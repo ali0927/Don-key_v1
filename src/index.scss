@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+@import "../public/assets/scss/variables.scss";
+
+body {
+  margin: 0;
+  /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif; */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: "Roboto", sans-serif;
+  background: $primary-color;
+}
+
+.colorBlack {
+  color: $colorBlack !important;
+}
+.headsame {
+  font-family: Object Sans;
+  font-weight: bold;
+  font-size: 45px;
+  line-height: 130%;
+  display: flex;
+  align-items: center;
+  color: $colorBlack;
+}
+.parasame {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 132%;
+  display: flex;
+  align-items: center;
+  color: #222222;
+}
+.bgyellowColor {
+  background-color: $bgyellowColor;
+}
+.bggeryColor {
+  background: $bggeryColor;
+}
