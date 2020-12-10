@@ -14,12 +14,13 @@
 .container.newContainer {
   max-width: 900px;
 }
-.boardingImg img {
-  max-width: 100%;
-}
+// .boardingImg img {
+//   max-width: 100%;
+// }
 
 .footer {
   background: $bgyellowColor;
+  height: 256px;
   & p {
     font-weight: normal;
     font-size: 15px;
@@ -55,6 +56,11 @@
     display: flex;
     align-items: center;
     color: $colorBlack;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      font-size: 21px;
+    }
   }
   & .content5Foot h2 {
     font-weight: bold;
@@ -63,6 +69,11 @@
     display: flex;
     align-items: center;
     color: #070602;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      font-size: 21px;
+    }
   }
   & .contentbottom5Foot p {
     font-weight: normal;

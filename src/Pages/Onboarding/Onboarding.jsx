@@ -31,11 +31,11 @@ const Onboarding = () => {
       <ControlledCarousel
         children1={
           <div>
-            <div className="mt-5 mb-5 pb-5 boardContent">
+            <div className="boardContent">
               <Container>
                 <Row>
                   <Col md={12} className="text-center">
-                    <div className="boardingImg mt-lg-4">
+                    <div className="onboardimg">
                       <img
                         src="/assets/images/onboarding/1.png"
                         className="d-inline-block"
@@ -47,9 +47,9 @@ const Onboarding = () => {
               </Container>
             </div>
 
-            <footer className="mt-5 pt-5 pb-3 footer">
+            <footer className="pt-5 footer">
               <Container className="newContainer content1Foot">
-                <Row className="mt-5 mb-5">
+                <Row>
                   <Col md={5}>
                     <h2> First steps with the strategy builder</h2>
                   </Col>
@@ -69,7 +69,7 @@ const Onboarding = () => {
         }
         children2={
           <div>
-            <div className="mt-5 mb-5">
+            <div className="boardContent">
               <Container className="newContainer">
                 <Row>
                   <Col md={12}>
@@ -85,9 +85,9 @@ const Onboarding = () => {
               </Container>
             </div>
 
-            <footer className="mt-5 pt-5 pb-3 footer">
+            <footer className="pt-5 footer">
               <Container className="newContainer content1Foot">
-                <Row className="mt-5 mb-5">
+                <Row>
                   <Col md={5}>
                     <h2> First steps with the strategy builder</h2>
                   </Col>
@@ -107,7 +107,7 @@ const Onboarding = () => {
         }
         children3={
           <div>
-            <div className="mt-5 mb-5">
+            <div className="boardContent">
               <Container className="newContainer">
                 <Row>
                   <Col md={12}>
@@ -123,9 +123,9 @@ const Onboarding = () => {
               </Container>
             </div>
 
-            <footer className="mt-5 pt-5 pb-3 footer">
+            <footer className="pt-5 footer">
               <Container className="newContainer content5Foot">
-                <Row className="mt-5 mb-5 pb-4">
+                <Row>
                   <Col md={5} className="mr-5 text-md-right text-left">
                     <h2> Experienced farmer</h2>
                   </Col>
@@ -145,7 +145,7 @@ const Onboarding = () => {
         }
         children4={
           <div>
-            <div className="mt-5 mb-5">
+            <div className="boardContent">
               <Container className="newContainer">
                 <Row>
                   <Col md={12}>
@@ -161,9 +161,9 @@ const Onboarding = () => {
               </Container>
             </div>
 
-            <footer className="mt-5 pt-5 pb-3 footer">
+            <footer className="pt-5 footer">
               <Container className="newContainer content5Foot">
-                <Row className="mt-5 mb-5 pb-4">
+                <Row>
                   <Col
                     md={{ span: 3, offset: 1 }}
                     className="mr-5 text-md-right text-left"
@@ -185,7 +185,7 @@ const Onboarding = () => {
         }
         children5={
           <div>
-            <div className="mt-5 mb-5">
+            <div className="boardContent">
               <Container className="newContainer">
                 <Row>
                   <Col md={12}>
@@ -201,9 +201,9 @@ const Onboarding = () => {
               </Container>
             </div>
 
-            <footer className="mt-5 pt-5 pb-3 footer">
+            <footer className="pt-5 footer">
               <Container className="newContainer content5Foot">
-                <Row className="mt-5 mb-5 pb-4">
+                <Row>
                   <Col md={5} className="mr-5 text-md-right text-left">
                     <h2> Top farmers comments</h2>
                   </Col>
