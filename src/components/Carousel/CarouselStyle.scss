@@ -1,0 +1,11 @@
+.carousel.slide {
+  background: transparent;
+
+  & img {
+    width: auto;
+  }
+
+  & .onboardimg {
+    text-align: center;
+  }
+}

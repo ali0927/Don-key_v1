@@ -1,0 +1,74 @@
+@import "../../../public/assets/scss/variables.scss";
+
+.btn.btn-farming {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: 0.03em;
+  border: 1px solid $colorBlack;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 10px 17px;
+}
+.container.newContainer {
+  max-width: 900px;
+}
+.boardingImg img {
+  max-width: 100%;
+}
+
+.footer {
+  background: $bgyellowColor;
+  & p {
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 135%;
+    display: flex;
+    align-items: center;
+    color: $paracolorBlack;
+  }
+
+  & ul li a,
+  ul li a:hover {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    color: $paracolorBlack;
+    text-decoration: none;
+  }
+  & .skipLink,
+  .skipLink:hover {
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    color: $linkColor;
+    text-decoration: none;
+  }
+  & .content1Foot h2 {
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    color: $colorBlack;
+  }
+  & .content5Foot h2 {
+    font-weight: bold;
+    font-size: 34px;
+    line-height: 40px;
+    display: flex;
+    align-items: center;
+    color: #070602;
+  }
+  & .contentbottom5Foot p {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    justify-content: flex-end;
+    color: $paracolorBlack;
+  }
+}

@@ -1,0 +1,39 @@
+@import "../../../public/assets/scss/variables.scss";
+
+.nav-link {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  display: flex;
+  align-items: center;
+}
+.btn.btn-outline,
+.btn.btn-outline:hover,
+.btn.btn-outline:active,
+.btn.btn-outline:focus,
+.btn-primary.btn-outline:not(:disabled):not(.disabled).active,
+.btn-primary.btn-outline:not(:disabled):not(.disabled):active,
+.show > .btn-primary.btn-outline.dropdown-toggle {
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+  text-align: center;
+  letter-spacing: 0.03em;
+  border: 1px solid $colorBlack;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 12px 17px;
+}
+
+@media screen and (max-width: 767px) {
+  .navbar-collapse {
+    /* position: absolute;
+    top: 86%;
+    z-index: 999999; */
+    background: rgb(238, 238, 238);
+    width: 100%;
+    left: 0px;
+    right: 0px;
+    padding: 5px 15px;
+  }
+}
