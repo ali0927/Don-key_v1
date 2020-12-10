@@ -1,3 +1,5 @@
+@import "../../../public/assets/scss/variables.scss";
+
 .carousel.slide {
   background: transparent;
 
@@ -7,5 +9,36 @@
 
   & .onboardimg {
     text-align: center;
+  }
+  & .carousel-control-prev {
+    color: $paracolorBlack;
+    opacity: 1;
+    top: auto;
+    bottom: 6%;
+    left:auto;
+    right:6%;
+  }
+  & .carousel-control-next {
+    color: $paracolorBlack;
+    opacity: 1;
+    top: auto;
+    bottom: 6%;
+  }
+  & .carousel-control-prev-icon{
+    display: none !important;
+    background:none;
+  }
+  & .carousel-control-next-icon{
+    display: none !important;
+    background:none;
+  }
+  .sr-only {
+    clip: auto;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    color: $paracolorBlack;
+    text-decoration: none;
+    overflow: visible;
   }
 }
