@@ -126,7 +126,7 @@ const Onboarding = () => {
             <footer className="mt-5 pt-5 pb-3 footer">
               <Container className="newContainer content5Foot">
                 <Row className="mt-5 mb-5 pb-4">
-                  <Col md={5} className="mr-5 text-right">
+                  <Col md={5} className="mr-5 text-md-right text-left">
                     <h2> Experienced farmer</h2>
                   </Col>
                   <Col md={5} className="pr-md-0">
@@ -164,7 +164,10 @@ const Onboarding = () => {
             <footer className="mt-5 pt-5 pb-3 footer">
               <Container className="newContainer content5Foot">
                 <Row className="mt-5 mb-5 pb-4">
-                  <Col md={{ span: 3, offset: 1 }} className="mr-5 text-right">
+                  <Col
+                    md={{ span: 3, offset: 1 }}
+                    className="mr-5 text-md-right text-left"
+                  >
                     <h2>Farmers Rating</h2>
                   </Col>
                   <Col md={5} className="pr-md-0">
@@ -201,7 +204,7 @@ const Onboarding = () => {
             <footer className="mt-5 pt-5 pb-3 footer">
               <Container className="newContainer content5Foot">
                 <Row className="mt-5 mb-5 pb-4">
-                  <Col md={5} className="mr-5 text-right">
+                  <Col md={5} className="mr-5 text-md-right text-left">
                     <h2> Top farmers comments</h2>
                   </Col>
                   <Col md={5} className="pr-md-0">

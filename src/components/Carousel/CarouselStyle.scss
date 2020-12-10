@@ -5,10 +5,12 @@
 
   & img {
     width: auto;
+    max-width: 100%;
   }
 
   & .onboardimg {
     text-align: center;
+    overflow: hidden;
   }
   & .carousel-control-prev {
     color: $paracolorBlack;
