@@ -64,7 +64,7 @@ const Onboarding = () => {
                   </Col>
                 </Row>
 
-                <a href="#" className="d-inline-block skipLink">
+                <a href="/login" className="d-inline-block skipLink">
                   Skip
                 </a>
               </Container>
@@ -105,7 +105,7 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
-                <a href="#" className="d-inline-block skipLink">
+                <a href="/login" className="d-inline-block skipLink">
                   Skip
                 </a>
               </Container>
@@ -146,7 +146,7 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
-                <a href="#" className="d-inline-block skipLink">
+                <a href="/login" className="d-inline-block skipLink">
                   Skip
                 </a>
               </Container>
@@ -189,7 +189,7 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
-                <a href="#" className="d-inline-block skipLink">
+                <a href="/login" className="d-inline-block skipLink">
                   Skip
                 </a>
               </Container>
@@ -228,7 +228,7 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
-                <a href="#" className="d-inline-block skipLink">
+                <a href="/login" className="d-inline-block skipLink">
                   Skip
                 </a>
               </Container>
