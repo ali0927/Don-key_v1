@@ -1,10 +1,21 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import "../public/assets/scss/variables.scss";
 
+@font-face {
+  font-family: "CodecPro-Bold";
+  src: local("CodecPro-Bold"),
+    url(./fonts/CodecPro/CodecPro-News.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "ObjectSans-Bold";
+  src: local("ObjectSans-Bold"),
+    url(./fonts/object-sans/ObjectSans-Bold.otf) format("truetype");
+}
+
 body {
   margin: 0;
-
-  font-family: "Roboto", sans-serif;
+  font-family: "Roboto";
   background: $primary-color;
 }
 
@@ -12,7 +23,7 @@ body {
   color: $colorBlack !important;
 }
 .headsame {
-  font-family: Object-Sans-Bold;
+  font-family: "ObjectSans-Bold";
   font-weight: bold;
   font-size: 45px;
   line-height: 130%;
@@ -26,7 +37,7 @@ body {
   }
 }
 .parasame {
-  font-family: Roboto;
+  font-family: "Roboto";
   font-style: normal;
   font-weight: normal;
   font-size: 20px;

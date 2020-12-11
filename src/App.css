@@ -28,56 +28,6 @@
   color: #61dafb;
 }
 
-@font-face {
-  font-family: Object Sans;
-  src: url("/public/assets/fonts/object-sans/ObjectSans-Regular.otf")
-      format("opentype"),
-    url("/public/assets/fonts/object-sans/ObjectSans-Bold.otf")
-      format("opentype"),
-    url("/public/assets/fonts/object-sans/ObjectSans-Heavy.otf")
-      format("opentype"),
-    url("/public/assets/fonts/object-sans/ObjectSans-Thin.otf")
-      format("opentype");
-}
-
-@font-face {
-  font-family: ObjectSans-Regular;
-  src: url("/public/assets/fonts/object-sans/ObjectSans-Regular.otf")
-    format("opentype");
-}
-
-@font-face {
-  font-family: ObjectSans-Bold;
-  src: url("/public/assets/fonts/object-sans/ObjectSans-Bold.otf")
-    format("opentype");
-}
-
-@font-face {
-  font-family: ObjectSans-Heavy;
-  src: url("/public/assets/fonts/object-sans/ObjectSans-Heavy.otf")
-    format("opentype");
-}
-
-@font-face {
-  font-family: ObjectSans-Thin;
-  src: url("/public/assets/fonts/object-sans/ObjectSans-Thin.otf")
-    format("opentype");
-}
-
-@font-face {
-  font-family: CodecPro;
-  src: url("/public/assets/fonts/CodecPro/CodecPro-Bold.ttf") format("truetype"),
-    url("/public/assets/fonts/CodecPro/CodecPro-ExtraBold.ttf")
-      format("truetype"),
-    url("/public/assets/fonts/CodecPro/CodecPro-Light.ttf") format("truetype"),
-    url("/public/assets/fonts/CodecPro/CodecPro-News.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: CodecPro-Bold;
-  src: url("/public/assets/fonts/CodecPro/CodecPro-Bold.ttf") format("truetype");
-}
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

@@ -7,16 +7,17 @@
   flex-direction: row;
 
   & .loginImage {
-    left: 50vw;
+    left: 55vw;
     position: absolute;
     top: 0;
-    width: 50vw;
+    right: 0;
+    width: 45vw;
     height: 100vh;
-
-    background-attachment: fixed;
+    background-image: url("../../images/login/login.png");
+    background-repeat: no-repeat;
     background-size: 100vw;
+    background-size: 100% 100%;
     transition: left 300ms ease;
-    clip-path: inset(0);
   }
 }
 
@@ -36,6 +37,7 @@
     @media screen and (min-width: 768px) and (max-width: 1400px) {
       width: 77%;
       padding: 0px;
+      margin-top: 5%;
     }
   }
   & h1 {
@@ -43,7 +45,7 @@
     font-size: 55px;
     line-height: 32px;
     color: $colorBlack;
-    font-family: ObjectSans-Bold;
+    font-family: "ObjectSans-Bold";
 
     /* media queries */
     @media (max-width: 767px) {

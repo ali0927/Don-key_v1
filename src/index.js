@@ -5,6 +5,9 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import "./fonts/object-sans/ObjectSans-Bold.otf";
+import "./fonts/CodecPro/CodecPro-News.ttf";
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
