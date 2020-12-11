@@ -267,7 +267,13 @@
 
   & .card {
     /* media queries */
-    @media (max-width: 1023px) {
+    @media (max-width: 320px) {
+      width: 18rem !important;
+      margin: auto;
+    }
+
+    /* media queries */
+    @media screen and (min-width: 321px) and (max-width: 1023px) {
       width: 20rem !important;
       margin: auto;
     }

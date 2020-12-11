@@ -23,17 +23,32 @@
   box-sizing: border-box;
   border-radius: 5px;
   padding: 12px 17px;
+
+  /* media queries */
+  @media (max-width: 767px) {
+    padding: 10px 13px;
+  }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 991px) {
   .navbar-collapse {
-    /* position: absolute;
-    top: 86%;
-    z-index: 999999; */
+    position: absolute !important;
+    top: 85%;
+    z-index: 999;
     background: rgb(238, 238, 238);
     width: 100%;
     left: 0px;
     right: 0px;
     padding: 5px 15px;
+  }
+  .navbar-light .navbar-toggler {
+    border: 0;
+    margin-left: auto;
+    margin-right: 0;
+    width: 15%;
+  }
+
+  button.navbar-toggler:focus {
+    outline: none !important;
   }
 }
