@@ -9,7 +9,7 @@
 }
 .bannerLeft {
   & h1 {
-    font-family: Object Sans;
+    font-family: ObjectSans-Bold;
     font-weight: bold;
     font-size: 90px;
     line-height: 96.5%;
@@ -56,7 +56,7 @@
   padding: 12px 15px;
 }
 .headbelowSame {
-  font-family: Object Sans;
+  font-family: ObjectSans-Bold;
   font-weight: bold;
   font-size: 22px;
   line-height: 20px;
@@ -132,7 +132,7 @@
     }
   }
   & .card-title {
-    font-family: Codec Pro;
+    font-family: CodecPro-Bold;
     font-weight: bold;
     font-size: 22px;
     line-height: 120%;
@@ -164,6 +164,15 @@
 /*trading*/
 .trading {
   overflow: hidden;
+
+  & .parasame {
+    width: 71%;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      width: 100%;
+    }
+  }
 }
 /*farmers team*/
 .cardTeam {
@@ -296,7 +305,7 @@
   justify-content: center;
 
   & h4 {
-    font-family: Object Sans;
+    font-family: ObjectSans-Bold;
     font-weight: bold;
     font-size: 45px;
     line-height: 48px;
@@ -331,7 +340,7 @@ footer {
 }
 
 .footHead h4 {
-  font-family: Codec Pro;
+  font-family: CodecPro-Bold;
   font-weight: bold;
   font-size: 20px;
   line-height: 133%;

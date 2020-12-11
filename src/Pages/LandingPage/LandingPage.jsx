@@ -22,8 +22,7 @@ const LandingPage = () => {
                   and trade
                 </h1>
                 <p className="mt-4">
-                  Start farming from Buru is crop automation that allows you to
-                  publicly share your crop yield farming strategy
+                  Build your DeFi strategy Get liquidity and Boost your yield
                 </p>
                 <div className="mt-5">
                   <ButtonComponent className="btnYellow">
@@ -176,10 +175,10 @@ const LandingPage = () => {
                 Join the best <br /> Be part of farmers team
               </h3>
               <p className="parasame mt-4">
-                With Buru, you can become part of a farming team and compete for
-                the title of the best farmer, which will give you the
-                opportunity to attract investments of up to USD 1 million to
-                your trading portfolio. Be the first in the ranking of farmers!
+                Buru encourages successful farmers to share their wisdom, with
+                Buru you can trade , get liquidity based on your results, share
+                the yield and get extra dividend just for being a part of our
+                farmers community
               </p>
               <ButtonComponent className="btnYellow mt-4">
                 Discover best farmers
@@ -200,8 +199,8 @@ const LandingPage = () => {
                     <Card.Title>Saly</Card.Title>
 
                     <ul className="p-0">
-                      <li>110,400 allocation </li>
-                      <li>190,300 next level </li>
+                      <li>$50,000 Assets under managemnt </li>
+                      <li>$100,000 next level </li>
                     </ul>
 
                     <img
@@ -236,8 +235,8 @@ const LandingPage = () => {
                     <span className="cardLetter">RA</span>
                     <Card.Title>Ramp</Card.Title>
                     <ul className="p-0">
-                      <li>101,300 allocation </li>
-                      <li>187,300 next level </li>
+                      <li>$500,000 Assets under managemnt </li>
+                      <li>$750,000 next level </li>
                     </ul>
 
                     <img
@@ -277,7 +276,7 @@ const LandingPage = () => {
                     <Card.Title>Djony</Card.Title>
 
                     <ul className="p-0">
-                      <li>120,500 allocation </li>
+                      <li>$100,000 Assets under managemnt </li>
                       <li>200,000 next level </li>
                     </ul>
 
@@ -314,8 +313,8 @@ const LandingPage = () => {
                     <Card.Title>Jack</Card.Title>
 
                     <ul className="p-0">
-                      <li>107,200 allocation </li>
-                      <li>186,000 next level </li>
+                      <li>$25,000 Assets under managemnt </li>
+                      <li>$50,000 next level </li>
                     </ul>
 
                     <img
@@ -351,8 +350,8 @@ const LandingPage = () => {
                     <Card.Title>You could be here</Card.Title>
 
                     <ul className="p-0">
-                      <li>120,500 allocation </li>
-                      <li>200,000 next level </li>
+                      <li>$25,000 allocation </li>
+                      <li>$50,000 next level </li>
                     </ul>
 
                     <ButtonComponent className="btnYellow mt-5 mb-4">
@@ -375,9 +374,9 @@ const LandingPage = () => {
               <div className="tokenRIght">
                 <h3 className="headsame mb-3 mt-3">Trading strategy builder</h3>
                 <p className="parasame mt-4">
-                  With the ability to create trading strategies, you can find
-                  statistically valid ones based on a testable alpha / market
-                  dominance. Become the best farmer with BURU.
+                  Build your DeFi strategy with a drag and drop interface
+                  allowing you to adapt fast to the dynamic world of DeFi and
+                  secure your yield
                 </p>
                 <ButtonComponent
                   variant="colorBlack btn-outline"
@@ -418,20 +417,20 @@ const LandingPage = () => {
               <div className="tokenRIght">
                 <h3 className="headsame mb-3 mt-md-2 mt-5">BURU Tokens</h3>
                 <p className="parasame">
-                  A token is a unit of accounting for assets in BURU, analogous
-                  to shares on the stock exchange. Tokens are accounted for
-                  using blockchain technology, and access to them is carried out
-                  using a program using a digital signature.
+                  BURU tokens are airdropped to all farmers based on monthly
+                  trading results and take into account: ROI, Risk level, asset
+                  exposer and more. the better you are , the more you get
                 </p>
-                <h5 className="mt-4">Сurrency in BURU</h5>
+                <h5 className="mt-4">Yield and Dividend </h5>
                 <p className="parasame">
-                  Play the role of currency in the BURU system - they can be
-                  used to purchase the services and services of the project.
+                  BURU tokens represents the farmer’s yield based on his own
+                  stratagies, in addition to a proportionate monthly dividend
+                  from BURU’s total monthly yield
                 </p>
-                <h5 className="mt-4">Bounty</h5>
+                <h5 className="mt-4">Exchangeable</h5>
                 <p className="parasame">
-                  They act as a reward for attracting investors by advertising a
-                  project.
+                  You can redeem your BURU tokens at any time or hold on to them
+                  and accumulate higher future coupons
                 </p>
               </div>
             </Col>

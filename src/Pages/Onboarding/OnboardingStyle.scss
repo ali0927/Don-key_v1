@@ -40,6 +40,10 @@
   }
   & .skipLink,
   .skipLink:hover {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+    right: auto;
     font-weight: normal;
     font-size: 15px;
     line-height: 18px;
@@ -47,9 +51,14 @@
     align-items: center;
     color: $linkColor;
     text-decoration: none;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      bottom: 3%;
+    }
   }
   & .content1Foot h2 {
-    font-family: Object Sans;
+    font-family: ObjectSans-Bold;
     font-weight: bold;
     font-size: 30px;
     line-height: 40px;
@@ -58,7 +67,12 @@
     color: $colorBlack;
 
     /* media queries */
-    @media (max-width: 767px) {
+
+    @media (max-width: 320px) {
+      font-size: 19px;
+      line-height: 30px;
+    }
+    @media screen and (min-width: 321px) and (max-width: 767px) {
       font-size: 21px;
     }
   }

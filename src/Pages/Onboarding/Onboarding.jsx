@@ -63,6 +63,10 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
+
+                <a href="#" className="d-inline-block skipLink">
+                  Skip
+                </a>
               </Container>
             </footer>
           </div>
@@ -101,6 +105,9 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
+                <a href="#" className="d-inline-block skipLink">
+                  Skip
+                </a>
               </Container>
             </footer>
           </div>
@@ -139,6 +146,9 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
+                <a href="#" className="d-inline-block skipLink">
+                  Skip
+                </a>
               </Container>
             </footer>
           </div>
@@ -179,6 +189,9 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
+                <a href="#" className="d-inline-block skipLink">
+                  Skip
+                </a>
               </Container>
             </footer>
           </div>
@@ -215,6 +228,9 @@ const Onboarding = () => {
                     </p>
                   </Col>
                 </Row>
+                <a href="#" className="d-inline-block skipLink">
+                  Skip
+                </a>
               </Container>
             </footer>
           </div>
