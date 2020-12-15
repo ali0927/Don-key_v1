@@ -319,6 +319,12 @@
     align-items: center;
     justify-content: center;
     color: #ffca00;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      font-size: 26px;
+      line-height: 36px;
+    }
   }
   & p {
     font-weight: normal;

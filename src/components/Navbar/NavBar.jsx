@@ -19,7 +19,7 @@ function NavBar(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-            <Nav.Link href="#" className="colorBlack pr-md-5">
+            <Nav.Link href="/resource" className="colorBlack pr-md-5">
               Resources
             </Nav.Link>
             <Nav.Link href="#" className="colorBlack pr-md-5">
