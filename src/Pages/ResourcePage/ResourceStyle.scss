@@ -4,6 +4,30 @@
   background-color: $bglightgrey;
 }
 
+.bgImage {
+  position: relative;
+}
+
+.bgImage:before {
+  position: absolute;
+  content: "";
+  height: 100%;
+  width: 100%;
+  background-image: url("../../images/bg1.png");
+  z-index: 0;
+  bottom: -90px;
+  left: 0px;
+  right: 0px;
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  /* media queries */
+  @media (max-width: 767px) {
+    bottom: -41px;
+  }
+}
+
 .bannerText {
   & h1 {
     font-family: "ObjectSans-Bold";
@@ -74,6 +98,74 @@
   }
 }
 
+.cryptoContent {
+  background: $yellowlightbg;
+  box-shadow: 0px 3px 20px rgba(0, 18, 80, 0.13);
+  border-radius: 10px;
+  padding: 30px 24px 0px;
+  width: 100%;
+  display: flex;
+  flex: 1 0 auto;
+  height: 100%;
+
+  & .cryptoImg {
+    display: inline-block;
+    width: 120px;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      display: block;
+      width: 120px;
+      margin: 0 auto;
+    }
+  }
+  & .cryptoMain {
+    width: calc(100vw - 150px);
+    margin-left: 12px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 20px 0px;
+      text-align: center;
+    }
+
+    & h4 {
+      font-weight: 500;
+      font-size: 18px;
+      line-height: 126.69%;
+      // display: flex;
+      // align-items: center;
+      color: $colorBlack;
+    }
+    & p {
+      font-weight: normal;
+      font-size: 18px;
+      line-height: 126.69%;
+      // display: flex;
+      // align-items: center;
+      color: $paracolorBlack;
+      margin: 29px 0px;
+    }
+    & span {
+      font-weight: normal;
+      font-size: 16px;
+      line-height: 126.69%;
+      // display: flex;
+      // align-items: center;
+      color: $colorspan;
+    }
+  }
+  /* media queries */
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
+
 .resourcepara {
   font-weight: normal;
   font-size: 18px;
@@ -120,7 +212,7 @@
     width: 120px;
   }
   & .actionContent {
-    background: #ffe47f;
+    background: $yellowlightbg;
     box-shadow: 0px 3px 20px rgba(0, 18, 80, 0.13);
     border-radius: 10px;
     padding: 30px 20px;

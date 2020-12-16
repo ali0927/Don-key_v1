@@ -6,13 +6,13 @@ import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 
-const LandingPage = () => {
+const ResourcePage = () => {
   return (
     <div>
       <Navbar />
 
       {/* Banner */}
-      <div className="mt-4 mb-5">
+      <div className="mt-4 bgImage">
         <Container>
           <Row>
             <Col lg={{ span: 9, offset: 2 }} md={{ span: 10, offset: 1 }}>
@@ -82,9 +82,13 @@ const LandingPage = () => {
       </div>
 
       {/* Crypto */}
-      <div className="actionsDiv bgyellowColor pt-5 pb-5">
-        <Container>
-          <h2 className="text-center mt-md-3 resourcehead"> Crypto Basics</h2>
+
+      <div className="actionsDiv bgyellowColor pt-5 pb-5 mt-md-5">
+        <Container className="mb-md-5">
+          <h2 className="text-center mt-5 pt-md-5 pt-3 resourcehead">
+            {" "}
+            Crypto Basics
+          </h2>
           <Row>
             <Col
               lg={{ span: 8, offset: 2 }}
@@ -101,39 +105,87 @@ const LandingPage = () => {
 
           <Row>
             <Col md={6}>
-              <div className="actionContent mt-md-4 mb-5">
-                <div className="actionImg">
+              <div className="cryptoContent mt-md-4">
+                <div className="cryptoImg">
                   <img
                     src="/assets/images/resource/action/1.png"
                     className="d-inline-block"
                     alt="Image"
                   />
                 </div>
-
-                <div className="actionMain">
-                  <h5>Central Bank Digital Currencies - A Map of the World</h5>
+                <div className="cryptoMain">
+                  <h4>Central Bank Digital Currencies - A Map of the World</h4>
                   <p>
                     Central bank digital currencies are being talked about all
                     over the world — CMC breaks down what exactly each country
                     is doing with their CBDCs.
                   </p>
+                  <span>November 23, 2020</span>
                 </div>
               </div>
             </Col>
 
-            <Col md={6}>
-              <div className="actionContent mt-md-4 mb-5">
-                <div className="actionImg">
+            <Col md={6} className="mt-md-0 mt-4">
+              <div className="cryptoContent mt-md-4">
+                <div className="cryptoImg">
                   <img
                     src="/assets/images/resource/action/2.png"
                     className="d-inline-block"
                     alt="Image"
                   />
                 </div>
+                <div className="cryptoMain">
+                  <h4>Hot Wallets vs Cold Wallets: What’s the Difference?</h4>
+                  <p>
+                    The difference between hot and cold wallets, and the amount
+                    of security that they offer for your crypto assets, differs
+                    — find out which type of wallet is best for you.
+                  </p>
+                  <span>November 18, 2020</span>
+                </div>
+              </div>
+            </Col>
+          </Row>
 
-                <div className="actionMain">
-                  <h5>Swap</h5>
-                  <p>Swap 2 different tokens using an exchange</p>
+          <Row className="mt-4">
+            <Col md={6}>
+              <div className="cryptoContent mt-md-4">
+                <div className="cryptoImg">
+                  <img
+                    src="/assets/images/resource/action/3.png"
+                    className="d-inline-block"
+                    alt="Image"
+                  />
+                </div>
+                <div className="cryptoMain">
+                  <h4>Private keys: the keys to your cryptographic wallet</h4>
+                  <p>
+                    The difference between private keys and public keys is huge
+                    — find out what "not your coins, not your coins" really
+                    means.
+                  </p>
+                  <span>November 04, 2020</span>
+                </div>
+              </div>
+            </Col>
+
+            <Col md={6} className="mt-md-0 mt-4">
+              <div className="cryptoContent mt-md-4">
+                <div className="cryptoImg">
+                  <img
+                    src="/assets/images/resource/action/4.png"
+                    className="d-inline-block"
+                    alt="Image"
+                  />
+                </div>
+                <div className="cryptoMain">
+                  <h4>5 Myths Beginners Don't Know About Bitcoin</h4>
+                  <p>
+                    For those just getting started in crypto, we've broken down
+                    five common misconceptions about Bitcoin, the first
+                    cryptocurrency.
+                  </p>
+                  <span>November 02, 2020</span>
                 </div>
               </div>
             </Col>
@@ -583,4 +635,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+export default ResourcePage;
