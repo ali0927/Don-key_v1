@@ -1,11 +1,13 @@
 @import "../../../public/assets/scss/variables.scss";
 
-body {
+.bgColor {
   background-color: $greybody !important;
 }
 
 .navbanHead {
   background-color: $secondary-color;
+  border-bottom-right-radius: 50% 41px;
+  border-bottom-left-radius: 50% 41px;
 
   & h1 {
     font-family: "ObjectSans-Bold";
@@ -133,7 +135,7 @@ select.form-control {
   line-height: 137%;
   color: $paracolorBlack;
   text-align: left;
-  float: left;
+  float: left !important;
   padding: 8px 20px;
 }
 .paginationTable {
@@ -162,6 +164,10 @@ select.form-control {
   }
 }
 
+.pagePosition {
+  position: relative;
+}
+
 .dropTable {
   font-weight: normal;
   font-size: 14px;
@@ -171,6 +177,15 @@ select.form-control {
   float: right;
   padding: 0px 20px;
   position: relative;
+
+  /* media queries */
+  @media (max-width: 900px) {
+    float: none;
+    padding: 0px 12px;
+    position: absolute;
+    bottom: 51%;
+    right: 0;
+  }
 
   & span {
     position: absolute;

@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
 import { Card } from "react-bootstrap";
@@ -9,7 +9,7 @@ import ButtonComponent from "../../components/Button/Button";
 const ResourcePage = () => {
   return (
     <div>
-      <Navbar />
+      <NavBar />
 
       {/* Banner */}
       <div className="mt-4 bgImage">

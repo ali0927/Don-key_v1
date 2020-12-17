@@ -1,6 +1,6 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
-import { Container, Overlay } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import {
   Row,
   Col,
@@ -12,18 +12,10 @@ import {
   Button
 } from "react-bootstrap";
 import { Card } from "react-bootstrap";
-import "./MyaccountStyle.scss";
+import "./NotificationStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 
-const MyAccount = () => {
-  const [show, setShow] = useState(false);
-  const [target, setTarget] = useState(null);
-  const ref = useRef(null);
-
-  const handleClick = event => {
-    setShow(!show);
-    setTarget(event.target);
-  };
+const NotificationPage = () => {
   return (
     <div className="bgColor">
       <NavBar2 />
@@ -43,26 +35,6 @@ const MyAccount = () => {
             >
               <div className="firstLetter">
                 <p>SOL </p>
-
-                <div ref={ref}>
-                  <Button onClick={handleClick}>Holy guacamole!</Button>
-
-                  <Overlay
-                    show={show}
-                    target={target}
-                    placement="bottom"
-                    container={ref.current}
-                    containerPadding={20}
-                  >
-                    <Popover id="popover-contained">
-                      <Popover.Title as="h3">Popover bottom</Popover.Title>
-                      <Popover.Content>
-                        <strong>Holy guacamole!</strong> Check this info.
-                      </Popover.Content>
-                    </Popover>
-                  </Overlay>
-                </div>
-
                 <img
                   src="/assets/images/pattern.png"
                   className="d-inline-block align-top pattern"
@@ -446,19 +418,6 @@ const MyAccount = () => {
                 </tr>
 
                 <tr>
-                  <td className="rowData" colspan="8">
-                    Join our farmers team
-                    <ButtonComponent
-                      variant="colorBlack"
-                      className="btnYellow ml-md-5 btnPadding"
-                    >
-                      <span> Join us </span>
-                    </ButtonComponent>
-                  </td>
-                  <td></td>
-                </tr>
-
-                <tr>
                   <td className="nodata">5</td>
                   <td>
                     <img
@@ -517,41 +476,6 @@ const MyAccount = () => {
                 </tr>
               </tbody>
             </Table>
-
-            <div className="mt-4 pagePosition">
-              <p className="pageTable">Showing 1-10 of 120</p>
-              <div className="paginationTable">
-                <Pagination>
-                  <Pagination.Prev />
-                  <Pagination.Item active>{1}</Pagination.Item>
-                  <Pagination.Item>{2}</Pagination.Item>
-                  <Pagination.Item>{3}</Pagination.Item>
-                  <Pagination.Item>{4}</Pagination.Item>
-                  <Pagination.Ellipsis />
-
-                  <Pagination.Item>{120}</Pagination.Item>
-
-                  <Pagination.Next />
-                </Pagination>
-              </div>
-              <div className="dropTable">
-                Show rows
-                <span>
-                  <img
-                    src="/assets/images/selectdrop.png"
-                    className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4"
-                    alt="Logo"
-                  />
-                </span>
-                <Form.Group>
-                  <Form.Control as="select">
-                    <option>100</option>
-                    <option>200</option>
-                    <option>300</option>
-                  </Form.Control>
-                </Form.Group>
-              </div>
-            </div>
           </div>
         </Container>
       </div>
@@ -659,4 +583,4 @@ const MyAccount = () => {
   );
 };
 
-export default MyAccount;
+export default NotificationPage;

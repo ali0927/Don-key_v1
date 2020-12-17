@@ -1,5 +1,9 @@
 @import "../../../public/assets/scss/variables.scss";
 
+body {
+  background: $primary-color !important;
+}
+
 .bglightColor {
   background-color: $bglightgrey;
 }

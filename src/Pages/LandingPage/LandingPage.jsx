@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar/NavBar";
+import { NavBar, NavBar2 } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
 import { Card } from "react-bootstrap";
@@ -7,9 +7,11 @@ import "./LandingStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 
 const LandingPage = () => {
+  console.log(">>>>>>>>", window.location.pathname);
+
   return (
     <div>
-      <Navbar />
+      <NavBar />
 
       {/* Banner */}
       <div className="mt-4">

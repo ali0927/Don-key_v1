@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/Navbar/NavBar";
+import { NavBar2 } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
 import { Row, Col, Form, Pagination, Table } from "react-bootstrap";
 import { Card } from "react-bootstrap";
@@ -8,8 +8,8 @@ import ButtonComponent from "../../components/Button/Button";
 
 const FarmersPage = () => {
   return (
-    <div>
-      <Navbar />
+    <div className="bgColor">
+      <NavBar2 />
 
       <div className="navbanHead pt-5 pb-5">
         <Container>
@@ -37,7 +37,7 @@ const FarmersPage = () => {
       <div className="mt-4 mb-5">
         <Container>
           <div className="tablebg">
-            <Table responsive className="table">
+            <Table responsive>
               <thead>
                 <tr>
                   <th>#</th>
@@ -249,7 +249,7 @@ const FarmersPage = () => {
               </tbody>
             </Table>
 
-            <div className="mt-4">
+            <div className="mt-4 pagePosition">
               <p className="pageTable">Showing 1-10 of 120</p>
               <div className="paginationTable">
                 <Pagination>

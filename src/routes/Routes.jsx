@@ -6,6 +6,7 @@ import Login from "../Pages/Login";
 import ResourcePage from "../Pages/ResourcePage";
 import FarmersPage from "../Pages/FarmersPage";
 import MyAccount from "../Pages/MyAccount";
+import NotificationPage from "../Pages/NotificationPage";
 
 export default function Routes() {
   return (
@@ -17,6 +18,7 @@ export default function Routes() {
         <Route path="/resource" children={<ResourcePage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/myaccount" children={<MyAccount />} />
+        <Route path="/notification" children={<NotificationPage />} />
       </Switch>
     </Router>
   );

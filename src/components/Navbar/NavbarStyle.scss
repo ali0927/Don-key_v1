@@ -29,10 +29,132 @@
     padding: 10px 13px;
   }
 }
-
+.bg-none {
+  background-color: transparent;
+}
 .navbar-nav .active {
   font-weight: bold;
   position: relative;
+}
+
+.dropNav1 {
+  display: inline-block;
+  margin-top: -4px;
+
+  & .btn,
+  .btn:hover,
+  .btn:active,
+  .btn:focus,
+  .btn-primary:not(:disabled):not(.disabled).active,
+  .btn-primary:not(:disabled):not(.disabled):active,
+  .show > .btn-primary.dropdown-toggle {
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none !important;
+  }
+
+  & .dropdown-toggle::after {
+    display: none;
+  }
+
+  & .dropdown-menu {
+    padding: 0px;
+    min-width: 21rem;
+    max-width: 21rem;
+    left: -90%;
+    margin-top: 39% !important;
+    border: none;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      min-width: 17rem;
+      max-width: 17rem;
+      left: -200%;
+    }
+  }
+
+  & .notifyHead {
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: $primary-color;
+    background: #000000;
+    border-radius: 5px 5px 0px 0px;
+    padding: 15px;
+    position: relative;
+  }
+
+  & .notifyHead:before {
+    position: absolute;
+    content: "";
+    top: -8px;
+    background-image: url("../../images/dropangle.png");
+    left: 21%;
+    height: 9px;
+    width: 17px;
+
+    /* media queries */
+    @media (max-width: 767px) {
+      left: 52%;
+      right: auto;
+    }
+  }
+
+  & .dropdown-item,
+  .dropdown-item:hover {
+    background: $bggeryColor;
+    border-radius: 5px;
+    padding: 11px;
+    width: 92%;
+    margin: 15px auto;
+
+    & p {
+      white-space: normal;
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+      display: block;
+      align-items: center;
+      color: $colorBlack;
+      padding: 10px 11% 0px 0px;
+    }
+
+    & span {
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+      display: flex;
+      align-items: center;
+      color: $inputColor;
+      margin-bottom: 10px;
+    }
+  }
+
+  .viewDrop {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 0px 20px;
+
+    & a,
+    a:hover {
+      color: $inputColor;
+      text-decoration: none;
+    }
+  }
+
+  /* media queries */
+  @media (max-width: 767px) {
+    margin-left: -14px;
+  }
 }
 
 .navbar-nav .active:before {
