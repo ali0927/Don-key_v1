@@ -1,0 +1,41 @@
+@import "../../../public/assets/scss/variables.scss";
+
+.tablebgHead {
+  & h5 {
+    font-family: "ObjectSans-Bold";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30px;
+    line-height: 116%;
+    display: flex;
+    align-items: center;
+    color: $colorBlack;
+  }
+
+  & p {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 116%;
+    color: $colorBlack;
+    float: right;
+  }
+
+  & .btn {
+    float: right;
+  }
+}
+.tablebg {
+  margin-top: auto;
+}
+
+.tablebg1 {
+  & thead th {
+    text-transform: inherit !important;
+  }
+  & td.nodata1 {
+    font-weight: 500 !important;
+    color: $colorfullBlack !important;
+  }
+}

@@ -5,6 +5,7 @@ import Onboarding from "../Pages/Onboarding";
 import Login from "../Pages/Login";
 import ResourcePage from "../Pages/ResourcePage";
 import FarmersPage from "../Pages/FarmersPage";
+import MyAccount from "../Pages/MyAccount";
 
 export default function Routes() {
   return (
@@ -15,6 +16,7 @@ export default function Routes() {
         <Route path="/login" children={<Login />} />
         <Route path="/resource" children={<ResourcePage />} />
         <Route path="/farmers" children={<FarmersPage />} />
+        <Route path="/myaccount" children={<MyAccount />} />
       </Switch>
     </Router>
   );
