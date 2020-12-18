@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
-import { Container } from "react-bootstrap";
+import { Container, Overlay } from "react-bootstrap";
 import {
   Row,
   Col,
@@ -16,25 +16,78 @@ import "./NotificationStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 
 const NotificationPage = () => {
+  const [show, setShow] = useState(false);
+  const [target, setTarget] = useState(null);
+  const ref = useRef(null);
+
+  const handleClick = event => {
+    setShow(!show);
+    setTarget(event.target);
+  };
   return (
     <div className="bgColor">
       <NavBar2 />
-
       <div className="navbanHead pt-5 pb-5">
         <Container>
-          <h2 className="firstHeading mb-3">Solldy</h2>
-
           <Row>
             <Col
               className="pr-md-0 pl-md-0 ml-md-3 pr-sm-2 pr-0"
+              xl={12}
+              lg={12}
+              md={12}
+              sm={12}
+              xs={8}
+            >
+              <h2 className="firstHeading mb-3">Solldy</h2>
+            </Col>
+
+            <Col
+              className="pr-md-0 pl-md-0 ml-md-3 pr-sm-2"
               xl={1}
               lg={1}
               md={2}
               sm={3}
-              xs={3}
+              xs={4}
             >
               <div className="firstLetter">
-                <p>SOL </p>
+                {/* <p>SOL </p> */}
+
+                <div ref={ref}>
+                  <Button onClick={handleClick}>SOL</Button>
+
+                  <Overlay
+                    show={show}
+                    target={target}
+                    placement="bottom"
+                    container={ref.current}
+                    containerPadding={20}
+                  >
+                    <Popover id="popover-contained">
+                      <Popover.Content>
+                        <Row>
+                          <Col md={7} sm={7} xs={7}>
+                            <p className="d-inline-block">Budget now</p>
+                          </Col>
+
+                          <Col md={5} sm={5} xs={5} className="text-left">
+                            <span> $ 50,000</span>
+                          </Col>
+                        </Row>
+
+                        <Row>
+                          <Col md={7} sm={7} xs={7}>
+                            <p className="d-inline-block">Next level</p>
+                          </Col>
+
+                          <Col md={5} sm={5} xs={5} className="text-left">
+                            <span> $ 100,000</span>
+                          </Col>
+                        </Row>
+                      </Popover.Content>
+                    </Popover>
+                  </Overlay>
+                </div>
+
                 <img
                   src="/assets/images/pattern.png"
                   className="d-inline-block align-top pattern"
@@ -48,7 +101,7 @@ const NotificationPage = () => {
               </div>
             </Col>
 
-            <Col xl={6} lg={6} md={9} sm={9} xs={9}>
+            <Col xl={6} lg={6} md={9} sm={9} xs={12}>
               <div className="bannerDetail">
                 <Table responsive className="m-0">
                   <thead>
@@ -91,56 +144,6 @@ const NotificationPage = () => {
                     </tr>
                   </tbody>
                 </Table>
-                {/* <Row>
-                  <Col md={3} sm={3}>
-                    <div className="bannermainContent">
-                      <p>AUM</p>
-                      <span> $50,000</span>
-                    </div>
-                  </Col>
-
-                  <Col md={3} sm={3}>
-                    <div className="bannermainContent">
-                      <p>Daily</p>
-                      <span>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                        0,73% $370
-                      </span>
-                    </div>
-                  </Col>
-
-                  <Col md={3} sm={3}>
-                    <div className="bannermainContent">
-                      <p>Weekly</p>
-                      <span>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                        0,98% $620
-                      </span>
-                    </div>
-                  </Col>
-
-                  <Col md={3} sm={3}>
-                    <div className="bannermainContent">
-                      <p>To Date</p>
-                      <span>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                        0,66% $330
-                      </span>
-                    </div>
-                  </Col>
-                </Row> */}
               </div>
             </Col>
 
