@@ -24,6 +24,7 @@ const NotificationPage = () => {
     setShow(!show);
     setTarget(event.target);
   };
+  
   return (
     <div className="bgColor">
       <NavBar2 />

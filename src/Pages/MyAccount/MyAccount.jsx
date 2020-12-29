@@ -14,7 +14,9 @@ import {
 import { Card } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-
+import MyAccountDetail from "../../JsonData/MyAccountDetail";
+import DataFarmer from '../../JsonData/DataFarmer';
+import StrategiesTable from "../../JsonData/StrategiesTable";
 const MyAccount = () => {
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);
@@ -25,6 +27,7 @@ const MyAccount = () => {
     setTarget(event.target);
   };
   return (
+  
     <div className="bgColor">
       <NavBar2 />
 
@@ -39,7 +42,7 @@ const MyAccount = () => {
               sm={12}
               xs={8}
             >
-              <h2 className="firstHeading mb-3">Solldy</h2>
+              <h2 className="firstHeading mb-3">{MyAccountDetail.name}</h2>
             </Col>
 
             <Col
@@ -54,7 +57,7 @@ const MyAccount = () => {
                 {/* <p>SOL </p> */}
 
                 <div ref={ref}>
-                  <Button onClick={handleClick}>SOL</Button>
+                  <Button onClick={handleClick}>{(MyAccountDetail.name).substring(0, 3).toLocaleUpperCase()}</Button>
 
                   <Overlay
                     show={show}
@@ -113,17 +116,21 @@ const MyAccount = () => {
                       <th>To Date</th>
                     </tr>
                   </thead>
-
+           
+                         
                   <tbody>
-                    <tr>
-                      <td>$50,000</td>
+                  {
+                      MyAccountDetail.array.map((item,index)=>{
+                        return(
+                       <tr>
+                      <td>${item.aum}</td>
                       <td>
                         <img
                           src="/assets/images/triangle.png"
                           className="d-inline-block pr-1"
                           alt="Image"
                         />
-                        0,73% $370
+                       {(item.daily).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.daily_}
                       </td>
                       <td>
                         <img
@@ -131,7 +138,7 @@ const MyAccount = () => {
                           className="d-inline-block pr-1"
                           alt="Image"
                         />
-                        0,98% $620
+                        {(item.weekly).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.weekly_}
                       </td>
 
                       <td>
@@ -140,9 +147,11 @@ const MyAccount = () => {
                           className="d-inline-block pr-1"
                           alt="Image"
                         />
-                        0,66% $330
+                       {(item.to_date).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.to_date_}
                       </td>
-                    </tr>
+                    </tr> 
+                   
+                        )})}
                   </tbody>
                 </Table>
               </div>
@@ -164,16 +173,17 @@ const MyAccount = () => {
                   </Col>
 
                   <Col md={3} sm={3} xs={3} className="text-right">
-                    <span>790</span>
+                    <span>{MyAccountDetail.buru_token_minted}</span>
                   </Col>
                 </Row>
               </div>
             </Col>
+           
           </Row>
         </Container>
       </div>
 
-      {/* Table */}
+      {/* Table Strategies */}
       <div className="mt-4 mb-5 pb-3 tablebgHead">
         <Container>
           <h5 className="d-inline-block mt-4 mb-5">Strategies</h5>
@@ -204,7 +214,12 @@ const MyAccount = () => {
               </thead>
 
               <tbody>
-                <tr>
+                {
+                  StrategiesTable.map((item,index)=>{
+                    return(
+                      <>
+                      {item.status == 1?
+                       <tr>
                   <td className="nodata1">First strategy</td>
                   <td>16h</td>
                   <td>-</td>
@@ -223,49 +238,34 @@ const MyAccount = () => {
                       />
                     </a>
                   </td>
-                </tr>
+                </tr> 
+                      :
+                      <tr>
+                      <td className="nodata1">{item.name}</td>
+                      <td>{item.data_open}</td>
+                      <td>
+                        ${item.earnings}<span className="fontlight">{"+"+`${item.earnings_per}`+"%"} </span>
+                      </td>
+                      <td>${item.allocation}</td>
+                      <td> ${item.profit}</td>
+                      <td>${item.last_transaction}</td>
+                      <td>
+                        <strong> {item.apy}% </strong>
+                      </td>
+                      <td>{item.buru_token}</td>
+                      <td className="fontlighBold">{item.status == 1?"Waiting": "Approved" }</td>
+                      <td>
+                        <Form>
+                          <Form.Check type="switch" id="custom-switch1" />
+                        </Form>
+                      </td>
+                    </tr>
+                  }
+                    </>
 
-                <tr>
-                  <td className="nodata1">Curve DAL * *</td>
-                  <td>11.09.2019</td>
-                  <td>
-                    $74 <span className="fontlight"> +0,05% </span>
-                  </td>
-                  <td>$93,600</td>
-                  <td> $125,36</td>
-                  <td>$300,30</td>
-                  <td>
-                    <strong> 30% </strong>
-                  </td>
-                  <td>890</td>
-                  <td className="fontlighBold">Approved </td>
-                  <td>
-                    <Form>
-                      <Form.Check type="switch" id="custom-switch" />
-                    </Form>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td className="nodata1">Curve DAL * *</td>
-                  <td>25.10.2020</td>
-                  <td>
-                    $60 <span className="fontlight"> +0,02% </span>
-                  </td>
-                  <td>$63,600</td>
-                  <td> $105,36</td>
-                  <td>$250,10</td>
-                  <td>
-                    <strong> 25% </strong>
-                  </td>
-                  <td>730</td>
-                  <td className="fontlighBold">Approved </td>
-                  <td>
-                    <Form>
-                      <Form.Check type="switch" id="custom-switch1" />
-                    </Form>
-                  </td>
-                </tr>
+                    )
+                  })
+                }
               </tbody>
             </Table>
           </div>
@@ -305,123 +305,50 @@ const MyAccount = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td className="nodata">1</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Dj</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Djony </span> <br />
-                    <span className="fontlight">Nb of farmers: 112</span>
-                  </td>
-                  <td> $2 280,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">280 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+11,0%</td>
-                </tr>
+                {DataFarmer.map((item,index)=>{
+                    var str = item.name;
+                    var res = str.substring(0, 2).toLocaleUpperCase();
+                    var number=item.apy
+                    if(number.toString().length>=3){
+                     var num= number.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')
+                    }else{
+                      var num= number.toString().replace(/\B(?=(\d{1})+(?!\d))/g, ',')
+                    }
+                  return(
+                    <>
 
-                <tr>
-                  <td className="nodata">2</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Sa</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Saly </span> <br />
-                    <span className="fontlight">Nb of farmers: 103</span>
-                  </td>
-                  <td> $2 1230,10</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">276 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+10,5%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">3</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Ja</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Jack </span> <br />
-                    <span className="fontlight">Nb of farmers: 97</span>
-                  </td>
-                  <td> $2 080,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">265 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+10,1%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">4</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Ra</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Ramp </span> <br />
-                    <span className="fontlight">Nb of farmers: 92</span>
-                  </td>
-                  <td> $1 980,20</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">260 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+9,7%</td>
-                </tr>
-
-                <tr>
+                    <tr>
+                    <td className="nodata">{item.id}</td>
+                    <td>
+                      <img
+                        src="/assets/images/blackstar.png"
+                        className="d-inline-block"
+                        alt="Image"
+                      />
+                    </td>
+                    <td>
+                      <span className="spanname"> {res}</span>
+                    </td>
+                    <td>
+                      <span className="spanbold">{ item.name} </span> <br />
+                      <span className="fontlight">Nb of farmers: {item.nb_farmers}</span>
+                    </td>
+                    <td> ${(item.budget).toString().replace(/\B(?=(\d{4})+(?!\d))/g, ',')}</td>
+                    <td>{item.age} years</td>
+                    <td className="fontlighBold">{item.buru_token} </td>
+                    <td className="tdGraphic">
+                      <img
+                        src="/assets/images/graphic2.png"
+                        className="d-inline-block"
+                        alt="Image"
+                      />
+                    </td>
+                    <td className="fontdBold">{"+"+`${num}`+"%"}</td>
+                  </tr>
+                  {
+                    item.id === 4?
+                               
+                    <tr>
                   <td className="rowData" colspan="8">
                     Join our farmers team
                     <ButtonComponent
@@ -432,65 +359,24 @@ const MyAccount = () => {
                     </ButtonComponent>
                   </td>
                   <td></td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">5</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
+                </tr> :null
+                  }
+                  </>
+                  )
+                })}
+              
+         {/* <tr>
+                  <td className="rowData" colspan="8">
+                    Join our farmers team
+                    <ButtonComponent
+                      variant="colorBlack"
+                      className="btnYellow ml-md-5 btnPadding"
+                    >
+                      <span> Join us </span>
+                    </ButtonComponent>
                   </td>
-                  <td>
-                    <span className="spanname"> GQ</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Ramp </span> <br />
-                    <span className="fontlight">Nb of farmers: 81</span>
-                  </td>
-                  <td> $1 842,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">245 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+8,8%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">6</td>
-                  <td>
-                    <img
-                      src="/assets/images/greystar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> NI</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Nikol </span> <br />
-                    <span className="fontlight">Nb of farmers: 80</span>
-                  </td>
-                  <td> $1 784,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">240 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+7,8%</td>
-                </tr>
+                  <td></td>
+                </tr> */}
               </tbody>
             </Table>
 

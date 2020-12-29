@@ -5,13 +5,13 @@ import { Row, Col, Form, Pagination, Table } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./FarmersStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-
+import DataFarmer from "../../JsonData/DataFarmer";
 const FarmersPage = () => {
+
   return (
     <div className="bgColor">
       <NavBar2 />
-
-      <div className="navbanHead pt-5 pb-5">
+  <div className="navbanHead pt-5 pb-5">
         <Container>
           <h1 className="d-inline-block mt-md-3">Farmers</h1>
 
@@ -60,8 +60,22 @@ const FarmersPage = () => {
               </thead>
 
               <tbody>
-                <tr>
-                  <td className="nodata">1</td>
+              {DataFarmer.map((item,index)=>{
+                 var str = item.name;
+                 var res = str.substring(0, 2).toLocaleUpperCase();
+              var number=item.apy
+              if(number.toString().length>=3){
+               var num= number.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')
+              }else{
+                var num= number.toString().replace(/\B(?=(\d{1})+(?!\d))/g, ',')
+              }
+             
+                return(
+                 <>
+                  
+                 <tr>
+                 
+                  <td className="nodata">{item.id}</td>
                   <td>
                     <img
                       src="/assets/images/blackstar.png"
@@ -70,182 +84,52 @@ const FarmersPage = () => {
                     />
                   </td>
                   <td>
-                    <span className="spanname"> Dj</span>
+                    <span className="spanname"> {res}</span>
                   </td>
                   <td>
-                    <span className="spanbold">Djony </span> <br />
-                    <span className="fontlight">Nb of farmers: 112</span>
+                    <span className="spanbold">{item.name} </span> <br />
+                    <span className="fontlight">Nb of farmers: {item.nb_farmers}</span>
                   </td>
-                  <td> $2 280,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">280 </td>
+                  <td> ${item.budget}</td>
+                  <td>{item.age} years</td>
+                  <td className="fontlighBold">{item.buru_token} </td>
                   <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
+                    {
+                      item.chart_url?  <img
+                      src={item.chart_url}
                       className="d-inline-block"
                       alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+11,0%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">2</td>
-                  <td>
+                    />:
                     <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
+                    src="/assets/images/graphic2.png"
+                    className="d-inline-block"
+                    alt="Image"
+                  />
+                    }
+                  
                   </td>
-                  <td>
-                    <span className="spanname"> Sa</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Saly </span> <br />
-                    <span className="fontlight">Nb of farmers: 103</span>
-                  </td>
-                  <td> $2 1230,10</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">276 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+10,5%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">3</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Ja</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Jack </span> <br />
-                    <span className="fontlight">Nb of farmers: 97</span>
-                  </td>
-                  <td> $2 080,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">265 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+10,1%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">4</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> Ra</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Ramp </span> <br />
-                    <span className="fontlight">Nb of farmers: 92</span>
-                  </td>
-                  <td> $1 980,20</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">260 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+9,7%</td>
-                </tr>
-
-                <tr>
-                  <td className="rowData" colspan="8">
-                    Join our farmers team
-                    <ButtonComponent
-                      variant="colorBlack"
-                      className="btnYellow ml-md-5 btnPadding"
-                    >
-                      <span> Join us </span>
-                    </ButtonComponent>
-                  </td>
-                  <td></td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">5</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> GQ</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Ramp </span> <br />
-                    <span className="fontlight">Nb of farmers: 81</span>
-                  </td>
-                  <td> $1 842,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">245 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+8,8%</td>
-                </tr>
-
-                <tr>
-                  <td className="nodata">6</td>
-                  <td>
-                    <img
-                      src="/assets/images/greystar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> NI</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">Nikol </span> <br />
-                    <span className="fontlight">Nb of farmers: 80</span>
-                  </td>
-                  <td> $1 784,00</td>
-                  <td>3 years</td>
-                  <td className="fontlighBold">240 </td>
-                  <td className="tdGraphic">
-                    <img
-                      src="/assets/images/graphic2.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td className="fontdBold">+7,8%</td>
-                </tr>
+                  <td className="fontdBold">{"+"+`${num}`+"%"}</td>
+                  </tr>
+                  { item.id == 2 ?
+                      <tr>
+                      <td className="rowData" colspan="8">
+                       Join our farmers team
+                        <ButtonComponent
+                         variant="colorBlack"
+                         className="btnYellow ml-md-5 btnPadding"
+                       >
+                         <span> Join us </span>
+                       </ButtonComponent>
+                     </td>
+                     <td></td>
+                   </tr> 
+                   
+                   :null}
+                  </>
+                  
+                )
+                
+              })}
               </tbody>
             </Table>
 

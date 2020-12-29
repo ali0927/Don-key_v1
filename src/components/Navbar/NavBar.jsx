@@ -4,9 +4,9 @@ import { Container } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
 import { Navbar, Nav, Dropdown, DropdownButton } from "react-bootstrap";
 import "./NavbarStyle.scss";
-
+import NotificationJson from "../../JsonData/NotificationJson";
 function NavBar(props) {
-  return (
+   return (
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
       <Container>
         <Navbar.Brand href="#">
@@ -46,7 +46,34 @@ function NavBar(props) {
 }
 
 function NavBar2(props) {
-  return (
+  function timeSince(date) {
+  // var seconds = Math.floor((new Date() - date) / 1000);
+    var seconds = Math.floor(((new Date().getTime()/1000) - date)) 
+    var interval = seconds / 31536000;
+  
+    if (interval > 1) {
+      return Math.floor(interval) + " years ago";
+    }
+    interval = seconds / 2592000;
+    if (interval > 1) {
+      return Math.floor(interval) + " months ago";
+    }
+    interval = seconds / 86400;
+    if (interval > 1) {
+      return Math.floor(interval) + " days ago";
+    }
+    interval = seconds / 3600;
+    if (interval > 1) {
+      return Math.floor(interval) + " hours ago";
+    }
+    interval = seconds / 60;
+    if (interval > 1) {
+      return Math.floor(interval) + " minutes ago";
+    }
+    return Math.floor(seconds) + " seconds ago";
+  }
+  var aDay = 24*60*60*1000;
+return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
       <Container>
         <Navbar.Brand href="#">
@@ -86,22 +113,21 @@ function NavBar2(props) {
 
             <Dropdown.Menu>
               <p className="notifyHead">Notifications</p>
-              <Dropdown.Item href="#">
-                <p>
-                  Your <strong> «New strategy» </strong> has been approve and is
-                  ready to launch
-                </p>
-                <span>5 mins ago</span>
-              </Dropdown.Item>
 
-              <Dropdown.Item href="#">
-                <p>
-                  Your <strong> «Strategy 3» </strong> has been approve and is
-                  ready to launch ready to launch
-                </p>
-                <span>9 hours ago</span>
-              </Dropdown.Item>
-
+              {
+                NotificationJson.map((item,index)=>{
+                  return(
+                    <Dropdown.Item href="#">
+                    <p>
+                      {item.notification}
+                    </p>
+                  <span> 
+                    {timeSince(item.date)}
+                     </span>
+                  </Dropdown.Item>
+                  )
+                })
+              }
               <div className="viewDrop">
                 <a href="#"> View All</a>
               </div>

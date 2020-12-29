@@ -5,11 +5,10 @@ import { Row, Col } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./LandingStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-
+import NumberFromjson from "../../JsonData/NumberFromJson";
+import ListofFarmerjson from "../../JsonData/ListofFarmerJson";
 const LandingPage = () => {
-  console.log(">>>>>>>>", window.location.pathname);
-
-  return (
+ return (
     <div>
       <NavBar />
 
@@ -55,68 +54,47 @@ const LandingPage = () => {
       <div className="cardsBanner mt-5 pt-5">
         <Container>
           <Row>
-            <Col md={6} lg={3}>
-              <Card>
-                <Card.Body className="text-center">
-                  <img
-                    src="/assets/images/total/1.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                  <Card.Title className="mb-3">$5 400 00</Card.Title>
-                  <Card.Subtitle className="mb-2">
-                    Total amount yield
-                  </Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
+          {
+            NumberFromjson.map((item,index)=>{
+              if(item.id ==1){
+                var imag= '/assets/images/total/1.png'
+              }
+              else if( item.id==2){
+                var imag= '/assets/images/total/2.png'
+              }
+              else if(item.id == 3){
+                var imag= '/assets/images/total/3.png'
+              }
+              else if(item.id == 4){
+                var imag= '/assets/images/total/4.png'
+              }
+             
+              return(
+              <Col md={6} lg={3}>
+                <Card>
+                  <Card.Body className="text-center">
+                    <img
+                      src={imag}
+                      className="d-inline-block"
+                      alt="Image"
+                    />
+                    <Card.Title className="mb-3">
+                    {item.id == 1 || item.id==2 ? "$"+`${item.number}` : item.number}
+                     </Card.Title>
+                    <Card.Subtitle className="mb-2">
+                     {item.title}
+                    </Card.Subtitle>
+                  </Card.Body>
+                </Card>
+              </Col>
 
-            <Col md={6} lg={3}>
-              <Card>
-                <Card.Body className="text-center">
-                  <img
-                    src="/assets/images/total/2.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                  <Card.Title className="mb-3">$10 405 20</Card.Title>
-                  <Card.Subtitle className="mb-2">
-                    Total liq. amount
-                  </Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col md={6} lg={3}>
-              <Card>
-                <Card.Body className="text-center">
-                  <img
-                    src="/assets/images/total/3.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                  <Card.Title className="mb-3">50+</Card.Title>
-                  <Card.Subtitle className="mb-2">Total Farmers</Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
-
-            <Col md={6} lg={3}>
-              <Card>
-                <Card.Body className="text-center">
-                  <img
-                    src="/assets/images/total/4.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                  <Card.Title className="mb-3">12 490</Card.Title>
-                  <Card.Subtitle className="mb-2">
-                    Total tokens giving out
-                  </Card.Subtitle>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
+           
+              )
+         
+            })
+           }
+           </Row>
+          
         </Container>
 
         {/* Advantage */}
@@ -185,159 +163,117 @@ const LandingPage = () => {
               <ButtonComponent className="btnYellow mt-4">
                 Discover best farmers
               </ButtonComponent>
+              {
+                ListofFarmerjson.map((item,index)=>{
+                  var str = item.name;
+                  var res = str.substring(0, 2).toLocaleUpperCase();
+                  return(
+                    item.id == 3 || item.id == 4?
 
-              <div className="cardTeam mt-5">
-                <Card
-                  className="ml-auto mr-auto ml-md-auto mr-md-0 cardEven text-center pt-5 pb-3"
-                  style={{ width: "23rem" }}
-                >
-                  <img
-                    src="/assets/images/starblack.png"
-                    className="d-inline-block cardStar"
-                    alt="Image"
-                  />
-                  <Card.Body>
-                    <span className="cardLetter">SA</span>
-                    <Card.Title>Saly</Card.Title>
+                    <div className="cardTeam mt-5">
+                    <Card
+                      className="ml-auto mr-auto ml-md-auto mr-md-0 cardEven text-center pt-5 pb-3"
+                      style={{ width: "23rem" }}
+                    >
+                      <img
+                        src="/assets/images/starblack.png"
+                        className="d-inline-block cardStar"
+                        alt="Image"
+                      />
+                      <Card.Body>
+                        <span className="cardLetter">
+                          
+                          {item.picture ? <img
+                           src={item.chart_image_url}
+                          //  className="d-inline-block mt-4"
+                           alt="Image"
+                          />:res}
+                        
+                        </span>
+                        <Card.Title>{item.name}</Card.Title>
+    
+                        <ul className="p-0">
+                          <li>{item.description}</li>
+                         
+                        </ul>
+    
+                        <img
+                          src={item.chart_image_url}
+                          className="d-inline-block mt-4"
+                          alt="Image"
+                        />
+    
+                        <Row className="mt-4">
+                          <Col md={6}>
+                            <p className="cardPara">
+                              <span className="pr-2"> {"+"+`${item.apy}`+"%"} </span> APY
+                            </p>
+                          </Col>
+                          <Col md={6}>
+                            <p className="cardPara1">{"strategies " +`${item.strategies}`}</p>
+                          </Col>
+                        </Row>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                    :null
+                  )
+                })
+              }
 
-                    <ul className="p-0">
-                      <li>$50,000 Assets under managemnt </li>
-                      <li>$100,000 next level </li>
-                    </ul>
-
-                    <img
-                      src="/assets/images/graphic.png"
-                      className="d-inline-block mt-4"
-                      alt="Image"
-                    />
-
-                    <Row className="mt-4">
-                      <Col md={6}>
-                        <p className="cardPara">
-                          <span className="pr-2"> +81% </span> APY
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <p className="cardPara1">strategies 16</p>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
-
-                <Card
-                  className="ml-auto mr-auto ml-md-auto mr-md-0 cardEven text-center pt-5 pb-3"
-                  style={{ width: "23rem" }}
-                >
-                  <img
-                    src="/assets/images/starblack.png"
-                    className="d-inline-block cardStar"
-                    alt="Image"
-                  />
-                  <Card.Body>
-                    <span className="cardLetter">RA</span>
-                    <Card.Title>Ramp</Card.Title>
-                    <ul className="p-0">
-                      <li>$500,000 Assets under managemnt </li>
-                      <li>$750,000 next level </li>
-                    </ul>
-
-                    <img
-                      src="/assets/images/graphic.png"
-                      className="d-inline-block mt-4"
-                      alt="Image"
-                    />
-
-                    <Row className="mt-4">
-                      <Col md={6}>
-                        <p className="cardPara">
-                          <span className="pr-2"> +77% </span> APY
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <p className="cardPara1">strategies 13</p>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
-              </div>
             </Col>
 
             <Col md={6}>
               <div className="cardTeam mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
-                <Card
-                  className="cardEven text-center pt-5 pb-3"
-                  style={{ width: "23rem" }}
-                >
-                  <img
-                    src="/assets/images/starblack.png"
-                    className="d-inline-block cardStar"
-                    alt="Image"
-                  />
-                  <Card.Body>
-                    <span className="cardLetter">DJ</span>
-                    <Card.Title>Djony</Card.Title>
-
-                    <ul className="p-0">
-                      <li>$100,000 Assets under managemnt </li>
-                      <li>200,000 next level </li>
-                    </ul>
-
-                    <img
-                      src="/assets/images/graphic.png"
-                      className="d-inline-block mt-4"
-                      alt="Image"
-                    />
-
-                    <Row className="mt-4">
-                      <Col md={6}>
-                        <p className="cardPara">
-                          <span className="pr-2"> +82% </span> APY
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <p className="cardPara1">strategies 18</p>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
-
-                <Card
-                  className="cardEven text-center pt-5 pb-3"
-                  style={{ width: "23rem" }}
-                >
-                  <img
-                    src="/assets/images/starblack.png"
-                    className="d-inline-block cardStar"
-                    alt="Image"
-                  />
-                  <Card.Body>
-                    <span className="cardLetter">JA</span>
-                    <Card.Title>Jack</Card.Title>
-
-                    <ul className="p-0">
-                      <li>$25,000 Assets under managemnt </li>
-                      <li>$50,000 next level </li>
-                    </ul>
-
-                    <img
-                      src="/assets/images/graphic.png"
-                      className="d-inline-block mt-4"
-                      alt="Image"
-                    />
-
-                    <Row className="mt-4">
-                      <Col md={6}>
-                        <p className="cardPara">
-                          <span className="pr-2"> +78% </span> APY
-                        </p>
-                      </Col>
-                      <Col md={6}>
-                        <p className="cardPara1">strategies 14</p>
-                      </Col>
-                    </Row>
-                  </Card.Body>
-                </Card>
-
+               {
+                     ListofFarmerjson.map((item,index)=>{
+                      var str = item.name;
+                      var res = str.substring(0, 2).toLocaleUpperCase();
+                       return(
+                         item.id == 3 || item.id == 4 ? null:
+                         <Card
+                         className="cardEven text-center pt-5 pb-3"
+                         style={{ width: "23rem" }}
+                       >
+                         <img
+                           src="/assets/images/starblack.png"
+                           className="d-inline-block cardStar"
+                           alt="Image"
+                         />
+                         <Card.Body>
+                         <span className="cardLetter">
+                           {item.picture ? <img
+                            src={item.chart_image_url}
+                           //  className="d-inline-block mt-4"
+                            alt="Image"
+                           />:res}</span>
+                         <Card.Title>{item.name}</Card.Title>
+     
+                         <ul className="p-0">
+                           <li>{item.description}</li>
+                         </ul>
+     
+                         <img
+                           src={item.chart_image_url}
+                           className="d-inline-block mt-4"
+                           alt="Image"
+                         />
+     
+                         <Row className="mt-4">
+                           <Col md={6}>
+                             <p className="cardPara">
+                               <span className="pr-2"> {"+"+`${item.apy}`+"%"} </span> APY
+                             </p>
+                           </Col>
+                           <Col md={6}>
+                             <p className="cardPara1">{"strategies "+`${item.strategies}`}</p>
+                           </Col>
+                         </Row>
+                         </Card.Body>
+                         </Card>
+                       )
+                     })
+                   }
                 <Card
                   className="cardOdd text-center pt-5 pb-3"
                   style={{ width: "23rem" }}
