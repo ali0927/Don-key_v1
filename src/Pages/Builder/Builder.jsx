@@ -15,6 +15,18 @@ import { Card } from "react-bootstrap";
 import "./Builder.scss";
 const Builder = () => {
   return (
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
+	<script type="text/javascript">
+      mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
+	</script>
+	<link rel="stylesheet" href="./src/css/main.css">
+	<link rel="stylesheet" href="./src/css/modal.css">
+
+	<script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/src/js/mxClient.js"></script>
+	<script type="text/javascript" src="./protocols.js"></script>
+  
     <div className="page-wrapper">
       <div id="graphContainer"
         style="position:relative;overflow:hidden;width:100%;height:100%;cursor:default; margin-left: 150px;">
@@ -30,7 +42,7 @@ const Builder = () => {
 	padding: 10px;">
         <ul style="list-style: none;     padding-inline-start: 0px;">
           <li style="text-align: center; font-size:13px; color:#232323; height: 32px;">
-            Protocols
+                Protocols
 				</li>
           <li style="height: 66px;">
             <img src="./pics/YFI.png" id="yfi" draggable="true" ondragstart="drag(event)">
@@ -57,14 +69,14 @@ const Builder = () => {
                 <div className="modal-wrapper">
                   <div className="modal">
                     <div className="head">
-                      Deposit DAI
+                            Deposit DAI
 				<a className="btn-close trigger" href="javascript:;"></a>
                     </div>
                     <div className="content">
                       <table>
                         <tr>
                           <td>
-                            Amount:
+                                  Amount:
 						</td>
                           <td>
                             <input type="text">
@@ -72,7 +84,7 @@ const Builder = () => {
 					</tr>
                           <tr>
                             <td>
-                              Colleteralization %:
+                                    Colleteralization %:
 						</td>
                             <td>
                               <input type="text">
@@ -157,9 +169,9 @@ const Builder = () => {
                             <a href="https://yearn.finance" target="_blank">https://yearn.finance</a>
                           </div>
                           <div className="desc" style="font-size: 14px; color: #807f7f; margin-top: 15px;">
-                            Yearn Finance is a suite of products in Decentralized Finance (DeFi) that provides lending aggregation,
-                            yield generation, and insurance on the Ethereum blockchain. The protocol is maintained by various
-                            independent developers and is governed by YFI holders.
+                                  Yearn Finance is a suite of products in Decentralized Finance (DeFi) that provides lending aggregation,
+                                  yield generation, and insurance on the Ethereum blockchain. The protocol is maintained by various
+                                  independent developers and is governed by YFI holders.
 			</div>
 
 		</div>
@@ -174,11 +186,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">curve.fi/Compound LP</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 14.61%
+                                      APY: 14.61%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -187,11 +199,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">curve.fi/3pool LP</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 10.03%
+                                      APY: 10.03%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -200,11 +212,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">curve.fi/mUSD LP</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 5.56%
+                                      APY: 5.56%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -213,11 +225,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">curve.fi/busd LP</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 11.61%
+                                      APY: 11.61%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -226,11 +238,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">curve.fi/sbtc LP</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 1.94%
+                                      APY: 1.94%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -240,11 +252,11 @@ const Builder = () => {
                                 width="40" /></div>
                               <div style="display: inline-block; vertical-align: top;">DAI</div>
                               <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                APY: 12.61%
+                                      APY: 12.61%
 					</div>
                               <div className="btnControl actionBtn">
                                 <div className="btn">
-                                  Deposit
+                                        Deposit
 						</div>
                               </div>
                             </li>
@@ -270,12 +282,12 @@ const Builder = () => {
                                 <a href="https://compound.finance/" target="_blank">https://compound.finance/</a>
                               </div>
                               <div className="desc" style="font-size: 14px; color: #807f7f; margin-top: 15px;">
-                                Compound Finance is a sector-leading lending protocol enabling users to lend and borrow popular
-                                cryptocurrencies like Ether, Dai and Tether.
+                                      Compound Finance is a sector-leading lending protocol enabling users to lend and borrow popular
+                                      cryptocurrencies like Ether, Dai and Tether.
 
-                                Compound leverages audited smart contracts responsible for the storage, management, and facilitation of
-                                all pooled capital. Users connect to Compound through web3 wallets like MetaMask with all positions
-                                being tracked using interest-earning tokens called cTokens.
+                                      Compound leverages audited smart contracts responsible for the storage, management, and facilitation of
+                                      all pooled capital. Users connect to Compound through web3 wallets like MetaMask with all positions
+                                      being tracked using interest-earning tokens called cTokens.
 			</div>
 		</div>
 
@@ -290,12 +302,12 @@ const Builder = () => {
                                   </div>
                                   <div className="btnControl actionBtn">
                                     <div className="btn">
-                                      Supply 3.5%
+                                            Supply 3.5%
 						</div>
                                   </div>
                                   <div class="btnControl left actionBtn">
                                     <div class="btn">
-                                      Borrow 5.5%
+                                            Borrow 5.5%
 						</div>
                                   </div>
                                 </li>
@@ -304,16 +316,16 @@ const Builder = () => {
                                   </div>
                                   <div style="display: inline-block; vertical-align: top;">Compound</div>
                                   <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                    APY: 10.03%
+                                          APY: 10.03%
 					</div>
                                   <div className="btnControl actionBtn">
                                     <div className="btn">
-                                      Supply 3.5%
+                                            Supply 3.5%
 						</div>
                                   </div>
                                   <div className="btnControl left actionBtn">
                                     <div className="btn">
-                                      Borrow 5.5%
+                                            Borrow 5.5%
 						</div>
                                   </div>
                                 </li>
@@ -322,16 +334,16 @@ const Builder = () => {
                                   </div>
                                   <div style="display: inline-block; vertical-align: top;">DAI</div>
                                   <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                    APY: 5.56%
+                                          APY: 5.56%
 					</div>
                                   <div className="btnControl actionBtn">
                                     <div className="btn">
-                                      Supply 3.5%
+                                            Supply 3.5%
 						</div>
                                   </div>
                                   <div className="btnControl left actionBtn">
                                     <div className="btn">
-                                      Borrow 5.5%
+                                            Borrow 5.5%
 						</div>
                                   </div>
                                 </li>
@@ -340,16 +352,16 @@ const Builder = () => {
                                   </div>
                                   <div style="display: inline-block; vertical-align: top;">UNI</div>
                                   <div style="display: block;margin-left: 44px;margin-top: -21px;">
-                                    APY: 11.61%
+                                          APY: 11.61%
 					</div>
                                   <div className="btnControl actionBtn">
                                     <div className="btn">
-                                      Supply 3.5%
+                                            Supply 3.5%
 						</div>
                                   </div>
                                   <div className="btnControl left actionBtn">
                                     <div className="btn">
-                                      Borrow 5.5%
+                                            Borrow 5.5%
 						</div>
                                   </div>
                                 </li>
