@@ -1,7 +1,7 @@
 const DataFarmer = [
     {
         id: 1,
-        name: 'Djony',
+        name: 'Djony111',
         nb_farmers: 12,
         budget: 208000,
         age: 32,
