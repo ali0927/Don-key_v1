@@ -21,10 +21,13 @@ const Builder = () => {
 	<script type="text/javascript">
       mxBasePath = 'https://jgraph.github.io/mxgraph/javascript/src';
 	</script>
+
+  
 	<link rel="stylesheet" href="./src/css/main.css">
 	<link rel="stylesheet" href="./src/css/modal.css">
 
 	<script type="text/javascript" src="https://jgraph.github.io/mxgraph/javascript/src/js/mxClient.js"></script>
+  <script type="text/javascript" src="./scripts.js"></script>
 	<script type="text/javascript" src="./protocols.js"></script>
   
     <div className="page-wrapper">
