@@ -1,40 +1,27 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect } from "react";
-import Helmet from "react-helmet";
+import React from "react";
+import { map } from "lodash";
+import { PROTOCOLS, useGraph } from "../../hooks";
+import clsx from "clsx";
 import "./main.css";
 import "./modal.css";
 
-const Builder = () => {
-  if (typeof window !== "undefined") {
-    window.mxBasePath = "https://jgraph.github.io/mxgraph/javascript/src";
-    window.mxForceIncludes = true;
-  }
+function drag(ev) {
+  ev.dataTransfer.setData("protocol", ev.target.id);
+}
 
-  useEffect(() => {
-    setTimeout(() => {
-      const main = window.startBuilder ? window.startBuilder : null;
-      if (main) {
-        main(document.getElementById("graphContainer"));
-      }
-    }, 1000);
-  }, []);
+const Builder = () => {
+  const {
+    getActionConfigStyle,
+    isModalOpen,
+    insertAction,
+    panel,
+    toggleModal,
+  } = useGraph({ id: "graphContainer" });
+
   return (
     <>
-      <Helmet>
-        <script
-          src="https://code.jquery.com/jquery-3.5.1.min.js"
-          integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-          crossOrigin="anonymous"
-        ></script>
-        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.20/lodash.min.js"></script>
-        <script
-          type="text/javascript"
-          src="./assets/js/mxClient.min.js"
-        ></script>
-        <script type="text/javascript" src="./assets/js/scripts.js"></script>
-        <script type="text/javascript" src="./assets/js/protocols.js"></script>
-      </Helmet>
-      <div className="page-wrapper">
+      <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
         <div
           id="graphContainer"
           style={{
@@ -62,14 +49,46 @@ const Builder = () => {
           <ul
             style={{ listStyle: "none", paddingInlineStart: "0px" }}
             id="protocolsList"
-          ></ul>
+          >
+            <li
+              style={{
+                textAlign: "center",
+                fontSize: "13px",
+                color: "#232323",
+                height: "32px",
+              }}
+            >
+              Protocols
+            </li>
+            {map(PROTOCOLS, (protocol, name) => {
+              if (protocol.showOnToolbar) {
+                return (
+                  <li key={name} style={{ height: 66 }}>
+                    <img
+                      src={protocol.icon}
+                      draggable
+                      id={name}
+                      onDragStart={(e) => drag(e)}
+                    />
+                  </li>
+                );
+              }
+              return null;
+            })}
+          </ul>
         </div>
       </div>
-      <div className="b-modal-wrapper">
+      <div className={clsx("b-modal-wrapper", { open: isModalOpen })}>
         <div className="b-modal">
           <div className="head">
             Deposit DAI
-            <a className="b-btn-close trigger" href="javascript:;"></a>
+            <button
+              className="b-btn-close trigger"
+              onClick={(e) => {
+                e.preventDefault();
+                toggleModal();
+              }}
+            ></button>
           </div>
           <div className="b-content">
             <table>
@@ -87,7 +106,15 @@ const Builder = () => {
               </tr>
               <tr>
                 <td colSpan="2">
-                  <button className="trigger" id="createAction">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toggleModal();
+                      insertAction();
+                    }}
+                    className="trigger"
+                    id="createAction"
+                  >
                     Create action
                   </button>
                 </td>
@@ -97,8 +124,7 @@ const Builder = () => {
         </div>
       </div>
 
-      <style></style>
-      <div className="actionConfig">
+      <div className={clsx("actionConfig")} style={getActionConfigStyle()}>
         <div className="actionInner">
           <div id="pointer"></div>
           <div className="actionContent">
@@ -152,7 +178,10 @@ const Builder = () => {
           </div>
         </div>
       </div>
-      <div className="panel" id="yfipanel">
+      <div
+        className={clsx("panel", { panel_open: panel === "#yfipanel" })}
+        id="yfipanel"
+      >
         <div className="panel_header">
           <button id="close" className="btn_close">
             X
@@ -202,7 +231,12 @@ const Builder = () => {
               >
                 APY: 14.61%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -225,7 +259,12 @@ const Builder = () => {
               >
                 APY: 10.03%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -248,7 +287,12 @@ const Builder = () => {
               >
                 APY: 5.56%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -271,7 +315,12 @@ const Builder = () => {
               >
                 APY: 11.61%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -294,7 +343,12 @@ const Builder = () => {
               >
                 APY: 1.94%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -317,7 +371,12 @@ const Builder = () => {
               >
                 APY: 12.61%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Deposit</div>
               </div>
             </li>
@@ -330,7 +389,10 @@ const Builder = () => {
           <input type="submit" className="btn btn_save" value="Save" />
         </div>
       </div>
-      <div className="panel" id="cmppanel">
+      <div
+        className={clsx("panel", { panel_open: panel === "#cmppanel" })}
+        id="cmppanel"
+      >
         <div className="panel_header">
           <button id="close" className="btn_close">
             X
@@ -381,10 +443,20 @@ const Builder = () => {
                   marginTop: "-21px",
                 }}
               ></div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Supply 3.5%</div>
               </div>
-              <div className="btnControl left actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl left actionBtn"
+              >
                 <div className="b-btn">Borrow 5.5%</div>
               </div>
             </li>
@@ -407,10 +479,20 @@ const Builder = () => {
               >
                 APY: 10.03%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Supply 3.5%</div>
               </div>
-              <div className="btnControl left actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl left actionBtn"
+              >
                 <div className="b-btn">Borrow 5.5%</div>
               </div>
             </li>
@@ -433,10 +515,20 @@ const Builder = () => {
               >
                 APY: 5.56%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Supply 3.5%</div>
               </div>
-              <div className="btnControl left actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl left actionBtn"
+              >
                 <div className="b-btn">Borrow 5.5%</div>
               </div>
             </li>
@@ -459,10 +551,20 @@ const Builder = () => {
               >
                 APY: 11.61%
               </div>
-              <div className="btnControl actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl actionBtn"
+              >
                 <div className="b-btn">Supply 3.5%</div>
               </div>
-              <div className="btnControl left actionBtn">
+              <div
+                onClick={() => {
+                  toggleModal();
+                }}
+                className="btnControl left actionBtn"
+              >
                 <div className="b-btn">Borrow 5.5%</div>
               </div>
             </li>

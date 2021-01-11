@@ -1637,6 +1637,11 @@
   dependencies:
     "@babel/runtime" "^7.10.2"
 
+"@typed-mxgraph/typed-mxgraph@^0.0.5-0":
+  version "0.0.5-0"
+  resolved "https://registry.yarnpkg.com/@typed-mxgraph/typed-mxgraph/-/typed-mxgraph-0.0.5-0.tgz#9943cbd518d985e84d6132b40249be25eaeae345"
+  integrity sha512-hqRx0sbdMVHynG01pbIk2J//rgGlckftdKICBCqzLMdyA8OvKVnBAn3jR1kYbA7t6BRa0Ot0c+VDtOzeSShJlw==
+
 "@types/anymatch@*":
   version "1.3.1"
   resolved "https://registry.npmjs.org/@types/anymatch/-/anymatch-1.3.1.tgz"
@@ -3303,6 +3308,11 @@ clone-deep@^4.0.1:
     is-plain-object "^2.0.4"
     kind-of "^6.0.2"
     shallow-clone "^3.0.0"
+
+clsx@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.1.1.tgz#98b3134f9abbdf23b2663491ace13c5c03a73188"
+  integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
 
 co@^4.6.0:
   version "4.6.0"
@@ -6693,6 +6703,11 @@ jest@26.6.0:
     import-local "^3.0.2"
     jest-cli "^26.6.0"
 
+jquery@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
+  integrity sha512-XwIBPqcMn57FxfT+Go5pzySnm4KWkT1Tv7gjrpT1srtf8Weynl6R273VJ5GjkRb51IzMp5nbaPjJXMWeju2MKg==
+
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
@@ -7388,11 +7403,6 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
-
-mxgraph-js@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/mxgraph-js/-/mxgraph-js-1.0.1.tgz#21779cb4e35166ed2b24075eaa2d9447990675a3"
-  integrity sha1-IXectONRZu0rJAdeqi2UR5kGdaM=
 
 mxgraph@^4.2.2:
   version "4.2.2"
