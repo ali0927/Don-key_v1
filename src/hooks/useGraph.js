@@ -10,7 +10,7 @@ const mx = factory({
 });
 
 let _currentProtocol = '';
-let _selectedCell ={};
+let _selectedCell = {};
 
 function mxVertexToolHandler() {
   mx.mxVertexHandler.apply(this, arguments);
@@ -156,16 +156,24 @@ export const useGraph = ({ id }) => {
       y = lastProtocol.y;
     }
 
-    let newVertex = graph.insertVertex(
-      parent,
-      null,
-      "",
-      x,
-      y,
-      w,
-      h,
-      "resizable=0;shape=image;image=" + data + ";"
-    );
+    let newVertex = {};
+    graph.getModel().beginUpdate();
+    try {
+
+      newVertex = graph.insertVertex(
+        parent,
+        null,
+        "",
+        x,
+        y,
+        w,
+        h,
+        "resizable=0;shape=image;image=" + data + ";"
+      );
+    } finally {
+      // Updates the display
+      graph.getModel().endUpdate();
+    }
 
     addProtocolCell({
       mxObjectId: newVertex.id,
@@ -196,7 +204,7 @@ export const useGraph = ({ id }) => {
       _selectedCell.id
     );
 
-    const previousCell = getProtocolByName(getProtocolCells(),selectedProtocol.lastProtocol);
+    const previousCell = getProtocolByName(getProtocolCells(), selectedProtocol.lastProtocol);
 
     //get action image
     let base64 = actionsMap[selectedProtocol.lastProtocol][selectedProtocol.protocol].deposit; // REFACTOR FOR GENERIC ACTIONS
@@ -243,32 +251,37 @@ export const useGraph = ({ id }) => {
     const selectedCellProtocolEdge =
       PROTOCOLS[selectedProtocol.protocol].edgeColor;
 
-    // graph.model.setValue(actionVertex, "Deposit");
+    graph.getModel().beginUpdate();
 
-
-    //TODO: SHOULD STORE EDGES
-    graph.insertEdge(
-      parent,
-      null,
-      "",
-      actionVertex,
-      _selectedCell,
-      "strokeWidth=3;endArrow=block;" +
-      "endSize=2;endFill=1;strokeColor=" +
-      selectedCellProtocolEdge +
-      ";rounded=1;edgeStyle=orthogonalEdgeStyle"
-    );
-    graph.insertEdge(
-      parent,
-      null,
-      "",
-      previousCell.vertex,
-      actionVertex,
-      "strokeWidth=3;endArrow=block;" +
-      "endSize=2;endFill=1;strokeColor=" +
-      lastCellProtocolEdge +
-      ";rounded=1;edgeStyle=orthogonalEdgeStyle"
-    );
+    try {
+      //TODO: SHOULD STORE EDGES
+      graph.insertEdge(
+        parent,
+        null,
+        "",
+        actionVertex,
+        _selectedCell,
+        "strokeWidth=3;endArrow=block;" +
+        "endSize=2;endFill=1;strokeColor=" +
+        selectedCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+      );
+      graph.insertEdge(
+        parent,
+        null,
+        "",
+        previousCell.vertex,
+        actionVertex,
+        "strokeWidth=3;endArrow=block;" +
+        "endSize=2;endFill=1;strokeColor=" +
+        lastCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+      );
+    }
+    finally {
+      // Updates the display
+      graph.getModel().endUpdate();
+    }
   }, [_selectedCell]);
   useEffect(() => {
     const container = document.getElementById(id);
@@ -294,6 +307,7 @@ export const useGraph = ({ id }) => {
             openPanel(pData.panel);
           } else {
             closePanel();
+            openActionBar(_selectedCell.id);
           }
         } else {
           closePanel();
