@@ -224,7 +224,7 @@ export const useGraph = ({ id }) => {
       'gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=' + data;
 
     const x = previousCell.x + 80;
-    const y = 450;
+    const y = 350;
 
     const actionVertex = graph.insertVertex(
       parent,
@@ -232,8 +232,8 @@ export const useGraph = ({ id }) => {
       "",
       x,
       y,
-      103,
-      61,
+      105,
+      47,
       vertexStyleAction
     );
     addActionCell({
