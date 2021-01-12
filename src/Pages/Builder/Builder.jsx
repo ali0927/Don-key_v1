@@ -22,48 +22,15 @@ const Builder = () => {
   return (
     <>
       <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
-        <div
-          id="graphContainer"
-          style={{
-            position: "relative",
-            overflow: "hidden",
-            width: "100%",
-            height: "100%",
-            cursor: "default",
-            marginLeft: "150px",
-          }}
-        ></div>
+        <div id="graphContainer" className="graph-wrapper"></div>
 
-        <div
-          style={{
-            position: "absolute",
-            height: "616px",
-            backgroundColor: "white",
-            top: "20px",
-            borderRadius: "5px",
-            left: " 55px",
-            filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-            padding: "10px",
-          }}
-        >
-          <ul
-            style={{ listStyle: "none", paddingInlineStart: "0px" }}
-            id="protocolsList"
-          >
-            <li
-              style={{
-                textAlign: "center",
-                fontSize: "13px",
-                color: "#232323",
-                height: "32px",
-              }}
-            >
-              Protocols
-            </li>
+        <div className="protocol-list-wrapper">
+          <ul className="protocol-list" id="protocolsList">
+            <li className="protocol-list-item-header">Protocols</li>
             {map(PROTOCOLS, (protocol, name) => {
               if (protocol.showOnToolbar) {
                 return (
-                  <li key={name} style={{ height: 66 }}>
+                  <li key={name} className="protocol-list-item">
                     <img
                       src={protocol.icon}
                       draggable
@@ -187,9 +154,9 @@ const Builder = () => {
             X
           </button>
 
-          <h2 style={{ display: "inline-block" }}>yEarn finance</h2>
+          <h2 className="d-inline-block">yEarn finance</h2>
           <img
-            style={{ display: "inline-block" }}
+            className="d-inline-block"
             src="https://cdn.cryptotips.eu/wp-content/uploads/2020/09/yearn-finance-review-230x230.png"
             width="50"
           />
@@ -198,10 +165,7 @@ const Builder = () => {
               https://yearn.finance
             </a>
           </div>
-          <div
-            className="desc"
-            style={{ fontSize: "14px", color: "#807f7f", marginTop: "15px" }}
-          >
+          <div className="desc panel-desc">
             Yearn Finance is a suite of products in Decentralized Finance (DeFi)
             that provides lending aggregation, yield generation, and insurance
             on the Ethereum blockchain. The protocol is maintained by various
@@ -219,18 +183,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                curve.fi/Compound LP
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 14.61%
-              </div>
+              <div className="item-name">curve.fi/Compound LP</div>
+              <div className="item-percent">APY: 14.61%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -247,18 +201,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                curve.fi/3pool LP
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 10.03%
-              </div>
+              <div className="item-name">curve.fi/3pool LP</div>
+              <div className="item-percent">APY: 10.03%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -275,18 +219,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                curve.fi/mUSD LP
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 5.56%
-              </div>
+              <div className="item-name">curve.fi/mUSD LP</div>
+              <div className="item-percent">APY: 5.56%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -303,18 +237,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                curve.fi/busd LP
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 11.61%
-              </div>
+              <div className="item-name">curve.fi/busd LP</div>
+              <div className="item-percent">APY: 11.61%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -331,18 +255,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                curve.fi/sbtc LP
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 1.94%
-              </div>
+              <div className="item-name">curve.fi/sbtc LP</div>
+              <div className="item-percent">APY: 1.94%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -359,18 +273,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                DAI
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 12.61%
-              </div>
+              <div className="item-name">DAI</div>
+              <div className="item-percent">APY: 12.61%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -398,9 +302,9 @@ const Builder = () => {
             X
           </button>
 
-          <h2 style={{ display: "inline-block" }}>Compound finance</h2>
+          <h2 className="d-inline-block">Compound finance</h2>
           <img
-            style={{ display: "inline-block" }}
+            className="d-inline-block"
             src="https://pbs.twimg.com/profile_images/1154294327931068416/kKm_IHGE_400x400.png"
             width="50"
           />
@@ -409,10 +313,7 @@ const Builder = () => {
               https://compound.finance/
             </a>
           </div>
-          <div
-            className="desc"
-            style={{ fontSize: "14px", color: "#807f7f", marginTop: "15px" }}
-          >
+          <div className="desc panel-desc">
             Compound Finance is a sector-leading lending protocol enabling users
             to lend and borrow popular cryptocurrencies like Ether, Dai and
             Tether. Compound leverages audited smart contracts responsible for
@@ -433,16 +334,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                BAT
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              ></div>
+              <div className="item-name">BAT</div>
+              <div className="item-percent"></div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -467,18 +360,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                Compound
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 10.03%
-              </div>
+              <div className="item-name">Compound</div>
+              <div className="item-percent">APY: 10.03%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -503,18 +386,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                DAI
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 5.56%
-              </div>
+              <div className="item-name">DAI</div>
+              <div className="item-percent">APY: 5.56%</div>
               <div
                 onClick={() => {
                   toggleModal();
@@ -539,18 +412,8 @@ const Builder = () => {
                   width="40"
                 />
               </div>
-              <div style={{ display: "inline-block", verticalAlign: "top" }}>
-                UNI
-              </div>
-              <div
-                style={{
-                  display: "block",
-                  marginLeft: "44px",
-                  marginTop: "-21px",
-                }}
-              >
-                APY: 11.61%
-              </div>
+              <div className="item-name">UNI</div>
+              <div className="item-percent">APY: 11.61%</div>
               <div
                 onClick={() => {
                   toggleModal();
