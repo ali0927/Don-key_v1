@@ -243,8 +243,7 @@ export const useGraph = ({id}) => {
       mouseDown: function (sender, evt) {
         let cell = evt.getCell();
         if (cell != null) {
-          // selectedCell = cell;
-          console.log(cell);
+         
           setSelectedCell(cell);
           closePanel();
           var protocol = getProtocolForCellId(getProtocolCells(), cell.id);
@@ -257,12 +256,10 @@ export const useGraph = ({id}) => {
           } else {
             closePanel();
             openActionBar();
-            // showActionConfigBar(selectedCell.id);
           }
         } else {
           closePanel();
           hideActionBar();
-          // $("#actionsBar").hide();
         }
       },
       mouseMove: function (sender, evt) {
@@ -334,6 +331,7 @@ export const useGraph = ({id}) => {
     isModalOpen,
     toggleModal,
     panel,
+    closePanel,
     openPanel,
   };
 };
