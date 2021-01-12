@@ -9,7 +9,7 @@ import { ProtocolBar } from "../../components/ProtocolBar/ProtocolBar";
 import Protocol from "../../components/Protocol/Protocol";
 import { BuilderModal } from "../../components/BuilderModal/BuilderModal";
 import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
-import { CompPanel, YearnPanel } from "./Panels";
+import { CompPanel, YearnPanel, MakerPanel } from "./Panels";
 
 /**
  *
@@ -58,7 +58,12 @@ const Builder = () => {
           <Protocol name="crv" />
           <Protocol name="balancer" />
           <Protocol name="oneinch" />
-          <Protocol name="maker" />
+          <Protocol name="maker"
+            panel={
+              <MakerPanel isOpen={panel === "#mkrpanel"} toggleModal={toggleModal} onClose={closePanel}
+              />
+            } />
+
         </ProtocolBar>
       </div>
       <BuilderModal

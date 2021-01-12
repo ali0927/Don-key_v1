@@ -7,6 +7,11 @@ import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 
 const Login = () => {
+
+
+
+
+
   return (
     <div className="login">
       <div className="loginLeft">
@@ -23,37 +28,14 @@ const Login = () => {
             Join our farmers <br /> Be the best
           </p>
           <Form className="">
-            <Form.Group>
+            {/* <Form.Group>
               <Form.Control type="text" placeholder="Login" />
-            </Form.Group>
+            </Form.Group> */}
 
-            <ButtonComponent className="btnYellow mt-4 d-block w-100">
+            {/* <ButtonComponent className="btnYellow mt-4 d-block w-100">
               Connect Wallet
-            </ButtonComponent>
+            </ButtonComponent> */}
 
-            <Row>
-              <Col md={6}>
-                <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
-                  <img
-                    src="/assets/images/login/phone.png"
-                    className="d-inline-block mr-lg-3 mr-2 ml-2"
-                    alt="Image"
-                  />
-                  Phone
-                </ButtonComponent>
-              </Col>
-
-              <Col md={6}>
-                <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
-                  <img
-                    src="/assets/images/login/ledger.png"
-                    className="d-inline-block mr-lg-3 mr-2 ml-2"
-                    alt="Image"
-                  />
-                  Ledger
-                </ButtonComponent>
-              </Col>
-            </Row>
             <Row>
               <Col md={6}>
                 <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
@@ -65,19 +47,6 @@ const Login = () => {
                   Walletconnect
                 </ButtonComponent>
               </Col>
-
-              <Col md={6}>
-                <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
-                  <img
-                    src="/assets/images/login/coin.png"
-                    className="d-inline-block mr-lg-3 mr-2 ml-2"
-                    alt="Image"
-                  />
-                  Coinbase wallet
-                </ButtonComponent>
-              </Col>
-            </Row>
-            <Row>
               <Col md={6}>
                 <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
                   <img
@@ -86,17 +55,6 @@ const Login = () => {
                     alt="Image"
                   />
                   Metamask
-                </ButtonComponent>
-              </Col>
-
-              <Col md={6}>
-                <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
-                  <img
-                    src="/assets/images/login/exodus.png"
-                    className="d-inline-block mr-lg-3 mr-2 ml-2"
-                    alt="Image"
-                  />
-                  Exodus
                 </ButtonComponent>
               </Col>
             </Row>
