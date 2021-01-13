@@ -1,9 +1,11 @@
 import clsx from "clsx";
 import React from "react";
+import { useGraphMethods } from "../GraphProvider/GraphProvider";
 
-export const ActionConfig = ({ style }) => {
+export const ActionConfig = () => {
+  const {getActionConfigStyle} = useGraphMethods();
   return (
-    <div className={clsx("actionConfig")} style={style}>
+    <div className={clsx("actionConfig")} style={getActionConfigStyle()}>
       <div className="actionInner">
         <div id="pointer"></div>
         <div className="actionContent">

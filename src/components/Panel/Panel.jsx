@@ -2,13 +2,48 @@
 import clsx from "clsx";
 import React from "react";
 import { createPortal } from "react-dom";
-const Panel = ({ isOpen, title, onClose,  icon, url, desc, children }) => {
+import { PROTOCOLS } from "../../hooks";
+import { useGraphMethods } from "../GraphProvider/GraphProvider";
+import noProtocol from "../../images/no-protocol.png";
+import { SquareLine } from "../SquareLine/SquareLine";
+import { SelectedAction } from "../SelectedAction/SelectedAction";
+
+
+
+
+const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
+  const { getSelectedProtocol } = useGraphMethods();
+  const selectedProtocol = getSelectedProtocol();
+
+  const renderActionSelector = () => {
+    if (selectedProtocol) {
+      const protocol = PROTOCOLS[selectedProtocol.protocol];
+      const actions = Object.values(protocol.actions || {});
+      return (
+        <div className="panel_action">
+          <div className="panel_action_img">
+            <img className="img-fluid" src={protocol.base64} />
+          </div>
+          <SquareLine color={protocol.edgeColor} />
+          <SelectedAction actions={actions} />
+          <SquareLine color="#A1A5A4" />
+          <div className="panel_action_img">
+            <img className="img-fluid" src={noProtocol} />
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return createPortal(
     <div className={clsx("panel", { panel_open: isOpen })}>
       <div className="panel_header">
         <div className="d-flex align-items-center">
           <h2>{title}</h2>
-          <div className="panel_icon"><img className="img-fluid" src={icon}  /></div>
+          <div className="panel_icon">
+            <img className="img-fluid" src={icon} />
+          </div>
         </div>
         <button onClick={onClose} id="close" className="btn_close">
           X
@@ -19,6 +54,7 @@ const Panel = ({ isOpen, title, onClose,  icon, url, desc, children }) => {
           </a>
         </div>
         <div className="desc panel-desc">{desc}</div>
+        {renderActionSelector()}
       </div>
 
       <div className="panel_scroll">{children}</div>

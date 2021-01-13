@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from "react";
 // import { map } from "lodash";
-import { PROTOCOLS, useGraph, useToggle } from "../../hooks";
+import { PROTOCOLS,  useToggle } from "../../hooks";
 import clsx from "clsx";
 import "./main.scss";
 import "./modal.scss";
@@ -10,19 +10,17 @@ import Protocol from "../../components/Protocol/Protocol";
 import { BuilderModal } from "../../components/BuilderModal/BuilderModal";
 import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
 import { CompPanel, YearnPanel } from "./Panels";
+import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
+
 /**
  *
  *
  * @return {*}
  */
 const Builder = () => {
-
-  const [panel,setPanel] = useState(null);
+  const [panel, setPanel] = useState(null);
   const [isModalOpen, , , toggleModal] = useToggle();
-  const {
-    getActionConfigStyle,
-    insertAction,
-  } = useGraph({ id: "graphContainer", setPanel });
+ 
 
   const closePanel = () => setPanel(null);
 
@@ -43,29 +41,30 @@ const Builder = () => {
   return (
     <>
       <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
-        <div id="graphContainer" className="graph-wrapper"></div>
-        <ProtocolBar>
-          {Object.keys(PROTOCOLS).map((name) => {
-            return (
-              <Protocol
-                key={name}
-                toggleModal={toggleModal}
-                onClose={closePanel}
-                openedPanel={panel}
-                name={name}
-                panel={getPanel(name)}
-              />
-            );
-          })}
-        </ProtocolBar>
-      </div>
-      <BuilderModal
-        isModalOpen={isModalOpen}
-        toggleModal={toggleModal}
-        insertAction={insertAction}
-      />
+        <GraphProvider openPanel={setPanel} >
+          <ProtocolBar>
+            {Object.keys(PROTOCOLS).map((name) => {
+              return (
+                <Protocol
+                  key={name}
+                  toggleModal={toggleModal}
+                  onClose={closePanel}
+                  openedPanel={panel}
+                  name={name}
+                  panel={getPanel(name)}
+                />
+              );
+            })}
+          </ProtocolBar>
 
-      <ActionConfig style={getActionConfigStyle()} />
+          <BuilderModal
+            isModalOpen={isModalOpen}
+            toggleModal={toggleModal}
+          />
+
+          <ActionConfig  />
+        </GraphProvider>
+      </div>
     </>
   );
 };
