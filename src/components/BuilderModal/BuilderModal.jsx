@@ -1,8 +1,11 @@
 import clsx from "clsx";
 import React from "react";
+import { createPortal } from "react-dom";
+import { useGraphMethods } from "../GraphProvider/GraphProvider";
 
-export const BuilderModal = ({ isModalOpen, toggleModal, insertAction }) => {
-  return (
+export const BuilderModal = ({ isModalOpen, toggleModal }) => {
+  const { insertAction } = useGraphMethods();
+  return createPortal(
     <div className={clsx("b-modal-wrapper", { open: isModalOpen })}>
       <div className="b-modal">
         <div className="head">
@@ -47,6 +50,7 @@ export const BuilderModal = ({ isModalOpen, toggleModal, insertAction }) => {
           </table>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
