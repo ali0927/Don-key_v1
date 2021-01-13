@@ -35,21 +35,21 @@ export const GraphProvider = ({ children, openPanel }) => {
 
   const graphRef = useRef(null);
   const divRef = useRef(null);
-  const addProtocolCell = ((cell) => {
+  const addProtocolCell = (cell) => {
     protocolCellsRef.current.push(cell);
-  });
+  };
 
-  const getProtocolCells = (() => {
+  const getProtocolCells = () => {
     return protocolCellsRef.current;
-  });
+  };
 
-  const getActionCells = (() => {
+  const getActionCells = () => {
     return actionCellsRef.current;
-  });
+  };
 
-  const addActionCell = ((cell) => {
+  const addActionCell = (cell) => {
     actionCellsRef.current.push(cell);
-  });
+  };
 
   const getActionForCellId = useCallback((cellId) => {
     return filter(getActionCells(), function (n) {
@@ -90,12 +90,13 @@ export const GraphProvider = ({ children, openPanel }) => {
     }
     let left = 0;
     let top = 0;
-
-    left = action.x + 20;
-    top = action.y + 65;
+    console.log(action);
+    left = action.x + action.vertex.geometry.width / 2 + 5;
+    top = action.y + action.vertex.geometry.height + 20;
     return {
       top,
       left,
+      transform: `translateX(-50%)`,
       display: "block",
     };
   }, [isActionConfigOpen]);
@@ -178,7 +179,7 @@ export const GraphProvider = ({ children, openPanel }) => {
       // Updates the display
       graph.getModel().endUpdate();
     }
-    console.log(lastProtocol,"lastProtocol")
+    console.log(lastProtocol, "lastProtocol");
     addProtocolCell({
       mxObjectId: newVertex.id,
       vertex: newVertex,
@@ -201,13 +202,11 @@ export const GraphProvider = ({ children, openPanel }) => {
     insertProtocol(name);
   }, []);
 
-  
-
   const insertAction = useCallback(() => {
     let selectedProtocol = getSelectedProtocol();
 
     const previousCell = getProtocolByName(selectedProtocol.lastProtocol);
-
+    console.log(selectedProtocol);
     //get action image
     let base64 =
       actionsMap[selectedProtocol.lastProtocol][selectedProtocol.protocol]
@@ -399,7 +398,7 @@ export const GraphProvider = ({ children, openPanel }) => {
         {children}
       </GraphContext.Provider>
     ),
-    [getActionConfigStyle,children]
+    [getActionConfigStyle, children]
   );
 };
 

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import clsx from "clsx";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useClickAwayListener, useToggle } from "../../hooks";
 
@@ -8,7 +8,7 @@ export const SelectedAction = ({ actions = [] }) => {
   const [open, , doClose, doToggle] = useToggle();
 
   const anchorRef = useRef();
-
+  const [,,,rerender] = useToggle();
   const getPopupStyle = () => {
     if (open) {
       const styles = anchorRef.current.getBoundingClientRect();
@@ -22,6 +22,16 @@ export const SelectedAction = ({ actions = [] }) => {
       return { display: "none" };
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("resize", rerender);
+    
+    return () => {
+      window.addEventListener("resize", rerender);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const { onMouseDown } = useClickAwayListener({ onClickAway: doClose });
   return (
     <div onMouseDown={onMouseDown} className="position-relative">
