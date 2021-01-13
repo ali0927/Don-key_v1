@@ -1,5 +1,6 @@
-import { sequelize } from "src/database";
+
 import { DataTypes } from "sequelize";
+import { sequelize } from "../database";
 const Accounts = sequelize.define('accounts', {
     picture: {
         type: DataTypes.STRING,

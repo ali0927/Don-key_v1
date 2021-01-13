@@ -1,6 +1,6 @@
 
 import { RequestHandler } from "express";
-import { Numbers } from "src/models/Numbers";
+import { Numbers } from "../models/Numbers";
 
 
 export class NumberController {

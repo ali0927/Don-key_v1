@@ -1,6 +1,6 @@
 
 import { RequestHandler } from "express";
-import { Strategies } from "src/models/Strategies";
+import { Strategies } from "../models/Strategies";
 
 
 export class StrategiesController {

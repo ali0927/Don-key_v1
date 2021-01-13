@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { Farmers } from "src/models/Farmers";
+import { Farmers } from "../models/Farmers";
 import { map, pick } from "lodash";
 
 export class FarmerController {
@@ -21,7 +21,7 @@ export class FarmerController {
         );
     };
     
-    static getListOfFarmers = async (req, res) => {
+    static getListOfFarmers: RequestHandler = async (req, res) => {
         const results = await Farmers.findAll();
         res.json(
             map(results, (item) =>
@@ -38,14 +38,15 @@ export class FarmerController {
         );
     };
     static updateFarmer: RequestHandler = async (req, res) => {
-        const { id, ...rest } = req.body;
+        const { id } = req.params;
+        const {  ...rest } = req.body;
 
-        const results = await Farmers.update(rest, { where: id });
+        const results = await Farmers.update(rest, { where: {id} });
         res.json(results);
     };
 
     static deleteFarmer: RequestHandler = async (req, res) => {
-        const { id } = req.body;
+        const { id } = req.params;
         const count = await Farmers.destroy({ where: { id } });
         res.json({ count });
     };

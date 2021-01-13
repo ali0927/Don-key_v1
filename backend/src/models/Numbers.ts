@@ -1,4 +1,4 @@
-import { sequelize } from "src/database";
+import { sequelize } from "../database";
 import { DataTypes } from "sequelize";
 const Numbers = sequelize.define('numbers', {
 

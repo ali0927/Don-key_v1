@@ -1,6 +1,6 @@
 
 import { RequestHandler } from "express";
-import { Notifications } from "src/models/Notifications";
+import { Notifications } from "../models/Notifications";
 
 
 export class NotificationController {

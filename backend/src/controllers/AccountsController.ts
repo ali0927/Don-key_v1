@@ -1,6 +1,6 @@
 
 import { RequestHandler } from "express";
-import { Accounts } from "src/models/Accounts";
+import { Accounts } from "../models/Accounts";
 import { map, pick } from "lodash";
 
 export class AccountsController {
