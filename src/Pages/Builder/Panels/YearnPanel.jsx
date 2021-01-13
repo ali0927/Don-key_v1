@@ -16,7 +16,6 @@ const YearnPanel = ({ isOpen, onClose, toggleModal }) => {
     that provides lending aggregation, yield generation, and insurance on
     the Ethereum blockchain. The protocol is maintained by various
     independent developers and is governed by YFI holders.`}
-      toggleModal={toggleModal}
     >
       <h2>Staking pools</h2>
       <ul>

@@ -6,7 +6,6 @@ const CompPanel = ({ isOpen,onClose, toggleModal }) => {
   return (
     <Panel
       isOpen={isOpen}
-      toggleModal={toggleModal}
       onClose={onClose}
       title="Compound finance"
       desc="Compound Finance is a sector-leading lending protocol enabling users

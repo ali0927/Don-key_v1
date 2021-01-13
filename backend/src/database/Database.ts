@@ -1,9 +1,9 @@
 import { Sequelize } from "sequelize";
-import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER } from "src/env";
+import { DATABASE_HOST, DATABASE_NAME, DATABASE_PASS, DATABASE_USER } from "../env";
 
 
 
-export const sequelize = new Sequelize(DATABASE_NAME, DATABASE_USER, DATABASE_PASS, {
+export const sequelize = new Sequelize(DATABASE_NAME as string, DATABASE_USER as string, DATABASE_PASS, {
     host: DATABASE_HOST,
     dialect: 'mysql'
 });

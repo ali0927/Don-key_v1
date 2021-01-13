@@ -5,14 +5,13 @@ function drag(ev) {
   ev.dataTransfer.setData("protocol", ev.target.id);
 }
 
-/**
- * Protocol Component
- *
- * @param {{name: keyof typeof PROTOCOLS, panel: any}} props
- *
- * @return {React.ReactNode} 
- */
-const Protocol = ({ name, panel }) => {
+const Protocol = ({
+  name,
+  panel: PanelComp,
+  toggleModal,
+  onClose,
+  openedPanel,
+}) => {
   const protocol = PROTOCOLS[name];
   if (!protocol.showOnToolbar) {
     return null;
@@ -25,9 +24,15 @@ const Protocol = ({ name, panel }) => {
         id={name}
         onDragStart={(e) => drag(e)}
       />
-      {panel}
+      {PanelComp && (
+        <PanelComp
+          toggleModal={toggleModal}
+          onClose={onClose}
+          isOpen={openedPanel === protocol.panel}
+        />
+      )}
     </li>
   );
 };
 
-export default React.memo(Protocol)
+export default React.memo(Protocol);
