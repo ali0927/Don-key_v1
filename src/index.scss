@@ -63,3 +63,8 @@ body {
 .pull-right {
   float: right;
 }
+
+.btn.focus,
+.btn:focus {
+  box-shadow: none !important;
+}

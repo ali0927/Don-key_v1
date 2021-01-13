@@ -278,6 +278,155 @@ td .custom-switch .custom-control-label::after {
   background-color: $primary-color;
 }
 
+/*strategy modal*/
+.modal-backdrop {
+  background: $secondary-color !important;
+  opacity: 0.92 !important;
+}
+.modal-dialog-centered {
+  min-height: auto !important;
+}
+.modal-dialog {
+  background: #ffffff;
+  box-shadow: 0px 3px 20px rgba(0, 18, 80, 0.13);
+  border-radius: 5px;
+  border: none !important;
+
+  /* media queries */
+  @media (min-width: 992px) {
+    max-width: 900px !important;
+  }
+
+  & .modal-content {
+    padding: 30px !important;
+    border: none !important;
+  }
+
+  & .modal-header,
+  & .modal-body {
+    border: none !important;
+  }
+  .modal-header .h4 {
+    font-family: "ObjectSans-Bold";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 45px;
+    line-height: 46px;
+    color: $colorBlack;
+  }
+  & .close span {
+    display: none;
+  }
+  & .close {
+    position: relative;
+  }
+  & .close:before {
+    position: absolute;
+    background-image: url("../../images/cross.png");
+    content: "";
+    top: 0px;
+    left: auto;
+    right: 0px;
+    background-size: auto;
+    background-repeat: no-repeat;
+    height: 17px;
+    width: 17px;
+  }
+}
+.cardStrategy {
+  background: $primary-color;
+  box-shadow: 0px 8px 30px rgba(4, 7, 26, 0.13),
+    8px 0px 30px rgba(4, 7, 26, 0.13);
+  border-radius: 5px;
+  padding: 19px;
+
+  & h5 {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: $colorBlack;
+    min-height: 30px;
+  }
+  & img {
+    max-width: 100%;
+  }
+
+  & p {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 133%;
+    color: $paracolorBlack;
+  }
+
+  & .dark {
+    background: $colorBlack !important;
+    border-radius: 5px !important;
+    color: $primary-color !important;
+    padding: 10px 10px !important;
+  }
+  & .btnpadding {
+    padding: 10px 10px !important;
+  }
+  & span {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    color: $colorBlack;
+    display: inline-block;
+  }
+}
+.thankyouModal .modal-content {
+  padding: 0px !important;
+  & .bgBlack {
+    background: $colorBlack;
+    border-radius: 0px 5px 5px 0px;
+    height: 100%;
+  }
+  & .close span {
+    display: none;
+  }
+  & .close {
+    position: absolute;
+    background-image: url("../../images/cross1.png") !important;
+    content: "";
+    top: 7%;
+    left: auto;
+    right: 3%;
+    background-size: auto;
+    background-repeat: no-repeat;
+    height: 17px;
+    width: 17px;
+    background-repeat: no-repeat;
+    z-index: 9;
+  }
+  & .close:before {
+    display: none;
+  }
+  & h4 {
+    font-weight: 500;
+    font-size: 30px;
+    line-height: 133%;
+    display: flex;
+    align-items: center;
+    color: $primary-color;
+  }
+  & p {
+    font-size: 17px;
+    line-height: 131%;
+    color: $primary-color;
+  }
+  & .btn-btnWhite {
+    border: 1px solid $primary-color;
+    box-sizing: border-box;
+    border-radius: 5px;
+    color: $primary-color;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    padding: 12px 26px;
+  }
+}
+
 /* media queries */
 @media (max-width: 767px) {
   .tablebg .table tbody tr td {

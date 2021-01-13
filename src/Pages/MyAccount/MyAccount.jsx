@@ -15,11 +15,15 @@ import { Card } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import MyAccountDetail from "../../JsonData/MyAccountDetail";
-import DataFarmer from '../../JsonData/DataFarmer';
+import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
+import StrategyModal from "./strategyModal";
+
 const MyAccount = () => {
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);
+  const [modalShow, setModalShow] = React.useState(false);
+
   const ref = useRef(null);
 
   const handleClick = event => {
@@ -27,7 +31,6 @@ const MyAccount = () => {
     setTarget(event.target);
   };
   return (
-  
     <div className="bgColor">
       <NavBar2 />
 
@@ -57,7 +60,9 @@ const MyAccount = () => {
                 {/* <p>SOL </p> */}
 
                 <div ref={ref}>
-                  <Button onClick={handleClick}>{(MyAccountDetail.name).substring(0, 3).toLocaleUpperCase()}</Button>
+                  <Button onClick={handleClick}>
+                    {MyAccountDetail.name.substring(0, 3).toLocaleUpperCase()}
+                  </Button>
 
                   <Overlay
                     show={show}
@@ -116,42 +121,49 @@ const MyAccount = () => {
                       <th>To Date</th>
                     </tr>
                   </thead>
-           
-                         
-                  <tbody>
-                  {
-                      MyAccountDetail.array.map((item,index)=>{
-                        return(
-                       <tr>
-                      <td>${item.aum}</td>
-                      <td>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                       {(item.daily).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.daily_}
-                      </td>
-                      <td>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                        {(item.weekly).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.weekly_}
-                      </td>
 
-                      <td>
-                        <img
-                          src="/assets/images/triangle.png"
-                          className="d-inline-block pr-1"
-                          alt="Image"
-                        />
-                       {(item.to_date).toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')}% ${item.to_date_}
-                      </td>
-                    </tr> 
-                   
-                        )})}
+                  <tbody>
+                    {MyAccountDetail.array.map((item, index) => {
+                      return (
+                        <tr>
+                          <td>${item.aum}</td>
+                          <td>
+                            <img
+                              src="/assets/images/triangle.png"
+                              className="d-inline-block pr-1"
+                              alt="Image"
+                            />
+                            {item.daily
+                              .toString()
+                              .replace(/\B(?=(\d{2})+(?!\d))/g, ",")}
+                            % ${item.daily_}
+                          </td>
+                          <td>
+                            <img
+                              src="/assets/images/triangle.png"
+                              className="d-inline-block pr-1"
+                              alt="Image"
+                            />
+                            {item.weekly
+                              .toString()
+                              .replace(/\B(?=(\d{2})+(?!\d))/g, ",")}
+                            % ${item.weekly_}
+                          </td>
+
+                          <td>
+                            <img
+                              src="/assets/images/triangle.png"
+                              className="d-inline-block pr-1"
+                              alt="Image"
+                            />
+                            {item.to_date
+                              .toString()
+                              .replace(/\B(?=(\d{2})+(?!\d))/g, ",")}
+                            % ${item.to_date_}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </Table>
               </div>
@@ -178,7 +190,6 @@ const MyAccount = () => {
                 </Row>
               </div>
             </Col>
-           
           </Row>
         </Container>
       </div>
@@ -188,7 +199,10 @@ const MyAccount = () => {
         <Container>
           <h5 className="d-inline-block mt-4 mb-5">Strategies</h5>
 
-          <ButtonComponent variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right">
+          <ButtonComponent
+            variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right"
+            onClick={() => setModalShow(true)}
+          >
             <img
               src="/assets/images/btnplus.png"
               className="d-inline-block align-top"
@@ -214,58 +228,60 @@ const MyAccount = () => {
               </thead>
 
               <tbody>
-                {
-                  StrategiesTable.map((item,index)=>{
-                    return(
-                      <>
-                      {item.status == 1?
-                       <tr>
-                  <td className="nodata1">First strategy</td>
-                  <td>16h</td>
-                  <td>-</td>
-                  <td>-</td>
-                  <td> -</td>
-                  <td>-</td>
-                  <td>- </td>
-                  <td>- </td>
-                  <td className="fontlighBold">Waiting</td>
-                  <td>
-                    <a href="#">
-                      <img
-                        src="/assets/images/delete.png"
-                        className="d-inline-block align-top"
-                        alt="Logo"
-                      />
-                    </a>
-                  </td>
-                </tr> 
-                      :
-                      <tr>
-                      <td className="nodata1">{item.name}</td>
-                      <td>{item.data_open}</td>
-                      <td>
-                        ${item.earnings}<span className="fontlight">{"+"+`${item.earnings_per}`+"%"} </span>
-                      </td>
-                      <td>${item.allocation}</td>
-                      <td> ${item.profit}</td>
-                      <td>${item.last_transaction}</td>
-                      <td>
-                        <strong> {item.apy}% </strong>
-                      </td>
-                      <td>{item.buru_token}</td>
-                      <td className="fontlighBold">{item.status == 1?"Waiting": "Approved" }</td>
-                      <td>
-                        <Form>
-                          <Form.Check type="switch" id="custom-switch1" />
-                        </Form>
-                      </td>
-                    </tr>
-                  }
+                {StrategiesTable.map((item, index) => {
+                  return (
+                    <>
+                      {item.status == 1 ? (
+                        <tr>
+                          <td className="nodata1">First strategy</td>
+                          <td>16h</td>
+                          <td>-</td>
+                          <td>-</td>
+                          <td> -</td>
+                          <td>-</td>
+                          <td>- </td>
+                          <td>- </td>
+                          <td className="fontlighBold">Waiting</td>
+                          <td>
+                            <a href="#">
+                              <img
+                                src="/assets/images/delete.png"
+                                className="d-inline-block align-top"
+                                alt="Logo"
+                              />
+                            </a>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr>
+                          <td className="nodata1">{item.name}</td>
+                          <td>{item.data_open}</td>
+                          <td>
+                            ${item.earnings}
+                            <span className="fontlight">
+                              {"+" + `${item.earnings_per}` + "%"}{" "}
+                            </span>
+                          </td>
+                          <td>${item.allocation}</td>
+                          <td> ${item.profit}</td>
+                          <td>${item.last_transaction}</td>
+                          <td>
+                            <strong> {item.apy}% </strong>
+                          </td>
+                          <td>{item.buru_token}</td>
+                          <td className="fontlighBold">
+                            {item.status == 1 ? "Waiting" : "Approved"}
+                          </td>
+                          <td>
+                            <Form>
+                              <Form.Check type="switch" id="custom-switch1" />
+                            </Form>
+                          </td>
+                        </tr>
+                      )}
                     </>
-
-                    )
-                  })
-                }
+                  );
+                })}
               </tbody>
             </Table>
           </div>
@@ -305,67 +321,76 @@ const MyAccount = () => {
               </thead>
 
               <tbody>
-                {DataFarmer.map((item,index)=>{
-                    var str = item.name;
-                    var res = str.substring(0, 2).toLocaleUpperCase();
-                    var number=item.apy
-                    if(number.toString().length>=3){
-                     var num= number.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')
-                    }else{
-                      var num= number.toString().replace(/\B(?=(\d{1})+(?!\d))/g, ',')
-                    }
-                  return(
-                    <>
-
-                    <tr>
-                    <td className="nodata">{item.id}</td>
-                    <td>
-                      <img
-                        src="/assets/images/blackstar.png"
-                        className="d-inline-block"
-                        alt="Image"
-                      />
-                    </td>
-                    <td>
-                      <span className="spanname"> {res}</span>
-                    </td>
-                    <td>
-                      <span className="spanbold">{ item.name} </span> <br />
-                      <span className="fontlight">Nb of farmers: {item.nb_farmers}</span>
-                    </td>
-                    <td> ${(item.budget).toString().replace(/\B(?=(\d{4})+(?!\d))/g, ',')}</td>
-                    <td>{item.age} years</td>
-                    <td className="fontlighBold">{item.buru_token} </td>
-                    <td className="tdGraphic">
-                      <img
-                        src="/assets/images/graphic2.png"
-                        className="d-inline-block"
-                        alt="Image"
-                      />
-                    </td>
-                    <td className="fontdBold">{"+"+`${num}`+"%"}</td>
-                  </tr>
-                  {
-                    item.id === 4?
-                               
-                    <tr>
-                  <td className="rowData" colspan="8">
-                    Join our farmers team
-                    <ButtonComponent
-                      variant="colorBlack"
-                      className="btnYellow ml-md-5 btnPadding"
-                    >
-                      <span> Join us </span>
-                    </ButtonComponent>
-                  </td>
-                  <td></td>
-                </tr> :null
+                {DataFarmer.map((item, index) => {
+                  var str = item.name;
+                  var res = str.substring(0, 2).toLocaleUpperCase();
+                  var number = item.apy;
+                  if (number.toString().length >= 3) {
+                    var num = number
+                      .toString()
+                      .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+                  } else {
+                    var num = number
+                      .toString()
+                      .replace(/\B(?=(\d{1})+(?!\d))/g, ",");
                   }
-                  </>
-                  )
+                  return (
+                    <>
+                      <tr>
+                        <td className="nodata">{item.id}</td>
+                        <td>
+                          <img
+                            src="/assets/images/blackstar.png"
+                            className="d-inline-block"
+                            alt="Image"
+                          />
+                        </td>
+                        <td>
+                          <span className="spanname"> {res}</span>
+                        </td>
+                        <td>
+                          <span className="spanbold">{item.name} </span> <br />
+                          <span className="fontlight">
+                            Nb of farmers: {item.nb_farmers}
+                          </span>
+                        </td>
+                        <td>
+                          {" "}
+                          $
+                          {item.budget
+                            .toString()
+                            .replace(/\B(?=(\d{4})+(?!\d))/g, ",")}
+                        </td>
+                        <td>{item.age} years</td>
+                        <td className="fontlighBold">{item.buru_token} </td>
+                        <td className="tdGraphic">
+                          <img
+                            src="/assets/images/graphic2.png"
+                            className="d-inline-block"
+                            alt="Image"
+                          />
+                        </td>
+                        <td className="fontdBold">{"+" + `${num}` + "%"}</td>
+                      </tr>
+                      {item.id === 4 ? (
+                        <tr>
+                          <td className="rowData" colspan="8">
+                            Join our farmers team
+                            <ButtonComponent
+                              variant="colorBlack"
+                              className="btnYellow ml-md-5 btnPadding"
+                            >
+                              <span> Join us </span>
+                            </ButtonComponent>
+                          </td>
+                          <td></td>
+                        </tr>
+                      ) : null}
+                    </>
+                  );
                 })}
-              
-         {/* <tr>
+
+                {/* <tr>
                   <td className="rowData" colspan="8">
                     Join our farmers team
                     <ButtonComponent
@@ -517,6 +542,7 @@ const MyAccount = () => {
           </Row>
         </Container>
       </footer>
+      <StrategyModal show={modalShow} onHide={() => setModalShow(false)} />
     </div>
   );
 };
