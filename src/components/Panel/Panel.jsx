@@ -2,13 +2,19 @@
 import clsx from "clsx";
 import React from "react";
 import { createPortal } from "react-dom";
-const Panel = ({ isOpen, title, onClose,  icon, url, desc, children }) => {
+
+
+
+
+const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
   return createPortal(
     <div className={clsx("panel", { panel_open: isOpen })}>
       <div className="panel_header">
         <div className="d-flex align-items-center">
           <h2>{title}</h2>
-          <div className="panel_icon"><img className="img-fluid" src={icon}  /></div>
+          <div className="panel_icon">
+            <img className="img-fluid" src={icon} />
+          </div>
         </div>
         <button onClick={onClose} id="close" className="btn_close">
           X
