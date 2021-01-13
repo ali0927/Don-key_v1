@@ -24,6 +24,7 @@ const Protocol = ({
         id={name}
         onDragStart={(e) => drag(e)}
       />
+      <div className="protocol-list-item-tooltip">{name}</div>
       {PanelComp && (
         <PanelComp
           toggleModal={toggleModal}
