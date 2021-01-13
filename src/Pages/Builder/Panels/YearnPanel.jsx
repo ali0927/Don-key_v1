@@ -127,4 +127,7 @@ const YearnPanel = ({ isOpen, onClose, toggleModal }) => {
   );
 };
 
-export default React.memo(YearnPanel);
+
+const MemoizedPanel = React.memo(YearnPanel);
+
+export default MemoizedPanel;

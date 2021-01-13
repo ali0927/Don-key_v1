@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React from "react";
+import React, { useState } from "react";
 // import { map } from "lodash";
-import { PROTOCOLS, useGraph } from "../../hooks";
+import { PROTOCOLS, useGraph, useToggle } from "../../hooks";
 import clsx from "clsx";
 import "./main.scss";
 import "./modal.scss";
@@ -16,14 +16,15 @@ import { CompPanel, YearnPanel } from "./Panels";
  * @return {*}
  */
 const Builder = () => {
+
+  const [panel,setPanel] = useState(null);
+  const [isModalOpen, , , toggleModal] = useToggle();
   const {
     getActionConfigStyle,
-    isModalOpen,
     insertAction,
-    panel,
-    toggleModal,
-    closePanel,
-  } = useGraph({ id: "graphContainer" });
+  } = useGraph({ id: "graphContainer", setPanel });
+
+  const closePanel = () => setPanel(null);
 
   const getPanel = (name) => {
     switch (name) {

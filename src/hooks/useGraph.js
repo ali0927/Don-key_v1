@@ -1,16 +1,17 @@
-import { filter, findIndex } from "lodash";
-import { useCallback, useEffect, useRef, useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { filter } from "lodash";
+import { useCallback, useEffect, useRef } from "react";
 import { PROTOCOLS } from "./PROTOCOLS";
 import { actionsMap } from "./ActionsMap";
 import { useToggle } from "./useToggle";
 import factory from "mxgraph";
 
 const mx = factory({
-  mxBasePath: ""
+  mxBasePath: "",
 });
 
-let _currentProtocol = '';
-let _selectedCell = {};
+const global = {_currentProtocol: "",_selectedCell: {} };
+
 
 function mxVertexToolHandler() {
   mx.mxVertexHandler.apply(this, arguments);
@@ -20,29 +21,14 @@ mxVertexToolHandler.prototype.constructor = mxVertexToolHandler;
 
 mxVertexToolHandler.prototype.domNode = null;
 
-function getProtocolForCellId(protocolCells, cellId) {
-  return filter(protocolCells, function (n) {
-    return n.mxObjectId === cellId;
-  })[0];
-}
 
-function getProtocolByName(protocolCells, protocol) {
-  return filter(protocolCells, function (n) {
-    return n.protocol == protocol;
-  })[0];
-}
 
-export const useGraph = ({ id }) => {
-
+export const useGraph = ({ id, setPanel: openPanel }) => {
   const protocolCellsRef = useRef([]);
   const actionCellsRef = useRef([]);
-  const [selectedCell, setSelectedCell] = useState(null);
-  const [currentProtocol, setCurrentProtocol] = useState(null);
+  
   const [isActionConfigOpen, openActionBar, hideActionBar] = useToggle();
-  const [panel, openPanel] = useState(null);
-  const [isModalOpen, , , toggleModal] = useToggle();
-
-
+ 
   const graphRef = useRef(null);
 
   const addProtocolCell = useCallback((cell) => {
@@ -71,15 +57,29 @@ export const useGraph = ({ id }) => {
     return graphRef.current;
   }, []);
 
+  const getProtocolForCellId = useCallback((cellId) => {
+    return filter(getProtocolCells(), function (n) {
+      return n.mxObjectId === cellId;
+    })[0];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const getProtocolByName = useCallback((protocol) => {
+    return filter(getProtocolCells(), function (n) {
+      return n.protocol === protocol;
+    })[0];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const getActionConfigStyle = () => {
     if (!isActionConfigOpen) {
       return {};
     }
-    if (!_selectedCell) {
+    if (!global._selectedCell) {
       return {};
     }
 
-    const action = getActionForCellId(_selectedCell.id);
+    const action = getActionForCellId(global._selectedCell.id);
     if (!action) {
       return {};
     }
@@ -91,7 +91,7 @@ export const useGraph = ({ id }) => {
     return {
       top,
       left,
-      display: "block"
+      display: "block",
     };
   };
 
@@ -113,6 +113,7 @@ export const useGraph = ({ id }) => {
     } else {
       return false;
     }
+    
   }, []);
 
   const closePanel = useCallback(() => {
@@ -159,7 +160,6 @@ export const useGraph = ({ id }) => {
     let newVertex = {};
     graph.getModel().beginUpdate();
     try {
-
       newVertex = graph.insertVertex(
         parent,
         null,
@@ -183,45 +183,47 @@ export const useGraph = ({ id }) => {
       protocol: protocolName,
       x: x,
       y: y,
-      lastProtocol: _currentProtocol
+      lastProtocol: global._currentProtocol,
     });
 
-    _currentProtocol = protocolName;
-    _selectedCell = newVertex;
+    global._currentProtocol = protocolName;
+    global._selectedCell = newVertex;
 
     openPanel(PROTOCOLS[protocolName].panel);
     const selectionModel = graph.getSelectionModel();
     selectionModel.setCell(newVertex);
-
   }, []);
   const handleDrop = useCallback((name) => {
     insertProtocol(name);
   }, []);
 
   const insertAction = useCallback(() => {
-    let selectedProtocol = getProtocolForCellId(
-      getProtocolCells(),
-      _selectedCell.id
-    );
+    let selectedProtocol = getProtocolForCellId(global._selectedCell.id);
 
-    const previousCell = getProtocolByName(getProtocolCells(), selectedProtocol.lastProtocol);
+    const previousCell = getProtocolByName(selectedProtocol.lastProtocol);
 
     //get action image
-    let base64 = actionsMap[selectedProtocol.lastProtocol][selectedProtocol.protocol].deposit; // REFACTOR FOR GENERIC ACTIONS
+    let base64 =
+      actionsMap[selectedProtocol.lastProtocol][selectedProtocol.protocol]
+        .deposit; // REFACTOR FOR GENERIC ACTIONS
 
     const graph = getGraph();
     const parent = graph.getDefaultParent();
 
-    let data = '';
+    let data = "";
     // Converts format of data url to cell style value for use in vertex
-    const semi = base64.indexOf(';');
+    const semi = base64.indexOf(";");
 
     if (semi > 0) {
-      data = base64.substring(0, semi) + base64.substring(base64.indexOf(',', semi + 1));
+      data =
+        base64.substring(0, semi) +
+        base64.substring(base64.indexOf(",", semi + 1));
     }
 
-    const vertexStyleAction = 'shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;' +
-      'gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=' + data;
+    const vertexStyleAction =
+      "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
+      "gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=" +
+      data;
 
     const x = previousCell.x + 80;
     const y = 350;
@@ -260,11 +262,11 @@ export const useGraph = ({ id }) => {
         null,
         "",
         actionVertex,
-        _selectedCell,
+        global._selectedCell,
         "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        selectedCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+          "endSize=2;endFill=1;strokeColor=" +
+          selectedCellProtocolEdge +
+          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
       graph.insertEdge(
         parent,
@@ -273,16 +275,15 @@ export const useGraph = ({ id }) => {
         previousCell.vertex,
         actionVertex,
         "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        lastCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+          "endSize=2;endFill=1;strokeColor=" +
+          lastCellProtocolEdge +
+          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
-    }
-    finally {
+    } finally {
       // Updates the display
       graph.getModel().endUpdate();
     }
-  }, [_selectedCell]);
+  }, []);
   useEffect(() => {
     const container = document.getElementById(id);
 
@@ -296,10 +297,9 @@ export const useGraph = ({ id }) => {
       mouseDown: function (sender, evt) {
         let cell = evt.getCell();
         if (cell != null) {
-
-          _selectedCell = cell;
+          global._selectedCell = cell;
           closePanel();
-          const protocol = getProtocolForCellId(getProtocolCells(), cell.id);
+          const protocol = getProtocolForCellId(cell.id);
 
           const aIsPRotocol = isProtocol(cell.id);
           if (aIsPRotocol) {
@@ -307,10 +307,11 @@ export const useGraph = ({ id }) => {
             openPanel(pData.panel);
           } else {
             closePanel();
-            openActionBar(_selectedCell.id);
+            openActionBar(global._selectedCell.id);
           }
         } else {
           closePanel();
+          hideActionBar();
         }
       },
       mouseMove: function (sender, evt) {
@@ -379,10 +380,5 @@ export const useGraph = ({ id }) => {
     getActionConfigStyle,
     graphRef,
     insertAction,
-    isModalOpen,
-    toggleModal,
-    panel,
-    closePanel,
-    openPanel,
   };
 };
