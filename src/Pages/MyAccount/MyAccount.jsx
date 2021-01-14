@@ -1,6 +1,8 @@
 import React, { useRef, useState } from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
 import { Container, Overlay } from "react-bootstrap";
+import { useHistory } from 'react-router-dom';
+
 import {
   Row,
   Col,
@@ -17,8 +19,11 @@ import ButtonComponent from "../../components/Button/Button";
 import MyAccountDetail from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
+import { propTypes } from "react-bootstrap/esm/Image";
 
-const MyAccount = () => {
+const MyAccount = (props) => {
+  const history = useHistory();
+
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
@@ -198,7 +203,7 @@ const MyAccount = () => {
         <Container>
           <h5 className="d-inline-block mt-4 mb-5">Strategies</h5>
 
-          <ButtonComponent variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right">
+          <ButtonComponent variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right" onClick={() => history.push("/strategy/new")}>
             <img
               src="/assets/images/btnplus.png"
               className="d-inline-block align-top"

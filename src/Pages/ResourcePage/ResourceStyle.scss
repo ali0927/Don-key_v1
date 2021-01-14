@@ -269,3 +269,163 @@ body {
     }
   }
 }
+
+.modal-body,
+.modal-header,
+.modal-footer {
+  border: none !important;
+}
+.close {
+  position: absolute;
+  right: 4%;
+  top: 5%;
+  z-index: 999999;
+
+  & span {
+    display: none;
+  }
+}
+
+.close:before {
+  position: absolute;
+  content: "";
+  top: 5%;
+  right: 0;
+  background-image: url("../../images/cross.png");
+  height: 15px;
+  width: 15px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 99999;
+}
+
+.modal-lg,
+.modal-xl {
+  /* media queries */
+  @media (min-width: 992px) {
+    max-width: 1000px !important;
+  }
+}
+
+.modal-body p {
+  margin-bottom: 0px;
+}
+
+.protocolLeft {
+  background: $secondary-color;
+  padding: 10px 25px;
+  display: block;
+  height: 100%;
+
+  & h6 {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    color: $modalhead;
+  }
+  & .headbottom {
+    color: $colorBlack;
+  }
+  & ul li {
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    color: $paracolorBlack;
+    margin-bottom: 15px;
+  }
+}
+
+.protocolRight {
+  padding: 0px;
+
+  & .input-group {
+    border-bottom: 1px solid $bordercolor;
+    padding: 7px 20px;
+    width: 93%;
+  }
+  & .input-group input,
+  & .input-group input:focus {
+    font-weight: normal;
+    font-size: 15px;
+    line-height: 18px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.01em;
+    border: none !important;
+    background-color: $primary-color;
+    color: $inputColor;
+    box-shadow: none;
+  }
+  & .input-group input::-webkit-input-placeholder {
+    color: $inputColor;
+  }
+  & .input-group span {
+    border: none;
+    background-color: $primary-color;
+  }
+
+  & .protocolContent {
+    padding: 10px 10px 0px;
+    display: block;
+    width: 100%;
+
+    & .protocolImg {
+      width: 50px;
+      overflow: hidden;
+    }
+    & .protocolImg img {
+      max-width: 100%;
+    }
+    & .protocolMain h5 {
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+    }
+    & .protocolMain {
+      display: inline-block;
+      margin-left: 15px;
+      padding: 14px 0px;
+      vertical-align: top;
+      width: calc(100% - 77px);
+    }
+  }
+  .selectProtocol {
+    & h4 {
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+      letter-spacing: 0.01em;
+      color: $paracolorBlack;
+      display: inline-block;
+    }
+
+    & .selectprotolContent {
+      background: #f3f3f3;
+      border-radius: 5px;
+      display: inline-block;
+      padding: 5px 10px;
+      margin-right: 20px;
+
+      & h6 {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        color: $greylight;
+        display: inline-block;
+        margin-bottom: 0px;
+      }
+      & span {
+        float: right;
+        cursor: pointer;
+        height: 16px;
+        width: auto;
+        overflow: hidden;
+        margin-left: 19px;
+        display: inline-block;
+        & img {
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}

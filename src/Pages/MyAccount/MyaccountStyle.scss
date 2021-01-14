@@ -278,58 +278,6 @@ td .custom-switch .custom-control-label::after {
   background-color: $primary-color;
 }
 
-.thankyouModal .modal-content {
-  padding: 0px !important;
-  & .bgBlack {
-    background: $colorBlack;
-    border-radius: 0px 5px 5px 0px;
-    height: 100%;
-  }
-  & .close span {
-    display: none;
-  }
-  & .close {
-    position: absolute;
-    background-image: url("../../images/cross1.png") !important;
-    content: "";
-    top: 7%;
-    left: auto;
-    right: 3%;
-    background-size: auto;
-    background-repeat: no-repeat;
-    height: 17px;
-    width: 17px;
-    background-repeat: no-repeat;
-    z-index: 9;
-  }
-  & .close:before {
-    display: none;
-  }
-  & h4 {
-    font-weight: 500;
-    font-size: 30px;
-    line-height: 133%;
-    display: flex;
-    align-items: center;
-    color: $primary-color;
-  }
-  & p {
-    font-size: 17px;
-    line-height: 131%;
-    color: $primary-color;
-  }
-  & .btn-btnWhite {
-    border: 1px solid $primary-color;
-    box-sizing: border-box;
-    border-radius: 5px;
-    color: $primary-color;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 19px;
-    padding: 12px 26px;
-  }
-}
-
 /* media queries */
 @media (max-width: 767px) {
   .tablebg .table tbody tr td {

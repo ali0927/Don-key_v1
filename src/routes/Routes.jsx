@@ -9,7 +9,7 @@ import MyAccount from "../Pages/MyAccount";
 import NotificationPage from "../Pages/NotificationPage";
 import Builder from "../Pages/Builder";
 import SelectTemplate from "../Pages/SelectTemplate";
-
+import StrategyConfirmation from '../Pages/StrategyConfirmation';
 export default function Routes() {
   return (
     <Router>
@@ -22,6 +22,7 @@ export default function Routes() {
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/myaccount" children={<MyAccount />} />
         <Route path="/strategy/new" children={<SelectTemplate />} />
+        <Route path="/strategy/confirmation" children={<StrategyConfirmation />} />
         <Route path="/notification" children={<NotificationPage />} />
       </Switch>
     </Router>

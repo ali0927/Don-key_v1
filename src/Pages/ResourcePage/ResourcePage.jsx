@@ -1,12 +1,16 @@
 import React from "react";
+import Modal from "react-bootstrap/Modal";
 import { NavBar } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Form, InputGroup } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
+import ModalPopup from "../../components/ModalPopup/Modal";
 
 const ResourcePage = () => {
+  const [modalShow, setModalShow] = React.useState(false);
+
   return (
     <div>
       <NavBar />
@@ -349,7 +353,10 @@ const ResourcePage = () => {
           </Row>
 
           <div className="text-center mt-md-5 mb-md-5">
-            <ButtonComponent variant="colorBlack btn-outline pl-5 pr-5">
+            <ButtonComponent
+              variant="colorBlack btn-outline pl-5 pr-5"
+              onClick={() => setModalShow(true)}
+            >
               More
             </ButtonComponent>
           </div>
@@ -631,6 +638,261 @@ const ResourcePage = () => {
           </Row>
         </Container>
       </footer>
+      <ModalPopup
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        className="p-0"
+      >
+        <Row>
+          <Col md={3} className="pr-0">
+            <div className="protocolLeft">
+              <h6 className="mt-3">Protocols</h6>
+
+              <div className="mt-5 pt-5">
+                <h6 className="headbottom mb-4">Select a category</h6>
+
+                <ul>
+                  <li>Favorites</li>
+                  <li>Landing Protocols</li>
+                  <li>Swap Protocols</li>
+                  <li>DEX Protocols</li>
+                </ul>
+              </div>
+            </div>
+          </Col>
+
+          <Col md={9} className="pl-0">
+            <div className="protocolRight">
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text className="pl-0">
+                        <img src="/assets/images/search.png" alt="Image" />
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control type="text" placeholder="Search protocols" />
+                  </InputGroup>
+                </Form.Group>
+              </Form.Row>
+
+              <div className="selectProtocol pl-4 mt-3">
+                <h4 className="mr-4">Protocols select: </h4>
+
+                <div className="selectprotolContent">
+                  <h6> Dai (DAI) </h6>
+                  <span>
+                    <img src="/assets/images/cross1.png" />
+                  </span>
+                </div>
+
+                <div className="selectprotolContent">
+                  <h6> Сurve (СuSDT) </h6>
+                  <span>
+                    <img src="/assets/images/cross1.png" />
+                  </span>
+                </div>
+
+                <div className="selectprotolContent">
+                  <h6> USDT Coin (USDT) </h6>
+                  <span>
+                    <img src="/assets/images/cross1.png" />
+                  </span>
+                </div>
+              </div>
+              <div className="pl-3 pr-3">
+                <Row className="mt-4">
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/1.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Dai (DAI)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/2.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Сurve (СuSDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/1.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Dai (DAI)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/3.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>USDT Coin (USDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/4.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Compound (СSDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/3.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>USDT Coin (USDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/5.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>True USDT (TUSD)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/6.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Yearn.finance (yFUSDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/5.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>True USDT (TUSD)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/5.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>True USDT (TUSD)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/6.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>Yearn.finance (yFUSDT)</h5>
+                      </div>
+                    </div>
+                  </Col>
+
+                  <Col lg={4} md={6}>
+                    <div className="protocolContent mb-0">
+                      <div className="protocolImg">
+                        <img
+                          src="/assets/images/resource/protocol/5.png"
+                          className="d-inline-block"
+                          alt="Image"
+                        />
+                      </div>
+                      <div className="protocolMain">
+                        <h5>True USDT (TUSD)</h5>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+
+              <div className="text-left mt-md-5 mb-md-5">
+                <ButtonComponent variant="colorBlack btn-outline ml-3 pt-2 pb-2 pl-5 pr-5">
+                  Use
+                </ButtonComponent>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </ModalPopup>
     </div>
   );
 };
