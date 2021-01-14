@@ -1,10 +1,13 @@
 import { RequestHandler } from "express";
-import { Farmers } from "../models/Farmers";
+
 import { map, pick } from "lodash";
+import { prisma } from "../database";
+
+const Farmers =  prisma.farmers;
 
 export class FarmerController {
     static getFarmersData: RequestHandler = async (req, res) => {
-        const results = await Farmers.findAll();
+        const results = await Farmers.findMany();
         res.json(
             map(results, (item) =>
                 pick(item, [
@@ -22,7 +25,7 @@ export class FarmerController {
     };
     
     static getListOfFarmers: RequestHandler = async (req, res) => {
-        const results = await Farmers.findAll();
+        const results = await Farmers.findMany();
         res.json(
             map(results, (item) =>
                 pick(item, [
@@ -41,18 +44,18 @@ export class FarmerController {
         const { id } = req.params;
         const {  ...rest } = req.body;
 
-        const results = await Farmers.update(rest, { where: {id} });
+        const results = await Farmers.update({data: rest,  where: {id:parseInt(id)} });
         res.json(results);
     };
 
     static deleteFarmer: RequestHandler = async (req, res) => {
         const { id } = req.params;
-        const count = await Farmers.destroy({ where: { id } });
+        const count = await Farmers.delete({ where: { id: parseInt(id) } });
         res.json({ count });
     };
 
     static createFarmer: RequestHandler = async (req, res) => {
         const farmer = await Farmers.create(req.body);
-        res.json(farmer.toJSON());
+        res.json(farmer);
     };
 }

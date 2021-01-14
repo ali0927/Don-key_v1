@@ -8,27 +8,26 @@ import noProtocol from "../../images/no-protocol.png";
 import { SquareLine } from "../SquareLine/SquareLine";
 import { SelectedAction } from "../SelectedAction/SelectedAction";
 
-
-
-
 const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
   const { getSelectedProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
 
   const renderActionSelector = () => {
-    if (selectedProtocol) {
+    console.log(selectedProtocol, "selected");
+    if (selectedProtocol && selectedProtocol.lastProtocol) {
       const protocol = PROTOCOLS[selectedProtocol.protocol];
+      const lastprotcol = PROTOCOLS[selectedProtocol.lastProtocol];
       const actions = Object.values(protocol.actions || {});
       return (
         <div className="panel_action">
           <div className="panel_action_img">
-            <img className="img-fluid" src={protocol.base64} />
+            <img className="img-fluid" src={lastprotcol.base64} />
           </div>
-          <SquareLine color={protocol.edgeColor} />
+          <SquareLine color={lastprotcol.edgeColor} />
           <SelectedAction actions={actions} />
-          <SquareLine color="#A1A5A4" />
+          <SquareLine color={protocol.edgeColor} />
           <div className="panel_action_img">
-            <img className="img-fluid" src={noProtocol} />
+            <img className="img-fluid" src={protocol.base64} />
           </div>
         </div>
       );
@@ -54,7 +53,9 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
           </a>
         </div>
         <div className="desc panel-desc">{desc}</div>
-        {renderActionSelector()}
+        <div className="d-flex justify-content-center">
+          {renderActionSelector()}
+        </div>
       </div>
 
       <div className="panel_scroll">{children}</div>

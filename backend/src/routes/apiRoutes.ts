@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { AccountsController } from "../controllers/AccountsController";
 import { FarmerController } from "../controllers/FarmerController";
+import { LoginController } from "../controllers/LoginController";
 import { NotificationController } from "../controllers/NotificationsController";
 import { NumberController } from "../controllers/NumbersController";
 import { StrategiesController } from "../controllers/StrategiesController";
@@ -41,11 +42,19 @@ apiRoutes.route("/strategies")
     .put(StrategiesController.updateStrategies)
     .delete(StrategiesController.deleteStrategies);
 
+
+
+apiRoutes.get("/accounts/:id", AccountsController.getAccountById);
+
+
 apiRoutes.route("/accounts")
     .get(AccountsController.getAccounts)
     .post(AccountsController.createAccount)
     .put(AccountsController.updateAccount)
     .delete(AccountsController.deleteAccount);
 
+
+apiRoutes.route("/login")
+    .post(LoginController.handleLogin);
 
 export { apiRoutes }

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
+import clsx from "clsx";
 import React from "react";
-import { PROTOCOLS } from "../../hooks";
+import { PROTOCOLS, useToggle } from "../../hooks";
 function drag(ev) {
   ev.dataTransfer.setData("protocol", ev.target.id);
 }
@@ -13,16 +14,18 @@ const Protocol = ({
   openedPanel,
 }) => {
   const protocol = PROTOCOLS[name];
+  const [dragging,enableDragging,disableDragging] = useToggle(false);
   if (!protocol.showOnToolbar) {
     return null;
   }
   return (
-    <li className="protocol-list-item">
+    <li className={clsx("protocol-list-item", { dragging })}>
       <img
         src={protocol.icon}
         draggable
         id={name}
-        onDragStart={(e) => drag(e)}
+        onDragStart={(e) => {drag(e);enableDragging() }}
+        onMouseEnter={disableDragging}
       />
       <div className="protocol-list-item-tooltip">{name}</div>
       {PanelComp && (

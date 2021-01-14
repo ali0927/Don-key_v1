@@ -1,41 +1,60 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
 import { Container, Overlay } from "react-bootstrap";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 
 import {
+  Container,
+  Overlay,
   Row,
   Col,
   Form,
   Pagination,
   Table,
   Popover,
-  OverlayTrigger,
   Button
 } from "react-bootstrap";
-import { Card } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import MyAccountDetail from "../../JsonData/MyAccountDetail";
+import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
 import { propTypes } from "react-bootstrap/esm/Image";
 
-const MyAccount = (props) => {
+const MyAccount = props => {
   const history = useHistory();
+  import clsx from "clsx";
+  import { createPortal } from "react-dom";
+  import { api } from "../../services/api";
 
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);
   const [modalShow, setModalShow] = React.useState(false);
 
   const ref = useRef(null);
-
+  const [MyAccountDetail, setAccountDetail] = useState(DummyData);
+  const [isReady, setIsReady] = useState(false);
   const handleClick = event => {
     setShow(!show);
     setTarget(event.target);
   };
+
+  useEffect(() => {
+    api
+      .get("/api/v1/accounts/1")
+      .then(res => {
+        setAccountDetail(res.data);
+        setIsReady(true);
+      })
+      .catch(() => {
+        setIsReady(true);
+      });
+  }, []);
+
   return (
-    <div className="bgColor">
+    <div className={clsx("bgColor", { blur: !isReady })}>
+      {!isReady &&
+        createPortal(<div className="loading">Loading</div>, document.body)}
       <NavBar2 />
 
       <div className="navbanHead pt-5 pb-5">
@@ -203,7 +222,10 @@ const MyAccount = (props) => {
         <Container>
           <h5 className="d-inline-block mt-4 mb-5">Strategies</h5>
 
-          <ButtonComponent variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right" onClick={() => history.push("/strategy/new")}>
+          <ButtonComponent
+            variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right"
+            onClick={() => history.push("/strategy/new")}
+          >
             <img
               src="/assets/images/btnplus.png"
               className="d-inline-block align-top"
