@@ -1,28 +1,35 @@
 
 import { RequestHandler } from "express";
 import { Accounts } from "../models/Accounts";
-import { map, pick } from "lodash";
+// import { map, pick } from "lodash";
 
 export class AccountsController {
     static getAccounts: RequestHandler = async (req, res) => {
-        const results = await Accounts.findAll();
-        res.json(
-            map(results, (item) =>
-                pick(item, [
-                    "id",
-                    "name",
-                    "nb_Accounts",
-                    "budget",
-                    "age",
-                    "buru_token",
-                    "chart_url",
-                    "apy",
-                ])
-            )
-        );
+
+        const results = await Accounts.findAll({});
+        res.json(results);
     };
-    
-   
+
+    static getAccountById: RequestHandler = async (req, res) => {
+        const { id } = req.params;
+        const result = await Accounts.findByPk(id);
+        if (!result) {
+            return res.sendStatus(404);
+        }
+        return res.json({
+            ...result.toJSON(), array: [{
+                aum: '50,000',
+                daily: '073',
+                daily_: '370',
+                weekly: '098',
+                weekly_: '_620',
+                to_date: '066',
+                to_date_: '330',
+
+            }]
+        });
+    }
+
     static updateAccount: RequestHandler = async (req, res) => {
         const { id, ...rest } = req.body;
 

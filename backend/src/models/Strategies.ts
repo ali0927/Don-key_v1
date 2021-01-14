@@ -1,16 +1,22 @@
 import { sequelize } from "../database";
 import { DataTypes } from "sequelize";
+import { Accounts } from "./Accounts";
 const Strategies = sequelize.define('strategies', {
+    
     name: { type: DataTypes.STRING },
     data_open: { type: DataTypes.TIME },
-    earnings: { type: DataTypes.NUMBER },
-    earnings_per: { type: DataTypes.NUMBER },
-    allocation: { type: DataTypes.NUMBER },
-    profit: { type: DataTypes.NUMBER },
-    last_transaction: { type: DataTypes.NUMBER },
-    apy: { type: DataTypes.NUMBER },
-    buru_token: { type: DataTypes.NUMBER },
+    earnings: { type: DataTypes.INTEGER },
+    earnings_per: { type: DataTypes.INTEGER },
+    allocation: { type: DataTypes.INTEGER },
+    profit: { type: DataTypes.INTEGER },
+    last_transaction: { type: DataTypes.INTEGER },
+    apy: { type: DataTypes.INTEGER },
+    buru_token: { type: DataTypes.INTEGER },
     status: { type: DataTypes.INTEGER },
-});
+
+}, {tableName: "Strategies"});
+
+//@ts-ignore
+Strategies.Account = Strategies.belongsTo(Accounts)
 
 export { Strategies }

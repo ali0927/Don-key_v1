@@ -23,13 +23,13 @@ const Farmers = sequelize.define('farmers', {
         type: DataTypes.INTEGER
     },
     budget: {
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
     },
     age: {
         type: DataTypes.INTEGER
     },
     buru_token: {
-        type: DataTypes.NUMBER
+        type: DataTypes.INTEGER
     },
     chart_url: {
         type: DataTypes.STRING

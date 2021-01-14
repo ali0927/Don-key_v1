@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import { Database } from "./database";
 import { PORT } from "./env";
 import { apiRoutes } from "./routes/apiRoutes";
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(morgan("common"))
 app.use(express.json());
+app.use(cors());
 app.use(express.urlencoded({ extended: false }))
 
 app.use("/api/v1", apiRoutes);

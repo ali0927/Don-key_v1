@@ -6,7 +6,6 @@ export const useSetRef = (val) => {
     if (typeof newval === "function") {
       newval = newval(ref.current);
     }
-    console.log(newval);
     ref.current = newval;
   }, []);
   const getVal = useCallback(() => {

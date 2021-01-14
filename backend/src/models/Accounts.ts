@@ -12,10 +12,7 @@ const Accounts = sequelize.define('accounts', {
         type: DataTypes.STRING
     },
     buru_token_minted: {
-        type: DataTypes.NUMBER
-    },
-    array: {
-        type: DataTypes.ARRAY(DataTypes.JSON)
+        type: DataTypes.INTEGER
     }
 });
 

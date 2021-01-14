@@ -41,6 +41,11 @@ apiRoutes.route("/strategies")
     .put(StrategiesController.updateStrategies)
     .delete(StrategiesController.deleteStrategies);
 
+
+
+apiRoutes.get("/accounts/:id", AccountsController.getAccountById);
+
+
 apiRoutes.route("/accounts")
     .get(AccountsController.getAccounts)
     .post(AccountsController.createAccount)

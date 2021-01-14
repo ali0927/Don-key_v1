@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
 import { Container, Overlay } from "react-bootstrap";
 import {
@@ -8,15 +8,17 @@ import {
   Pagination,
   Table,
   Popover,
-  OverlayTrigger,
-  Button
+  Button,
 } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import MyAccountDetail from "../../JsonData/MyAccountDetail";
+import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
+import axios from "axios";
+import clsx from "clsx";
+import { createPortal } from "react-dom";
 
 const MyAccount = () => {
   const [show, setShow] = useState(false);
@@ -24,13 +26,25 @@ const MyAccount = () => {
   const [modalShow, setModalShow] = React.useState(false);
 
   const ref = useRef(null);
-
-  const handleClick = event => {
+  const [MyAccountDetail, setAccountDetail] = useState(DummyData);
+  const [isReady, setIsReady] = useState(false);
+  const handleClick = (event) => {
     setShow(!show);
     setTarget(event.target);
   };
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/v1/accounts/1").then((res) => {
+      setAccountDetail(res.data);
+      setIsReady(true);
+    }).catch(() => {
+      setIsReady(true);
+    });
+  }, []);
+
   return (
-    <div className="bgColor">
+    <div className={clsx("bgColor", { blur: !isReady })}>
+      {!isReady && createPortal(<div className="loading">Loading</div>, document.body)}
       <NavBar2 />
 
       <div className="navbanHead pt-5 pb-5">
