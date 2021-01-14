@@ -6,23 +6,28 @@
   "scripts": {
     "dev": "nodemon",
     "build": "gulp",
+    "postinstall": "npx prisma generate",
     "start": "node build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "2.14.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "morgan": "^1.10.0",
     "mysql2": "^2.2.5",
     "sequelize": "^6.3.5"
   },
   "devDependencies": {
+    "@prisma/cli": "2.14.0",
     "@types/cors": "^2.8.9",
     "@types/express": "^4.17.0",
+    "@types/jsonwebtoken": "^8.5.0",
     "@types/lodash": "^4.14.167",
     "@types/morgan": "^1.9.2",
     "@types/mysql": "^2.15.17",

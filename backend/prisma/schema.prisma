@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model ProtocolActionProperties {
+  id          Int     @id @default(autoincrement())
+  actionId    Int?
+  name        String?
+  actionType  Int?
+  optionsJSON String?
+  description String?
+  required    Int?
+}
+
+model ProtocolActions {
+  id          Int     @id @default(autoincrement())
+  protocolId  Int?
+  name        String?
+  description String?
+  icon        String?
+}
+
+model Protocols {
+  id              Int     @id @default(autoincrement())
+  name            String?
+  website         String?
+  toolbarImageURL String?
+  showOnToolbar   String?
+  edgeColor       String?
+  description     String?
+  vertexImageURL  String?
+  mediumImageURL  String?
+}
+
+model Strategies {
+  id               Int       @id @default(autoincrement())
+  name             String?
+  data_open        DateTime?
+  earnings         Int?
+  earnings_per     Int?
+  allocation       Int?
+  profit           Int?
+  last_transaction Int?
+  apy              Int?
+  buru_token       Int?
+  status           Int?
+  createdAt        DateTime
+  updatedAt        DateTime
+  accountId        Int?
+  accounts         accounts? @relation(fields: [accountId], references: [id])
+
+  @@index([accountId], name: "accountId")
+}
+
+model Users {
+  id            Int       @id @default(autoincrement())
+  walletAddress String?
+  created       DateTime?
+  lastUpdate    DateTime?
+  avatarURL     String?
+  username      String?
+  description   String?
+  GUID          String    @unique
+}
+
+model accounts {
+  id                Int          @id @default(autoincrement())
+  picture           String?
+  name              String?
+  description       String?
+  buru_token_minted Int?
+  createdAt         DateTime
+  updatedAt         DateTime
+  Strategies        Strategies[]
+}
+
+model farmers {
+  id              Int      @id @default(autoincrement())
+  picture         String?
+  name            String?
+  description     String?
+  chart_image_url String?
+  apy             String?
+  strategies      String?
+  nb_farmers      Int?
+  budget          Int?
+  age             Int?
+  buru_token      Int?
+  chart_url       String?
+  createdAt       DateTime
+  updatedAt       DateTime
+}
+
+model notifications {
+  id           Int      @id @default(autoincrement())
+  notification String?
+  createdAt    DateTime
+  updatedAt    DateTime
+}
+
+model numbers {
+  id        Int      @id @default(autoincrement())
+  number    Int?
+  title     String?
+  createdAt DateTime
+  updatedAt DateTime
+}

@@ -1,12 +1,12 @@
 
 import { RequestHandler } from "express";
-import { Notifications } from "../models/Notifications";
+import { prisma } from "../database";
 
-
+const Notifications = prisma.notifications;
 export class NotificationController {
     static getNotifications: RequestHandler = async (req, res) => {
 
-        const results = await Notifications.findAll();
+        const results = await Notifications.findMany();
 
         res.json(results);
     }
@@ -16,20 +16,20 @@ export class NotificationController {
             ...rest
         } = req.body;
 
-        const results = await Notifications.update(rest, { where: id })
+        const results = await Notifications.update({data: rest,  where: {id:parseInt(id)} });
         res.json(results);
     }
 
     static deleteNotification: RequestHandler = async (req, res) => {
         const { id } = req.body;
-        const count = await Notifications.destroy({ where: { id } });
+        const count = await Notifications.delete({ where: { id: parseInt(id) } });
         res.json({ count });
     }
 
     static createNotification: RequestHandler = async (req, res) => {
 
         const Notification = await Notifications.create(req.body);
-        res.json(Notification.toJSON());
+        res.json(Notification);
     }
 
 }
