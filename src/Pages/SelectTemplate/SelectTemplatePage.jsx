@@ -1,35 +1,25 @@
-import React, { Component, useState } from "react";
-import { Button, Modal } from "react-bootstrap";
-import ButtonComponent from "../../components/Button/Button";
+import React from "react";
+import { NavBar } from "../../components/Navbar/NavBar";
+import { Container } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
-import "./MyaccountStyle.scss";
-import StrategyConfirmationModal from "./strategyConfirmation";
+import { Card } from "react-bootstrap";
+import "./SelectTemplateStyle.scss";
+import ButtonComponent from "../../components/Button/Button";
 
-export default function StrategyModal(props) {
-  const [modalShow, setModalShow] = React.useState(false);
-
+const SelectTemplatePage = () => {
   return (
-    <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="contained-modal-title-vcenter" className="mt-0">
-          Select template strategy
-        </Modal.Title>
-      </Modal.Header>
-      <Row>
-        <Col className="ml-md-3" md={12}>
-          <p>
-            Solldy are waiting for your new strategy or we will use ready-made
-            templates.
-          </p>
-        </Col>
-      </Row>
+    <div className="newStrategy">
+      <div className="newStrategyContent">
+        <Row>
+          <Col md={12}>
+            <h4>Select template strategy</h4>
+            <p>
+              Solldy are waiting for your new strategy or we will use ready-made
+              templates.
+            </p>
+          </Col>
+        </Row>
 
-      <Modal.Body>
         <Row>
           <Col md={4}>
             <div className="cardStrategy">
@@ -54,7 +44,7 @@ export default function StrategyModal(props) {
               <ButtonComponent
                 variant="colorBlack dark btn-outline"
                 className="mt-2 w-100"
-                onClick={() => setModalShow(true)}
+                //   onClick={() => setModalShow(true)}
               >
                 Select
               </ButtonComponent>
@@ -133,11 +123,9 @@ export default function StrategyModal(props) {
             </div>
           </Col>
         </Row>
-      </Modal.Body>
-      <StrategyConfirmationModal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-      />
-    </Modal>
+      </div>
+    </div>
   );
-}
+};
+
+export default SelectTemplatePage;
