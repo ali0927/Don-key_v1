@@ -100,7 +100,7 @@ ul.actions li {
 
 .panel_open {
     right: 0;
-    left: 70%;
+    left: 66%;
     box-sizing: initial;
 }
 
@@ -327,6 +327,10 @@ textarea {
 
     &:hover .protocol-list-item-tooltip {
         opacity: 1;
+    }
+    
+    &.dragging .protocol-list-item-tooltip {
+        opacity: 0;
     }
 }
 
