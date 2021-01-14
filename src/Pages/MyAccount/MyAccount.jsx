@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
-import { Container, Overlay } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
+import clsx from "clsx";
+import { createPortal } from "react-dom";
+import { api } from "../../services/api";
 
 import {
   Container,
@@ -23,9 +25,6 @@ import { propTypes } from "react-bootstrap/esm/Image";
 
 const MyAccount = props => {
   const history = useHistory();
-  import clsx from "clsx";
-  import { createPortal } from "react-dom";
-  import { api } from "../../services/api";
 
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);

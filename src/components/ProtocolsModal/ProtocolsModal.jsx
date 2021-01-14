@@ -1,8 +1,8 @@
 import React from "react";
 import { Button, Modal } from "react-bootstrap";
-import ButtonComponent from "../../components/Button/Button";
+import ButtonComponent from "../Button/Button";
 
-export default function ModalPopup(props) {
+export default function ProtocolsModalPopup(props) {
   return (
     <Modal
       {...props}

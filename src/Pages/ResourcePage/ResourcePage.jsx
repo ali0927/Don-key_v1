@@ -6,7 +6,7 @@ import { Row, Col, Form, InputGroup } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import ModalPopup from "../../components/ModalPopup/Modal";
+import ModalPopup from "../../components/ProtocolsModal/ProtocolsModal";
 
 const ResourcePage = () => {
   const [modalShow, setModalShow] = React.useState(false);
