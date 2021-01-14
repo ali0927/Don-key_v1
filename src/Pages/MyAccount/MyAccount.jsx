@@ -17,7 +17,6 @@ import ButtonComponent from "../../components/Button/Button";
 import MyAccountDetail from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
-import StrategyModal from "./strategyModal";
 
 const MyAccount = () => {
   const [show, setShow] = useState(false);
@@ -199,10 +198,7 @@ const MyAccount = () => {
         <Container>
           <h5 className="d-inline-block mt-4 mb-5">Strategies</h5>
 
-          <ButtonComponent
-            variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right"
-            onClick={() => setModalShow(true)}
-          >
+          <ButtonComponent variant="colorBlack d-inline-block mt-md-4 mt-3 mb-5 text-right">
             <img
               src="/assets/images/btnplus.png"
               className="d-inline-block align-top"
@@ -542,7 +538,6 @@ const MyAccount = () => {
           </Row>
         </Container>
       </footer>
-      <StrategyModal show={modalShow} onHide={() => setModalShow(false)} />
     </div>
   );
 };

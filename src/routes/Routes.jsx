@@ -8,6 +8,7 @@ import FarmersPage from "../Pages/FarmersPage";
 import MyAccount from "../Pages/MyAccount";
 import NotificationPage from "../Pages/NotificationPage";
 import Builder from "../Pages/Builder";
+import SelectTemplate from "../Pages/SelectTemplate";
 
 export default function Routes() {
   return (
@@ -16,10 +17,11 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/onboarding" children={<Onboarding />} />
         <Route path="/login" children={<Login />} />
-        <Route path="/builder" children={<Builder />} />
+        <Route path="/strategy/build" children={<Builder />} />
         <Route path="/resource" children={<ResourcePage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/myaccount" children={<MyAccount />} />
+        <Route path="/strategy/new" children={<SelectTemplate />} />
         <Route path="/notification" children={<NotificationPage />} />
       </Switch>
     </Router>
