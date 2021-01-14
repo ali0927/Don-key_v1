@@ -17,7 +17,7 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/onboarding" children={<Onboarding />} />
         <Route path="/login" children={<Login />} />
-        <Route path="/builder" children={<Builder />} />
+        <Route path="/strategy/build" children={<Builder />} />
         <Route path="/resource" children={<ResourcePage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/myaccount" children={<MyAccount />} />
