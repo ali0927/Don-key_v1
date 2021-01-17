@@ -72,3 +72,4 @@ Thumbs.db
 *.wmv
 
 .env
+package-lock.json
