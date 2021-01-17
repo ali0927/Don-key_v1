@@ -4,26 +4,24 @@ import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { createPortal } from "react-dom";
 import { api } from "../../services/api";
-
 import {
-  Container,
-  Overlay,
   Row,
   Col,
   Form,
   Pagination,
   Table,
   Popover,
-  Button
+  Button,
+  Container,
+  Overlay
 } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
-import { propTypes } from "react-bootstrap/esm/Image";
 
-const MyAccount = props => {
+const MyAccount = () => {
   const history = useHistory();
 
   const [show, setShow] = useState(false);

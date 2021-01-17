@@ -54,8 +54,9 @@ apiRoutes.route("/accounts")
     .delete(AccountsController.deleteAccount);
 
 
-apiRoutes.route("/signup")
-    .post(LoginController.handleSignup);
+apiRoutes.route("/nonce")
+    .post(LoginController.getNonce);
+    
 apiRoutes.route("/login")
     .post(LoginController.handleSignIn);
 export { apiRoutes }
