@@ -10,6 +10,8 @@ import NotificationPage from "../Pages/NotificationPage";
 import Builder from "../Pages/Builder";
 import SelectTemplate from "../Pages/SelectTemplate";
 import StrategyConfirmation from '../Pages/StrategyConfirmation';
+
+
 export default function Routes() {
   return (
     <Router>

@@ -5,16 +5,18 @@ import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import Web3 from "web3";
 import { api } from "../../services/api";
+import { useHistory } from "react-router-dom";
+import { useNotification } from "../../components/Notification";
 
 let web3 = undefined;
 
-
-
-const AuthToken = 'AuthToken';
+const AuthToken = "AuthToken";
 
 const Login = () => {
   // useEffect(() => {}, []);
 
+  const history = useHistory();
+  const { showNotification } = useNotification();
   const handleMetaMaskLogin = async () => {
     if (!window.ethereum) {
       window.alert("Please install MetaMask first.");
@@ -46,7 +48,9 @@ const Login = () => {
       walletAddress: publicAddress,
     });
 
-    const { data: {data} } = resp;
+    const {
+      data: { data },
+    } = resp;
     console.log(data);
     const signature = await web3.eth.personal.sign(data.nonce, publicAddress);
     console.log(signature);
@@ -55,9 +59,17 @@ const Login = () => {
       walletAddress: publicAddress,
     });
 
-
     localStorage.setItem(AuthToken, JSON.stringify(resps.data));
 
+    history.push("/myaccount");
+    showNotification({
+      msg: (
+        <>
+          <p className="text-center">Metamask Account Connected</p>
+          <p className="text-center">{publicAddress}</p>
+        </>
+      ),
+    });
   };
 
   return (

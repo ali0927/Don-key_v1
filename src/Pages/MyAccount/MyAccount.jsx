@@ -13,7 +13,7 @@ import {
   Popover,
   Button,
   Container,
-  Overlay
+  Overlay,
 } from "react-bootstrap";
 import "./MyaccountStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
@@ -31,7 +31,7 @@ const MyAccount = () => {
   const ref = useRef(null);
   const [MyAccountDetail, setAccountDetail] = useState(DummyData);
   const [isReady, setIsReady] = useState(false);
-  const handleClick = event => {
+  const handleClick = (event) => {
     setShow(!show);
     setTarget(event.target);
   };
@@ -39,7 +39,7 @@ const MyAccount = () => {
   useEffect(() => {
     api
       .get("/api/v1/accounts/1")
-      .then(res => {
+      .then((res) => {
         setAccountDetail(res.data);
         setIsReady(true);
       })
