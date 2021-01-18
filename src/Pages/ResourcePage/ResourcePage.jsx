@@ -2,16 +2,45 @@ import React, { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { NavBar } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
-import { Row, Col, Form, InputGroup, Tab, Tabs, Nav } from "react-bootstrap";
+import {
+  Row,
+  Col,
+  Form,
+  InputGroup,
+  Tab,
+  Tabs,
+  Nav,
+  Button
+} from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import ModalPopup from "../../components/ProtocolsModal/ProtocolsModal";
 
+import Slider, { Range } from "rc-slider";
+import "rc-slider/assets/index.css";
+
 const ResourcePage = () => {
   const [modalShow, setModalShow] = React.useState(false);
   const [modalShow1, setModalShow1] = React.useState(false);
   const [key, setKey] = React.useState("swap");
+
+  const [rangeValue, setRangeValue] = React.useState(10);
+
+  const handleRange = val => {
+    const element = document.querySelector(".rc-slider-step");
+    // if (element) {
+    //   const childElement = element.children ? [...element.children] : [];
+    //   if (childElement) {
+    //     childElement.forEach(c => {
+    //       if (c.classList.contains("rc-slider-dot-active")) {
+    //         c.classList.remove("rc-slider-dot-active");
+    //       }
+    //     });
+    //   }
+    // }
+    setRangeValue(val);
+  };
 
   return (
     <div>
@@ -541,6 +570,140 @@ const ResourcePage = () => {
           </ul>
         </Container>
       </div>
+
+      {/* slider */}
+      <div className="p-5 deposit">
+        <div className="deposit-head">
+          <h5>
+            <img
+              src="/assets/images/action/icon1.png"
+              className="mr-3 ml-4"
+              alt="Image"
+            />
+            Deposit action
+          </h5>
+        </div>
+        <div className="deposit-body pt-5 pl-5 pr-4 pb-5">
+          <Row>
+            <Col md={8}>
+              <h6 className="mb-4"> Deposit amount:</h6>
+              <Slider
+                defaultValue={rangeValue}
+                min={10}
+                max={100}
+                step={10}
+                marks={{
+                  10: 10,
+                  20: 20,
+                  30: 30,
+                  40: 40,
+                  50: 50,
+                  60: 60,
+                  70: 70,
+                  80: 80,
+                  90: 90,
+                  100: 100
+                }}
+                onAfterChange={handleRange}
+              />
+
+              <Form>
+                {/* <div key={"checkbox"} className="mb-3">
+                  <Form.Check type={"checkbox"} id={`check-api-checkbox`}>
+                    <Form.Check.Input type={"checkbox"} isValid />
+                    <Form.Check.Label>{`Custom api checkbox`}</Form.Check.Label>
+                    <Form.Control.Feedback type="valid">
+                      You did it!
+                    </Form.Control.Feedback>
+                  </Form.Check>
+                </div> */}
+
+                <div key={`custom--react`} className="mb-3 mt-5">
+                  <Form.Check
+                    custom
+                    className="test-checkbox"
+                    type="checkbox"
+                    id={`custom-checkbox-react`}
+                  >
+                    <Form.Check.Input
+                      className="styled-checkbox"
+                      type={"checkbox"}
+                    />
+                    <Form.Check.Label className="pl-3 pt-1">{`Custom api checkbox`}</Form.Check.Label>
+                  </Form.Check>
+                </div>
+              </Form>
+            </Col>
+
+            <Col md={4}>
+              <div className="deposit-right mb-3 mt-4">
+                <p>60% ($3 000 USDT)</p>
+              </div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={8}>
+              <h6 className="mb-4 loanhead mt-3"> Loan to Value:</h6>
+              <Slider
+                defaultValue={rangeValue}
+                min={10}
+                max={100}
+                step={10}
+                marks={{
+                  10: 10,
+                  20: 20,
+                  30: 30,
+                  40: 40,
+                  50: 50,
+                  60: 60,
+                  70: 70,
+                  80: 80,
+                  90: 90,
+                  100: 100
+                }}
+                onAfterChange={handleRange}
+              />
+
+              <Form>
+                <div key={`custom--react1`} className="mb-3 mt-5">
+                  <Form.Check
+                    custom
+                    className="test-checkbox"
+                    type="checkbox"
+                    id={`custom-checkbox-react1`}
+                  >
+                    <Form.Check.Input
+                      className="styled-checkbox"
+                      type={"checkbox"}
+                    />
+                    <Form.Check.Label className="pl-3 pt-1">{`Alert me about low LTV`}</Form.Check.Label>
+                  </Form.Check>
+                </div>
+
+                {/* <Form.Group id="formGridCheckbox" className="mt-5">
+                  <Form.Check type="checkbox" label="Check me out" />
+                </Form.Group> */}
+              </Form>
+            </Col>
+
+            <Col md={4}>
+              <div className="deposit-right mb-3 mt-4">
+                <p>80% (min 70%)</p>
+              </div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col md={12} className="text-center">
+              <ButtonComponent variant="colorBlack btn-outline ml-3 mt-5 pl-5 pr-5">
+                Add deposit
+              </ButtonComponent>
+            </Col>
+          </Row>
+        </div>
+      </div>
+
       {/*  footer */}
       <footer className="pt-5 pb-5">
         <Container>
