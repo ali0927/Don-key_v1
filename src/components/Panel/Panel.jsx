@@ -2,20 +2,19 @@
 import clsx from "clsx";
 import React from "react";
 import { createPortal } from "react-dom";
-import { PROTOCOLS } from "../../hooks";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
 import { SquareLine } from "../SquareLine/SquareLine";
 import { SelectedAction } from "../SelectedAction/SelectedAction";
 
 const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
-  const { getSelectedProtocol, divRef } = useGraphMethods();
+  const { getSelectedProtocol, divRef, getProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
 
   const renderActionSelector = () => {
     console.log(selectedProtocol, "selected");
     if (selectedProtocol && selectedProtocol.lastProtocol) {
-      const protocol = PROTOCOLS[selectedProtocol.protocol];
-      const lastprotcol = PROTOCOLS[selectedProtocol.lastProtocol];
+      const protocol = getProtocol(selectedProtocol.protocol);
+      const lastprotcol = getProtocol(selectedProtocol.lastProtocol);
       const actions = Object.values(protocol.actions || {});
       return (
         <div className="panel_action">

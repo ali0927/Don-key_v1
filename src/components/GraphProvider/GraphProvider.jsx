@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { filter } from "lodash";
+import { filter, findIndex } from "lodash";
 import React, {
   createContext,
   useCallback,
@@ -9,7 +9,7 @@ import React, {
   useRef,
 } from "react";
 import factory from "mxgraph";
-import { PROTOCOLS, useSetRef, useToggle } from "../../hooks";
+import { useSetRef, useToggle } from "../../hooks";
 import { actionsMap } from "../../hooks/ActionsMap";
 
 const mx = factory({
@@ -26,10 +26,19 @@ mxVertexToolHandler.prototype.domNode = null;
 
 const GraphContext = createContext(null);
 
-export const GraphProvider = ({ children, openPanel }) => {
+export const GraphProvider = ({ children, openPanel, protocols }) => {
   const protocolCellsRef = useRef([]);
   const actionCellsRef = useRef([]);
   const [getSelectedCell, setSelectedCell] = useSetRef({});
+
+
+  const getProtocol = (name) => {
+    const index = findIndex(protocols,item => item.name === name);
+    if(index === -1){
+      return null;
+    }
+    return protocols[index];
+  }
 
   const [isActionConfigOpen, openActionBar, hideActionBar] = useToggle();
 
@@ -132,9 +141,12 @@ export const GraphProvider = ({ children, openPanel }) => {
 
     return protocols[protocols.length - 1];
   }, []);
+
+
+
   const getSelectedProtocol = () => getProtocolForCellId(getSelectedCell().id);
   const insertProtocol = useCallback((protocolName) => {
-    const base64 = PROTOCOLS[protocolName].base64;
+    const base64 = getProtocol(protocolName).base64;
 
     let w = 136;
     let h = 136;
@@ -194,7 +206,7 @@ export const GraphProvider = ({ children, openPanel }) => {
     // setCurrentProtocol(protocolName);
     setSelectedCell(newVertex);
 
-    openPanel(PROTOCOLS[protocolName].panel);
+    openPanel(protocolName);
     const selectionModel = graph.getSelectionModel();
     selectionModel.setCell(newVertex);
   }, []);
@@ -253,10 +265,9 @@ export const GraphProvider = ({ children, openPanel }) => {
     });
 
     //get selected cell edge color
-
-    const lastCellProtocolEdge = PROTOCOLS[previousCell.protocol].edgeColor;
-    const selectedCellProtocolEdge =
-      PROTOCOLS[selectedProtocol.protocol].edgeColor;
+    const protocol = getProtocol(previousCell.protocol);
+    const lastCellProtocolEdge = protocol.edgeColor;
+    const selectedCellProtocolEdge =getProtocol(selectedProtocol.protocol).edgeColor;
 
     graph.getModel().beginUpdate();
 
@@ -308,8 +319,7 @@ export const GraphProvider = ({ children, openPanel }) => {
 
           const aIsPRotocol = isProtocol(cell.id);
           if (aIsPRotocol) {
-            const pData = PROTOCOLS[protocol.protocol];
-            openPanel(pData.panel);
+            openPanel(protocol.protocol);
           } else {
             closePanel();
             openActionBar(getSelectedCell().id);
@@ -357,7 +367,7 @@ export const GraphProvider = ({ children, openPanel }) => {
 
     graph.getModel().beginUpdate();
     try {
-      insertProtocol("buru", 100, 150);
+      // insertProtocol("buru", 100, 150);
     } finally {
       // Updates the display
       graph.getModel().endUpdate();
@@ -389,6 +399,7 @@ export const GraphProvider = ({ children, openPanel }) => {
     insertAction,
     insertProtocol,
     getActionConfigStyle,
+    getProtocol,
     divRef
   };
 

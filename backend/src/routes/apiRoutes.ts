@@ -4,6 +4,7 @@ import { FarmerController } from "../controllers/FarmerController";
 import { LoginController } from "../controllers/LoginController";
 import { NotificationController } from "../controllers/NotificationsController";
 import { NumberController } from "../controllers/NumbersController";
+import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
 
 
@@ -54,6 +55,14 @@ apiRoutes.route("/accounts")
     .delete(AccountsController.deleteAccount);
 
 
+
+apiRoutes.route('/protocols')
+    .get(ProtocolsController.getProtocols)
+    .post(ProtocolsController.createProtocols)
+    .put(ProtocolsController.updateProtocols)
+    .delete(ProtocolsController.deleteProtocols);
+
+    
 apiRoutes.route("/nonce")
     .post(LoginController.getNonce);
     
