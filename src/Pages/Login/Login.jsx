@@ -4,39 +4,60 @@ import { Form } from "react-bootstrap";
 import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import Web3 from "web3";
-import { api } from "../../services/api";
+import {  getAuthToken, getNonce } from "../../services/api";
 import { useHistory } from "react-router-dom";
 import { useNotification } from "../../components/Notification";
+import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
 
 let web3 = undefined;
 
-const AuthToken = "AuthToken";
+export const AuthToken = "AuthToken";
+
+
+const getAuthTokenForPublicAddress = async (publicAddress) => {
+  const nonce = await getNonce(publicAddress);
+  const web3 = await getWeb3();
+
+  const signature = await web3.eth.personal.sign(nonce, publicAddress);
+
+  return await getAuthToken(publicAddress, signature);
+};
+
+const getWeb3 = async () => {
+  if (!window.ethereum) {
+    window.alert("Please install MetaMask first.");
+    return;
+  }
+
+  if (!web3) {
+    try {
+      // Request account access if needed
+      await window.ethereum.enable();
+
+      // We don't know window.web3 version, so we use our own instance of Web3
+      // with the injected provider given by MetaMask
+      web3 = new Web3(window.ethereum);
+    } catch (error) {
+      window.alert("You need to allow MetaMask.");
+      return;
+    }
+  }
+  return web3;
+};
+
+
+
 
 const Login = () => {
-  // useEffect(() => {}, []);
+  
+
+
+  
 
   const history = useHistory();
   const { showNotification } = useNotification();
   const handleMetaMaskLogin = async () => {
-    if (!window.ethereum) {
-      window.alert("Please install MetaMask first.");
-      return;
-    }
-
-    if (!web3) {
-      try {
-        // Request account access if needed
-        await window.ethereum.enable();
-
-        // We don't know window.web3 version, so we use our own instance of Web3
-        // with the injected provider given by MetaMask
-        web3 = new Web3(window.ethereum);
-      } catch (error) {
-        window.alert("You need to allow MetaMask.");
-        return;
-      }
-    }
-
+    const web3 = await getWeb3();
     const coinbase = await web3.eth.getCoinbase();
     if (!coinbase) {
       window.alert("Please activate MetaMask first.");
@@ -44,23 +65,9 @@ const Login = () => {
     }
 
     const publicAddress = coinbase.toLowerCase();
-    const resp = await api.post("/api/v1/nonce", {
-      walletAddress: publicAddress,
-    });
-
-    const {
-      data: { data },
-    } = resp;
-    console.log(data);
-    const signature = await web3.eth.personal.sign(data.nonce, publicAddress);
-    console.log(signature);
-    const resps = await api.post("/api/v1/login", {
-      signature,
-      walletAddress: publicAddress,
-    });
-
-    localStorage.setItem(AuthToken, JSON.stringify(resps.data));
-
+    const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
+    localStorage.setItem(AuthToken, token);
+    localStorage.setItem("user", JSON.stringify(user));
     history.push("/myaccount");
     showNotification({
       msg: (
@@ -71,6 +78,8 @@ const Login = () => {
       ),
     });
   };
+
+  const { handleWalletConnect } = useWalletConnectHook();
 
   return (
     <div className="login">
@@ -98,7 +107,10 @@ const Login = () => {
 
             <Row>
               <Col md={6}>
-                <ButtonComponent className="btn-outline1 mt-4 d-block w-100">
+                <ButtonComponent
+                  onClick={handleWalletConnect}
+                  className="btn-outline1 mt-4 d-block w-100"
+                >
                   <img
                     src="/assets/images/login/wallet.png"
                     className="d-inline-block mr-lg-3 mr-2 ml-2"

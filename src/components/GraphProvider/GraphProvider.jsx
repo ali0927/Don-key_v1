@@ -389,6 +389,7 @@ export const GraphProvider = ({ children, openPanel }) => {
     insertAction,
     insertProtocol,
     getActionConfigStyle,
+    divRef
   };
 
   return useMemo(
