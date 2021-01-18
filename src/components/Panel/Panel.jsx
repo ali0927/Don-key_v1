@@ -4,12 +4,11 @@ import React from "react";
 import { createPortal } from "react-dom";
 import { PROTOCOLS } from "../../hooks";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
-import noProtocol from "../../images/no-protocol.png";
 import { SquareLine } from "../SquareLine/SquareLine";
 import { SelectedAction } from "../SelectedAction/SelectedAction";
 
 const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
-  const { getSelectedProtocol } = useGraphMethods();
+  const { getSelectedProtocol, divRef } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
 
   const renderActionSelector = () => {
@@ -35,8 +34,19 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
     return null;
   };
 
+  const getPosition = () => {
+    if (!divRef.current) {
+      return {};
+    }
+    const rect = divRef.current.getBoundingClientRect();
+    return { top: rect.top, bottom: 0 };
+  };
+
   return createPortal(
-    <div className={clsx("panel", { panel_open: isOpen })}>
+    <div
+      className={clsx("panel", { panel_open: isOpen })}
+      style={getPosition()}
+    >
       <div className="panel_header">
         <div className="d-flex align-items-center">
           <h2>{title}</h2>

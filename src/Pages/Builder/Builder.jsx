@@ -1,17 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useState } from "react";
-// import { map } from "lodash";
-import { PROTOCOLS,  useToggle } from "../../hooks";
+import { PROTOCOLS, useToggle } from "../../hooks";
 import clsx from "clsx";
-import "./main.scss";
-import "./modal.scss";
 import { ProtocolBar } from "../../components/ProtocolBar/ProtocolBar";
 import Protocol from "../../components/Protocol/Protocol";
 import { BuilderModal } from "../../components/BuilderModal/BuilderModal";
 import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
 import { CompPanel, YearnPanel } from "./Panels";
 import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
-
+import { NavBar3 } from "../../components/Navbar/NavBar";
+import "./main.scss";
 /**
  *
  *
@@ -20,7 +18,6 @@ import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
 const Builder = () => {
   const [panel, setPanel] = useState(null);
   const [isModalOpen, , , toggleModal] = useToggle();
- 
 
   const closePanel = () => setPanel(null);
 
@@ -41,7 +38,8 @@ const Builder = () => {
   return (
     <>
       <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
-        <GraphProvider openPanel={setPanel} >
+        <NavBar3 />
+        <GraphProvider openPanel={setPanel}>
           <ProtocolBar>
             {Object.keys(PROTOCOLS).map((name) => {
               return (
@@ -56,13 +54,8 @@ const Builder = () => {
               );
             })}
           </ProtocolBar>
-
-          <BuilderModal
-            isModalOpen={isModalOpen}
-            toggleModal={toggleModal}
-          />
-
-          <ActionConfig  />
+          <BuilderModal isModalOpen={isModalOpen} toggleModal={toggleModal} />
+          <ActionConfig />
         </GraphProvider>
       </div>
     </>
