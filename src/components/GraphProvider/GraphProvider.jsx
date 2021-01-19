@@ -367,7 +367,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
 
     graph.getModel().beginUpdate();
     try {
-      // insertProtocol("buru", 100, 150);
+      insertProtocol("BY", 100, 150);
     } finally {
       // Updates the display
       graph.getModel().endUpdate();

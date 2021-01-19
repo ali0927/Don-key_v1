@@ -6,6 +6,7 @@ import { Navbar, Nav, Dropdown, DropdownButton } from "react-bootstrap";
 import "./NavbarStyle.scss";
 import NotificationJson from "../../JsonData/NotificationJson";
 import { NotificationIcon, UserIcon } from "../Icons";
+import { Link } from "react-router-dom";
 function NavBar(props) {
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
@@ -38,9 +39,11 @@ function NavBar(props) {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <ButtonComponent variant="colorBlack btn-outline">
-          Connect wallet
-        </ButtonComponent>
+        <Link to="/login">
+          <ButtonComponent variant="colorBlack btn-outline">
+            Connect wallet
+          </ButtonComponent>
+        </Link>
       </Container>
     </Navbar>
   );

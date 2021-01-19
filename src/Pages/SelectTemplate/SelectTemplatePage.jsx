@@ -4,6 +4,7 @@ import { Row, Col } from "react-bootstrap";
 import "./SelectTemplateStyle.scss";
 import CreateStrategy from "../../JsonData/CreateStrategyJson";
 import ButtonComponent from "../../components/Button/Button";
+import { Link } from "react-router-dom";
 
 const SelectTemplatePage = () => {
   return (
@@ -40,13 +41,14 @@ const SelectTemplatePage = () => {
                     </Col>
                   </Row>
                   <p className="mt-2">{item.desc}</p>
-                  <ButtonComponent
-                    variant="colorBlack dark btn-outline"
-                    className="mt-2 w-100"
-                    //   onClick={() => setModalShow(true)}
-                  >
-                    Select
-                  </ButtonComponent>
+                  <Link to="/strategy/build">
+                    <ButtonComponent
+                      variant="colorBlack dark btn-outline"
+                      className="mt-2 w-100"
+                    >
+                      Select
+                    </ButtonComponent>
+                  </Link>
                 </div>
               </Col>
             );
