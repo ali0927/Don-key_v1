@@ -2,22 +2,39 @@ import React from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
-import { Navbar, Nav, Dropdown, DropdownButton } from "react-bootstrap";
+import { Navbar, Nav, Dropdown } from "react-bootstrap";
 import "./NavbarStyle.scss";
 import NotificationJson from "../../JsonData/NotificationJson";
 import { NotificationIcon, UserIcon } from "../Icons";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+const shortenAddress = (val) => {
+  return val.slice(0, 4) + "..." + val.slice(-4);
+};
+
+const useWalletAddress = ({ short = false }) => {
+  const user = useSelector((state) => state.auth.user);
+  const walletAddress = user
+    ? user.walletAddress
+    : "0x1341133ba79815e04e008f7635212bf086e821301";
+  return short ? shortenAddress(walletAddress) : walletAddress;
+};
+
 function NavBar(props) {
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
       <Container>
-        <Navbar.Brand href="#">
-          <img
-            src="/assets/images/logo.png"
-            className="d-inline-block align-top"
-            alt="Logo"
-          />
+        <Navbar.Brand onClick={(e) => e.preventDefault()}>
+          <Link to="/">
+            <img
+              src="/assets/images/logo.png"
+              className="d-inline-block align-top"
+              alt="Logo"
+            />
+          </Link>
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
@@ -75,16 +92,18 @@ function timeSince(date) {
   return Math.floor(seconds) + " seconds ago";
 }
 function NavBar2(props) {
-  var aDay = 24 * 60 * 60 * 1000;
+  const address = useWalletAddress({ short: true });
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
       <Container>
         <Navbar.Brand href="#">
-          <img
-            src="/assets/images/logo2.png"
-            className="d-inline-block align-top"
-            alt="Logo"
-          />
+          <Link to="/">
+            <img
+              src="/assets/images/logo2.png"
+              className="d-inline-block align-top"
+              alt="Logo"
+            />
+          </Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -145,7 +164,7 @@ function NavBar2(props) {
             className="d-inline-block align-top mr-md-2"
             alt="Image"
           />
-          <span> OxOa...ec8e </span>
+          <span> {address}</span>
         </ButtonComponent>
       </Container>
     </Navbar>
@@ -153,6 +172,7 @@ function NavBar2(props) {
 }
 
 const NavBar3 = () => {
+  const address = useWalletAddress({ short: true });
   return (
     <Navbar
       expand="lg"
@@ -160,14 +180,16 @@ const NavBar3 = () => {
       className="pt-4 pb-4 text-white"
     >
       <Container>
-        <Navbar.Brand href="#">
-          <img
-            src="/assets/images/logo-light.svg"
-            className="d-inline-block align-top "
-            alt="Logo"
-            style={{ width: 100 }}
-          />
-        </Navbar.Brand>
+        <Link to="/">
+          <Navbar.Brand href="#">
+            <img
+              src="/assets/images/logo-light.svg"
+              className="d-inline-block align-top "
+              alt="Logo"
+              style={{ width: 100 }}
+            />
+          </Navbar.Brand>
+        </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
@@ -219,7 +241,7 @@ const NavBar3 = () => {
             className="d-inline-block align-top mr-md-2"
             alt="Image"
           />
-          <span> OxOa...ec8e </span>
+          <span> {address} </span>
         </ButtonComponent>
       </Container>
     </Navbar>

@@ -3,14 +3,18 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./fonts/object-sans/ObjectSans-Bold.otf";
 import "./fonts/CodecPro/CodecPro-News.ttf";
+import { store } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

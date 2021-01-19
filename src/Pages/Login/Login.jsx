@@ -9,6 +9,8 @@ import { useHistory } from "react-router-dom";
 import { useNotification } from "../../components/Notification";
 import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
 import { AuthToken } from "../../constants";
+import {useDispatch} from "react-redux";
+import { doLogin } from "../../actions/authActions/authActions";
 let web3 = undefined;
 
 
@@ -53,6 +55,9 @@ const Login = () => {
 
   const history = useHistory();
   const { showNotification } = useNotification();
+
+  const dispatch = useDispatch()
+
   const handleMetaMaskLogin = async () => {
     const web3 = await getWeb3();
     const coinbase = await web3.eth.getCoinbase();
@@ -65,6 +70,7 @@ const Login = () => {
     const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
     localStorage.setItem(AuthToken, token);
     localStorage.setItem("user", JSON.stringify(user));
+    dispatch(doLogin(user))
     history.push("/myaccount");
     showNotification({
       msg: (
