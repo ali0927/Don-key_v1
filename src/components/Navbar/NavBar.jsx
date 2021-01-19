@@ -28,9 +28,10 @@ function NavBar(props) {
         <Navbar.Brand onClick={(e) => e.preventDefault()}>
           <Link to="/">
             <img
-              src="/assets/images/logo.png"
-              className="d-inline-block align-top"
+              src="/assets/images/logo.svg"
+              className="d-inline-block align-top by-logo"
               alt="Logo"
+            
             />
           </Link>
         </Navbar.Brand>
@@ -99,8 +100,8 @@ function NavBar2(props) {
         <Navbar.Brand href="#">
           <Link to="/">
             <img
-              src="/assets/images/logo2.png"
-              className="d-inline-block align-top"
+              src="/assets/images/logo.svg"
+              className="d-inline-block align-top by-logo"
               alt="Logo"
             />
           </Link>
@@ -184,9 +185,8 @@ const NavBar3 = () => {
           <Navbar.Brand href="#">
             <img
               src="/assets/images/logo-light.svg"
-              className="d-inline-block align-top "
+              className="d-inline-block align-top by-logo"
               alt="Logo"
-              style={{ width: 100 }}
             />
           </Navbar.Brand>
         </Link>
