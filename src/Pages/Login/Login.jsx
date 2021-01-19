@@ -8,10 +8,9 @@ import {  getAuthToken, getNonce } from "../../services/api";
 import { useHistory } from "react-router-dom";
 import { useNotification } from "../../components/Notification";
 import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
-
+import { AuthToken } from "../../constants";
 let web3 = undefined;
 
-export const AuthToken = "AuthToken";
 
 
 const getAuthTokenForPublicAddress = async (publicAddress) => {
@@ -51,8 +50,6 @@ const getWeb3 = async () => {
 const Login = () => {
   
 
-
-  
 
   const history = useHistory();
   const { showNotification } = useNotification();

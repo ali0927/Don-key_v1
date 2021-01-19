@@ -38,6 +38,18 @@ const Builder = () => {
       setProtocols(res.data);
     });
   }, []);
+  // const { showTooltip } = useTooltip();
+
+  // useEffect(() => {
+  //   if (protocols.length > 0) {
+  //     showTooltip({
+  //       rect: {top: 100, left: 100, width: 100, height: 100},
+  //       direction: "right",
+  //       msg: "Test Messsssssssss",
+  //       duration: 10000,
+  //     });
+  //   }
+  // }, [protocols]);
 
   return (
     <>

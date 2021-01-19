@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "http://18.191.241.99:3033",
 });
 
 export const getNonce = async (publicAddress) => {

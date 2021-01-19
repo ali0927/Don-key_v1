@@ -5,7 +5,7 @@ import { useNotification } from "../components/Notification";
 import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import { convertUtf8ToHex } from "@walletconnect/utils";
-import { AuthToken } from "../Pages/Login/Login";
+import { AuthToken } from "../constants";
 
 export const useWalletConnectHook = () => {
   const [state, setState] = useState({
