@@ -12,6 +12,7 @@ const YearnPanel = ({ isOpen, onClose, toggleModal }) => {
       url="https://yearn.finance"
       isOpen={isOpen}
       onClose={onClose}
+      toggleModal={toggleModal}
       desc={`Yearn Finance is a suite of products in Decentralized Finance (DeFi)
     that provides lending aggregation, yield generation, and insurance on
     the Ethereum blockchain. The protocol is maintained by various

@@ -18,6 +18,7 @@ const CompPanel = ({ isOpen,onClose, toggleModal }) => {
       icon={
         "https://pbs.twimg.com/profile_images/1154294327931068416/kKm_IHGE_400x400.png"
       }
+      toggleModal={toggleModal}
       url="https://compound.finance/"
     >
       <h2>Liquidity pools</h2>

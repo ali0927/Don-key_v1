@@ -289,6 +289,7 @@ textarea {
     background: rgb(20, 20, 20);
     box-sizing: initial;
 }
+
 .page-wrapper {
     width: 100vw;
     height: 100vh;
@@ -296,9 +297,7 @@ textarea {
     overflow: scroll;
     display: flex;
     flex-direction: column;
-   
 }
-
 
 .graph-wrapper {
     position: relative;
@@ -337,7 +336,7 @@ textarea {
     &:hover .protocol-list-item-tooltip {
         opacity: 1;
     }
-    
+
     &.dragging .protocol-list-item-tooltip {
         opacity: 0;
     }
@@ -356,6 +355,7 @@ textarea {
     text-transform: capitalize;
     padding: 5px 10px;
     border-radius: 4px;
+
     &::before {
         content: "";
         display: block;
@@ -376,6 +376,46 @@ textarea {
     margin-top: 15px;
 }
 
+.panel-triangle {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: -4px;
+    z-index: 10;
+}
+
+.panel-action-btn {
+    width: 100%;
+    background: #fff;
+    color: #070602;
+    border: 1px solid #dbdbdb;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+    transition: all 0.3s;
+    border-radius: 3px;
+    overflow: hidden;
+    &-bg {
+        position: absolute;
+        top: 0;
+        z-index: -1;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+    &:hover {
+        background: transparent;
+        color: #fff;
+        border: 1px solid transparent;
+    }
+    &:focus {
+        outline: none;
+    }
+}
+
 .item-name {
     display: inline-block;
     vertical-align: top;
@@ -386,9 +426,6 @@ textarea {
     margin-left: 44px;
     margin-top: -21px;
 }
-
-
-
 
 .b-modal-wrapper {
     width: 100%;
@@ -454,7 +491,7 @@ textarea {
 
 .b-btn-close::before,
 .b-btn-close::after {
-    content: '';
+    content: "";
     width: 32px;
     height: 6px;
     display: block;

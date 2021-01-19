@@ -1,31 +1,84 @@
 /* eslint-disable jsx-a11y/alt-text */
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
 import { SquareLine } from "../SquareLine/SquareLine";
-import { SelectedAction } from "../SelectedAction/SelectedAction";
-
-const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
+const Panel = ({ isOpen, title, onClose, icon, url, desc, children, toggleModal }) => {
   const { getSelectedProtocol, divRef, getProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
-
+  const [isAction, setIsOpen] = useState(false);
+  useEffect(() => {
+    if(!isOpen){
+      setIsOpen(false);
+    }
+  }, [isOpen])
   const renderActionSelector = () => {
-    console.log(selectedProtocol, "selected");
     if (selectedProtocol && selectedProtocol.lastProtocol) {
       const protocol = getProtocol(selectedProtocol.protocol);
       const lastprotcol = getProtocol(selectedProtocol.lastProtocol);
-      const actions = Object.values(protocol.actions || {});
+
       return (
         <div className="panel_action">
           <div className="panel_action_img">
             <img className="img-fluid" src={lastprotcol.base64} />
           </div>
           <SquareLine color={lastprotcol.edgeColor} />
-          <SelectedAction actions={actions} />
+          <div
+            onClick={() => setIsOpen((val) => !val)}
+            className="action_select"
+          >
+            Select default
+          </div>
           <SquareLine color={protocol.edgeColor} />
           <div className="panel_action_img">
             <img className="img-fluid" src={protocol.base64} />
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderActions = () => {
+    if (!isAction) {
+      return children;
+    }
+    if (selectedProtocol && selectedProtocol.lastProtocol) {
+      const protocol = getProtocol(selectedProtocol.protocol);
+      const actions = protocol.actions;
+
+      const lastprotcol = getProtocol(selectedProtocol.lastProtocol);
+      return (
+        <div className="p-4">
+          <h3 style={{ fontSize: 23 }}>Choose Action</h3>
+          <div className="row mt-4">
+            {actions && actions.map((action) => {
+              return (
+                <div className="col-4">
+                  <button
+                    onClick={toggleModal}
+                    className="panel-action-btn"
+                  >
+                    <div
+                      className="panel-action-btn-bg"
+                      style={{
+                        background: `linear-gradient(to right, ${lastprotcol.edgeColor}, ${protocol.edgeColor})`,
+                      }}
+                    />
+                    {action.icon ? (
+                      <span
+                        className="d-inline-block mr-2"
+                        style={{ width: 15 }}
+                      >
+                        <img className="img-fluid" src={action.icon} />
+                      </span>
+                    ) : null}
+                    {action.name}{" "}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       );
@@ -65,15 +118,34 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc, children }) => {
         <div className="d-flex justify-content-center">
           {renderActionSelector()}
         </div>
+        {isAction && (
+          <div className="panel-triangle">
+            <svg
+              width="19"
+              height="20"
+              viewBox="0 0 19 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M1.37222 16.2436L9.5002 1.98614L17.6282 16.2436H1.37222Z"
+                stroke="#C5C5C5"
+              />
+              <path
+                d="M2.27344 15.668L16.7383 15.6914L17.4486 16.809L16.8659 19.1284H2.08203L1.46484 16.8304L2.27344 15.668Z"
+                fill="white"
+              />
+            </svg>
+          </div>
+        )}
       </div>
+      <div className="panel_scroll">{renderActions()}</div>
 
-      <div className="panel_scroll">{children}</div>
-
-      <div className="panel_footer">
+      {/* <div className="panel_footer">
         <button className="btn btn_cancel">Cancel</button>
         <button className="btn btn_delete">Delete</button>
         <input type="submit" className="btn btn_save" value="Save" />
-      </div>
+      </div> */}
     </div>,
     document.body
   );

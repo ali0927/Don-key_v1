@@ -18,15 +18,16 @@ model ProtocolActionProperties {
 }
 
 model ProtocolActions {
-  id          Int     @id @default(autoincrement())
+  id          Int        @id @default(autoincrement())
   protocolId  Int?
+  protocols   Protocols? @relation(fields: [protocolId], references: [id])
   name        String?
   description String?
   icon        String?
 }
 
 model Protocols {
-  id              Int     @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String?
   website         String?
   toolbarImageURL String?
@@ -35,6 +36,7 @@ model Protocols {
   description     String?
   vertexImageURL  String?
   mediumImageURL  String?
+  actions         ProtocolActions[]
 }
 
 model Strategies {

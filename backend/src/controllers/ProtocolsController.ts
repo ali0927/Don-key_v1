@@ -6,13 +6,11 @@ import imageDataURI from "image-data-uri";
 const Protocols = prisma.protocols;
 
 
-
-
 export class ProtocolsController {
 
     static getProtocols: RequestHandler = async (req, res) => {
 
-        const results = await Protocols.findMany();;
+        const results = await Protocols.findMany({ include: {actions: true}});;
         const newResults: any[] = [];
         const base64Urls = results.map(({vertexImageURL}) => {
             return imageDataURI.encodeFromURL(vertexImageURL)

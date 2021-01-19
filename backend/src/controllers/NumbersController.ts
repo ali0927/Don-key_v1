@@ -3,13 +3,17 @@ import { RequestHandler } from "express";
 import { prisma } from "../database";
 
 const Numbers = prisma.numbers
+
+
 export class NumberController {
+
     static getNumbers: RequestHandler = async (req, res) => {
 
         const results = await Numbers.findMany();;
 
         res.json(results);
     }
+
     static updateNumber: RequestHandler = async (req, res) => {
         const {
             id,
