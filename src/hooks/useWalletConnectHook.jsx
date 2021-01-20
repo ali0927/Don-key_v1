@@ -66,12 +66,13 @@ export const useWalletConnectHook = () => {
     const nonce = await getNonce(publicAddress);
     const msgParams = [convertUtf8ToHex(nonce), publicAddress];
     const { connector } = state;
-    console.log(connector);
+
+
     const signature = await connector.signPersonalMessage(msgParams);
 
     const { user, token } = await getAuthToken(publicAddress, signature);
     localStorage.setItem(AuthToken, token);
-    localStorage.setItem("user", JSON.stringify(user));
+   
     history.push("/myaccount");
     showNotification({
       msg: (

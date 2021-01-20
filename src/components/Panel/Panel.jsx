@@ -2,17 +2,11 @@
 import clsx from "clsx";
 import React from "react";
 import { createPortal } from "react-dom";
+import { ActionsUI } from "../ActionUI/ActionsUI";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
 import { SquareLine } from "../SquareLine/SquareLine";
-const Panel = ({
-  isOpen,
-  title,
-  onClose,
-  icon,
-  url,
-  desc,
-  toggleModal,
-}) => {
+import { ActionsPanel } from "./ActionsPanel";
+const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
   const { getSelectedProtocol, divRef, getProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
 
@@ -41,40 +35,9 @@ const Panel = ({
   const renderActions = () => {
     if (selectedProtocol && selectedProtocol.lastProtocol) {
       const protocol = getProtocol(selectedProtocol.protocol);
-      const actions = protocol.actions;
 
       const lastprotcol = getProtocol(selectedProtocol.lastProtocol);
-      return (
-        <div className="p-4">
-          <h3 style={{ fontSize: 23 }}>Choose Action</h3>
-          <div className="row mt-4">
-            {actions &&
-              actions.map((action) => {
-                return (
-                  <div className="col-4">
-                    <button onClick={toggleModal} className="panel-action-btn">
-                      <div
-                        className="panel-action-btn-bg"
-                        style={{
-                          background: `linear-gradient(to right, ${lastprotcol.edgeColor}, ${protocol.edgeColor})`,
-                        }}
-                      />
-                      {action.icon ? (
-                        <span
-                          className="d-inline-block mr-2"
-                          style={{ width: 15 }}
-                        >
-                          <img className="img-fluid" src={action.icon} />
-                        </span>
-                      ) : null}
-                      {action.name}{" "}
-                    </button>
-                  </div>
-                );
-              })}
-          </div>
-        </div>
-      );
+      return <ActionsUI icon={icon} protocol={protocol} lastProtocol={lastprotcol} />;
     }
     return null;
   };

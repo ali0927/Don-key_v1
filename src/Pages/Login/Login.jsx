@@ -3,60 +3,20 @@ import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import Web3 from "web3";
-import {  getAuthToken, getNonce } from "../../services/api";
+import { getAuthTokenForPublicAddress } from "../../services/api";
 import { useHistory } from "react-router-dom";
 import { useNotification } from "../../components/Notification";
 import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
 import { AuthToken } from "../../constants";
-import {useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import { doLogin } from "../../actions/authActions/authActions";
-let web3 = undefined;
-
-
-
-const getAuthTokenForPublicAddress = async (publicAddress) => {
-  const nonce = await getNonce(publicAddress);
-  const web3 = await getWeb3();
-
-  const signature = await web3.eth.personal.sign(nonce, publicAddress);
-
-  return await getAuthToken(publicAddress, signature);
-};
-
-const getWeb3 = async () => {
-  if (!window.ethereum) {
-    window.alert("Please install MetaMask first.");
-    return;
-  }
-
-  if (!web3) {
-    try {
-      // Request account access if needed
-      await window.ethereum.enable();
-
-      // We don't know window.web3 version, so we use our own instance of Web3
-      // with the injected provider given by MetaMask
-      web3 = new Web3(window.ethereum);
-    } catch (error) {
-      window.alert("You need to allow MetaMask.");
-      return;
-    }
-  }
-  return web3;
-};
-
-
-
+import { getWeb3 } from "../../helpers/helpers";
 
 const Login = () => {
-  
-
-
   const history = useHistory();
   const { showNotification } = useNotification();
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleMetaMaskLogin = async () => {
     const web3 = await getWeb3();
@@ -68,9 +28,9 @@ const Login = () => {
 
     const publicAddress = coinbase.toLowerCase();
     const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
+    
     localStorage.setItem(AuthToken, token);
-    localStorage.setItem("user", JSON.stringify(user));
-    dispatch(doLogin(user))
+    dispatch(doLogin(user));
     history.push("/myaccount");
     showNotification({
       msg: (
@@ -83,7 +43,6 @@ const Login = () => {
   };
 
   const { handleWalletConnect } = useWalletConnectHook();
-
   return (
     <div className="login">
       <div className="loginLeft">
