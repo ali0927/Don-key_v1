@@ -4,7 +4,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json ./
 COPY yarn.lock ./
 RUN yarn
-COPY . ./
+COPY src ./src
+COPY public ./public
 RUN npm run build
 
 # production environment
