@@ -5,7 +5,7 @@
   "main": "build/app.js",
   "scripts": {
     "dev": "nodemon",
-    "build": "gulp",
+    "build": "tsc",
     "postinstall": "npx prisma generate",
     "start": "node build/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -36,6 +36,7 @@
     "@types/minio": "^7.0.7",
     "@types/morgan": "^1.9.2",
     "@types/mysql": "^2.15.17",
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
     "gulp-typescript": "^5.0.1",
     "nodemon": "^2.0.4",

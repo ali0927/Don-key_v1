@@ -2,7 +2,7 @@ import axios from "axios";
 import { getWeb3 } from "../helpers/helpers";
 
 export const api = axios.create({
-  baseURL: "http://18.191.241.99:3033",
+  baseURL: "https://api.by.finance",
 });
 
 export const getNonce = async (publicAddress) => {
