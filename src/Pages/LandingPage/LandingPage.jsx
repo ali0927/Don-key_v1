@@ -21,7 +21,6 @@ const LandingPage = () => {
                 <h1 className="colorBlack">
                   Come <br />
                   and trade
-                  Hello
                 </h1>
                 <p className="mt-4">
                   Build your DeFi strategy Get liquidity and Boost your yield
