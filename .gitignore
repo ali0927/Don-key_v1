@@ -76,3 +76,4 @@ package-lock.json
 **/build/**
 .eslintcache
 yarn.lock
+package-lock.json
