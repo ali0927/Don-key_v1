@@ -97,6 +97,8 @@ ul.actions li {
     transition: left 0.3s ease;
     height: 100%;
     box-sizing: initial;
+    display: flex;
+    flex-direction: column;
 }
 
 .panel_open {
@@ -152,6 +154,10 @@ button:focus {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+.flex-val-1 {
+    flex: 1;
 }
 
 .panel_action_img {
@@ -294,8 +300,6 @@ textarea {
 .page-wrapper {
     width: 100vw;
     height: 100vh;
-    box-sizing: initial;
-    overflow: scroll;
     display: flex;
     flex-direction: column;
 }

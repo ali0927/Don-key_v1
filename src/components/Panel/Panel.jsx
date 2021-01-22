@@ -47,7 +47,7 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
       return {};
     }
     const rect = divRef.current.getBoundingClientRect();
-    return { top: rect.top, bottom: 0 };
+    return { top: rect.top, bottom: 0, height: `calc(100% - ${rect.top}px)` };
   };
 
   return createPortal(

@@ -2,17 +2,18 @@
 import clsx from "clsx";
 import React from "react";
 import { useToggle } from "../../hooks";
+import Panel from "../Panel/Panel";
 function drag(ev) {
   ev.dataTransfer.setData("protocol", ev.target.id);
 }
 
 const Protocol = ({
   name,
-  panel: PanelComp,
-  toggleModal,
   onClose,
   openedPanel,
   showOnToolbar,
+  description,
+  website,
   icon
 }) => {
 
@@ -33,13 +34,14 @@ const Protocol = ({
         onMouseEnter={disableDragging}
       />
       <div className="protocol-list-item-tooltip">{name}</div>
-      {PanelComp && (
-        <PanelComp
-          toggleModal={toggleModal}
-          onClose={onClose}
-          isOpen={openedPanel === name}
-        />
-      )}
+      <Panel
+        icon={icon}
+        isOpen={openedPanel === name}
+        onClose={onClose}
+        title={name}
+        url={website}
+        desc={description}
+      />
     </li>
   );
 };
