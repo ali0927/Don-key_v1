@@ -27,7 +27,7 @@ model ProtocolActions {
 }
 
 model Protocols {
-  id              Int               @id @default(autoincrement())
+  id              Int     @id @default(autoincrement())
   name            String?
   website         String?
   toolbarImageURL String?
@@ -61,7 +61,7 @@ model Strategies {
 
 model Users {
   id            Int       @id @default(autoincrement())
-  walletAddress String    @unique
+  walletAddress String?   @unique
   created       DateTime?
   lastUpdate    DateTime?
   avatarURL     String?
@@ -111,4 +111,19 @@ model numbers {
   title     String?
   createdAt DateTime
   updatedAt DateTime
+}
+
+model yearn_vaults {
+  id                    Int      @id @default(autoincrement())
+  tokenIcon             String
+  symbol                String
+  name                  String   @unique
+  tokenName             String
+  tokenSymbol           String
+  strategyName          String
+  apy_apyOneMonthSample Float    @map("apy.apyOneMonthSample")
+  apy_symbol            String   @map("apy.symbol")
+  apy_apyOneWeekSample  Float    @map("apy.apyOneWeekSample")
+  apy_description       String   @map("apy.description")
+  timestamp             DateTime @default(now())
 }

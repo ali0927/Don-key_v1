@@ -5,7 +5,7 @@ import { Database } from "./database";
 import { PORT } from "./env";
 import { apiRoutes } from "./routes/apiRoutes";
 import {appendUser} from "./middlewares/appendUser";
-
+import "./cron";
 const app = express();
 
 
