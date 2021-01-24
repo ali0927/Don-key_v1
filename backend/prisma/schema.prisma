@@ -61,7 +61,7 @@ model Strategies {
 
 model Users {
   id            Int       @id @default(autoincrement())
-  walletAddress String?
+  walletAddress String    @unique
   created       DateTime?
   lastUpdate    DateTime?
   avatarURL     String?

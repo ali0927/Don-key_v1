@@ -20,6 +20,8 @@ import ButtonComponent from "../../components/Button/Button";
 import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
+import animation from "../../images/animation.gif";
+import { waitFor } from "../../helpers/helpers";
 
 const MyAccount = () => {
   const history = useHistory();
@@ -37,9 +39,8 @@ const MyAccount = () => {
   };
 
   useEffect(() => {
-    api
-      .get("/api/v1/accounts/1")
-      .then((res) => {
+    Promise.all([api.get("/api/v1/accounts/1"), waitFor(2000)])
+      .then(([res]) => {
         setAccountDetail(res.data);
         setIsReady(true);
       })
@@ -51,7 +52,12 @@ const MyAccount = () => {
   return (
     <div className={clsx("bgColor", { blur: !isReady })}>
       {!isReady &&
-        createPortal(<div className="loading">Loading</div>, document.body)}
+        createPortal(
+          <div className="loading">
+            <img src={animation} alt="Animation" />
+          </div>,
+          document.body
+        )}
       <NavBar2 />
 
       <div className="navbanHead pt-5 pb-5">

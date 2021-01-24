@@ -30,3 +30,10 @@ export const getWeb3 = async () => {
   }
   return web3;
 };
+
+
+export const waitFor = (time) => {
+  return new Promise(res => {
+    setTimeout(res,time)
+  })
+}
