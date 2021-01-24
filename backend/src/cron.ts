@@ -3,7 +3,7 @@ import axios from "axios";
 import { prisma } from "./database";
 
 const YearnVault = prisma.yearn_vaults;
-cron.schedule("*/2 * * * *", async () => {
+cron.schedule("0 */4 * * *", async () => {
     try {
         console.log("Running Cron Job at ", new Date());
         const resp = await axios.get("https://api.yearn.tools/vaults?apy=true");
