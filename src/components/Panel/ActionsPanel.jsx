@@ -30,7 +30,7 @@ export const ActionsPanel = ({
                       <img className="img-fluid" src={action.icon} />
                     </span>
                   ) : null}
-                  {action.name}{" "}
+                  {action.description}{" "}
                 </button>
               </div>
             );
