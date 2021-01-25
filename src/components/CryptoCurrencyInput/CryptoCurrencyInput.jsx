@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FaCaretDown, FaSearch } from "react-icons/fa";
 import { useClickAwayListener } from "../../hooks";
 import { AutoCompleteInput } from "./AutoCompleteInput";
@@ -54,9 +54,15 @@ export const CryptoCurrencyInput = ({
     }
     return selectedCurrency.name;
   };
+
+
+  const handleChange = useCallback((item) => {
+    setIsOpen(false)
+    setSelectedCurrency(item)
+  }, [])
   const renderInput = () => {
     if (isOpen) {
-      return <AutoCompleteInput multi={multi} currencies={currencies} />;
+      return <AutoCompleteInput onSelect={handleChange}  multi={multi} currencies={currencies} />;
     }
     if (!isOpen) {
       return (

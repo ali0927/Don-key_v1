@@ -3,7 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import Fuse from "fuse.js";
 
 
-export const AutoCompleteInput = ({ currencies, multi }) => {
+export const AutoCompleteInput = ({ currencies, multi, onSelect = () => {} }) => {
 
 
 
@@ -80,7 +80,7 @@ export const AutoCompleteInput = ({ currencies, multi }) => {
                         return currency.name;
                       };
                     return (
-                        <div className="cryptoinput__list__item">
+                        <div onClick={() => onSelect(currencies[index])} className="cryptoinput__list__item">
                             <span className="cryptoinput__icon">{getIcon()}</span>
                             <span className="cryptoinput__name">{getName()}
                            
