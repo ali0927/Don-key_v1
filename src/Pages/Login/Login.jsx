@@ -4,7 +4,7 @@ import { Form } from "react-bootstrap";
 import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import { getAuthTokenForPublicAddress } from "../../services/api";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useNotification } from "../../components/Notification";
 import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
 import { AuthToken } from "../../constants";
@@ -28,7 +28,7 @@ const Login = () => {
 
     const publicAddress = coinbase.toLowerCase();
     const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
-    
+
     localStorage.setItem(AuthToken, token);
     dispatch(doLogin(user));
     history.push("/myaccount");
@@ -47,11 +47,13 @@ const Login = () => {
     <div className="login">
       <div className="loginLeft">
         <div className="logo mt-5 ml-5">
-          <img
-            src="/assets/images/logo.png"
-            className="d-inline-block"
-            alt="Image"
-          />
+          <Link to="/">
+            <img
+              src="/assets/images/logo.svg"
+              className="d-inline-block align-top by-logo"
+              alt="Logo"
+            />
+          </Link>
         </div>
         <div className="text-center loginForm">
           <h1 className="mb-4">Join the Buru</h1>
