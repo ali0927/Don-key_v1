@@ -21,6 +21,7 @@ cron.schedule("0 */4 * * *", async () => {
                 apy_apyOneMonthSample: item.apy.apyOneMonthSample,
                 apy_apyOneWeekSample: item.apy.apyOneWeekSample,
                 apy_description: item.apy.description,
+                timestamp: new Date(),
             }
             if (exists) {
                 await YearnVault.update({ where: { name: item.name }, data })
@@ -35,6 +36,6 @@ cron.schedule("0 */4 * * *", async () => {
         }
         console.log("Cron Job Completed at ", new Date());
     } catch (e) {
-        console.log("An Error Occured in cron job",e, new Date());
+        console.log("An Error Occured in cron job", e, new Date());
     }
 });
