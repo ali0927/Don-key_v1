@@ -11,7 +11,6 @@ export const CryptoInputSimple = ({ label, icon, name, placeholder, className ='
         </div>
         <input
           className="cryptoinput__input "
-          style={{ maxWidth: 80 }}
           type="number"
           placeholder={placeholder}
         />

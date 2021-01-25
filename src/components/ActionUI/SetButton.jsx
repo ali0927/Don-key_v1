@@ -6,8 +6,7 @@ export const SetButton = ({ protocol, lastProtocol, action }) => {
 
     const handleClick = () => {
         
-        let pMap = getProtocolByName(lastProtocol.name);
-
+        insertAction(lastProtocol.name,protocol.name);
 
     };
 

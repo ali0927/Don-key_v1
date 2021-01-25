@@ -220,10 +220,10 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     insertProtocol(name);
   }, []);
 
-  const insertAction = useCallback(() => {
-    let selectedProtocol = getSelectedProtocol();
+  const insertAction = useCallback((previousProtocol, currentProtocol) => {
+    let selectedProtocol = getProtocolByName(currentProtocol);
 
-    const previousCell = getProtocolByName(selectedProtocol.lastProtocol);
+    const previousCell = getProtocolByName(previousProtocol);
     console.log(selectedProtocol);
     //get action image
     let base64 =

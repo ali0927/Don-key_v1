@@ -56,9 +56,10 @@
   &__input {
     border: 0;
     font-size: 16px;
-    color: #aaa8a8;
+    color: black;
     flex: 1;
-    text-align: end;
+    text-align: initial;
+    padding-left: 15px;
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       -webkit-appearance: none;

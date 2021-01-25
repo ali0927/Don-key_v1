@@ -31,7 +31,6 @@ export const BalancerRemoveLiquidity = () => {
           </div>
           <input
             className="cryptoinput__input "
-            style={{ maxWidth: 80 }}
             type="number"
             placeholder={"0"}
           />
@@ -47,7 +46,6 @@ export const BalancerRemoveLiquidity = () => {
           </div>
           <input
             className="cryptoinput__input "
-            style={{ maxWidth: 80 }}
             type="number"
             placeholder={"0"}
           />

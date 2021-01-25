@@ -81,7 +81,6 @@ export const CryptoCurrencyInput = ({
           </div>
           <input
             className="cryptoinput__input "
-            style={{ maxWidth: 80 }}
             type="number"
             placeholder={placeholder}
           />
