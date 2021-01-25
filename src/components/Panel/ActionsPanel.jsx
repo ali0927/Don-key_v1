@@ -9,7 +9,7 @@ export const ActionsPanel = ({
 
   return (
     <div className="p-4">
-      <h3 style={{ fontSize: 23 }}>Choose Action</h3>
+      <h3 style={{ fontSize: 23 }}>Select Action</h3>
       <div className="row mt-4">
         {actions &&
           actions.map((action) => {

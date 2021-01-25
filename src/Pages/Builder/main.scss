@@ -161,7 +161,7 @@ button:focus {
 }
 
 .panel_action_img {
-    width: 80px;
+    width: 125px;
 }
 
 .action_select_popup {
@@ -206,7 +206,7 @@ button:focus {
 }
 
 .action_select {
-    font-size: 10px;
+    font-size: 13px;
     color: #fff;
     text-align: center;
     width: 60px;
@@ -216,7 +216,10 @@ button:focus {
     font-weight: bold;
     border-radius: 4px;
     cursor: pointer;
+    height: 50px;
     margin-right: 2px;
+    width: 100px;
+    padding-top: 12px;
 }
 
 label {

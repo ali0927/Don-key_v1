@@ -21,7 +21,7 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
             <img className="img-fluid" src={lastprotcol.base64} />
           </div>
           <SquareLine color={lastprotcol.edgeColor} />
-          <div className="action_select">Select default</div>
+          <div className="action_select">Select action</div>
           <SquareLine color={protocol.edgeColor} />
           <div className="panel_action_img">
             <img className="img-fluid" src={protocol.base64} />
@@ -70,7 +70,7 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
             {url}
           </a>
         </div>
-        <div className="desc panel-desc">{desc}</div>
+        {/* <div className="desc panel-desc">{desc}</div> */}
         <div className="d-flex justify-content-center">
           {renderActionSelector()}
         </div>
