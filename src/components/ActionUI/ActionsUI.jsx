@@ -1,3 +1,4 @@
+/* eslint-disable default-case */
 import React, { useState } from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
@@ -15,6 +16,7 @@ import { BalancerAddLiquidity } from "../ActionInputs/BalancerAddLiquidity";
 import { BalancerRemoveLiquidity } from "../ActionInputs/BalancerRemoveLiquidity";
 import { CryptoInputSimple } from "../CryptoCurrencyInput/CryptoInputSimple";
 import { currencies } from "../CryptoCurrencyInput/currencies";
+import { SetButton } from "./SetButton";
 
 export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
   const [state, setState] = useState({ selectedAction: null });
@@ -22,7 +24,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
   const onSelect = (name) => {
     setState({ selectedAction: name });
   };
-  console.log(protocol, "prot");
+
   const renderPanel = () => {
     if (protocol.name === "YFI") {
       switch (state.selectedAction) {
@@ -31,7 +33,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -44,7 +46,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -52,7 +54,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <UniswapInput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -60,7 +62,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <UniswapInputReverse />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -74,7 +76,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -90,7 +92,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -108,7 +110,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 label={"Output"}
                 placeholder="Amount"
               />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -121,7 +123,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveInput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -129,7 +131,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -137,7 +139,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveLiquidity />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -145,7 +147,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <InputOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -153,7 +155,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <InputOutput noOutput />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -171,7 +173,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 label={"Output"}
                 placeholder="0"
               />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -184,7 +186,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -192,7 +194,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <BalancerAddLiquidity />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -200,7 +202,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <BalancerRemoveLiquidity />
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -240,7 +242,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 </div>
               </div>
 
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -276,7 +278,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -310,7 +312,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
@@ -344,7 +346,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <button className="setbtn">Set</button>
+              <SetButton protocol={protocol} action={state.selectedAction} />
             </div>
           );
         }
