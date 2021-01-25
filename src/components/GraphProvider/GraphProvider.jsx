@@ -33,8 +33,8 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
 
 
   const getProtocol = (name) => {
-    const index = findIndex(protocols,item => item.name === name);
-    if(index === -1){
+    const index = findIndex(protocols, item => item.name === name);
+    if (index === -1) {
       return null;
     }
     return protocols[index];
@@ -142,6 +142,12 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     return protocols[protocols.length - 1];
   }, []);
 
+
+
+  const resetGraph = useCallback(() => {
+    let graph = getGraph();
+    graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+  });
 
 
   const getSelectedProtocol = () => getProtocolForCellId(getSelectedCell().id);
@@ -267,7 +273,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     //get selected cell edge color
     const protocol = getProtocol(previousCell.protocol);
     const lastCellProtocolEdge = protocol.edgeColor;
-    const selectedCellProtocolEdge =getProtocol(selectedProtocol.protocol).edgeColor;
+    const selectedCellProtocolEdge = getProtocol(selectedProtocol.protocol).edgeColor;
 
     graph.getModel().beginUpdate();
 
@@ -280,9 +286,9 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
         actionVertex,
         getSelectedCell(),
         "strokeWidth=3;endArrow=block;" +
-          "endSize=2;endFill=1;strokeColor=" +
-          selectedCellProtocolEdge +
-          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+        "endSize=2;endFill=1;strokeColor=" +
+        selectedCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
       graph.insertEdge(
         parent,
@@ -291,9 +297,9 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
         previousCell.vertex,
         actionVertex,
         "strokeWidth=3;endArrow=block;" +
-          "endSize=2;endFill=1;strokeColor=" +
-          lastCellProtocolEdge +
-          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+        "endSize=2;endFill=1;strokeColor=" +
+        lastCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
     } finally {
       // Updates the display
@@ -400,6 +406,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     insertProtocol,
     getActionConfigStyle,
     getProtocol,
+    resetGraph,
     divRef
   };
 
