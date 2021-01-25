@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { ActionsUI } from "../ActionUI/ActionsUI";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
 import { SquareLine } from "../SquareLine/SquareLine";
-import { ActionsPanel } from "./ActionsPanel";
+
 const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
   const { getSelectedProtocol, divRef, getProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
