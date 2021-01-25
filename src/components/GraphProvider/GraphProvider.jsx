@@ -11,7 +11,7 @@ import React, {
 import factory from "mxgraph";
 import { useSetRef, useToggle } from "../../hooks";
 import { actionsMap } from "../../hooks/ActionsMap";
-
+import { uuidv4 } from "../../helpers/helpers";
 const mx = factory({
   mxBasePath: "",
 });
@@ -26,60 +26,270 @@ mxVertexToolHandler.prototype.domNode = null;
 
 const GraphContext = createContext(null);
 
+const useRerender = () => {
+  const item = useToggle();
+  return [item[0], item[3]];
+};
+
+const first = uuidv4();
+// const second = uuidv4();
+const useGraphState = ({ getGraph, getProtocol }) => {
+  const stateRef = useRef({
+    protocolCells: [
+      {
+        protocolId: first,
+        protocol: "BY",
+        lastProtocol: null,
+        x: 200,
+        y: 150,
+        w: 110,
+        h: 110,
+        vertex: null,
+      },
+      // {
+      //   protocolId: second,
+      //   protocol: "YFI",
+      //   x: 350,
+      //   y: 150,
+      //   w: 110,
+      //   h: 110,
+      //   vertex: null,
+      // },
+    ],
+    actionCells: [
+      // {
+      //   prevProtocolCellId: first,
+      //   nextProtocolCellId: second,
+      //   y: 350,
+      //   x: 280,
+      // },
+    ],
+  });
+  const [val, rerender] = useRerender();
+
+  const findProtocolById = (id) => {
+    const index = stateRef.current.protocolCells.findIndex(
+      (item) => item.protocolId === id
+    );
+    return stateRef.current.protocolCells[index];
+  };
+
+  const addProtocolToGraph = (cell) => {
+    const graph = getGraph();
+    const parent = graph.getDefaultParent();
+    let newVertex = {};
+    const base64 = getProtocol(cell.protocol).base64;
+
+    let data = "";
+    // Converts format of data url to cell style value for use in vertex
+    let semi = base64.indexOf(";");
+
+    if (semi > 0) {
+      data =
+        base64.substring(0, semi) +
+        base64.substring(base64.indexOf(",", semi + 1));
+    }
+    graph.getModel().beginUpdate();
+    try {
+      newVertex = graph.insertVertex(
+        parent,
+        null,
+        "",
+        cell.x,
+        cell.y,
+        cell.w,
+        cell.h,
+        "resizable=0;shape=image;image=" + data + ";"
+      );
+    } finally {
+      // Updates the display
+      graph.getModel().endUpdate();
+    }
+    cell.vertex = newVertex;
+  };
+
+  const addActionToGraph = (cell) => {
+    let selectedProtocol = findProtocolById(cell.nextProtocolCellId);
+
+    const previousCell = findProtocolById(cell.prevProtocolCellId);
+    console.log(selectedProtocol);
+    //get action image
+    let base64 =
+      actionsMap[previousCell.protocol][selectedProtocol.protocol]
+        .deposit; // REFACTOR FOR GENERIC ACTIONS
+
+    const graph = getGraph();
+    const parent = graph.getDefaultParent();
+
+    let data = "";
+    // Converts format of data url to cell style value for use in vertex
+    const semi = base64.indexOf(";");
+
+    if (semi > 0) {
+      data =
+        base64.substring(0, semi) +
+        base64.substring(base64.indexOf(",", semi + 1));
+    }
+
+    const vertexStyleAction =
+      "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
+      "gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=" +
+      data;
+
+    const x = cell.x;
+    const y = cell.y;
+
+    const actionVertex = graph.insertVertex(
+      parent,
+      null,
+      "",
+      x,
+      y,
+      105,
+      47,
+      vertexStyleAction
+    );
+
+    //get selected cell edge color
+    const protocol = getProtocol(previousCell.protocol);
+    const lastCellProtocolEdge = protocol.edgeColor;
+    const selectedCellProtocolEdge = getProtocol(selectedProtocol.protocol)
+      .edgeColor;
+
+    graph.getModel().beginUpdate();
+
+    try {
+      //TODO: SHOULD STORE EDGES
+      graph.insertEdge(
+        parent,
+        null,
+        "",
+        actionVertex,
+        selectedProtocol.vertex,
+        "strokeWidth=3;endArrow=block;" +
+        "endSize=2;endFill=1;strokeColor=" +
+        selectedCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+      );
+      graph.insertEdge(
+        parent,
+        null,
+        "",
+        previousCell.vertex,
+        actionVertex,
+        "strokeWidth=3;endArrow=block;" +
+        "endSize=2;endFill=1;strokeColor=" +
+        lastCellProtocolEdge +
+        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+      );
+    } finally {
+      // Updates the display
+      graph.getModel().endUpdate();
+    }
+    cell.vertex = actionVertex;
+  };
+
+  const insertProtocol = (name) => {
+    const lastCell =
+      stateRef.current.protocolCells.length > 0
+        ? stateRef.current.protocolCells[
+            stateRef.current.protocolCells.length - 1
+          ]
+        : null;
+    const newCell = {
+      protocolId: uuidv4(),
+      protocol: name,
+      lastProtocol: lastCell.protocol,
+      x: (lastCell?.x || 0) + 150,
+      y: 150,
+      w: 110,
+      h: 110,
+      isAction: false,
+      buru: false,
+      vertex: null,
+    };
+    addProtocolToGraph(newCell);
+    stateRef.current.protocolCells.push(newCell);
+    return newCell;
+  };
+
+  const insertAction = (prevCellId, nextCellId) => {
+    const protocol = findProtocolById(prevCellId);
+    const cell = {
+      vertex: null,
+      prevProtocolCellId: prevCellId,
+      nextProtocolCellId: nextCellId,
+      y: 350,
+      isAction: true,
+      x: protocol.x + 80,
+    };
+
+    addActionToGraph(cell);
+    return cell;
+  };
+
+  const restoreGraphFromState = () => {
+    stateRef.current.protocolCells.forEach((cell) => {
+      addProtocolToGraph(cell);
+    });
+
+    stateRef.current.actionCells.forEach((cell) => {
+      addActionToGraph(cell);
+    });
+  };
+
+  const getActionCells = () => {
+    return stateRef.current.actionCells;
+  };
+  const getProtocolCells = () => {
+    return stateRef.current.protocolCells;
+  };
+  return {
+    restoreGraphFromState,
+    insertAction,
+    insertProtocol,
+    getActionCells,
+    getProtocolCells,
+  };
+};
+
 export const GraphProvider = ({ children, openPanel, protocols }) => {
-  const protocolCellsRef = useRef([]);
-  const actionCellsRef = useRef([]);
   const [getSelectedCell, setSelectedCell] = useSetRef({});
 
-
   const getProtocol = (name) => {
-    const index = findIndex(protocols, item => item.name === name);
+    const index = findIndex(protocols, (item) => item.name === name);
     if (index === -1) {
       return null;
     }
     return protocols[index];
-  }
+  };
 
   const [isActionConfigOpen, openActionBar, hideActionBar] = useToggle();
 
   const graphRef = useRef(null);
   const divRef = useRef(null);
-  const addProtocolCell = (cell) => {
-    protocolCellsRef.current.push(cell);
-  };
-
-  const getProtocolCells = () => {
-    return protocolCellsRef.current;
-  };
-
-  const getActionCells = () => {
-    return actionCellsRef.current;
-  };
-
-  const addActionCell = (cell) => {
-    actionCellsRef.current.push(cell);
-  };
-
-  const getActionForCellId = useCallback((cellId) => {
-    return filter(getActionCells(), function (n) {
-      return n.mxObjectId === cellId;
-    })[0];
-  }, []);
 
   const getGraph = useCallback(() => {
     return graphRef.current;
   }, []);
+  const {getActionCells, getProtocolCells, insertProtocol, insertAction: insertinGraph,restoreGraphFromState} = useGraphState({getGraph, getProtocol})
+
+  const getActionForCellId = useCallback((cellId) => {
+    return filter(getActionCells(), function (n) {
+      return n.vertex?.id === cellId;
+    })[0];
+  }, []);
 
   const getProtocolForCellId = useCallback((cellId) => {
     return filter(getProtocolCells(), function (n) {
-      return n.mxObjectId === cellId;
+      return n.vertex?.id === cellId;
     })[0];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const getProtocolByName = useCallback((protocol) => {
     return filter(getProtocolCells(), function (n) {
-      return n.protocol === protocol;
+      return n.vertex?.id === protocol;
     })[0];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -112,12 +322,12 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
 
   const isProtocol = useCallback((cellId) => {
     const action = filter(getActionCells(), function (n) {
-      return n.mxObjectId === cellId;
+      return n.vertex?.id === cellId;
     })[0];
 
     if (!action) {
       const protocol = filter(getProtocolCells(), function (n) {
-        return n.mxObjectId === cellId;
+        return n.vertex?.id === cellId;
       })[0];
 
       if (protocol) {
@@ -134,177 +344,26 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     openPanel(null);
   }, []);
 
-  const getLastCellProtocol = useCallback(() => {
-    let protocols = filter(getProtocolCells(), function (n) {
-      return n.isAction === false;
-    });
-
-    return protocols[protocols.length - 1];
-  }, []);
-
-
-
-  const resetGraph = useCallback(() => {
-    let graph = getGraph();
-    graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
-  });
 
 
   const getSelectedProtocol = () => getProtocolForCellId(getSelectedCell().id);
-  const insertProtocol = useCallback((protocolName) => {
-    const base64 = getProtocol(protocolName).base64;
-
-    let w = 136;
-    let h = 136;
-
-    let data = "";
-    // Converts format of data url to cell style value for use in vertex
-    let semi = base64.indexOf(";");
-
-    if (semi > 0) {
-      data =
-        base64.substring(0, semi) +
-        base64.substring(base64.indexOf(",", semi + 1));
-    }
-    let graph = getGraph();
-    w = 110;
-    h = 110;
-    let parent = graph.getDefaultParent();
-
-    const lastProtocol = getLastCellProtocol();
-    let x = 200;
-    let y = 150;
-
-    if (lastProtocol) {
-      x = lastProtocol.x + 150;
-      y = lastProtocol.y;
-    }
-
-    let newVertex = {};
-    graph.getModel().beginUpdate();
-    try {
-      newVertex = graph.insertVertex(
-        parent,
-        null,
-        "",
-        x,
-        y,
-        w,
-        h,
-        "resizable=0;shape=image;image=" + data + ";"
-      );
-    } finally {
-      // Updates the display
-      graph.getModel().endUpdate();
-    }
-    console.log(lastProtocol, "lastProtocol");
-    addProtocolCell({
-      mxObjectId: newVertex.id,
-      vertex: newVertex,
-      isAction: false,
-      buru: false,
-      protocol: protocolName,
-      x: x,
-      y: y,
-      lastProtocol: lastProtocol?.protocol,
-    });
-
-    // setCurrentProtocol(protocolName);
-    setSelectedCell(newVertex);
-
-    openPanel(protocolName);
+  const insertProtocolAndOpenPanel = useCallback((protocol) => {
+    const graph = getGraph();
+    const cell = insertProtocol(protocol);
+   
+    setSelectedCell(cell.vertex);
+    openPanel(protocol);
     const selectionModel = graph.getSelectionModel();
-    selectionModel.setCell(newVertex);
+    selectionModel.setCell(cell.vertex);
   }, []);
   const handleDrop = useCallback((name) => {
-    insertProtocol(name);
+    insertProtocolAndOpenPanel(name);
   }, []);
 
-  const insertAction = useCallback((previousProtocol, currentProtocol) => {
-    let selectedProtocol = getProtocolByName(currentProtocol);
-
-    const previousCell = getProtocolByName(previousProtocol);
-    console.log(selectedProtocol);
-    //get action image
-    let base64 =
-      actionsMap[selectedProtocol.lastProtocol][selectedProtocol.protocol]
-        .deposit; // REFACTOR FOR GENERIC ACTIONS
-
-    const graph = getGraph();
-    const parent = graph.getDefaultParent();
-
-    let data = "";
-    // Converts format of data url to cell style value for use in vertex
-    const semi = base64.indexOf(";");
-
-    if (semi > 0) {
-      data =
-        base64.substring(0, semi) +
-        base64.substring(base64.indexOf(",", semi + 1));
-    }
-
-    const vertexStyleAction =
-      "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
-      "gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=" +
-      data;
-
-    const x = previousCell.x + 80;
-    const y = 350;
-
-    const actionVertex = graph.insertVertex(
-      parent,
-      null,
-      "",
-      x,
-      y,
-      105,
-      47,
-      vertexStyleAction
-    );
-    addActionCell({
-      mxObjectId: actionVertex.id,
-      vertex: actionVertex,
-      isAction: true,
-      buru: false,
-      x: x,
-      y: y,
-    });
-
-    //get selected cell edge color
-    const protocol = getProtocol(previousCell.protocol);
-    const lastCellProtocolEdge = protocol.edgeColor;
-    const selectedCellProtocolEdge = getProtocol(selectedProtocol.protocol).edgeColor;
-
-    graph.getModel().beginUpdate();
-
-    try {
-      //TODO: SHOULD STORE EDGES
-      graph.insertEdge(
-        parent,
-        null,
-        "",
-        actionVertex,
-        getSelectedCell(),
-        "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        selectedCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
-      );
-      graph.insertEdge(
-        parent,
-        null,
-        "",
-        previousCell.vertex,
-        actionVertex,
-        "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        lastCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
-      );
-    } finally {
-      // Updates the display
-      graph.getModel().endUpdate();
-    }
+  const insertAction = useCallback(() => {
+    let selectedProtocol = getSelectedProtocol();
+    const prevProtocol = getProtocolCells()[getProtocolCells().findIndex(item => item.protocolId === selectedProtocol.protocolId) - 1];
+    insertinGraph(prevProtocol.protocolId,selectedProtocol.protocolId)
   }, []);
   useEffect(() => {
     const container = divRef.current;
@@ -322,7 +381,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
           setSelectedCell(cell);
           closePanel();
           const protocol = getProtocolForCellId(cell.id);
-
+          console.log(cell, protocol);
           const aIsPRotocol = isProtocol(cell.id);
           if (aIsPRotocol) {
             openPanel(protocol.protocol);
@@ -371,13 +430,13 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
       return mx.mxGraph.prototype.createHandler.apply(this, arguments);
     };
 
-    graph.getModel().beginUpdate();
-    try {
-      insertProtocol("BY", 100, 150);
-    } finally {
-      // Updates the display
-      graph.getModel().endUpdate();
-    }
+    // graph.getModel().beginUpdate();
+    // try {
+    //   insertProtocolAndOpenPanel("BY");
+    // } finally {
+    //   // Updates the display
+    //   graph.getModel().endUpdate();
+    // }
 
     mx.mxEvent.addListener(container, "drop", function (evt) {
       if (graph.isEnabled()) {
@@ -395,15 +454,16 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
         evt.preventDefault();
       }
     });
+    restoreGraphFromState();
   }, []);
-
+  
   const graphMethods = {
     getActionCells,
     getProtocolByName,
     getSelectedCell,
     getSelectedProtocol,
     insertAction,
-    insertProtocol,
+    insertProtocol: insertProtocolAndOpenPanel,
     getActionConfigStyle,
     getProtocol,
     resetGraph,
