@@ -6,6 +6,7 @@ COPY yarn.lock ./
 RUN yarn
 COPY src ./src
 COPY public ./public
+COPY tsconfig.json ./
 RUN npm run build
 
 # production environment
