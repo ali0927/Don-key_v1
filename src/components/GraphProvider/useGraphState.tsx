@@ -1,5 +1,4 @@
 import { useRef } from "react";
-import { actionsMap } from "../../hooks/ActionsMap";
 import { uuidv4 } from "../../helpers/helpers";
 import { api } from "../../services/api";
 

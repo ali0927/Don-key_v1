@@ -25,8 +25,8 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
             <div
               className="action_select"
               style={{
-                borderColor: "transparent",
                 color: "#fff",
+                border: "none",
                 background: `linear-gradient(to right, ${lastprotcol.edgeColor}, ${protocol.edgeColor})`,
               }}
             >
