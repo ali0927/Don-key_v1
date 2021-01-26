@@ -1,41 +1,60 @@
 import { useRef } from "react";
 import { actionsMap } from "../../hooks/ActionsMap";
 import { uuidv4 } from "../../helpers/helpers";
-export const first = uuidv4();
+import { api } from "../../services/api";
+
+const saveStrategy = async (strategy: IStrategy) => {
+  const { id, ...rest } = strategy;
+  rest.actionCells = rest.actionCells.map((item) => ({...item, vertex: null}));
+  rest.protocolCells = rest.protocolCells.map((item) => ({...item, vertex: null}));
+  const json = JSON.stringify(rest);
+
+  const result = api.put("/api/v1/strategies", { id, json });
+  console.log(result);
+};
+
+type IProtocolCell = {
+  protocolId: string,
+  protocol: string,
+  lastProtocol?: string,
+  x:number
+  y: number;
+  w: number;
+  h:number;
+  isAction: boolean,
+  buru: boolean,
+  vertex: any | null,
+}
+
+type IActionCell = {
+  vertex: any |null,
+  prevProtocolCellId: string,
+  nextProtocolCellId: string,
+  y: number,
+  isAction: boolean,
+  x: number,
+}
+
+type IStrategy = {
+  id?: string;
+  protocolCells: IProtocolCell[];
+  actionCells: IActionCell[]
+}
+
 // const second = uuidv4();
-export const useGraphState = ({ getGraph, getProtocol }) => {
-  const stateRef = useRef({
-    protocolCells: [
-      {
-        protocolId: first,
-        protocol: "BY",
-        lastProtocol: null,
-        x: 200,
-        y: 150,
-        w: 110,
-        h: 110,
-        vertex: null,
-      },
-    ],
-    actionCells: [
-      // {
-      //   prevProtocolCellId: first,
-      //   nextProtocolCellId: second,
-      //   y: 350,
-      //   x: 280,
-      // },
-    ],
-  });
+export const useGraphState = ({ strategy, getGraph, getProtocol }: {strategy: IStrategy, getGraph: any,
+   getProtocol: any}) => {
+     console.log(strategy);
+  const stateRef = useRef(strategy);
 
-
-  const findProtocolById = (id) => {
+  const findProtocolById = (id: string) => {
     const index = stateRef.current.protocolCells.findIndex(
       (item) => item.protocolId === id
     );
     return stateRef.current.protocolCells[index];
   };
 
-  const addProtocolToGraph = (cell) => {
+  const addProtocolToGraph = (cell: IProtocolCell) => {
     const graph = getGraph();
     const parent = graph.getDefaultParent();
     let newVertex = {};
@@ -69,14 +88,14 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
     cell.vertex = newVertex;
   };
 
-  const addActionToGraph = (cell) => {
+  const addActionToGraph = (cell: IActionCell) => {
     let selectedProtocol = findProtocolById(cell.nextProtocolCellId);
 
     const previousCell = findProtocolById(cell.prevProtocolCellId);
     console.log(selectedProtocol);
     //get action image
-    let base64 = actionsMap[previousCell.protocol][selectedProtocol.protocol]
-      .deposit; // REFACTOR FOR GENERIC ACTIONS
+    //@ts-ignore
+    let base64 = actionsMap[previousCell.protocol][selectedProtocol.protocol].deposit; // REFACTOR FOR GENERIC ACTIONS
 
     const graph = getGraph();
     const parent = graph.getDefaultParent();
@@ -91,7 +110,8 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
         base64.substring(base64.indexOf(",", semi + 1));
     }
 
-    const vertexStyleAction = "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
+    const vertexStyleAction =
+      "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
       "gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=" +
       data;
 
@@ -126,9 +146,9 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
         actionVertex,
         selectedProtocol.vertex,
         "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        selectedCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+          "endSize=2;endFill=1;strokeColor=" +
+          selectedCellProtocolEdge +
+          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
       graph.insertEdge(
         parent,
@@ -137,9 +157,9 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
         previousCell.vertex,
         actionVertex,
         "strokeWidth=3;endArrow=block;" +
-        "endSize=2;endFill=1;strokeColor=" +
-        lastCellProtocolEdge +
-        ";rounded=1;edgeStyle=orthogonalEdgeStyle"
+          "endSize=2;endFill=1;strokeColor=" +
+          lastCellProtocolEdge +
+          ";rounded=1;edgeStyle=orthogonalEdgeStyle"
       );
     } finally {
       // Updates the display
@@ -148,14 +168,17 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
     cell.vertex = actionVertex;
   };
 
-  const insertProtocol = (name) => {
-    const lastCell = stateRef.current.protocolCells.length > 0
-      ? stateRef.current.protocolCells[stateRef.current.protocolCells.length - 1]
-      : null;
+  const insertProtocol = (name: string) => {
+    const lastCell =
+      stateRef.current.protocolCells.length > 0
+        ? stateRef.current.protocolCells[
+            stateRef.current.protocolCells.length - 1
+          ]
+        : null;
     const newCell = {
       protocolId: uuidv4(),
       protocol: name,
-      lastProtocol: lastCell.protocol,
+      lastProtocol: lastCell?.protocol,
       x: (lastCell?.x || 0) + 150,
       y: 150,
       w: 110,
@@ -166,10 +189,11 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
     };
     addProtocolToGraph(newCell);
     stateRef.current.protocolCells.push(newCell);
+    saveStrategy(stateRef.current);
     return newCell;
   };
 
-  const insertAction = (prevCellId, nextCellId) => {
+  const insertAction = (prevCellId: string, nextCellId: string) => {
     const protocol = findProtocolById(prevCellId);
     const cell = {
       vertex: null,
@@ -181,6 +205,7 @@ export const useGraphState = ({ getGraph, getProtocol }) => {
     };
 
     addActionToGraph(cell);
+    saveStrategy(stateRef.current);
     return cell;
   };
 

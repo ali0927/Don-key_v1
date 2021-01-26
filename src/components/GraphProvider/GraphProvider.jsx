@@ -26,7 +26,7 @@ mxVertexToolHandler.prototype.domNode = null;
 
 const GraphContext = createContext(null);
 
-export const GraphProvider = ({ children, openPanel, protocols }) => {
+export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
   const [getSelectedCell, setSelectedCell] = useSetRef({});
 
   const getProtocol = (name) => {
@@ -45,7 +45,13 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
   const getGraph = useCallback(() => {
     return graphRef.current;
   }, []);
-  const {getActionCells, getProtocolCells, insertProtocol, insertAction: insertinGraph,restoreGraphFromState} = useGraphState({getGraph, getProtocol})
+  const {
+    getActionCells,
+    getProtocolCells,
+    insertProtocol,
+    insertAction: insertinGraph,
+    restoreGraphFromState,
+  } = useGraphState({ getGraph, strategy, getProtocol });
 
   const getActionForCellId = useCallback((cellId) => {
     return filter(getActionCells(), function (n) {
@@ -117,13 +123,11 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     openPanel(null);
   }, []);
 
-
-
   const getSelectedProtocol = () => getProtocolForCellId(getSelectedCell().id);
   const insertProtocolAndOpenPanel = useCallback((protocol) => {
     const graph = getGraph();
     const cell = insertProtocol(protocol);
-   
+
     setSelectedCell(cell.vertex);
     openPanel(protocol);
     const selectionModel = graph.getSelectionModel();
@@ -133,16 +137,19 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     insertProtocolAndOpenPanel(name);
   }, []);
 
-
   const resetGraph = useCallback(() => {
     let graph = getGraph();
-    graph.removeCells(graph.getChildVertices(graph.getDefaultParent()))
+    graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
   });
 
   const insertAction = useCallback(() => {
     let selectedProtocol = getSelectedProtocol();
-    const prevProtocol = getProtocolCells()[getProtocolCells().findIndex(item => item.protocolId === selectedProtocol.protocolId) - 1];
-    insertinGraph(prevProtocol.protocolId,selectedProtocol.protocolId)
+    const prevProtocol = getProtocolCells()[
+      getProtocolCells().findIndex(
+        (item) => item.protocolId === selectedProtocol.protocolId
+      ) - 1
+    ];
+    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId);
   }, []);
   useEffect(() => {
     const container = divRef.current;
@@ -235,7 +242,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     });
     restoreGraphFromState();
   }, []);
-  
+
   const graphMethods = {
     getActionCells,
     getProtocolByName,
@@ -246,7 +253,7 @@ export const GraphProvider = ({ children, openPanel, protocols }) => {
     getActionConfigStyle,
     getProtocol,
     resetGraph,
-    divRef
+    divRef,
   };
 
   return useMemo(

@@ -5,10 +5,16 @@ import { prisma } from "../database";
 const Strategies = prisma.strategies;
 
 export class StrategiesController {
+
+
+
     static getStrategies: RequestHandler = async (req, res) => {
-
-        const results = await Strategies.findMany();;
-
+        let options = {};
+        const id = parseInt(req.query.id as string);
+        if(id){
+            options = {where: {id}}
+        }
+        const results = await Strategies.findMany(options);
         res.json(results);
     }
     static updateStrategies: RequestHandler = async (req, res) => {
@@ -29,7 +35,9 @@ export class StrategiesController {
 
     static createStrategies: RequestHandler = async (req, res) => {
 
-        const strategy = await Strategies.create(req.body);
+        const time = new Date()
+
+        const strategy = await Strategies.create({data: {createdAt:time, updatedAt: time,...req.body}});
         res.json(strategy);
     }
 
