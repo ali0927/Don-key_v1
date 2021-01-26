@@ -20,14 +20,16 @@ model ProtocolActionProperties {
 model ProtocolActions {
   id          Int        @id @default(autoincrement())
   protocolId  Int?
-  protocols   Protocols? @relation(fields: [protocolId], references: [id])
   name        String?
   description String?
   icon        String?
+  Protocols   Protocols? @relation(fields: [protocolId], references: [id])
+
+  @@index([protocolId], name: "protocol")
 }
 
 model Protocols {
-  id              Int     @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String?
   website         String?
   toolbarImageURL String?
@@ -36,8 +38,8 @@ model Protocols {
   description     String?
   vertexImageURL  String?
   mediumImageURL  String?
-  protocolMaps    protocol_proto_map[]
-  actions         ProtocolActions[]
+  protocolMaps protocol_proto_map[]
+  actions ProtocolActions[]
 }
 
 model Strategies {
@@ -45,6 +47,7 @@ model Strategies {
   name             String?
   data_open        DateTime?
   earnings         Int?
+  json             String?
   earnings_per     Int?
   allocation       Int?
   profit           Int?
@@ -114,6 +117,8 @@ model numbers {
   updatedAt DateTime
 }
 
+
+
 model yearn_vaults {
   id                    Int      @id @default(autoincrement())
   tokenIcon             String
@@ -123,6 +128,7 @@ model yearn_vaults {
   tokenSymbol           String
   strategyName          String
   tokenAddress          String?
+  vaultIcon             String?
   apy_tokenAddress      String?  @map("apy.tokenAddress")
   apy_apyOneMonthSample Float    @map("apy.apyOneMonthSample")
   apy_symbol            String   @map("apy.symbol")
