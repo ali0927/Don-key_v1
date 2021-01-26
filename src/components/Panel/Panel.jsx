@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 import clsx from "clsx";
-import React from "react";
+import React, { useState } from "react";
 import { createPortal } from "react-dom";
 import { ActionsUI } from "../ActionUI/ActionsUI";
 import { useGraphMethods } from "../GraphProvider/GraphProvider";
@@ -9,7 +9,7 @@ import { SquareLine } from "../SquareLine/SquareLine";
 const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
   const { getSelectedProtocol, divRef, getProtocol } = useGraphMethods();
   const selectedProtocol = getSelectedProtocol();
-
+  const [selectedAction, setSelectedAction] = useState(null);
   const renderActionSelector = () => {
     if (selectedProtocol && selectedProtocol.lastProtocol) {
       const protocol = getProtocol(selectedProtocol.protocol);
@@ -21,7 +21,20 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
             <img className="img-fluid" src={lastprotcol.base64} />
           </div>
           <SquareLine color={lastprotcol.edgeColor} />
-          <div className="action_select">Select action</div>
+          {selectedAction ? (
+            <div
+              className="action_select"
+              style={{
+                borderColor: "transparent",
+                color: "#fff",
+                background: `linear-gradient(to right, ${lastprotcol.edgeColor}, ${protocol.edgeColor})`,
+              }}
+            >
+              {selectedAction}
+            </div>
+          ) : (
+            <div className="action_select">Select action</div>
+          )}
           <SquareLine color={protocol.edgeColor} />
           <div className="panel_action_img">
             <img className="img-fluid" src={protocol.base64} />
@@ -37,7 +50,15 @@ const Panel = ({ isOpen, title, onClose, icon, url, desc }) => {
       const protocol = getProtocol(selectedProtocol.protocol);
 
       const lastprotcol = getProtocol(selectedProtocol.lastProtocol);
-      return <ActionsUI icon={icon} protocol={protocol} lastProtocol={lastprotcol} />;
+      return (
+        <ActionsUI
+          onSelect={setSelectedAction}
+          selectedAction={selectedAction}
+          icon={icon}
+          protocol={protocol}
+          lastProtocol={lastprotcol}
+        />
+      );
     }
     return null;
   };

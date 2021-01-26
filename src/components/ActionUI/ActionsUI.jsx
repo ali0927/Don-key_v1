@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, { useState } from "react";
+import React, { use} from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
 import { InputOutput } from "../ActionInputs/InputOutput";
@@ -11,29 +11,24 @@ import {
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput";
 import { CurveInput } from "../ActionInputs/CurveInput";
 import { CurveLiquidity } from "../ActionInputs/CurveLiquidity";
-import { actionsMap } from "../../hooks/ActionsMap";
 import { BalancerAddLiquidity } from "../ActionInputs/BalancerAddLiquidity";
 import { BalancerRemoveLiquidity } from "../ActionInputs/BalancerRemoveLiquidity";
 import { CryptoInputSimple } from "../CryptoCurrencyInput/CryptoInputSimple";
 import { currencies } from "../CryptoCurrencyInput/currencies";
 import { SetButton } from "./SetButton";
 
-export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
-  const [state, setState] = useState({ selectedAction: null });
-
-  const onSelect = (name) => {
-    setState({ selectedAction: name });
-  };
+export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtocol }) => {
+ 
 
   const renderPanel = () => {
     if (protocol.name === "YFI") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "Withdrawal":
         case "Deposit": {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -41,12 +36,12 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "Uniswap") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "SwapToken": {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -54,7 +49,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <UniswapInput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -62,7 +57,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <UniswapInputReverse />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -70,13 +65,13 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "AAVE") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "Withdrawal":
         case "Deposit": {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -84,7 +79,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "Compound") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "Supply":
         case "Borrow":
         case "Repay":
@@ -92,7 +87,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -110,7 +105,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 label={"Output"}
                 placeholder="Amount"
               />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -118,12 +113,12 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "Curve") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "SwapStable": {
           return (
             <div className="action-wrapper py-4">
               <CurveInput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -131,7 +126,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -139,7 +134,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <CurveLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -147,7 +142,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -155,7 +150,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <InputOutput noOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -173,7 +168,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 label={"Output"}
                 placeholder="0"
               />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -181,12 +176,12 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "Balancer") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "SwapToken": {
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -194,7 +189,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <BalancerAddLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -202,7 +197,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
           return (
             <div className="action-wrapper py-4">
               <BalancerRemoveLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -210,7 +205,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
 
     if (protocol.name === "MakerDAO") {
-      switch (state.selectedAction) {
+      switch (selectedAction) {
         case "Deposit Colleteral": {
           return (
             <div className="action-wrapper py-4">
@@ -242,7 +237,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                 </div>
               </div>
 
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -278,7 +273,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -312,7 +307,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -346,7 +341,7 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={state.selectedAction} />
+              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
             </div>
           );
         }
@@ -354,18 +349,18 @@ export const ActionsUI = ({ icon, protocol, lastProtocol }) => {
     }
   };
 
-  if (state.selectedAction) {
+  if (selectedAction) {
     return (
       <div className="p-4 d-flex flex-column flex-val-1">
         <div className="d-flex align-items-center justify-content-between">
           <span
-            onClick={() => setState({ selectedAction: null })}
+            onClick={() => onSelect(null)}
             className="cursor-pointer"
           >
             <FaChevronLeft />
           </span>
           <h3 style={{ fontSize: 23 }} className="mb-0">
-            {state.selectedAction}
+            {selectedAction}
           </h3>
           <span style={{ width: 22 }}>
             <img className="img-fluid" src={icon} />
