@@ -205,6 +205,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {strategy: IS
     };
 
     addActionToGraph(cell);
+    stateRef.current.actionCells.push(cell);
     saveStrategy(stateRef.current);
     return cell;
   };
