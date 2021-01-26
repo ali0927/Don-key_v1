@@ -12,7 +12,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && window.ethereum) {
       window.ethereum.on("accountsChanged", async function (accounts) {
         // Time to reload your interface with accounts[0]!
         console.log(accounts[0]);

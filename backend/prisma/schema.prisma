@@ -36,6 +36,7 @@ model Protocols {
   description     String?
   vertexImageURL  String?
   mediumImageURL  String?
+  protocolMaps    protocol_proto_map[]
   actions         ProtocolActions[]
 }
 
@@ -121,9 +122,20 @@ model yearn_vaults {
   tokenName             String
   tokenSymbol           String
   strategyName          String
+  tokenAddress          String?
+  apy_tokenAddress      String?  @map("apy.tokenAddress")
   apy_apyOneMonthSample Float    @map("apy.apyOneMonthSample")
   apy_symbol            String   @map("apy.symbol")
   apy_apyOneWeekSample  Float    @map("apy.apyOneWeekSample")
   apy_description       String   @map("apy.description")
   timestamp             DateTime @default(now())
+}
+
+model protocol_proto_map {
+  id               Int    @id @default(autoincrement())
+  protocol         Protocols  @relation(fields: [protocol_id], references: [id])
+  next_protocol    Protocols  @relation(name: "prev",fields: [next_protocol_id], references: [id])
+  protocol_id      Int
+  next_protocol_id Int
+  image            String
 }
