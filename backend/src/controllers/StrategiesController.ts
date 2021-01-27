@@ -26,13 +26,13 @@ export class StrategiesController {
             data: rest,
             where: { id: parseInt(id) },
         });
-        res.json(results);
+        return sendResponse(res, { data: results, user: req.user });
     };
 
     static deleteStrategies: RequestHandler = async (req, res) => {
         const { id } = req.body;
         const count = await Strategies.delete({ where: { id: parseInt(id) } });
-        res.json({ count });
+        return sendResponse(res, {data: count, user: req.user})
     };
 
     static createStrategies: RequestHandler = async (req, res) => {
@@ -41,6 +41,6 @@ export class StrategiesController {
         const strategy = await Strategies.create({
             data: { createdAt: time, updatedAt: time, ...req.body },
         });
-        res.json(strategy);
+        return sendResponse(res, {data: strategy, user: req.user})
     };
 }
