@@ -1,11 +1,19 @@
 import axios from "axios";
-import { getWeb3 } from "../helpers/helpers";
+import { AuthToken } from "../constants";
+import { getWeb3 } from "helpers/helpers";
 
 export const api = axios.create({
   baseURL: "https://api.by.finance",
+  transformRequest: [...axios.defaults.transformRequest as any, (data,headers) => {
+    const token =localStorage.getItem(AuthToken)
+    if(token){
+      headers["Authorization"] = `Bearer ${token}`
+    }
+    return data
+  }]
 });
 
-export const getNonce = async (publicAddress) => {
+export const getNonce = async (publicAddress: string) => {
   const res = await api.post("/api/v1/nonce", {
     walletAddress: publicAddress,
   });
@@ -14,7 +22,7 @@ export const getNonce = async (publicAddress) => {
   } = res;
   return data.nonce;
 };
-export const getAuthToken = async (publicAddress, signature) => {
+export const getAuthToken = async (publicAddress: string, signature: string) => {
   const resps = await api.post("/api/v1/login", {
     signature,
     walletAddress: publicAddress,
@@ -28,10 +36,10 @@ export const getAuthToken = async (publicAddress, signature) => {
 };
 
 
-export const getAuthTokenForPublicAddress = async (publicAddress) => {
+export const getAuthTokenForPublicAddress = async (publicAddress: string) => {
   const nonce = await getNonce(publicAddress);
   const web3 = await getWeb3();
-
+  //@ts-ignore
   const signature = await web3.eth.personal.sign(nonce, publicAddress);
 
   return await getAuthToken(publicAddress, signature);
