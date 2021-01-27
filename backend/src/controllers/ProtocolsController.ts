@@ -27,7 +27,7 @@ export class ProtocolsController {
         }
         sendResponse(res, {data: results.image})
     }
-
+    
     static getProtocols: RequestHandler = async (req, res,next) => {
         if(req.query.protocol_id && req.query.nextprotocol_id){
             return ProtocolsController.getMapImage(req,res, next);

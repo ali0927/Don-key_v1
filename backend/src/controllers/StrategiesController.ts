@@ -39,7 +39,8 @@ export class StrategiesController {
         const time = new Date();
 
         const strategy = await Strategies.create({
-            data: { createdAt: time, updatedAt: time, ...req.body },
+            data: {userId: req.user?.uid, createdAt: time, updatedAt: time, ...req.body },
+        
         });
         return sendResponse(res, {data: strategy, user: req.user})
     };
