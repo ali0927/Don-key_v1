@@ -1,3 +1,4 @@
+import { withAuth } from "components/AuthProvider";
 import { IStoreState } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
 import React from "react";
@@ -9,7 +10,7 @@ export const ProtectedRoute = (props: RouteProps) => {
   let extras: any = {};
   if (!isLoggedIn) {
     extras = {
-      children: <LoadingPage />,
+      children: withAuth(props.children),
     };
   }
   return <Route {...props} {...extras} />;

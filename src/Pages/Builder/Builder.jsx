@@ -13,9 +13,7 @@ import { api } from "../../services/api";
 import { getQueryParam, uuidv4 } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
 
-const createStrategy = {};
 
-export const first = uuidv4();
 const Builder = () => {
     const [panel, setPanel] = useState(null);
     const [isModalOpen, , , toggleModal] = useToggle();
@@ -27,7 +25,7 @@ const Builder = () => {
     const [strategy, setStrategy] = useState({
         protocolCells: [
             {
-                protocolId: first,
+                protocolId: uuidv4(),
                 protocol: "BY",
                 lastProtocol: null,
                 x: 200,
@@ -42,27 +40,24 @@ const Builder = () => {
 
     useEffect(() => {
         const strategy = getQueryParam("id");
-        if (strategy) {
-            Promise.all([
-                api.get("/api/v1/strategies?id=" + strategy),
-                api.get("/api/v1/protocols"),
-            ]).then(([strategy, protocol]) => {
-                const json = strategy.data[0].json;
+        const request = strategy
+            ? api.get("/api/v1/strategies?id=" + strategy)
+            : api.post("/api/v1/strategies");
 
+        Promise.all([request, api.get("/api/v1/protocols")]).then(
+            ([strategy, protocol]) => {
+                const json = strategy.data.data.json;
+                const strategyid = strategy.data.data.id;
+                history.replace("/strategy/build?id=" + strategyid);
                 setStrategy((old) => {
                     const data = json ? JSON.parse(json) : old;
-
-                    return { ...data, id: strategy.data[0].id };
+                    return { ...data, id: strategyid };
                 });
                 setProtocols(protocol.data);
-            });
-        } else {
-            api.post("/api/v1/strategies").then((res) => {
-                const strategyid = res.data.id;
-                history.push("/strategy/build?id=" + strategyid);
-                window.location.reload();
-            });
-        }
+            }
+        );
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

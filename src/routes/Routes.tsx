@@ -1,8 +1,7 @@
-import React, { Children, useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
-  RouteProps,
   Switch,
 } from "react-router-dom";
 import LandingPage from "../Pages/LandingPage";
@@ -15,14 +14,12 @@ import NotificationPage from "../Pages/NotificationPage";
 import Builder from "../Pages/Builder";
 import SelectTemplate from "../Pages/SelectTemplate";
 import StrategyConfirmation from "../Pages/StrategyConfirmation";
-import { AuthProvider } from "components/AuthProvider";
 import { ProtectedRoute } from "components/ProtectedRoute";
 
 
 export default function Routes() {
   return (
     <Router>
-      <AuthProvider>
         <Switch>
           <Route exact path="/" children={<LandingPage />} />
           <Route path="/onboarding" children={<Onboarding />} />
@@ -38,7 +35,6 @@ export default function Routes() {
           />
           <Route path="/notification" children={<NotificationPage />} />
         </Switch>
-      </AuthProvider>
     </Router>
   );
 }
