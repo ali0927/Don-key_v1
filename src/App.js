@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { doLogin } from "./actions/authActions/authActions";
@@ -8,7 +9,6 @@ import Routes from "./routes/Routes";
 import { getAuthTokenForPublicAddress } from "./services/api";
 
 function App() {
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -16,14 +16,12 @@ function App() {
       window.ethereum.on("accountsChanged", async function (accounts) {
         // Time to reload your interface with accounts[0]!
         console.log(accounts[0]);
-        const { token, user } = await getAuthTokenForPublicAddress(
-          accounts[0]
-        );
+        const { token, user } = await getAuthTokenForPublicAddress(accounts[0]);
         localStorage.setItem(AuthToken, token);
         dispatch(doLogin(user));
       });
     }
-  }, [dispatch])
+  }, [dispatch]);
   return (
     <div>
       <NotificationProvider>

@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { AccountsController } from "../controllers/AccountsController";
 import { FarmerController } from "../controllers/FarmerController";
-import { LoginController } from "../controllers/LoginController";
+
 import { NotificationController } from "../controllers/NotificationsController";
 import { NumberController } from "../controllers/NumbersController";
 import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
+
 
 
 
@@ -63,9 +64,6 @@ apiRoutes.route('/protocols')
     .delete(ProtocolsController.deleteProtocols);
 
     
-apiRoutes.route("/nonce")
-    .post(LoginController.getNonce);
-    
-apiRoutes.route("/login")
-    .post(LoginController.handleSignIn);
+
+
 export { apiRoutes }
