@@ -1,3 +1,4 @@
+import { IStrategy, IProtocol, IProtocolCell, IActionCell } from "interfaces";
 import { useRef } from "react";
 import { uuidv4 } from "../../helpers/helpers";
 import { api } from "../../services/api";
@@ -13,46 +14,7 @@ const saveStrategy = async (strategy: IStrategy) => {
 };
 
 
-type IProtocol = {
-  id: number;
-  name: string;
-  website: string;
-  toolbarImageURL: string;
-  showOnToolbar: "1" | "0";
-  edgeColor: string;
-  description: string;
-  vertexImageURL: string;
-  base64: string;
-};
 
-type IProtocolCell = {
-  protocolId: string,
-  protocol: string,
-  lastProtocol?: string,
-  x: number
-  y: number;
-  w: number;
-  h: number;
-  isAction: boolean,
-  buru: boolean,
-  vertex: any | null,
-}
-
-type IActionCell = {
-  vertex: any | null,
-  prevProtocolCellId: string,
-  nextProtocolCellId: string,
-  imageUrl: string;
-  y: number,
-  isAction: boolean,
-  x: number,
-}
-
-type IStrategy = {
-  id?: string;
-  protocolCells: IProtocolCell[];
-  actionCells: IActionCell[]
-}
 
 // const second = uuidv4();
 export const useGraphState = ({ strategy, getGraph, getProtocol }: {

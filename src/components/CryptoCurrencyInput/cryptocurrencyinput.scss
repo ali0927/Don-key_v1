@@ -82,27 +82,28 @@
     color: #aaa8a8;
     font-size: 16px;
     max-height: 200px;
-    overflow-y: scroll;
+    height: 200px;
+    overflow: hidden;
     border-radius: 2px;
     // border-top-color: transparent;
-    &::-webkit-scrollbar {
+    & div::-webkit-scrollbar {
       width: 4px;
       border-radius: 10px;
     }
 
     /* Track */
-    &::-webkit-scrollbar-track {
+    & div::-webkit-scrollbar-track {
       background: #f1f1f1;
     }
 
     /* Handle */
-    &::-webkit-scrollbar-thumb {
+    & div::-webkit-scrollbar-thumb {
       background: #bbb;
       border-radius: 10px;
     }
 
     /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover {
+    & div::-webkit-scrollbar-thumb:hover {
       background: #555;
     }
     &__item {
