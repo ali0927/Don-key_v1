@@ -1,12 +1,12 @@
 import React from "react";
-import animation from "images/animation_500_kkczfqhd.gif";
 import "./LoadingPage.scss"
+import { Loader } from "components/Loader/Loader";
 export const LoadingPage = () => {
   return (
     <div
       className="loadingpage"
     >
-      <img src={animation} alt="Animation" width="400" />
+      <Loader />
     </div>
   );
 };

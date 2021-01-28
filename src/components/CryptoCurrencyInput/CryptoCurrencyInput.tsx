@@ -1,25 +1,40 @@
+/* eslint-disable jsx-a11y/alt-text */
 import React, { useCallback, useState } from "react";
-import { FaCaretDown, FaSearch } from "react-icons/fa";
+import { FaCaretDown } from "react-icons/fa";
 import { useClickAwayListener } from "../../hooks";
-import { AutoCompleteInput } from "./AutoCompleteInput";
+import { AutoCompleteInput, IToken } from "./AutoCompleteInput";
 import "./cryptocurrencyinput.scss";
-import { currencies } from "./currencies";
 
 export const CryptoCurrencyInput = ({
   label,
   placeholder,
-  defaultCurrency = currencies[0],
+  currencies,
+  currency,
   className = "",
   multi = false,
   noDropdown = false,
   icon,
+  isOutput,
   name,
+  onChange
+}: {
+  name?: string;
+  icon?: string;
+  noDropdown?: boolean;
+  className?: string;
+  multi?: boolean;
+  isOutput?: boolean;
+  currency?: IToken;
+  currencies: IToken[];
+  label: string;
+  placeholder: string;
+  onChange?: (token: IToken) => void;
 }) => {
-  const [isOpen, setIsOpen] = useState();
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedCurrency = currency ? currency : currencies[0];
+  
 
-  const [selectedCurrency, setSelectedCurrency] = useState(defaultCurrency);
-
-  const getNextIndex = (index) => {
+  const getNextIndex = (index: number) => {
     const next = index + 1;
     if (currencies.length === next) {
       return 0;
@@ -27,7 +42,6 @@ export const CryptoCurrencyInput = ({
     return next;
   };
   const currentIndex = currencies.indexOf(selectedCurrency);
-
   const getIcon = () => {
     if (icon) {
       return icon;
@@ -35,11 +49,12 @@ export const CryptoCurrencyInput = ({
     if (multi) {
       return (
         <>
-          {selectedCurrency.icon} {currencies[getNextIndex(currentIndex)].icon}
+          <img src={selectedCurrency.tokenIcon} />{" "}
+          <img src={currencies[getNextIndex(currentIndex)].tokenIcon} />
         </>
       );
     }
-    return selectedCurrency.icon;
+    return <img src={selectedCurrency.tokenIcon} />;
   };
   const getName = () => {
     if (name) {
@@ -48,21 +63,27 @@ export const CryptoCurrencyInput = ({
     if (multi) {
       return (
         <>
-          {selectedCurrency.name}/{currencies[getNextIndex(currentIndex)].name}
+          {selectedCurrency.tokenSymbol}/
+          {currencies[getNextIndex(currentIndex)].tokenSymbol}
         </>
       );
     }
-    return selectedCurrency.name;
+    return selectedCurrency.tokenSymbol;
   };
 
-
   const handleChange = useCallback((item) => {
-    setIsOpen(false)
-    setSelectedCurrency(item)
-  }, [])
+    setIsOpen(false);
+    onChange && onChange(item)
+  }, [onChange]);
   const renderInput = () => {
     if (isOpen) {
-      return <AutoCompleteInput onSelect={handleChange}  multi={multi} currencies={currencies} />;
+      return (
+        <AutoCompleteInput
+          onSelect={handleChange}
+          multi={multi}
+          currencies={currencies}
+        />
+      );
     }
     if (!isOpen) {
       return (

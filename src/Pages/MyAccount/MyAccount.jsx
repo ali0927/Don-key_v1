@@ -20,8 +20,8 @@ import ButtonComponent from "../../components/Button/Button";
 import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
-import animation from "../../images/animation_500_kkczfqhd.gif";
 import { waitFor } from "../../helpers/helpers";
+import { Loader } from "components/Loader/Loader";
 
 const MyAccount = () => {
   const history = useHistory();
@@ -54,7 +54,7 @@ const MyAccount = () => {
       {!isReady &&
         createPortal(
           <div className="loading">
-            <img src={animation} alt="Animation" width="500" />
+            <Loader />
           </div>,
           document.body
         )}

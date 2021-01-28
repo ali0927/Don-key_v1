@@ -2,13 +2,7 @@ import { RequestHandler } from "express";
 import { sendResponse } from "../helpers/sendResponse";
 import { verifyToken } from "../helpers";
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: { walletAddress: string, GUID: string, uid: number };
-    }
-  }
-}
+
 
 export const checkAuth = (): RequestHandler => (req, res, next) => {
   const authHeader = req.header("Authorization");
