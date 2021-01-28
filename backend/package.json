@@ -13,7 +13,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ethersproject/address": "^5.0.9",
+    "@ethersproject/contracts": "^5.0.9",
+    "@ethersproject/networks": "^5.0.7",
+    "@ethersproject/providers": "^5.0.19",
+    "@ethersproject/solidity": "^5.0.8",
     "@prisma/client": "2.15.0",
+    "@uniswap/sdk": "^3.0.3",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

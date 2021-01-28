@@ -16,23 +16,16 @@ import { BalancerRemoveLiquidity } from "../ActionInputs/BalancerRemoveLiquidity
 import { CryptoInputSimple } from "../CryptoCurrencyInput/CryptoInputSimple";
 import { currencies } from "../CryptoCurrencyInput/currencies";
 import { SetButton } from "./SetButton";
-import { IToken } from "interfaces";
-import { api } from "services/api";
+import { useYFITokens, withYFITokens } from "components/YFITokensProvider";
 
-export const ActionsUI = ({
+const ActionsUIUnrwapped = ({
   icon,
   selectedAction,
   onSelect,
   protocol,
   lastProtocol,
 }: any) => {
-  const [yfiTokens, setTokens] = useState<IToken[]>([]);
-
-  useEffect(() => {
-    api.get("/api/v1/protocols/yfi").then((res) => {
-      setTokens(res.data.data);
-    });
-  }, []);
+  const yfiTokens = useYFITokens();
   if (yfiTokens.length === 0) {
     return <>Loading</>;
   }
@@ -476,3 +469,6 @@ export const ActionsUI = ({
     );
   }
 };
+
+
+export const ActionsUI = withYFITokens(ActionsUIUnrwapped);

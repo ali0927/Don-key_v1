@@ -1,3 +1,4 @@
+import { useYFITokens } from "components/YFITokensProvider";
 import { IToken } from "interfaces";
 import React, { useEffect, useState } from "react";
 import { api } from "services/api";
@@ -8,15 +9,7 @@ import { MUSDIcon } from "./MUSDIcon";
 
 export const BalancerAddLiquidity = () => {
 
-  const [yfiTokens, setTokens] = useState<IToken[]>([]);
-
-
-  useEffect(() => {
-    api.get("/api/v1/protocols/yfi").then((res) => {
-      setTokens(res.data.data);
-     
-    })
-  }, [])
+  const yfiTokens = useYFITokens();
   if(yfiTokens.length === 0){
     return <>Loading</>
   }

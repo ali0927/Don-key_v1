@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput";
 import {IToken} from "interfaces";
+import { useYFITokens } from "components/YFITokensProvider";
 
 const UpDownArrow = (props: any) => {
   return (
@@ -29,19 +29,16 @@ export const CurveInput = ({
     noPrev= false
 }) => {
 
-  const [yfiTokens, setTokens] = useState<IToken[]>([]);
-
+  const yfiTokens = useYFITokens();
 
   const [selectedToken, setSelectedToken] = useState<IToken | null>();
 
   useEffect(() => {
-    api.get("/api/v1/protocols/yfi").then((res) => {
-      setTokens(res.data.data);
-      console.log(res.data.data);
-      
-      setSelectedToken(res.data.data[0]);
-    })
-  }, [])
+
+    if (yfiTokens.length > 0) {
+      setSelectedToken(yfiTokens[0]);
+    }
+  }, [yfiTokens])
   if(!selectedToken){
     return <>Loading</>;
   }
