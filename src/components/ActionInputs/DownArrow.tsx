@@ -1,6 +1,6 @@
 import React from "react";
 
-export const DownArrow = (props) => {
+export const DownArrow = (props: any) => {
   return <svg
     width={16}
     height={25}

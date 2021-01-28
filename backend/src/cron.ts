@@ -34,6 +34,7 @@ const Jobs: IJob[] = [{
                     tokenAddress:item.tokenAddress,
                     apy_description: item.apy.description,
                     vaultIcon: item.vaultIcon,
+                    address: item.address,
                     timestamp: new Date(),
                 }
                 if (exists) {

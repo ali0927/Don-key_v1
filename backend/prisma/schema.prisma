@@ -126,6 +126,7 @@ model yearn_vaults {
   name                  String   @unique
   tokenName             String
   tokenSymbol           String
+  address               String?
   strategyName          String
   tokenAddress          String?
   vaultIcon             String?

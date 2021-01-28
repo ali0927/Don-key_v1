@@ -19,3 +19,14 @@ export type AppThunk =ThunkAction<
   unknown,
   any
 >
+
+export type ICurrency = {
+	tokenIcon: string;
+	tokenSymbol: string;
+	apy_apyOneMonthSample: number;
+};
+export interface IToken extends ICurrency {
+    vaultIcon: string;
+    symbol: string;
+  }
+  

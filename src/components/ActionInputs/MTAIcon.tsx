@@ -1,6 +1,6 @@
 import React from "react";
 
-export const MTAIcon = (props) => {
+export const MTAIcon = (props: any) => {
     return (
         <svg
             width={30}

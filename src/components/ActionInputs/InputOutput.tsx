@@ -1,8 +1,10 @@
-import { IToken } from "components/CryptoCurrencyInput/AutoCompleteInput";
+
 import React, { useEffect, useState } from "react";
 import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput/CryptoCurrencyInput";
 import { DownArrow } from "./DownArrow";
+import {IToken} from "interfaces";
+
 
 export const InputOutput = ({ noOutput = false }) => {
 
@@ -14,11 +16,13 @@ export const InputOutput = ({ noOutput = false }) => {
   useEffect(() => {
     api.get("/api/v1/protocols/yfi").then((res) => {
       setTokens(res.data.data);
+      console.log(res.data.data);
+      
       setSelectedToken(res.data.data[0]);
     })
   }, [])
   if(!selectedToken){
-    return "Loading";
+    return <>Loading</>;
   }
   return (
     <div>

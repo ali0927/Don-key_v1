@@ -2,23 +2,18 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import Fuse from "fuse.js";
+import { ICurrency } from "interfaces";
 
-export type IToken = {
-	tokenIcon: string;
-	tokenSymbol: string;
-	vaultIcon: string;
-	symbol: string;
-	apy_apyOneMonthSample: number;
-};
 
-export const AutoCompleteInput = ({
+
+export const AutoCompleteInput = <T extends ICurrency>({
 	currencies,
 	multi,
 	onSelect = () => { },
 }: {
-	currencies: IToken[];
+	currencies: T[];
 	multi?: boolean;
-	onSelect: (token: IToken) => void;
+	onSelect: (token: T) => void;
 }) => {
 	const [inputValue, setInputValue] = useState("");
 

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { doLogin } from "./actions/authActions/authActions";
@@ -7,7 +6,12 @@ import { TooltipProvider } from "./components/TooltipProvider";
 import { AuthToken } from "./constants";
 import Routes from "./routes/Routes";
 import { getAuthTokenForPublicAddress } from "./services/api";
+// import { Web3ReactProvider } from "@web3-react/core";
+// // import your favorite web3 convenience library here
 
+// function getLibrary(provider, connector) {
+//   return new Web3Provider(provider); // this will vary according to whether you use e.g. ethers or web3.js
+// }
 function App() {
   const dispatch = useDispatch();
 
@@ -26,7 +30,9 @@ function App() {
     <div>
       <NotificationProvider>
         <TooltipProvider>
-          <Routes />
+         
+            <Routes />
+          
         </TooltipProvider>
       </NotificationProvider>
     </div>

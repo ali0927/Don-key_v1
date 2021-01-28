@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput";
-import { currencies } from "../CryptoCurrencyInput/currencies";
-import { DownArrow } from "./DownArrow";
+import {IToken} from "interfaces";
 
-const UpDownArrow = (props) => {
+const UpDownArrow = (props: any) => {
   return (
     <svg
       width={31}
@@ -28,12 +28,32 @@ const UpDownArrow = (props) => {
 export const CurveInput = ({
     noPrev= false
 }) => {
+
+  const [yfiTokens, setTokens] = useState<IToken[]>([]);
+
+
+  const [selectedToken, setSelectedToken] = useState<IToken | null>();
+
+  useEffect(() => {
+    api.get("/api/v1/protocols/yfi").then((res) => {
+      setTokens(res.data.data);
+      console.log(res.data.data);
+      
+      setSelectedToken(res.data.data[0]);
+    })
+  }, [])
+  if(!selectedToken){
+    return <>Loading</>;
+  }
   return (
     <div>
       <CryptoCurrencyInput
         className="mt-4"
         label="Input"
         placeholder="Amount"
+        currencies={yfiTokens}
+        currency={selectedToken}
+        onChange={setSelectedToken}
       />
       <div className="arrow-wrapper">
         <UpDownArrow />
@@ -45,7 +65,10 @@ export const CurveInput = ({
       <CryptoCurrencyInput
         label="Output (Estimate)"
         placeholder="0"
-        defaultCurrency={currencies[1]}
+        currencies={yfiTokens}
+        noDropdown
+        currency={{...selectedToken, tokenIcon: selectedToken.vaultIcon,tokenSymbol: selectedToken.symbol}}
+        onChange={setSelectedToken}
       />
     </div>
   );

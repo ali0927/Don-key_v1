@@ -1,13 +1,29 @@
-import React from "react";
+import { IToken } from "interfaces";
+import React, { useEffect, useState } from "react";
+import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput";
 import { DownArrow } from "./DownArrow";
 import { MTAIcon } from "./MTAIcon";
 import { MUSDIcon } from "./MUSDIcon";
 
 export const BalancerAddLiquidity = () => {
+
+  const [yfiTokens, setTokens] = useState<IToken[]>([]);
+
+
+  useEffect(() => {
+    api.get("/api/v1/protocols/yfi").then((res) => {
+      setTokens(res.data.data);
+     
+    })
+  }, [])
+  if(yfiTokens.length === 0){
+    return <>Loading</>
+  }
   return (
     <div>
       <CryptoCurrencyInput
+      currencies={yfiTokens}
         noDropdown
         label="Input (Estimate)"
         name={"mUSD"}
@@ -18,17 +34,20 @@ export const BalancerAddLiquidity = () => {
         <div className="arrow-max">Max</div>
       </div>
       <CryptoCurrencyInput
+        currencies={yfiTokens}
         noDropdown
         icon={<MTAIcon />}
         label="Input (Estimate)"
         name={"MTA"}
         placeholder="Amount"
+
       />
       <div className={`arrow-wrapper `}>
         <DownArrow />
         <div className="arrow-max">Max</div>
       </div>
       <CryptoCurrencyInput
+        currencies={yfiTokens}
         icon={<MTAIcon />}
         label="Output (Estimate)"
         name={"0x003A"}
