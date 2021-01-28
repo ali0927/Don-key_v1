@@ -60,7 +60,7 @@ export const UniswapSwapToken = ({
         if(e.target.value === ""){
             setOutPutAmount('')
         }else {
-            setOutPutAmount(parseFloat(e.target.value) * parseFloat(midPrice));
+            setOutPutAmount(parseFloat(e.target.value) * parseFloat(invertedMidPrice));
         }
     }
     const handleOutputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,7 +68,7 @@ export const UniswapSwapToken = ({
         if(e.target.value === ""){
             setInputAmount('')
         }else {
-            setInputAmount(parseFloat(e.target.value) * parseFloat(invertedMidPrice));
+            setInputAmount(parseFloat(e.target.value) * parseFloat(midPrice));
         }
         
     }
