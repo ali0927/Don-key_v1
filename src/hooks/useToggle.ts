@@ -1,3 +1,4 @@
+import { tuplify } from "helpers";
 import { useCallback, useState } from "react";
 
 export const useToggle = (val = false) => {
@@ -11,5 +12,5 @@ export const useToggle = (val = false) => {
   const toggleModal = useCallback(() => {
     setIsModalOpen((val) => !val);
   }, []);
-  return [isModalOpen, openModal, closeModal, toggleModal];
+  return tuplify(isModalOpen, openModal, closeModal, toggleModal);
 };

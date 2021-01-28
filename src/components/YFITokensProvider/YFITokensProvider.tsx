@@ -4,6 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { api } from "services/api";
 import Web3 from "web3";
 import abi from "erc-20-abi";
+import { usePanel } from "components/Panel/Panel";
 
 const getTokenBalances = async (tokens: IToken[]) => {
     const tokenWithBalances = await Promise.all(tokens.map(async (token) => {
@@ -21,16 +22,21 @@ const YFITokensContext = createContext<IToken[]>([]);
 
 export const YFITokensProvider: React.FC = ({children}) => {
     const [yfiTokens, setTokens] = useState<IToken[]>([]);
-
+    const {enableBlur, disableBlur} = usePanel();
     useEffect(() => {
         (async () => {
-            const res = await api.get("/api/v1/protocols/yfi");
+            enableBlur()
+            try {
+                const res = await api.get("/api/v1/protocols/yfi");
       
-            const tokens = await getTokenBalances(res.data.data);
-            setTokens(tokens);
-      
-            console.log(res.data.data);
-           
+                const tokens = await getTokenBalances(res.data.data);
+                setTokens(tokens);
+          
+                console.log(res.data.data);
+            }finally {
+                disableBlur()
+            }
+            
           })()
     }, []);
     return <YFITokensContext.Provider value={yfiTokens}>

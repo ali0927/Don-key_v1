@@ -1,8 +1,9 @@
+import clsx from "clsx";
 import React from "react";
 import "./Loader.scss"
 
-export const Loader = () => {
-    return <div className="preloader_main">
+export const Loader = ({className, style}: {className?: string; style?: React.CSSProperties }) => {
+    return <div className={clsx("preloader_main", className)} style={style}>
     <div className="preloader_main_inner">
         <div className="round_1"></div>
         <div className="round-rotate">

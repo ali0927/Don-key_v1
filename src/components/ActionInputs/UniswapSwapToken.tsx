@@ -1,4 +1,5 @@
 import { SetButton } from "components/ActionUI/SetButton";
+import { usePanel } from "components/Panel/Panel";
 import { getWeb3 } from "helpers/helpers";
 import { ICurrencyWithAddress, IProtocol } from "interfaces";
 import React, { useEffect, useState } from "react";
@@ -26,27 +27,30 @@ export const UniswapSwapToken = ({
     const [{ midPrice, invertedMidPrice }, setPriceRatio] = useState({ midPrice: '0', invertedMidPrice: '0' });
     const [inputAmount, setInputAmount] = useState<number | string>('');
     const [outputAmount, setOutPutAmount] = useState<number | string>('');
+    const { enableBlur, disableBlur } = usePanel();
     useEffect(() => {
         (async () => {
-            const res = await api.get("/api/v1/protocols/uni");
-            const data = res.data;
-            const web3 = await getWeb3() as Web3;
-            const chainId = await web3.eth.getChainId()
-            const curr = data.tokens.filter((item: any) => item.chainId === chainId).map((item: any) => {
-                return {
-                    tokenSymbol: item.symbol,
-                    tokenIcon: item.logoURI,
-                    apy_apyOneMonthSample: 10,
-                    address: item.address
-                } as ICurrencyWithAddress;
-            });
-            setCurrencies(curr);
-            setInputCurrency(curr[0]);
-            setOutputCurrency(curr[1]);
+            enableBlur()
+            try {
+                const res = await api.get("/api/v1/protocols/uni");
+                const data = res.data;
+                const web3 = await getWeb3() as Web3;
+                const chainId = await web3.eth.getChainId()
+                const curr = data.tokens.filter((item: any) => item.chainId === chainId).map((item: any) => {
+                    return {
+                        tokenSymbol: item.symbol,
+                        tokenIcon: item.logoURI,
+                        apy_apyOneMonthSample: 10,
+                        address: item.address
+                    } as ICurrencyWithAddress;
+                });
+                setCurrencies(curr);
+                setInputCurrency(curr[0]);
+                setOutputCurrency(curr[1]);
+            } finally {
+                disableBlur()
+            }
         })()
-        api.get("/api/v1/protocols/uni").then((res) => {
-           
-        });
     }, []);
 
 
@@ -60,25 +64,25 @@ export const UniswapSwapToken = ({
     }, [inputCurrency, outputCurrency])
 
     if (!inputCurrency || !outputCurrency) {
-        return <>Loading</>;
+        return <></>;
     }
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setInputAmount((e.target.value))
-        if(e.target.value === ""){
+        if (e.target.value === "") {
             setOutPutAmount('')
-        }else {
+        } else {
             setOutPutAmount(parseFloat(e.target.value) * parseFloat(invertedMidPrice));
         }
     }
     const handleOutputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setOutPutAmount((e.target.value))
-        if(e.target.value === ""){
+        if (e.target.value === "") {
             setInputAmount('')
-        }else {
+        } else {
             setInputAmount(parseFloat(e.target.value) * parseFloat(midPrice));
         }
-        
+
     }
 
     return (
@@ -88,7 +92,7 @@ export const UniswapSwapToken = ({
                     currencies,
                     onChangeCurrency: setInputCurrency,
                     selectedCurrency: inputCurrency,
-                    amount: inputAmount as number, 
+                    amount: inputAmount as number,
                     onChangeAmount: handleInputChange
                 }}
                 output={{

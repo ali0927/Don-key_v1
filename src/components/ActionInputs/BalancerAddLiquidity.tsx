@@ -11,7 +11,7 @@ export const BalancerAddLiquidity = () => {
 
   const yfiTokens = useYFITokens();
   if(yfiTokens.length === 0){
-    return <>Loading</>
+    return <></>
   }
   return (
     <div>

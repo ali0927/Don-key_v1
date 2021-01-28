@@ -40,7 +40,7 @@ export const CurveInput = ({
     }
   }, [yfiTokens])
   if(!selectedToken){
-    return <>Loading</>;
+    return <></>;
   }
   return (
     <div>
