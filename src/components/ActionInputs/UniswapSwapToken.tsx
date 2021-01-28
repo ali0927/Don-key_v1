@@ -1,7 +1,9 @@
 import { SetButton } from "components/ActionUI/SetButton";
-import { ICurrency, ICurrencyWithAddress, IProtocol } from "interfaces";
+import { getWeb3 } from "helpers/helpers";
+import { ICurrencyWithAddress, IProtocol } from "interfaces";
 import React, { useEffect, useState } from "react";
 import { api } from "services/api";
+import Web3 from "web3";
 import { InputOutputPure } from "./InputOutput";
 
 
@@ -25,9 +27,12 @@ export const UniswapSwapToken = ({
     const [inputAmount, setInputAmount] = useState<number | string>('');
     const [outputAmount, setOutPutAmount] = useState<number | string>('');
     useEffect(() => {
-        api.get("/api/v1/protocols/uni").then((res) => {
+        (async () => {
+            const res = await api.get("/api/v1/protocols/uni");
             const data = res.data;
-            const curr = data.tokens.filter((item: any) => item.chainId === 1).map((item: any) => {
+            const web3 = await getWeb3() as Web3;
+            const chainId = await web3.eth.getChainId()
+            const curr = data.tokens.filter((item: any) => item.chainId === chainId).map((item: any) => {
                 return {
                     tokenSymbol: item.symbol,
                     tokenIcon: item.logoURI,
@@ -38,6 +43,9 @@ export const UniswapSwapToken = ({
             setCurrencies(curr);
             setInputCurrency(curr[0]);
             setOutputCurrency(curr[1]);
+        })()
+        api.get("/api/v1/protocols/uni").then((res) => {
+           
         });
     }, []);
 
