@@ -16,7 +16,9 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
   noDropdown = false,
   icon,
   name,
-  onChange
+  onChange,
+  amount,
+  onChangeAmount
 }: {
   name?: string;
   icon?: string| React.ReactElement;
@@ -27,6 +29,8 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
   currencies: T[];
   label: string;
   placeholder: string;
+  amount?: number | null;
+  onChangeAmount?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChange?: (token: T) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -102,6 +106,8 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
           <input
             className="cryptoinput__input "
             type="number"
+            value={amount as number}
+            onChange={onChangeAmount}
             placeholder={placeholder}
           />
         </>

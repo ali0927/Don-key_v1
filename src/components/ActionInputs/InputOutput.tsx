@@ -9,16 +9,16 @@ export type IInputOutputPureProps<T extends ICurrency> = {
     currencies: T[];
     selectedCurrency: T;
     onChangeCurrency: (val: T) => void;
-    onChangeAmount?: (val: string) => void;
-    amount?: number;
+    onChangeAmount?: (val: React.ChangeEvent<HTMLInputElement>) => void
+    amount?: number | null;
     noDropDown?: boolean;
   };
   output?: {
     currencies: T[];
     selectedCurrency: T;
     onChangeCurrency: (val: T) => void;
-    onChangeAmount?: (val: string) => void;
-    amount?: number;
+    onChangeAmount?: (val: React.ChangeEvent<HTMLInputElement>) => void;
+    amount?: number | null;
     noDropDown?: boolean;
   };
   noOutput?: boolean;
@@ -37,6 +37,8 @@ export const InputOutputPure = <T extends ICurrency>({
         currencies={input.currencies}
         currency={input.selectedCurrency}
         onChange={input.onChangeCurrency}
+        amount={input.amount}
+        onChangeAmount={input.onChangeAmount}
         placeholder="Amount"
       />
       <div className={`arrow-wrapper ${noOutput ? "justify-content-end" : ""}`}>
@@ -47,9 +49,11 @@ export const InputOutputPure = <T extends ICurrency>({
         <CryptoCurrencyInput
           label="Output (Estimate)"
           placeholder="0"
+          amount={output.amount}
           currencies={output.currencies}
           noDropdown={output.noDropDown}
           currency={output.selectedCurrency}
+          onChangeAmount={output.onChangeAmount}
           onChange={output.onChangeCurrency}
         />
       )}
