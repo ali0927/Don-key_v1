@@ -1,6 +1,6 @@
 import React from "react";
 
-export const MUSDIcon = (props) => {
+export const MUSDIcon = (props: any) => {
     return (
         <svg
             width={30}

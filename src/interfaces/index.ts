@@ -10,12 +10,19 @@ export interface IStoreState {
     auth: {
         user: IUser | null;
         isLoggedIn: boolean;
-    }
+    };
 }
 
-export type AppThunk =ThunkAction<
-  void,
-  IStoreState,
-  unknown,
-  any
->
+export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;
+
+export type ICurrency = {
+    tokenIcon: string;
+    tokenSymbol: string;
+    apy_apyOneMonthSample: number;
+    balance?: number;
+};
+export interface IToken extends ICurrency {
+    vaultIcon: string;
+    symbol: string;
+    tokenAddress: string;
+}

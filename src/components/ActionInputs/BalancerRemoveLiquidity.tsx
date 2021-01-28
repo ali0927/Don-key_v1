@@ -1,16 +1,26 @@
-import React from "react";
+import { useYFITokens } from "components/YFITokensProvider";
+import { IToken } from "interfaces";
+import React, { useEffect, useState } from "react";
+import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput";
 import { DownArrow } from "./DownArrow";
 import { MTAIcon } from "./MTAIcon";
 import { MUSDIcon } from "./MUSDIcon";
 
 export const BalancerRemoveLiquidity = () => {
+
+  
+  const yfiTokens = useYFITokens();
+  if(yfiTokens.length === 0){
+    return <>Loading</>
+  }
   return (
     <div>
       <CryptoCurrencyInput
         noDropdown
         label="Input (Estimate)"
         name={"0x003A"}
+        currencies={yfiTokens}
         icon={<MTAIcon />}
         placeholder="Amount"
       />

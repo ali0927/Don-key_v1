@@ -23,7 +23,7 @@ export class StrategiesController {
         const { id, ...rest } = req.body;
 
         const results = await Strategies.update({
-            data: rest,
+            data: {...rest, updatedAt: new Date()},
             where: { id: parseInt(id) },
         });
         return sendResponse(res, { data: results, user: req.user });

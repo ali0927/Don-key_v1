@@ -1,6 +1,12 @@
 import React from "react";
 
-export const CryptoInputSimple = ({ label, icon, name, placeholder, className ='' }) => {
+export const CryptoInputSimple = ({ label, icon, name, placeholder, className ='' }: {
+  label?: string;
+  icon?: any;
+  name: string;
+  placeholder: string;
+  className?: string;
+}) => {
   return (
     <div className={`cryptoinput ${className}`}>
       <label className="cryptoinput__label">{label}</label>

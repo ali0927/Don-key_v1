@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, { use} from "react";
+import React, {useEffect, useState } from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
 import { InputOutput } from "../ActionInputs/InputOutput";
@@ -16,9 +16,19 @@ import { BalancerRemoveLiquidity } from "../ActionInputs/BalancerRemoveLiquidity
 import { CryptoInputSimple } from "../CryptoCurrencyInput/CryptoInputSimple";
 import { currencies } from "../CryptoCurrencyInput/currencies";
 import { SetButton } from "./SetButton";
+import { useYFITokens, withYFITokens } from "components/YFITokensProvider";
 
-export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtocol }) => {
- 
+const ActionsUIUnrwapped = ({
+  icon,
+  selectedAction,
+  onSelect,
+  protocol,
+  lastProtocol,
+}: any) => {
+  const yfiTokens = useYFITokens();
+  if (yfiTokens.length === 0) {
+    return <>Loading</>;
+  }
 
   const renderPanel = () => {
     if (protocol.name === "YFI") {
@@ -28,7 +38,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -41,7 +55,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -49,7 +67,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <UniswapInput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -57,7 +79,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <UniswapInputReverse />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -71,7 +97,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -87,7 +117,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -101,11 +135,16 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                     <img className="img-fluid" src={icon} />
                   </span>
                 }
+                currencies={yfiTokens}
                 noDropdown
                 label={"Output"}
                 placeholder="Amount"
               />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -118,7 +157,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <CurveInput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -126,7 +169,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -134,7 +181,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <CurveLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -142,7 +193,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <InputOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -150,7 +205,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <InputOutput noOutput />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -164,11 +223,16 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                     <img className="img-fluid" src={icon} />
                   </span>
                 }
+                currencies={yfiTokens}
                 noDropdown
                 label={"Output"}
                 placeholder="0"
               />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -181,7 +245,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -189,7 +257,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <BalancerAddLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -197,7 +269,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
           return (
             <div className="action-wrapper py-4">
               <BalancerRemoveLiquidity />
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -213,6 +289,7 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                 <CryptoInputSimple
                   label="Vault"
                   name="#"
+    
                   placeholder="Number"
                 />
                 <CryptoInputSimple
@@ -237,7 +314,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                 </div>
               </div>
 
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -273,7 +354,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -307,7 +392,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -341,7 +430,11 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
                   </div>
                 </div>
               </div>
-              <SetButton lastProtocol={lastProtocol} protocol={protocol} action={selectedAction} />
+              <SetButton
+                lastProtocol={lastProtocol}
+                protocol={protocol}
+                action={selectedAction}
+              />
             </div>
           );
         }
@@ -353,10 +446,7 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
     return (
       <div className="p-4 d-flex flex-column flex-val-1">
         <div className="d-flex align-items-center justify-content-between">
-          <span
-            onClick={() => onSelect(null)}
-            className="cursor-pointer"
-          >
+          <span onClick={() => onSelect(null)} className="cursor-pointer">
             <FaChevronLeft />
           </span>
           <h3 style={{ fontSize: 23 }} className="mb-0">
@@ -379,3 +469,6 @@ export const ActionsUI = ({ icon, selectedAction,onSelect, protocol, lastProtoco
     );
   }
 };
+
+
+export const ActionsUI = withYFITokens(ActionsUIUnrwapped);

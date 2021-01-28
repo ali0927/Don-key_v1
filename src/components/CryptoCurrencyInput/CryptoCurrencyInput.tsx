@@ -1,11 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
+import { ICurrency } from "interfaces";
 import React, { useCallback, useState } from "react";
 import { FaCaretDown } from "react-icons/fa";
 import { useClickAwayListener } from "../../hooks";
-import { AutoCompleteInput, IToken } from "./AutoCompleteInput";
+import { AutoCompleteInput } from "./AutoCompleteInput";
 import "./cryptocurrencyinput.scss";
 
-export const CryptoCurrencyInput = ({
+export const CryptoCurrencyInput = <T extends ICurrency>({
   label,
   placeholder,
   currencies,
@@ -14,21 +15,19 @@ export const CryptoCurrencyInput = ({
   multi = false,
   noDropdown = false,
   icon,
-  isOutput,
   name,
   onChange
 }: {
   name?: string;
-  icon?: string;
+  icon?: string| React.ReactElement;
   noDropdown?: boolean;
   className?: string;
   multi?: boolean;
-  isOutput?: boolean;
-  currency?: IToken;
-  currencies: IToken[];
+  currency?: T;
+  currencies: T[];
   label: string;
   placeholder: string;
-  onChange?: (token: IToken) => void;
+  onChange?: (token: T) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const selectedCurrency = currency ? currency : currencies[0];

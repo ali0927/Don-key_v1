@@ -1,24 +1,30 @@
-import { IToken } from "components/CryptoCurrencyInput/AutoCompleteInput";
+
 import React, { useEffect, useState } from "react";
 import { api } from "services/api";
 import { CryptoCurrencyInput } from "../CryptoCurrencyInput/CryptoCurrencyInput";
 import { DownArrow } from "./DownArrow";
+import { IToken } from "interfaces";
+import { useYFITokens } from "components/YFITokensProvider";
+
+
+
+
+
 
 export const InputOutput = ({ noOutput = false }) => {
 
-  const [yfiTokens, setTokens] = useState<IToken[]>([]);
-
+  const yfiTokens = useYFITokens();
 
   const [selectedToken, setSelectedToken] = useState<IToken | null>();
 
   useEffect(() => {
-    api.get("/api/v1/protocols/yfi").then((res) => {
-      setTokens(res.data.data);
-      setSelectedToken(res.data.data[0]);
-    })
-  }, [])
-  if(!selectedToken){
-    return "Loading";
+
+    if (yfiTokens.length > 0) {
+      setSelectedToken(yfiTokens[0]);
+    }
+  }, [yfiTokens])
+  if (!selectedToken) {
+    return <>Loading</>;
   }
   return (
     <div>
@@ -30,7 +36,7 @@ export const InputOutput = ({ noOutput = false }) => {
         onChange={setSelectedToken}
         placeholder="Amount"
       />
-      <div className={`arrow-wrapper ${noOutput ? "justify-content-end": ''}`}>
+      <div className={`arrow-wrapper ${noOutput ? "justify-content-end" : ''}`}>
         {!noOutput && <DownArrow />}
         <div className="arrow-max">Max</div>
       </div>
@@ -40,7 +46,7 @@ export const InputOutput = ({ noOutput = false }) => {
           placeholder="0"
           currencies={yfiTokens}
           noDropdown
-          currency={{...selectedToken, tokenIcon: selectedToken.vaultIcon,tokenSymbol: selectedToken.symbol}}
+          currency={{ ...selectedToken, tokenIcon: selectedToken.vaultIcon, tokenSymbol: selectedToken.symbol }}
           onChange={setSelectedToken}
         />
       )}
