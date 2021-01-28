@@ -17,6 +17,7 @@ import { CryptoInputSimple } from "../CryptoCurrencyInput/CryptoInputSimple";
 import { currencies } from "../CryptoCurrencyInput/currencies";
 import { SetButton } from "./SetButton";
 import { useYFITokens, withYFITokens } from "components/YFITokensProvider";
+import { UniswapSwapToken } from "components/ActionInputs/UniswapSwapToken";
 
 const ActionsUIUnrwapped = ({
   icon,
@@ -53,14 +54,7 @@ const ActionsUIUnrwapped = ({
       switch (selectedAction) {
         case "SwapToken": {
           return (
-            <div className="action-wrapper">
-              <InputOutput />
-              <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
-                action={selectedAction}
-              />
-            </div>
+            <UniswapSwapToken lastProtocol={lastProtocol} protocol={protocol} />
           );
         }
         case "AddLiquidity": {

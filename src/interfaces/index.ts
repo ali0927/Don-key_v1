@@ -26,3 +26,44 @@ export interface IToken extends ICurrency {
     symbol: string;
     tokenAddress: string;
 }
+
+export type IProtocol = {
+    id: number;
+    name: string;
+    website: string;
+    toolbarImageURL: string;
+    showOnToolbar: "1" | "0";
+    edgeColor: string;
+    description: string;
+    vertexImageURL: string;
+    base64: string;
+};
+
+export type IProtocolCell = {
+    protocolId: string,
+    protocol: string,
+    lastProtocol?: string,
+    x: number
+    y: number;
+    w: number;
+    h: number;
+    isAction: boolean,
+    buru: boolean,
+    vertex: any | null,
+}
+
+export type IActionCell = {
+    vertex: any | null,
+    prevProtocolCellId: string,
+    nextProtocolCellId: string,
+    imageUrl: string;
+    y: number,
+    isAction: boolean,
+    x: number,
+}
+
+export type IStrategy = {
+    id?: string;
+    protocolCells: IProtocolCell[];
+    actionCells: IActionCell[]
+}
