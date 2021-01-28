@@ -91,7 +91,7 @@ export const AutoCompleteInput = <T extends ICurrency>({
 							<span className="cryptoinput__percent">
 								{currency.apy_apyOneMonthSample.toFixed(2)}%<span>APY</span>
 							</span>
-							<span className="cryptoinput__value">90.000</span>
+							<span className="cryptoinput__value">{currency.balance }</span>
 						</div>
 					);
 				})}
