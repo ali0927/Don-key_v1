@@ -8,7 +8,7 @@ export const UniswapInput = () => {
   const yfiTokens = useYFITokens();
 
   if (yfiTokens.length === 0) {
-    return <>Loading</>;
+    return <></>;
   }
   return (
     <div className="mt-4">
@@ -33,7 +33,7 @@ export const UniswapInput = () => {
 export const UniswapInputReverse = () => {
   const yfiTokens = useYFITokens();
   if (yfiTokens.length === 0) {
-    return <>Loading</>;
+    return <></>;
   }
   return (
     <div className="mt-4">

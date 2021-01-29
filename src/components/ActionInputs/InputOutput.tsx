@@ -72,7 +72,7 @@ export const InputOutput = ({ noOutput = false }) => {
     }
   }, [yfiTokens]);
   if (!selectedToken) {
-    return <>Loading</>;
+    return <></>;
   }
 
   return (

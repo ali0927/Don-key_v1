@@ -10,7 +10,7 @@ export const CurveLiquidity = () => {
 
   
   if(yfiTokens.length === 0){
-    return <>Loading</>;
+    return <></>;
   }
 
   return (

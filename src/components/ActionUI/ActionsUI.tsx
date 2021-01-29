@@ -28,7 +28,7 @@ const ActionsUIUnrwapped = ({
 }: any) => {
   const yfiTokens = useYFITokens();
   if (yfiTokens.length === 0) {
-    return <>Loading</>;
+    return <></>;
   }
 
   const renderPanel = () => {

@@ -58,3 +58,7 @@ export const getQueryParam = (name: string) => {
   console.log(queryObj);
   return queryObj[name];
 }
+
+export const tuplify = <T extends any[]>(...args: T) => {
+  return args;
+}
