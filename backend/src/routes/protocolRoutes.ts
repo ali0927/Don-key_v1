@@ -30,7 +30,7 @@ protocolRoutes.route("/protocols/uni")
 
     const pair = await Fetcher.fetchPairData(Token1, Token2);
 
-    const route = new Route([pair], WETH[Token1.chainId]);
+    const route = new Route([pair], Token2[Token2.chainId]);
 
     sendResponse(res, {
         data: {
