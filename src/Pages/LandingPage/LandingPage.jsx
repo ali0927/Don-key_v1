@@ -19,11 +19,10 @@ const LandingPage = () => {
             <Col md={5}>
               <div className="bannerLeft mt-md-5 pt-md-4">
                 <h1 className="colorBlack">
-                  Come <br />
-                  and trade
+              Outsmart DeFi
                 </h1>
                 <p className="mt-4">
-                  Build your DeFi strategy Get liquidity and Boost your yield
+                  Create your DeFi strategy with a few clicks, top-up your liquidity and your knowledge.
                 </p>
                 <div className="mt-5">
                   <ButtonComponent className="btnYellow">
@@ -102,23 +101,21 @@ const LandingPage = () => {
         <div className="advantage bgyellowColor">
           <Container>
             <h3 className="headsame mb-3 mt-5 justify-content-center">
-              Advantages
+             Painless DeFi
             </h3>
-            <h5 className="headbelowSame mt-4">of farming with BURU </h5>
             <Row>
-              <Col md={4}>
+              <Col md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-4">
-                      User friendly drag and drop strategy builder to implement
-                      the best from your wits
+                      The most user friendly interface in the DeFi space. create complicated strategies with 0 code.
                     </Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Get liquidity</Card.Title>
@@ -130,7 +127,18 @@ const LandingPage = () => {
                 </Card>
               </Col>
 
-              <Col md={4}>
+              <Col md={3}>
+                <Card>
+                  <Card.Body>
+                    <Card.Title>Follow traders</Card.Title>
+                    <Card.Text className="mt-4">
+                      Make commission on your yields and get extra bonuses based
+                      on your ranks and performance
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={3}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Boost your yield</Card.Title>
