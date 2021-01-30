@@ -147,7 +147,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
       protocolId: uuidv4(),
       protocol: name,
       lastProtocol: lastCell?.protocol,
-      x: (lastCell?.x || 0) + 350,
+      x: (lastCell?.x || 0) + 150,
       y: 150,
       w: 110,
       h: 110,
