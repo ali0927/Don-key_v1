@@ -7,7 +7,11 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: $primary-color;
+  background-color: #fafafb;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 code {
@@ -26,7 +30,7 @@ a:hover {
 
 .sidebar {
   position: fixed;
-  background-color: #fff;
+  background-color: #18202e;
   width: 280px;
   top: 0;
   bottom: 0;
@@ -38,8 +42,9 @@ a:hover {
 }
 
 .sidebar-header {
-  padding: 10px 20px;
-  border: 1px solid #ebebeb;
+  padding: 20px 30px;
+  background-color: $primary-color;
+  // border: 1px solid #ebebeb;
 }
 
 .sidebar-menu {
@@ -49,9 +54,16 @@ a:hover {
 }
 .nav-item {
   display: block;
+  a {
+    color: rgba($color: #fff, $alpha: 0.5);
+    &:hover {
+      color: #fff;
+    }
+  }
+
   &.active {
     a {
-      color: $primary-color;
+      color: rgba($color: #fff, $alpha: 1);
     }
   }
 }
@@ -69,7 +81,7 @@ a:hover {
   border-radius: 6px;
   display: inline-block;
   font-size: 17px;
-  color: $primary-color;
+  color: inherit;
   height: 35px;
   left: 0;
   line-height: 35px;

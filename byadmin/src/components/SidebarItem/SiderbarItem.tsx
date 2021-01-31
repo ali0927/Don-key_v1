@@ -11,7 +11,7 @@ export const SiderbarItem = ({
     href: string;
 }) => {
 
-    const {path} = useRouteMatch();
+    const { path } = useRouteMatch();
 
     return (
         <li className={clsx("nav-item", {active: path === href})}>

@@ -1,7 +1,11 @@
 import { Button, Paper, TextField } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
 import { Logo } from "./Logo";
 
 const Login = () => {
+
+  const history = useHistory();
+
   return (
     <div className="container">
       <div className="row mt-5 pt-5">
@@ -25,7 +29,7 @@ const Login = () => {
                 type="password"
                 label="Password"
               />
-              <Button variant="outlined" color="primary">
+              <Button onClick={() => history.push('/dashboard')} variant="outlined" color="primary">
                 Sign In
               </Button>
             </div>

@@ -6,12 +6,16 @@ import { sendResponse } from "../helpers/sendResponse";
 const Protocols = prisma.protocols;
 const ProtocolMap = prisma.protocol_proto_map;
 const convertoDataUri = async (url: string) => {
-    const input = (await axios({ url, responseType: "arraybuffer" }))
+    try {
+        const input = (await axios({ url, responseType: "arraybuffer" }))
         .data as Buffer;
 
     const uri = await sharp(input).toBuffer();
 
     return "data:image/png;base64," + uri.toString("base64");
+    }catch(e){
+        return "";
+    }
 }
 
 
@@ -32,9 +36,20 @@ export class ProtocolsController {
         if(req.query.protocol_id && req.query.nextprotocol_id){
             return ProtocolsController.getMapImage(req,res, next);
         }
+        const {id} = req.params;
+        if(id){
+           const result = await Protocols.findUnique({where: { id: parseInt(id) },include: {actions: true}});
+
+            if(!result){
+                return res.sendStatus(404);
+            }
+            const url = await convertoDataUri(result.vertexImageURL as string);
+
+            return sendResponse(res, {data: {...result, base64: url}, user: req.user})
+        }
 
         const results = await Protocols.findMany({
-            include: { actions: true,  },
+            include: { actions: true  },
         });
 
         const newResults: (typeof results[1] & { base64: string })[] = [];
@@ -52,23 +67,28 @@ export class ProtocolsController {
         res.json(newResults);
     };
     static updateProtocols: RequestHandler = async (req, res) => {
-        const { id, ...rest } = req.body;
-
+        let { id, ...rest } = req.body;
+        if(req.params.id){
+            id = req.params.id;
+        }
+        if(!id){
+            return res.sendStatus(400);
+        }
         const results = await Protocols.update({
             data: rest,
             where: { id: parseInt(id) },
         });
-        res.json(results);
+        return res.json(results);
     };
 
     static deleteProtocols: RequestHandler = async (req, res) => {
-        const { id } = req.body;
+        const { id } = req.params;
         const count = await Protocols.delete({ where: { id: parseInt(id) } });
-        res.json({ count });
+        sendResponse(res,{data: count, user: req.user});
     };
 
     static createProtocols: RequestHandler = async (req, res) => {
-        const strategy = await Protocols.create(req.body);
-        res.json(strategy);
+        const strategy = await Protocols.create({data: req.body});
+        sendResponse(res,{data: strategy, user: req.user});
     };
 }

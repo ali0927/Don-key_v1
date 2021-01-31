@@ -1,11 +1,14 @@
 import { RequestHandler } from "express";
 import { sendResponse } from "../helpers/sendResponse";
 import { verifyToken } from "../helpers";
-
-
+import { API_SECRET } from "../env";
 
 export const checkAuth = (): RequestHandler => (req, res, next) => {
   const authHeader = req.header("Authorization");
+  const apiSecret = req.header("X-Api-Secret");
+  if (apiSecret === API_SECRET) {
+    return next();
+  }
   if (!authHeader) {
     return sendResponse(res, { error: { msg: "Acccess Denied" }, code: 401 });
   }
@@ -26,12 +29,10 @@ export const checkAuth = (): RequestHandler => (req, res, next) => {
   }
 
   try {
-
-    req.user = verifyToken(token)
+    req.user = verifyToken(token);
     next();
   } catch (e) {
     console.log(e);
     return sendResponse(res, { error: { msg: "Acccess Denied" }, code: 401 });
   }
-
 };

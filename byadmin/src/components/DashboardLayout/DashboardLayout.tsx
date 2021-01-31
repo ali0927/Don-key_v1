@@ -1,11 +1,12 @@
-import { Typography } from "@material-ui/core";
+import {  Typography } from "@material-ui/core";
 import { SiderbarItem } from "components/SidebarItem";
 import { Logo } from "pages/Logo";
 import React from "react";
 
-export const DashboardLayout: React.FC<{ title: string }> = ({
+export const DashboardLayout: React.FC<{ title: string, button?: React.ReactElement }> = ({
   children,
   title,
+  button
 }) => {
   return (
     <>
@@ -44,7 +45,13 @@ export const DashboardLayout: React.FC<{ title: string }> = ({
         <header className="header">
           <div className="header-container"></div>
         </header>
-        <main className="page-content">{children}</main>
+        <main className="page-content">
+          <div className="px-3 pt-2 d-flex justify-content-between">
+            <Typography variant="h4">{title}</Typography>
+            {button && button}
+          </div>
+          {children}
+        </main>
       </div>
     </>
   );

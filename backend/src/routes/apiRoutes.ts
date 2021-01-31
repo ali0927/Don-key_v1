@@ -59,10 +59,13 @@ apiRoutes.route("/accounts")
 
 apiRoutes.route('/protocols')
     .get(ProtocolsController.getProtocols)
-    .post(ProtocolsController.createProtocols)
-    .put(ProtocolsController.updateProtocols)
-    .delete(ProtocolsController.deleteProtocols);
+    .post(ProtocolsController.createProtocols);
 
+
+apiRoutes.route('/protocols/:id')
+    .get(ProtocolsController.getProtocols)
+    .delete(ProtocolsController.deleteProtocols)
+    .put(ProtocolsController.updateProtocols);
     
 
 

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { prisma } from "../database";
 import { sendResponse } from "../helpers";
-import { ChainId, Token, WETH, Fetcher, Route } from "@uniswap/sdk";
+import { ChainId, Token, Fetcher, Route } from "@uniswap/sdk";
 import axios from "axios";
 
 const protocolRoutes = Router();
@@ -29,7 +29,7 @@ protocolRoutes.route("/protocols/uni")
     const Token2 = new Token(ChainId.MAINNET, address2, 18);
 
     const pair = await Fetcher.fetchPairData(Token1, Token2);
-
+    //@ts-ignore
     const route = new Route([pair], Token2[Token2.chainId]);
 
     sendResponse(res, {

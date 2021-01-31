@@ -10,8 +10,7 @@ import { User } from "pages/User";
 import { Protocol } from "pages/Protocol";
 import { Farmers } from "pages/Farmers";
 import { Strategy } from "pages/Strategy";
-
-
+import { ProtocolsEdit } from "pages/ProtocolsEdit";
 
 export default function Routes() {
   return (
@@ -21,6 +20,8 @@ export default function Routes() {
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/users" component={User}/>
           <Route exact path="/protocols" component={Protocol} />
+          <Route exact path="/protocols/edit/" component={ProtocolsEdit} />
+          <Route path="/protocols/edit/:id" component={ProtocolsEdit} />
           <Route exact path="/farmers" component={Farmers} />
           <Route exact path="/strategies" component={Strategy} />
         </Switch>
