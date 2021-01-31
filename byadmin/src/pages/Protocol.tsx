@@ -1,61 +1,103 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { DashboardLayout } from "components/DashboardLayout";
 import { api } from "helpers/api";
 import { useGet } from "hooks/useGet";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Table, Column, HeaderCell, Cell } from "rsuite-table";
+import { Modal, Table } from "rsuite";
 import { protocolList } from "./protocolsJson";
 import { useToastContext } from "./useToastContext";
 
+const { Column, Cell, HeaderCell } = Table;
 
-const DialogComp = ({open, onClose, title, description, onSuccess , cancelText="Disagree", saveText ="Agree"}: {
+const DialogComp = ({
+  open,
+  onClose,
+  title,
+  description,
+  onSuccess,
+  cancelText = "Cancel",
+  saveText = "Ok",
+}: {
   open: boolean;
-  onClose: () => void; title: string; description: string;
+  onClose: () => void;
+  title: string;
+  description: string;
   onSuccess: () => void;
   cancelText?: string;
   saveText?: string;
 }) => {
-  return <Dialog
-  
-  open={open}
-  onClose={onClose}
-  BackdropProps={{style: { display: "none"}}}
-  fullWidth
-  maxWidth="sm"
->
-  <DialogTitle >{title}</DialogTitle>
-  <DialogContent>
-    <DialogContentText>
-    {description}
-    </DialogContentText>
-  </DialogContent>
-  <DialogActions>
-    <Button autoFocus onClick={onClose} color="primary">
-      {cancelText}
-    </Button>
-    <Button onClick={onSuccess} color="primary" autoFocus>
-      {saveText}
-    </Button>
-  </DialogActions>
-</Dialog>
-}
+  return (
+    <Modal show={open} onHide={onClose}>
+      <Modal.Header>
+        <Modal.Title>{title}</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>{description}</Modal.Body>
+      <Modal.Footer>
+        <Button onClick={onSuccess} color="primary">
+          {saveText}
+        </Button>
+        <Button onClick={onClose} color="primary" variant="outlined">
+          {cancelText}
+        </Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
+
+const ProtocolActions = ({ rowData, reload }: any) => {
+  const history = useHistory();
+  const [open, setOpen] = useState(false);
+  const { showSuccessToast, showErrorToast } = useToastContext();
+
+  const handleDelete = async () => {
+    try {
+      await api.delete(`/api/v1/protocols/${rowData.id}`);
+      setOpen(false);
+      reload();
+      showSuccessToast("Protocol Deleted");
+    } catch (e) {
+      showErrorToast("An Error Occurred");
+    }
+  };
+  return (
+    <div
+      style={{ fontSize: 10, height: "100%" }}
+      className="d-flex  justify-content-around"
+    >
+      <div
+        onClick={() => history.push(`/protocols/edit/${rowData.id}`)}
+        className="cursor-pointer d-flex align-items-center"
+      >
+        <i className="fa fa-pencil-alt" />
+      </div>
+      <div
+        onClick={() => setOpen(true)}
+        className="cursor-pointer d-flex align-items-center"
+      >
+        <i className="fa fa-trash-alt" />
+      </div>
+
+      <DialogComp
+        title="Are you sure ?"
+        description="Deleting Protocol"
+        onClose={() => setOpen(false)}
+        open={open}
+        onSuccess={handleDelete}
+      />
+    </div>
+  );
+};
 
 const ProtocolTable = ({
   protocols = [],
   loading,
-  reload
+  reload,
 }: {
   protocols: any;
   loading: boolean;
   reload: () => void;
 }) => {
-
-  const [open,setOpen] = useState(false);
-  const {showSuccessToast, showErrorToast} = useToastContext();
-
-  const history = useHistory();
-
   return (
     <Table virtualized loading={loading} height={500} data={protocols}>
       <Column width={50} align="center" fixed>
@@ -123,39 +165,7 @@ const ProtocolTable = ({
         <HeaderCell></HeaderCell>
         <Cell>
           {(rowData: any) => {
-            const handleDelete = async () => {
-              
-              try {
-                 await api.delete(`/api/v1/protocols/${rowData.id}`);
-                 setOpen(false);
-                 reload()
-                 showSuccessToast("Protocol Deleted");
-              }catch(e){
-                showErrorToast("An Error Occurred");
-              }
-              
-            }
-            return (
-              <div
-                style={{ fontSize: 10, height: "100%" }}
-                className="d-flex  justify-content-around"
-              >
-                <div onClick={() => history.push(`/protocols/edit/${rowData.id}`)} className="cursor-pointer d-flex align-items-center">
-                  <i className="fa fa-pencil-alt" />
-                </div>
-                <div onClick={() => setOpen(true)} className="cursor-pointer d-flex align-items-center">
-                  <i className="fa fa-trash-alt" />
-                </div>
-                {open && <DialogComp  
-                  title="Are you sure ?"
-                  
-                  description="Deleting Protocol"
-                  onClose={() => setOpen(false)}
-                  open={open}
-                  onSuccess={handleDelete}
-                />}
-              </div>
-            );
+            return <ProtocolActions reload={reload} rowData={rowData} />;
           }}
         </Cell>
       </Column>
@@ -174,10 +184,21 @@ export const Protocol = () => {
   return (
     <DashboardLayout
       title="Protocols"
-      button={<Button onClick={() => history.push("/protocols/edit")} variant="outlined">Add New Protocol</Button>}
+      button={
+        <Button
+          onClick={() => history.push("/protocols/edit")}
+          variant="outlined"
+        >
+          Add New Protocol
+        </Button>
+      }
     >
       <div className="p-3">
-        <ProtocolTable reload={refetchData} loading={loading} protocols={data} />
+        <ProtocolTable
+          reload={refetchData}
+          loading={loading}
+          protocols={data}
+        />
       </div>
     </DashboardLayout>
   );

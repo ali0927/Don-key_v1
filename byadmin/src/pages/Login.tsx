@@ -7,9 +7,9 @@ const Login = () => {
   const history = useHistory();
 
   return (
-    <div className="container">
-      <div className="row mt-5 pt-5">
-        <div className="col-md-6 offset-md-3 py-5">
+    <div className="container-fluid bg-primary py-2" style={{minHeight: "100vh"}}>
+      <div className="row mt-5 pt-5 justify-content-center">
+        <div className="col-md-4 py-5">
           <Paper className="p-5">
             <div className="d-flex flex-column align-items-center ">
               <div className="w-50 mb-4">
@@ -29,7 +29,7 @@ const Login = () => {
                 type="password"
                 label="Password"
               />
-              <Button onClick={() => history.push('/dashboard')} variant="outlined" color="primary">
+              <Button onClick={() => history.push('/protocols')} variant="outlined" color="primary">
                 Sign In
               </Button>
             </div>

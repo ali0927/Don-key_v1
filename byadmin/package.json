@@ -16,9 +16,8 @@
     "@types/react-dom": "^16.9.8",
     "axios": "^0.21.1",
     "bootstrap": "4.6.0",
-    "chart.js": "2.9.4",
-    "classnames": "2.2.6",
     "clsx": "^1.1.1",
+    "rsuite": "^4.8.8",
     "lodash": "^4.17.20",
     "moment": "2.29.1",
     "node-sass": "4.14.1",
@@ -30,7 +29,6 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "react-toast-notifications": "^2.4.0",
-    "rsuite-table": "^3.14.2",
     "typescript": "^4.0.3",
     "web-vitals": "^0.2.4"
   },

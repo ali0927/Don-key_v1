@@ -10,6 +10,10 @@ body {
   background-color: #fafafb;
 }
 
+.bg-primary {
+  background-color: $primary-color !important;
+}
+
 .cursor-pointer {
   cursor: pointer;
 }
