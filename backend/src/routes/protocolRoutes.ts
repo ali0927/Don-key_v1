@@ -21,7 +21,7 @@ protocolRoutes.route("/protocols/uni")
         const result = await axios.get("https://gateway.ipfs.io/ipns/tokens.uniswap.org");
         unitokens = result.data;
     }
-    res.send(unitokens);
+    sendResponse(res, {data: unitokens, user: req.user})
 })
 .post(async (req, res) => {
     const { address1, address2 } = req.body;

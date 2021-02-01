@@ -26,13 +26,9 @@ export class LoginController {
                     data: { walletAddress, GUID: uuidv4(), created: time, lastUpdate: time },
                 });
             }
-            const token = jwt.sign(
-                { walletAddress, GUID: user.GUID, uid: user.id },
-                JWT_SECRET,
-                { expiresIn: "1d", algorithm: "HS256" }
-            );
+         
 
-            return sendResponse(res, { data: { nonce: user.GUID, token } });
+            return sendResponse(res, { data: { nonce: user.GUID } });
         } catch (e) {
             res.status(500).send({ data: null, user: null, error: e.message });
         }

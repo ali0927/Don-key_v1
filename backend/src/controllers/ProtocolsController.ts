@@ -29,7 +29,7 @@ export class ProtocolsController {
         if(!results){
             return sendResponse(res,{code: 404, error: {msg: "Not Found"}});
         }
-        sendResponse(res, {data: results.image})
+        sendResponse(res, {data: results.image, user: req.user})
     }
     
     static getProtocols: RequestHandler = async (req, res,next) => {
@@ -64,7 +64,8 @@ export class ProtocolsController {
             const result = results[i];
             newResults.push({ ...result, base64: uris[i] });
         }
-        res.json(newResults);
+        sendResponse(res, {data: newResults, user: req.user});
+      
     };
     static updateProtocols: RequestHandler = async (req, res) => {
         let { id, ...rest } = req.body;
@@ -78,7 +79,8 @@ export class ProtocolsController {
             data: rest,
             where: { id: parseInt(id) },
         });
-        return res.json(results);
+        return sendResponse(res, {data: results, user: req.user});
+    
     };
 
     static deleteProtocols: RequestHandler = async (req, res) => {
@@ -88,7 +90,7 @@ export class ProtocolsController {
     };
 
     static createProtocols: RequestHandler = async (req, res) => {
-        const strategy = await Protocols.create({data: req.body});
-        sendResponse(res,{data: strategy, user: req.user});
+        const protcol = await Protocols.create({data: req.body});
+        sendResponse(res,{data: protcol, user: req.user});
     };
 }
