@@ -5,7 +5,6 @@ const loginRoutes = Router();
 
 loginRoutes.route("/login").post(LoginController.handleSignIn);
 
-loginRoutes.route("/verifyToken").post(LoginController.verifyToken)
 
 
 export {loginRoutes};
