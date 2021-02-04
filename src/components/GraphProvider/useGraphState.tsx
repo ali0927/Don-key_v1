@@ -161,7 +161,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
     return newCell;
   };
 
-  const insertAction = async (prevCellId: string, nextCellId: string) => {
+  const insertAction = async (prevCellId: string, nextCellId: string, label: string) => {
     const protocolcell = findProtocolCellById(prevCellId);
     const nextProtocolcell = findProtocolCellById(nextCellId);
     const protocol = getProtocol(protocolcell.protocol);
@@ -176,7 +176,8 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
       y: 350,
       isAction: true,
       x: protocolcell.x + 80,
-      imageUrl: res.data.data
+      imageUrl: res.data.data,
+      label
     };
 
     addActionToGraph(cell);

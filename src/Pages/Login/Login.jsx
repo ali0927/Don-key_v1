@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import "./LoginStyle.scss";
@@ -41,6 +41,15 @@ const Login = () => {
       ),
     });
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem(AuthToken);
+    if(token){
+      history.push('/myaccount')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
 
   const { handleWalletConnect } = useWalletConnectHook();
   return (
