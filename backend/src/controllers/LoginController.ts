@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { recoverPersonalSignature } from "eth-sig-util";
 import { bufferToHex } from "ethereumjs-util";
 import { prisma } from "../database";
-import { uuidv4, verifyToken } from "../helpers";
+import { uuidv4 } from "../helpers";
 import { JWT_SECRET } from "../env";
 import { sendResponse } from "../helpers/sendResponse";
 
@@ -34,16 +34,6 @@ export class LoginController {
         }
     };
 
-
-    static verifyToken: RequestHandler = async (req, res) => {
-        const {token} = req.body;
-        try {
-            const user = verifyToken(token);
-            sendResponse(res,{user })
-        }catch(e){
-            sendResponse(res, {code: 400,error: {msg: "Invalid Token"}});
-        }
-    }
 
 
     static handleSignIn: RequestHandler = async (req, res) => {

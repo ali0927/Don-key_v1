@@ -5,12 +5,24 @@ export interface IUser {
   GUID: string;
   uid: string;
 }
+export type API_STATE = {
+    requests: {
+      [endpoint: string]: {
+        method: string;
+        endpoint: string;
+        response?: any;
+        error?: any;
+        status: "PENDING" | "SUCCESS" | "ERROR";
+      };
+    };
+  };
 
 export interface IStoreState {
   auth: {
     user: IUser | null;
     isLoggedIn: boolean;
   };
+  api: API_STATE
 }
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;

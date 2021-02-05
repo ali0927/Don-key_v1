@@ -27,6 +27,7 @@ export const ProtocolsEdit = () => {
 
   useEffect(() => {
     if (id) {
+      
       api.get("/api/v1/protocols/" + id).then((res) => {
         const data = res.data.data;
         setName(data.name);

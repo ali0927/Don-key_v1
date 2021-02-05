@@ -7,7 +7,7 @@ const Accounts = prisma.accounts;
 export class AccountsController {
   static getAccounts: RequestHandler = async (req, res) => {
     const results = await prisma.accounts.findMany();
-    res.json(results);
+    sendResponse(res, {data: results,user: req.user});
   };
 
   static getAccountById: RequestHandler = async (req, res) => {

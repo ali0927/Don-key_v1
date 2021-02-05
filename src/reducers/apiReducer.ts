@@ -1,17 +1,8 @@
 import { ApiActions } from "actions/apiActions";
 import { Reducer } from "redux";
 import produce from "immer";
-type API_STATE = {
-  requests: {
-    [endpoint: string]: {
-      method: string;
-      endpoint: string;
-      response?: any;
-      error?: any;
-      status: "PENDING" | "SUCCESS" | "ERROR";
-    };
-  };
-};
+import { API_STATE } from "interfaces";
+
 
 export const apiReducer: Reducer<API_STATE, ApiActions> = (
   state = { requests: {} },
