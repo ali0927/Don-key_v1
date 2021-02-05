@@ -62,3 +62,29 @@ export const getQueryParam = (name: string) => {
 export const tuplify = <T extends any[]>(...args: T) => {
   return args;
 }
+
+export const generateGradientImage = (color1: string, color2: string) => {
+  if(typeof window === "undefined"){
+    console.error("Only works in Client")
+    return ""
+  }
+  const canvas = document.createElement("canvas");
+  canvas.style.display = "none";
+  canvas.width = 80
+  canvas.height = 48
+  document.body.append(canvas)
+  const ctx = canvas.getContext("2d");
+  if(!ctx){
+    return "";
+  }
+  const grd = ctx.createLinearGradient(0, 0, 200, 0);
+  grd.addColorStop(0, color1);
+  grd.addColorStop(1, color2);
+  ctx.fillStyle = grd;
+  ctx.fillRect(0, 0, 80, 48);
+  
+  const url = canvas.toDataURL()
+  document.body.removeChild(canvas);
+  canvas.remove();
+  return url;
+}

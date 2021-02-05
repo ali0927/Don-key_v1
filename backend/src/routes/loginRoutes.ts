@@ -5,6 +5,7 @@ const loginRoutes = Router();
 
 loginRoutes.route("/login").post(LoginController.handleSignIn);
 
+loginRoutes.route("/nonce").post(LoginController.getNonce);
 
 
 export {loginRoutes};

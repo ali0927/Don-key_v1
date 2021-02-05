@@ -10,8 +10,13 @@ import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
 import { NavBar3 } from "../../components/Navbar/NavBar";
 import "./main.scss";
 import { api } from "../../services/api";
-import { getQueryParam, uuidv4 } from "../../helpers/helpers";
+import { generateGradientImage, getQueryParam, uuidv4 } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { onApiRequest } from "actions/apiActions";
+
+
+
 
 
 const Builder = () => {
@@ -38,13 +43,33 @@ const Builder = () => {
         actionCells: [],
     });
 
+    const dispatch = useDispatch()
+
+    const getStrategy = () => {
+        return new Promise((res,rej) => {
+            dispatch(onApiRequest({method: "GET",endpoint: "/api/v1/strategies?id=" + strategy,onDone: res,onFail: rej}));
+        })
+    }
+
+    const createStrategy = () => {
+        return new Promise((res,rej) => {
+            dispatch(onApiRequest({method: "POST",endpoint: "/api/v1/strategies" ,onDone: res,onFail: rej}));
+        })
+    }
+    const getProtocols = () => {
+        return new Promise((res,rej) => {
+            dispatch(onApiRequest({method: "GET",endpoint: "/api/v1/protocols" ,onDone: res,onFail: rej}));
+        })
+    }
+    
+
     useEffect(() => {
         const strategy = getQueryParam("id");
         const request = strategy
-            ? api.get("/api/v1/strategies?id=" + strategy)
-            : api.post("/api/v1/strategies");
+            ?  getStrategy()
+            : createStrategy();
 
-        Promise.all([request, api.get("/api/v1/protocols")]).then(
+        Promise.all([request, getProtocols()]).then(
             ([strategy, protocol]) => {
                 const json = strategy.data.data.json;
                 const strategyid = strategy.data.data.id;
@@ -64,6 +89,7 @@ const Builder = () => {
         <>
             <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
                 <NavBar3 />
+                <img src={generateGradientImage("red", "blue")} />
                 {protocols.length > 0 ? (
                     <GraphProvider
                         strategy={strategy}

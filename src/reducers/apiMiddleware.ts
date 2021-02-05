@@ -1,10 +1,10 @@
 import { Middleware } from "redux";
 import { ApiActions, onApiError, onApiSuccess } from "actions/apiActions";
 import { api } from "services/api";
-import { doLogin, doLogout } from "actions/authActions";
+import { AuthActions, doLogin, doLogout } from "actions/authActions";
 
 export const apiMiddleware: Middleware = (store) => (next) => async (
-  action: ApiActions
+  action: ApiActions | AuthActions
 ) => {
   next(action);
 
@@ -23,10 +23,21 @@ export const apiMiddleware: Middleware = (store) => (next) => async (
         req.onDone && req.onDone(res);
       } catch (e) {
         if ("response" in e) {
+          console.log(e.response.status);
+          if(e.response.status === 401){
+            dispatch(doLogout())
+          }
           req.onFail && req.onFail(e.response);
         }
         dispatch(onApiError({...req,err: e}));
       }
+    }
+    break;
+    case "USER_LOGOUT": {
+      if(typeof window !== "undefined"){
+        window.location.assign(window.location.origin + "/login")
+      }
+     
     }
   }
 };

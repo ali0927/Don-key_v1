@@ -99,7 +99,7 @@ const ProtocolTable = ({
   reload: () => void;
 }) => {
   return (
-    <Table virtualized loading={loading} height={500} data={protocols}>
+    <Table virtualized loading={loading} height={700} data={protocols}>
       <Column width={50} align="center" fixed>
         <HeaderCell>ID</HeaderCell>
         <Cell dataKey="id" />
@@ -174,9 +174,9 @@ const ProtocolTable = ({
 };
 
 export const Protocol = () => {
-  const { data, loading, refetchData } = useGet<typeof protocolList>(
+  const { data, loading, refetchData } = useGet<{data: typeof protocolList}>(
     "/api/v1/protocols",
-    []
+    {data: []}
   );
 
   const history = useHistory();
@@ -197,7 +197,7 @@ export const Protocol = () => {
         <ProtocolTable
           reload={refetchData}
           loading={loading}
-          protocols={data}
+          protocols={data.data}
         />
       </div>
     </DashboardLayout>

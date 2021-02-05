@@ -20,9 +20,11 @@ const Login = () => {
 
   const handleMetaMaskLogin = async () => {
     const web3 = await getWeb3();
+    if(!web3){
+      return;
+    }
     const coinbase = await web3.eth.getCoinbase();
     if (!coinbase) {
-      window.alert("Please activate MetaMask first.");
       return;
     }
 
