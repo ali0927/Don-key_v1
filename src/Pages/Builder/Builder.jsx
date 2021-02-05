@@ -47,6 +47,7 @@ const Builder = () => {
 
     const getStrategy = () => {
         return new Promise((res,rej) => {
+            const strategy = getQueryParam("id");
             dispatch(onApiRequest({method: "GET",endpoint: "/api/v1/strategies?id=" + strategy,onDone: res,onFail: rej}));
         })
     }
@@ -78,7 +79,7 @@ const Builder = () => {
                     const data = json ? JSON.parse(json) : old;
                     return { ...data, id: strategyid };
                 });
-                setProtocols(protocol.data);
+                setProtocols(protocol.data.data);
             }
         );
         
@@ -89,7 +90,7 @@ const Builder = () => {
         <>
             <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
                 <NavBar3 />
-                <img src={generateGradientImage("red", "blue")} />
+                {/* <img src={generateGradientImage("red", "blue")} /> */}
                 {protocols.length > 0 ? (
                     <GraphProvider
                         strategy={strategy}

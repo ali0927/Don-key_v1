@@ -24,8 +24,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
 app.use("/api/v1", loginRoutes);
-app.use("/api/v1", checkAuth(), apiRoutes);
 app.use("/api/v1", checkAuth(), protocolRoutes)
+
+app.use("/api/v1", checkAuth(), apiRoutes);
 
 async function bootstrap() {
   await Database.connect();

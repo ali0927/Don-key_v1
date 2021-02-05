@@ -4,6 +4,7 @@ import { verifyToken } from "../helpers";
 import { API_SECRET } from "../env";
 
 export const checkAuth = (): RequestHandler => (req, res, next) => {
+  // return next();
   const authHeader = req.header("Authorization");
   const apiSecret = req.header("X-Api-Secret");
   if (apiSecret === API_SECRET) {

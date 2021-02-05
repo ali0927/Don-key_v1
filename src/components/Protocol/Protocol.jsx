@@ -25,6 +25,7 @@ const Protocol = ({
     <li className={clsx("protocol-list-item", { dragging })}>
       <img
         src={icon}
+        style={{maxWidth: 58}}
         draggable
         id={name}
         onDragStart={(e) => {

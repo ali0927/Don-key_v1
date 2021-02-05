@@ -77,7 +77,7 @@ export const generateGradientImage = (color1: string, color2: string) => {
   if(!ctx){
     return "";
   }
-  const grd = ctx.createLinearGradient(0, 0, 200, 0);
+  const grd = ctx.createLinearGradient(0, 0, 80, 0);
   grd.addColorStop(0, color1);
   grd.addColorStop(1, color2);
   ctx.fillStyle = grd;

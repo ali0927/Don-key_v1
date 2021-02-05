@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
 import { InputOutput } from "../ActionInputs/InputOutput";
@@ -283,7 +283,7 @@ const ActionsUIUnrwapped = ({
                 <CryptoInputSimple
                   label="Vault"
                   name="#"
-    
+
                   placeholder="Number"
                 />
                 <CryptoInputSimple

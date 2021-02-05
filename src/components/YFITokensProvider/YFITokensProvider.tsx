@@ -8,37 +8,40 @@ import { usePanel } from "components/Panel/Panel";
 
 const getTokenBalances = async (tokens: IToken[]) => {
     const tokenWithBalances = await Promise.all(tokens.map(async (token) => {
-      const web3 = await getWeb3() as Web3;
-      const addrss = await web3.eth.getCoinbase();
-      //@ts-ignore
-      var tokenInst = new web3.eth.Contract(abi,token.tokenAddress);
-  
-    const balance = await tokenInst.methods.balanceOf(addrss).call();
-        return {...token,balance}
-    } ))
-    return tokenWithBalances;
-  }
-const YFITokensContext = createContext<IToken[]>([]);
+        const web3 = await getWeb3() as Web3;
+        const addrss = await web3.eth.getCoinbase();
+        //@ts-ignore
+        var tokenInst = new web3.eth.Contract(abi, token.tokenAddress);
 
-export const YFITokensProvider: React.FC = ({children}) => {
+        const balance = await tokenInst.methods.balanceOf(addrss).call();
+        return { ...token, balance }
+    }))
+    return tokenWithBalances;
+}
+const YFITokensContext = createContext<IToken[]>([]);
+const GetYfiTokensContext = createContext<() => void>(() => {})
+
+
+export const YFITokensProvider: React.FC = ({ children }) => {
     const [yfiTokens, setTokens] = useState<IToken[]>([]);
-    const {enableBlur, disableBlur} = usePanel();
+    const { enableBlur, disableBlur } = usePanel();
+    const loadYfiTokens = async () => {
+        enableBlur()
+        try {
+            const res = await api.get("/api/v1/protocols/yfi");
+
+            const tokens = await getTokenBalances(res.data.data);
+            setTokens(tokens);
+
+            console.log(res.data.data);
+        } finally {
+            disableBlur()
+        }
+
+    }
     useEffect(() => {
-        (async () => {
-            enableBlur()
-            try {
-                const res = await api.get("/api/v1/protocols/yfi");
-      
-                const tokens = await getTokenBalances(res.data.data);
-                setTokens(tokens);
-          
-                console.log(res.data.data);
-            }finally {
-                disableBlur()
-            }
-            
-          })()
-    }, []);
+        loadYfiTokens()
+    }, [])
     return <YFITokensContext.Provider value={yfiTokens}>
         {children}
     </YFITokensContext.Provider>
@@ -46,8 +49,8 @@ export const YFITokensProvider: React.FC = ({children}) => {
 
 export const useYFITokens = () => useContext(YFITokensContext);
 
-export const withYFITokens = <T, >(Comp: React.ComponentType<T>) => {
-    const WithYFIprovider: React.FC<T> = (props)=> {
+export const withYFITokens = <T,>(Comp: React.ComponentType<T>) => {
+    const WithYFIprovider: React.FC<T> = (props) => {
         return <YFITokensProvider>
             <Comp {...props} />
         </YFITokensProvider>
