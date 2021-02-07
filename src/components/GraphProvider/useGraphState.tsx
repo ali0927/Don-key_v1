@@ -1,6 +1,6 @@
 import { IStrategy, IProtocol, IProtocolCell, IActionCell } from "interfaces";
 import { useRef } from "react";
-import { uuidv4 } from "../../helpers/helpers";
+import { generateGradientImage, uuidv4 } from "../../helpers/helpers";
 import { api } from "../../services/api";
 
 const saveStrategy = async (strategy: IStrategy) => {
@@ -14,6 +14,19 @@ const saveStrategy = async (strategy: IStrategy) => {
 };
 
 
+
+const formatImageData = (base64: string) => {
+  let data = "";
+  // Converts format of data url to cell style value for use in vertex
+  let semi = base64.indexOf(";");
+
+  if (semi > 0) {
+    data =
+      base64.substring(0, semi) +
+      base64.substring(base64.indexOf(",", semi + 1));
+  }
+  return data;
+}
 
 
 // const second = uuidv4();
@@ -37,15 +50,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
     let newVertex = {};
     const base64 = getProtocol(cell.protocol).base64;
 
-    let data = "";
-    // Converts format of data url to cell style value for use in vertex
-    let semi = base64.indexOf(";");
-
-    if (semi > 0) {
-      data =
-        base64.substring(0, semi) +
-        base64.substring(base64.indexOf(",", semi + 1));
-    }
+    let data = formatImageData(base64)
     graph.getModel().beginUpdate();
     try {
       newVertex = graph.insertVertex(
@@ -76,12 +81,13 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
     const graph = getGraph();
     const parent = graph.getDefaultParent();
 
-
+    const prevObj = getProtocol(previousCell.protocol);
+    const selectedObj = getProtocol(selectedProtocol.protocol);
 
     const vertexStyleAction =
       "shape=image;strokeWidth=2;fillColor=#4F4F4F;strokeColor=black;resizable=0;" +
       "gradientColor=#313130;fontColor=white;fontStyle=0;spacingTop=12;image=" +
-      cell.imageUrl;
+      formatImageData(generateGradientImage(prevObj.edgeColor, selectedObj.edgeColor));
 
     const x = cell.x;
     const y = cell.y;

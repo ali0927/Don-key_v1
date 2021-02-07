@@ -36,7 +36,7 @@ export const ProtocolsEdit = () => {
         setshowontoolbar(data.showOnToolbar === "1");
         setEdgeColor(data.edgeColor);
         setdescription(data.description);
-        setVertexImage(data.vertex);
+        setVertexImage(data.vertexImageURL);
         setIsReady(true);
       });
     }
