@@ -19,7 +19,6 @@ const getTokenBalances = async (tokens: IToken[]) => {
     return tokenWithBalances;
 }
 const YFITokensContext = createContext<IToken[]>([]);
-const GetYfiTokensContext = createContext<() => void>(() => {})
 
 
 export const YFITokensProvider: React.FC = ({ children }) => {
