@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
 model ProtocolActionProperties {
   id          Int     @id @default(autoincrement())
   actionId    Int?
@@ -145,4 +147,30 @@ model protocol_proto_map {
   protocol_id      Int
   next_protocol_id Int
   image            String
+}
+
+
+model pancakeSwapPairs {
+  id                                                                 Int               @id @default(autoincrement())
+  pair_contract                                                      String
+  base_symbol                                                        Int
+  quote_symbol                                                       Int
+  last_price                                                         Float
+  lastUpdated                                                        DateTime
+  base_token                                                  pancakeSwapTokens @relation(fields: [base_symbol], references: [id])
+  quote_token pancakeSwapTokens @relation("pancakeSwapPairs_quote_symbolTopancakeSwapTokens", fields: [quote_symbol], references: [id])
+
+  @@index([base_symbol], name: "base_token")
+  @@index([quote_symbol], name: "quote_token")
+}
+
+model pancakeSwapTokens {
+  id                                                                Int                @id @default(autoincrement())
+  name                                                              String
+  price                                                             Float
+  lastUpdated                                                       DateTime
+  pancakeSwapPairs                                                  pancakeSwapPairs[]
+  pancakeSwapPairs_pancakeSwapPairs_quote_symbolTopancakeSwapTokens pancakeSwapPairs[] @relation("pancakeSwapPairs_quote_symbolTopancakeSwapTokens")
+
+  @@index([name], name: "name")
 }
