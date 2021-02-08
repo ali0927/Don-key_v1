@@ -75,7 +75,7 @@ export type IActionCell = {
   y: number;
   isAction: boolean;
   x: number;
-  label: string;
+  actionName: string;
 };
 
 export type IStrategy = {

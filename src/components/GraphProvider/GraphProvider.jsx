@@ -150,11 +150,11 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     ];
   }
 
-  const insertAction = useCallback(() => {
+  const insertAction = useCallback((actionName = "ActionName") => {
     const selectedProtocol = getSelectedProtocol();
     const prevProtocol = getPrevProtocol();
-    const label = "Label"
-    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId, label);
+   
+    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId, actionName);
   }, []);
   useEffect(() => {
     const container = divRef.current;

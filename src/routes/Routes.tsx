@@ -29,10 +29,7 @@ export default function Routes() {
           <ProtectedRoute path="/farmers" children={<FarmersPage />} />
           <ProtectedRoute path="/myaccount" children={<MyAccount />} />
           <Route path="/strategy/new" children={<SelectTemplate />} />
-          <Route
-            path="/strategy/confirmation"
-            children={<StrategyConfirmation />}
-          />
+          <Route path="/strategy/confirmation" children={<StrategyConfirmation />} />
           <Route path="/notification" children={<NotificationPage />} />
         </Switch>
     </Router>

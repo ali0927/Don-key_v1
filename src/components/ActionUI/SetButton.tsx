@@ -1,12 +1,12 @@
 import React from "react";
 import {useGraphMethods} from "../GraphProvider/GraphProvider";
-export const SetButton = ({ protocol, lastProtocol, action }) => {
+export const SetButton = ({  action }: {action: string}) => {
 
-    const {insertAction,getProtocolByName} = useGraphMethods();
+    const {insertAction} = useGraphMethods();
 
     const handleClick = () => {
         
-        insertAction(lastProtocol.name,protocol.name);
+        insertAction(action);
 
     };
 
