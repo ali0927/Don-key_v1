@@ -22,7 +22,7 @@ export const apiMiddleware: Middleware = (store) => (next) => async (
         dispatch(onApiSuccess({ ...req ,data: res.data, statusCode: res.status, }));
         req.onDone && req.onDone(res);
       } catch (e) {
-        if ("response" in e) {
+        if (e.response) {
           console.log(e.response.status);
           if(e.response.status === 401){
             dispatch(doLogout())

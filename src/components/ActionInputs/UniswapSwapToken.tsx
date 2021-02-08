@@ -11,8 +11,7 @@ import { InputOutputPure } from "./InputOutput";
 
 
 export const UniswapSwapToken = ({
-    lastProtocol,
-    protocol,
+
 }: {
     lastProtocol: IProtocol;
     protocol: IProtocol;
@@ -33,7 +32,7 @@ export const UniswapSwapToken = ({
             enableBlur()
             try {
                 const res = await api.get("/api/v1/protocols/uni");
-                const data = res.data;
+                const data = res.data.data;
                 const web3 = await getWeb3() as Web3;
                 const chainId = await web3.eth.getChainId()
                 const curr = data.tokens.filter((item: any) => item.chainId === chainId).map((item: any) => {

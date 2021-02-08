@@ -1,7 +1,7 @@
 import cron from "node-cron";
 import { IJob } from "./IJob";
 import { PancakeCronJob } from "./PancakeCronJob";
-
+import moment from "moment";
 import { YearnCronJob } from "./YearnCronJob";
 
 
@@ -12,12 +12,15 @@ const scheduleJobs = () => {
     console.log("Scheduling Cron Jobs");
     Jobs.forEach(async ({job,schedule,runOnStart,JobName})  => {
         const newJob = async () => {
+            const startTime = moment();
             try {
-                console.log(`Running ${JobName} at `, new Date());
+                
+                console.log(`Running ${JobName} at `, startTime.format());
                 await job()
-                console.log(`Cron Job ${JobName} Completed at `, new Date());
+                const endTime = moment();
+                console.log(`Cron Job ${JobName} Completed in `, moment.duration(endTime.diff(startTime)).humanize());
             }catch(e){
-                console.log(`An Error Occured in  ${JobName}`, e, new Date());
+                console.log(`An Error Occured in  ${JobName}`, e, moment.duration(moment().diff(startTime)).humanize());
             }
             
         }
