@@ -9,26 +9,24 @@ import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
 import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
 import { NavBar3 } from "../../components/Navbar/NavBar";
 import "./main.scss";
-import {
-	getQueryParam,
-	uuidv4,
-} from "../../helpers/helpers";
+import { getQueryParam, uuidv4 } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { onApiRequest } from "actions/apiActions";
 import moreIcon from "./more.svg";
 import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsModal";
-
+import { AxiosResponse } from "axios";
+import { IProtocolFromAPI } from "interfaces";
 
 const Builder = () => {
 	const [panel, setPanel] = useState(null);
 	const [isModalOpen, , , toggleModal] = useToggle();
-	const [protocols, setProtocols] = useState([]);
+	const [protocols, setProtocols] = useState<IProtocolFromAPI[]>([]);
 	const closePanel = () => setPanel(null);
 
 	const history = useHistory();
 
-    const[showMoreProtocols, setShowMoreProtocols] = useState(false);
+	const [showMoreProtocols, setShowMoreProtocols] = useState(false);
 
 	const [strategy, setStrategy] = useState({
 		protocolCells: [
@@ -49,7 +47,7 @@ const Builder = () => {
 	const dispatch = useDispatch();
 
 	const getStrategy = () => {
-		return new Promise((res, rej) => {
+		return new Promise<AxiosResponse>((res, rej) => {
 			const strategy = getQueryParam("id");
 			dispatch(
 				onApiRequest({
@@ -63,7 +61,7 @@ const Builder = () => {
 	};
 
 	const createStrategy = () => {
-		return new Promise((res, rej) => {
+		return new Promise<AxiosResponse>((res, rej) => {
 			dispatch(
 				onApiRequest({
 					method: "POST",
@@ -75,7 +73,7 @@ const Builder = () => {
 		});
 	};
 	const getProtocols = () => {
-		return new Promise((res, rej) => {
+		return new Promise<AxiosResponse>((res, rej) => {
 			dispatch(
 				onApiRequest({
 					method: "GET",
@@ -113,10 +111,11 @@ const Builder = () => {
 		<>
 			<div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
 				<NavBar3 />
-                <MoreProtocolsModal 
-                    isOpen={showMoreProtocols}
-                    onClose={() => setShowMoreProtocols(false)}
-                />
+				<MoreProtocolsModal
+					protocols={protocols}
+					isOpen={showMoreProtocols}
+					onClose={() => setShowMoreProtocols(false)}
+				/>
 				{/* <img src={generateGradientImage("red", "blue")} /> */}
 				{protocols.length > 0 ? (
 					<GraphProvider
@@ -149,10 +148,15 @@ const Builder = () => {
 									);
 								}
 							)}
-                            <li>
-                                <hr />
-                            </li>
-							<li onClick={() => setShowMoreProtocols(true)} className={clsx("protocol-list-item cursor-pointer")}>
+							<li>
+								<hr />
+							</li>
+							<li
+								onClick={() => setShowMoreProtocols(true)}
+								className={clsx(
+									"protocol-list-item cursor-pointer"
+								)}
+							>
 								<img src={moreIcon} style={{ maxWidth: 58 }} />
 							</li>
 						</ProtocolBar>

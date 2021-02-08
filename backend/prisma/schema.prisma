@@ -8,7 +8,6 @@ datasource db {
 }
 
 
-
 model ProtocolActionProperties {
   id          Int     @id @default(autoincrement())
   actionId    Int?
@@ -42,6 +41,7 @@ model Protocols {
   mediumImageURL  String?
   protocolMaps protocol_proto_map[]
   actions ProtocolActions[]
+  protocol_category_relation protocol_category_relation[]
 }
 
 model Strategies {
@@ -174,3 +174,23 @@ model pancakeSwapTokens {
 
   @@index([name], name: "name")
 }
+
+
+
+model protocol_categories {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @unique
+  protocol_category_relation protocol_category_relation[]
+}
+
+model protocol_category_relation {
+  id                  Int                 @id @default(autoincrement())
+  protocol_id         Int
+  category_id         Int
+  protocol_categories protocol_categories @relation(fields: [category_id], references: [id])
+  Protocols           Protocols           @relation(fields: [protocol_id], references: [id])
+
+  @@index([category_id], name: "category")
+  @@index([protocol_id], name: "protocol_cat")
+}
+

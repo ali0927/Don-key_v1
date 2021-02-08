@@ -67,6 +67,21 @@ export type IProtocolCell = {
   vertex: any | null;
 };
 
+
+export type IProtocolFromAPI = {
+	base64: string;
+	description: string;
+	edgeColor: string;
+	id: number;
+	mediumImageURL: string | null;
+	name: string;
+	showOnToolbar: "1" | "0";
+	toolbarImageURL: string;
+	vertexImageURL: string;
+	website: string;
+	actions: any[];
+};
+
 export type IActionCell = {
   vertex: any | null;
   prevProtocolCellId: string;
