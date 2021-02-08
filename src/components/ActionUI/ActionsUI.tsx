@@ -25,7 +25,7 @@ const ActionsUIUnrwapped = ({
   onSelect,
   protocol,
   lastProtocol,
-}: {icon: any, selectedAction: string; onSelect:any; protocol: any; lastProtocol: any}) => {
+}: {icon: any, selectedAction: string | null; onSelect:any; protocol: any; lastProtocol: any}) => {
   const yfiTokens = useYFITokens();
   if (yfiTokens.length === 0) {
     return <></>;

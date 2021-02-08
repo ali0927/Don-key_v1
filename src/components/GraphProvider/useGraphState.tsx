@@ -110,7 +110,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
       .edgeColor;
 
     graph.getModel().beginUpdate();
-
+    graph.model.setValue(actionVertex, cell.actionName);
     try {
       //TODO: SHOULD STORE EDGES
       graph.insertEdge(

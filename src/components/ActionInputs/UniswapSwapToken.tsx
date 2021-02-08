@@ -104,8 +104,6 @@ export const UniswapSwapToken = ({
                 }}
             />
             <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action="SwapToken"
             />
         </div>
