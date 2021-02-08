@@ -6,7 +6,7 @@ const YearnVault = prisma.yearn_vaults;
 
 export const YearnCronJob: IJob = {
 	schedule: "0 */4 * * *",
-	runOnStart: false,
+	runOnStart: true,
     JobName:"Yearn Cron Job",
 	job: async () => {
 		const resp = await axios.get("https://api.yearn.tools/vaults?apy=true");

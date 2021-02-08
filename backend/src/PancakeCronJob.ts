@@ -19,7 +19,6 @@ export const PancakeCronJob: IJob = {
 
 		for (let i = 0; i < tokens.length; i++) {
             const name = tokens[i]
-            console.log("Adding", name);
 			const exists = await PancakeTokens.findFirst({
 				where: { name },
 			});
@@ -50,7 +49,6 @@ export const PancakeCronJob: IJob = {
 			const pair = tradePairs[i];
 			const base_symbol = pair.base_symbol;
 			const quote_symbol = pair.quote_symbol;
-            console.log("Pair ", i + 1)
 			const exists1 = await PancakeTokens.findFirst({
 				where: { name: base_symbol },
 			});
