@@ -1,0 +1,58 @@
+.pool_value {
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.investment_title {
+    font-size: 20px;
+}
+
+.performance_title {
+    font-size: 12px;
+    text-align: right;
+}
+
+.performance_title_icon {
+    color: rgba(0,0,0,0.6);
+    top: -2px;
+    position: relative;
+}
+
+.graph_duration {
+    font-weight: 500;
+    cursor: pointer;
+    &.active {
+        font-weight: 700;
+        border-bottom: 3px solid #222;
+    }
+}
+.graph_date {
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.graph_date_sub {
+    color: rgba(34,34,34,0.6);
+}
+
+.tab_item {
+    cursor: pointer;
+    margin-right: 50px;
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 4px solid transparent;
+    transition: all 0.3s linear;
+    &:hover {
+        border-bottom: 4px solid #222;
+    }
+    &.active {
+        border-bottom: 4px solid #222;
+    }
+}
+.tab_item_icon {
+    margin-right: 4px;
+}
+.tab_item_text {
+    font-weight: bold;
+}
