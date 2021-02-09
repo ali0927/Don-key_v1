@@ -1,6 +1,6 @@
 import { Button, Paper, TextField } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
-import { Logo } from "./Logo";
+import { Logo } from "../components/Logo";
 
 const Login = () => {
 

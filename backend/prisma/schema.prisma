@@ -66,15 +66,16 @@ model Strategies {
 }
 
 model Users {
-  id            Int          @id @default(autoincrement())
-  walletAddress String?      @unique
-  created       DateTime?
-  lastUpdate    DateTime?
-  avatarURL     String?
-  username      String?
-  description   String?
-  GUID          String       @unique
-  Strategies    Strategies[]
+  id                Int          @id @default(autoincrement())
+  walletAddress     String?      @unique
+  createdAt         DateTime?    @default(now())
+  updatedAt         DateTime?    @default(now())
+  avatarURL         String?
+  username          String?
+  description       String?
+  GUID              String       @unique
+  buru_token_minted Int?
+  Strategies        Strategies[]
 }
 
 model accounts {

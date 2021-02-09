@@ -1,6 +1,6 @@
 import {  Typography } from "@material-ui/core";
 import { SiderbarItem } from "components/SidebarItem";
-import { Logo } from "pages/Logo";
+import { Logo } from "components/Logo";
 import React from "react";
 
 export const DashboardLayout: React.FC<{ title: string, button?: React.ReactElement }> = ({

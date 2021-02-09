@@ -5,8 +5,8 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Loader } from "rsuite";
-import { useInputState } from "./useInputState";
-import { useToastContext } from "./useToastContext";
+import { useInputState } from "../hooks/useInputState";
+import { useToastContext } from "../hooks/useToastContext";
 
 export const ProtocolsEdit = () => {
   const { id } = useParams<{ id: string }>();

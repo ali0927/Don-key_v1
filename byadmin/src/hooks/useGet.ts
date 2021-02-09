@@ -1,7 +1,7 @@
 import { api } from "helpers/api";
 import { useEffect, useState } from "react";
 
-export const useGet = <T>(url: string, defaultVal: T) => {
+export const useGet = <T>(url: string, defaultVal: T, dependsOn: any[] = []) => {
   const [state, setState] = useState<T>(defaultVal);
 
   const [error, setError] = useState<any>(null);
@@ -23,7 +23,7 @@ export const useGet = <T>(url: string, defaultVal: T) => {
   useEffect(() => {
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, dependsOn);
 
   return { data: state, error: error, loading, refetchData: fetchData };
 };

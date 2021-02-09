@@ -1,12 +1,12 @@
 import { Button } from "@material-ui/core";
 import { DashboardLayout } from "components/DashboardLayout";
+import { TableEditDeleteCell } from "components/TableEditDeleteCell";
 import { api } from "helpers/api";
 import { useGet } from "hooks/useGet";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { Modal, Table } from "rsuite";
-import { protocolList } from "./protocolsJson";
-import { useToastContext } from "./useToastContext";
+import { useToastContext } from "../hooks/useToastContext";
 
 const { Column, Cell, HeaderCell } = Table;
 
@@ -45,6 +45,9 @@ const DialogComp = ({
   );
 };
 
+
+
+
 const ProtocolActions = ({ rowData, reload }: any) => {
   const history = useHistory();
   const [open, setOpen] = useState(false);
@@ -61,23 +64,13 @@ const ProtocolActions = ({ rowData, reload }: any) => {
     }
   };
   return (
-    <div
-      style={{ fontSize: 10, height: "100%" }}
-      className="d-flex  justify-content-around"
-    >
-      <div
-        onClick={() => history.push(`/protocols/edit/${rowData.id}`)}
-        className="cursor-pointer d-flex align-items-center"
-      >
-        <i className="fa fa-pencil-alt" />
-      </div>
-      <div
-        onClick={() => setOpen(true)}
-        className="cursor-pointer d-flex align-items-center"
-      >
-        <i className="fa fa-trash-alt" />
-      </div>
-
+    
+    < >
+      <TableEditDeleteCell 
+        onEdit={() => history.push(`/protocols/edit/${rowData.id}`)}
+        onDelete={() => setOpen(true)}
+      />
+      
       <DialogComp
         title="Are you sure ?"
         description="Deleting Protocol"
@@ -85,7 +78,8 @@ const ProtocolActions = ({ rowData, reload }: any) => {
         open={open}
         onSuccess={handleDelete}
       />
-    </div>
+
+    </>
   );
 };
 
@@ -174,7 +168,7 @@ const ProtocolTable = ({
 };
 
 export const Protocol = () => {
-  const { data, loading, refetchData } = useGet<{data: typeof protocolList}>(
+  const { data, loading, refetchData } = useGet<{data: any}>(
     "/api/v1/protocols",
     {data: []}
   );
