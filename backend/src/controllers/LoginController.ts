@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { recoverPersonalSignature } from "eth-sig-util";
 import { bufferToHex } from "ethereumjs-util";
 import { prisma } from "../database";
-import { uuidv4, verifyToken } from "../helpers";
+import { uuidv4 } from "../helpers";
 import { JWT_SECRET } from "../env";
 import { sendResponse } from "../helpers/sendResponse";
 
@@ -21,33 +21,18 @@ export class LoginController {
             }
             let [user] = await Users.findMany({ where: { walletAddress } });
             if (!user) {
-                const time = new Date();
                 user = await Users.create({
-                    data: { walletAddress, GUID: uuidv4(), created: time, lastUpdate: time },
+                    data: { walletAddress, GUID: uuidv4() },
                 });
             }
-            const token = jwt.sign(
-                { walletAddress, GUID: user.GUID, uid: user.id },
-                JWT_SECRET,
-                { expiresIn: "1d", algorithm: "HS256" }
-            );
+         
 
-            return sendResponse(res, { data: { nonce: user.GUID, token } });
+            return sendResponse(res, { data: { nonce: user.GUID } });
         } catch (e) {
             res.status(500).send({ data: null, user: null, error: e.message });
         }
     };
 
-
-    static verifyToken: RequestHandler = async (req, res) => {
-        const {token} = req.body;
-        try {
-            const user = verifyToken(token);
-            sendResponse(res,{user })
-        }catch(e){
-            sendResponse(res, {code: 400,error: {msg: "Invalid Token"}});
-        }
-    }
 
 
     static handleSignIn: RequestHandler = async (req, res) => {

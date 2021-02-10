@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, {useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
 import { InputOutput } from "../ActionInputs/InputOutput";
@@ -25,7 +25,7 @@ const ActionsUIUnrwapped = ({
   onSelect,
   protocol,
   lastProtocol,
-}: any) => {
+}: {icon: any, selectedAction: string | null; onSelect:any; protocol: any; lastProtocol: any}) => {
   const yfiTokens = useYFITokens();
   if (yfiTokens.length === 0) {
     return <></>;
@@ -40,8 +40,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper">
               <InputOutput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -62,8 +60,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper">
               <UniswapInput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -74,8 +70,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper">
               <UniswapInputReverse />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -92,8 +86,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper">
               <InputOutput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -112,8 +104,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper">
               <InputOutput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -135,8 +125,6 @@ const ActionsUIUnrwapped = ({
                 placeholder="Amount"
               />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -152,8 +140,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <CurveInput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -164,8 +150,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -176,8 +160,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <CurveLiquidity />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -188,8 +170,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <InputOutput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -200,8 +180,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <InputOutput noOutput />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -223,8 +201,6 @@ const ActionsUIUnrwapped = ({
                 placeholder="0"
               />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -240,8 +216,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <CurveInput noPrev />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -252,8 +226,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <BalancerAddLiquidity />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -264,8 +236,6 @@ const ActionsUIUnrwapped = ({
             <div className="action-wrapper py-4">
               <BalancerRemoveLiquidity />
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -283,7 +253,7 @@ const ActionsUIUnrwapped = ({
                 <CryptoInputSimple
                   label="Vault"
                   name="#"
-    
+
                   placeholder="Number"
                 />
                 <CryptoInputSimple
@@ -309,8 +279,6 @@ const ActionsUIUnrwapped = ({
               </div>
 
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -349,8 +317,6 @@ const ActionsUIUnrwapped = ({
                 </div>
               </div>
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -387,8 +353,6 @@ const ActionsUIUnrwapped = ({
                 </div>
               </div>
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>
@@ -425,8 +389,6 @@ const ActionsUIUnrwapped = ({
                 </div>
               </div>
               <SetButton
-                lastProtocol={lastProtocol}
-                protocol={protocol}
                 action={selectedAction}
               />
             </div>

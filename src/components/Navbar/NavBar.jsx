@@ -6,8 +6,9 @@ import { Navbar, Nav, Dropdown } from "react-bootstrap";
 import "./NavbarStyle.scss";
 import NotificationJson from "../../JsonData/NotificationJson";
 import { NotificationIcon, UserIcon } from "../Icons";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import clsx from "clsx";
 
 const shortenAddress = (val) => {
   return val.slice(0, 4) + "..." + val.slice(-4);
@@ -31,7 +32,7 @@ function NavBar(props) {
               src="/assets/images/logo.svg"
               className="d-inline-block align-top by-logo"
               alt="Logo"
-            
+
             />
           </Link>
         </Navbar.Brand>
@@ -92,6 +93,17 @@ function timeSince(date) {
   }
   return Math.floor(seconds) + " seconds ago";
 }
+
+
+const NavbarLink = ({ to, children }) => {
+
+  const { pathname } = useLocation();
+
+  return <Link className={clsx("colorBlack pr-md-5", { active: pathname === to })} component={Nav.Link} to={to}>
+    {children}
+  </Link>
+}
+
 function NavBar2(props) {
   const address = useWalletAddress({ short: true });
   return (
@@ -109,15 +121,18 @@ function NavBar2(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-            <Nav.Link href="/resource" className="colorBlack pr-md-5">
+            <NavbarLink to="/resources">
               Resources
-            </Nav.Link>
-            <Nav.Link href="/farmers" className="colorBlack pr-md-5 active">
+            </NavbarLink>
+            <NavbarLink to="/myaccount_new">
+              My Investment
+            </NavbarLink>
+            <NavbarLink to="/farmers">
               Farmers
-            </Nav.Link>
-            <Nav.Link href="#" className="colorBlack">
+            </NavbarLink>
+            <NavbarLink to="/developers">
               Developers
-            </Nav.Link>
+            </NavbarLink>
           </Nav>
         </Navbar.Collapse>
 

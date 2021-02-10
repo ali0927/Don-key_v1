@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model ProtocolActionProperties {
   id          Int     @id @default(autoincrement())
   actionId    Int?
@@ -40,6 +41,7 @@ model Protocols {
   mediumImageURL  String?
   protocolMaps protocol_proto_map[]
   actions ProtocolActions[]
+  protocol_category_relation protocol_category_relation[]
 }
 
 model Strategies {
@@ -64,15 +66,16 @@ model Strategies {
 }
 
 model Users {
-  id            Int          @id @default(autoincrement())
-  walletAddress String?      @unique
-  created       DateTime?
-  lastUpdate    DateTime?
-  avatarURL     String?
-  username      String?
-  description   String?
-  GUID          String       @unique
-  Strategies    Strategies[]
+  id                Int          @id @default(autoincrement())
+  walletAddress     String?      @unique
+  createdAt         DateTime?    @default(now())
+  updatedAt         DateTime?    @default(now())
+  avatarURL         String?
+  username          String?
+  description       String?
+  GUID              String       @unique
+  buru_token_minted Int?
+  Strategies        Strategies[]
 }
 
 model accounts {
@@ -146,3 +149,49 @@ model protocol_proto_map {
   next_protocol_id Int
   image            String
 }
+
+
+model pancakeSwapPairs {
+  id                                                                 Int               @id @default(autoincrement())
+  pair_contract                                                      String
+  base_symbol                                                        Int
+  quote_symbol                                                       Int
+  last_price                                                         Float
+  lastUpdated                                                        DateTime
+  base_token                                                  pancakeSwapTokens @relation(fields: [base_symbol], references: [id])
+  quote_token pancakeSwapTokens @relation("pancakeSwapPairs_quote_symbolTopancakeSwapTokens", fields: [quote_symbol], references: [id])
+
+  @@index([base_symbol], name: "base_token")
+  @@index([quote_symbol], name: "quote_token")
+}
+
+model pancakeSwapTokens {
+  id                                                                Int                @id @default(autoincrement())
+  name                                                              String
+  price                                                             Float
+  lastUpdated                                                       DateTime
+  pancakeSwapPairs                                                  pancakeSwapPairs[]
+  pancakeSwapPairs_pancakeSwapPairs_quote_symbolTopancakeSwapTokens pancakeSwapPairs[] @relation("pancakeSwapPairs_quote_symbolTopancakeSwapTokens")
+
+  @@index([name], name: "name")
+}
+
+
+
+model protocol_categories {
+  id                         Int                          @id @default(autoincrement())
+  name                       String                       @unique
+  protocol_category_relation protocol_category_relation[]
+}
+
+model protocol_category_relation {
+  id                  Int                 @id @default(autoincrement())
+  protocol_id         Int
+  category_id         Int
+  protocol_categories protocol_categories @relation(fields: [category_id], references: [id])
+  Protocols           Protocols           @relation(fields: [protocol_id], references: [id])
+
+  @@index([category_id], name: "category")
+  @@index([protocol_id], name: "protocol_cat")
+}
+

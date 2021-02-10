@@ -142,14 +142,19 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     graph.removeCells(graph.getChildVertices(graph.getDefaultParent()));
   });
 
-  const insertAction = useCallback(() => {
-    let selectedProtocol = getSelectedProtocol();
-    const prevProtocol = getProtocolCells()[
+  const getPrevProtocol = () => {
+    return getProtocolCells()[
       getProtocolCells().findIndex(
-        (item) => item.protocolId === selectedProtocol.protocolId
+        (item) => item.protocolId === getSelectedProtocol().protocolId
       ) - 1
     ];
-    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId);
+  }
+
+  const insertAction = useCallback((actionName = "ActionName") => {
+    const selectedProtocol = getSelectedProtocol();
+    const prevProtocol = getPrevProtocol();
+   
+    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId, actionName);
   }, []);
   useEffect(() => {
     const container = divRef.current;

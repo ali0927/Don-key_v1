@@ -15,6 +15,7 @@ import Builder from "../Pages/Builder";
 import SelectTemplate from "../Pages/SelectTemplate";
 import StrategyConfirmation from "../Pages/StrategyConfirmation";
 import { ProtectedRoute } from "components/ProtectedRoute";
+import { MyAccountNew } from "Pages/MyAccountNew/MyAccountNew";
 
 
 export default function Routes() {
@@ -28,11 +29,9 @@ export default function Routes() {
           <Route path="/resource" children={<ResourcePage />} />
           <ProtectedRoute path="/farmers" children={<FarmersPage />} />
           <ProtectedRoute path="/myaccount" children={<MyAccount />} />
+          <Route path="/myaccount_new"><MyAccountNew /></Route>
           <Route path="/strategy/new" children={<SelectTemplate />} />
-          <Route
-            path="/strategy/confirmation"
-            children={<StrategyConfirmation />}
-          />
+          <Route path="/strategy/confirmation" children={<StrategyConfirmation />} />
           <Route path="/notification" children={<NotificationPage />} />
         </Switch>
     </Router>

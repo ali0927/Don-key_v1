@@ -22,6 +22,8 @@ import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
 import { waitFor } from "../../helpers/helpers";
 import { Loader } from "components/Loader/Loader";
+import { useDispatch } from "react-redux";
+import { onApiRequest } from "actions/apiActions";
 
 const MyAccount = () => {
   const history = useHistory();
@@ -37,16 +39,19 @@ const MyAccount = () => {
     setShow(!show);
     setTarget(event.target);
   };
-
+  const dispatch = useDispatch();
   useEffect(() => {
-    Promise.all([api.get("/api/v1/accounts/1"), waitFor(2000)])
-      .then(([res]) => {
-        setAccountDetail(res.data);
-        setIsReady(true);
+    dispatch(
+      onApiRequest({
+        method: "GET",
+        endpoint: "/api/v1/accounts/1",
+        onDone: (res) => {
+          setAccountDetail(res.data.data);
+          setIsReady(true);
+        },
       })
-      .catch(() => {
-        setIsReady(true);
-      });
+    );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
