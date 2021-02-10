@@ -104,7 +104,7 @@ const LandingPage = () => {
              Painless DeFi
             </h3>
             <Row>
-              <Col md={3}>
+              <Col md={4}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Build your strategy</Card.Title>
@@ -115,7 +115,7 @@ const LandingPage = () => {
                 </Card>
               </Col>
 
-              <Col md={3}>
+              <Col md={4}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Get liquidity</Card.Title>
@@ -126,19 +126,7 @@ const LandingPage = () => {
                   </Card.Body>
                 </Card>
               </Col>
-
-              <Col md={3}>
-                <Card>
-                  <Card.Body>
-                    <Card.Title>Follow traders</Card.Title>
-                    <Card.Text className="mt-4">
-                      Make commission on your yields and get extra bonuses based
-                      on your ranks and performance
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </Col>
-              <Col md={3}>
+              <Col md={4}>
                 <Card>
                   <Card.Body>
                     <Card.Title>Boost your yield</Card.Title>
