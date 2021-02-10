@@ -104,10 +104,10 @@ const LandingPage = () => {
         <div className="borderCurve"></div>
         <div className="advantage bgyellowColor">
           <Container>
-            <h3 className="headsame mb-3 mt-5 justify-content-center">
+            <h3 className="headsame mb-3 my-5 justify-content-center">
              Painless DeFi
             </h3>
-            <Row>
+            <Row className="pt-5">
               <Col md={4}>
                 <Card>
                   <Card.Body>
