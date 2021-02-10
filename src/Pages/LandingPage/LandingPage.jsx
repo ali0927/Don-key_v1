@@ -22,7 +22,7 @@ const LandingPage = () => {
               Outsmart DeFi
                 </h1>
                 <p className="mt-4">
-                  Create your DeFi strategy with a few clicks, top-up your liquidity and your knowledge.
+                  Create your DeFi strategy with a few clicks, top-up your liquidity and profits.
                 </p>
                 <div className="mt-5">
                   <ButtonComponent className="btnYellow">
