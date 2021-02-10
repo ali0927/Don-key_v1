@@ -7,6 +7,10 @@ import "./LandingStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
 import NumberFromjson from "../../JsonData/NumberFromJson";
 import ListofFarmerjson from "../../JsonData/ListofFarmerJson";
+import boostyield from "./boost-yield.png";
+import buildStrategy from "./build-strategy.png";
+import getLiquidity from "./get-liquidity.png";
+
 const LandingPage = () => {
  return (
     <div>
@@ -107,6 +111,7 @@ const LandingPage = () => {
               <Col md={4}>
                 <Card>
                   <Card.Body>
+                    <img className="advantage-img" src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-4">
                       The most user friendly interface in the DeFi space. create complicated strategies with 0 code.
@@ -118,6 +123,7 @@ const LandingPage = () => {
               <Col md={4}>
                 <Card>
                   <Card.Body>
+                  <img className="advantage-img"  src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
                     <Card.Text className="mt-4">
                       Сlimb up the rank ladder and get up to 1M USD budget for
@@ -129,6 +135,7 @@ const LandingPage = () => {
               <Col md={4}>
                 <Card>
                   <Card.Body>
+                  <img className="advantage-img"  src={boostyield} />
                     <Card.Title>Boost your yield</Card.Title>
                     <Card.Text className="mt-4">
                       Make commission on your yields and get extra bonuses based
