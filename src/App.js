@@ -6,37 +6,38 @@ import { TooltipProvider } from "./components/TooltipProvider";
 import { AuthToken } from "./constants";
 import Routes from "./routes/Routes";
 import { getAuthTokenForPublicAddress } from "./services/api";
-// import { Web3ReactProvider } from "@web3-react/core";
-// // import your favorite web3 convenience library here
-
-// function getLibrary(provider, connector) {
-//   return new Web3Provider(provider); // this will vary according to whether you use e.g. ethers or web3.js
-// }
+import { Web3ReactProvider } from "@web3-react/core";
+import { Web3Provider } from "@ethersproject/providers";
+function getLibrary(provider) {
+    return new Web3Provider(provider);
+}
 function App() {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (typeof window !== "undefined" && window.ethereum) {
-      window.ethereum.on("accountsChanged", async function (accounts) {
-        // Time to reload your interface with accounts[0]!
-        console.log(accounts[0]);
-        const { token, user } = await getAuthTokenForPublicAddress(accounts[0]);
-        localStorage.setItem(AuthToken, token);
-        dispatch(doLogin(user));
-      });
-    }
-  }, [dispatch]);
-  return (
-    <div>
-      <NotificationProvider>
-        <TooltipProvider>
-         
-            <Routes />
-          
-        </TooltipProvider>
-      </NotificationProvider>
-    </div>
-  );
+    useEffect(() => {
+        if (typeof window !== "undefined" && window.ethereum) {
+            window.ethereum.on("accountsChanged", async function (accounts) {
+                // Time to reload your interface with accounts[0]!
+                console.log(accounts[0]);
+                const { token, user } = await getAuthTokenForPublicAddress(
+                    accounts[0]
+                );
+                localStorage.setItem(AuthToken, token);
+                dispatch(doLogin(user));
+            });
+        }
+    }, [dispatch]);
+    return (
+        <div>
+            <Web3ReactProvider getLibrary={getLibrary}>
+                <NotificationProvider>
+                    <TooltipProvider>
+                        <Routes />
+                    </TooltipProvider>
+                </NotificationProvider>
+            </Web3ReactProvider>
+        </div>
+    );
 }
 
 export default App;

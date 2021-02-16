@@ -24,7 +24,7 @@ export const NotificationProvider = ({ children }) => {
  * useNotification
  * 
  * @param {*} { children }
- * @return {{showNotification: () => void}}  
+ * @return {{showNotification: (val: any) => void}}  
  *
  */
 export const useNotification = () => useContext(NotificationContext);
