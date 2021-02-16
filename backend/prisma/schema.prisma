@@ -7,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model ProtocolActionProperties {
   id          Int     @id @default(autoincrement())
   actionId    Int?
@@ -39,7 +38,6 @@ model Protocols {
   description     String?
   vertexImageURL  String?
   mediumImageURL  String?
-  protocolMaps protocol_proto_map[]
   actions ProtocolActions[]
   protocol_category_relation protocol_category_relation[]
 }
@@ -78,78 +76,12 @@ model Users {
   Strategies        Strategies[]
 }
 
-model accounts {
-  id                Int      @id @default(autoincrement())
-  picture           String?
-  name              String?
-  description       String?
-  buru_token_minted Int?
-  createdAt         DateTime
-  updatedAt         DateTime
-}
-
-model farmers {
-  id              Int      @id @default(autoincrement())
-  picture         String?
-  name            String?
-  description     String?
-  chart_image_url String?
-  apy             String?
-  strategies      String?
-  nb_farmers      Int?
-  budget          Int?
-  age             Int?
-  buru_token      Int?
-  chart_url       String?
-  createdAt       DateTime
-  updatedAt       DateTime
-}
-
 model notifications {
   id           Int      @id @default(autoincrement())
   notification String?
   createdAt    DateTime
   updatedAt    DateTime
 }
-
-model numbers {
-  id        Int      @id @default(autoincrement())
-  number    Int?
-  title     String?
-  createdAt DateTime
-  updatedAt DateTime
-}
-
-
-
-model yearn_vaults {
-  id                    Int      @id @default(autoincrement())
-  tokenIcon             String
-  symbol                String
-  name                  String   @unique
-  tokenName             String
-  tokenSymbol           String
-  address               String?
-  strategyName          String
-  tokenAddress          String?
-  vaultIcon             String?
-  apy_tokenAddress      String?  @map("apy.tokenAddress")
-  apy_apyOneMonthSample Float    @map("apy.apyOneMonthSample")
-  apy_symbol            String   @map("apy.symbol")
-  apy_apyOneWeekSample  Float    @map("apy.apyOneWeekSample")
-  apy_description       String   @map("apy.description")
-  timestamp             DateTime @default(now())
-}
-
-model protocol_proto_map {
-  id               Int    @id @default(autoincrement())
-  protocol         Protocols  @relation(fields: [protocol_id], references: [id])
-  next_protocol    Protocols  @relation(name: "prev",fields: [next_protocol_id], references: [id])
-  protocol_id      Int
-  next_protocol_id Int
-  image            String
-}
-
 
 model pancakeSwapPairs {
   id                                                                 Int               @id @default(autoincrement())
@@ -176,8 +108,6 @@ model pancakeSwapTokens {
   @@index([name], name: "name")
 }
 
-
-
 model protocol_categories {
   id                         Int                          @id @default(autoincrement())
   name                       String                       @unique
@@ -195,3 +125,21 @@ model protocol_category_relation {
   @@index([protocol_id], name: "protocol_cat")
 }
 
+model yearn_vaults {
+  id                    Int      @id @default(autoincrement())
+  tokenIcon             String
+  symbol                String
+  address               String?
+  name                  String   @unique
+  tokenName             String
+  tokenSymbol           String
+  strategyName          String
+  tokenAddress          String?
+  vaultIcon             String?
+  apy_tokenAddress      String?  @map("apy.tokenAddress")
+  apy_apyOneMonthSample Float    @map("apy.apyOneMonthSample")
+  apy_symbol            String   @map("apy.symbol")
+  apy_apyOneWeekSample  Float    @map("apy.apyOneWeekSample")
+  apy_description       String   @map("apy.description")
+  timestamp             DateTime @default(now())
+}

@@ -21,8 +21,9 @@ export class LoginController {
             }
             let [user] = await Users.findMany({ where: { walletAddress } });
             if (!user) {
+                const date = new Date();
                 user = await Users.create({
-                    data: { walletAddress, GUID: uuidv4() },
+                    data: { walletAddress, GUID: uuidv4(), createdAt: date, updatedAt: date},
                 });
             }
          

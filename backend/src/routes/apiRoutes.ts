@@ -1,72 +1,64 @@
 import { Router } from "express";
-import { AccountsController } from "../controllers/AccountsController";
-import { FarmerController } from "../controllers/FarmerController";
 
 import { NotificationController } from "../controllers/NotificationsController";
-import { NumberController } from "../controllers/NumbersController";
 import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
-
-
-
+import { UsersController } from "../controllers/UsersController";
 
 const apiRoutes = Router();
 
-
-
-
-
-apiRoutes.route("/farmers")
-    .get(FarmerController.getFarmersData)
-    .post(FarmerController.createFarmer);
-apiRoutes.route("/farmers/:id")
-    .put(FarmerController.updateFarmer)
-    .delete(FarmerController.deleteFarmer);
-
-apiRoutes.get("/farmerslist", FarmerController.getListOfFarmers);
-
-
-apiRoutes.route("/notifications")
+apiRoutes
+    .route("/notifications")
     .get(NotificationController.getNotifications)
     .post(NotificationController.createNotification)
     .put(NotificationController.updateNotification)
     .delete(NotificationController.deleteNotification);
 
-apiRoutes.route("/numbers")
-    .get(NumberController.getNumbers)
-    .post(NumberController.createNumber)
-    .put(NumberController.updateNumber)
-    .delete(NumberController.deleteNumber);
-
-apiRoutes.route("/strategies")
+apiRoutes
+    .route("/strategies")
     .get(StrategiesController.getStrategies)
     .post(StrategiesController.createStrategies)
     .put(StrategiesController.updateStrategies)
     .delete(StrategiesController.deleteStrategies);
 
+apiRoutes
+    .route("/users")
+    .get(UsersController.getUsers)
+    .post(UsersController.createUser);
 
+apiRoutes
+    .route("/users/:id")
+    .get(UsersController.getUsersById)
+    .put(UsersController.updateUser)
+    .delete(UsersController.deleteUser);
 
-apiRoutes.get("/accounts/:id", AccountsController.getAccountById);
-
-
-apiRoutes.route("/accounts")
-    .get(AccountsController.getAccounts)
-    .post(AccountsController.createAccount)
-    .put(AccountsController.updateAccount)
-    .delete(AccountsController.deleteAccount);
-
-
-
-apiRoutes.route('/protocols')
+apiRoutes
+    .route("/protocols")
     .get(ProtocolsController.getProtocols)
     .post(ProtocolsController.createProtocols);
 
+apiRoutes
+    .route("/categories")
+    .get(ProtocolsController.getProtocolCategories)
+    .post(ProtocolsController.createCategory);
 
-apiRoutes.route('/protocols/:id')
+apiRoutes
+    .route("/categories/:categoryId")
+    .get(ProtocolsController.getProtocolByCategoryId);
+
+apiRoutes
+    .route("/categories/:categoryid/protocols/:protocolid")
+    .put(ProtocolsController.addProtocolToCategory)
+    .delete(ProtocolsController.deleteProtocolFromCat)
+    
+apiRoutes
+    .route("/protocols/:id")
     .get(ProtocolsController.getProtocols)
     .delete(ProtocolsController.deleteProtocols)
     .put(ProtocolsController.updateProtocols);
-    
 
+apiRoutes
+    .route("/protocols/:id/categories")
+    .put(ProtocolsController.addProtocolToCategories);
 
-export { apiRoutes }
+export { apiRoutes };
