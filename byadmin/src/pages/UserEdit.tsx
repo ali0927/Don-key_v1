@@ -10,7 +10,7 @@ import { Loader } from "rsuite";
 
 export const UserEdit = () => {
     const { id } = useParams<{ id: string }>();
-    const { loading: isCreating, post } = usePost<Partial<IUserFromApi>>(
+    const { sending: isCreating, post } = usePost<Partial<IUserFromApi>>(
         `/api/v1/users`
     );
     const {
@@ -22,7 +22,7 @@ export const UserEdit = () => {
         [id]
     );
     const history = useHistory();
-    const { loading: isUpdating, put } = usePut<Partial<IUserFromApi>>(
+    const { sending: isUpdating, put } = usePut<Partial<IUserFromApi>>(
         `/api/v1/users/${id}`
     );
 

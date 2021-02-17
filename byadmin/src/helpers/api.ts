@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 export const api = axios.create({
-    baseURL: "https://api.by.finance",
+    baseURL: "http://localhost:5000",
     headers: {
         "X-Api-Secret": "supersecret"
     }

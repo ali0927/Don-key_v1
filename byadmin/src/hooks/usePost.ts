@@ -13,10 +13,11 @@ export const usePost = <T>(url: string) => {
         return res;
       } catch (e) {
         setError(e);
+        throw e;
       } finally {
         setLoading(false);
       }
     }, [url]);
 
-    return {  error: error, loading, post };
+    return {  error: error, sending: loading, post };
 }

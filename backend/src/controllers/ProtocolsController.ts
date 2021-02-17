@@ -22,10 +22,55 @@ const convertoDataUri = async (url: string) => {
 };
 
 export class ProtocolsController {
+    static addAction: RequestHandler = async (req, res) => {
+        const { id } = req.params;
+        const { name, icon, description } = req.body;
+        const updatedProtocol = await Protocols.update({
+            where: { id: parseInt(id) },
+            data: { actions: { create: { name, icon, description } } },
+            include: { actions: true },
+        });
 
+        return sendResponse(res, { data: updatedProtocol, user: req.user });
+    };
+    static updateAction: RequestHandler = async (req, res) => {
+        const { id, actionid } = req.params;
+        const { name, icon, description } = req.body;
+        const updatedProtocol = await Protocols.update({
+            where: { id: parseInt(id) },
+            data: {
+                actions: {
+                    update: {
+                        data: { name, icon, description },
+                        where: { id: parseInt(actionid) },
+                    },
+                },
+            },
+            include: { actions: true },
+        });
+
+        return sendResponse(res, { data: updatedProtocol, user: req.user });
+    };
+
+    static deleteAction: RequestHandler = async (req, res) => {
+        const { id, actionid } = req.params;
+
+        const updatedProtocol = await Protocols.update({
+            where: { id: parseInt(id) },
+            data: {
+                actions: {
+                    delete: {
+                        id: parseInt(actionid),
+                    },
+                },
+            },
+            include: { actions: true },
+        });
+
+        return sendResponse(res, { data: updatedProtocol, user: req.user });
+    };
 
     static getProtocols: RequestHandler = async (req, res, next) => {
-      
         const { id } = req.params;
         if (id) {
             const result = await Protocols.findUnique({
@@ -106,13 +151,13 @@ export class ProtocolsController {
         const category = await Categories.findFirst({
             where: { id: { equals: parseInt(categoryId) } },
             include: {
-				protocol_category_relation: {
-					select: {
-						category_id: false,
-						protocol_id: false,
-						Protocols: { include: { actions: true } },
-					},
-				},
+                protocol_category_relation: {
+                    select: {
+                        category_id: false,
+                        protocol_id: false,
+                        Protocols: { include: { actions: true } },
+                    },
+                },
             },
         });
         return sendResponse(res, { data: category, user: req.user });
@@ -147,16 +192,16 @@ export class ProtocolsController {
             protocol_id: parseInt(protocolid),
         };
         let exists = await Protocol_Relation.findFirst({ where: data });
-		let category = null;
-		const include =   {
-			protocol_category_relation: {
-				select: {
-					category_id: false,
-					protocol_id: false,
-					Protocols: { include: { actions: true } },
-				},
-			},
-		};
+        let category = null;
+        const include = {
+            protocol_category_relation: {
+                select: {
+                    category_id: false,
+                    protocol_id: false,
+                    Protocols: { include: { actions: true } },
+                },
+            },
+        };
         if (!exists) {
             category = await Categories.update({
                 where: { id: parseInt(categoryid) },
@@ -167,24 +212,29 @@ export class ProtocolsController {
                         },
                     },
                 },
-				include
+                include,
             });
-        }else {
-			category = await Categories.findFirst({where: {id: parseInt(categoryid)},include});
-		}
+        } else {
+            category = await Categories.findFirst({
+                where: { id: parseInt(categoryid) },
+                include,
+            });
+        }
 
         return sendResponse(res, { data: category, user: req.user });
-	};
-	
-	static deleteProtocolFromCat: RequestHandler = async (req,res) => {
-		const { categoryid, protocolid } = req.params;
+    };
+
+    static deleteProtocolFromCat: RequestHandler = async (req, res) => {
+        const { categoryid, protocolid } = req.params;
         const data = {
             category_id: parseInt(categoryid),
             protocol_id: parseInt(protocolid),
-		};
-		
-		await Protocol_Relation.deleteMany({where: data})
-		return sendResponse(res, { data: {msg: "Protocol Remove From Category"}, user: req.user });
-	}
+        };
 
+        await Protocol_Relation.deleteMany({ where: data });
+        return sendResponse(res, {
+            data: { msg: "Protocol Remove From Category" },
+            user: req.user,
+        });
+    };
 }

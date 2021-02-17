@@ -18,5 +18,5 @@ export const usePut = <T>(url: string) => {
       }
     }, [url]);
 
-    return {  error, loading, put };
+    return {  error, sending: loading, put };
 }

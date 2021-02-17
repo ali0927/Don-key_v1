@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Login } from "pages/Login";
 import { Dashboard } from "pages/Dashboard";
@@ -7,6 +6,7 @@ import { Protocol } from "pages/Protocol";
 import { Strategy } from "pages/Strategy";
 import { ProtocolsEdit } from "pages/ProtocolsEdit";
 import { UserEdit } from "pages/UserEdit";
+import { ProtocolCategories } from "pages/ProtocolCategories";
 
 export default function Routes() {
     return (
@@ -22,6 +22,11 @@ export default function Routes() {
                     exact
                     path="/protocols/edit/"
                     component={ProtocolsEdit}
+                />
+                 <Route
+                    exact
+                    path="/categories/"
+                    component={ProtocolCategories}
                 />
                 <Route path="/protocols/edit/:id" component={ProtocolsEdit} />
                 <Route exact path="/strategies" component={Strategy} />

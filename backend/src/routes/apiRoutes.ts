@@ -5,6 +5,7 @@ import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
 import { UsersController } from "../controllers/UsersController";
 
+
 const apiRoutes = Router();
 
 apiRoutes
@@ -46,6 +47,7 @@ apiRoutes
     .route("/categories/:categoryId")
     .get(ProtocolsController.getProtocolByCategoryId);
 
+
 apiRoutes
     .route("/categories/:categoryid/protocols/:protocolid")
     .put(ProtocolsController.addProtocolToCategory)
@@ -56,6 +58,10 @@ apiRoutes
     .get(ProtocolsController.getProtocols)
     .delete(ProtocolsController.deleteProtocols)
     .put(ProtocolsController.updateProtocols);
+
+apiRoutes.post('/protocols/:id/actions',ProtocolsController.addAction)
+apiRoutes.put('/protocols/:id/actions/:actionid',ProtocolsController.updateAction)
+apiRoutes.delete('/protocols/:id/actions/:actionid',ProtocolsController.deleteAction)
 
 apiRoutes
     .route("/protocols/:id/categories")
