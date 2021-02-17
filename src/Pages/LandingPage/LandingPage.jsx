@@ -42,7 +42,7 @@ const LandingPage = () => {
             <Col md={7}>
               <div className="bannerRight">
                 <img
-                  src="https://byfinance.s3.us-east-2.amazonaws.com/illustration.png"
+                  src="https://byfinance.s3.us-east-2.amazonaws.com/animation_500_kl9tdo9z.gif"
                   className="d-inline-block"
                   alt="Image"
                 />
