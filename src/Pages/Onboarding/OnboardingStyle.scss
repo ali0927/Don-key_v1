@@ -43,7 +43,21 @@
         -moz-appearance: textfield;
     }
 }
-
+.onboard-input-list {
+    position: absolute;
+    overflow: auto;
+    max-height: 200px;
+    z-index: 1;
+    background-color: #fff;
+    width: calc(100%);
+    li {
+        padding: 0.8rem 0.5rem;
+    }
+    li[data-focus="true"] {
+        background-color: #efefef;
+        cursor: default;
+    }
+}
 .onboard-progress {
     display: flex;
     width: 100%;
