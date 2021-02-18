@@ -1,620 +1,107 @@
-import React from "react";
-
-const OnboardingIcon = () => {
-    return (
-        <svg
-            width={128}
-            height={124}
-            viewBox="0 0 128 124"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <g clipPath="url(#onboard_img)">
-                <path
-                    d="M124.261 100.77v4.428H92.354l-23.929-3.224-23.928 3.224H12.59v-4.428c0-10.573 8.142-19.422 18.82-20.452l13.063-1.26h47.905l13.062 1.26c10.679 1.03 18.821 9.879 18.821 20.452z"
-                    fill="#4A4A4A"
-                />
-                <path
-                    d="M124.261 100.77v4.428H92.354l-23.928-3.224V79.059h23.952l13.063 1.26c10.678 1.029 18.82 9.878 18.82 20.451z"
-                    fill="#3B3B3B"
-                />
-                <path
-                    d="M102.141 96.607l-9.785 8.589H82.87l-14.441-3.224-14.441 3.224h-9.488l-9.784-8.589 9.76-17.55 8-.772H84.38l8 .772 9.761 17.55z"
-                    fill="#000"
-                />
-                <path
-                    d="M102.139 96.607l-9.785 8.589h-9.487l-14.441-3.224V78.285h15.952l8 .772 9.761 17.55z"
-                    fill="#4A4A4A"
-                />
-                <path
-                    d="M84.377 78.246l-1.511 26.952H53.984l-1.511-26.952h31.904z"
-                    fill="#fff"
-                />
-                <path
-                    d="M84.378 78.246l-1.511 26.952H68.426V78.246h15.952zM50.988 49.028h-7.481c-5.602 0-10.144-4.476-10.144-9.997 0-5.52 4.541-9.996 10.144-9.996h7.477l.004 19.993zM85.867 49.028h7.478c5.601 0 10.143-4.476 10.143-9.997 0-5.52-4.541-9.996-10.143-9.996h-7.478v19.993z"
-                    fill="#fff"
-                />
-                <path
-                    d="M84.377 62.652v15.59L68.425 91.756 52.473 78.242v-15.59h31.904z"
-                    fill="#fff"
-                />
-                <path
-                    d="M84.378 62.652v15.59L68.426 91.756V62.652h15.952z"
-                    fill="#000"
-                />
-                <path
-                    d="M95.914 17.823v4.323c0 3.805-3.132 6.891-6.993 6.891H47.93c-3.86 0-6.992-3.086-6.992-6.891v-9.802c0-4.75 1.954-9.049 5.112-12.161a17.53 17.53 0 0112.34-5.038c0 3.026 2.491 5.478 5.562 5.478h14.509c9.638 0 17.453 7.702 17.453 17.2z"
-                    fill="#4A4A4A"
-                />
-                <path
-                    d="M95.914 17.821v4.323c0 3.804-3.132 6.89-6.993 6.89H68.426V.622H78.46c9.638 0 17.453 7.702 17.453 17.2z"
-                    fill="#3B3B3B"
-                />
-                <path
-                    d="M88.92 26.04v23.104c0 11.873-9.175 21.5-20.495 21.5-5.66 0-10.783-2.407-14.493-6.297-3.708-3.89-6.002-9.267-6.002-15.203V25.58c0-3.785 3.114-6.854 6.955-6.854h26.618c3.954-.02 7.382 3.205 7.418 7.312z"
-                    fill="#fff"
-                />
-                <path
-                    d="M88.921 26.04v23.104c0 11.873-9.175 21.5-20.495 21.5V18.727h13.078c3.953-.02 7.382 3.205 7.417 7.312z"
-                    fill="#fff"
-                />
-            </g>
-            <circle
-                cx={1.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 1.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 1.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 1.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 1.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={102.367}
-                r={1}
-                transform="rotate(-90 1.133 102.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={97.367}
-                r={1}
-                transform="rotate(-90 1.133 97.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={92.367}
-                r={1}
-                transform="rotate(-90 1.133 92.367)"
-                fill="#000"
-            />
-            <circle
-                cx={1.133}
-                cy={87.367}
-                r={1}
-                transform="rotate(-90 1.133 87.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 6.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 6.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 6.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 6.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={102.367}
-                r={1}
-                transform="rotate(-90 6.133 102.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={97.367}
-                r={1}
-                transform="rotate(-90 6.133 97.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={92.367}
-                r={1}
-                transform="rotate(-90 6.133 92.367)"
-                fill="#000"
-            />
-            <circle
-                cx={6.133}
-                cy={87.367}
-                r={1}
-                transform="rotate(-90 6.133 87.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 11.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 11.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 11.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 11.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={102.367}
-                r={1}
-                transform="rotate(-90 11.133 102.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={97.367}
-                r={1}
-                transform="rotate(-90 11.133 97.367)"
-                fill="#000"
-            />
-            <circle
-                cx={11.133}
-                cy={92.367}
-                r={1}
-                transform="rotate(-90 11.133 92.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 16.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 16.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 16.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 16.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={102.367}
-                r={1}
-                transform="rotate(-90 16.133 102.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={97.367}
-                r={1}
-                transform="rotate(-90 16.133 97.367)"
-                fill="#000"
-            />
-            <circle
-                cx={16.133}
-                cy={92.367}
-                r={1}
-                transform="rotate(-90 16.133 92.367)"
-                fill="#000"
-            />
-            <circle
-                cx={21.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 21.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={21.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 21.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={21.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 21.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={21.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 21.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={26.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 26.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={26.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 26.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={26.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 26.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={26.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 26.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={31.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 31.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={31.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 31.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={31.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 31.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={31.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 31.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={36.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 36.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={36.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 36.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={36.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 36.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={36.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 36.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={41.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 41.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={41.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 41.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={41.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 41.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={41.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 41.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={46.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 46.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={46.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 46.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={46.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 46.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={46.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 46.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={51.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 51.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={51.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 51.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={51.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 51.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={51.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 51.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={56.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 56.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={56.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 56.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={56.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 56.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={56.133}
-                cy={107.367}
-                r={1}
-                transform="rotate(-90 56.133 107.367)"
-                fill="#000"
-            />
-            <circle
-                cx={61.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 61.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={61.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 61.133 117.367)"
-                fill="#000"
-            />
-            <circle
-                cx={61.133}
-                cy={112.367}
-                r={1}
-                transform="rotate(-90 61.133 112.367)"
-                fill="#000"
-            />
-            <circle
-                cx={66.133}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 66.133 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={70.867}
-                cy={122.367}
-                r={1}
-                transform="rotate(-90 70.867 122.367)"
-                fill="#000"
-            />
-            <circle
-                cx={66.133}
-                cy={117.367}
-                r={1}
-                transform="rotate(-90 66.133 117.367)"
-                fill="#000"
-            />
-            <defs>
-                <clipPath id="onboard_img">
-                    <path
-                        fill="#fff"
-                        transform="translate(15.828)"
-                        d="M0 0h111.671v111.134H0z"
-                    />
-                </clipPath>
-            </defs>
-        </svg>
-    );
-};
-
-const Logo = (props: any) => {
-    return (
-        <svg
-            width={90}
-            height={25}
-            viewBox="0 0 90 25"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}
-        >
-            <path
-                d="M31.922 5.256h4.968c.48 0 .954.06 1.422.18.468.108.882.294 1.242.558.372.252.672.582.9.99.228.408.342.9.342 1.476 0 .72-.204 1.314-.612 1.782-.408.468-.942.804-1.602 1.008v.036a3.09 3.09 0 011.098.342c.348.168.642.39.882.666.24.264.426.576.558.936.144.348.216.726.216 1.134 0 .696-.138 1.278-.414 1.746a3.366 3.366 0 01-1.098 1.116c-.444.276-.96.474-1.548.594-.576.12-1.164.18-1.764.18h-4.59V5.256zm2.268 5.184h2.07c.756 0 1.32-.144 1.692-.432.384-.3.576-.69.576-1.17 0-.552-.198-.96-.594-1.224-.384-.276-1.008-.414-1.872-.414H34.19v3.24zm0 5.616h2.088c.288 0 .594-.018.918-.054.336-.036.642-.12.918-.252s.504-.318.684-.558c.18-.252.27-.588.27-1.008 0-.672-.222-1.14-.666-1.404-.432-.264-1.11-.396-2.034-.396H34.19v3.672zm13.418-3.51l-4.788-7.29h2.844l3.132 5.076 3.168-5.076h2.7l-4.788 7.29V18h-2.268v-5.454zm8.804-3.186h2.16V18h-2.16V9.36zm-.306-2.934c0-.348.126-.648.378-.9.264-.264.594-.396.99-.396s.726.126.99.378c.276.24.414.546.414.918s-.138.684-.414.936c-.264.24-.594.36-.99.36s-.726-.126-.99-.378a1.29 1.29 0 01-.378-.918zm7.573 8.01c.072.648.324 1.152.756 1.512.432.36.954.54 1.566.54.54 0 .99-.108 1.35-.324.372-.228.696-.51.972-.846l1.548 1.17c-.504.624-1.068 1.068-1.692 1.332a4.985 4.985 0 01-1.962.396c-.648 0-1.26-.108-1.836-.324a4.404 4.404 0 01-1.494-.918 4.498 4.498 0 01-1.008-1.422 4.734 4.734 0 01-.36-1.872c0-.684.12-1.302.36-1.854a4.444 4.444 0 011.008-1.44c.42-.396.918-.702 1.494-.918a5.186 5.186 0 011.836-.324c.6 0 1.146.108 1.638.324.504.204.93.504 1.278.9.36.396.636.888.828 1.476.204.576.306 1.242.306 1.998v.594H63.68zm4.428-1.62c-.012-.636-.21-1.134-.594-1.494-.384-.372-.918-.558-1.602-.558-.648 0-1.164.186-1.548.558-.372.372-.6.87-.684 1.494h4.428zm5.116-8.424h2.16V18h-2.16V4.392zm12.38 12.312h-.036a2.778 2.778 0 01-1.26 1.152c-.528.24-1.098.36-1.71.36-.672 0-1.272-.114-1.8-.342a4.15 4.15 0 01-1.332-.972 4.117 4.117 0 01-.846-1.44 5.388 5.388 0 01-.288-1.782 5.1 5.1 0 01.306-1.782 4.519 4.519 0 01.846-1.44 3.93 3.93 0 011.332-.954c.516-.24 1.08-.36 1.692-.36.408 0 .768.042 1.08.126.312.084.588.192.828.324s.444.276.612.432c.168.144.306.288.414.432h.054V4.392h2.16V18h-2.052v-1.296zm-5.112-3.024c0 .336.054.66.162.972.12.312.288.588.504.828a2.506 2.506 0 001.872.792c.396 0 .75-.072 1.062-.216.312-.144.576-.336.792-.576.228-.24.396-.516.504-.828.12-.312.18-.636.18-.972 0-.336-.06-.66-.18-.972a2.264 2.264 0 00-.504-.828 2.408 2.408 0 00-.792-.576 2.506 2.506 0 00-1.062-.216 2.506 2.506 0 00-1.872.792c-.216.24-.384.516-.504.828a2.95 2.95 0 00-.162.972z"
-                fill="#070602"
-            />
-            <circle cx={12} cy={11.5} r={11.5} fill="#222" />
-            <circle cx={9.334} cy={6.459} r={2.373} fill="#fff" />
-            <circle cx={9.334} cy={11.502} r={2.373} fill="#FFCA00" />
-            <circle cx={14.67} cy={11.502} r={2.373} fill="#FFCA00" />
-            <circle cx={9.334} cy={16.541} r={2.373} fill="#FFCA00" />
-            <circle cx={14.67} cy={16.541} r={2.373} fill="#FFCA00" />
-        </svg>
-    );
-};
-
-const CloseIcon = (props: React.SVGProps<SVGSVGElement>) => {
-    return (
-        <svg
-            width="16"
-            height="17"
-            viewBox="0 0 16 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}
-        >
-            <path
-                opacity="0.9"
-                d="M0.5 1L8 8.5M8 8.5L15.5 16M8 8.5L15.5 1M8 8.5L0.5 16"
-                stroke="#252525"
-                stroke-linecap="round"
-            />
-        </svg>
-    );
-};
+import React, { useState } from "react";
+import { Logo } from "./Logo";
+import { OnboardingIcon } from "./OnboardingIcon";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useStore } from "react-redux";
+import clsx from "clsx";
+import { OnboardLayout } from "./OnboardLayout";
 
 export const Onboarding1 = () => {
+    const [radio, setRadio] = useState(0);
+
     return (
-        <div className="oboardlayout">
-            <div className="container-fluid">
+        <OnboardLayout>
+            <h3>Your Profile</h3>
+            <p>This should match your ID or Passport</p>
+            <div className="container">
                 <div className="row">
-                    <div className="onboard-sidebar col-sm-4 ">
-                        <div className="p-4 py-5">
-                            <Logo />
-                        </div>
-                        <div className="px-5 py-2  d-flex justify-content-center">
-                            <p className="font-weight-bold">
-                                A few clicks away from creating your profile{" "}
-                            </p>
-                        </div>
-                        <div className="onboard_icon d-flex justify-content-center">
-                            <OnboardingIcon />
+                    <label className="onboard-label col-2 d-flex align-items-center">
+                        Name
+                    </label>
+                    <div className="col-4">
+                        <input
+                            className="onboard-input"
+                            placeholder="First Name"
+                            type="text"
+                        />
+                    </div>
+                    <div className="col-4">
+                        <input
+                            className="onboard-input"
+                            placeholder="Middle Name"
+                            type="text"
+                        />
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    <div className="col-4 offset-2">
+                        <input className="onboard-input " type="text" />
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    <label className="onboard-label col-2 d-flex align-items-center">
+                        Gender
+                    </label>
+                    <div className="col-4">
+                        <div
+                            onClick={() => setRadio(0)}
+                            className={clsx("input-radio", {
+                                active: radio === 0,
+                            })}
+                        >
+                            Male
                         </div>
                     </div>
-                    <div className="col-sm-8">
-                        <CloseIcon className="closeicon cursor-pointer" />
+                    <div className="col-4">
+                        <div
+                            onClick={() => setRadio(1)}
+                            className={clsx("input-radio", {
+                                active: radio === 1,
+                            })}
+                        >
+                            Female
+                        </div>
+                    </div>
+                </div>
+                <div className="row mt-3">
+                    <label className="onboard-label col-2 d-flex align-items-center">
+                        Birthday
+                    </label>
+                    <div className="col-8">
+                        <div className="row">
+                            <div className="col">
+                                <input
+                                    className="onboard-input"
+                                    placeholder="dd"
+                                    type="number"
+                                    maxLength={2}
+                                />
+                            </div>
+                            <div className="col">
+                                <input
+                                    className="onboard-input"
+                                    placeholder="mm"
+                                    type="number"
+                                    maxLength={2}
+                                />
+                            </div>
+                            <div className="col ">
+                                <input
+                                    className="onboard-input"
+                                    type="number"
+                                    placeholder="yyyy"
+                                    maxLength={4}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="row justify-content-end mt-5">
+                    <div className="onboard-next">
+                        <FaChevronRight size={22} />
                     </div>
                 </div>
             </div>
-        </div>
+        </OnboardLayout>
     );
 };
