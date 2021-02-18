@@ -104,7 +104,7 @@ const Builder = () => {
 	}, []);
 
 	const firstSeven = useMemo(() => {
-		return protocols.length > 6 ? protocols.slice(0, 7) : protocols;
+		return protocols.length > 6 ? protocols.slice(0, protocols.length -1) : protocols;
 	}, [protocols]);
 
 	return (
