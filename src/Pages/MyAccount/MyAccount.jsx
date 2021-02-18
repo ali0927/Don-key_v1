@@ -45,9 +45,9 @@ const MyAccount = () => {
     dispatch(
       onApiRequest({
         method: "GET",
-        endpoint: "/api/v1/accounts/1",
+        endpoint: "/api/v1/users/1",
         onDone: (res) => {
-          setAccountDetail(res.data.data);
+          // setAccountDetail(res.data.data);
           setIsReady(true);
         },
       })

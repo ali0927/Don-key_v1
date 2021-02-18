@@ -1,100 +1,228 @@
 @import "../../../public/assets/scss/variables.scss";
 
+.onboard-sidebar {
+    background-color: $bgyellowColor;
+    height: 100vh;
+}
+.onboard_icon {
+    margin-top: 9rem;
+}
+
+.onboard-wrapper {
+    padding-top: 8rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+}
+.onboard-main {
+    background-color: #fafafa;
+    position: relative;
+}
+
+.onboard-label {
+    font-weight: bold;
+    box-sizing: border-box;
+}
+
+.onboard-input,
+.input-radio {
+    background-color: #fff;
+    border: 0;
+    border-radius: 0;
+    padding: 0.8rem 2rem;
+    &:focus {
+        outline: 1px solid rgba(34, 34, 34, 0.2);
+    }
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+   
+    /* Firefox */
+    &[type="number"] {
+        -moz-appearance: textfield;
+    }
+}
+.onboard-input-list {
+    position: absolute;
+    overflow: auto;
+    max-height: 200px;
+    z-index: 1;
+    background-color: #fff;
+    width: calc(100%);
+    li {
+        padding: 0.8rem 0.5rem;
+    }
+    li[data-focus="true"] {
+        background-color: #efefef;
+        cursor: default;
+    }
+}
+.onboard-progress {
+    display: flex;
+    width: 100%;
+    position: relative;
+}
+.progress-back {
+    background-color: #fff;
+    flex: 1;
+    position: relative;
+}
+.progress-text {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: rgba($color:  #222222, $alpha: 0.7)
+}
+.progress-front {
+    background-color: #ffeb9f;
+}
+.onboard-icon {
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px;
+}
+.progress-wrapper {
+  position:absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+
+.input-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover {
+        outline: 1px solid rgba(34, 34, 34, 0.2);
+    }
+    &.active {
+        font-weight: bold;
+        outline: 1px solid rgba(34, 34, 34, 0.2);
+    }
+}
+
+.onboard-next {
+  background-color: #222;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 100%;
+}
+
+.closeicon {
+    position: absolute;
+    top: 3rem;
+    right: 4rem;
+}
+
 .btn.btn-farming {
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 19px;
-  text-align: center;
-  letter-spacing: 0.03em;
-  border: 1px solid $colorBlack;
-  box-sizing: border-box;
-  border-radius: 5px;
-  padding: 10px 17px;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    letter-spacing: 0.03em;
+    border: 1px solid $colorBlack;
+    box-sizing: border-box;
+    border-radius: 5px;
+    padding: 10px 17px;
 }
 .container.newContainer {
-  max-width: 900px;
+    max-width: 900px;
 }
 // .boardingImg img {
 //   max-width: 100%;
 // }
 
 .footer {
-  background: $bgyellowColor;
-  height: 256px;
-  & p {
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 135%;
-    display: flex;
-    align-items: center;
-    color: $paracolorBlack;
-  }
-
-  & ul li a,
-  ul li a:hover {
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 19px;
-    color: $paracolorBlack;
-    text-decoration: none;
-  }
-  & .skipLink,
-  .skipLink:hover {
-    position: absolute;
-    bottom: 5%;
-    left: 5%;
-    right: auto;
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 18px;
-    display: flex;
-    align-items: center;
-    color: $linkColor;
-    text-decoration: none;
-
-    /* media queries */
-    @media (max-width: 767px) {
-      bottom: 3%;
+    background: $bgyellowColor;
+    height: 256px;
+    & p {
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 135%;
+        display: flex;
+        align-items: center;
+        color: $paracolorBlack;
     }
-  }
-  & .content1Foot h2 {
-    font-family: "ObjectSans-Bold";
-    font-weight: bold;
-    font-size: 30px;
-    line-height: 40px;
-    display: flex;
-    align-items: center;
-    color: $colorBlack;
 
-    /* media queries */
+    & ul li a,
+    ul li a:hover {
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 19px;
+        color: $paracolorBlack;
+        text-decoration: none;
+    }
+    & .skipLink,
+    .skipLink:hover {
+        position: absolute;
+        bottom: 5%;
+        left: 5%;
+        right: auto;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        display: flex;
+        align-items: center;
+        color: $linkColor;
+        text-decoration: none;
 
-    @media (max-width: 320px) {
-      font-size: 19px;
-      line-height: 30px;
+        /* media queries */
+        @media (max-width: 767px) {
+            bottom: 3%;
+        }
     }
-    @media screen and (min-width: 321px) and (max-width: 767px) {
-      font-size: 21px;
-    }
-  }
-  & .content5Foot h2 {
-    font-weight: bold;
-    font-size: 34px;
-    line-height: 40px;
-    display: flex;
-    align-items: center;
-    color: #070602;
+    & .content1Foot h2 {
+        font-family: "ObjectSans-Bold";
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        color: $colorBlack;
 
-    /* media queries */
-    @media (max-width: 767px) {
-      font-size: 21px;
+        /* media queries */
+
+        @media (max-width: 320px) {
+            font-size: 19px;
+            line-height: 30px;
+        }
+        @media screen and (min-width: 321px) and (max-width: 767px) {
+            font-size: 21px;
+        }
     }
-  }
-  & .contentbottom5Foot p {
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 16px;
-    display: flex;
-    justify-content: flex-end;
-    color: $paracolorBlack;
-  }
+    & .content5Foot h2 {
+        font-weight: bold;
+        font-size: 34px;
+        line-height: 40px;
+        display: flex;
+        align-items: center;
+        color: #070602;
+
+        /* media queries */
+        @media (max-width: 767px) {
+            font-size: 21px;
+        }
+    }
+    & .contentbottom5Foot p {
+        font-weight: normal;
+        font-size: 14px;
+        line-height: 16px;
+        display: flex;
+        justify-content: flex-end;
+        color: $paracolorBlack;
+    }
 }
