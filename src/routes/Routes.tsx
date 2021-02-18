@@ -5,7 +5,7 @@ import {
   Switch,
 } from "react-router-dom";
 import LandingPage from "../Pages/LandingPage";
-import Onboarding from "../Pages/Onboarding";
+import {Onboarding} from "../Pages/Onboarding";
 import Login from "../Pages/Login";
 import ResourcePage from "../Pages/ResourcePage";
 import FarmersPage from "../Pages/FarmersPage";
@@ -16,6 +16,7 @@ import SelectTemplate from "../Pages/SelectTemplate";
 import StrategyConfirmation from "../Pages/StrategyConfirmation";
 import { ProtectedRoute } from "components/ProtectedRoute";
 import { MyAccountNew } from "Pages/MyAccountNew/MyAccountNew";
+import { Onboarding1 } from "Pages/Onboarding/Onboarding1";
 
 
 export default function Routes() {
@@ -23,7 +24,8 @@ export default function Routes() {
     <Router>
         <Switch>
           <Route exact path="/" children={<LandingPage />} />
-          <Route path="/onboarding" children={<Onboarding />} />
+          <Route exact path="/onboarding" children={<Onboarding />} />
+          <Route path="/onboarding/1" children={<Onboarding1 />} />
           <Route path="/login" children={<Login />} />
           <ProtectedRoute path="/strategy/build" children={<Builder />} />
           <Route path="/resource" children={<ResourcePage />} />

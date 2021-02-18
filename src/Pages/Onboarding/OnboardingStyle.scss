@@ -1,5 +1,20 @@
 @import "../../../public/assets/scss/variables.scss";
 
+
+.onboard-sidebar {
+  background-color: $bgyellowColor;
+  height: 100vh;
+}
+.onboard_icon {
+  margin-top: 9rem;
+}
+
+.closeicon {
+  position: absolute;
+  top: 3rem;
+  right: 4rem;
+}
+
 .btn.btn-farming {
   font-weight: normal;
   font-size: 16px;
