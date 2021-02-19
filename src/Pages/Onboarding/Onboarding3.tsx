@@ -760,30 +760,31 @@ export const Onboarding3 = () => {
             title="Over th past three years, to what extent have you invested in/traded the following products?"
             icon={<Onboard3Icon />}
         >
-             <h3>Your Farmers Experience</h3>
-             <p className="text-muted">Over th past three years, to what extent have you invested in/traded the following products?</p>
-             <div className="container">
-             <div className="row">
-                    <label className="onboard-label col-2 d-flex align-items-center">
-                        Equities <span className="text-muted">(Stocks, ETFs)</span>
-                    </label>
-                    <div className="col-4">
-                        <input
-                            className="onboard-input"
-                            placeholder="First Name"
-                            type="text"
-                        />
+            <h3>Your Farmers Experience</h3>
+            <p className="text-muted">
+                Over th past three years, to what extent have you invested
+                in/traded the following products?
+            </p>
+
+            <label className="onboard-label d-flex align-items-center">
+                Equities{" "}
+                <span className="text-muted ml-1 font-weight-normal">
+                    (Stocks, ETFs)
+                </span>
+            </label>
+            <div className="container">
+                <div className="row">
+                    <div className="col">
+                        <div className="selectable-item">1-10 times</div>
                     </div>
-                    <div className="col-4">
-                        <input
-                            className="onboard-input"
-                            placeholder="Middle Name"
-                            type="text"
-                        />
+                    <div className="col">
+                        <div className="selectable-item">1-10 times</div>
+                    </div>
+                    <div className="col">
+                        <div className="selectable-item">1-10 times</div>
                     </div>
                 </div>
-
-             </div>
+            </div>
         </OnboardLayout>
     );
 };
