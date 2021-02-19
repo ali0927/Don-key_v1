@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import { Logo } from "./Logo";
-import { OnboardingIcon } from "./OnboardingIcon";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
-import { useStore } from "react-redux";
+import { FaChevronRight } from "react-icons/fa";
 import clsx from "clsx";
 import { OnboardLayout } from "./OnboardLayout";
 

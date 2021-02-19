@@ -45,7 +45,15 @@ const OnboardProgress = ({ progress }: { progress: number }) => {
     );
 };
 
-export const OnboardLayout = ({ children }: { children: React.ReactNode }) => {
+export const OnboardLayout = ({
+    children,
+    title = "A few clicks away from creating your profile",
+    icon = <OnboardingIcon />,
+}: {
+    children: React.ReactNode;
+    title?: string;
+    icon?: React.ReactElement;
+}) => {
     return (
         <div className="oboardlayout">
             <div className="container-fluid">
@@ -55,12 +63,10 @@ export const OnboardLayout = ({ children }: { children: React.ReactNode }) => {
                             <Logo />
                         </div>
                         <div className="px-5 py-2  d-flex justify-content-center">
-                            <p className="font-weight-bold">
-                                A few clicks away from creating your profile{" "}
-                            </p>
+                            <p className="font-weight-bold">{title} </p>
                         </div>
                         <div className="onboard_icon d-flex justify-content-center">
-                            <OnboardingIcon />
+                            {icon}
                         </div>
                     </div>
                     <div className="col-sm-8 onboard-main">

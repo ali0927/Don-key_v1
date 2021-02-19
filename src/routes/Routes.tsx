@@ -18,6 +18,7 @@ import { ProtectedRoute } from "components/ProtectedRoute";
 import { MyAccountNew } from "Pages/MyAccountNew/MyAccountNew";
 import { Onboarding1 } from "Pages/Onboarding/Onboarding1";
 import { Onboarding2 } from "Pages/Onboarding/Onboarding2";
+import { Onboarding3 } from "Pages/Onboarding/Onboarding3";
 
 
 export default function Routes() {
@@ -28,6 +29,7 @@ export default function Routes() {
           <Route exact path="/onboarding" children={<Onboarding />} />
           <Route path="/onboarding/1" children={<Onboarding1 />} />
           <Route path="/onboarding/2" children={<Onboarding2 />} />
+          <Route path="/onboarding/3" children={<Onboarding3 />} />
           <Route path="/login" children={<Login />} />
           <ProtectedRoute path="/strategy/build" children={<Builder />} />
           <Route path="/resource" children={<ResourcePage />} />
