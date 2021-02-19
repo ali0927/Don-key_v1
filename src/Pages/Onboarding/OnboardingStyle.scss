@@ -143,6 +143,14 @@
     border-radius: 100%;
 }
 
+.btn-buru-link {
+    color: $bgyellowColor !important;
+    text-decoration: none;
+    position: absolute;
+    top: 6px;
+    right: 20px;
+}
+
 .closeicon {
     position: absolute;
     top: 3rem;

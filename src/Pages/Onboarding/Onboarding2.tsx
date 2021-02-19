@@ -17,7 +17,7 @@ function countryToFlag(isoCode: string) {
 const BuruCheckbox = ({
     className,
     checked,
-    onClick
+    onClick,
 }: {
     className?: string;
     checked: boolean;
@@ -28,19 +28,26 @@ const BuruCheckbox = ({
             style={{
                 display: "inline-flex",
                 position: "relative",
-                padding: "1em",
+                padding: "0.9em",
                 border: "2px solid #D3D3D3",
                 cursor: "pointer",
                 borderRadius: 4,
-                
             }}
-            onClick={e => {e.stopPropagation(); e.preventDefault(); onClick()}}
+            onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onClick();
+            }}
             className={className}
         >
             {checked && (
                 <svg
                     className="position-absolute"
-                    style={{top: "50%", left: "50%", transform: `translate(-50%, -50%)`}}
+                    style={{
+                        top: "50%",
+                        left: "50%",
+                        transform: `translate(-50%, -50%)`,
+                    }}
                     width="14"
                     height="11"
                     viewBox="0 0 14 11"
@@ -58,9 +65,8 @@ const BuruCheckbox = ({
 };
 
 export const Onboarding2 = () => {
-
     const [checked, setChecked] = useState(false);
-
+    const [isPassVisible, setIsPassVisible] = useState(false);
     const {
         getRootProps,
         getInputProps,
@@ -71,7 +77,6 @@ export const Onboarding2 = () => {
     } = useAutocomplete({
         id: "use-autocomplete-demo",
         options: countries,
-        value: countries[0],
         getOptionLabel: (option) => option.label,
     });
     return (
@@ -185,25 +190,41 @@ export const Onboarding2 = () => {
                                 </ul>
                             ) : null}
                         </div>
-
-                       
                     </div>
                     <div className="col-9 offset-3 d-flex mt-3">
-                            <BuruCheckbox checked={checked} onClick={() => {setChecked(val => !val)}} className="mr-2" />
-                            <div>
-                                This country is both my birthplace and country
-                                of citizenship
-                            </div>
+                        <BuruCheckbox
+                            checked={checked}
+                            onClick={() => {
+                                setChecked((val) => !val);
+                            }}
+                            className="mr-2"
+                        />
+                        <div>
+                            This country is both my birthplace and country of
+                            citizenship
                         </div>
+                    </div>
                 </div>
 
-                <div className="row mt-3">
+                <div className="row mt-5">
                     <label className="onboard-label col-3 d-flex align-items-center">
                         Passport Number
                     </label>
-                    <div className="col-9">
-                        <input className="onboard-input"   autoComplete="new-password" type="password" />
-                        <div>Show</div>
+                    <div className="col-9 position-relative">
+                        <input
+                            className="onboard-input"
+                            autoComplete="new-password"
+                            type={isPassVisible ?"text" : "password"}
+                        />
+                        <button
+                            onClick={() => setIsPassVisible((val) => !val)}
+                            className="btn btn-buru-link"
+                        >
+                            {isPassVisible ? "Hide" : "Show"}
+                        </button>
+                    </div>
+                    <div className="col-9 offset-3 text-muted mt-2">
+                        This number must perain to your country of citizenship
                     </div>
                 </div>
                 <div className="row justify-content-end mt-5">
@@ -215,3 +236,4 @@ export const Onboarding2 = () => {
         </OnboardLayout>
     );
 };
+ 
