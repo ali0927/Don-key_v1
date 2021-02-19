@@ -83,6 +83,18 @@
         border: 2px solid $bgyellowColor;
     }
 }
+.selectable-item-withicon {
+    min-width: 200px;
+}
+.selectable-item_icon {
+    display: flex;
+    justify-content: center;
+}
+.selectable-item_text {
+   font-size: 14px;
+   margin-top: 0.8rem;
+   color: rgba( 97,97,97,1);
+}
 
 .progress-back {
     background-color: #fff;
