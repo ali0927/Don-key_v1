@@ -1,5 +1,5 @@
 /* eslint-disable default-case */
-import React, { useEffect, useState } from "react";
+import React, {  } from "react";
 import { ActionsPanel } from "../Panel/ActionsPanel";
 import { FaChevronLeft } from "react-icons/fa";
 import { InputOutput } from "../ActionInputs/InputOutput";
@@ -26,7 +26,10 @@ const ActionsUIUnrwapped = ({
   protocol,
   lastProtocol,
 }: {icon: any, selectedAction: string | null; onSelect:any; protocol: any; lastProtocol: any}) => {
-  const yfiTokens = useYFITokens();
+  const  yfiTokens = useYFITokens();
+
+
+
   if (yfiTokens.length === 0) {
     return <></>;
   }
@@ -427,4 +430,4 @@ const ActionsUIUnrwapped = ({
 };
 
 
-export const ActionsUI = withYFITokens(ActionsUIUnrwapped);
+export const ActionsUI = ActionsUIUnrwapped;

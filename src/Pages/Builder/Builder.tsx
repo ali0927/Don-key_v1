@@ -17,161 +17,162 @@ import moreIcon from "./more.svg";
 import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsModal";
 import { AxiosResponse } from "axios";
 import { IProtocolFromAPI } from "interfaces";
+import { withYFITokens } from "components/YFITokensProvider";
 
 const Builder = () => {
-	const [panel, setPanel] = useState(null);
-	const [isModalOpen, , , toggleModal] = useToggle();
-	const [protocols, setProtocols] = useState<IProtocolFromAPI[]>([]);
-	const closePanel = () => setPanel(null);
+    const [panel, setPanel] = useState(null);
+    const [isModalOpen, , , toggleModal] = useToggle();
+    const [protocols, setProtocols] = useState<IProtocolFromAPI[]>([]);
+    const closePanel = () => setPanel(null);
 
-	const history = useHistory();
+    const history = useHistory();
 
-	const [showMoreProtocols, setShowMoreProtocols] = useState(false);
+    const [showMoreProtocols, setShowMoreProtocols] = useState(false);
 
-	const [strategy, setStrategy] = useState({
-		protocolCells: [
-			{
-				protocolId: uuidv4(),
-				protocol: "BY",
-				lastProtocol: null,
-				x: 200,
-				y: 150,
-				w: 110,
-				h: 110,
-				vertex: null,
-			},
-		],
-		actionCells: [],
-	});
+    const [strategy, setStrategy] = useState({
+        protocolCells: [
+            {
+                protocolId: uuidv4(),
+                protocol: "BY",
+                lastProtocol: null,
+                x: 200,
+                y: 150,
+                w: 110,
+                h: 110,
+                vertex: null,
+            },
+        ],
+        actionCells: [],
+    });
 
-	const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
-	const getStrategy = () => {
-		return new Promise<AxiosResponse>((res, rej) => {
-			const strategy = getQueryParam("id");
-			dispatch(
-				onApiRequest({
-					method: "GET",
-					endpoint: "/api/v1/strategies?id=" + strategy,
-					onDone: res,
-					onFail: rej,
-				})
-			);
-		});
-	};
+    const getStrategy = () => {
+        return new Promise<AxiosResponse>((res, rej) => {
+            const strategy = getQueryParam("id");
+            dispatch(
+                onApiRequest({
+                    method: "GET",
+                    endpoint: "/api/v1/strategies?id=" + strategy,
+                    onDone: res,
+                    onFail: rej,
+                })
+            );
+        });
+    };
 
-	const createStrategy = () => {
-		return new Promise<AxiosResponse>((res, rej) => {
-			dispatch(
-				onApiRequest({
-					method: "POST",
-					endpoint: "/api/v1/strategies",
-					onDone: res,
-					onFail: rej,
-				})
-			);
-		});
-	};
-	const getProtocols = () => {
-		return new Promise<AxiosResponse>((res, rej) => {
-			dispatch(
-				onApiRequest({
-					method: "GET",
-					endpoint: "/api/v1/protocols",
-					onDone: res,
-					onFail: rej,
-				})
-			);
-		});
-	};
+    const createStrategy = () => {
+        return new Promise<AxiosResponse>((res, rej) => {
+            dispatch(
+                onApiRequest({
+                    method: "POST",
+                    endpoint: "/api/v1/strategies",
+                    onDone: res,
+                    onFail: rej,
+                })
+            );
+        });
+    };
+    const getProtocols = () => {
+        return new Promise<AxiosResponse>((res, rej) => {
+            dispatch(
+                onApiRequest({
+                    method: "GET",
+                    endpoint: "/api/v1/protocols",
+                    onDone: res,
+                    onFail: rej,
+                })
+            );
+        });
+    };
 
-	useEffect(() => {
-		const strategy = getQueryParam("id");
-		const request = strategy ? getStrategy() : createStrategy();
+    useEffect(() => {
+        const strategy = getQueryParam("id");
+        const request = strategy ? getStrategy() : createStrategy();
 
-		Promise.all([request, getProtocols()]).then(([strategy, protocol]) => {
-			const json = strategy.data.data.json;
-			const strategyid = strategy.data.data.id;
-			history.replace("/strategy/build?id=" + strategyid);
-			setStrategy((old) => {
-				const data = json ? JSON.parse(json) : old;
-				return { ...data, id: strategyid };
-			});
-			setProtocols(protocol.data.data);
-		});
+        Promise.all([request, getProtocols()]).then(([strategy, protocol]) => {
+            const json = strategy.data.data.json;
+            const strategyid = strategy.data.data.id;
+            history.replace("/strategy/build?id=" + strategyid);
+            setStrategy((old) => {
+                const data = json ? JSON.parse(json) : old;
+                return { ...data, id: strategyid };
+            });
+            setProtocols(protocol.data.data);
+        });
 
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 	const firstSeven = useMemo(() => {
 		return protocols.length > 6 ? protocols.slice(0, protocols.length -1) : protocols;
 	}, [protocols]);
 
-	return (
-		<>
-			<div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
-				<NavBar3 />
-				<MoreProtocolsModal
-					protocols={protocols}
-					isOpen={showMoreProtocols}
-					onClose={() => setShowMoreProtocols(false)}
-				/>
-				{/* <img src={generateGradientImage("red", "blue")} /> */}
-				{protocols.length > 0 ? (
-					<GraphProvider
-						strategy={strategy}
-						openPanel={setPanel}
-						protocols={protocols}
-					>
-						<ProtocolBar>
-							{firstSeven.map(
-								({
-									name,
-									showOnToolbar,
-									toolbarImageURL,
-									website,
-									description,
-								}) => {
-									return (
-										<Protocol
-											key={name}
-											onClose={closePanel}
-											openedPanel={panel}
-											icon={toolbarImageURL}
-											name={name}
-											website={website}
-											description={description}
-											showOnToolbar={
-												showOnToolbar === "1"
-											}
-										/>
-									);
-								}
-							)}
-							<li>
-								<hr />
-							</li>
-							<li
-								onClick={() => setShowMoreProtocols(true)}
-								className={clsx(
-									"protocol-list-item cursor-pointer"
-								)}
-							>
-								<img src={moreIcon} style={{ maxWidth: 58 }} />
-							</li>
-						</ProtocolBar>
-						<BuilderModal
-							isModalOpen={isModalOpen}
-							toggleModal={toggleModal}
-						/>
-						<ActionConfig />
-					</GraphProvider>
-				) : (
-					"Loading"
-				)}
-			</div>
-		</>
-	);
+    return (
+        <>
+            <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
+                <NavBar3 />
+                <MoreProtocolsModal
+                    protocols={protocols}
+                    isOpen={showMoreProtocols}
+                    onClose={() => setShowMoreProtocols(false)}
+                />
+                {/* <img src={generateGradientImage("red", "blue")} /> */}
+                {protocols.length > 0 ? (
+                    <GraphProvider
+                        strategy={strategy}
+                        openPanel={setPanel}
+                        protocols={protocols}
+                    >
+                        <ProtocolBar>
+                            {firstSeven.map(
+                                ({
+                                    name,
+                                    showOnToolbar,
+                                    toolbarImageURL,
+                                    website,
+                                    description,
+                                }) => {
+                                    return (
+                                        <Protocol
+                                            key={name}
+                                            onClose={closePanel}
+                                            openedPanel={panel}
+                                            icon={toolbarImageURL}
+                                            name={name}
+                                            website={website}
+                                            description={description}
+                                            showOnToolbar={
+                                                showOnToolbar === "1"
+                                            }
+                                        />
+                                    );
+                                }
+                            )}
+                            <li>
+                                <hr />
+                            </li>
+                            <li
+                                onClick={() => setShowMoreProtocols(true)}
+                                className={clsx(
+                                    "protocol-list-item cursor-pointer"
+                                )}
+                            >
+                                <img src={moreIcon} style={{ maxWidth: 58 }} />
+                            </li>
+                        </ProtocolBar>
+                        <BuilderModal
+                            isModalOpen={isModalOpen}
+                            toggleModal={toggleModal}
+                        />
+                        <ActionConfig />
+                    </GraphProvider>
+                ) : (
+                    "Loading"
+                )}
+            </div>
+        </>
+    );
 };
 
-export default Builder;
+export default withYFITokens(Builder);
