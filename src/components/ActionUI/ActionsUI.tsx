@@ -399,6 +399,17 @@ const ActionsUIUnrwapped = ({
         }
       }
     }
+    if(selectedAction){
+      return (
+        <div className="action-wrapper">
+          <InputOutput />
+          <SetButton
+            action={selectedAction}
+          />
+        </div>
+      );
+    }
+    
   };
 
   if (selectedAction) {
