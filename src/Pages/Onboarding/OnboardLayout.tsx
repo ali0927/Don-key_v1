@@ -55,7 +55,7 @@ export const OnboardLayout = ({
     icon?: React.ReactElement;
 }) => {
     return (
-        <div className="oboardlayout">
+        <div className="onboardlayout">
             <div className="container-fluid">
                 <div className="row">
                     <div className="onboard-sidebar col-sm-4 ">

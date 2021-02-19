@@ -1,7 +1,7 @@
 import { FaChevronRight } from "react-icons/fa";
 import { OnboardLayout } from "./OnboardLayout";
 import React, { useState } from "react";
-import { useAutocomplete } from "@material-ui/lab/";
+import { useAutocomplete } from "@material-ui/lab";
 import { countries } from "./countries";
 
 function countryToFlag(isoCode: string) {
