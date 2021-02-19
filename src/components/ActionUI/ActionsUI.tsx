@@ -399,6 +399,17 @@ const ActionsUIUnrwapped = ({
         }
       }
     }
+
+    if(protocol.name === "Pancake Swap"){
+      switch(selectedAction){
+        case "SwapToken": {
+          return (
+            <UniswapSwapToken lastProtocol={lastProtocol} protocol={protocol} />
+          );
+        }
+      }
+    }
+
     if(selectedAction){
       return (
         <div className="action-wrapper">
@@ -411,6 +422,8 @@ const ActionsUIUnrwapped = ({
     }
     
   };
+
+
 
   if (selectedAction) {
     return (
