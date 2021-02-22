@@ -63,19 +63,34 @@
     width: 100%;
     position: relative;
 }
-
+.burucheckbox {
+    display: inline-flex;
+    position: relative;
+    padding: 0.9em;
+    border: 2px solid #D3D3D3;
+    cursor: pointer;
+    border-radius: 4px;
+    svg {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%)
+    }
+}
 .onboardlayout {
     background-color: #fafafa;
 }
 .selectable-item {
     background-color: #fff;
-    width: 10rem;
+    width: 250px;
     color: #a4a4a4;
     text-align: center;
-    padding: 0.8rem;
+    padding: 2rem;
+    position: relative;
     &:not(:last-child) {
-        margin-right: 2rem;
+        margin-right: 1rem;
     }
+    margin-top: 1rem;
     border: 2px solid #fff;
     cursor: pointer;
     &:hover,
@@ -180,6 +195,40 @@
     border-radius: 5px;
     padding: 10px 17px;
 }
+
+
+
+.investment_box {
+    display: flex;
+    background-color: #fff;
+    padding: 0.5rem;
+    cursor: pointer;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.investment_box_icon {
+    padding: 1rem;
+}
+
+.investment_box_text {
+    display: flex;
+    align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .container.newContainer {
     max-width: 900px;
 }

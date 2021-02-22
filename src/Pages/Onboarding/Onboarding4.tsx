@@ -1,33 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { CaryBagIcon } from "./CaryBagIcon";
+import { FarmerKnoweldge } from "./FarmerKnoweldge";
 import { Onboard3Icon } from "./Onboard3Icon";
 import { OnboardLayout } from "./OnboardLayout";
 
 const GraduationHat = () => {
     return (
         <svg
-        width={79}
-        height={70}
-        viewBox="0 0 79 70"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-   
-      >
-        <g opacity={0.4} clipPath="url(#prefix__clip21)" fill="#000">
-          <path d="M11.98 47.848c0-2.67 1.754-4.925 4.182-5.775V20.828l-4.182-1.691L47.67 5.094l35.69 14.043L47.67 33.18 20.345 22.475v19.598c2.429.85 4.182 3.105 4.182 5.775 0 2.444-1.472 4.543-3.583 5.534l3.475 10.223-3.966 1.298-2.2-6.471-2.199 6.47-3.966-1.297 3.475-10.223c-2.11-.991-3.583-3.09-3.583-5.534z" />
-          <path d="M47.668 37.599l18.82-7.411v5.354c0 5.846-8.09 10.254-18.82 10.254s-18.821-4.408-18.821-10.254v-5.355l18.82 7.412z" />
-        </g>
-        <defs>
-          <clipPath id="prefix__clip21">
-            <path
-              fill="#fff"
-              transform="matrix(-1 0 0 1 78.297 0)"
-              d="M0 0h77.487v70H0z"
-            />
-          </clipPath>
-        </defs>
-      </svg>
+            width={79}
+            height={70}
+            viewBox="0 0 79 70"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <g opacity={0.4} clipPath="url(#prefix__clip21)" fill="#000">
+                <path d="M11.98 47.848c0-2.67 1.754-4.925 4.182-5.775V20.828l-4.182-1.691L47.67 5.094l35.69 14.043L47.67 33.18 20.345 22.475v19.598c2.429.85 4.182 3.105 4.182 5.775 0 2.444-1.472 4.543-3.583 5.534l3.475 10.223-3.966 1.298-2.2-6.471-2.199 6.47-3.966-1.297 3.475-10.223c-2.11-.991-3.583-3.09-3.583-5.534z" />
+                <path d="M47.668 37.599l18.82-7.411v5.354c0 5.846-8.09 10.254-18.82 10.254s-18.821-4.408-18.821-10.254v-5.355l18.82 7.412z" />
+            </g>
+            <defs>
+                <clipPath id="prefix__clip21">
+                    <path
+                        fill="#fff"
+                        transform="matrix(-1 0 0 1 78.297 0)"
+                        d="M0 0h77.487v70H0z"
+                    />
+                </clipPath>
+            </defs>
+        </svg>
     );
 };
 const CourseFilesIcon = () => {
@@ -53,22 +53,6 @@ const CourseFilesIcon = () => {
                 fill="#3F3F3F"
             />
         </svg>
-    );
-};
-
-const FarmerKnoweldge = ({
-    icon,
-    children,
-}: {
-    icon: React.ReactElement;
-    children: React.ReactNode;
-}) => {
-    return (
-        <div className="selectable-item mt-4 selectable-item-withicon">
-            <div className="selectable-item_icon">{icon}</div>
-
-            <div className="selectable-item_text">{children}</div>
-        </div>
     );
 };
 
@@ -104,6 +88,19 @@ const NoKnowledgeIcon = () => {
 };
 
 export const Onboarding4 = () => {
+    const [selectedItems, setSelectedItems] = useState<{
+        [x: string]: boolean;
+    }>({});
+
+    const getChecked = (name: string) => {
+        return selectedItems[name];
+    };
+
+    const toggle = (name: string) => () => {
+        setSelectedItems((old) => {
+            return { ...old, [name]: !!!old[name] };
+        });
+    };
     return (
         <OnboardLayout icon={<Onboard3Icon />}>
             <div className="row">
@@ -114,16 +111,32 @@ export const Onboarding4 = () => {
                         Please select one or more relevant answers
                     </p>
                     <div className="d-flex flex-wrap">
-                        <FarmerKnoweldge icon={<CaryBagIcon />}>
+                        <FarmerKnoweldge
+                            active={getChecked("carrybag")}
+                            onClick={toggle("carrybag")}
+                            icon={<CaryBagIcon />}
+                        >
                             Professional certificate or relevant work experience
                         </FarmerKnoweldge>
-                        <FarmerKnoweldge icon={<GraduationHat />}>
+                        <FarmerKnoweldge
+                            active={getChecked("Academic")}
+                            onClick={toggle("Academic")}
+                            icon={<GraduationHat />}
+                        >
                             Academic degree in financial related field
                         </FarmerKnoweldge>
-                        <FarmerKnoweldge icon={<CourseFilesIcon />}>
+                        <FarmerKnoweldge
+                            active={getChecked("courses")}
+                            onClick={toggle("courses")}
+                            icon={<CourseFilesIcon />}
+                        >
                             I have attended farmers courses
                         </FarmerKnoweldge>
-                        <FarmerKnoweldge icon={<NoKnowledgeIcon />}>
+                        <FarmerKnoweldge
+                            active={getChecked("knowledge")}
+                            onClick={toggle("knowledge")}
+                            icon={<NoKnowledgeIcon />}
+                        >
                             I have no financial knowledge
                         </FarmerKnoweldge>
                     </div>
