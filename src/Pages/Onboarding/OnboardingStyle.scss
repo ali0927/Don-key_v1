@@ -168,6 +168,10 @@
     color: #fff;
     padding: 1rem;
     border-radius: 100%;
+    text-decoration: none;
+    &:hover {
+        color: #fff
+    }
 }
 
 .btn-buru-link {
@@ -176,6 +180,45 @@
     position: absolute;
     top: 6px;
     right: 20px;
+}
+.btn-buru {
+    width: 100%;
+    background-color: $bgyellowColor;
+    color: #222;
+    font-weight: 500;
+    padding: 0.8rem 0;
+    border: none;
+    transition: all 0.3s linear;
+    &:hover {
+        background-color: darken($color: $bgyellowColor, $amount: 2);
+    }
+    &-outline {
+        background-color: transparent;
+        color: rgba($color: #222222, $alpha: 0.6);
+        border: 1px solid rgba($color: #222222, $alpha: 0.3);
+        &:hover {
+            background-color: transparent;
+            border-color: rgba($color: #222222, $alpha: 0.6);
+            color: rgba($color: #222222, $alpha: 0.8);
+        }
+    }
+    &:focus {
+        outline: none !important;
+    }
+}
+
+.verification-logo {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+}
+
+.onboardlayout-verification {
+    border-left: 2rem solid $bgyellowColor;
+}
+
+.mt-large {
+    margin-top: 10rem;
 }
 
 .closeicon {

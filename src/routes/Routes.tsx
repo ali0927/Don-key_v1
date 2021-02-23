@@ -24,6 +24,10 @@ import { Onboarding5 } from "Pages/Onboarding/Onboarding5";
 import { Onboarding6 } from "Pages/Onboarding/Onboarding6";
 import { Onboarding7 } from "Pages/Onboarding/Onboarding7";
 import { Onboarding8 } from "Pages/Onboarding/Onboarding8";
+import { Onboarding9 } from "Pages/Onboarding/Onboarding9";
+import { Onboarding10 } from "Pages/Onboarding/Onboarding10";
+import { Onboarding11 } from "Pages/Onboarding/Onboarding11";
+import { Onboarding12 } from "Pages/Onboarding/Onboarding12";
 
 
 export default function Routes() {
@@ -40,6 +44,10 @@ export default function Routes() {
           <Route path="/onboarding/6" children={<Onboarding6 />} />
           <Route path="/onboarding/7" children={<Onboarding7 />} />
           <Route path="/onboarding/8" children={<Onboarding8 />} />
+          <Route path="/onboarding/9" children={<Onboarding9 />} />
+          <Route path="/onboarding/10" children={<Onboarding10 />} />
+          <Route path="/onboarding/11" children={<Onboarding11 />} />
+          <Route path="/onboarding/12" children={<Onboarding12 />} />
           <Route path="/login" children={<Login />} />
           <ProtectedRoute path="/strategy/build" children={<Builder />} />
           <Route path="/resource" children={<ResourcePage />} />

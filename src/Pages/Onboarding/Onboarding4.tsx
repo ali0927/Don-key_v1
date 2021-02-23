@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { CaryBagIcon } from "./CaryBagIcon";
 import { FarmerKnoweldge } from "./FarmerKnoweldge";
 import { Onboard3Icon } from "./Onboard3Icon";
@@ -102,7 +103,7 @@ export const Onboarding4 = () => {
         });
     };
     return (
-        <OnboardLayout icon={<Onboard3Icon />}>
+        <OnboardLayout progress={50} icon={<Onboard3Icon />}>
             <div className="row">
                 <div className="col-8">
                     <h3>Farmers Knowledge</h3>
@@ -144,9 +145,9 @@ export const Onboarding4 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-                <div className="onboard-next">
-                    <FaChevronRight size={22} />
-                </div>
+            <Link to={`/onboarding/5`} className="onboard-next">
+                        <FaChevronRight size={22} />
+                    </Link>
             </div>
         </OnboardLayout>
     );

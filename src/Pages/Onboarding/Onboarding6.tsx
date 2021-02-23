@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Onboard5Icon } from "./Onboard5Icon";
 import { FarmerKnoweldge } from "./FarmerKnoweldge";
+import { Link } from "react-router-dom";
 
 const StopWatchIcon = () => {
     return (
@@ -192,7 +193,7 @@ export const Onboarding6 = () => {
         });
     };
     return (
-        <OnboardLayout icon={<Onboard5Icon />}>
+        <OnboardLayout progress={70} icon={<Onboard5Icon />}>
             <div className="row">
                 <div className="col-8">
                     <h3>Farmer Strategy</h3>
@@ -226,9 +227,9 @@ export const Onboarding6 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-                <div className="onboard-next">
-                    <FaChevronRight size={22} />
-                </div>
+            <Link to={`/onboarding/7`} className="onboard-next">
+                        <FaChevronRight size={22} />
+                    </Link>
             </div>
         </OnboardLayout>
     );

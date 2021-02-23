@@ -1,8 +1,10 @@
+import { useAutocomplete } from "@material-ui/lab";
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import Select from "react-select";
 import { Onboard5Icon } from "./Onboard5Icon";
 import { OnboardLayout } from "./OnboardLayout";
-import Select from "react-select";
 
 const options = [
     {
@@ -19,35 +21,10 @@ const options = [
     },
 ];
 
-const colourStyles = {
-    control: (styles:any) => ({ ...styles, backgroundColor: 'white', outline: "none" }),
-    option: (styles: any, {  isDisabled, isFocused, isSelected }: any) => {
-      const color = "#f6c301"
-      return {
-        ...styles,
-        backgroundColor: isDisabled
-          ? null
-          : isSelected
-          ? "#ebebeb"
-          : isFocused
-          ? `#ebebeb`
-          : null,
-        color: "#333" ,
-        cursor: isDisabled ? 'not-allowed' : 'default',
-  
-        ':active': {
-          ...styles[':active'],
-          backgroundColor:
-            !isDisabled && "#ebebeb",
-        },
-      };
-    },
-   
-  };
-
 export const Onboarding8 = () => {
+    
     return (
-        <OnboardLayout icon={<Onboard5Icon />}>
+        <OnboardLayout progress={90} icon={<Onboard5Icon />}>
             <div className="row">
                 <div className="col-8">
                     <h3>Your Attitude to Risk</h3>
@@ -58,11 +35,22 @@ export const Onboarding8 = () => {
                     <div className="row">
                         <div className="col-8">
                             <Select
-                                className="basic-single"
-                                classNamePrefix="select"
+                             
                                 placeholder="Please Select"
                                 options={options}
-                                styles={colourStyles}
+                                theme={(theme) => ({
+                                    ...theme,
+                                    borderRadius: 0,
+                                    colors: {
+                                        ...theme.colors,
+                                        primary50: "rgba(255,202,0,0.5)",
+                                        primary75: "rgba(255,202,0,0.75)",
+                                        primary25: "rgba(255,202,0,0.25)",
+                                        primary: "rgba(255,202,0,1)",
+                                        danger: "#222",
+                                        dangerLight: "rgba(255,202,0,0.2)",
+                                    },
+                                })}
                             />
                         </div>
                     </div>
@@ -70,9 +58,9 @@ export const Onboarding8 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-                <div className="onboard-next">
-                    <FaChevronRight size={22} />
-                </div>
+            <Link to={`/onboarding/9`} className="onboard-next">
+                        <FaChevronRight size={22} />
+                    </Link>
             </div>
         </OnboardLayout>
     );

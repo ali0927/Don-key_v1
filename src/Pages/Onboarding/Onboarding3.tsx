@@ -1,5 +1,6 @@
 import React from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import { BuruCheckbox } from "./BuruCheckbox";
 import { Onboard3Icon } from "./Onboard3Icon";
 import { OnboardLayout } from "./OnboardLayout";
@@ -9,6 +10,7 @@ export const Onboarding3 = () => {
         <OnboardLayout
             title="Over th past three years, to what extent have you invested in/traded the following products?"
             icon={<Onboard3Icon />}
+            progress={40}
         >
             <h3>Your Farmers Experience</h3>
             <p className="text-muted">
@@ -23,11 +25,11 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item">1-10 times</div>
+                <div className="selectable-item py-3">1-10 times</div>
 
-                <div className="selectable-item">10-20 times</div>
+                <div className="selectable-item py-3">10-20 times</div>
 
-                <div className="selectable-item">20+ times</div>
+                <div className="selectable-item py-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox checked onClick={() => {}} />
@@ -40,11 +42,11 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item">1-10 times</div>
+                <div className="selectable-item py-3">1-10 times</div>
 
-                <div className="selectable-item">10-20 times</div>
+                <div className="selectable-item py-3">10-20 times</div>
 
-                <div className="selectable-item">20+ times</div>
+                <div className="selectable-item py-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox checked onClick={() => {}} />
@@ -57,20 +59,20 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item">1-10 times</div>
+                <div className="selectable-item py-3">1-10 times</div>
 
-                <div className="selectable-item">10-20 times</div>
+                <div className="selectable-item py-3">10-20 times</div>
 
-                <div className="selectable-item">20+ times</div>
+                <div className="selectable-item py-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox onClick={() => {}} />
                 <span className="ml-2">Never traded</span>
             </div>
             <div className="d-flex justify-content-end">
-                <div className="onboard-next">
+                <Link to={`/onboarding/4`} className="onboard-next">
                     <FaChevronRight size={22} />
-                </div>
+                </Link>
             </div>
         </OnboardLayout>
     );

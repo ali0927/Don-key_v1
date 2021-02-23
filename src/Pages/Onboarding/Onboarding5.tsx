@@ -11,6 +11,7 @@ import { USDTIcon } from "../../components/Icons/USDTIcon";
 import { AAVEIcon } from "../../components/Icons/AAVEIcon";
 import { DAIicon } from "../../components/Icons/DAIicon";
 import { SUSDIcon } from "../../components/Icons/SUSDIcon";
+import { Link } from "react-router-dom";
 
 
 export const Onboarding5 = () => {
@@ -30,7 +31,7 @@ export const Onboarding5 = () => {
     }
 
     return (
-        <OnboardLayout icon={<Onboard5Icon />}>
+        <OnboardLayout progress={60} icon={<Onboard5Icon />}>
             <div className="row">
                 <div className="col-10">
                     <h3>Planned Investments</h3>
@@ -108,9 +109,9 @@ export const Onboarding5 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-                <div className="onboard-next">
-                    <FaChevronRight size={22} />
-                </div>
+            <Link to={`/onboarding/6`} className="onboard-next">
+                        <FaChevronRight size={22} />
+                    </Link>
             </div>
         </OnboardLayout>
     );

@@ -2,26 +2,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { Logo } from "./Logo";
 import React from "react";
 import { OnboardingIcon } from "./OnboardingIcon";
-const CloseIcon = (props: React.SVGProps<SVGSVGElement>) => {
-    return (
-        <svg
-            width="16"
-            height="17"
-            viewBox="0 0 16 17"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            {...props}
-        >
-            <path
-                opacity="0.9"
-                d="M0.5 1L8 8.5M8 8.5L15.5 16M8 8.5L15.5 1M8 8.5L0.5 16"
-                stroke="#252525"
-                stroke-linecap="round"
-            />
-        </svg>
-    );
-};
-
+import { CloseIcon } from "./CloseIcon";
 const OnboardProgress = ({ progress }: { progress: number }) => {
     return (
         <div className="onboard-progress">
@@ -49,10 +30,12 @@ export const OnboardLayout = ({
     children,
     title = "A few clicks away from creating your profile",
     icon = <OnboardingIcon />,
+    progress 
 }: {
     children: React.ReactNode;
     title?: string;
     icon?: React.ReactElement;
+    progress?: number
 }) => {
     return (
         <div className="onboardlayout">
@@ -73,7 +56,7 @@ export const OnboardLayout = ({
                         <CloseIcon className="closeicon cursor-pointer" />
                         <div className="onboard-wrapper">{children}</div>
                         <div className="progress-wrapper">
-                            <OnboardProgress progress={12} />
+                            {typeof progress !== "undefined" && <OnboardProgress progress={progress} />}
                         </div>
                     </div>
                 </div>

@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import clsx from "clsx";
 import { OnboardLayout } from "./OnboardLayout";
+import { Link } from "react-router-dom";
 
 export const Onboarding1 = () => {
     const [radio, setRadio] = useState(0);
 
     return (
-        <OnboardLayout>
+        <OnboardLayout progress={20}>
             <h3>Your Profile</h3>
             <p>This should match your ID or Passport</p>
             <div className="container">
@@ -94,9 +95,9 @@ export const Onboarding1 = () => {
                     </div>
                 </div>
                 <div className="row justify-content-end mt-5">
-                    <div className="onboard-next">
+                    <Link to={`/onboarding/2`} className="onboard-next">
                         <FaChevronRight size={22} />
-                    </div>
+                    </Link>
                 </div>
             </div>
         </OnboardLayout>

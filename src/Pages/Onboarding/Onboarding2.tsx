@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useAutocomplete } from "@material-ui/lab";
 import { countries } from "./countries";
 import { BuruCheckbox } from "./BuruCheckbox";
+import { Link } from "react-router-dom";
 
 function countryToFlag(isoCode: string) {
     return typeof String.fromCodePoint !== "undefined"
@@ -31,7 +32,7 @@ export const Onboarding2 = () => {
         getOptionLabel: (option) => option.label,
     });
     return (
-        <OnboardLayout>
+        <OnboardLayout progress={30}>
             <h3>Your Address</h3>
             <div className="container">
                 <div className="row mt-5">
@@ -179,9 +180,9 @@ export const Onboarding2 = () => {
                     </div>
                 </div>
                 <div className="row justify-content-end mt-5">
-                    <div className="onboard-next">
+                <Link to={`/onboarding/3`} className="onboard-next">
                         <FaChevronRight size={22} />
-                    </div>
+                    </Link>
                 </div>
             </div>
         </OnboardLayout>
