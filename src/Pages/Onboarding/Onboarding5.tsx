@@ -33,14 +33,14 @@ export const Onboarding5 = () => {
     return (
         <OnboardLayout progress={60} icon={<Onboard5Icon />}>
             <div className="row">
-                <div className="col-10">
+                <div className="col-sm-10 col-12">
                     <h3>Planned Investments</h3>
                     <p className="text-muted">
                         In which instruments do you plan to trade? Please select
                         one or more relevant answer
                     </p>
                     <div className="row">
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                 checked={getChecked("BYield")}
                                 onClick={toggle("BYield")}
@@ -48,7 +48,7 @@ export const Onboarding5 = () => {
                                 text="BYield"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("True")}
                                  onClick={toggle("True")}
@@ -56,7 +56,7 @@ export const Onboarding5 = () => {
                                 text="True"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("Yearn")}
                                  onClick={toggle("Yearn")}
@@ -64,7 +64,7 @@ export const Onboarding5 = () => {
                                 text="Yearn.finance"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("Ethereum")}
                                  onClick={toggle("Ethereum")}
@@ -72,7 +72,7 @@ export const Onboarding5 = () => {
                                 text="Ethereum"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("USDT")}
                                  onClick={toggle("USDT")}
@@ -80,7 +80,7 @@ export const Onboarding5 = () => {
                                 text="USDT Coin"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("AAVE")}
                                  onClick={toggle("AAVE")}
@@ -88,7 +88,7 @@ export const Onboarding5 = () => {
                                 text="AAVE"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("DAI")}
                                  onClick={toggle("DAI")}
@@ -96,7 +96,7 @@ export const Onboarding5 = () => {
                                 text="DAI"
                             />
                         </div>
-                        <div className="col-6">
+                        <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
                                  checked={getChecked("sUSD")}
                                  onClick={toggle("sUSD")}

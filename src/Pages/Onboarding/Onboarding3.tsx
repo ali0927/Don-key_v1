@@ -25,11 +25,11 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item py-3">1-10 times</div>
+                <div className="selectable-item py-2 py-sm-3">1-10 times</div>
 
-                <div className="selectable-item py-3">10-20 times</div>
+                <div className="selectable-item py-2 py-sm-3">10-20 times</div>
 
-                <div className="selectable-item py-3">20+ times</div>
+                <div className="selectable-item py-2 py-sm-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox checked onClick={() => {}} />
@@ -42,11 +42,11 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item py-3">1-10 times</div>
+                <div className="selectable-item py-2 py-sm-3">1-10 times</div>
 
-                <div className="selectable-item py-3">10-20 times</div>
+                <div className="selectable-item py-2 py-sm-3">10-20 times</div>
 
-                <div className="selectable-item py-3">20+ times</div>
+                <div className="selectable-item py-2 py-sm-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox checked onClick={() => {}} />
@@ -59,11 +59,11 @@ export const Onboarding3 = () => {
                 </span>
             </label>
             <div className="d-flex">
-                <div className="selectable-item py-3">1-10 times</div>
+                <div className="selectable-item py-2 py-sm-3">1-10 times</div>
 
-                <div className="selectable-item py-3">10-20 times</div>
+                <div className="selectable-item py-2 py-sm-3">10-20 times</div>
 
-                <div className="selectable-item py-3">20+ times</div>
+                <div className="selectable-item py-2 py-sm-3">20+ times</div>
             </div>
             <div className="d-flex align-items-center text-muted mt-2">
                 <BuruCheckbox onClick={() => {}} />

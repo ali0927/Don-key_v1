@@ -378,7 +378,7 @@ export const Onboarding11 = () => {
         <OnboardLayout title="" icon={<Onboard11Icon />}>
             <div className="container">
                 <div className="row">
-                    <div className="col-10">
+                    <div className="col-12 col-sm-10">
                         <h3>Profile Updated!</h3>
 
                         <p className="text-muted mt-4">

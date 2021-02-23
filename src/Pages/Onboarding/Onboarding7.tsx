@@ -310,7 +310,7 @@ export const Onboarding7 = () => {
     return (
         <OnboardLayout progress={80} icon={<Onboard5Icon />}>
             <div className="row">
-                <div className="col-8">
+                <div className="col-12 col-sm-8">
                     <h3>Farmer Strategy</h3>
                     <p className="text-muted">
                         How long do you plan to leave your positions open?

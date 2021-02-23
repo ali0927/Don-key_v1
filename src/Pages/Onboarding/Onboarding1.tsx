@@ -11,19 +11,19 @@ export const Onboarding1 = () => {
         <OnboardLayout progress={20}>
             <h3>Your Profile</h3>
             <p>This should match your ID or Passport</p>
-            <div className="container">
+            <div className="container paddingSet">
                 <div className="row">
                     <label className="onboard-label col-2 d-flex align-items-center">
                         Name
                     </label>
-                    <div className="col-4">
+                    <div className="col-10 col-sm-4 col-sm-4">
                         <input
                             className="onboard-input"
                             placeholder="First Name"
                             type="text"
                         />
                     </div>
-                    <div className="col-4">
+                    <div className="col-10 offset-2  mt-3 mt-sm-0  col-sm-4">
                         <input
                             className="onboard-input"
                             placeholder="Middle Name"
@@ -32,7 +32,7 @@ export const Onboarding1 = () => {
                     </div>
                 </div>
                 <div className="row mt-3">
-                    <div className="col-4 offset-2">
+                    <div className="col-10 col-sm-4 offset-2">
                         <input className="onboard-input " type="text" />
                     </div>
                 </div>
@@ -40,7 +40,7 @@ export const Onboarding1 = () => {
                     <label className="onboard-label col-2 d-flex align-items-center">
                         Gender
                     </label>
-                    <div className="col-4">
+                    <div className="col-5 col-sm-4">
                         <div
                             onClick={() => setRadio(0)}
                             className={clsx("input-radio", {
@@ -50,7 +50,7 @@ export const Onboarding1 = () => {
                             Male
                         </div>
                     </div>
-                    <div className="col-4">
+                    <div className="col-5 col-sm-4">
                         <div
                             onClick={() => setRadio(1)}
                             className={clsx("input-radio", {
@@ -65,7 +65,7 @@ export const Onboarding1 = () => {
                     <label className="onboard-label col-2 d-flex align-items-center">
                         Birthday
                     </label>
-                    <div className="col-8">
+                    <div className="col-10 col-sm-8">
                         <div className="row">
                             <div className="col">
                                 <input
@@ -83,7 +83,7 @@ export const Onboarding1 = () => {
                                     maxLength={2}
                                 />
                             </div>
-                            <div className="col ">
+                            <div className="col mt-2 mt-sm-0">
                                 <input
                                     className="onboard-input"
                                     type="number"

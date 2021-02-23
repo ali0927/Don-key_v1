@@ -40,12 +40,12 @@ export const OnboardLayout = ({
     return (
         <div className="onboardlayout">
             <div className="container-fluid">
-                <div className="row">
+                <div className="row wrapperonboard">
                     <div className="onboard-sidebar col-sm-4 ">
                         <div className="p-4 py-5">
                             <Logo />
                         </div>
-                        <div className="px-5 py-2  d-flex justify-content-center">
+                        <div className="px-5 py-2   d-flex justify-content-center">
                             <p className="font-weight-bold">{title} </p>
                         </div>
                         <div className="onboard_icon d-flex justify-content-center">
@@ -53,6 +53,9 @@ export const OnboardLayout = ({
                         </div>
                     </div>
                     <div className="col-sm-8 onboard-main">
+                        <div className="logosecond  p-2  p-sm-4 py-5">
+                            <Logo />
+                        </div>
                         <CloseIcon className="closeicon cursor-pointer" />
                         <div className="onboard-wrapper">{children}</div>
                         <div className="progress-wrapper">

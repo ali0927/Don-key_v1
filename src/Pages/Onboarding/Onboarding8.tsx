@@ -26,7 +26,7 @@ export const Onboarding8 = () => {
     return (
         <OnboardLayout progress={90} icon={<Onboard5Icon />}>
             <div className="row">
-                <div className="col-8">
+                <div className="col-12 col-sm-9">
                     <h3>Your Attitude to Risk</h3>
                     <p className="text-muted">
                         How much do you plan to deposit into your BYield account

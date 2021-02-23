@@ -36,7 +36,7 @@ export const Onboarding10 = () => {
         <OnboardLayout title="" icon={<Onboard10Icon />}>
             <div className="container">
                 <div className="row">
-                    <div className="col-10">
+                    <div className="col-12 col-lg-10">
                         <h3>Suitability Assessment</h3>
 
                         <p className="text-muted mt-4">

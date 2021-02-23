@@ -39,20 +39,25 @@ export const Onboarding2 = () => {
                     <label className="onboard-label col-3 d-flex align-items-center">
                         Address
                     </label>
-                    <div className="col-7">
-                        <input
-                            className="onboard-input"
-                            placeholder="Street"
-                            type="text"
-                        />
+                    <div className="col-9">
+                        <div className="row">
+                            <div className="col-12 col-md-6 col-lg-8 col-xl-9">
+                            <input
+                                className="onboard-input"
+                                placeholder="Street"
+                                type="text"
+                                />
+                            </div>
+                            <div className="col-12 mt-3 mt-sm-0  col-md-6 col-lg-4 col-xl-3">
+                            <input
+                                className="onboard-input"
+                                placeholder="No"
+                                type="text"
+                            />
+                        </div>
+                        </div>
                     </div>
-                    <div className="col-2">
-                        <input
-                            className="onboard-input"
-                            placeholder="No"
-                            type="text"
-                        />
-                    </div>
+                    
                 </div>
                 <div className="row mt-3">
                     <label className="onboard-label col-3 d-flex align-items-center">
@@ -158,7 +163,7 @@ export const Onboarding2 = () => {
                     </div>
                 </div>
 
-                <div className="row mt-5">
+                <div className="row mt-3">
                     <label className="onboard-label col-3 d-flex align-items-center">
                         Passport Number
                     </label>

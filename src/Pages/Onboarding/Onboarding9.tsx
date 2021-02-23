@@ -29,7 +29,7 @@ export const Onboarding9 = () => {
             </p>
 
             <Select
-                className="w-50"
+                className="w-75"
                 placeholder="Select One or More"
                 isMulti
                 options={options}

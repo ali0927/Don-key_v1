@@ -2,25 +2,78 @@
 
 .onboard-sidebar {
     background-color: $bgyellowColor;
-    height: 100vh;
+    min-height: 100vh;
+    @media (max-width: 768px) {
+        display: none;
+    }
 }
 .onboard_icon {
     margin-top: 9rem;
+    @media (max-width: 768px) {
+        visibility: hidden!important;
+        max-width: 0px;
+        max-height: 0px;
+    }
+}
+
+.paddingSet {
+    @media (max-width: 768px) {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+}
+
+.wrapperonboard {
+    @media (max-width: 768px) {
+        justify-content: center;
+    }
+}
+
+.logosecond {
+    display: none;
+    @media (max-width: 768px) {
+        display: block;
+    }
 }
 
 .onboard-wrapper {
     padding-top: 8rem;
     padding-left: 5rem;
     padding-right: 5rem;
+    @media (max-width: 768px) {
+        padding-top: 1rem;
+        padding-left: 0rem;
+        padding-right: 0rem;
+    }
 }
 .onboard-main {
     background-color: #fafafa;
     position: relative;
+    @media (max-width: 768px) {
+        min-height: 100vh;
+        padding-bottom: 40px;
+    }
+}
+
+
+.burucheckbox + div {
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
+}
+.logodisplay {
+    @media (max-width: 768px) {
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+    }
 }
 
 .onboard-label {
     font-weight: bold;
     box-sizing: border-box;
+    @media (max-width: 768px) {
+        font-size: 10px;
+    }
 }
 
 .onboard-input,
@@ -76,6 +129,11 @@
         left: 50%;
         transform: translate(-50%, -50%)
     }
+    @media (max-width: 768px) {
+        font-size: 13px;
+        height: 25px;
+
+    }
 }
 .onboardlayout {
     background-color: #fafafa;
@@ -87,8 +145,16 @@
     text-align: center;
     padding: 2rem;
     position: relative;
+    margin-right: 1rem;
+
     &:not(:last-child) {
-        margin-right: 1rem;
+        @media (max-width: 768px) {
+            padding: .6rem;
+            margin-top: 0px;
+            margin-right: 2px;
+            margin-left: 2px;
+            margin-top: 10px;
+        }
     }
     margin-top: 1rem;
     border: 2px solid #fff;
@@ -96,6 +162,18 @@
     &:hover,
     &.active {
         border: 2px solid $bgyellowColor;
+    }
+
+    @media (max-width: 1100px) {
+        padding: .6rem;
+        margin-top: 10px;
+    }
+    @media (max-width: 768px) {
+        padding: .6rem;
+        margin-top: 10px;
+        margin-right: 2px;
+            margin-left: 2px;
+
     }
 }
 .selectable-item-withicon {
@@ -187,6 +265,7 @@
     color: #222;
     font-weight: 500;
     padding: 0.8rem 0;
+    margin-top: 10px;
     border: none;
     transition: all 0.3s linear;
     &:hover {
@@ -225,6 +304,16 @@
     position: absolute;
     top: 3rem;
     right: 4rem;
+    @media (max-width: 768px) {
+        right: 2em;
+        top: 1.8em;
+    }
+    @media (max-width: 576px) {
+        right: 2em;
+        top: 3rem;
+
+    }
+    
 }
 
 .btn.btn-farming {
