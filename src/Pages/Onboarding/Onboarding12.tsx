@@ -86,8 +86,8 @@ export const Onboarding12 = () => {
                     <Logo />
                 </div>
                 <CloseIcon className="closeicon cursor-pointer" />
-                <div className="row justify-content-center">
-                    <div className="col-md-6 mt-large text-center">
+                <div className="row justify-content-center mt-5 pt-5 pb-5">
+                    <div className="col-md-6 mt-5  text-center">
                         <h3>Pending Verification</h3>
 
                         <div className="row mt-large">

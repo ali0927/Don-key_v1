@@ -356,7 +356,7 @@ export const Onboarding7 = () => {
                 </div>
             </div>
 
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end  mt-3 mt-sm-0">
             <Link to={`/onboarding/8`} className="onboard-next">
                         <FaChevronRight size={22} />
                     </Link>

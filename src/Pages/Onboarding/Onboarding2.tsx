@@ -41,14 +41,14 @@ export const Onboarding2 = () => {
                     </label>
                     <div className="col-9">
                         <div className="row">
-                            <div className="col-12 col-md-6 col-lg-8 col-xl-9">
+                            <div className="col-12 mt-sm-1 mt-lg-0  col-md-6 col-lg-8 col-xl-9">
                             <input
                                 className="onboard-input"
                                 placeholder="Street"
                                 type="text"
                                 />
                             </div>
-                            <div className="col-12 mt-3 mt-sm-0  col-md-6 col-lg-4 col-xl-3">
+                            <div className="col-12 mt-3 mt-sm-1 mt-lg-0  col-md-6 col-lg-4 col-xl-3">
                             <input
                                 className="onboard-input"
                                 placeholder="No"
@@ -65,14 +65,14 @@ export const Onboarding2 = () => {
                     </label>
                     <div className="col-9">
                         <div className="row">
-                            <div className="col">
+                            <div className="col-12 col-lg-6">
                                 <input
                                     className="onboard-input "
                                     placeholder="City"
                                     type="text"
                                 />
                             </div>
-                            <div className="col">
+                            <div className="col-12 col-lg-6 mt-3 mt-sm-1 mt-lg-0">
                                 <input
                                     className="onboard-input "
                                     placeholder="Postal Code"

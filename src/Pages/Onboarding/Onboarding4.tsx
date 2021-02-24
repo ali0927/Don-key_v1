@@ -105,7 +105,7 @@ export const Onboarding4 = () => {
     return (
         <OnboardLayout progress={50} icon={<Onboard3Icon />}>
             <div className="row d-flex flex-wrap  justify-content-center  justify-content-sm-start">
-                <div className="col-12 col-sm-11 col-lg-12 col-xl-11">
+                <div className="col-12 col-sm-11 col-lg-12 col-xl-11 mb-3 mb-sm-1">
                     <h3>Farmers Knowledge</h3>
                     <p className="text-muted">
                         What is your level of farmer and educational knowledge?

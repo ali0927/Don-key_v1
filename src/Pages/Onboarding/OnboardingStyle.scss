@@ -298,7 +298,11 @@
 
 .mt-large {
     margin-top: 10rem;
+    @media (max-width: 768px) {
+        margin-top: 4rem;
+    }
 }
+
 
 .closeicon {
     position: absolute;

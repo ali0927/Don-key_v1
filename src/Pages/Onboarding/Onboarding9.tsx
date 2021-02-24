@@ -29,7 +29,7 @@ export const Onboarding9 = () => {
             </p>
 
             <Select
-                className="w-75"
+                className="w-100"
                 placeholder="Select One or More"
                 isMulti
                 options={options}
@@ -48,7 +48,7 @@ export const Onboarding9 = () => {
                 })}
             />
 
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end mt-5 mt-sm-4">
             <Link to={`/onboarding/10`} className="onboard-next">
                         <FaChevronRight size={22} />
                     </Link>

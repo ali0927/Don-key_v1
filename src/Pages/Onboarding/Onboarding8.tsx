@@ -33,7 +33,7 @@ export const Onboarding8 = () => {
                         over the course of the year?
                     </p>
                     <div className="row">
-                        <div className="col-8">
+                        <div className="col-12">
                             <Select
                              
                                 placeholder="Please Select"
@@ -57,7 +57,7 @@ export const Onboarding8 = () => {
                 </div>
             </div>
 
-            <div className="d-flex justify-content-end">
+            <div className="d-flex justify-content-end  mt-5 mt-sm-4">
             <Link to={`/onboarding/9`} className="onboard-next">
                         <FaChevronRight size={22} />
                     </Link>

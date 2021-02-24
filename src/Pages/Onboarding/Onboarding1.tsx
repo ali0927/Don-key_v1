@@ -23,7 +23,7 @@ export const Onboarding1 = () => {
                             type="text"
                         />
                     </div>
-                    <div className="col-10 offset-2  mt-3 mt-sm-0  col-sm-4">
+                    <div className="col-10 offset-2 offset-sm-0  mt-3 mt-sm-0  col-sm-4">
                         <input
                             className="onboard-input"
                             placeholder="Middle Name"
@@ -67,7 +67,7 @@ export const Onboarding1 = () => {
                     </label>
                     <div className="col-10 col-sm-8">
                         <div className="row">
-                            <div className="col">
+                            <div className="col-12 mt-xl-0  mt-3 col-xl-4">
                                 <input
                                     className="onboard-input"
                                     placeholder="dd"
@@ -75,7 +75,7 @@ export const Onboarding1 = () => {
                                     maxLength={2}
                                 />
                             </div>
-                            <div className="col">
+                            <div className="col-12  mt-3 mt-xl-0 col-xl-4">
                                 <input
                                     className="onboard-input"
                                     placeholder="mm"
@@ -83,7 +83,7 @@ export const Onboarding1 = () => {
                                     maxLength={2}
                                 />
                             </div>
-                            <div className="col mt-2 mt-sm-0">
+                            <div className="col-12 mt-3 mt-2 mt-xl-0 col-xl-4">
                                 <input
                                     className="onboard-input"
                                     type="number"

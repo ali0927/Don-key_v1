@@ -33,7 +33,7 @@ export const Onboarding5 = () => {
     return (
         <OnboardLayout progress={60} icon={<Onboard5Icon />}>
             <div className="row">
-                <div className="col-sm-10 col-12">
+                <div className="col-sm-10 col-12 mb-3 mb-sm-0">
                     <h3>Planned Investments</h3>
                     <p className="text-muted">
                         In which instruments do you plan to trade? Please select
