@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import { getUserSettings, saveUserSettings } from "actions/userActions";
+import { useUserSettings } from "hooks/useUserSettings";
+import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { CaryBagIcon } from "./CaryBagIcon";
 import { FarmerKnoweldge } from "./FarmerKnoweldge";
@@ -89,19 +92,20 @@ const NoKnowledgeIcon = () => {
 };
 
 export const Onboarding4 = () => {
-    const [selectedItems, setSelectedItems] = useState<{
-        [x: string]: boolean;
-    }>({});
+    const [farmer_knowledge, setfarmer_knowledge] = useUserSettings<
+        "professional" | "academicdegree" | "noknowledge" | "attendedcourses",
+        "farmer_knowledge"
+    >("farmer_knowledge");
 
-    const getChecked = (name: string) => {
-        return selectedItems[name];
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
     };
 
-    const toggle = (name: string) => () => {
-        setSelectedItems((old) => {
-            return { ...old, [name]: !!!old[name] };
-        });
-    };
+
     return (
         <OnboardLayout progress={50} icon={<Onboard3Icon />}>
             <div className="row d-flex flex-wrap  justify-content-center  justify-content-sm-start">
@@ -113,29 +117,33 @@ export const Onboarding4 = () => {
                     </p>
                     <div className="d-flex flex-wrap  justify-content-center  justify-content-sm-center">
                         <FarmerKnoweldge
-                            active={getChecked("carrybag")}
-                            onClick={toggle("carrybag")}
+                            active={farmer_knowledge === "professional"}
+                            onClick={() => setfarmer_knowledge("professional")}
                             icon={<CaryBagIcon />}
                         >
                             Professional certificate or relevant work experience
                         </FarmerKnoweldge>
                         <FarmerKnoweldge
-                            active={getChecked("Academic")}
-                            onClick={toggle("Academic")}
+                            active={farmer_knowledge === "academicdegree"}
+                            onClick={() =>
+                                setfarmer_knowledge("academicdegree")
+                            }
                             icon={<GraduationHat />}
                         >
                             Academic degree in financial related field
                         </FarmerKnoweldge>
                         <FarmerKnoweldge
-                            active={getChecked("courses")}
-                            onClick={toggle("courses")}
+                            active={farmer_knowledge === "attendedcourses"}
+                            onClick={() =>
+                                setfarmer_knowledge("attendedcourses")
+                            }
                             icon={<CourseFilesIcon />}
                         >
                             I have attended farmers courses
                         </FarmerKnoweldge>
                         <FarmerKnoweldge
-                            active={getChecked("knowledge")}
-                            onClick={toggle("knowledge")}
+                            active={farmer_knowledge === "noknowledge"}
+                            onClick={() => setfarmer_knowledge("noknowledge")}
                             icon={<NoKnowledgeIcon />}
                         >
                             I have no financial knowledge
@@ -145,9 +153,9 @@ export const Onboarding4 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-            <Link to={`/onboarding/5`} className="onboard-next">
-                        <FaChevronRight size={22} />
-                    </Link>
+                <Link to={`/onboarding/5`} onClick={handleSave} className="onboard-next">
+                    <FaChevronRight size={22} />
+                </Link>
             </div>
         </OnboardLayout>
     );

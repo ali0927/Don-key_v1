@@ -10,15 +10,15 @@ export const useWalletConnectHook = () => {
     const history = useHistory();
     const { showNotification } = useNotification();
 
-    const { activate, library, account, chainId } = useWeb3React();
+    const { activate, library, account } = useWeb3React();
 
     const handleAuth = async (publicAddress: string) => {
         const nonce = await getNonce(publicAddress);
 
         const signature = await library.getSigner(account).signMessage(nonce);
-      console.log(signature, "sign")
-        const { user, token } = await getAuthToken(publicAddress, signature);
-      console.log(token, "token");
+      
+        const {  token } = await getAuthToken(publicAddress, signature);
+      
         localStorage.setItem(AuthToken, token);
 
         history.push("/myaccount");

@@ -1,6 +1,9 @@
 import { useAutocomplete } from "@material-ui/lab";
-import React from "react";
+import { getUserSettings, saveUserSettings } from "actions/userActions";
+import { useUserSettings } from "hooks/useUserSettings";
+import React, { useEffect } from "react";
 import { FaChevronRight } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import { Onboard5Icon } from "./Onboard5Icon";
@@ -8,21 +11,37 @@ import { OnboardLayout } from "./OnboardLayout";
 
 const options = [
     {
-        value: "Value",
-        label: "value",
+        value: "high",
+        label: "High",
     },
     {
-        value: "Value2",
-        label: "value2",
+        value: "moderate",
+        label: "Moderate",
     },
     {
-        value: "Value3",
-        label: "value3",
+        value: "low",
+        label: "Low",
     },
 ];
 
+const findItem = (val: string) => {
+    const index = options.findIndex((item) => item.value === val);
+    return index > -1 ? options[index] : null;
+};
+
 export const Onboarding8 = () => {
-    
+    const [risk_limit, setRiskLimit] = useUserSettings("risk_limit");
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
+    };
+
+
+
+
     return (
         <OnboardLayout progress={90} icon={<Onboard5Icon />}>
             <div className="row">
@@ -35,7 +54,12 @@ export const Onboarding8 = () => {
                     <div className="row">
                         <div className="col-12">
                             <Select
-                             
+                                value={risk_limit ? findItem(risk_limit) : null}
+                                onChange={(val) => {
+                                    if (val) {
+                                        setRiskLimit(val.value);
+                                    }
+                                }}
                                 placeholder="Please Select"
                                 options={options}
                                 theme={(theme) => ({
@@ -58,9 +82,9 @@ export const Onboarding8 = () => {
             </div>
 
             <div className="d-flex justify-content-end  mt-5 mt-sm-4">
-            <Link to={`/onboarding/9`} className="onboard-next">
-                        <FaChevronRight size={22} />
-                    </Link>
+                <Link onClick={handleSave} to={`/onboarding/9`} className="onboard-next">
+                    <FaChevronRight size={22} />
+                </Link>
             </div>
         </OnboardLayout>
     );

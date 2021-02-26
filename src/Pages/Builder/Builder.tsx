@@ -12,7 +12,7 @@ import "./main.scss";
 import { getQueryParam, uuidv4 } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { onApiRequest } from "actions/apiActions";
+import { apiRequest } from "actions/apiActions";
 import moreIcon from "./more.svg";
 import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsModal";
 import { AxiosResponse } from "axios";
@@ -51,7 +51,7 @@ const Builder = () => {
         return new Promise<AxiosResponse>((res, rej) => {
             const strategy = getQueryParam("id");
             dispatch(
-                onApiRequest({
+                apiRequest({
                     method: "GET",
                     endpoint: "/api/v1/strategies?id=" + strategy,
                     onDone: res,
@@ -64,7 +64,7 @@ const Builder = () => {
     const createStrategy = () => {
         return new Promise<AxiosResponse>((res, rej) => {
             dispatch(
-                onApiRequest({
+                apiRequest({
                     method: "POST",
                     endpoint: "/api/v1/strategies",
                     onDone: res,
@@ -76,7 +76,7 @@ const Builder = () => {
     const getProtocols = () => {
         return new Promise<AxiosResponse>((res, rej) => {
             dispatch(
-                onApiRequest({
+                apiRequest({
                     method: "GET",
                     endpoint: "/api/v1/protocols",
                     onDone: res,

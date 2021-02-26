@@ -1,5 +1,5 @@
 import { OnboardLayout } from "./OnboardLayout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Onboard5Icon } from "./Onboard5Icon";
 import { BYieldIcon } from "../../components/Icons/BYieldIcon";
@@ -12,23 +12,41 @@ import { AAVEIcon } from "../../components/Icons/AAVEIcon";
 import { DAIicon } from "../../components/Icons/DAIicon";
 import { SUSDIcon } from "../../components/Icons/SUSDIcon";
 import { Link } from "react-router-dom";
-
+import { getUserSettings, saveUserSettings } from "actions/userActions";
+import { useUserSettings } from "hooks/useUserSettings";
+import { useDispatch } from "react-redux";
 
 export const Onboarding5 = () => {
-    const [selectedItems, setSelectedItems] = useState<{[x:string]: boolean}>({});
+    const [planned_investments, setPlannedInvestment] = useUserSettings(
+        "planned_investments"
+    );
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
+    };
 
-    const getChecked= (name: string) => {
-        return selectedItems[name];
-    }
-
-    const toggle = (name: string) => () => {
-        setSelectedItems(old => {
-         
-                return {...old,[name]: !!!old[name]}
-            
-        })
-    }
+    const hasInvestment = (val: string) => {
+        return planned_investments.includes(val);
+    };
+    const toggle = (val: string) => () => {
+        setPlannedInvestment((old) => {
+            if(!old){
+                return val;
+            }
+            const arr = old.split(",");
+            const index = arr.indexOf(val);
+            if (index > -1) {
+                arr.splice(index, 1);
+            } else {
+                arr.push(val);
+            }
+            return arr.join(",");
+        });
+    };
 
     return (
         <OnboardLayout progress={60} icon={<Onboard5Icon />}>
@@ -42,7 +60,7 @@ export const Onboarding5 = () => {
                     <div className="row">
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                checked={getChecked("BYield")}
+                                checked={hasInvestment("BYield")}
                                 onClick={toggle("BYield")}
                                 icon={<BYieldIcon />}
                                 text="BYield"
@@ -50,56 +68,56 @@ export const Onboarding5 = () => {
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("True")}
-                                 onClick={toggle("True")}
+                                checked={hasInvestment("True")}
+                                onClick={toggle("True")}
                                 icon={<TrueIcon />}
                                 text="True"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("Yearn")}
-                                 onClick={toggle("Yearn")}
+                                checked={hasInvestment("Yearn")}
+                                onClick={toggle("Yearn")}
                                 icon={<YearnIcon />}
                                 text="Yearn.finance"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("Ethereum")}
-                                 onClick={toggle("Ethereum")}
+                                checked={hasInvestment("Ethereum")}
+                                onClick={toggle("Ethereum")}
                                 icon={<EthereumIcon />}
                                 text="Ethereum"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("USDT")}
-                                 onClick={toggle("USDT")}
+                                checked={hasInvestment("USDT")}
+                                onClick={toggle("USDT")}
                                 icon={<USDTIcon />}
                                 text="USDT Coin"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("AAVE")}
-                                 onClick={toggle("AAVE")}
+                                checked={hasInvestment("AAVE")}
+                                onClick={toggle("AAVE")}
                                 icon={<AAVEIcon />}
                                 text="AAVE"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("DAI")}
-                                 onClick={toggle("DAI")}
+                                checked={hasInvestment("DAI")}
+                                onClick={toggle("DAI")}
                                 icon={<DAIicon />}
                                 text="DAI"
                             />
                         </div>
                         <div className="col-12 col-lg-12 col-xl-6">
                             <InvestmentCheckbox
-                                 checked={getChecked("sUSD")}
-                                 onClick={toggle("sUSD")}
+                                checked={hasInvestment("sUSD")}
+                                onClick={toggle("sUSD")}
                                 icon={<SUSDIcon />}
                                 text="sUSD"
                             />
@@ -109,9 +127,9 @@ export const Onboarding5 = () => {
             </div>
 
             <div className="d-flex justify-content-end">
-            <Link to={`/onboarding/6`} className="onboard-next">
-                        <FaChevronRight size={22} />
-                    </Link>
+                <Link to={`/onboarding/6`} onClick={handleSave} className="onboard-next">
+                    <FaChevronRight size={22} />
+                </Link>
             </div>
         </OnboardLayout>
     );

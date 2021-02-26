@@ -5,7 +5,6 @@ import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
 import { UsersController } from "../controllers/UsersController";
 
-
 const apiRoutes = Router();
 
 apiRoutes
@@ -26,6 +25,10 @@ apiRoutes
     .route("/users")
     .get(UsersController.getUsers)
     .post(UsersController.createUser);
+apiRoutes
+    .route("/users/settings")
+    .get(UsersController.getUserSettings)
+    .put(UsersController.updateUserSettings);
 
 apiRoutes
     .route("/users/:id")
@@ -47,21 +50,26 @@ apiRoutes
     .route("/categories/:categoryId")
     .get(ProtocolsController.getProtocolByCategoryId);
 
-
 apiRoutes
     .route("/categories/:categoryid/protocols/:protocolid")
     .put(ProtocolsController.addProtocolToCategory)
-    .delete(ProtocolsController.deleteProtocolFromCat)
-    
+    .delete(ProtocolsController.deleteProtocolFromCat);
+
 apiRoutes
     .route("/protocols/:id")
     .get(ProtocolsController.getProtocols)
     .delete(ProtocolsController.deleteProtocols)
     .put(ProtocolsController.updateProtocols);
 
-apiRoutes.post('/protocols/:id/actions',ProtocolsController.addAction)
-apiRoutes.put('/protocols/:id/actions/:actionid',ProtocolsController.updateAction)
-apiRoutes.delete('/protocols/:id/actions/:actionid',ProtocolsController.deleteAction)
+apiRoutes.post("/protocols/:id/actions", ProtocolsController.addAction);
+apiRoutes.put(
+    "/protocols/:id/actions/:actionid",
+    ProtocolsController.updateAction
+);
+apiRoutes.delete(
+    "/protocols/:id/actions/:actionid",
+    ProtocolsController.deleteAction
+);
 
 apiRoutes
     .route("/protocols/:id/categories")

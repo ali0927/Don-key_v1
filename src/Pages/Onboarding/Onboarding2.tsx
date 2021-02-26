@@ -1,10 +1,13 @@
 import { FaChevronRight } from "react-icons/fa";
 import { OnboardLayout } from "./OnboardLayout";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAutocomplete } from "@material-ui/lab";
 import { countries } from "./countries";
 import { BuruCheckbox } from "./BuruCheckbox";
 import { Link } from "react-router-dom";
+import { useUserSettings } from "hooks/useUserSettings";
+import { useDispatch } from "react-redux";
+import { getUserSettings, saveUserSettings } from "actions/userActions";
 
 function countryToFlag(isoCode: string) {
     return typeof String.fromCodePoint !== "undefined"
@@ -19,6 +22,29 @@ function countryToFlag(isoCode: string) {
 export const Onboarding2 = () => {
     const [checked, setChecked] = useState(false);
     const [isPassVisible, setIsPassVisible] = useState(false);
+
+    const [address, setAddress] = useUserSettings("address");
+
+    const [city, setcity] = useUserSettings("city");
+    const [postalcode, setpostalcode] = useUserSettings("postalcode");
+    const [country, setCountry] = useUserSettings("country");
+    const [passportNumber, setPassportNum] = useUserSettings("passportnum");
+
+    const[streetnum, setStreetNum] = useUserSettings("streetNo");
+
+    const[birth, setBirth] = useUserSettings("birthsameascitizen");
+
+
+    const contValue = useMemo(() => {
+     
+        const index = countries.findIndex((val) => val.label === country);
+        console.log(index);
+        if (index === -1) {
+            return null
+        }
+       
+        return countries[index];
+    }, [country]);
     const {
         getRootProps,
         getInputProps,
@@ -29,8 +55,29 @@ export const Onboarding2 = () => {
     } = useAutocomplete({
         id: "use-autocomplete-demo",
         options: countries,
+        value: contValue,
+
+        onChange: (e, val) => {
+            console.log(val)
+            if(val){
+                setCountry(val.label)
+            }
+        },
+
         getOptionLabel: (option) => option.label,
     });
+
+    
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
+    };
+
     return (
         <OnboardLayout progress={30}>
             <h3>Your Address</h3>
@@ -42,22 +89,25 @@ export const Onboarding2 = () => {
                     <div className="col-9">
                         <div className="row">
                             <div className="col-12 mt-sm-1 mt-lg-0  col-md-6 col-lg-8 col-xl-9">
-                            <input
-                                className="onboard-input"
-                                placeholder="Street"
-                                type="text"
+                                <input
+                                    className="onboard-input"
+                                    placeholder="Street"
+                                    type="text"
+                                    value={address}
+                                    onChange={setAddress}
                                 />
                             </div>
                             <div className="col-12 mt-3 mt-sm-1 mt-lg-0  col-md-6 col-lg-4 col-xl-3">
-                            <input
-                                className="onboard-input"
-                                placeholder="No"
-                                type="text"
-                            />
-                        </div>
+                                <input
+                                    className="onboard-input"
+                                    placeholder="No"
+                                    type="text"
+                                    value={streetnum}
+                                    onChange={setStreetNum}
+                                />
+                            </div>
                         </div>
                     </div>
-                    
                 </div>
                 <div className="row mt-3">
                     <label className="onboard-label col-3 d-flex align-items-center">
@@ -70,6 +120,8 @@ export const Onboarding2 = () => {
                                     className="onboard-input "
                                     placeholder="City"
                                     type="text"
+                                    value={city}
+                                    onChange={setcity}
                                 />
                             </div>
                             <div className="col-12 col-lg-6 mt-3 mt-sm-1 mt-lg-0">
@@ -77,6 +129,8 @@ export const Onboarding2 = () => {
                                     className="onboard-input "
                                     placeholder="Postal Code"
                                     type="text"
+                                    value={postalcode}
+                                    onChange={setpostalcode}
                                 />
                             </div>
                         </div>
@@ -150,9 +204,9 @@ export const Onboarding2 = () => {
                     </div>
                     <div className="col-9 offset-3 d-flex mt-3">
                         <BuruCheckbox
-                            checked={checked}
+                            checked={birth}
                             onClick={() => {
-                                setChecked((val) => !val);
+                                setBirth(val => !val)
                             }}
                             className="mr-2"
                         />
@@ -169,9 +223,11 @@ export const Onboarding2 = () => {
                     </label>
                     <div className="col-9 position-relative">
                         <input
+                            onChange={setPassportNum}
+                            value={passportNumber}
                             className="onboard-input"
                             autoComplete="new-password"
-                            type={isPassVisible ?"text" : "password"}
+                            type={isPassVisible ? "text" : "password"}
                         />
                         <button
                             onClick={() => setIsPassVisible((val) => !val)}
@@ -185,7 +241,11 @@ export const Onboarding2 = () => {
                     </div>
                 </div>
                 <div className="row justify-content-end mt-5">
-                <Link to={`/onboarding/3`} className="onboard-next">
+                    <Link
+                        to={`/onboarding/3`}
+                        onClick={handleSave}
+                        className="onboard-next"
+                    >
                         <FaChevronRight size={22} />
                     </Link>
                 </div>
@@ -193,4 +253,3 @@ export const Onboarding2 = () => {
         </OnboardLayout>
     );
 };
- 

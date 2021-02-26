@@ -3,6 +3,11 @@ import { FaChevronRight } from "react-icons/fa";
 import { Onboard9Icon } from "./Onboard9Icon";
 import { OnboardLayout } from "./OnboardLayout";
 import { Link } from "react-router-dom";
+import { getUserSettings, saveUserSettings } from "actions/userActions";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useUserSettings } from "hooks/useUserSettings";
+import { isEmpty } from "lodash";
 const options = [
     {
         value: "Value",
@@ -17,8 +22,28 @@ const options = [
         label: "value3",
     },
 ];
-
+const findItem = (val: string) => {
+    const index = options.findIndex((item) => item.value === val);
+    return index > -1 ? options[index] : null;
+};
 export const Onboarding9 = () => {
+    const [income, setIncome] = useUserSettings("income_sources");
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
+    };
+
+    const getSelectedOptions = () => {
+        return income
+            .split(",")
+            .map(findItem)
+            .filter((item) => item) as any[];
+    };
+
     return (
         <OnboardLayout progress={100} icon={<Onboard9Icon />}>
             <h3>Your Financial Status</h3>
@@ -32,7 +57,13 @@ export const Onboarding9 = () => {
                 className="w-100"
                 placeholder="Select One or More"
                 isMulti
+                value={getSelectedOptions()}
                 options={options}
+                onChange={(val) => {
+               
+                    const str = val.map((item) => item.value).join(",");
+                    setIncome(str);
+                }}
                 theme={(theme) => ({
                     ...theme,
                     borderRadius: 0,
@@ -49,9 +80,13 @@ export const Onboarding9 = () => {
             />
 
             <div className="d-flex justify-content-end mt-5 mt-sm-4">
-            <Link to={`/onboarding/10`} className="onboard-next">
-                        <FaChevronRight size={22} />
-                    </Link>
+                <Link
+                    to={`/onboarding/10`}
+                    onClick={handleSave}
+                    className="onboard-next"
+                >
+                    <FaChevronRight size={22} />
+                </Link>
             </div>
         </OnboardLayout>
     );

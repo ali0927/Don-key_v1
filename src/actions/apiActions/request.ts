@@ -2,7 +2,7 @@ import { AxiosResponse } from "axios";
 import { action } from "typesafe-actions";
 import { BuruRequest } from "interfaces";
 
-export const onApiRequest = (
+export const apiRequest = (
   args: {
     onDone?: (res: AxiosResponse) => void;
     onFail?: (res: AxiosResponse) => void;

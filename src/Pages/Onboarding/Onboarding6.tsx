@@ -1,9 +1,12 @@
 import { OnboardLayout } from "./OnboardLayout";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Onboard5Icon } from "./Onboard5Icon";
 import { FarmerKnoweldge } from "./FarmerKnoweldge";
 import { Link } from "react-router-dom";
+import { useUserSettings } from "hooks/useUserSettings";
+import { getUserSettings, saveUserSettings } from "actions/userActions";
+import { useDispatch } from "react-redux";
 
 const StopWatchIcon = () => {
     return (
@@ -179,45 +182,45 @@ const MonthIcon = () => {
 };
 
 export const Onboarding6 = () => {
-    const [selectedItems, setSelectedItems] = useState<{
-        [x: string]: boolean;
-    }>({});
+    const [strategy, setStrategy] = useUserSettings<
+        "hours" | "weeks" | "years",
+        "farmer_strategy"
+    >("farmer_strategy");
 
-    const getChecked = (name: string) => {
-        return selectedItems[name];
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getUserSettings(true));
+    }, []);
+    const handleSave = async () => {
+        dispatch(saveUserSettings());
     };
 
-    const toggle = (name: string) => () => {
-        setSelectedItems((old) => {
-            return { ...old, [name]: !!!old[name] };
-        });
-    };
     return (
         <OnboardLayout progress={70} icon={<Onboard5Icon />}>
             <div className="row">
-                <div className="col-12 col-sm-8">
+                <div className="col">
                     <h3>Farmer Strategy</h3>
                     <p className="text-muted">
                         How long do you plan to leave your positions open?
                     </p>
                     <div className="d-flex flex-wrap">
                         <FarmerKnoweldge
-                            active={getChecked("watch")}
-                            onClick={toggle("watch")}
+                            active={strategy === "hours"}
+                            onClick={() => setStrategy("hours")}
                             icon={<StopWatchIcon />}
                         >
                             Few seconds up to 24 hours
                         </FarmerKnoweldge>
                         <FarmerKnoweldge
-                            active={getChecked("calendar")}
-                            onClick={toggle("calendar")}
+                            active={strategy === "weeks"}
+                            onClick={() => setStrategy("weeks")}
                             icon={<CalendarIcon />}
                         >
                             Few weeks up to several months
                         </FarmerKnoweldge>
                         <FarmerKnoweldge
-                            active={getChecked("months")}
-                            onClick={toggle("months")}
+                            active={strategy === "years"}
+                            onClick={() => setStrategy("years")}
                             icon={<MonthIcon />}
                         >
                             More than several months/years
@@ -227,9 +230,13 @@ export const Onboarding6 = () => {
             </div>
 
             <div className="d-flex justify-content-end mt-3 mt-sm-0">
-            <Link to={`/onboarding/7`} className="onboard-next">
-                        <FaChevronRight size={22} />
-                    </Link>
+                <Link
+                    to={`/onboarding/7`}
+                    onClick={handleSave}
+                    className="onboard-next"
+                >
+                    <FaChevronRight size={22} />
+                </Link>
             </div>
         </OnboardLayout>
     );

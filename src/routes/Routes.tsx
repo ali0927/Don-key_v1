@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -31,6 +31,8 @@ import { Onboarding12 } from "Pages/Onboarding/Onboarding12";
 
 
 export default function Routes() {
+
+
   return (
     <Router>
         <Switch>

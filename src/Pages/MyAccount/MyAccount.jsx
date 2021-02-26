@@ -23,7 +23,7 @@ import StrategiesTable from "../../JsonData/StrategiesTable";
 import { waitFor } from "../../helpers/helpers";
 import { Loader } from "components/Loader/Loader";
 import { useDispatch } from "react-redux";
-import { onApiRequest } from "actions/apiActions";
+import { apiRequest } from "actions/apiActions";
 import { Footer } from "components/Footer/Footer";
 
 const MyAccount = () => {
@@ -43,7 +43,7 @@ const MyAccount = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
-      onApiRequest({
+      apiRequest({
         method: "GET",
         endpoint: "/api/v1/users/1",
         onDone: (res) => {
