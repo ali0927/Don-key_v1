@@ -3,7 +3,7 @@ import { AuthToken } from "../constants";
 import { getWeb3 } from "helpers/helpers";
 
 export const api = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://api.by.finance",
   transformRequest: [...axios.defaults.transformRequest as any, (data,headers) => {
     const token =localStorage.getItem(AuthToken)
     if(token){
