@@ -75,7 +75,7 @@ export class ProtocolsController {
         if (id) {
             const result = await Protocols.findUnique({
                 where: { id: parseInt(id) },
-                include: { actions: true },
+                include: { actions: true,protocol_category_relation: {include: {protocol_categories: true}} },
             });
 
             if (!result) {

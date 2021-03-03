@@ -58,11 +58,9 @@ function NavBar(props) {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <Link to="/login">
-          <ButtonComponent variant="colorBlack btn-outline">
-            Connect wallet
+          <ButtonComponent disabled variant="colorBlack btn-outline">
+            DAPP (coming soon)
           </ButtonComponent>
-        </Link>
       </Container>
     </Navbar>
   );

@@ -30,7 +30,9 @@
     padding: 10px 13px;
   }
 }
-
+button:disabled.btn-outline{
+  border: 1px solid rgba($color: $colorBlack, $alpha: 0.65) !important;
+}
 .bg-none {
   background-color: transparent;
 }
