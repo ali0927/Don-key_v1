@@ -48,7 +48,9 @@ apiRoutes
 
 apiRoutes
     .route("/categories/:categoryId")
-    .get(ProtocolsController.getProtocolByCategoryId);
+    .get(ProtocolsController.getProtocolByCategoryId)
+    .put(ProtocolsController.updateCategory)
+    .delete(ProtocolsController.deleteCategory)
 
 apiRoutes
     .route("/categories/:categoryid/protocols/:protocolid")

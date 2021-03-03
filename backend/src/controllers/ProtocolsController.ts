@@ -140,6 +140,52 @@ export class ProtocolsController {
         return sendResponse(res, { data: category, user: req.user });
     };
 
+    static updateCategory: RequestHandler = async (req, res) => {
+        const {categoryId} = req.params;
+        const {name} = req.body;
+        const cat = await Categories.findFirst({
+            where: { id: { equals: parseInt(categoryId) } },
+            include: {
+                protocol_category_relation: {
+                    select: {
+                        category_id: false,
+                        protocol_id: false,
+                        Protocols: { include: { actions: true } },
+                    },
+                },
+            },
+        });
+        if(!cat){
+            return sendResponse(res, {data: {msg: "Category Not Found"}, user: req.user, code: 404})
+        }
+        const category = await Categories.update({ data: { name }, where: {id: parseInt(categoryId)} });
+        return sendResponse(res, { data: category, user: req.user });
+    }
+    static deleteCategory: RequestHandler = async (req, res) => {
+        const {categoryId} = req.params;
+        const cat = await Categories.findFirst({
+            where: { id: { equals: parseInt(categoryId) } },
+            include: {
+                protocol_category_relation: {
+                    select: {
+                        category_id: false,
+                        protocol_id: false,
+                        Protocols: { include: { actions: true } },
+                    },
+                },
+            },
+        });
+        if(!cat){
+            return sendResponse(res, {data: {msg: "Category Not Found"}, user: req.user, code: 404})
+        }
+        if(cat.protocol_category_relation.length !== 0){
+            return sendResponse(res, {data: {msg: "Category Has Protocols"}, user: req.user,code:400});
+        }
+
+        const category = await Categories.delete({ where: {id: parseInt(categoryId)} });
+        return sendResponse(res, { data: category, user: req.user });
+    }
+
     static getProtocolCategories: RequestHandler = async (req, res) => {
         const categories = await Categories.findMany();
         return sendResponse(res, { data: categories, user: req.user });
