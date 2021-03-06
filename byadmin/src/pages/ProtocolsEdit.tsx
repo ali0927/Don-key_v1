@@ -4,7 +4,7 @@ import { DashboardLayout } from "components/DashboardLayout";
 import { ProtocolActionsTable } from "components/ProtocolActionsTable/ProtocolActionsTable";
 import { api } from "helpers/api";
 import { useGet } from "hooks/useGet";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { Loader } from "rsuite";
@@ -54,6 +54,12 @@ export const ProtocolsEdit = () => {
             setVertexImage(data.vertexImageURL);
             setIsReady(true);
             setActions(data.actions);
+            const relation = data.protocol_category_relation;
+            if (relation) {
+                setSelectedCat(
+                    relation.map((item: any) => item.protocol_categories)
+                );
+            }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [result]);
@@ -100,6 +106,26 @@ export const ProtocolsEdit = () => {
         }
     };
 
+    const handleCategoryUpdate = async (categories: ICategory[]) => {
+        const catIds = categories.map((item) => item.id);
+        try {
+            await api.put(`/api/v1/protocols/${id}/categories`, {
+                categories: catIds,
+            });
+            showSuccessToast("Categories Updated");
+        } catch (e) {
+            showErrorToast("An Error Occurred");
+        }
+    };
+
+    const spinner = (
+        <div
+            className="d-flex align-items-center justify-content-center"
+            style={{ minHeight: 100 }}
+        >
+            <Loader />
+        </div>
+    );
     return (
         <DashboardLayout title="Protocols">
             <div className="p-3 mt-3">
@@ -113,12 +139,7 @@ export const ProtocolsEdit = () => {
                             }}
                         >
                             {!isReady && id ? (
-                                <div
-                                    className="d-flex align-items-center justify-content-center"
-                                    style={{ minHeight: 100 }}
-                                >
-                                    <Loader />
-                                </div>
+                                spinner
                             ) : (
                                 <>
                                     <div className="row">
@@ -247,17 +268,24 @@ export const ProtocolsEdit = () => {
                                 background: "#fff",
                             }}
                         >
-                            Add Categories
-                            <Select
-                                options={cats}
-                                isMulti
-                                getOptionLabel={(val) => val.name}
-                                getOptionValue={(val) => val.id}
-                                value={selectedCategories}
-                                onChange={(val) => {
-                                    setSelectedCat(val as any[]);
-                                }}
-                            />
+                            {!isReady && id ? (
+                                spinner
+                            ) : (
+                                <>
+                                    Add Categories
+                                    <Select
+                                        options={cats}
+                                        isMulti
+                                        getOptionLabel={(val) => val.name}
+                                        getOptionValue={(val) => val.id}
+                                        value={selectedCategories}
+                                        onChange={(val) => {
+                                            handleCategoryUpdate(val as any[]);
+                                            setSelectedCat(val as any[]);
+                                        }}
+                                    />
+                                </>
+                            )}
                         </div>
                     </div>
                 </div>
