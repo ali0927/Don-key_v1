@@ -18,12 +18,13 @@ export const PancakeCronJob: IJob = {
   JobName: "Pancake Cron Job",
   runOnStart: true,
   job: async () => {
+	await PancakePairs.deleteMany();
     const [res1, res2] = await Promise.all([
       axios.get("https://api.pancakeswap.finance/api/v1/price"),
       axios.get("https://api.pancakeswap.finance/api/v1/stat"),
       PancakeTokens.deleteMany(),
     ]);
-    await PancakePairs.deleteMany();
+   
     const prices = res1.data.prices;
     const tokens = Object.keys(prices);
     const panTokens = tokens.map((name) => {
