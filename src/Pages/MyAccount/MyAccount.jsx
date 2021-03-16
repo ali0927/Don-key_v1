@@ -31,7 +31,7 @@ const MyAccount = () => {
 
   const [show, setShow] = useState(false);
   const [target, setTarget] = useState(null);
-  const [modalShow, setModalShow] = React.useState(false);
+
 
   const ref = useRef(null);
   const [MyAccountDetail, setAccountDetail] = useState(DummyData);

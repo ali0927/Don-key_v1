@@ -94,6 +94,11 @@ div:focus {
 .bgyellowColor {
   background-color: $bgyellowColor;
 }
+
+.primary-text {
+  color: $bgyellowColor;
+}
+
 .bggeryColor {
   background: $bggeryColor;
 }
@@ -121,7 +126,6 @@ div:focus {
 .bg-buru {
   background-color: #ffca00 !important;
 }
-
 
 .cardsBanner .card .advantage-img {
   height: 265px;

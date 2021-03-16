@@ -125,7 +125,7 @@ function NavBar2(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-            <NavbarLink to="/resources">Resources</NavbarLink>
+            <NavbarLink to="/resource">Resources</NavbarLink>
             <NavbarLink to="/myaccount_new">My Investment</NavbarLink>
             <NavbarLink to="/farmers">Farmers</NavbarLink>
             <NavbarLink to="/developers">Developers</NavbarLink>

@@ -12,79 +12,20 @@ import {
 } from "react-bootstrap";
 import "./MyAccountNew.scss";
 import { BsArrowRight } from "react-icons/bs";
-import clsx from "clsx";
 import { Footer } from "components/Footer/Footer";
 import { PostsIcon, StrategiesIcon, WithDrawalIcon } from "components/Icons";
 import { PostTab } from "./Tabs/PostTab";
 import { StratgiesTab } from "./Tabs/StratgiesTab";
 import { MyAccountNewGraph } from "components/MyAccountNewGraph";
 import { DepositsTab } from "./Tabs/DepositsTab";
+import { TabSection } from "components/TabSection";
 
-const TabItem = ({
-    icon,
-    text,
-    active,
-    onClick,
-}: {
-    icon: any;
-    text: string;
-    active?: boolean;
-    onClick: () => void;
-}) => {
-    return (
-        <div onClick={onClick} className={clsx("tab_item", { active })}>
-            <span className="tab_item_icon">{icon}</span>
-            <span className="tab_item_text">{text}</span>
-        </div>
-    );
-};
-
-const tabs = [
+export const tabs = [
     { text: "Posts", comp: <PostTab />, icon: <PostsIcon /> },
     { text: "Strategies", comp: <StratgiesTab />, icon: <StrategiesIcon /> },
     { text: "Deposits", comp: <DepositsTab title="Deposits" />, icon: <BsArrowRight size={20} /> },
     { text: "WithDrawal", comp:<DepositsTab title="Withdrawal" />, icon: <WithDrawalIcon /> },
 ];
-
-const TabsSection = () => {
-    const [selectedTab, setSelectedTab] = useState<string>(tabs[0].text);
-
-    return (
-        <section className="tabssection">
-            <div className="bg-buru">
-                <Container>
-                    <Row>
-                        <Col sm={12}>
-                            <div className="d-flex flex-wrap">
-                                {tabs.map((item) => {
-                                    return (
-                                        <TabItem
-                                            active={selectedTab === item.text}
-                                            onClick={() =>
-                                                setSelectedTab(item.text)
-                                            }
-                                            icon={item.icon}
-                                            text={item.text}
-                                        />
-                                    );
-                                })}
-                            </div>
-                        </Col>
-                    </Row>
-                </Container>
-            </div>
-
-            <div className="py-5">
-                {tabs.map((item) => {
-                    if (item.text === selectedTab) {
-                       
-                        return item.comp;
-                    }
-                })}
-            </div>
-        </section>
-    );
-};
 
 export const MyAccountNew = () => {
     const ref = useRef<HTMLDivElement | null>(null);
@@ -347,7 +288,7 @@ export const MyAccountNew = () => {
                 </Container>
                 <MyAccountNewGraph />
             </section>
-            <TabsSection />
+            <TabSection tabs={tabs} />
             <Footer />
         </>
     );

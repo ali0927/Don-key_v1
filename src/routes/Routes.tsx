@@ -28,6 +28,8 @@ import { Onboarding9 } from "Pages/Onboarding/Onboarding9";
 import { Onboarding10 } from "Pages/Onboarding/Onboarding10";
 import { Onboarding11 } from "Pages/Onboarding/Onboarding11";
 import { Onboarding12 } from "Pages/Onboarding/Onboarding12";
+import { DashboardPage } from "Pages/DashboardPage/DashboardPage";
+import { InvestmentPage } from "Pages/InvestmentPage/InvestmentPage";
 
 
 export default function Routes() {
@@ -37,6 +39,8 @@ export default function Routes() {
     <Router>
         <Switch>
           <Route exact path="/" children={<LandingPage />} />
+          <Route exact path="/dashboard" children={<DashboardPage />} />
+          <Route exact path="/dashboard/invest" children={<InvestmentPage />} />
           <Route exact path="/onboarding" children={<Onboarding />} />
           <Route path="/onboarding/1" children={<Onboarding1 />} />
           <Route path="/onboarding/2" children={<Onboarding2 />} />
