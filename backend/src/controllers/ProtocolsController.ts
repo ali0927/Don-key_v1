@@ -90,6 +90,7 @@ export class ProtocolsController {
         }
 
         const results = await Protocols.findMany({
+            where: { showOnToolbar: '1' },
             include: { actions: true },
         });
 
