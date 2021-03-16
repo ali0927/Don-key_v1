@@ -10,7 +10,7 @@ import {
   Tab,
   Tabs,
   Nav,
-  Button
+  Button,
 } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
@@ -23,11 +23,10 @@ import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsM
 
 const ResourcePage = () => {
   const [modalShow, setModalShow] = React.useState(false);
- 
 
   const [rangeValue, setRangeValue] = React.useState(10);
 
-  const handleRange = val => {
+  const handleRange = (val) => {
     const element = document.querySelector(".rc-slider-step");
     // if (element) {
     //   const childElement = element.children ? [...element.children] : [];
@@ -602,7 +601,7 @@ const ResourcePage = () => {
                   70: 70,
                   80: 80,
                   90: 90,
-                  100: 100
+                  100: 100,
                 }}
                 onAfterChange={handleRange}
               />
@@ -660,7 +659,7 @@ const ResourcePage = () => {
                   70: 70,
                   80: 80,
                   90: 90,
-                  100: 100
+                  100: 100,
                 }}
                 onAfterChange={handleRange}
               />
@@ -803,7 +802,8 @@ const ResourcePage = () => {
           </Row>
         </Container>
       </footer>
-      <MoreProtocolsModal 
+      <MoreProtocolsModal
+        protocols={[]}
         isOpen={modalShow}
         onClose={() => setModalShow(false)}
       />
