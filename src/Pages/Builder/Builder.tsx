@@ -166,6 +166,9 @@ const Builder = () => {
                             toggleModal={toggleModal}
                         />
                         <ActionConfig />
+                        <div style={{width:150, height:80}}>
+                            Approve strategy
+                        </div>
                     </GraphProvider>
                 ) : (
                     "Loading"
