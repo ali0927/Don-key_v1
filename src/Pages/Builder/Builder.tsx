@@ -104,9 +104,9 @@ const Builder = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-	const firstSeven = useMemo(() => {
-		return protocols.length > 6 ? protocols.slice(0, protocols.length -1) : protocols;
-	}, [protocols]);
+    const firstSeven = useMemo(() => {
+        return protocols.length > 6 ? protocols.slice(0, protocols.length - 1) : protocols;
+    }, [protocols]);
 
     return (
         <>
@@ -166,7 +166,8 @@ const Builder = () => {
                             toggleModal={toggleModal}
                         />
                         <ActionConfig />
-                        <div style={{width:150, height:80}}>
+                        width: 150px;
+                        <div style={{ width: 150, height: 54, position: 'absolute', top: 120, right: 87, padding: 14, backgroundColor: '#acacac' }}>
                             Approve strategy
                         </div>
                     </GraphProvider>
