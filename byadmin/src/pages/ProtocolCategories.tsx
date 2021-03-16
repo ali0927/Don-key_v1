@@ -87,7 +87,7 @@ export const ProtocolCategories = () => {
         data: { data },
         loading,
         refetchData,
-    } = useGet("/api/v1/categories", { data: [] });
+    } = useGet<{data: ICategory[]}>("/api/v1/categories", { data: [] });
 
     return (
         <DashboardLayout

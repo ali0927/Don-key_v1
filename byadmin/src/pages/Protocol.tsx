@@ -6,7 +6,7 @@ import { api } from "helpers/api";
 import { useGet } from "hooks/useGet";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { Modal, Table } from "rsuite";
+import {  Table } from "rsuite";
 import { useToastContext } from "../hooks/useToastContext";
 
 const { Column, Cell, HeaderCell } = Table;

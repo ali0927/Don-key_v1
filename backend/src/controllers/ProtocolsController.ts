@@ -75,7 +75,7 @@ export class ProtocolsController {
         if (id) {
             const result = await Protocols.findUnique({
                 where: { id: parseInt(id) },
-                include: { actions: true },
+                include: { actions: true,protocol_category_relation: {include: {protocol_categories: true}} },
             });
 
             if (!result) {
@@ -216,19 +216,20 @@ export class ProtocolsController {
         const { categories } = req.body;
 
         let results = [];
-
+      await Protocol_Relation.deleteMany({ where: {protocol_id: parseInt(id)} });
+        
         for (let i = 0; i < categories.length; i++) {
+            
             const data = {
                 category_id: parseInt(categories[i]),
                 protocol_id: parseInt(id),
             };
-            let exists = await Protocol_Relation.findFirst({ where: data });
-            if (!exists) {
-                exists = await Protocol_Relation.create({
+           
+            const result =  await Protocol_Relation.create({
                     data,
-                });
-            }
-            results.push(exists);
+            });
+            
+            results.push(result);
         }
         return sendResponse(res, { data: results, user: req.user });
     };

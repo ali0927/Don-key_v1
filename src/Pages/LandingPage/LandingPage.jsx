@@ -53,9 +53,8 @@ const LandingPage = () => {
       </div>
 
       {/* Cards */}
-
-      <div className="cardsBanner mt-5 pt-5">
-        <Container>
+      <div className="cardsBanner mt-5">
+        {/* <Container>
           <Row>
           {
             NumberFromjson.map((item,index)=>{
@@ -98,11 +97,12 @@ const LandingPage = () => {
            }
            </Row>
           
-        </Container>
+        </Container> */}
 
         {/* Advantage */}
-        <div className="borderCurve"></div>
+       
         <div className="advantage bgyellowColor">
+        <div className="borderCurve"></div>
           <Container>
             <h3 className="headsame mb-3 my-5 justify-content-center">
              Painless DeFi

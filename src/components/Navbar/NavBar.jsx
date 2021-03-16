@@ -1,26 +1,26 @@
-import React from "react";
-import { Container } from "react-bootstrap";
+import React from 'react'
+import { Container } from 'react-bootstrap'
 // import { Button } from "react-bootstrap";
-import ButtonComponent from "../Button/Button";
-import { Navbar, Nav, Dropdown } from "react-bootstrap";
-import "./NavbarStyle.scss";
-import NotificationJson from "../../JsonData/NotificationJson";
-import { NotificationIcon, UserIcon } from "../Icons";
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import clsx from "clsx";
-
+import ButtonComponent from '../Button/Button'
+import { Navbar, Nav, Dropdown } from 'react-bootstrap'
+import './NavbarStyle.scss'
+import NotificationJson from '../../JsonData/NotificationJson'
+import { NotificationIcon, UserIcon } from '../Icons'
+import { Link, useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import clsx from 'clsx'
+import comingsoon from 'images/comingsoon.svg'
 const shortenAddress = (val) => {
-  return val.slice(0, 4) + "..." + val.slice(-4);
-};
+  return val.slice(0, 4) + '...' + val.slice(-4)
+}
 
 const useWalletAddress = ({ short = false }) => {
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user)
   const walletAddress = user
     ? user.walletAddress
-    : "0x1341133ba79815e04e008f7635212bf086e821301";
-  return short ? shortenAddress(walletAddress) : walletAddress;
-};
+    : '0x1341133ba79815e04e008f7635212bf086e821301'
+  return short ? shortenAddress(walletAddress) : walletAddress
+}
 
 function NavBar(props) {
   return (
@@ -32,7 +32,6 @@ function NavBar(props) {
               src="/assets/images/logo.svg"
               className="d-inline-block align-top by-logo"
               alt="Logo"
-
             />
           </Link>
         </Navbar.Brand>
@@ -43,9 +42,9 @@ function NavBar(props) {
             <Nav.Link
               href="/resource"
               className={
-                window.location.pathname === "/"
-                  ? "colorBlack pr-md-5"
-                  : "colorBlack pr-md-5 active"
+                window.location.pathname === '/'
+                  ? 'colorBlack pr-md-5'
+                  : 'colorBlack pr-md-5 active'
               }
             >
               Resources
@@ -58,54 +57,59 @@ function NavBar(props) {
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
-        <Link to="/login">
-          <ButtonComponent variant="colorBlack btn-outline">
-            Connect wallet
+        <div className="position-relative">
+          <ButtonComponent disabled variant="colorBlack btn-outline px-4">
+            DAPP
           </ButtonComponent>
-        </Link>
+          <img className="coming-soon" src={comingsoon} />
+        </div>
       </Container>
     </Navbar>
-  );
+  )
 }
 function timeSince(date) {
   // var seconds = Math.floor((new Date() - date) / 1000);
-  var seconds = Math.floor(new Date().getTime() / 1000 - date);
-  var interval = seconds / 31536000;
+  var seconds = Math.floor(new Date().getTime() / 1000 - date)
+  var interval = seconds / 31536000
 
   if (interval > 1) {
-    return Math.floor(interval) + " years ago";
+    return Math.floor(interval) + ' years ago'
   }
-  interval = seconds / 2592000;
+  interval = seconds / 2592000
   if (interval > 1) {
-    return Math.floor(interval) + " months ago";
+    return Math.floor(interval) + ' months ago'
   }
-  interval = seconds / 86400;
+  interval = seconds / 86400
   if (interval > 1) {
-    return Math.floor(interval) + " days ago";
+    return Math.floor(interval) + ' days ago'
   }
-  interval = seconds / 3600;
+  interval = seconds / 3600
   if (interval > 1) {
-    return Math.floor(interval) + " hours ago";
+    return Math.floor(interval) + ' hours ago'
   }
-  interval = seconds / 60;
+  interval = seconds / 60
   if (interval > 1) {
-    return Math.floor(interval) + " minutes ago";
+    return Math.floor(interval) + ' minutes ago'
   }
-  return Math.floor(seconds) + " seconds ago";
+  return Math.floor(seconds) + ' seconds ago'
 }
 
-
 const NavbarLink = ({ to, children }) => {
+  const { pathname } = useLocation()
 
-  const { pathname } = useLocation();
-
-  return <Link className={clsx("colorBlack pr-md-5", { active: pathname === to })} component={Nav.Link} to={to}>
-    {children}
-  </Link>
+  return (
+    <Link
+      className={clsx('colorBlack pr-md-5', { active: pathname === to })}
+      component={Nav.Link}
+      to={to}
+    >
+      {children}
+    </Link>
+  )
 }
 
 function NavBar2(props) {
-  const address = useWalletAddress({ short: true });
+  const address = useWalletAddress({ short: true })
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
       <Container>
@@ -121,18 +125,12 @@ function NavBar2(props) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-            <NavbarLink to="/resources">
-              Resources
-            </NavbarLink>
-            <NavbarLink to="/myaccount_new">
-              My Investment
-            </NavbarLink>
-            <NavbarLink to="/farmers">
-              Farmers
-            </NavbarLink>
-            <NavbarLink to="/developers">
-              Developers
-            </NavbarLink>
+            <NavbarLink to="/resources">Resources</NavbarLink>
+            <NavbarLink to="/myaccount_new">My Investment</NavbarLink>
+            <NavbarLink to="/farmers">Farmers</NavbarLink>
+            <NavbarLink to="/developers">Developers</NavbarLink>
+            x-special/nautilus-clipboard copy
+            file:///home/iwebcode/Pictures/Screenshot%20from%202021-03-03%2017-37-14.png
           </Nav>
         </Navbar.Collapse>
 
@@ -158,7 +156,7 @@ function NavBar2(props) {
                     <p>{item.notification}</p>
                     <span>{timeSince(item.date)}</span>
                   </Dropdown.Item>
-                );
+                )
               })}
               <div className="viewDrop">
                 <a href="#"> View All</a>
@@ -184,15 +182,15 @@ function NavBar2(props) {
         </ButtonComponent>
       </Container>
     </Navbar>
-  );
+  )
 }
 
 const NavBar3 = () => {
-  const address = useWalletAddress({ short: true });
+  const address = useWalletAddress({ short: true })
   return (
     <Navbar
       expand="lg"
-      style={{ backgroundColor: "#000" }}
+      style={{ backgroundColor: '#000' }}
       className="pt-4 pb-4 text-white"
     >
       <Container>
@@ -238,7 +236,7 @@ const NavBar3 = () => {
                     <p>{item.notification}</p>
                     <span>{timeSince(item.date)}</span>
                   </Dropdown.Item>
-                );
+                )
               })}
               <div className="viewDrop">
                 <a href="#"> View All</a>
@@ -260,7 +258,7 @@ const NavBar3 = () => {
         </ButtonComponent>
       </Container>
     </Navbar>
-  );
-};
+  )
+}
 
-export { NavBar, NavBar2, NavBar3 };
+export { NavBar, NavBar2, NavBar3 }

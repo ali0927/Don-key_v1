@@ -30,7 +30,9 @@
     padding: 10px 13px;
   }
 }
-
+button:disabled.btn-outline{
+  border: 1px solid rgba($color: $colorBlack, $alpha: 0.65) !important;
+}
 .bg-none {
   background-color: transparent;
 }
@@ -158,6 +160,11 @@
   @media (max-width: 767px) {
     margin-left: -14px;
   }
+}
+.coming-soon {
+  position: absolute;
+  top: -25px;
+  left: 35px;
 }
 
 .navbar-nav .active:before {

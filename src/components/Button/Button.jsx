@@ -3,6 +3,7 @@ import { Button } from "react-bootstrap";
 const ButtonComponent = props => {
   return (
     <Button
+      {...props}
       variant={props.variant}
       className={props.className}
       onClick={props.onClick}
