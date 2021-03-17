@@ -33,7 +33,7 @@ const Login = () => {
 
     localStorage.setItem(AuthToken, token);
     dispatch(doLogin(user));
-    history.push("/myaccount");
+    history.push("/dashboard");
     showNotification({
       msg: (
         <>
@@ -47,7 +47,7 @@ const Login = () => {
   useEffect(() => {
     const token = localStorage.getItem(AuthToken);
     if(token){
-      history.push('/myaccount')
+      history.push('/dashboard')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

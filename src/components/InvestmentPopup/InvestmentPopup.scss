@@ -1,6 +1,10 @@
+@import "../../../public/assets/scss/variables.scss";
 .invest_col {
   position: relative;
   padding: 2rem 2.5rem !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   &:not(:last-child) {
     border-right: 1px solid rgba($color: #8e8a8a, $alpha: 0.2);
   }
@@ -49,4 +53,29 @@
   font-weight: bold;
   padding: 0.5rem 0.8rem;
   border-right: 1px solid #d9d9d9;
+}
+
+
+.invest_btn {
+  width: 100%;
+  background-color: $bgyellowColor;
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 5px;
+  padding: 0.6rem;
+  transition: all 0.3s linear;
+  &:hover {
+    background-color: rgba($color: $bgyellowColor, $alpha: 0.8)
+  }
+  &--outlined {
+    background-color: #fff;
+    border: 1px solid #000;
+    &:hover {
+      background-color: rgba($color: #000, $alpha: 0.05)
+    }
+  }
+  &:focus {
+    outline: none;
+  }
 }

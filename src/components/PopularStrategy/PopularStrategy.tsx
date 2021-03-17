@@ -1,6 +1,7 @@
 import "./popularstrategy.scss";
 import graph from "../MyAccountNewGraph/graph.svg";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { useHistory } from "react-router";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -25,6 +26,9 @@ const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
 };
 
 export const PopularStrategy = () => {
+
+  const history = useHistory();
+
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
@@ -91,7 +95,7 @@ export const PopularStrategy = () => {
           length={120}
         />
         </p>
-        <button className="popularstrategy__btn">Invest</button>
+        <button onClick={() => history.push('/dashboard/invest')} className="popularstrategy__btn">Invest</button>
       </div>
     </div>
   );

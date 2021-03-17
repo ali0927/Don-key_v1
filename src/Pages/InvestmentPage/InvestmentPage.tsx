@@ -156,13 +156,16 @@ const DetailTable = () => {
 };
 
 const InvestCard = () => {
+
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="invest_card">
       <p>Your investment Balance</p>
       <h5 className="mb-3">140 000$</h5>
       <div className="row">
         <div className="col">
-          <button className="invest_card_btn">Invest</button>
+          <button onClick={() => setIsOpen(true)} className="invest_card_btn">Invest</button>
         </div>
         <div className="col">
           <button disabled className="invest_card_btn">
@@ -170,7 +173,7 @@ const InvestCard = () => {
           </button>
         </div>
       </div>
-      <InvestmentPopup />
+      {isOpen && <InvestmentPopup onClose={() => setIsOpen(false)} />}
     </div>
   );
 };
