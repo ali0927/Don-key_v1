@@ -29,10 +29,15 @@ export const PopularStrategy = () => {
 
   const history = useHistory();
 
+  const goToStrategy = () => {
+    history.push('/strategy')
+  }
+
+
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
-        <div className="popularstrategy__title">
+        <div onClick={goToStrategy}  className="popularstrategy__title cursor-pointer">
           <StratIcon text="SA" showDot />
           <h5 className="ml-3 mb-0">Saly Strategies WOW</h5>
         </div>
@@ -95,7 +100,7 @@ export const PopularStrategy = () => {
           length={120}
         />
         </p>
-        <button onClick={() => history.push('/dashboard/invest')} className="popularstrategy__btn">Invest</button>
+        <button onClick={goToStrategy} className="popularstrategy__btn">Invest</button>
       </div>
     </div>
   );

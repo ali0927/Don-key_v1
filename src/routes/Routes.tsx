@@ -40,7 +40,7 @@ export default function Routes() {
         <Switch>
           <Route exact path="/" children={<LandingPage />} />
           <Route exact path="/dashboard" children={<DashboardPage />} />
-          <Route exact path="/dashboard/invest" children={<InvestmentPage />} />
+          <Route exact path="/strategy" children={<InvestmentPage />} />
           <Route exact path="/onboarding" children={<Onboarding />} />
           <Route path="/onboarding/1" children={<Onboarding1 />} />
           <Route path="/onboarding/2" children={<Onboarding2 />} />
