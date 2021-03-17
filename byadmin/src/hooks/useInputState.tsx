@@ -6,7 +6,7 @@ export const useInputState = (val?: string) => {
   const [state, setState] = useState(val);
 
   const onChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if(typeof e !== "object"){
+    if(!("target" in e)){
       setState(e);
     }else {
       setState(e.target.value);
