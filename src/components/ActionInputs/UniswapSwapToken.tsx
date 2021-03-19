@@ -33,9 +33,7 @@ export const UniswapSwapToken = ({
             try {
                 const res = await api.get("/api/v1/protocols/uni");
                 const data = res.data.data;
-                const web3 = await getWeb3() as Web3;
-                const chainId = await web3.eth.getChainId()
-                const curr = data.tokens.filter((item: any) => item.chainId === chainId).map((item: any) => {
+                const curr = data.tokens.map((item: any) => {
                     return {
                         tokenSymbol: item.symbol,
                         tokenIcon: item.logoURI,
