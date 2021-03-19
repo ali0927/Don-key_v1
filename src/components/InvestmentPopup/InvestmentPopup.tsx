@@ -1,10 +1,11 @@
 import { BiInfoCircle } from "react-icons/bi";
 import { CloseIcon } from "Pages/Onboarding/CloseIcon";
-import { Modal } from "react-bootstrap";
+import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
 import { useState } from "react";
 import { getWeb3 } from "helpers";
 import Web3 from "web3";
+import { useToggle } from "hooks";
 
 const InvestmentInput = ({
   value,
@@ -47,16 +48,26 @@ const InvestmentInput = ({
 
 export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
   const [value, setValue] = useState("");
+  const [isLoading, enable, disable] = useToggle();
+
   const handleInvest = async () => {
-    const web3 = (await getWeb3()) as Web3;
-    const accounts = await web3.eth.getAccounts();
-    const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
-    const parsedPoolContract = (await import("../../JsonData/POOL.json"))
-      .default;
-    const amount = web3.utils.toWei(value);
-    //@ts-ignore
-    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-    await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+    if(isLoading){
+      return;
+    }
+    enable();
+    try {
+      const web3 = (await getWeb3()) as Web3;
+      const accounts = await web3.eth.getAccounts();
+      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+      const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+        .default;
+      const amount = web3.utils.toWei(value);
+      //@ts-ignore
+      const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+      await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+    } finally {
+      disable();
+    }
     onClose();
   };
 
@@ -108,8 +119,12 @@ export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
             </div>
             <div className="row">
               <div className="col">
-                <button onClick={handleInvest} className="invest_btn">
-                  Invest
+                <button disabled={!value} onClick={handleInvest} className="invest_btn">
+                  {isLoading ? (
+                    <Spinner animation="border" size={"sm"} color="#fff" />
+                  ) : (
+                    "Invest"
+                  )}
                 </button>
               </div>
               <div className="col">

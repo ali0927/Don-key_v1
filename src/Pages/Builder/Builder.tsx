@@ -184,6 +184,7 @@ const Builder = () => {
                 backgroundColor: "white",
                 border: "3px solid black",
                 borderRadius: "8px",
+                cursor: "pointer"
               }}
               onClick={handleApprove}
             >
