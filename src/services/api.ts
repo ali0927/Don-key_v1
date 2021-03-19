@@ -2,6 +2,7 @@ import axios from "axios";
 import { AuthToken } from "../constants";
 import { getWeb3 } from "helpers/helpers";
 
+
 export const api = axios.create({
   baseURL: "https://api.by.finance",
   transformRequest: [...axios.defaults.transformRequest as any, (data,headers) => {
@@ -22,6 +23,8 @@ export const getNonce = async (publicAddress: string) => {
   } = res;
   return data.nonce;
 };
+
+
 export const getAuthToken = async (publicAddress: string, signature: string) => {
   const resps = await api.post("/api/v1/login", {
     signature,
