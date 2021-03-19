@@ -65,11 +65,17 @@
 }
 
 .balance-listing-container{
-  margin-top: 1px solid #e2e2e2 ;
+  border-top: 1px solid #e2e2e2 ;
+  margin-top: 10px;
 }
 
 .balance-li{
   padding-top: 14px;
+}
+
+.balance-li-icon{
+  margin-right: 5px;
+  height: 14px;
 }
 
 

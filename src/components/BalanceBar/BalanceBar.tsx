@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { AiOutlineCaretDown, AiOutlineCaretUp } from "react-icons/ai";
 import { ProgressBar } from "react-bootstrap";
 import "./BalanceBar.scss";
 import BalanceBarListItem from "./BalanceBarListItem";
+import icon from "../../images/balance-bar/icon.svg"
+import smile from "../../images/balance-bar/smile.svg"
 
 export default function BalanceBar() {
   const [isListingVisible, setIsListingVisible] = useState(false);
@@ -15,7 +16,7 @@ export default function BalanceBar() {
   return (
     <div className="balance-card">
       <div id="balance-bar-title" className="d-flex justify-content-between">
-        <div className="color-gray-76 fw-700 font-size-13">Balance Bar</div>
+        <div className="color-gray-76 fw-700 font-size-13">Balance bar</div>
         <div onClick={toggleListingView} className="cursor-pointer">
           {isListingVisible ? <AiOutlineCaretUp /> : <AiOutlineCaretDown />}
         </div>
@@ -44,10 +45,9 @@ export default function BalanceBar() {
       {isListingVisible && (
         <div
           className="balance-listing-container"
-          style={{ borderTop: "1px solid #e2e2e2", marginTop: "10px" }}
         >
-          <BalanceBarListItem />
-          <BalanceBarListItem />
+          <BalanceBarListItem icon={icon}/>
+          <BalanceBarListItem icon={smile}/>
         </div>
       )}
     </div>
