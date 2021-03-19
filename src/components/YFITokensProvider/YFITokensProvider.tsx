@@ -16,7 +16,9 @@ const getTokenBalances = async (tokens: IToken[]) => {
             return { ...token, balance };
         })
     );
-    return tokenWithBalances;
+
+    return [];
+    // return tokenWithBalances;
 };
 
 const YFITokensContext = createContext<IToken[]>([]);
