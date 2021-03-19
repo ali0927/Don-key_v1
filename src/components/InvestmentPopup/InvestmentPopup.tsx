@@ -3,10 +3,18 @@ import { CloseIcon } from "Pages/Onboarding/CloseIcon";
 import { Modal } from "react-bootstrap";
 import "./InvestmentPopup.scss";
 import { useState } from "react";
+import { getWeb3 } from "helpers";
+import Web3 from "web3";
 
-const InvestmentInput = ({ max }: { max: number }) => {
-  const [value, setValue] = useState("");
-
+const InvestmentInput = ({
+  value,
+  setValue,
+  max,
+}: {
+  value: string;
+  setValue: (val: string) => void;
+  max: number;
+}) => {
   return (
     <div>
       <div className="invest_input">
@@ -37,9 +45,29 @@ const InvestmentInput = ({ max }: { max: number }) => {
   );
 };
 
-export const InvestmentPopup = ({onClose}: {onClose: () => void}) => {
+export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
+  const [value, setValue] = useState("");
+  const handleInvest = async () => {
+    const web3 = (await getWeb3()) as Web3;
+    const accounts = await web3.eth.getAccounts();
+    const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+    const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+      .default;
+    const amount = web3.utils.toWei(value);
+    //@ts-ignore
+    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+    await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+    onClose();
+  };
+
   return (
-    <Modal dialogClassName="invest_dialog" onHide={onClose} show style={{ border: 0 }} centered>
+    <Modal
+      dialogClassName="invest_dialog"
+      onHide={onClose}
+      show
+      style={{ border: 0 }}
+      centered
+    >
       <div className="container">
         <div className="row">
           <div className="col-5 invest_col">
@@ -65,18 +93,30 @@ export const InvestmentPopup = ({onClose}: {onClose: () => void}) => {
           </div>
           <div className="col invest_col">
             <div>
-              <CloseIcon onClick={onClose} className="cursor-pointer invest_close" />
+              <CloseIcon
+                onClick={onClose}
+                className="cursor-pointer invest_close"
+              />
               <p className="text-right">
                 <small>Balance: $1 300 000 - Get sUSD</small>
               </p>
-              <InvestmentInput max={1300000} />
+              <InvestmentInput
+                value={value}
+                setValue={setValue}
+                max={1300000}
+              />
             </div>
             <div className="row">
               <div className="col">
-                <button onClick={onClose} className="invest_btn">Invest</button>
+                <button onClick={handleInvest} className="invest_btn">
+                  Invest
+                </button>
               </div>
               <div className="col">
-                <button onClick={onClose} className="invest_btn invest_btn--outlined">
+                <button
+                  onClick={onClose}
+                  className="invest_btn invest_btn--outlined"
+                >
                   Cancel
                 </button>
               </div>

@@ -9,16 +9,17 @@ import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
 import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
 import { NavBar3 } from "../../components/Navbar/NavBar";
 import "./main.scss";
-import { getQueryParam, uuidv4 } from "../../helpers/helpers";
+import { getQueryParam, getWeb3, uuidv4 } from "../../helpers/helpers";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { apiRequest } from "actions/apiActions";
 import moreIcon from "./more.svg";
 import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsModal";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 import { IProtocolFromAPI } from "interfaces";
 import { withYFITokens } from "components/YFITokensProvider";
 import BalanceBar from "components/BalanceBar/BalanceBar";
+import Web3 from "web3";
 
 const Builder = () => {
   const [panel, setPanel] = useState(null);
@@ -90,7 +91,6 @@ const Builder = () => {
   useEffect(() => {
     const strategy = getQueryParam("id");
     const request = strategy ? getStrategy() : createStrategy();
-
     Promise.all([request, getProtocols()]).then(([strategy, protocol]) => {
       const json = strategy.data.data.json;
       const strategyid = strategy.data.data.id;
@@ -110,6 +110,19 @@ const Builder = () => {
       ? protocols.slice(0, protocols.length - 1)
       : protocols;
   }, [protocols]);
+  const [isApproved, setApproved] = useState(false);
+  const handleApprove = async () => {
+    const contract = (await import("./DemoContract.json")).default;
+    const web3 = (await getWeb3()) as Web3;
+    const accounts = await web3.eth.getAccounts();
+    const strategyAddress = "0xdab9d54e774398718edd6671e0b00780e4c6ff69";
+    //@ts-ignore
+    const strategy = new web3.eth.Contract(contract.abi, strategyAddress);
+    var executedStrategy = await strategy.methods
+      .ExecutePOOL()
+      .send({ from: accounts[0] });
+    setApproved(true);
+  };
 
   return (
     <>
@@ -172,10 +185,11 @@ const Builder = () => {
                 border: "3px solid black",
                 borderRadius: "8px",
               }}
+              onClick={handleApprove}
             >
-              Approve strategy
+              {isApproved ? "Approved" : "Approve strategy"}
             </div>
-            <BalanceBar/>
+            <BalanceBar />
           </GraphProvider>
         ) : (
           "Loading"
