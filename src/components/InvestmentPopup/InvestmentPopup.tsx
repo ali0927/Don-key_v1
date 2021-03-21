@@ -64,7 +64,7 @@ export const InvestmentPopup = ({
       .default;
     //@ts-ignore
     const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-    const poolLiquidity = await pool.methods.getliquiduty();
+    const poolLiquidity = await pool.methods.getliquiduty(accounts[0]).call();
     return poolLiquidity;
   }
 
