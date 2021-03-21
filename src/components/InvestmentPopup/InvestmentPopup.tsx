@@ -2,7 +2,7 @@ import { BiInfoCircle } from "react-icons/bi";
 import { CloseIcon } from "Pages/Onboarding/CloseIcon";
 import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getWeb3 } from "helpers";
 import Web3 from "web3";
 import { useToggle } from "hooks";
@@ -46,10 +46,15 @@ const InvestmentInput = ({
   );
 };
 
-export const InvestmentPopup = ({ balance, onClose }: { balance: string | number, onClose: () => void }) => {
+export const InvestmentPopup = ({
+  balance,
+  onClose,
+}: {
+  balance: string | number;
+  onClose: () => void;
+}) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
-
 
   async function fetchPoolLiquidity() {
     const web3 = (await getWeb3()) as Web3;
@@ -57,7 +62,7 @@ export const InvestmentPopup = ({ balance, onClose }: { balance: string | number
     const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
     const parsedPoolContract = (await import("../../JsonData/POOL.json"))
       .default;
-      //@ts-ignore
+    //@ts-ignore
     const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
     const poolLiquidity = await pool.methods.getliquiduty();
     return poolLiquidity;
@@ -75,37 +80,65 @@ export const InvestmentPopup = ({ balance, onClose }: { balance: string | number
       .send({ from: accounts[0] });
   }
 
+  const [poolLiquidity, setPoolLiquidity] = useState(0);
+
+  const updatePoolLiquidity = async () => {
+    const val = await fetchPoolLiquidity();
+    setPoolLiquidity(parseFloat(val));
+  };
+
+  useEffect(() => {
+    updatePoolLiquidity();
+  }, []);
+
   const handleInvest = async () => {
     if (isLoading) {
       return;
     }
     enable();
     try {
-      const poolLiquidity = await fetchPoolLiquidity();
-      if(parseFloat(poolLiquidity) > 0){
+      if (poolLiquidity === 0) {
         const web3 = (await getWeb3()) as Web3;
         const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
         const accounts = await web3.eth.getAccounts();
-        const abi = require('erc-20-abi');
-  
-        const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
-        const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
-  
-        const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
-  
+        const abi = require("erc-20-abi");
+
+        const BEP20ABI = await import("../../JsonData/BEP20Token.json");
+        const WBNB = new web3.eth.Contract(
+          abi,
+          "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+        );
+
+        const currentAllowance = await WBNB.methods
+          .allowance(accounts[0], poolAddress)
+          .call();
+
         const parsedPoolContract = (await import("../../JsonData/POOL.json"))
           .default;
-  
+
         const amount = web3.utils.toWei(value);
         //@ts-ignore
         const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
         await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+        await updatePoolLiquidity();
+      }
+      if (poolLiquidity > 0) {
         await executeStrategy();
       }
     } finally {
       disable();
     }
     onClose();
+  };
+
+  const renderButtonText = () => {
+    if (isLoading) {
+      return <Spinner animation="border" size={"sm"} color="#fff" />;
+    }
+    if (poolLiquidity > 0) {
+      return "Run Strategy";
+    }
+    return "Invest";
   };
 
   return (
@@ -156,12 +189,12 @@ export const InvestmentPopup = ({ balance, onClose }: { balance: string | number
             </div>
             <div className="row">
               <div className="col">
-                <button disabled={!value} onClick={handleInvest} className="invest_btn">
-                  {isLoading ? (
-                    <Spinner animation="border" size={"sm"} color="#fff" />
-                  ) : (
-                    "Invest"
-                  )}
+                <button
+                  disabled={!value}
+                  onClick={handleInvest}
+                  className="invest_btn"
+                >
+                  {renderButtonText()}
                 </button>
               </div>
               <div className="col">
