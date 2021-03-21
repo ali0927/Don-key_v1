@@ -239,6 +239,7 @@ async function fetchPoolLiquidity() {
   const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
   const parsedPoolContract = (await import("../../JsonData/POOL.json"))
   .default;
+  //@ts-ignore
   const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
   const poolLiquidity = await pool.methods.getliquiduty();
   return poolLiquidity;

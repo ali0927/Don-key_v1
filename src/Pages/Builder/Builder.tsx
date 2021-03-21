@@ -112,7 +112,7 @@ const Builder = () => {
   }, [protocols]);
   const [isApproved, setApproved] = useState(false);
   const handleApprove = async () => {
-    const contract = (await import("./DemoContract.json")).default;
+    const contract = (await import("../../JsonData/DemoContract.json")).default;
     const web3 = (await getWeb3()) as Web3;
     const accounts = await web3.eth.getAccounts();
     const strategyAddress = "0xdab9d54e774398718edd6671e0b00780e4c6ff69";

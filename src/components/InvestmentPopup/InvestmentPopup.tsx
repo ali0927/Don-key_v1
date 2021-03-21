@@ -57,13 +57,14 @@ export const InvestmentPopup = ({ balance, onClose }: { balance: string | number
     const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
     const parsedPoolContract = (await import("../../JsonData/POOL.json"))
       .default;
+      //@ts-ignore
     const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
     const poolLiquidity = await pool.methods.getliquiduty();
     return poolLiquidity;
   }
 
   async function executeStrategy() {
-    const contract = (await import("./DemoContract.json")).default;
+    const contract = (await import("../../JsonData/DemoContract.json")).default;
     const web3 = (await getWeb3()) as Web3;
     const accounts = await web3.eth.getAccounts();
     const strategyAddress = "0xdab9d54e774398718edd6671e0b00780e4c6ff69";
@@ -80,25 +81,27 @@ export const InvestmentPopup = ({ balance, onClose }: { balance: string | number
     }
     enable();
     try {
-      const web3 = (await getWeb3()) as Web3;
-      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
-      const accounts = await web3.eth.getAccounts();
-      const abi = require('erc-20-abi');
-
-      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
-      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
-
-      const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
-
-      const parsedPoolContract = (await import("../../JsonData/POOL.json"))
-        .default;
-
-      const amount = web3.utils.toWei(value);
-      //@ts-ignore
-      const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-      await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
-
-
+      const poolLiquidity = await fetchPoolLiquidity();
+      if(parseFloat(poolLiquidity) > 0){
+        const web3 = (await getWeb3()) as Web3;
+        const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+        const accounts = await web3.eth.getAccounts();
+        const abi = require('erc-20-abi');
+  
+        const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
+        const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+  
+        const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
+  
+        const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+          .default;
+  
+        const amount = web3.utils.toWei(value);
+        //@ts-ignore
+        const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+        await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+        await executeStrategy();
+      }
     } finally {
       disable();
     }
