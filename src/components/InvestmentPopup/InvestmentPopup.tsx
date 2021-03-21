@@ -46,7 +46,7 @@ const InvestmentInput = ({
   );
 };
 
-export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
+export const InvestmentPopup = ({ balance, onClose }: {balance: string | number, onClose: () => void }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
 
@@ -117,7 +117,7 @@ export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
                 className="cursor-pointer invest_close"
               />
               <p className="text-right">
-                <small>Balance: $1 300 000 WBNB</small>
+                <small>Balance: ${balance} WBNB</small>
               </p>
               <InvestmentInput
                 value={value}

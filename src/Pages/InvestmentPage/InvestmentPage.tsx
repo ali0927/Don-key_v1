@@ -1,6 +1,6 @@
 import { NavBar2 } from "components/Navbar/NavBar";
 import MyAccountDetail from "JsonData/MyAccountDetail";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   Container,
   Row,
@@ -9,6 +9,7 @@ import {
   Overlay,
   Popover,
   Table,
+  Spinner,
 } from "react-bootstrap";
 import { BsArrowRight } from "react-icons/bs";
 import { Footer } from "components/Footer/Footer";
@@ -157,17 +158,49 @@ const DetailTable = () => {
   );
 };
 
-const InvestCard = () => {
-
+const InvestCard = ({
+  balance,
+  allowance,
+}: {
+  balance: string | number;
+  allowance: string | number;
+}) => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const [loading, setloading] = useState(false);
+
+  const renderButtonContent = () => {
+    if (loading) {
+      return <Spinner animation="border" size={"sm"} color="#fff" />;
+    }
+    if (allowance === 0) {
+      return "Allow 1 WBNB";
+    }
+    return "Invest";
+  };
+
+  const handleButtonClick = async () => {
+    if (allowance === 0) {
+      setloading(true);
+      try {
+        await ApproveWBNB();
+      } finally {
+        setloading(false);
+      }
+    } else {
+      setIsOpen(true);
+    }
+  };
 
   return (
     <div className="invest_card">
       <p>Your investment Balance</p>
-      <h5 className="mb-3">140 000$</h5>
+      <h5 className="mb-3">{balance}$</h5>
       <div className="row">
         <div className="col">
-          <button onClick={() => setIsOpen(true)} className="invest_card_btn">Invest</button>
+          <button onClick={handleButtonClick} className="invest_card_btn">
+            {renderButtonContent()}
+          </button>
         </div>
         <div className="col">
           <button disabled className="invest_card_btn">
@@ -175,54 +208,68 @@ const InvestCard = () => {
           </button>
         </div>
       </div>
-      {isOpen && <InvestmentPopup onClose={() => setIsOpen(false)} />}
+      {isOpen && (
+        <InvestmentPopup balance={balance} onClose={() => setIsOpen(false)} />
+      )}
     </div>
   );
 };
 
+async function ApproveWBNB() {
+  const web3 = (await getWeb3()) as Web3;
+  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+  const accounts = await web3.eth.getAccounts();
+  const abi = require("erc-20-abi");
+
+  const WBNB = new web3.eth.Contract(
+    abi,
+    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+  );
+  await WBNB.methods
+    .approve(poolAddress, web3.utils.toWei("1"))
+    .send({ from: accounts[0] });
+}
+
+async function fetchAllowance() {
+  const web3 = (await getWeb3()) as Web3;
+  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+  const accounts = await web3.eth.getAccounts();
+  const abi = require("erc-20-abi");
+
+  const WBNB = new web3.eth.Contract(
+    abi,
+    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+  );
+  const currentAllowance = await WBNB.methods
+    .allowance(accounts[0], poolAddress)
+    .call();
+  return currentAllowance;
+}
+async function fetchBalance() {
+  const web3 = (await getWeb3()) as Web3;
+  const accounts = await web3.eth.getAccounts();
+  const abi = require("erc-20-abi");
+  const WBNB = new web3.eth.Contract(
+    abi,
+    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+  );
+  const balance = await WBNB.methods.balanceOf(accounts[0]).call();
+  return balance;
+}
+
 export const InvestmentPage = () => {
-
+  const [balance, setBalance] = useState(0);
+  const [allowance, setAllowance] = useState(0);
+  const [isReady, setIsReady] = useState(false);
   useEffect(() => {
-
-    async function ApproveWBNB() {
-      const web3 = (await getWeb3()) as Web3;
-      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
-      const accounts = await web3.eth.getAccounts();
-      const abi = require('erc-20-abi');
-      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
-      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
-      await WBNB.methods.approve(poolAddress, web3.utils.toWei('1')).send({ from: accounts[0] });
-    }
-
-    async function fetchAllowance() {
-      const web3 = (await getWeb3()) as Web3;
-      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
-      const accounts = await web3.eth.getAccounts();
-      const abi = require('erc-20-abi');
-      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
-      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
-      const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
-      return currentAllowance;
-    }
-
-    async function fetchBalance() {
-      const web3 = (await getWeb3()) as Web3;
-      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
-      const accounts = await web3.eth.getAccounts();
-      const abi = require('erc-20-abi');
-      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
-      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
-      const balance = await WBNB.methods.balanceOf(accounts[0]).call();
-      return balance;
-    }
-    fetchAllowance().then((allowance) => {
-      fetchBalance().then(balance => {
-      })
-    });
-
-
-
-  }, [])
+    (async () => {
+      const allowance = await fetchAllowance();
+      setAllowance(allowance);
+      const balance = await fetchBalance();
+      setBalance(balance);
+      setIsReady(true);
+    })();
+  }, []);
 
   return (
     <>
@@ -243,7 +290,9 @@ export const InvestmentPage = () => {
                 </Row>
               </Col>
               <Col sm={4}>
-                <InvestCard />
+                {isReady && (
+                  <InvestCard allowance={allowance} balance={balance} />
+                )}
               </Col>
             </Row>
           </Container>
