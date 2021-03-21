@@ -173,14 +173,14 @@ const InvestCard = ({
     if (loading) {
       return <Spinner animation="border" size={"sm"} color="#fff" />;
     }
-    if (allowance === 0) {
+    if (parseInt(allowance as string) === 0) {
       return "Allow 1 WBNB";
     }
     return "Invest";
   };
 
   const handleButtonClick = async () => {
-    if (allowance === 0) {
+    if (parseInt(allowance as string) === 0) {
       setloading(true);
       try {
         await ApproveWBNB();

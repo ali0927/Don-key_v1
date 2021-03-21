@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleMetaMaskLogin = async () => {
     const web3 = await getWeb3();
-    if(!web3){
+    if (!web3) {
       return;
     }
     const coinbase = await web3.eth.getCoinbase();
@@ -32,6 +32,7 @@ const Login = () => {
     const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
 
     localStorage.setItem(AuthToken, token);
+    localStorage.setItem("User", JSON.stringify(user));
     dispatch(doLogin(user));
     history.push("/dashboard");
     showNotification({
@@ -46,12 +47,19 @@ const Login = () => {
 
   useEffect(() => {
     const token = localStorage.getItem(AuthToken);
-    if(token){
-      history.push('/dashboard')
+    let user = localStorage.getItem("User");
+    if (user) {
+      user = JSON.parse(user);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
+    if (token && user) {
+      dispatch(doLogin(user));
+      history.push("/dashboard");
+    } else {
+      localStorage.removeItem(AuthToken);
+      localStorage.removeItem("User");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { handleWalletConnect } = useWalletConnectHook();
   return (

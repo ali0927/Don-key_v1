@@ -122,7 +122,7 @@ export const InvestmentPopup = ({ balance, onClose }: {balance: string | number,
               <InvestmentInput
                 value={value}
                 setValue={setValue}
-                max={1300000}
+                max={parseInt(balance as string)}
               />
             </div>
             <div className="row">
