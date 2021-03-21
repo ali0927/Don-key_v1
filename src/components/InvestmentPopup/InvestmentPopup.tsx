@@ -19,7 +19,7 @@ const InvestmentInput = ({
   return (
     <div>
       <div className="invest_input">
-        <div className="invest_input_currency">sUSD</div>
+        <div className="invest_input_currency">WBNB</div>
         <div>
           <input
             type="number"
@@ -51,16 +51,24 @@ export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
   const [isLoading, enable, disable] = useToggle();
 
   const handleInvest = async () => {
-    if(isLoading){
+    if (isLoading) {
       return;
     }
     enable();
     try {
       const web3 = (await getWeb3()) as Web3;
-      const accounts = await web3.eth.getAccounts();
       const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+      const accounts = await web3.eth.getAccounts();
+      const abi = require('erc-20-abi');
+
+      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
+      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+
+      const currentAllowance = await WBNB.methods.allowance(accounts[0],poolAddress).call();
+
       const parsedPoolContract = (await import("../../JsonData/POOL.json"))
         .default;
+
       const amount = web3.utils.toWei(value);
       //@ts-ignore
       const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
@@ -85,16 +93,16 @@ export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
             <h4>Invest</h4>
             <small className="text-muted">Summary</small>
             <p className="d-flex mt-2 text-muted justify-content-between">
-              <span>USD</span>
-              <span>$120 000,00</span>
+              <span>USD Value</span>
+              <span>$240</span>
             </p>
             <p className="d-flex text-muted justify-content-between">
               <span>GAS FEE</span>
-              <span>$1230,00</span>
+              <span>$13</span>
             </p>
             <p className="d-flex justify-content-between">
               <span>TOTAL</span>
-              <span>$121 300,00</span>
+              <span>$254</span>
             </p>
             <p className="mb-0 mt-3 cursor-pointer">
               <small>
@@ -109,7 +117,7 @@ export const InvestmentPopup = ({ onClose }: { onClose: () => void }) => {
                 className="cursor-pointer invest_close"
               />
               <p className="text-right">
-                <small>Balance: $1 300 000 - Get sUSD</small>
+                <small>Balance: $1 300 000 WBNB</small>
               </p>
               <InvestmentInput
                 value={value}

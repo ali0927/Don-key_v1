@@ -1,6 +1,6 @@
 import { NavBar2 } from "components/Navbar/NavBar";
 import MyAccountDetail from "JsonData/MyAccountDetail";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Row,
@@ -19,6 +19,8 @@ import { DepositsTab } from "Pages/MyAccountNew/Tabs/DepositsTab";
 import { PostTab } from "Pages/MyAccountNew/Tabs/PostTab";
 import { StratgiesTab } from "Pages/MyAccountNew/Tabs/StratgiesTab";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { getWeb3 } from "helpers";
+import Web3 from "web3";
 import "./InvestmentPage.scss";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 export const tabs = [
@@ -179,6 +181,49 @@ const InvestCard = () => {
 };
 
 export const InvestmentPage = () => {
+
+  useEffect(() => {
+
+    async function ApproveWBNB() {
+      const web3 = (await getWeb3()) as Web3;
+      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+      const accounts = await web3.eth.getAccounts();
+      const abi = require('erc-20-abi');
+      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
+      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+      await WBNB.methods.approve(poolAddress, web3.utils.toWei('1')).send({ from: accounts[0] });
+    }
+
+    async function fetchAllowance() {
+      const web3 = (await getWeb3()) as Web3;
+      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+      const accounts = await web3.eth.getAccounts();
+      const abi = require('erc-20-abi');
+      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
+      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+      const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
+      return currentAllowance;
+    }
+
+    async function fetchBalance() {
+      const web3 = (await getWeb3()) as Web3;
+      const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+      const accounts = await web3.eth.getAccounts();
+      const abi = require('erc-20-abi');
+      const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
+      const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
+      const balance = await WBNB.methods.balanceOf(accounts[0]).call();
+      return balance;
+    }
+    fetchAllowance().then((allowance) => {
+      fetchBalance().then(balance => {
+      })
+    });
+
+
+
+  }, [])
+
   return (
     <>
       <NavBar2 />
