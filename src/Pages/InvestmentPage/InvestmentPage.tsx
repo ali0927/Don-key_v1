@@ -272,7 +272,7 @@ export const InvestmentPage = () => {
 
   useEffect(() => {
     (async () => {
-      updateAllowance();
+      await updateAllowance();
       const balance = await fetchBalance();
       setBalance(balance);
       setIsReady(true);
