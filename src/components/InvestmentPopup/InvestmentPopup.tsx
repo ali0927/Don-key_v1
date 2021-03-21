@@ -56,10 +56,14 @@ export const InvestmentPopup = ({
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
 
+  const poolAddress = "0xb76fc5261234206c8a84d86465F71F9220db5775";
+  const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+  const strategyAddress = "0x8dE5c1aEC7363eb44493994898CcD3e07f45938b";
+
   async function fetchPoolLiquidity() {
     const web3 = (await getWeb3()) as Web3;
     const accounts = await web3.eth.getAccounts();
-    const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+
     const parsedPoolContract = (await import("../../JsonData/POOL.json"))
       .default;
     //@ts-ignore
@@ -72,7 +76,7 @@ export const InvestmentPopup = ({
     const contract = (await import("../../JsonData/DemoContract.json")).default;
     const web3 = (await getWeb3()) as Web3;
     const accounts = await web3.eth.getAccounts();
-    const strategyAddress = "0xdab9d54e774398718edd6671e0b00780e4c6ff69";
+
     //@ts-ignore
     const strategy = new web3.eth.Contract(contract.abi, strategyAddress);
     var executedStrategy = await strategy.methods
@@ -99,14 +103,13 @@ export const InvestmentPopup = ({
     try {
       if (poolLiquidity === 0) {
         const web3 = (await getWeb3()) as Web3;
-        const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
         const accounts = await web3.eth.getAccounts();
         const abi = require("erc-20-abi");
 
         const BEP20ABI = await import("../../JsonData/BEP20Token.json");
         const WBNB = new web3.eth.Contract(
           abi,
-          "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+          WBNBAddress
         );
 
         const currentAllowance = await WBNB.methods

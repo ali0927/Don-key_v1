@@ -218,15 +218,16 @@ const InvestCard = ({
   );
 };
 
+const poolAddress = "0xb76fc5261234206c8a84d86465F71F9220db5775";
+const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 async function ApproveWBNB() {
   const web3 = (await getWeb3()) as Web3;
-  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
   const accounts = await web3.eth.getAccounts();
   const abi = require("erc-20-abi");
 
   const WBNB = new web3.eth.Contract(
     abi,
-    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+    WBNBAddress
   );
   await WBNB.methods
     .approve(poolAddress, web3.utils.toWei("1"))
@@ -236,9 +237,8 @@ async function ApproveWBNB() {
 async function fetchPoolLiquidity() {
   const web3 = (await getWeb3()) as Web3;
   const accounts = await web3.eth.getAccounts();
-  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
   const parsedPoolContract = (await import("../../JsonData/POOL.json"))
-  .default;
+    .default;
   //@ts-ignore
   const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
   const poolLiquidity = await pool.methods.getliquiduty();
@@ -248,13 +248,12 @@ async function fetchPoolLiquidity() {
 
 async function fetchAllowance() {
   const web3 = (await getWeb3()) as Web3;
-  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
   const accounts = await web3.eth.getAccounts();
   const abi = require("erc-20-abi");
 
   const WBNB = new web3.eth.Contract(
     abi,
-    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+    WBNBAddress
   );
   const currentAllowance = await WBNB.methods
     .allowance(accounts[0], poolAddress)
@@ -267,10 +266,10 @@ async function fetchBalance() {
   const abi = require("erc-20-abi");
   const WBNB = new web3.eth.Contract(
     abi,
-    "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
+    WBNBAddress
   );
   const balance = await WBNB.methods.balanceOf(accounts[0]).call();
-  var fBalance = parseFloat(parseFloat(web3.utils.fromWei(balance,'ether')).toFixed(5));
+  var fBalance = parseFloat(parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(5));
   return fBalance;
 }
 
