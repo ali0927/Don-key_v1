@@ -179,7 +179,7 @@ export const InvestmentPopup = ({
                 className="cursor-pointer invest_close"
               />
               <p className="text-right">
-                <small>Balance: ${balance} WBNB</small>
+                <small>Balance: {balance} WBNB</small>
               </p>
               <InvestmentInput
                 value={value}

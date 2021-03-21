@@ -198,7 +198,7 @@ const InvestCard = ({
   return (
     <div className="invest_card">
       <p>Your investment Balance</p>
-      <h5 className="mb-3">{balance}$</h5>
+      <h5 className="mb-3">{balance} WBNB</h5>
       <div className="row">
         <div className="col">
           <button onClick={handleButtonClick} className="invest_card_btn">
@@ -270,7 +270,8 @@ async function fetchBalance() {
     "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
   );
   const balance = await WBNB.methods.balanceOf(accounts[0]).call();
-  return balance;
+  var fBalance = parseFloat(parseFloat(web3.utils.fromWei(balance,'ether')).toFixed(5));
+  return fBalance;
 }
 
 export const InvestmentPage = () => {
