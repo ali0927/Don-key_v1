@@ -46,9 +46,33 @@ const InvestmentInput = ({
   );
 };
 
-export const InvestmentPopup = ({ balance, onClose }: {balance: string | number, onClose: () => void }) => {
+export const InvestmentPopup = ({ balance, onClose }: { balance: string | number, onClose: () => void }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
+
+
+  async function fetchPoolLiquidity() {
+    const web3 = (await getWeb3()) as Web3;
+    const accounts = await web3.eth.getAccounts();
+    const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+    const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+      .default;
+    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+    const poolLiquidity = await pool.methods.getliquiduty();
+    return poolLiquidity;
+  }
+
+  async function executeStrategy() {
+    const contract = (await import("./DemoContract.json")).default;
+    const web3 = (await getWeb3()) as Web3;
+    const accounts = await web3.eth.getAccounts();
+    const strategyAddress = "0xdab9d54e774398718edd6671e0b00780e4c6ff69";
+    //@ts-ignore
+    const strategy = new web3.eth.Contract(contract.abi, strategyAddress);
+    var executedStrategy = await strategy.methods
+      .ExecutePOOL()
+      .send({ from: accounts[0] });
+  }
 
   const handleInvest = async () => {
     if (isLoading) {
@@ -64,7 +88,7 @@ export const InvestmentPopup = ({ balance, onClose }: {balance: string | number,
       const BEP20ABI = (await import("../../JsonData/BEP20Token.json"));
       const WBNB = new web3.eth.Contract(abi, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c");
 
-      const currentAllowance = await WBNB.methods.allowance(accounts[0],poolAddress).call();
+      const currentAllowance = await WBNB.methods.allowance(accounts[0], poolAddress).call();
 
       const parsedPoolContract = (await import("../../JsonData/POOL.json"))
         .default;
@@ -73,6 +97,8 @@ export const InvestmentPopup = ({ balance, onClose }: {balance: string | number,
       //@ts-ignore
       const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
       await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
+
+
     } finally {
       disable();
     }

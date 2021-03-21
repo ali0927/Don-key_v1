@@ -233,6 +233,18 @@ async function ApproveWBNB() {
     .send({ from: accounts[0] });
 }
 
+async function fetchPoolLiquidity() {
+  const web3 = (await getWeb3()) as Web3;
+  const accounts = await web3.eth.getAccounts();
+  const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
+  const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+  .default;
+  const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+  const poolLiquidity = await pool.methods.getliquiduty();
+  return poolLiquidity;
+}
+
+
 async function fetchAllowance() {
   const web3 = (await getWeb3()) as Web3;
   const poolAddress = "0x271a6e88a501c73f786df6cf78a14b69bde6ec1b";
