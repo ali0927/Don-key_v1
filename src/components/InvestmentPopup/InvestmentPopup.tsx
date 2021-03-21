@@ -56,15 +56,14 @@ export const InvestmentPopup = ({
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
 
-  const poolAddress = "0xb76fc5261234206c8a84d86465F71F9220db5775";
+  const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
   const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
-  const strategyAddress = "0x8dE5c1aEC7363eb44493994898CcD3e07f45938b";
 
   async function fetchPoolLiquidity() {
     const web3 = (await getWeb3()) as Web3;
     const accounts = await web3.eth.getAccounts();
 
-    const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+    const parsedPoolContract = (await import("../../JsonData/NPOOL.json"))
       .default;
     //@ts-ignore
     const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
@@ -73,13 +72,14 @@ export const InvestmentPopup = ({
   }
 
   async function executeStrategy() {
-    const contract = (await import("../../JsonData/DemoContract.json")).default;
     const web3 = (await getWeb3()) as Web3;
+    const parsedPoolContract = (await import("../../JsonData/NPOOL.json"))
+      .default;
+    //@ts-ignore
+    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
     const accounts = await web3.eth.getAccounts();
 
-    //@ts-ignore
-    const strategy = new web3.eth.Contract(contract.abi, strategyAddress);
-    var executedStrategy = await strategy.methods
+    var executedStrategy = await pool.methods
       .ExecutePOOL()
       .send({ from: accounts[0] });
   }

@@ -218,7 +218,7 @@ const InvestCard = ({
   );
 };
 
-const poolAddress = "0xb76fc5261234206c8a84d86465F71F9220db5775";
+const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
 const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 async function ApproveWBNB() {
   const web3 = (await getWeb3()) as Web3;
@@ -233,18 +233,6 @@ async function ApproveWBNB() {
     .approve(poolAddress, web3.utils.toWei("1"))
     .send({ from: accounts[0] });
 }
-
-async function fetchPoolLiquidity() {
-  const web3 = (await getWeb3()) as Web3;
-  const accounts = await web3.eth.getAccounts();
-  const parsedPoolContract = (await import("../../JsonData/POOL.json"))
-    .default;
-  //@ts-ignore
-  const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-  const poolLiquidity = await pool.methods.getliquiduty();
-  return poolLiquidity;
-}
-
 
 async function fetchAllowance() {
   const web3 = (await getWeb3()) as Web3;
