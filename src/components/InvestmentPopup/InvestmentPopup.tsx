@@ -190,7 +190,7 @@ export const InvestmentPopup = ({
             <div className="row">
               <div className="col">
                 <button
-                  disabled={!value}
+                  disabled={poolLiquidity === 0 && !value}
                   onClick={handleInvest}
                   className="invest_btn"
                 >
