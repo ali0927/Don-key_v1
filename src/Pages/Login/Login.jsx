@@ -49,7 +49,11 @@ const Login = () => {
     const token = localStorage.getItem(AuthToken);
     let user = localStorage.getItem("User");
     if (user) {
-      user = JSON.parse(user);
+      try {
+        user = JSON.parse(user);
+      } catch (e) {
+        user = null;
+      }
     }
     if (token && user) {
       dispatch(doLogin(user));

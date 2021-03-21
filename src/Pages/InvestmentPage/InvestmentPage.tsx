@@ -161,9 +161,11 @@ const DetailTable = () => {
 const InvestCard = ({
   balance,
   allowance,
+  onRefetch,
 }: {
   balance: string | number;
   allowance: string | number;
+  onRefetch?: () => Promise<void>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -184,6 +186,7 @@ const InvestCard = ({
       setloading(true);
       try {
         await ApproveWBNB();
+        onRefetch && (await onRefetch());
       } finally {
         setloading(false);
       }
@@ -261,10 +264,15 @@ export const InvestmentPage = () => {
   const [balance, setBalance] = useState(0);
   const [allowance, setAllowance] = useState(0);
   const [isReady, setIsReady] = useState(false);
+
+  const updateAllowance = async () => {
+    const allowance = await fetchAllowance();
+    setAllowance(allowance);
+  };
+
   useEffect(() => {
     (async () => {
-      const allowance = await fetchAllowance();
-      setAllowance(allowance);
+      updateAllowance();
       const balance = await fetchBalance();
       setBalance(balance);
       setIsReady(true);
@@ -291,7 +299,11 @@ export const InvestmentPage = () => {
               </Col>
               <Col sm={4}>
                 {isReady && (
-                  <InvestCard allowance={allowance} balance={balance} />
+                  <InvestCard
+                    onRefetch={updateAllowance}
+                    allowance={allowance}
+                    balance={balance}
+                  />
                 )}
               </Col>
             </Row>
