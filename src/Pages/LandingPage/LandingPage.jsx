@@ -158,8 +158,8 @@ const LandingPage = () => {
                 Join the best <br /> Be part of farmers team
               </h3>
               <p className="parasame mt-4">
-                Buru encourages successful farmers to share their wisdom, with
-                Buru you can trade , get liquidity based on your results, share
+                Don-key encourages successful farmers to share their wisdom, with
+                Don-key you can trade , get liquidity based on your results, share
                 the yield and get extra dividend just for being a part of our
                 farmers community
               </p>
@@ -196,7 +196,6 @@ const LandingPage = () => {
                         <Card.Title>{item.name}</Card.Title>
     
                         <ul className="p-0">
-                          <li>{item.description}</li>
                          
                         </ul>
     
@@ -291,8 +290,6 @@ const LandingPage = () => {
                     <Card.Title>You could be here</Card.Title>
 
                     <ul className="p-0">
-                      <li>$25,000 allocation </li>
-                      <li>$50,000 next level </li>
                     </ul>
 
                     <ButtonComponent className="btnYellow mt-5 mb-4">
@@ -340,7 +337,7 @@ const LandingPage = () => {
         </Container>
       </div>
 
-      {/* BURU Tokens */}
+      {/* Don Tokens */}
 
       <div className="toekns pt-5 pb-5">
         <Container>
@@ -356,21 +353,21 @@ const LandingPage = () => {
             </Col>
             <Col md={7} className="ml-md-4">
               <div className="tokenRIght">
-                <h3 className="headsame mb-3 mt-md-2 mt-5">BURU Tokens</h3>
+                <h3 className="headsame mb-3 mt-md-2 mt-5">Don Tokens</h3>
                 <p className="parasame">
-                  BURU tokens are airdropped to all farmers based on monthly
+                  Don tokens are airdropped to all farmers based on monthly
                   trading results and take into account: ROI, Risk level, asset
                   exposer and more. the better you are , the more you get
                 </p>
                 <h5 className="mt-4">Yield and Dividend </h5>
                 <p className="parasame">
-                  BURU tokens represents the farmer’s yield based on his own
+                  Don tokens represents the farmer’s yield based on his own
                   stratagies, in addition to a proportionate monthly dividend
-                  from BURU’s total monthly yield
+                  from Don-key’s total monthly yield
                 </p>
                 <h5 className="mt-4">Exchangeable</h5>
                 <p className="parasame">
-                  You can redeem your BURU tokens at any time or hold on to them
+                  You can redeem your Don tokens at any time or hold on to them
                   and accumulate higher future coupons
                 </p>
               </div>
@@ -379,14 +376,14 @@ const LandingPage = () => {
         </Container>
       </div>
 
-      {/*  Join the BURU Community */}
+      {/*  Join the Don-key Community */}
       <div className="community pt-5 pb-5 text-center">
         <Container>
-          <h4 className="mt-4 pt-3">Join the BURU Community</h4>
+          <h4 className="mt-4 pt-3">Join the Don-key Community</h4>
           <p className="mt-5">Follow us Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
-              <a href="#">
+              <a href="https://Medium.com/@don-key.finance">
                 <img
                   src="/assets/images/social/medium.png"
                   className="d-inline-block"
@@ -395,7 +392,7 @@ const LandingPage = () => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="https://t.me/don_key_finance">
                 <img
                   src="/assets/images/social/telegram.png"
                   className="d-inline-block"
@@ -404,7 +401,7 @@ const LandingPage = () => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="https://twitter.com/Don_key_finance">
                 <img
                   src="/assets/images/social/twitter.png"
                   className="d-inline-block"
@@ -412,15 +409,7 @@ const LandingPage = () => {
                 />
               </a>
             </li>
-            <li>
-              <a href="#">
-                <img
-                  src="/assets/images/social/github.png"
-                  className="d-inline-block"
-                  alt="Image"
-                />
-              </a>
-            </li>
+
           </ul>
         </Container>
       </div>
