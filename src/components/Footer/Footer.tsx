@@ -7,6 +7,7 @@ export const Footer = () => {
     <Container>
       <Row>
        
+       
       </Row>
     </Container>
   </footer>
