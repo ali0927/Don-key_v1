@@ -27,13 +27,6 @@ function NavBar(props) {
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
       <Container>
         <Navbar.Brand onClick={(e) => e.preventDefault()}>
-          <Link to="/">
-            <img
-              src="/assets/images/logo.svg"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-          </Link>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
