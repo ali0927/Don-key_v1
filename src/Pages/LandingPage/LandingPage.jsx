@@ -337,7 +337,7 @@ const LandingPage = () => {
         </Container>
       </div>
 
-      {/* Don Tokens */}
+      {/* DON Tokens */}
 
       <div className="toekns pt-5 pb-5">
         <Container>
@@ -353,21 +353,21 @@ const LandingPage = () => {
             </Col>
             <Col md={7} className="ml-md-4">
               <div className="tokenRIght">
-                <h3 className="headsame mb-3 mt-md-2 mt-5">Don Tokens</h3>
+                <h3 className="headsame mb-3 mt-md-2 mt-5">DON Tokens</h3>
                 <p className="parasame">
-                  Don tokens are airdropped to all farmers based on monthly
+                  DON tokens are airdropped to all farmers based on monthly
                   trading results and take into account: ROI, Risk level, asset
                   exposer and more. the better you are , the more you get
                 </p>
                 <h5 className="mt-4">Yield and Dividend </h5>
                 <p className="parasame">
-                  Don tokens represents the farmer’s yield based on his own
+                  DON tokens represents the farmer’s yield based on his own
                   stratagies, in addition to a proportionate monthly dividend
                   from Don-key’s total monthly yield
                 </p>
                 <h5 className="mt-4">Exchangeable</h5>
                 <p className="parasame">
-                  You can redeem your Don tokens at any time or hold on to them
+                  You can redeem your DON tokens at any time or hold on to them
                   and accumulate higher future coupons
                 </p>
               </div>
