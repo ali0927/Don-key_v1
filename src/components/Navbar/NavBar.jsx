@@ -40,20 +40,20 @@ function NavBar(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
             <Nav.Link
-              href="/resource"
+              href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
               className={
                 window.location.pathname === "/"
                   ? "colorBlack pr-md-5"
                   : "colorBlack pr-md-5 active"
               }
             >
-              Resources
+              Litepaper
             </Nav.Link>
             <Nav.Link href="/farmers" className="colorBlack pr-md-5">
               Farmers
             </Nav.Link>
             <Nav.Link href="#" className="colorBlack">
-              Developers
+              Team
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
@@ -260,3 +260,4 @@ const NavBar3 = () => {
 };
 
 export { NavBar, NavBar2, NavBar3 };
+
