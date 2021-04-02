@@ -329,7 +329,7 @@ const LandingPage = () => {
                 <img
                   src="/assets/images/trading.png"
                   className="Imagetrading"
-                  alt="Image"
+                  alt="Imagetrading"
                 />
               </div>
             </Col>
