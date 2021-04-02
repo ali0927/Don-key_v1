@@ -19,7 +19,7 @@ const FarmersPage = () => {
               >
                 <p className="text-center">
                   You think you are a super star farmer? come and show everyone!
-                  Submit to becomae an early farmer
+                  Submit to become an early farmer
                 </p>
 
                 <div className="container">
