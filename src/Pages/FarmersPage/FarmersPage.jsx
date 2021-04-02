@@ -2,6 +2,7 @@ import { NavBar2 } from "../../components/Navbar/NavBar";
 import { Container, Form } from "react-bootstrap";
 import "./FarmersStyle.scss";
 import { Footer } from "components/Footer/Footer";
+import ButtonComponent from "components/Button/Button";
 const FarmersPage = () => {
   return (
     <div className="bgnav">
@@ -38,8 +39,15 @@ const FarmersPage = () => {
 
                       <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>What kind of Don-key are you?</Form.Label>
-                        <Form.Control as="textarea" rows={3} />
+                        <Form.Control
+                          as="textarea"
+                          placeholder="What kind of Don-key are you?"
+                          rows={3}
+                        />
                       </Form.Group>
+                      <ButtonComponent className="btnYellow">
+                        Submit
+                      </ButtonComponent>
                     </div>
                   </div>
                 </div>
