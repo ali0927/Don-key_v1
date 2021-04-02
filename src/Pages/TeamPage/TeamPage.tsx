@@ -78,7 +78,7 @@ const TeamJSON: ITeamCardProps[] = [
   },
   {
     image: yanir,
-    name: "Yanir",
+    name: "Yanir Goldenberg",
     designation: "Co-founder",
     linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
   },

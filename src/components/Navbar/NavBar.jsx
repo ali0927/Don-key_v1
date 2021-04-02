@@ -134,7 +134,14 @@ function NavBar2({ hideWallet = false }) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-            <NavbarLink to="/resource">Resources</NavbarLink>
+             <Nav.Link
+              href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
+              className={
+                "colorBlack pr-md-5"
+              }
+            >
+              Litepaper
+            </Nav.Link>
             <NavbarLink to="/farmers">Farmers</NavbarLink>
             <NavbarLink to="/team">Team</NavbarLink>
           </Nav>

@@ -9,22 +9,36 @@ export const Footer = () => {
         <Row>
           <Col>
             <div className="d-flex justify-content-between align-items-center">
-              <Link to="/" className="text-white d-flex align-items-center no-underline">
-                <img
-                  src="/assets/images/logo.png"
-                  className="d-inline-block align-top by-logo"
-                  alt="Logo"
-                />
+              <Link
+                className="d-flex align-items-center inherit-color no-underline"
+                to="/"
+              >
                 <p
                   className="m-0"
                   style={{
-                    fontFamily: "Avenir-Regular",
+                    fontFamily: "Avenir-Bold",
+                    fontWeight: "bolder",
                     color: "#fff",
                     fontSize: 24,
-                    fontWeight: "bolder",
                   }}
                 >
-                  <span style={{ letterSpacing: "2px" }}>Don</span>-key
+                  <span style={{ letterSpacing: "2px" }}>
+                    D
+                    <img
+                      style={{
+                        position: "relative",
+                        width: 24,
+                        top: 5,
+                        marginLeft: -2,
+                        marginRight: -1,
+                      }}
+                      src="/assets/images/logo.png"
+                      className="d-inline-block align-top by-logo"
+                      alt="Logo"
+                    />
+                    n
+                  </span>{" "}
+                  - key
                 </p>
               </Link>
 
