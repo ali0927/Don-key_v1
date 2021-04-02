@@ -328,8 +328,8 @@ const LandingPage = () => {
               <div className="tradingrightImg">
                 <img
                   src="/assets/images/trading.png"
-                  className="d-inline-block"
-                  alt="Image"
+                  className="Imagetrading"
+                  alt="Imagetrading"
                 />
               </div>
             </Col>

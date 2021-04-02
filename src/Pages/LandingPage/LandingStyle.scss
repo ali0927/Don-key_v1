@@ -387,7 +387,15 @@ footer {
   }
 }
 
-@media screen and (max-width: 320px) {
+
+.Imagetrading {
+  height: 50%;
+  width: 700px;
+  margin-right: 300px;
+
+}
+
+@media screen and (max-width: 500) {
   .tradingrightImg {
     overflow: hidden;
     margin-top: 50px;
