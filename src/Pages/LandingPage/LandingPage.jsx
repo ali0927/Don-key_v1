@@ -11,9 +11,8 @@ import boostyield from "./boost-yield.png";
 import buildStrategy from "./build-strategy.png";
 import getLiquidity from "./get-liquidity.png";
 import { Footer } from "components/Footer/Footer";
-import { AiOutlineGithub } from "react-icons/ai";
 import { HeroImage } from "./HeroImage";
-
+import comingsoon from "images/comingsoon.svg";
 const StarIcon = (props) => {
   return (
     <svg
@@ -86,15 +85,7 @@ const LandingPage = () => {
                   Create your DeFi strategy with a few clicks, get liquidity and
                   boost your profits.
                 </p>
-                <div className="mt-5">
-                  <ButtonComponent className="btnYellow">
-                    Start farming
-                  </ButtonComponent>
-
-                  <a href="#" className="pl-4">
-                    How it works
-                  </a>
-                </div>
+                <div className="mt-5"></div>
               </div>
             </Col>
             <Col md={7}>
@@ -181,8 +172,8 @@ const LandingPage = () => {
                     <img className="advantage-img" src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
                     <Card.Text className="mt-4">
-                      Сlimb up the rank ladder and get up to 1M USD budget for
-                      your trading portfolio
+                      Climb up the leader board and get more liquidity in your
+                      pool
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -210,7 +201,7 @@ const LandingPage = () => {
           <Row className="mt-md-5 mb-5 mt-1">
             <Col md={6}>
               <h3 className="headsame mb-3 mt-3">
-                Join the best <br /> Be part of farmers team
+                Join the best <br /> Be part of our farmers team
               </h3>
               <p className="parasame mt-4">
                 Don-key encourages successful farmers to share their wisdom,
@@ -218,7 +209,11 @@ const LandingPage = () => {
                 results, share the yield and get extra dividend just for being a
                 part of our farmers community
               </p>
-              <ButtonComponent className="btnYellow mt-4">
+              <ButtonComponent
+                disabled
+                className="position-relative btn  btnYellow mt-4"
+              >
+                <img className="coming-soon" src={comingsoon} />
                 Discover best farmers
               </ButtonComponent>
               {ListofFarmerjson.map((item, index) => {
@@ -350,16 +345,18 @@ const LandingPage = () => {
           <Row className="mt-md-5 mb-5 mt-1">
             <Col md={7}>
               <div className="tokenRIght">
-                <h3 className="headsame mb-3 mt-3">Trading strategy builder</h3>
+                <h3 className="headsame mb-3 mt-3">Farming strategy builder</h3>
                 <p className="parasame mt-4">
                   Build your DeFi strategy with a drag and drop interface
                   allowing you to adapt fast to the dynamic world of DeFi and
                   secure your yield
                 </p>
                 <ButtonComponent
-                  variant="colorBlack btn-outline"
+                  disabled
+                  variant="colorBlack btn-outline position-relative"
                   className="mt-4"
                 >
+                  <img className="coming-soon" src={comingsoon} />
                   Build strategy
                 </ButtonComponent>
               </div>

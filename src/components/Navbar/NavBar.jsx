@@ -25,7 +25,7 @@ const useWalletAddress = ({ short = false }) => {
 const Logo = () => {
   return (
     <Navbar.Brand onClick={(e) => e.preventDefault()}>
-      <Link className="d-flex align-items-center inherit-color" to="/">
+      <Link className="d-flex align-items-center inherit-color no-underline" to="/">
         <img
           src="/assets/images/logo.png"
           className="d-inline-block align-top by-logo"

@@ -116,6 +116,12 @@ div:focus {
   border: 1px solid $secondary-color;
   color: $colorBlack;
 }
+
+.btn.btnYellow:disabled {
+  background: $secondary-color;
+  border-color: $secondary-color;
+}
+
 .pull-right {
   float: right;
 }
