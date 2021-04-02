@@ -1,40 +1,56 @@
-import React from "react";
 import { NavBar2 } from "../../components/Navbar/NavBar";
-import { Container } from "react-bootstrap";
-import { Row, Col, Form, Pagination, Table } from "react-bootstrap";
-import { Card } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
 import "./FarmersStyle.scss";
-import ButtonComponent from "../../components/Button/Button";
-import DataFarmer from "../../JsonData/DataFarmer";
+import { Footer } from "components/Footer/Footer";
 const FarmersPage = () => {
-
   return (
-    <div className="bgColor">
-      <NavBar2 />
-  <div className="navbanHead pt-5 pb-5">
+    <div className="bgnav">
+      <NavBar2 hideWallet />
+      <div className=" pt-5 pb-5">
         <Container>
-          <h1 className="d-inline-block mt-md-3">Farmers</h1>
+          <div className="row">
+            <div className="col">
+              <h1 className="text-center mt-md-3">Farmers</h1>
 
-          <div className="d-inline-block pull-right selectdrop">
-            <img
-              src="/assets/images/dropdown.png"
-              className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4"
-              alt="Logo"
-            />
-            <Form.Group controlId="exampleForm.ControlSelect1">
-              <Form.Control as="select">
-                <option>Date range Month</option>
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-              </Form.Control>
-            </Form.Group>
+              <form
+                className="newStrategyContent"
+                style={{ background: "#fff" }}
+              >
+                <p className="text-center">
+                  You think you are a super star farmer? come and show everyone!
+                  submit to being an early farmer
+                </p>
+
+                <div className="container">
+                  <div className="row justify-content-center">
+                    <div className="col-md-6">
+                      <p className="text-center font-weight-bold">
+                        Please Enter Your details Below
+                      </p>
+                      <Form.Group controlId="nickname">
+                        <Form.Label>Nick name</Form.Label>
+                        <Form.Control placeholder="Nick name" />
+                      </Form.Group>
+                      <Form.Group controlId="telegram">
+                        <Form.Label>Telegram</Form.Label>
+                        <Form.Control placeholder="Telegram User" />
+                      </Form.Group>
+
+                      <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>What kind of Don-key are you?</Form.Label>
+                        <Form.Control as="textarea" rows={3} />
+                      </Form.Group>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </Container>
       </div>
 
       {/* Table */}
-      <div className="mt-4 mb-5">
+      {/* <div className="mt-4 mb-5">
         <Container>
           <div className="tablebg">
             <Table responsive>
@@ -60,76 +76,77 @@ const FarmersPage = () => {
               </thead>
 
               <tbody>
-              {DataFarmer.map((item,index)=>{
-                 var str = item.name;
-                 var res = str.substring(0, 2).toLocaleUpperCase();
-              var number=item.apy
-              if(number.toString().length>=3){
-               var num= number.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ',')
-              }else{
-                var num= number.toString().replace(/\B(?=(\d{1})+(?!\d))/g, ',')
-              }
-             
-                return(
-                 <>
-                  
-                 <tr>
-                 
-                  <td className="nodata">{item.id}</td>
-                  <td>
-                    <img
-                      src="/assets/images/blackstar.png"
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                  </td>
-                  <td>
-                    <span className="spanname"> {res}</span>
-                  </td>
-                  <td>
-                    <span className="spanbold">{item.name} </span> <br />
-                    <span className="fontlight">Nb of farmers: {item.nb_farmers}</span>
-                  </td>
-                  <td> ${item.budget}</td>
-                  <td>{item.age} years</td>
-                  <td className="fontlighBold">{item.buru_token} </td>
-                  <td className="tdGraphic">
-                    {
-                      item.chart_url?  <img
-                      src={item.chart_url}
-                      className="d-inline-block"
-                      alt="Image"
-                    />:
-                    <img
-                    src="/assets/images/graphic2.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                    }
-                  
-                  </td>
-                  <td className="fontdBold">{"+"+`${num}`+"%"}</td>
-                  </tr>
-                  { item.id == 2 ?
+                {DataFarmer.map((item, index) => {
+                  var str = item.name;
+                  var res = str.substring(0, 2).toLocaleUpperCase();
+                  var number = item.apy;
+                  if (number.toString().length >= 3) {
+                    var num = number
+                      .toString()
+                      .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
+                  } else {
+                    var num = number
+                      .toString()
+                      .replace(/\B(?=(\d{1})+(?!\d))/g, ",");
+                  }
+
+                  return (
+                    <>
                       <tr>
-                      <td className="rowData" colspan="8">
-                       Join our farmers team
-                        <ButtonComponent
-                         variant="colorBlack"
-                         className="btnYellow ml-md-5 btnPadding"
-                       >
-                         <span> Join us </span>
-                       </ButtonComponent>
-                     </td>
-                     <td></td>
-                   </tr> 
-                   
-                   :null}
-                  </>
-                  
-                )
-                
-              })}
+                        <td className="nodata">{item.id}</td>
+                        <td>
+                          <img
+                            src="/assets/images/blackstar.png"
+                            className="d-inline-block"
+                            alt="Image"
+                          />
+                        </td>
+                        <td>
+                          <span className="spanname"> {res}</span>
+                        </td>
+                        <td>
+                          <span className="spanbold">{item.name} </span> <br />
+                          <span className="fontlight">
+                            Nb of farmers: {item.nb_farmers}
+                          </span>
+                        </td>
+                        <td> ${item.budget}</td>
+                        <td>{item.age} years</td>
+                        <td className="fontlighBold">{item.buru_token} </td>
+                        <td className="tdGraphic">
+                          {item.chart_url ? (
+                            <img
+                              src={item.chart_url}
+                              className="d-inline-block"
+                              alt="Image"
+                            />
+                          ) : (
+                            <img
+                              src="/assets/images/graphic2.png"
+                              className="d-inline-block"
+                              alt="Image"
+                            />
+                          )}
+                        </td>
+                        <td className="fontdBold">{"+" + `${num}` + "%"}</td>
+                      </tr>
+                      {item.id == 2 ? (
+                        <tr>
+                          <td className="rowData" colspan="8">
+                            Join our farmers team
+                            <ButtonComponent
+                              variant="colorBlack"
+                              className="btnYellow ml-md-5 btnPadding"
+                            >
+                              <span> Join us </span>
+                            </ButtonComponent>
+                          </td>
+                          <td></td>
+                        </tr>
+                      ) : null}
+                    </>
+                  );
+                })}
               </tbody>
             </Table>
 
@@ -172,104 +189,7 @@ const FarmersPage = () => {
       </div>
 
       {/*  footer */}
-      <footer className="pt-5 pb-5 mb-0">
-        <Container>
-          <Row>
-            <Col md={3}>
-              <div className="footcol">
-                <div className="footHead mb-md-5 mb-3">
-                  <img
-                    src="/assets/images/footerLogo.png"
-                    className="d-inline-block"
-                    alt="Image"
-                  />
-                </div>
-                <p>
-                  Start building your crypto <br /> investment portfolio with{" "}
-                  <br /> a trusted partner
-                </p>
-
-                <p className="pt-5">2020</p>
-              </div>
-            </Col>
-
-            <Col md={3}>
-              <div className="footcol">
-                <div className="footHead mb-md-5 mb-3">
-                  <h4>Company</h4>
-                </div>
-                <ul className="pl-0">
-                  <li>
-                    <a href="#">About</a>
-                  </li>
-                  <li>
-                    <a href="#">Blog</a>
-                  </li>
-                  <li>
-                    <a href="#">Legal</a>
-                  </li>
-                  <li>
-                    <a href="#">GDPR</a>
-                  </li>
-                  <li>
-                    <a href="#">Partners</a>
-                  </li>
-                </ul>
-              </div>
-            </Col>
-
-            <Col md={3}>
-              <div className="footcol">
-                <div className="footHead mb-md-5 mb-3">
-                  <h4>For users</h4>
-                </div>
-                <ul className="pl-0">
-                  <li>
-                    <a href="#">Support Center</a>
-                  </li>
-                  <li>
-                    <a href="#">Farmers free tier</a>
-                  </li>
-                  <li>
-                    <a href="#">How to Withdraw</a>
-                  </li>
-                  <li>
-                    <a href="#">How to Verify Your Account</a>
-                  </li>
-                  <li>
-                    <a href="#">Customer Service</a>
-                  </li>
-                </ul>
-              </div>
-            </Col>
-
-            <Col md={3}>
-              <div className="footcol">
-                <div className="footHead mb-md-5 mb-3">
-                  <h4>Privacy and Regulation</h4>
-                </div>
-                <ul className="pl-0">
-                  <li>
-                    <a href="#"> Buru Cookie Policy</a>
-                  </li>
-                  <li>
-                    <a href="#">Privacy Policy</a>
-                  </li>
-                  <li>
-                    <a href="#">Regulation & License</a>
-                  </li>
-                  <li>
-                    <a href="#">General Risk Disclosure</a>
-                  </li>
-                  <li>
-                    <a href="#">Terms & Conditions</a>
-                  </li>
-                </ul>
-              </div>
-            </Col>
-          </Row>
-        </Container>
-      </footer>
+      <Footer />
     </div>
   );
 };

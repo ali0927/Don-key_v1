@@ -8,6 +8,12 @@
 }
 
 @font-face {
+  font-family: "Avenir-Regular";
+  src: local("Avenir-Regular"),
+    url(./fonts/avenir-font/AvenirNextCyr-Regular.ttf) format("truetype");
+}
+
+@font-face {
   font-family: "ObjectSans-Bold";
   src: local("ObjectSans-Bold"),
     url(./fonts/object-sans/ObjectSans-Bold.otf) format("truetype");

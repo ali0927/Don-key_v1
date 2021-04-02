@@ -22,20 +22,34 @@ const useWalletAddress = ({ short = false }) => {
   return short ? shortenAddress(walletAddress) : walletAddress;
 };
 
+const Logo = () => {
+  return (
+    <Navbar.Brand
+      className="d-flex align-items-center"
+      onClick={(e) => e.preventDefault()}
+    >
+      <Link to="/">
+        <img
+          src="/assets/images/logo.jpg"
+          className="d-inline-block align-top by-logo"
+          alt="Logo"
+        />
+      </Link>
+      <p
+        className="pt-2"
+        style={{ fontFamily: "Avenir-Regular", fontWeight: "bold" }}
+      >
+        Don-key
+      </p>
+    </Navbar.Brand>
+  );
+};
+
 function NavBar(props) {
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
       <Container>
-        <Navbar.Brand onClick={(e) => e.preventDefault()}>
-        <Link to="/">
-            <img
-              src="/assets/images/logo.png"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-          </Link>
-        </Navbar.Brand>
-
+        <Logo />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
@@ -52,9 +66,7 @@ function NavBar(props) {
             <Nav.Link href="/farmers" className="colorBlack pr-md-5">
               Farmers
             </Nav.Link>
-            <Nav.Link href="#" className="colorBlack">
-              Team
-            </Nav.Link>
+            <NavbarLink to="/team">Team</NavbarLink>
           </Nav>
         </Navbar.Collapse>
         <div className="position-relative">
@@ -107,77 +119,72 @@ const NavbarLink = ({ to, children }) => {
     </Link>
   );
 };
-
-function NavBar2(props) {
+//@ts-ignore
+function NavBar2({ hideWallet = false }) {
   const address = useWalletAddress({ short: true });
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
       <Container>
-        <Navbar.Brand href="#">
-          <Link to="/">
-            <img
-              src="/assets/images/logo.svg"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-          </Link>
-        </Navbar.Brand>
+       <Logo />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
             <NavbarLink to="/resource">Resources</NavbarLink>
-            <NavbarLink to="/myaccount_new">My Investment</NavbarLink>
             <NavbarLink to="/farmers">Farmers</NavbarLink>
-            <NavbarLink to="/developers">Developers</NavbarLink>
+            <NavbarLink to="/team">Team</NavbarLink>
           </Nav>
         </Navbar.Collapse>
 
-        <div className="">
-          <Dropdown className="dropNav1">
-            <Dropdown.Toggle
-              id="dropdown-basic"
-              className=" mr-0 ml-2 ml-md-0 mr-md-2"
-            >
+        {!hideWallet && (
+          <div className="">
+            <Dropdown className="dropNav1">
+              <Dropdown.Toggle
+                id="dropdown-basic"
+                className=" mr-0 ml-2 ml-md-0 mr-md-2"
+              >
+                <img
+                  src="/assets/images/notifications.png"
+                  className="d-inline-block align-top"
+                  alt="Image"
+                />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <p className="notifyHead">Notifications</p>
+
+                {NotificationJson.map((item, index) => {
+                  return (
+                    <Dropdown.Item href="#">
+                      <p>{item.notification}</p>
+                      <span>{timeSince(item.date)}</span>
+                    </Dropdown.Item>
+                  );
+                })}
+                <div className="viewDrop">
+                  <a href="#"> View All</a>
+                </div>
+              </Dropdown.Menu>
+            </Dropdown>
+
+            <a href="#">
               <img
-                src="/assets/images/notifications.png"
-                className="d-inline-block align-top"
+                src="/assets/images/user.png"
+                className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4 mt-1"
                 alt="Image"
               />
-            </Dropdown.Toggle>
-
-            <Dropdown.Menu>
-              <p className="notifyHead">Notifications</p>
-
-              {NotificationJson.map((item, index) => {
-                return (
-                  <Dropdown.Item href="#">
-                    <p>{item.notification}</p>
-                    <span>{timeSince(item.date)}</span>
-                  </Dropdown.Item>
-                );
-              })}
-              <div className="viewDrop">
-                <a href="#"> View All</a>
-              </div>
-            </Dropdown.Menu>
-          </Dropdown>
-
-          <a href="#">
+            </a>
+          </div>
+        )}
+        {!hideWallet && (
+          <ButtonComponent variant="colorBlack btn-outline btnusername">
             <img
-              src="/assets/images/user.png"
-              className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4 mt-1"
+              src="/assets/images/usericon.png"
+              className="d-inline-block align-top mr-md-2"
               alt="Image"
             />
-          </a>
-        </div>
-        <ButtonComponent variant="colorBlack btn-outline btnusername">
-          <img
-            src="/assets/images/usericon.png"
-            className="d-inline-block align-top mr-md-2"
-            alt="Image"
-          />
-          <span> {address}</span>
-        </ButtonComponent>
+            <span> {address}</span>
+          </ButtonComponent>
+        )}
       </Container>
     </Navbar>
   );
@@ -193,13 +200,7 @@ const NavBar3 = () => {
     >
       <Container>
         <Link to="/">
-          <Navbar.Brand href="#">
-            <img
-              src="/assets/images/logo-light.svg"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-          </Navbar.Brand>
+          <Logo />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -260,4 +261,3 @@ const NavBar3 = () => {
 };
 
 export { NavBar, NavBar2, NavBar3 };
-

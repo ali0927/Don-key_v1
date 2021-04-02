@@ -57,7 +57,7 @@ export default function Routes() {
           <Route path="/login" children={<Login />} />
           <ProtectedRoute path="/strategy/build" children={<Builder />} />
           <Route path="/resource" children={<ResourcePage />} />
-          <ProtectedRoute path="/farmers" children={<FarmersPage />} />
+          <Route path="/farmers" children={<FarmersPage />} />
           <ProtectedRoute path="/myaccount" children={<MyAccount />} />
           <Route path="/myaccount_new"><MyAccountNew /></Route>
           <Route path="/strategy/new" children={<SelectTemplate />} />
