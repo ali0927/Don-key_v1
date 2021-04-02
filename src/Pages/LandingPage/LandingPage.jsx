@@ -13,6 +13,7 @@ import getLiquidity from "./get-liquidity.png";
 import { Footer } from "components/Footer/Footer";
 import { HeroImage } from "./HeroImage";
 import comingsoon from "images/comingsoon.svg";
+import { useHistory } from "react-router";
 const StarIcon = (props) => {
   return (
     <svg
@@ -70,6 +71,8 @@ const ChartIcon = () => {
 };
 
 const LandingPage = () => {
+  const history = useHistory();
+
   return (
     <div>
       <NavBar />
@@ -327,7 +330,7 @@ const LandingPage = () => {
 
                     <ul className="p-0"></ul>
 
-                    <ButtonComponent className="btnYellow mt-5 mb-4">
+                    <ButtonComponent onClick={() => history.push("/farmers")} className="btnYellow mt-5 mb-4">
                       Start farming
                     </ButtonComponent>
                   </Card.Body>
