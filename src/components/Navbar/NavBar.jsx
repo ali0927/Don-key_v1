@@ -24,23 +24,20 @@ const useWalletAddress = ({ short = false }) => {
 
 const Logo = () => {
   return (
-    <Navbar.Brand
-      className="d-flex align-items-center"
-      onClick={(e) => e.preventDefault()}
-    >
-      <Link to="/">
+    <Navbar.Brand onClick={(e) => e.preventDefault()}>
+      <Link className="d-flex align-items-center inherit-color" to="/">
         <img
           src="/assets/images/logo.png"
           className="d-inline-block align-top by-logo"
           alt="Logo"
         />
+        <p
+          className="m-0"
+          style={{ fontFamily: "Avenir-Regular", fontWeight: "bold" }}
+        >
+          <span style={{ letterSpacing: "2px" }}>Don</span>-key
+        </p>
       </Link>
-      <p
-        className="m-0"
-        style={{ fontFamily: "Avenir-Regular", fontWeight: "bold" }}
-      >
-        <span style={{letterSpacing: "2px"}}>Don</span>-key
-      </p>
     </Navbar.Brand>
   );
 };
@@ -125,7 +122,7 @@ function NavBar2({ hideWallet = false }) {
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
       <Container>
-       <Logo />
+        <Logo />
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
