@@ -423,7 +423,7 @@ const LandingPage = () => {
           <p className="mt-5">Follow us Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
-              <a href="#">
+              <a href="https://medium.com/@don-key.finance">
                 <svg
                   width={25}
                   height={24}
@@ -450,7 +450,7 @@ const LandingPage = () => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="https://t.me/don_key_finance">
                 <svg
                   width={25}
                   height={24}
@@ -477,7 +477,7 @@ const LandingPage = () => {
               </a>
             </li>
             <li>
-              <a href="#">
+              <a href="https://twitter.com/Don_key_finance">
                 <svg
                   width={25}
                   height={24}

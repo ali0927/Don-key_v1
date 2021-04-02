@@ -19,7 +19,7 @@ const FarmersPage = () => {
               >
                 <p className="text-center">
                   You think you are a super star farmer? come and show everyone!
-                  submit to being an early farmer
+                  Submit to becomae an early farmer
                 </p>
 
                 <div className="container">
@@ -41,7 +41,7 @@ const FarmersPage = () => {
                         <Form.Label>What kind of Don-key are you?</Form.Label>
                         <Form.Control
                           as="textarea"
-                          placeholder="What kind of Don-key are you?"
+                          placeholder="I'm the kind of farmer you all want to farm"
                           rows={3}
                         />
                       </Form.Group>
