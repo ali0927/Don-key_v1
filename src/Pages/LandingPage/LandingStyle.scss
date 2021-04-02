@@ -394,16 +394,17 @@ footer {
   height: 50%;
   width: 700px;
   margin-right: 300px;
-
 }
 
-@media screen and (max-width: 500) {
+@media screen and (max-width: 500px) {
+
   .tradingrightImg {
     overflow: hidden;
     margin-top: 50px;
-    margin-right: 50px;
+
+    
     & img {
-      max-width: 50%;
+      max-width: 100%;
     }
   }
 }
