@@ -30,16 +30,16 @@ const Logo = () => {
     >
       <Link to="/">
         <img
-          src="/assets/images/logo.jpg"
+          src="/assets/images/logo.png"
           className="d-inline-block align-top by-logo"
           alt="Logo"
         />
       </Link>
       <p
-        className="pt-2"
+        className="m-0"
         style={{ fontFamily: "Avenir-Regular", fontWeight: "bold" }}
       >
-        Don-key
+        <span style={{letterSpacing: "2px"}}>Don</span>-key
       </p>
     </Navbar.Brand>
   );
