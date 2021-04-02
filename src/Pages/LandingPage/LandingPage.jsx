@@ -345,7 +345,7 @@ const LandingPage = () => {
             <Col md={4} className="mr-md-4">
               <div className="toeknImg">
                 <img
-                  src="src/images/trading.png"
+                  src="/assets/images/token.png"
                   className="d-inline-block"
                   alt="Image"
                 />
