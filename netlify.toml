@@ -1,4 +1,4 @@
 [[redirects]]
-  from = "/old-path"
-  to = "/"
+  from = "/*"
+  to = "/index.html"
   status = 200
