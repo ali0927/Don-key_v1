@@ -12,6 +12,11 @@
   src: local("Avenir-Regular"),
     url(./fonts/avenir-font/AvenirNextCyr-Regular.ttf) format("truetype");
 }
+@font-face {
+  font-family: "Avenir-Bold";
+  src: local("Avenir-Bold"),
+    url(./fonts/avenir-font/AvenirNextCyr-Bold.ttf) format("truetype");
+}
 
 @font-face {
   font-family: "ObjectSans-Bold";
