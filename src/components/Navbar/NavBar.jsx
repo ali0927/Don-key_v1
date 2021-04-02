@@ -74,7 +74,7 @@ function NavBar(props) {
             <NavbarLink to="/team">Team</NavbarLink>
           </Nav>
         </Navbar.Collapse>
-        <div className="position-relative">
+        <div className="position-relative mr-5 mr-sm-0">
           <ButtonComponent disabled variant="colorBlack btn-outline px-4">
             DAPP
           </ButtonComponent>
