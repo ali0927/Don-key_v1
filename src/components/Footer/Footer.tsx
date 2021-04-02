@@ -32,7 +32,7 @@ export const Footer = () => {
                         marginLeft: -2,
                         marginRight: -1,
                       }}
-                      src="/assets/images/logo.png"
+                      src="/assets/images/logo-don.png"
                       className="d-inline-block align-top by-logo"
                       alt="Logo"
                     />

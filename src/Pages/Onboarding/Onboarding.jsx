@@ -14,7 +14,7 @@ const Onboarding = () => {
         <Container>
           <Navbar.Brand href="#">
             <img
-              src="/assets/images/logo.png"
+              src="/assets/images/logo-don.png"
               className="d-inline-block align-top"
               alt="Logo"
             />
