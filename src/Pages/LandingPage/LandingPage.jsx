@@ -153,7 +153,7 @@ const LandingPage = () => {
           <div className="borderCurve"></div>
           <Container>
             <h3 className="headsame mb-3 my-5 justify-content-center">
-              Painless DeFi
+              Become a Don-key farmer
             </h3>
             <Row className="pt-5">
               <Col md={4}>
@@ -169,7 +169,7 @@ const LandingPage = () => {
                 </Card>
               </Col>
 
-              <Col md={4}>
+              <Col md={4}> 
                 <Card>
                   <Card.Body>
                     <img className="advantage-img" src={getLiquidity} />
@@ -204,13 +204,13 @@ const LandingPage = () => {
           <Row className="mt-md-5 mb-5 mt-1">
             <Col md={6}>
               <h3 className="headsame mb-3 mt-3">
-                Join the best <br /> Be part of our farmers team
+                Come discover our Don-key farmers and follow the best
               </h3>
               <p className="parasame mt-4">
-                Don-key encourages successful farmers to share their wisdom,
-                with Don-key you can trade , get liquidity based on your
-                results, share the yield and get extra dividend just for being a
-                part of our farmers community
+                Want to join the Yield farming frenzy but don't have the
+                know-how or the time to do it, discover and follow the best
+                yield farmers with just one click. Historical APY, farming
+                philosophy, risk apatite; You can see it all.
               </p>
               <ButtonComponent
                 disabled
@@ -330,7 +330,10 @@ const LandingPage = () => {
 
                     <ul className="p-0"></ul>
 
-                    <ButtonComponent onClick={() => history.push("/farmers")} className="btnYellow mt-5 mb-4">
+                    <ButtonComponent
+                      onClick={() => history.push("/farmers")}
+                      className="btnYellow mt-5 mb-4"
+                    >
                       Start farming
                     </ButtonComponent>
                   </Card.Body>
