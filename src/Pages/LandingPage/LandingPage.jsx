@@ -14,6 +14,9 @@ import { Footer } from "components/Footer/Footer";
 import { HeroImage } from "./HeroImage";
 import comingsoon from "images/comingsoon.svg";
 import { useHistory } from "react-router";
+import { FarmerCards } from "../../components/FarmerCards/FarmerCards";
+import farmerCard1 from "../../images/farmer-card-1.jpg";
+
 const StarIcon = (props) => {
   return (
     <svg
@@ -169,7 +172,7 @@ const LandingPage = () => {
                 </Card>
               </Col>
 
-              <Col md={4}> 
+              <Col md={4}>
                 <Card>
                   <Card.Body>
                     <img className="advantage-img" src={getLiquidity} />
@@ -219,93 +222,31 @@ const LandingPage = () => {
                 <img className="coming-soon" src={comingsoon} />
                 Discover best farmers
               </ButtonComponent>
-              {ListofFarmerjson.map((item, index) => {
-                var str = item.name;
-                var res = str.substring(0, 2).toLocaleUpperCase();
-                return item.id == 3 || item.id == 4 ? (
-                  <div className="cardTeam mt-5">
-                    <Card
-                      className="ml-auto mr-auto ml-md-auto mr-md-0 cardEven text-center pt-5 pb-3"
-                      style={{ width: "23rem" }}
-                    >
-                      <StarIcon className="cardStar" />
-
-                      <Card.Body>
-                        <span className="cardLetter">
-                          {item.picture ? <ChartIcon /> : res}
-                        </span>
-                        <Card.Title>{item.name}</Card.Title>
-
-                        <ul className="p-0"></ul>
-
-                        <ChartIcon />
-
-                        <Row className="mt-4">
-                          <Col md={6}>
-                            <p className="cardPara">
-                              <span className="pr-2">
-                                {" "}
-                                {"+" + `${item.apy}` + "%"}{" "}
-                              </span>{" "}
-                              APY
-                            </p>
-                          </Col>
-                          <Col md={6}>
-                            <p className="cardPara1">
-                              {"strategies " + `${item.strategies}`}
-                            </p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  </div>
-                ) : null;
-              })}
+              
+              <FarmerCards
+                  imgs={farmerCard1}
+                  heading="DON - Make You Yield"
+                  content="3405 FOLLOWERS"
+                /> 
+                
             </Col>
-
+          
+          
+             
             <Col md={6}>
-              <div className="cardTeam mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
-                {ListofFarmerjson.map((item, index) => {
-                  var str = item.name;
-                  var res = str.substring(0, 2).toLocaleUpperCase();
-                  return item.id == 3 || item.id == 4 ? null : (
-                    <Card
-                      className="cardEven text-center pt-5 pb-3"
-                      style={{ width: "23rem" }}
-                    >
-                      <StarIcon className="cardStar" />
-                      <Card.Body>
-                        <span className="cardLetter">
-                          {item.picture ? <ChartIcon /> : res}
-                        </span>
-                        <Card.Title>{item.name}</Card.Title>
-
-                        <ul className="p-0">
-                          {/* <li>{item.description}</li> */}
-                        </ul>
-
-                        <ChartIcon />
-                        <Row className="mt-4">
-                          <Col md={6}>
-                            <p className="cardPara">
-                              <span className="pr-2">
-                                {" "}
-                                {"+" + `${item.apy}` + "%"}{" "}
-                              </span>{" "}
-                              APY
-                            </p>
-                          </Col>
-                          <Col md={6}>
-                            <p className="cardPara1">
-                              {"strategies " + `${item.strategies}`}
-                            </p>
-                          </Col>
-                        </Row>
-                      </Card.Body>
-                    </Card>
-                  );
-                })}
-                <Card
+              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
+              <FarmerCards
+                  imgs={farmerCard1}
+                  heading="DON - Make You Yield"
+                  content="3405 FOLLOWERS"
+                />
+                <FarmerCards
+                imgs={farmerCard1}
+                heading="DON - Make You Yield"
+                content="3405 FOLLOWERS"
+              />
+             
+                {/* <Card
                   className="cardOdd text-center pt-5 pb-3"
                   style={{ width: "23rem" }}
                 >
@@ -337,9 +278,13 @@ const LandingPage = () => {
                       Start farming
                     </ButtonComponent>
                   </Card.Body>
-                </Card>
+                </Card> */}
+              
               </div>
+
+              
             </Col>
+
           </Row>
         </Container>
       </div>
