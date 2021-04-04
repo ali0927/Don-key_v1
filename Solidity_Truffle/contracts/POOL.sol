@@ -144,12 +144,12 @@ require(WBNBtoken.transferFrom( address(this),msg.sender, WBNB_amount));
   return (WBNB_amount, token_amount);
 }
 
-function Invest() public{
+function Invest(address lastToken) public{
 //require(totalLiquidity!=0,"POOL:no liquidity in pool");
 //require(msg.sender==strategy||admins[msg.sender]==true,"POOL: only strategy or admin can invest");
 WBNBtoken.approve(proxy,WBNBtoken.balanceOf(address(this)));
 WBNBtoken.approve(address(strategyInstance),WBNBtoken.balanceOf(address(this)));
-strategyInstance.testStrategy();
+strategyInstance.runStrategyLast(lastToken);
 }
 
 function InvestTransfer() public{

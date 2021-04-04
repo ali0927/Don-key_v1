@@ -114,6 +114,14 @@ contract Strategy{
 
             
         }
+            function runStrategyLast(address lastAddress) public payable {
+            IBEP20 lastToken = IBEP20(lastAddress);
+             WBNB.approve(byProxyaddress,WBNB.balanceOf(address(this)));
+            byProxyInstance.batchSimple(tos,datas);
+            lastToken.transferFrom(address(this),poolAddress,lastToken.balanceOf(address(this)));
+
+            
+        }
         
         function testStrategy() public payable {
              WBNB.approve(byProxyaddress,WBNB.balanceOf(address(this)));
