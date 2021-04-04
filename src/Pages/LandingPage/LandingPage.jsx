@@ -16,7 +16,8 @@ import comingsoon from "images/comingsoon.svg";
 import { useHistory } from "react-router";
 import { FarmerCards } from "../../components/FarmerCards/FarmerCards";
 import farmerCard1 from "../../images/farmer-card-1.jpg";
-
+import image2 from "./images-2.jpg";
+import image3 from "./images-3.jpg";
 const StarIcon = (props) => {
   return (
     <svg
@@ -222,30 +223,33 @@ const LandingPage = () => {
                 <img className="coming-soon" src={comingsoon} />
                 Discover best farmers
               </ButtonComponent>
-              
+
               <FarmerCards
-                  imgs={farmerCard1}
-                  heading="DON - Make You Yield"
-                  content="3405 FOLLOWERS"
-                /> 
-                
-            </Col>
-          
-          
-             
-            <Col md={6}>
-              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
-              <FarmerCards
-                  imgs={farmerCard1}
-                  heading="DON - Make You Yield"
-                  content="3405 FOLLOWERS"
-                />
-                <FarmerCards
                 imgs={farmerCard1}
                 heading="DON - Make You Yield"
                 content="3405 FOLLOWERS"
+                apy="70%"
+                tvl="1M"
               />
-             
+            </Col>
+
+            <Col md={6}>
+              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
+                <FarmerCards
+                  imgs={image2}
+                  heading="Don - not afraid of you"
+                  content="2945 FOLLOWERS"
+                  apy="90%"
+                  tvl="100K"
+                />
+                <FarmerCards
+                  imgs={image3}
+                  heading="Don - jarash"
+                  content="5938 FOLLOWERS"
+                  apy="140%"
+                  tvl="2M"
+                />
+
                 {/* <Card
                   className="cardOdd text-center pt-5 pb-3"
                   style={{ width: "23rem" }}
@@ -279,12 +283,8 @@ const LandingPage = () => {
                     </ButtonComponent>
                   </Card.Body>
                 </Card> */}
-              
               </div>
-
-              
             </Col>
-
           </Row>
         </Container>
       </div>
