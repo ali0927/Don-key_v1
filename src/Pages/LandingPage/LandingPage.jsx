@@ -226,10 +226,10 @@ const LandingPage = () => {
               <div className="d-flex flex-column align-items-end mt-4">
                 <FarmerCards
                   imgs={farmerCard1}
-                  heading="DON - Make You Yield"
+                  heading="Don - Make You Yield"
                   content="3405 FOLLOWERS"
                   apy="70%"
-                  tvl="1M"
+                  tvl="2.3M"
                 />
               </div>
             </Col>
@@ -241,14 +241,14 @@ const LandingPage = () => {
                   heading="Don - not afraid of you"
                   content="2945 FOLLOWERS"
                   apy="90%"
-                  tvl="100K"
+                  tvl="1.4M"
                 />
                 <FarmerCards
                   imgs={image3}
                   heading="Don - jarash"
                   content="5938 FOLLOWERS"
                   apy="140%"
-                  tvl="2M"
+                  tvl="0.9M"
                 />
 
                 {/* <Card
