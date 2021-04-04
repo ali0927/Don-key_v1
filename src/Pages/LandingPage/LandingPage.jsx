@@ -223,14 +223,15 @@ const LandingPage = () => {
                 <img className="coming-soon" src={comingsoon} />
                 Discover best farmers
               </ButtonComponent>
-
-              <FarmerCards
-                imgs={farmerCard1}
-                heading="DON - Make You Yield"
-                content="3405 FOLLOWERS"
-                apy="70%"
-                tvl="1M"
-              />
+              <div className="d-flex flex-column align-items-end mt-4">
+                <FarmerCards
+                  imgs={farmerCard1}
+                  heading="DON - Make You Yield"
+                  content="3405 FOLLOWERS"
+                  apy="70%"
+                  tvl="1M"
+                />
+              </div>
             </Col>
 
             <Col md={6}>

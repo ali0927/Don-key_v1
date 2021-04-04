@@ -3,6 +3,7 @@ import React from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import { IoLogoTwitter } from "react-icons/io";
 import comingsoon from "images/comingsoon.svg";
+import clsx from "clsx";
 const ChartIcon = () => {
   return (
     <svg
@@ -43,7 +44,7 @@ const ChartIcon = () => {
 
 export const FarmerCards = (props: any) => {
   return (
-    <div className="farmer-cards mx-auto mt-4" style={{ maxWidth: 350 }}>
+    <div className={clsx("farmer-cards mt-4")} style={{ maxWidth: 350 }}>
       <Card className="card-outer justify-content-center text-center">
         <Card.Body>
           <div className="card-inner">
