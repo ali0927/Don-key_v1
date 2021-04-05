@@ -82,7 +82,7 @@ const LandingPage = () => {
       <NavBar />
 
       {/* Banner */}
-      <div className="mt-4">
+      <div className="mt-4 pb-5">
         <Container>
           <Row>
             <Col md={5}>
@@ -106,51 +106,60 @@ const LandingPage = () => {
 
       {/* Cards */}
       <div className="cardsBanner mt-5">
-        {/* <Container>
-          <Row>
-          {
-            NumberFromjson.map((item,index)=>{
-              if(item.id ==1){
-                var imag= '/assets/images/total/1.png'
-              }
-              else if( item.id==2){
-                var imag= '/assets/images/total/2.png'
-              }
-              else if(item.id == 3){
-                var imag= '/assets/images/total/3.png'
-              }
-              else if(item.id == 4){
-                var imag= '/assets/images/total/4.png'
-              }
-             
-              return(
-              <Col md={6} lg={3}>
-                <Card>
-                  <Card.Body className="text-center">
-                    <img
-                      src={imag}
-                      className="d-inline-block"
-                      alt="Image"
-                    />
-                    <Card.Title className="mb-3">
-                    {item.id == 1 || item.id==2 ? "$"+`${item.number}` : item.number}
-                     </Card.Title>
-                    <Card.Subtitle className="mb-2">
-                     {item.title}
-                    </Card.Subtitle>
-                  </Card.Body>
-                </Card>
+     
+        <div className="farmer bggeryColor mt-5 pt-5 pb-5">
+          <Container>
+            <Row className="mt-md-5 mb-5 mt-1">
+              <Col md={6}>
+                <h3 className="headsame mb-3 mt-3">
+                  Come discover our Don-key farmers and follow the best
+                </h3>
+                <p className="parasame mt-4">
+                  Want to join the Yield farming frenzy but don't have the
+                  know-how or the time to do it, discover and follow the best
+                  yield farmers with just one click. Historical APY, farming
+                  philosophy, risk apatite; You can see it all.
+                </p>
+                <ButtonComponent
+                  disabled
+                  className="position-relative btn  btnYellow mt-4"
+                >
+                  <img className="coming-soon" src={comingsoon} />
+                  Discover best farmers
+                </ButtonComponent>
+
+                <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
+                  <FarmerCards
+                    imgs={farmerCard1}
+                    name="Gabriel"
+                    content="3405"
+                    apy="90%"
+                    tvl="2.3M"
+                  />
+                </div>
               </Col>
 
-           
-              )
-         
-            })
-           }
-           </Row>
-          
-        </Container> */}
-
+              <Col md={6}>
+                <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5 d-flex flex-column align-items-center align-items-sm-start ">
+                  <FarmerCards
+                    imgs={image2}
+                    name="Popeye"
+                    content="2945"
+                    apy="140%"
+                    tvl="1.4M"
+                  />
+                  <FarmerCards
+                    imgs={image3}
+                    name="Jacob"
+                    content="5938"
+                    apy="70%"
+                    tvl="0.9M"
+                  />
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
         {/* Advantage */}
 
         <div className="advantage bgyellowColor">
@@ -200,61 +209,6 @@ const LandingPage = () => {
             </Row>
           </Container>
         </div>
-      </div>
-
-      {/* Farmers Team */}
-      <div className="farmer bggeryColor pt-5 pb-5">
-        <Container>
-          <Row className="mt-md-5 mb-5 mt-1">
-            <Col md={6}>
-              <h3 className="headsame mb-3 mt-3">
-                Come discover our Don-key farmers and follow the best
-              </h3>
-              <p className="parasame mt-4">
-                Want to join the Yield farming frenzy but don't have the
-                know-how or the time to do it, discover and follow the best
-                yield farmers with just one click. Historical APY, farming
-                philosophy, risk apatite; You can see it all.
-              </p>
-              <ButtonComponent
-                disabled
-                className="position-relative btn  btnYellow mt-4"
-              >
-                <img className="coming-soon" src={comingsoon} />
-                Discover best farmers
-              </ButtonComponent>
-
-              <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
-                <FarmerCards
-                  imgs={farmerCard1}
-                  name="Make You Yield"
-                  content="3405"
-                  apy="90%"
-                  tvl="2.3M"
-                />
-              </div>
-            </Col>
-
-            <Col md={6}>
-              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5 d-flex flex-column align-items-center align-items-sm-start ">
-                <FarmerCards
-                  imgs={image2}
-                  name="not afraid of you"
-                  content="2945"
-                  apy="140%"
-                  tvl="1.4M"
-                />
-                <FarmerCards
-                  imgs={image3}
-                  name="jarash"
-                  content="5938"
-                  apy="70%"
-                  tvl="0.9M"
-                />
-              </div>
-            </Col>
-          </Row>
-        </Container>
       </div>
 
       {/* Trading strategy builder */}
