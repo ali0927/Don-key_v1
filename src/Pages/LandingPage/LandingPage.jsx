@@ -162,8 +162,8 @@ const LandingPage = () => {
         </div>
         {/* Advantage */}
 
-        <div className="advantage bgyellowColor">
-          <div className="borderCurve"></div>
+        <div className="advantage mt-0 bgyellowColor">
+          <div className="borderCurve bggeryColor"></div>
           <Container>
             <h3 className="headsame mb-3 my-5 justify-content-center">
               Become a Don-key farmer
