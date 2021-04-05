@@ -15,9 +15,9 @@ import { HeroImage } from "./HeroImage";
 import comingsoon from "images/comingsoon.svg";
 import { useHistory } from "react-router";
 import { FarmerCards } from "../../components/FarmerCards/FarmerCards";
-import farmerCard1 from "../../images/farmer-card-1.jpg";
-import image2 from "./images-2.jpg";
-import image3 from "./images-3.jpg";
+import farmerCard1 from "./gabriel.svg";
+import image2 from "./popeye.svg";
+import image3 from "./image.svg";
 const StarIcon = (props) => {
   return (
     <svg
@@ -223,11 +223,12 @@ const LandingPage = () => {
                 <img className="coming-soon" src={comingsoon} />
                 Discover best farmers
               </ButtonComponent>
-              <div className="d-flex flex-column align-items-end mt-4">
+
+              <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                 <FarmerCards
                   imgs={farmerCard1}
-                  heading="Don - Make You Yield"
-                  content="3405 FOLLOWERS"
+                  name="Make You Yield"
+                  content="3405"
                   apy="90%"
                   tvl="2.3M"
                 />
@@ -235,18 +236,18 @@ const LandingPage = () => {
             </Col>
 
             <Col md={6}>
-              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5">
+              <div className="mt-3 ml-lg-5 ml-md-2 ml-auto mr-auto mb-5 d-flex flex-column align-items-center align-items-sm-start ">
                 <FarmerCards
                   imgs={image2}
-                  heading="Don - not afraid of you"
-                  content="2945 FOLLOWERS"
+                  name="not afraid of you"
+                  content="2945"
                   apy="140%"
                   tvl="1.4M"
                 />
                 <FarmerCards
                   imgs={image3}
-                  heading="Don - jarash"
-                  content="5938 FOLLOWERS"
+                  name="jarash"
+                  content="5938"
                   apy="70%"
                   tvl="0.9M"
                 />

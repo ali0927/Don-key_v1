@@ -1,13 +1,13 @@
 import ButtonComponent from "components/Button/Button";
-import React from "react";
-import { Container, Row, Col, Card } from "react-bootstrap";
-import { IoLogoTwitter } from "react-icons/io";
+import { Card } from "react-bootstrap";
+import "./FarmerCards.scss";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
+import { FaTwitter } from "react-icons/fa";
 const ChartIcon = () => {
   return (
     <svg
-      width={196}
+      width={350}
       height={89}
       viewBox="0 0 196 89"
       fill="none"
@@ -44,31 +44,42 @@ const ChartIcon = () => {
 
 export const FarmerCards = (props: any) => {
   return (
-    <div className={clsx("farmer-cards mt-4")} style={{ maxWidth: 350 }}>
-      <Card className="card-outer justify-content-center text-center">
-        <Card.Body>
-          <div className="card-inner">
-            <img src={props.imgs} className="img-fluid card-inner-img" />{" "}
-            <Card.Title className="pl-2 m-0">{props.heading}</Card.Title>
+    <div className={clsx("farmer-cards  mt-5")}>
+      <div className="p-4">
+        <div className="card-inner">
+          <img src={props.imgs} className="img-fluid card-inner-img" />
+          <Card.Title className="pl-3 m-0">
+            <FaTwitter className="mr-1" />
+            Don - {props.name}
+          </Card.Title>
+        </div>
+        <div className="d-flex justify-content-center py-5 p-2">
+          <ChartIcon />
+        </div>
+      </div>
+      <div className="farmer-card-bottom p-4 d-flex flex-column align-items-center">
+        <Card.Text className="mt-4 mb-4 text-center w-100">
+          <div><b>{props.content}</b> Investors</div>
+          <div className="d-flex justify-content-between px-5 py-2 mt-4 mb-3">
+            <span>
+              APY:
+              <b>
+                <span className="primary-text"> {props.apy}</span>
+              </b>{" "}
+            </span>
+            <span>
+              {" "}
+              TVL: <b> {props.tvl}</b>
+            </span>
           </div>
-          <div className="d-flex justify-content-center pt-5 pb-4">
-            <ChartIcon />
-          </div>
-          <Card.Text className="mt-4 mb-4">
-           <b>{props.content}</b>
-            <div className="d-flex justify-content-between px-5 mt-3">
-              <b>APY: <span className="primary-text"> {props.apy}</span></b> <b>TVL: {props.tvl}</b>
-            </div>
-          </Card.Text>
-          <ButtonComponent
-            disabled
-            className="position-relative btn  btnYellow"
-          >
-            <img className="coming-soon" src={comingsoon} />
-            FOLLOW
+        </Card.Text>
+        <div className="position-relative d-inline-block">
+          <ButtonComponent disabled variant="colorBlack mx btn-outline px-4">
+            Follow {props.name}
           </ButtonComponent>
-        </Card.Body>
-      </Card>
+          <img className="coming-soon" src={comingsoon} />
+        </div>
+      </div>
     </div>
   );
 };
