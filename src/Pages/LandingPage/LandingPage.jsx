@@ -228,7 +228,7 @@ const LandingPage = () => {
                   imgs={farmerCard1}
                   heading="Don - Make You Yield"
                   content="3405 FOLLOWERS"
-                  apy="70%"
+                  apy="90%"
                   tvl="2.3M"
                 />
               </div>
@@ -240,50 +240,16 @@ const LandingPage = () => {
                   imgs={image2}
                   heading="Don - not afraid of you"
                   content="2945 FOLLOWERS"
-                  apy="90%"
+                  apy="140%"
                   tvl="1.4M"
                 />
                 <FarmerCards
                   imgs={image3}
                   heading="Don - jarash"
                   content="5938 FOLLOWERS"
-                  apy="140%"
+                  apy="70%"
                   tvl="0.9M"
                 />
-
-                {/* <Card
-                  className="cardOdd text-center pt-5 pb-3"
-                  style={{ width: "23rem" }}
-                >
-                  <svg
-                    width={53}
-                    height={50}
-                    className="cardStar"
-                    viewBox="0 0 53 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M50.697 19.293v.001c.157.484.012 1.01-.371 1.346l-.001.001L38.98 30.59l-.672.588.198.872 3.345 14.735s0 0 0 0a1.265 1.265 0 01-.492 1.307h0c-.411.299-.954.32-1.384.062l-.004-.002-12.941-7.738-.77-.46-.77.46-12.946 7.738h0a1.253 1.253 0 01-1.387-.06 1.262 1.262 0 01-.49-1.308l3.345-14.734.197-.871-.671-.59L2.193 20.64l-.003-.002a1.26 1.26 0 01-.368-1.342 1.264 1.264 0 011.088-.87s0 0 0 0l15.01-1.363.891-.081.352-.824 5.934-13.886V2.27a1.263 1.263 0 012.326-.002v.001l5.934 13.888.352.824.892.08 15.008 1.364h.001c.506.045.931.386 1.087.868z"
-                      fill="#FFCA00"
-                      stroke="#070602"
-                      strokeWidth={3}
-                    />
-                  </svg>
-                  <Card.Body>
-                    <span className="cardLetter">YOU</span>
-                    <Card.Title>You could be here</Card.Title>
-
-                    <ul className="p-0"></ul>
-
-                    <ButtonComponent
-                      onClick={() => history.push("/farmers")}
-                      className="btnYellow mt-5 mb-4"
-                    >
-                      Start farming
-                    </ButtonComponent>
-                  </Card.Body>
-                </Card> */}
               </div>
             </Col>
           </Row>
