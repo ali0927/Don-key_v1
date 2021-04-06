@@ -51,6 +51,8 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     insertProtocol,
     insertAction: insertinGraph,
     restoreGraphFromState,
+    updateActionData,
+    updateProtocolData
   } = useGraphState({ getGraph, strategy, getProtocol });
 
   const getActionForCellId = useCallback((cellId) => {
@@ -88,7 +90,7 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     }
     let left = 0;
     let top = 0;
-    console.log(action);
+ 
     left = action.x + action.vertex.geometry.width / 2 + 5;
     top = action.y + action.vertex.geometry.height + 100;
     return {
@@ -154,7 +156,7 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     const selectedProtocol = getSelectedProtocol();
     const prevProtocol = getPrevProtocol();
    
-    insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId, actionName);
+    return insertinGraph(prevProtocol.protocolId, selectedProtocol.protocolId, actionName);
   }, []);
   useEffect(() => {
     const container = divRef.current;
@@ -172,7 +174,7 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
           setSelectedCell(cell);
           closePanel();
           const protocol = getProtocolForCellId(cell.id);
-          console.log(cell, protocol);
+        
           const aIsPRotocol = isProtocol(cell.id);
           if (aIsPRotocol) {
             openPanel(protocol.protocol);
@@ -235,7 +237,7 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
         evt.preventDefault();
 
         const protocol = evt.dataTransfer.getData("protocol");
-        console.log(protocol);
+    
         handleDrop(protocol);
       }
     });
@@ -258,6 +260,8 @@ export const GraphProvider = ({ children, openPanel, protocols, strategy }) => {
     getActionConfigStyle,
     getProtocol,
     resetGraph,
+    updateActionData,
+    updateProtocolData,
     divRef,
   };
 

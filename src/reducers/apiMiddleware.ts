@@ -37,7 +37,7 @@ export const apiMiddleware: Middleware<any, IStoreState> = (store) => (
                     req.onDone && req.onDone(res);
                 } catch (e) {
                     if (e.response) {
-                        console.log(e.response.status);
+                     
                         if (e.response.status === 401) {
                             dispatch(doLogout());
                         }

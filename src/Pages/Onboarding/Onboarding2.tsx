@@ -38,7 +38,7 @@ export const Onboarding2 = () => {
     const contValue = useMemo(() => {
      
         const index = countries.findIndex((val) => val.label === country);
-        console.log(index);
+       
         if (index === -1) {
             return null
         }
@@ -58,7 +58,6 @@ export const Onboarding2 = () => {
         value: contValue,
 
         onChange: (e, val) => {
-            console.log(val)
             if(val){
                 setCountry(val.label)
             }

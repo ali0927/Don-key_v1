@@ -20,7 +20,7 @@ const waitUntilEnabled = () => {
 };
 
 export const getWeb3 = async () => {
-    console.log("called");
+   
     //@ts-ignore
     if (!window.ethereum) {
         window.alert("Please install MetaMask first.");
@@ -36,7 +36,7 @@ export const getWeb3 = async () => {
             }
 
             if (!isEnabling && !done) {
-                console.log("enabling");
+               
                 isEnabling = true;
                 //@ts-ignore
 
@@ -82,7 +82,7 @@ export const getQueryParam = (name: string) => {
         const items = item.split("=");
         queryObj[items[0]] = items[1];
     });
-    console.log(queryObj);
+ 
     return queryObj[name];
 };
 

@@ -183,6 +183,36 @@ const Builder = () => {
             >
               {isApproved ? "Approved" : "Approve strategy"}
             </div>
+            <div
+              style={{
+                position: "absolute",
+                top: 200,
+                right: 87,
+                padding: "15px 20px",
+                backgroundColor: "white",
+                border: "3px solid black",
+                borderRadius: "8px",
+                cursor: "pointer"
+              }}
+              onClick={handleApprove}
+            >
+              Deploy Strategy
+            </div>
+            <div
+              style={{
+                position: "absolute",
+                top: 280,
+                right: 87,
+                padding: "15px 20px",
+                backgroundColor: "white",
+                border: "3px solid black",
+                borderRadius: "8px",
+                cursor: "pointer"
+              }}
+              onClick={handleApprove}
+            >
+              EnableStrategy
+            </div>
             <BalanceBar />
           </GraphProvider>
         ) : (

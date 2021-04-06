@@ -84,6 +84,7 @@ export type IProtocolCell = {
     protocolId: string;
     protocol: string;
     lastProtocol?: string;
+    previousCell?: IProtocolCell | null
     x: number;
     y: number;
     w: number;
@@ -91,6 +92,7 @@ export type IProtocolCell = {
     isAction: boolean;
     buru: boolean;
     vertex: any | null;
+    data?: any
 };
 
 export type IProtocolFromAPI = {
@@ -105,17 +107,20 @@ export type IProtocolFromAPI = {
     vertexImageURL: string;
     website: string;
     actions: any[];
+    data?: any;
 };
 
 export type IActionCell = {
     vertex: any | null;
     prevProtocolCellId: string;
     nextProtocolCellId: string;
+    data?: any;
     imageUrl: string;
     y: number;
     isAction: boolean;
     x: number;
     actionName: string;
+    actionId: string;
 };
 
 export type IStrategy = {

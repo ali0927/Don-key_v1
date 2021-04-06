@@ -10,7 +10,7 @@ const saveStrategy = async (strategy: IStrategy) => {
   const json = JSON.stringify(rest);
 
   const result = await api.put("/api/v1/strategies", { id, json });
-  console.log(result);
+ 
 };
 
 
@@ -34,7 +34,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
   strategy: IStrategy, getGraph: any,
   getProtocol: (name: string) => IProtocol
 }) => {
-  console.log(strategy);
+
   const stateRef = useRef(strategy);
 
   const findProtocolCellById = (id: string) => {
@@ -74,7 +74,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
     let selectedProtocol = findProtocolCellById(cell.nextProtocolCellId);
 
     const previousCell = findProtocolCellById(cell.prevProtocolCellId);
-    console.log(selectedProtocol);
+    
     //get action image
     //@ts-ignore
 
@@ -153,6 +153,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
       protocolId: uuidv4(),
       protocol: name,
       lastProtocol: lastCell?.protocol,
+      
       x: (lastCell?.x || 0) + 150,
       y: 150,
       w: 110,
@@ -166,6 +167,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
     saveStrategy(stateRef.current);
     return newCell;
   };
+
 
   const insertAction = async (prevCellId: string, nextCellId: string, actionName: string) => {
     const protocolcell = findProtocolCellById(prevCellId);
@@ -183,7 +185,7 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
       isAction: true,
       x: protocolcell.x + 80,
       imageUrl: res.data.data,
-      actionName
+      actionName ,actionId: uuidv4()
     };
 
     addActionToGraph(cell);
@@ -208,11 +210,28 @@ export const useGraphState = ({ strategy, getGraph, getProtocol }: {
   const getProtocolCells = () => {
     return stateRef.current.protocolCells;
   };
+
+  const updateActionData = async (actionId: string, data: any) => {
+      const action = getActionCells().find(item => item.actionId === actionId);
+      if(action){
+        action.data = data
+      }
+  }
+  const updateProtocolData = async (protocolId: string, data: any) => {
+    const protocol = getProtocolCells().find(item => item.protocolId === protocolId);
+    if(protocol){
+      protocol.data = data
+    }
+}
+
   return {
     restoreGraphFromState,
     insertAction,
     insertProtocol,
     getActionCells,
     getProtocolCells,
+    updateActionData,
+    findProtocolCellById,
+    updateProtocolData
   };
 };
