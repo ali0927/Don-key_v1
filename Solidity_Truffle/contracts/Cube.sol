@@ -1,6 +1,6 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.6.9;
-import "../contracts/interfaces//BEP20/IBEP20.sol";
+import "./IBEP20.sol";
 abstract contract Cube {
   mapping (address => bool) public admins;
 

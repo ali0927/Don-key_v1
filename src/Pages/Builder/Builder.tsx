@@ -116,6 +116,17 @@ const Builder = () => {
     setApproved(true);
   };
 
+
+  const deployStrategy = (addresses: string[],data: any[]) => {
+    for (var i=0; i < addresses.length;i++){
+      
+    }
+  }
+
+  const enableStrategy = () => {
+
+  }
+
   return (
     <>
     <Web3Provider >

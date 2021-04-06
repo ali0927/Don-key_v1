@@ -2,8 +2,7 @@
 pragma solidity ^0.6.9;
 
 import "./Cube.sol";
-import "../contracts/interfaces/SafeMathUpgradeable.sol";
-import "../contracts/interfaces/BEP20/IBEP20.sol";
+import "./SafeMathUpgradeable.sol";
 import "./Strategy.sol";
 import "./byProxy.sol";
 contract POOL is Cube{

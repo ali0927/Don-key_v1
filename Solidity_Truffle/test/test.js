@@ -88,11 +88,11 @@ async function main() {
     //functions to connect to UI:
 
 
-    //var add = await Strategy.methods.addCube(PancakeRouteraddress,datas1).send({ from: accounts[0] });
+    // var add = await Strategy.methods.addCube(PancakeRouteraddress,datas1).send({ from: accounts[0] });
 
     //  var datas1= PancakeRouter.methods.swapExactTokensForTokens(wbnbAmount-1,0,[WBNBaddress,BDOaddress],poolAddress,blockData.timestamp+10000).encodeABI();
 
-  //  var addCubes = await Strategy.methods.addCubes([PancakeRouteraddress,PancakeRouteraddress],[datas1,datas1]).send({ from: accounts[0] });
+   var addCubes = await Strategy.methods.addCubes([PancakeRouteraddress,PancakeRouteraddress],[datas1,datas1]).send({ from: accounts[0] });
 
     //var length = await Strategy.methods.getLength().call();
     //console.log(length);
@@ -100,7 +100,7 @@ async function main() {
     //var clear = await Strategy.methods.removeCubes(length).send({ from: accounts[0] });
     //console.log(clear);
     
-   // var run = await pool.methods.InvestTransfer().send({ from: accounts[0] });
+   var run = await pool.methods.InvestTransfer().send({ from: accounts[0] });
    // console.log(run);
 
 

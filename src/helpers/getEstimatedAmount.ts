@@ -16,7 +16,7 @@ export const getEstimatedAmount = async (
     pancakerouteraddress
   );
 
-  var weiAmout = web3.utils.toBN(amount).mul(web3.utils.toBN(1e18));
+  var weiAmout = web3.utils.toBN(amount)
   var weiAmount2 = web3.utils.toWei(weiAmout.toString() );
 
   const estimate = await pancakeRouter.methods
@@ -24,5 +24,5 @@ export const getEstimatedAmount = async (
     .call();
   const out = estimate[1] as string;
   
-  return out as string;
+  return web3.utils.fromWei(out, 'ether') as string;
 };

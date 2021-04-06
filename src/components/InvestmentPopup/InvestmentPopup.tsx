@@ -67,21 +67,23 @@ export const InvestmentPopup = ({
       .default;
     //@ts-ignore
     const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+
     const poolLiquidity = await pool.methods.getLiquidity().call();
     return poolLiquidity;
   }
 
-  async function executeStrategy() {
+  async function investMoney(amount: string) {
     const web3 = (await getWeb3()) as Web3;
-    const parsedPoolContract = (await import("../../JsonData/NPOOL.json"))
-      .default;
-    //@ts-ignore
-    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
+  
     const accounts = await web3.eth.getAccounts();
 
-    var executedStrategy = await pool.methods
-      .ExecutePOOL()
-      .send({ from: accounts[0] });
+    var executedStrategy = await web3.eth.sendTransaction({
+      from: accounts[0],
+      to:  poolAddress,
+      value: web3.utils.toWei(amount, "ether")
+    })
+    console.log("Sent", executedStrategy);
+    
   }
 
   const [poolLiquidity, setPoolLiquidity] = useState(0);
@@ -106,7 +108,6 @@ export const InvestmentPopup = ({
         const accounts = await web3.eth.getAccounts();
         const abi = require("erc-20-abi");
 
-        const BEP20ABI = await import("../../JsonData/BEP20Token.json");
         const WBNB = new web3.eth.Contract(
           abi,
           WBNBAddress
@@ -126,7 +127,7 @@ export const InvestmentPopup = ({
         await updatePoolLiquidity();
       }
       if (poolLiquidity > 0) {
-        await executeStrategy();
+        await investMoney(value);
       }
     } finally {
       disable();
