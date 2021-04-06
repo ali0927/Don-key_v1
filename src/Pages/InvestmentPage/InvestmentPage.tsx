@@ -22,6 +22,7 @@ import { StratgiesTab } from "Pages/MyAccountNew/Tabs/StratgiesTab";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { getWeb3 } from "helpers";
 import Web3 from "web3";
+import PoolAbi from "./PoolAbi.json";
 import "./InvestmentPage.scss";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 export const tabs = [
@@ -160,12 +161,8 @@ const DetailTable = () => {
 
 const InvestCard = ({
   balance,
-  allowance,
-  onRefetch,
 }: {
   balance: string | number;
-  allowance: string | number;
-  onRefetch?: () => Promise<void>;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -175,24 +172,12 @@ const InvestCard = ({
     if (loading) {
       return <Spinner animation="border" size={"sm"} color="#fff" />;
     }
-    if (parseInt(allowance as string) === 0) {
-      return "Allow 1 WBNB";
-    }
+
     return "Invest";
   };
 
   const handleButtonClick = async () => {
-    if (parseInt(allowance as string) === 0) {
-      setloading(true);
-      try {
-        await ApproveWBNB();
-        onRefetch && (await onRefetch());
-      } finally {
-        setloading(false);
-      }
-    } else {
-      setIsOpen(true);
-    }
+    setIsOpen(true);
   };
 
   return (
@@ -218,57 +203,37 @@ const InvestCard = ({
   );
 };
 
-const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
-const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
-async function ApproveWBNB() {
-  const web3 = (await getWeb3()) as Web3;
-  const accounts = await web3.eth.getAccounts();
-  const abi = require("erc-20-abi");
+const poolAddress = "0x921E8B9185Fe180Eb2a1770A1137F6e6E22E9B37";
 
-  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
-  await WBNB.methods
-    .approve(poolAddress, web3.utils.toWei("1"))
-    .send({ from: accounts[0] });
-}
 
-async function fetchAllowance() {
-  const web3 = (await getWeb3()) as Web3;
-  const accounts = await web3.eth.getAccounts();
-  const abi = require("erc-20-abi");
-
-  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
-  const currentAllowance = await WBNB.methods
-    .allowance(accounts[0], poolAddress)
-    .call();
-  return currentAllowance;
-}
 async function fetchBalance() {
   const web3 = (await getWeb3()) as Web3;
   const accounts = await web3.eth.getAccounts();
-  const abi = require("erc-20-abi");
-  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
-  const balance = await WBNB.methods.balanceOf(accounts[0]).call();
-  var fBalance = parseFloat(
-    parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
-  );
-  return fBalance;
+
+  const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
+  console.log(WBNB.methods)
+  const balance = await WBNB.methods.gettInvested().call();
+  console.log(balance)
+  // var fBalance = parseFloat(
+  //   parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
+  // );
+  // console.log()
+  return 0;
 }
 
 export const InvestmentPage = () => {
   const [balance, setBalance] = useState(0);
-  const [allowance, setAllowance] = useState(0);
+ 
   const [isReady, setIsReady] = useState(false);
 
-  const updateAllowance = async () => {
-    const allowance = await fetchAllowance();
-    setAllowance(allowance);
-  };
+
 
   useEffect(() => {
     (async () => {
-      await updateAllowance();
+  
       const balance = await fetchBalance();
       setBalance(balance);
+      
       setIsReady(true);
     })();
   }, []);
@@ -294,8 +259,7 @@ export const InvestmentPage = () => {
               <Col sm={4}>
                 {isReady && (
                   <InvestCard
-                    onRefetch={updateAllowance}
-                    allowance={allowance}
+                 
                     balance={balance}
                   />
                 )}
