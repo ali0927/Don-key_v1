@@ -106,8 +106,8 @@ const LandingPage = () => {
 
       {/* Cards */}
       <div className="cardsBanner mt-5">
-     
-        <div className="farmer bggeryColor mt-5 pt-5 pb-5">
+        <div className="advantage mt-0 bgyellowColor">
+          <div className="borderCurve"></div>
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
               <Col md={6}>
@@ -120,13 +120,15 @@ const LandingPage = () => {
                   yield farmers with just one click. Historical APY, farming
                   philosophy, risk apatite; You can see it all.
                 </p>
-                <ButtonComponent
-                  disabled
-                  className="position-relative btn  btnYellow mt-4"
-                >
+                <div className="position-relative d-inline-block mt-4">
+                  <ButtonComponent
+                    disabled
+                    variant="position-relative   colorBlack  btn-outline"
+                  >
+                    Discover best farmers
+                  </ButtonComponent>
                   <img className="coming-soon" src={comingsoon} />
-                  Discover best farmers
-                </ButtonComponent>
+                </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <FarmerCards
@@ -160,17 +162,14 @@ const LandingPage = () => {
             </Row>
           </Container>
         </div>
-        {/* Advantage */}
-
-        <div className="advantage mt-0 bgyellowColor">
-          <div className="borderCurve bggeryColor"></div>
+        <div className="farmer bggeryColor pt-5 pb-5">
           <Container>
             <h3 className="headsame mb-3 my-5 justify-content-center">
               Become a Don-key farmer
             </h3>
             <Row className="pt-5">
               <Col md={4}>
-                <Card>
+                <Card className="h-100">
                   <Card.Body>
                     <img className="advantage-img" src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
@@ -183,7 +182,7 @@ const LandingPage = () => {
               </Col>
 
               <Col md={4}>
-                <Card>
+                <Card className="h-100">
                   <Card.Body>
                     <img className="advantage-img" src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
@@ -195,7 +194,7 @@ const LandingPage = () => {
                 </Card>
               </Col>
               <Col md={4}>
-                <Card>
+                <Card className="h-100">
                   <Card.Body>
                     <img className="advantage-img" src={boostyield} />
                     <Card.Title>Boost your yield</Card.Title>
@@ -209,6 +208,7 @@ const LandingPage = () => {
             </Row>
           </Container>
         </div>
+        {/* Advantage */}
       </div>
 
       {/* Trading strategy builder */}
