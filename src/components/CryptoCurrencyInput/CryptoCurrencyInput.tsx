@@ -18,7 +18,9 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
   name,
   onChange,
   amount,
-  onChangeAmount
+  onChangeAmount,
+  onFocus,
+  onBlur
 }: {
   name?: string;
   icon?: string| React.ReactElement;
@@ -27,6 +29,8 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
   multi?: boolean;
   currency?: T;
   currencies: T[];
+  onFocus?: () => void;
+  onBlur?: () => void;
   label: string;
   placeholder: string;
   amount?: number | null;
@@ -106,6 +110,8 @@ export const CryptoCurrencyInput = <T extends ICurrency>({
           <input
             className="cryptoinput__input "
             type="number"
+            onFocus={onFocus}
+            onBlur={onBlur}
             value={amount as number}
             onChange={onChangeAmount}
             placeholder={placeholder}

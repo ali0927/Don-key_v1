@@ -64,7 +64,7 @@ const MyAccount = () => {
           </div>,
           document.body
         )}
-      <NavBar2 />
+      <NavBar2 variant="loggedin" />
 
       <div className="navbanHead pt-5 pb-5">
         <Container>

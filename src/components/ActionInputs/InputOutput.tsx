@@ -7,6 +7,8 @@ import { useYFITokens } from "components/YFITokensProvider";
 export type IInputOutputPureProps<T extends ICurrency> = {
   input: {
     currencies: T[];
+    onFocus?: () => void;
+    onBlur?: () => void;
     selectedCurrency: T;
     onChangeCurrency: (val: T) => void;
     onChangeAmount?: (val: React.ChangeEvent<HTMLInputElement>) => void
@@ -16,6 +18,8 @@ export type IInputOutputPureProps<T extends ICurrency> = {
   output?: {
     currencies: T[];
     selectedCurrency: T;
+    onFocus?: () => void;
+    onBlur?: () => void;
     onChangeCurrency: (val: T) => void;
     onChangeAmount?: (val: React.ChangeEvent<HTMLInputElement>) => void;
     amount?: number | null;
@@ -36,6 +40,8 @@ export const InputOutputPure = <T extends ICurrency>({
         label="Input"
         currencies={input.currencies}
         currency={input.selectedCurrency}
+        onBlur={input.onBlur}
+        onFocus={input.onFocus}
         onChange={input.onChangeCurrency}
         amount={input.amount}
         onChangeAmount={input.onChangeAmount}
@@ -50,6 +56,8 @@ export const InputOutputPure = <T extends ICurrency>({
           label="Output (Estimate)"
           placeholder="0"
           amount={output.amount}
+          onBlur={output.onBlur}
+          onFocus={output.onFocus}
           currencies={output.currencies}
           noDropdown={output.noDropDown}
           currency={output.selectedCurrency}
