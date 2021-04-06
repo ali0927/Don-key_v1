@@ -20,6 +20,7 @@ import { IProtocolFromAPI } from "interfaces";
 import { withYFITokens } from "components/YFITokensProvider";
 import BalanceBar from "components/BalanceBar/BalanceBar";
 import Web3 from "web3";
+import { Web3Provider } from "providers/Web3Provider";
 
 const Builder = () => {
   const [panel, setPanel] = useState(null);
@@ -117,6 +118,7 @@ const Builder = () => {
 
   return (
     <>
+    <Web3Provider >
       <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
         <NavBar3 />
         <MoreProtocolsModal
@@ -187,6 +189,7 @@ const Builder = () => {
           "Loading"
         )}
       </div>
+      </Web3Provider>
     </>
   );
 };

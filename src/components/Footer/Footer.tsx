@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { LogoWhite } from "./LogoWhite";
 
 export const Footer = () => {
   return (
@@ -9,39 +9,7 @@ export const Footer = () => {
         <Row>
           <Col>
             <div className="d-flex justify-content-between align-items-center">
-              <Link
-                className="d-flex align-items-center inherit-color no-underline"
-                to="/"
-              >
-                <p
-                  className="m-0"
-                  style={{
-                    fontFamily: "Avenir-Bold",
-                    fontWeight: "bolder",
-                    color: "#fff",
-                    fontSize: 24,
-                  }}
-                >
-                  <span style={{ letterSpacing: "2px" }}>
-                    D
-                    <img
-                      style={{
-                        position: "relative",
-                        width: 24,
-                        top: 5,
-                        marginLeft: -2,
-                        marginRight: -1,
-                      }}
-                      src="/assets/images/logo-don.png"
-                      className="d-inline-block align-top by-logo"
-                      alt="Logo"
-                    />
-                    n
-                  </span>{" "}
-                  - key
-                </p>
-              </Link>
-
+              <LogoWhite />
               <p className="text-white ml-5"> All Rights Reserved 2021</p>
             </div>
           </Col>

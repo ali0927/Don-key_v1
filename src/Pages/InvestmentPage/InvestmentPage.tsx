@@ -225,10 +225,7 @@ async function ApproveWBNB() {
   const accounts = await web3.eth.getAccounts();
   const abi = require("erc-20-abi");
 
-  const WBNB = new web3.eth.Contract(
-    abi,
-    WBNBAddress
-  );
+  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
   await WBNB.methods
     .approve(poolAddress, web3.utils.toWei("1"))
     .send({ from: accounts[0] });
@@ -239,10 +236,7 @@ async function fetchAllowance() {
   const accounts = await web3.eth.getAccounts();
   const abi = require("erc-20-abi");
 
-  const WBNB = new web3.eth.Contract(
-    abi,
-    WBNBAddress
-  );
+  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
   const currentAllowance = await WBNB.methods
     .allowance(accounts[0], poolAddress)
     .call();
@@ -252,12 +246,11 @@ async function fetchBalance() {
   const web3 = (await getWeb3()) as Web3;
   const accounts = await web3.eth.getAccounts();
   const abi = require("erc-20-abi");
-  const WBNB = new web3.eth.Contract(
-    abi,
-    WBNBAddress
-  );
+  const WBNB = new web3.eth.Contract(abi, WBNBAddress);
   const balance = await WBNB.methods.balanceOf(accounts[0]).call();
-  var fBalance = parseFloat(parseFloat(web3.utils.fromWei(balance, 'ether')).toFixed(5));
+  var fBalance = parseFloat(
+    parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
+  );
   return fBalance;
 }
 
@@ -282,7 +275,7 @@ export const InvestmentPage = () => {
 
   return (
     <>
-      <NavBar2 />
+      <NavBar2 variant="loggedin" />
       <section className="bg-buru">
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>

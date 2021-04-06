@@ -18,6 +18,7 @@ import { currencies } from "../CryptoCurrencyInput/currencies";
 import { SetButton } from "./SetButton";
 import { useYFITokens, withYFITokens } from "components/YFITokensProvider";
 import { UniswapSwapToken } from "components/ActionInputs/UniswapSwapToken";
+import { PancakeSwapToken } from "components/ActionInputs/PancakeSwapToken";
 
 const ActionsUIUnrwapped = ({
   icon,
@@ -403,7 +404,7 @@ const ActionsUIUnrwapped = ({
       switch(selectedAction){
         case "SwapToken": {
           return (
-            <UniswapSwapToken lastProtocol={lastProtocol} protocol={protocol} />
+            <PancakeSwapToken lastProtocol={lastProtocol} protocol={protocol} />
           );
         }
       }

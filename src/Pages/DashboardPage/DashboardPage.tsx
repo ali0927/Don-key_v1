@@ -9,7 +9,7 @@ import "./DashboardPage.scss";
 export const DashboardPage = () => {
   return (
     <div className={clsx("bgColor")}>
-      <NavBar2 />
+      <NavBar2 variant="loggedin" />
 
       <div className="navbanHead pt-5 pb-5">
         <Container>

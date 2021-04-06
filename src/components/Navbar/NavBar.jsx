@@ -6,10 +6,9 @@ import { Navbar, Nav, Dropdown } from "react-bootstrap";
 import "./NavbarStyle.scss";
 import NotificationJson from "../../JsonData/NotificationJson";
 import { NotificationIcon, UserIcon } from "../Icons";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
-import comingsoon from "images/comingsoon.svg";
 import { Logo } from "./Logo";
 const shortenAddress = (val) => {
   return val.slice(0, 4) + "..." + val.slice(-4);
@@ -24,6 +23,8 @@ const useWalletAddress = ({ short = false }) => {
 };
 
 function NavBar(props) {
+  const history = useHistory();
+
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bg-none">
       <Container>
@@ -48,10 +49,12 @@ function NavBar(props) {
           </Nav>
         </Navbar.Collapse>
         <div className="position-relative mr-5 mr-sm-0">
-          <ButtonComponent disabled variant="colorBlack btn-outline px-4">
+          <ButtonComponent
+            onClick={() => history.push("/login")}
+            variant="colorBlack btn-outline px-4"
+          >
             DAPP
           </ButtonComponent>
-          <img className="coming-soon" src={comingsoon} />
         </div>
       </Container>
     </Navbar>
@@ -98,7 +101,7 @@ const NavbarLink = ({ to, children }) => {
   );
 };
 //@ts-ignore
-function NavBar2({ hideWallet = false }) {
+function NavBar2({ hideWallet = false, variant = "default" }) {
   const address = useWalletAddress({ short: true });
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
@@ -107,16 +110,25 @@ function NavBar2({ hideWallet = false }) {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
-             <Nav.Link
-              href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
-              className={
-                "colorBlack pr-md-5"
-              }
-            >
-              Litepaper
-            </Nav.Link>
-            <NavbarLink to="/farmers">Farmers</NavbarLink>
-            <NavbarLink to="/team">Team</NavbarLink>
+            {variant === "default" && (
+              <>
+                <Nav.Link
+                  href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
+                  className={"colorBlack pr-md-5"}
+                >
+                  Litepaper
+                </Nav.Link>
+                <NavbarLink to="/farmers">Farmers</NavbarLink>
+                <NavbarLink to="/team">Team</NavbarLink>
+              </>
+            )}
+            {variant === "loggedin" && (
+              <>
+                <NavbarLink to="/dashboard">My Investments</NavbarLink>
+                <NavbarLink to="/myaccount">My Strategies</NavbarLink>
+                <NavbarLink to="/team">Developers</NavbarLink>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
 
@@ -184,9 +196,9 @@ const NavBar3 = () => {
       className="pt-4 pb-4 text-white"
     >
       <Container>
-        <Link to="/">
-          <Logo />
-        </Link>
+       
+          <LogoWhite />
+      
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
