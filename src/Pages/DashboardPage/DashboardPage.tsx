@@ -23,16 +23,7 @@ export const DashboardPage = () => {
             <Col>
               <h2 className="firstHeading mb-3">Explore Strategies</h2>
             </Col>
-            <Col>
-              <ButtonComponent
-                onClick={() => {
-                  history.push("/farmer/strategy");
-                }}
-              >
-                Farmer
-              </ButtonComponent>
-              <ButtonComponent>Investor</ButtonComponent>
-            </Col>
+       
           </Row>
         </Container>
       </div>

@@ -124,9 +124,9 @@ function NavBar2({ hideWallet = false, variant = "default" }) {
             )}
             {variant === "loggedin" && (
               <>
+                <NavbarLink to="/">Main</NavbarLink>
                 <NavbarLink to="/dashboard">My Investments</NavbarLink>
-                <NavbarLink to="/myaccount">My Strategies</NavbarLink>
-                <NavbarLink to="/team">Developers</NavbarLink>
+                <NavbarLink to="/myaccount">My Farmer Page</NavbarLink>
               </>
             )}
           </Nav>
@@ -196,9 +196,8 @@ const NavBar3 = () => {
       className="pt-4 pb-4 text-white"
     >
       <Container>
-       
-          <LogoWhite />
-      
+        <LogoWhite />
+
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
