@@ -4,6 +4,9 @@ import { NotificationController } from "../controllers/NotificationsController";
 import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
 import { UsersController } from "../controllers/UsersController";
+import { FarmerController } from  "../controllers/FarmerController";
+import { upload } from "../uploadConfig";
+
 
 const apiRoutes = Router();
 
@@ -29,6 +32,13 @@ apiRoutes
     .route("/users/settings")
     .get(UsersController.getUserSettings)
     .put(UsersController.updateUserSettings);
+
+
+apiRoutes.route("/farmer")
+    .get(FarmerController.getFarmers)
+    .post(upload.single("picture"),FarmerController.createFarmer)
+    .put(upload.single("picture"),FarmerController.updateFarmer);
+
 
 apiRoutes
     .route("/users/:id")
