@@ -5,8 +5,14 @@ import { NavBar2 } from "components/Navbar/NavBar";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import DataFarmer from "JsonData/DataFarmer";
 import { Form, Pagination, Row, Container, Col, Table } from "react-bootstrap";
+import { useHistory } from "react-router";
 import "./DashboardPage.scss";
 export const DashboardPage = () => {
+  const history = useHistory();
+
+
+
+
   return (
     <div className={clsx("bgColor")}>
       <NavBar2 variant="loggedin" />
@@ -16,6 +22,16 @@ export const DashboardPage = () => {
           <Row>
             <Col>
               <h2 className="firstHeading mb-3">Explore Strategies</h2>
+            </Col>
+            <Col>
+              <ButtonComponent
+                onClick={() => {
+                  history.push("/farmer/strategy");
+                }}
+              >
+                Farmer
+              </ButtonComponent>
+              <ButtonComponent>Investor</ButtonComponent>
             </Col>
           </Row>
         </Container>
@@ -63,7 +79,7 @@ export const DashboardPage = () => {
               </thead>
 
               <tbody>
-                {[...DataFarmer,...DataFarmer].map((item, index) => {
+                {[...DataFarmer, ...DataFarmer].map((item, index) => {
                   var str = item.name;
                   var res = str.substring(0, 2).toLocaleUpperCase();
                   var number = item.apy;

@@ -31,6 +31,7 @@ import { Onboarding12 } from "Pages/Onboarding/Onboarding12";
 import { DashboardPage } from "Pages/DashboardPage/DashboardPage";
 import { InvestmentPage } from "Pages/InvestmentPage/InvestmentPage";
 import TeamPage from "Pages/TeamPage/TeamPage";
+import { FarmerStrategyPage } from "Pages/FarmerStrategyPage/FarmerStrategyPage";
 
 
 export default function Routes() {
@@ -43,6 +44,7 @@ export default function Routes() {
           <Route exact path="/dashboard" children={<DashboardPage />} />
           <Route exact path="/strategy" children={<InvestmentPage />} />
           <Route exact path="/onboarding" children={<Onboarding />} />
+          <Route exact path="/farmer/strategy" children={<FarmerStrategyPage />} />
           <Route path="/onboarding/1" children={<Onboarding1 />} />
           <Route path="/onboarding/2" children={<Onboarding2 />} />
           <Route path="/onboarding/3" children={<Onboarding3 />} />
@@ -59,6 +61,7 @@ export default function Routes() {
           <ProtectedRoute path="/strategy/build" children={<Builder />} />
           <Route path="/resource" children={<ResourcePage />} />
           <Route path="/farmers" children={<FarmersPage />} />
+        
           <Route path="/team" children={<TeamPage />} />
           <ProtectedRoute path="/myaccount" children={<MyAccount />} />
           <Route path="/myaccount_new"><MyAccountNew /></Route>

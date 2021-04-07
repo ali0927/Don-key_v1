@@ -25,6 +25,7 @@ import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
 import "./InvestmentPage.scss";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
+import ButtonComponent from "components/Button/Button";
 export const tabs = [
   { text: "Posts", comp: <PostTab />, icon: <PostsIcon /> },
   { text: "Strategies", comp: <StratgiesTab />, icon: <StrategiesIcon /> },
