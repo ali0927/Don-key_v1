@@ -20,7 +20,6 @@ import ButtonComponent from "../../components/Button/Button";
 import DummyData from "../../JsonData/MyAccountDetail";
 import DataFarmer from "../../JsonData/DataFarmer";
 import StrategiesTable from "../../JsonData/StrategiesTable";
-import { waitFor } from "../../helpers/helpers";
 import { Loader } from "components/Loader/Loader";
 import { useDispatch } from "react-redux";
 import { apiRequest } from "actions/apiActions";

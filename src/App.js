@@ -8,6 +8,8 @@ import Routes from "./routes/Routes";
 import { getAuthTokenForPublicAddress } from "./services/api";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
+
+import "./scss/styles.scss";
 function getLibrary(provider) {
     return new Web3Provider(provider);
 }
