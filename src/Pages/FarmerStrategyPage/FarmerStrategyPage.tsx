@@ -116,13 +116,13 @@ export const FarmerStrategyPage = () => {
   }, []);
 
   const renderPage = () => {
-    if (!isReady) {
-      return <LoadingPage />;
-    }
+    // if (!isReady) {
+    //   return <LoadingPage />;
+    // }
  
-    if (!farmerInfo) {
-      return <InvestmentPage />;
-    }
+    // if (!farmerInfo) {
+    //   return <InvestmentPage />;
+    // }
     return <FarmS />;
   };
 
