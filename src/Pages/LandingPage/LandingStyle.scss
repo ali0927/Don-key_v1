@@ -55,6 +55,12 @@
   border-radius: 5px;
   color: $colorBlack;
   padding: 12px 15px;
+  &:focus {
+    color: $colorBlack;
+    background-color:$secondary-color;
+    border-color:$secondary-color;;
+  }
+  
 }
 .headbelowSame {
   font-family: "ObjectSans-Bold";

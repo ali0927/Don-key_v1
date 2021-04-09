@@ -1,12 +1,9 @@
 import ButtonComponent from "components/Button/Button";
-import { Footer } from "components/Footer/Footer";
 import { Layout } from "components/Layout";
-import { NavBar2 } from "components/Navbar/NavBar";
 import { useAxios } from "hooks/useAxios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
-import { api } from "services/api";
 
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
@@ -14,6 +11,7 @@ export const FarmerSignupPage = () => {
   const [image, setImage] = useState<File | null>(null);
 
   const history = useHistory();
+  const [errorMsg,setErrorMsg] = useState("");
   const [{ data, error, loading }] = useAxios("/api/v1/farmer");
   const [{  loading: posting }, executePost] = useAxios(
     { method: "POST", url: "/api/v1/farmer" },
@@ -22,6 +20,16 @@ export const FarmerSignupPage = () => {
 
   const handleCreate = async () => {
     const formData = new FormData();
+    if(!name){
+      return setErrorMsg("Please Enter a Name")
+    }
+    if(!description){
+      return setErrorMsg("Please Enter a Description");
+    }
+    if(!image){
+      return setErrorMsg("Please Provide a Picture");
+    }
+
     formData.append("name", name);
     formData.append("description", description);
     if (image) {
@@ -30,7 +38,11 @@ export const FarmerSignupPage = () => {
     await executePost({ data: formData });
     history.push("/dashboard/farmer/me");
   };
-
+  useEffect(() => {
+    if(errorMsg){
+      setErrorMsg("");
+    }
+  }, [name, description, image])
   const renderContent = () => {
     if (error) {
       return "Some Error Occurred";
@@ -81,6 +93,7 @@ export const FarmerSignupPage = () => {
                 onChange={(e) => setImage((e.target as any).files[0])}
               />
             </Form.Group>
+            {errorMsg && <div className="text-danger mb-3" >{errorMsg}</div>}
             <ButtonComponent onClick={handleCreate} className="btnYellow">
               Make Farmer Profile
             </ButtonComponent>
