@@ -7,6 +7,7 @@ import DataFarmer from "JsonData/DataFarmer";
 import { Form, Pagination, Row, Container, Col, Table } from "react-bootstrap";
 import { useHistory } from "react-router";
 import "./DashboardPage.scss";
+import { leaderBoardData } from "../../JsonData/leaderboard";
 export const DashboardPage = () => {
   const history = useHistory();
 
@@ -23,7 +24,7 @@ export const DashboardPage = () => {
             <Col>
               <h2 className="firstHeading mb-3">Explore Strategies</h2>
             </Col>
-       
+
           </Row>
         </Container>
       </div>
@@ -49,81 +50,34 @@ export const DashboardPage = () => {
           <div className="tablebg tablebgAuto">
             <Table responsive className="table">
               <thead>
-                <tr>
-                  <th>#</th>
-                  <th>RANK</th>
-                  <th></th>
-                  <th>NAME</th>
-                  <th>
-                    Budget
-                    <img
-                      src="/assets/images/icon1.png"
-                      className="d-inline-block pl-2"
-                      alt="Image"
-                    />
-                  </th>
-                  <th>AGE</th>
-                  <th> BURU TOKEN</th>
-                  <th>Chart</th>
-                  <th>APY</th>
-                </tr>
+              <tr>
+                <th>Name of Farmer</th>
+                <th>WBNB in Pool</th>
+                <th>24 hours Profit</th>
+                <th>7 days Profit</th>
+                <th>Total Profit</th>
+              </tr>
               </thead>
 
               <tbody>
-                {[...DataFarmer, ...DataFarmer].map((item, index) => {
-                  var str = item.name;
-                  var res = str.substring(0, 2).toLocaleUpperCase();
-                  var number = item.apy;
-                  if (number.toString().length >= 3) {
-                    var num = number
-                      .toString()
-                      .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-                  } else {
-                    var num = number
-                      .toString()
-                      .replace(/\B(?=(\d{1})+(?!\d))/g, ",");
-                  }
-                  return (
-                    <>
-                      <tr>
-                        <td className="nodata">{item.id}</td>
-                        <td>
-                          <img
-                            src="/assets/images/blackstar.png"
-                            className="d-inline-block"
-                            alt="Image"
-                          />
-                        </td>
-                        <td>
-                          <span className="spanname"> {res}</span>
-                        </td>
-                        <td>
-                          <span className="spanbold">{item.name} </span> <br />
-                          <span className="fontlight">
-                            Nb of farmers: {item.nb_farmers}
-                          </span>
-                        </td>
-                        <td>
-                          {" "}
-                          $
-                          {item.budget
-                            .toString()
-                            .replace(/\B(?=(\d{4})+(?!\d))/g, ",")}
-                        </td>
-                        <td>{item.age} years</td>
-                        <td className="fontlighBold">{item.buru_token} </td>
-                        <td className="tdGraphic">
-                          <img
-                            src="/assets/images/graphic2.png"
-                            className="d-inline-block"
-                            alt="Image"
-                          />
-                        </td>
-                        <td className="fontdBold">{"+" + `${num}` + "%"}</td>
-                      </tr>
-                    </>
-                  );
-                })}
+              {leaderBoardData.length > 0 &&
+              leaderBoardData.map((item, index) => {
+                return (
+                  <>
+                    <tr>
+                      <td className="nodata">{item.nameOfFarmer}</td>
+                      <td>
+                        <span className="spanname"> {item.wbnb}</span>
+                      </td>
+                      <td>
+                        <span className="fontlight">{item.hrsProfit}</span>
+                      </td>
+                      <td>{item.daysProfit}</td>
+                      <td>{item.totalProfit}</td>
+                    </tr>
+                  </>
+                );
+              })}
               </tbody>
             </Table>
           </div>

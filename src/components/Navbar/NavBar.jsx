@@ -50,7 +50,7 @@ function NavBar(props) {
         </Navbar.Collapse>
         <div className="position-relative mr-5 mr-sm-0">
           <ButtonComponent
-            onClick={() => history.push("/login")}
+            onClick={() => history.push("/dashboard")}
             variant="colorBlack btn-outline px-4"
           >
             DAPP
@@ -60,6 +60,7 @@ function NavBar(props) {
     </Navbar>
   );
 }
+
 function timeSince(date) {
   // var seconds = Math.floor((new Date() - date) / 1000);
   var seconds = Math.floor(new Date().getTime() / 1000 - date);
@@ -100,8 +101,12 @@ const NavbarLink = ({ to, children }) => {
     </Link>
   );
 };
+
 //@ts-ignore
 function NavBar2({ hideWallet = false, variant = "default" }) {
+  const isAuth = useSelector(state => state.auth);
+  const { isLoggedIn } = isAuth;
+  const history = useHistory();
   const address = useWalletAddress({ short: true });
   return (
     <Navbar expand="lg" className="pt-4 pb-4 bgnav">
@@ -132,47 +137,8 @@ function NavBar2({ hideWallet = false, variant = "default" }) {
           </Nav>
         </Navbar.Collapse>
 
-        {!hideWallet && (
-          <div className="">
-            <Dropdown className="dropNav1">
-              <Dropdown.Toggle
-                id="dropdown-basic"
-                className=" mr-0 ml-2 ml-md-0 mr-md-2"
-              >
-                <img
-                  src="/assets/images/notifications.png"
-                  className="d-inline-block align-top"
-                  alt="Image"
-                />
-              </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <p className="notifyHead">Notifications</p>
-
-                {NotificationJson.map((item, index) => {
-                  return (
-                    <Dropdown.Item href="#">
-                      <p>{item.notification}</p>
-                      <span>{timeSince(item.date)}</span>
-                    </Dropdown.Item>
-                  );
-                })}
-                <div className="viewDrop">
-                  <a href="#"> View All</a>
-                </div>
-              </Dropdown.Menu>
-            </Dropdown>
-
-            <a href="#">
-              <img
-                src="/assets/images/user.png"
-                className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4 mt-1"
-                alt="Image"
-              />
-            </a>
-          </div>
-        )}
-        {!hideWallet && (
+        {isLoggedIn && !hideWallet ? (
           <ButtonComponent variant="colorBlack btn-outline btnusername">
             <img
               src="/assets/images/usericon.png"
@@ -181,6 +147,12 @@ function NavBar2({ hideWallet = false, variant = "default" }) {
             />
             <span> {address}</span>
           </ButtonComponent>
+        ) : (
+
+            <ButtonComponent onClick={() => history.push('/login')} variant="colorBlack btn-outline btnusername">
+              Connect wallet
+            </ButtonComponent>
+
         )}
       </Container>
     </Navbar>
