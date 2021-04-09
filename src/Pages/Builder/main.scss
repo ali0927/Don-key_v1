@@ -9,16 +9,6 @@ ul {
     box-sizing: initial;
 }
 
-.inherit-color {
-    color: inherit !important;
-}
-.no-underline {
-    text-decoration: none !important;
-    &:hover {
-        text-decoration: none !important;
-    }
-}
-
 ul.actions li {
     text-align: center;
     font-size: 13px;

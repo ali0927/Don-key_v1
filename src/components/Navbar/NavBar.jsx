@@ -131,7 +131,9 @@ function NavBar2({ hideWallet = false, variant = "default" }) {
               <>
                 <NavbarLink to="/">Main</NavbarLink>
                 <NavbarLink to="/dashboard">My Investments</NavbarLink>
-                <NavbarLink to="/myaccount">My Farmer Page</NavbarLink>
+                <NavbarLink to="/dashboard/farmer/me">
+                  My Farmer Page
+                </NavbarLink>
               </>
             )}
           </Nav>

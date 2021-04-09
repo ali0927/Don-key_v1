@@ -1,7 +1,9 @@
+import { apiRequest } from "actions/apiActions";
 import { IStoreState } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RouteProps } from "react-router-dom";
 
 export const withAuth = (element?: RouteProps["children"]) => {
@@ -13,11 +15,23 @@ export const withAuth = (element?: RouteProps["children"]) => {
       (state: IStoreState) => state.auth.isLoggedIn
     );
 
-    
+    const dispatch = useDispatch();
+    useEffect(() => {
+      dispatch(
+        apiRequest({
+          method: "GET",
+          endpoint: "/api/v1/farmer",
+          onDone: () => {
+            console.log("logged in");
+          },
+        })
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
       <>
-        {!isLoggedIn && createPortal(<LoadingPage />, document.body)}
-        {element}
+        {!isLoggedIn ? createPortal(<LoadingPage />, document.body) : element}
       </>
     );
   };

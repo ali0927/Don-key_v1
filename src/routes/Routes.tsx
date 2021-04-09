@@ -18,6 +18,7 @@ import TeamPage from "Pages/TeamPage/TeamPage";
 import { FarmerStrategyPage } from "Pages/FarmerStrategyPage/FarmerStrategyPage";
 import { lazy } from "react";
 import { FarmerSignupPage } from "Pages/FarmerSignupPage/FarmerSignupPage";
+import { FarmerBioPage } from "Pages/FarmerBioPage";
 
 
 const Builder = lazy(() => import("../Pages/Builder"));
@@ -26,13 +27,13 @@ const Builder = lazy(() => import("../Pages/Builder"));
 
 export default function Routes() {
 
-
   return (
     <Router>
         <Switch>
           <Route exact path="/" children={<LandingPage />} />
           <Route exact path="/dashboard" children={<DashboardPage />} />
-          <Route exact path="/dashboard/farmer/signup" component={FarmerSignupPage} />
+          <ProtectedRoute exact path="/dashboard/farmer/signup" children={<FarmerSignupPage />} />
+          <ProtectedRoute exact path="/dashboard/farmer/:id" children={<FarmerBioPage />} />
           <Route exact path="/strategy" children={<InvestmentPage />} />
           <Route exact path="/farmer/strategy" children={<FarmerStrategyPage />} />
           <Route path="/login" children={<Login />} />
