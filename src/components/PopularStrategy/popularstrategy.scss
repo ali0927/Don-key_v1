@@ -67,6 +67,9 @@
     }
     &:disabled {
         border-color: #d9d9d9;
+        &:hover {
+            background: transparent;
+        }
     }
 
 }
