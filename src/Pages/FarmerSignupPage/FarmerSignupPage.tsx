@@ -82,7 +82,7 @@ export const FarmerSignupPage = () => {
               />
             </Form.Group>
             <ButtonComponent onClick={handleCreate} className="btnYellow">
-              Create
+              Make Farmer Profile
             </ButtonComponent>
           </div>
         </div>
