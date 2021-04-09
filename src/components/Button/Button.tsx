@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "react-bootstrap";
-const ButtonComponent = props => {
+import { Button, ButtonProps } from "react-bootstrap";
+const ButtonComponent = (props: ButtonProps) => {
   return (
     <Button
       {...props}
