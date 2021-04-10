@@ -71,7 +71,7 @@ const Login = () => {
     <div className="login">
       <div className="loginLeft">
         <div className="logo mt-5 ml-5">
-        <Logo />
+          <Logo />
         </div>
         <div className="text-center loginForm">
           <h1 className="mb-4">Join the Don-Key</h1>
