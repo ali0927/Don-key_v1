@@ -4,22 +4,22 @@ The project is Defi app for creating yield Farming strategies.
 
 
 # Technologies Used
-Node.js
-React 
-MySQL
-Web3
-Solidity
-Redux
+ - Node.js
+ - React 
+ - MySQL
+ - Web3
+ - Solidity
+ - Redux
 
 # Project Structure
 
-Reuseable components live inside components folder 
-Pages used in router go to Pages folder
-All Component should have Pascal Case Naming
-Components Prop interface should be inside components file
-All hooks go inside hooks folder
-All helpers functions used will go to helpers folder
-All common interface should be inside interfaces folder
+ - Reuseable components live inside components folder 
+ - Pages used in router go to Pages folder
+ - All Component should have Pascal Case Naming
+ - Components Prop interface should be inside components file
+ - All hooks go inside hooks folder
+ - All helpers functions used will go to helpers folder
+ - All common interface should be inside interfaces folder
 
 
 # Git

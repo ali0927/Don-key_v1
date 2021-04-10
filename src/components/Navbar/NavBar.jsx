@@ -10,6 +10,7 @@ import { Link, useHistory, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { Logo } from "./Logo";
+import { LogoWhite } from "components/Footer/LogoWhite";
 const shortenAddress = (val) => {
   return val.slice(0, 4) + "..." + val.slice(-4);
 };
