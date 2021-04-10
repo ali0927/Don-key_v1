@@ -97,7 +97,7 @@ export const PopularStrategy = ({
       <div className="popularstrategy__graph">
         <div
           onClick={!comingSoonProp ? goToStrategy: undefined}
-          className={clsx("popularstrategy__title ", {"cursor-pointer": comingSoonProp})}
+          className={clsx("popularstrategy__title ", {"cursor-pointer": !comingSoonProp})}
         >
           {icon}
           {investers ? (
