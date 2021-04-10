@@ -1,6 +1,34 @@
-# Getting Started with Create React App
+# Don-key.finance Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+The project is Defi app for creating yield Farming strategies.
+
+
+# Technologies Used
+Node.js
+React 
+MySQL
+Web3
+Solidity
+Redux
+
+# Project Structure
+
+Reuseable components live inside components folder 
+Pages used in router go to Pages folder
+All Component should have Pascal Case Naming
+Components Prop interface should be inside components file
+All hooks go inside hooks folder
+All helpers functions used will go to helpers folder
+All common interface should be inside interfaces folder
+
+
+# Git
+We follow git flow, by this we mean that our main branch is the dev branch.
+
+When working on new features we craete a branch from dev called feature/{what-the-feature-is} bug branches start with bugfix/{bug-fix-name}
+
+
+
 
 ## Available Scripts
 
