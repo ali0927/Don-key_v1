@@ -11,6 +11,7 @@ import { AuthToken } from "../../constants";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../actions/authActions/authActions";
 import { getWeb3 } from "../../helpers/helpers";
+import { Logo } from "components/Navbar/Logo";
 
 const Login = () => {
   const history = useHistory();
@@ -70,16 +71,10 @@ const Login = () => {
     <div className="login">
       <div className="loginLeft">
         <div className="logo mt-5 ml-5">
-          <Link to="/">
-            <img
-              src="/assets/images/logo.svg"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-          </Link>
+        <Logo />
         </div>
         <div className="text-center loginForm">
-          <h1 className="mb-4">Join the Don - Key</h1>
+          <h1 className="mb-4">Join the Don-Key</h1>
           <p className="mb-4">
             Join our farmers <br /> Be the best
           </p>

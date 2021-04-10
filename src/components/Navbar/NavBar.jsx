@@ -10,6 +10,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import clsx from "clsx";
 import comingsoon from "images/comingsoon.svg";
+import { Logo } from "./Logo";
 const shortenAddress = (val) => {
   return val.slice(0, 4) + "..." + val.slice(-4);
 };
@@ -20,34 +21,6 @@ const useWalletAddress = ({ short = false }) => {
     ? user.walletAddress
     : "0x1341133ba79815e04e008f7635212bf086e821301";
   return short ? shortenAddress(walletAddress) : walletAddress;
-};
-
-const Logo = () => {
-  return (
-    <Navbar.Brand onClick={(e) => e.preventDefault()}>
-      <Link
-        className="d-flex align-items-center inherit-color no-underline"
-        to="/"
-      >
-        <p
-          className="m-0"
-          style={{ fontFamily: "Avenir-Bold", fontWeight: "bolder" }}
-        >
-          <span style={{ letterSpacing: "2px" }}>
-            D
-            <img
-              style={{ position: "relative", width: 24,top: 2, marginLeft: -2, marginRight:-1 }}
-              src="/assets/images/logo-don.png"
-              className="d-inline-block align-top by-logo"
-              alt="Logo"
-            />
-            n
-          </span>
-          {" "}-{" "}key
-        </p>
-      </Link>
-    </Navbar.Brand>
-  );
 };
 
 function NavBar(props) {
