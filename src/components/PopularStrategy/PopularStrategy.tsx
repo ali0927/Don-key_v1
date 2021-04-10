@@ -3,6 +3,7 @@ import graph from "../MyAccountNewGraph/graph.svg";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useHistory } from "react-router";
 import comingsoon from "images/comingsoon.svg";
+import clsx from "clsx";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -95,8 +96,8 @@ export const PopularStrategy = ({
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
         <div
-          onClick={goToStrategy}
-          className="popularstrategy__title cursor-pointer"
+          onClick={!comingSoonProp ? goToStrategy: undefined}
+          className={clsx("popularstrategy__title ", {"cursor-pointer": !comingSoonProp})}
         >
           {icon}
           {investers ? (

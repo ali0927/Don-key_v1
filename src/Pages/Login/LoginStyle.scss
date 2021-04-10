@@ -25,20 +25,13 @@
   width: 50vw;
   & .loginForm {
     padding: 20px;
-    width: 60%;
+    max-width: 800px;
     margin: 0 auto;
     margin-top: 13%;
     display: block;
 
     /* media queries */
-    @media (max-width: 767px) {
-      width: 100%;
-    }
-    @media screen and (min-width: 768px) and (max-width: 1400px) {
-      width: 77%;
-      padding: 0px;
-      margin-top: 5%;
-    }
+  
   }
   & h1 {
     font-weight: bold;
