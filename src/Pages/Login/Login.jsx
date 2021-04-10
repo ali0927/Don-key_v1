@@ -79,7 +79,7 @@ const Login = () => {
           </Link>
         </div>
         <div className="text-center loginForm">
-          <h1 className="mb-4">Join the Buru</h1>
+          <h1 className="mb-4">Join the Don - Key</h1>
           <p className="mb-4">
             Join our farmers <br /> Be the best
           </p>
