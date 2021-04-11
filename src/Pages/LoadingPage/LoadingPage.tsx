@@ -1,6 +1,5 @@
-import React from "react";
+import { Loader } from "don-components";
 import "./LoadingPage.scss"
-import { Loader } from "components/Loader/Loader";
 
 export const LoadingPage = () => {
   return (

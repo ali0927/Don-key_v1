@@ -1,7 +1,7 @@
 import { USER_LOGIN, USER_LOGOUT } from "./authActionTypes";
 import { action } from "typesafe-actions";
 import { IUser } from "interfaces";
-import { AuthToken } from "constants/constants";
+import { AuthToken } from "don-utils";
 
 export const doLogin = (user: IUser) => {
   return action(USER_LOGIN, { user });

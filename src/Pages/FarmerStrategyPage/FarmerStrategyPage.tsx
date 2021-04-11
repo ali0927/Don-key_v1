@@ -1,7 +1,7 @@
 import { apiRequest } from "actions/apiActions";
+import { Web3Provider } from "don-components";
 import { InvestmentPage } from "Pages/InvestmentPage/InvestmentPage";
 import { LoadingPage } from "Pages/LoadingPage";
-import { Web3Provider } from "providers/Web3Provider";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 

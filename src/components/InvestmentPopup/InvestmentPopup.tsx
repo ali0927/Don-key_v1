@@ -3,9 +3,10 @@ import { CloseIcon } from "Pages/Onboarding/CloseIcon";
 import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
 import { useEffect, useState } from "react";
-import { getWeb3 } from "helpers";
+
 import Web3 from "web3";
-import { useToggle } from "hooks";
+import { useToggle } from "don-hooks";
+import { getWeb3 } from "don-utils";
 
 const InvestmentInput = ({
   value,

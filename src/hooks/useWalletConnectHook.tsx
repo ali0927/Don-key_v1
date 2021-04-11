@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { getAuthToken, getNonce } from "../services/api";
-import { AuthToken } from "../constants";
 import { useHistory } from "react-router-dom";
 import { useNotification } from "components/Notification";
 import { useWeb3React } from "@web3-react/core";
 import { walletconnect } from "connectors";
+import { AuthToken } from "don-utils";
 
 export const useWalletConnectHook = () => {
     const history = useHistory();

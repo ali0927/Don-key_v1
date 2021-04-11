@@ -1,18 +1,8 @@
-import axios from "axios";
-import { AuthToken } from "../constants";
-import { getWeb3 } from "helpers/helpers";
+import { api, getWeb3 } from "don-utils";
 
 
-export const api = axios.create({
-  baseURL: "https://api.don-key.finance",
-  transformRequest: [...axios.defaults.transformRequest as any, (data,headers) => {
-    const token =localStorage.getItem(AuthToken)
-    if(token){
-      headers["Authorization"] = `Bearer ${token}`
-    }
-    return data
-  }]
-});
+
+
 
 export const getNonce = async (publicAddress: string) => {
   const res = await api.post("/api/v1/nonce", {

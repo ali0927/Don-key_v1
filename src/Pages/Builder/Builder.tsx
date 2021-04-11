@@ -1,36 +1,25 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useMemo, useState } from "react";
-import { useToggle } from "../../hooks";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { ProtocolBar } from "../../components/ProtocolBar/ProtocolBar";
-import Protocol from "../../components/Protocol/Protocol";
-import { BuilderModal } from "../../components/BuilderModal/BuilderModal";
-import { ActionConfig } from "../../components/ActionConfig/ActionConfig";
-import { GraphProvider } from "../../components/GraphProvider/GraphProvider";
 import { NavBar3 } from "../../components/Navbar/NavBar";
 import "./main.scss";
-import { getQueryParam, getWeb3, uuidv4 } from "../../helpers/helpers";
+import {  uuidv4 } from "don-utils";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { apiRequest } from "actions/apiActions";
-import moreIcon from "./more.svg";
-import { MoreProtocolsModal } from "components/MoreProtocolsModal/MoreProtocolsModal";
-import axios, { AxiosResponse } from "axios";
-import { IProtocolFromAPI } from "interfaces";
-import { withYFITokens } from "components/YFITokensProvider";
-import BalanceBar from "components/BalanceBar/BalanceBar";
-import Web3 from "web3";
-import { Web3Provider } from "providers/Web3Provider";
+import { AxiosResponse } from "axios";
+import { IProtocolFromAPI, withYFITokens} from "don-builder";
+import { getQueryParam } from "helpers";
+import { Builder as DonBuilder} from "don-builder";
 
 const Builder = () => {
   const [panel, setPanel] = useState(null);
-  const [isModalOpen, , , toggleModal] = useToggle();
+
   const [protocols, setProtocols] = useState<IProtocolFromAPI[]>([]);
   const closePanel = () => setPanel(null);
 
   const history = useHistory();
 
-  const [showMoreProtocols, setShowMoreProtocols] = useState(false);
 
   const [strategy, setStrategy] = useState({
     protocolCells: [
@@ -106,15 +95,10 @@ const Builder = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const firstSeven = useMemo(() => {
-    return protocols.length > 6
-      ? protocols.slice(0, protocols.length - 1)
-      : protocols;
-  }, [protocols]);
-  const [isApproved, setApproved] = useState(false);
-  const handleApprove = async () => {
-    setApproved(true);
-  };
+
+
+
+
 
 
   const deployStrategy = (addresses: string[],data: any[]) => {
@@ -129,108 +113,11 @@ const Builder = () => {
 
   return (
     <>
-    <Web3Provider >
-      <div className={clsx(`page-wrapper`, { blur: isModalOpen })}>
+  
+      <div className={clsx(`page-wrapper`)}>
         <NavBar3 />
-        <MoreProtocolsModal
-          protocols={protocols}
-          isOpen={showMoreProtocols}
-          onClose={() => setShowMoreProtocols(false)}
-        />
-        {/* <img src={generateGradientImage("red", "blue")} /> */}
-        {protocols.length > 0 ? (
-          <GraphProvider
-            strategy={strategy}
-            openPanel={setPanel}
-            protocols={protocols}
-          >
-            <ProtocolBar>
-              {firstSeven.map(
-                ({
-                  name,
-                  showOnToolbar,
-                  toolbarImageURL,
-                  website,
-                  description,
-                }) => {
-                  return (
-                    <Protocol
-                      key={name}
-                      onClose={closePanel}
-                      openedPanel={panel}
-                      icon={toolbarImageURL}
-                      name={name}
-                      website={website}
-                      description={description}
-                      showOnToolbar={showOnToolbar === "1"}
-                    />
-                  );
-                }
-              )}
-              <li>
-                <hr />
-              </li>
-              <li
-                onClick={() => setShowMoreProtocols(true)}
-                className={clsx("protocol-list-item cursor-pointer")}
-              >
-                <img src={moreIcon} style={{ maxWidth: 58 }} />
-              </li>
-            </ProtocolBar>
-            <BuilderModal isModalOpen={isModalOpen} toggleModal={toggleModal} />
-            <ActionConfig />
-            <div
-              style={{
-                position: "absolute",
-                top: 120,
-                right: 87,
-                padding: "15px 20px",
-                backgroundColor: "white",
-                border: "3px solid black",
-                borderRadius: "8px",
-                cursor: "pointer"
-              }}
-              onClick={handleApprove}
-            >
-              {isApproved ? "Approved" : "Approve strategy"}
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: 200,
-                right: 87,
-                padding: "15px 20px",
-                backgroundColor: "white",
-                border: "3px solid black",
-                borderRadius: "8px",
-                cursor: "pointer"
-              }}
-              onClick={handleApprove}
-            >
-              Deploy Strategy
-            </div>
-            <div
-              style={{
-                position: "absolute",
-                top: 280,
-                right: 87,
-                padding: "15px 20px",
-                backgroundColor: "white",
-                border: "3px solid black",
-                borderRadius: "8px",
-                cursor: "pointer"
-              }}
-              onClick={handleApprove}
-            >
-              EnableStrategy
-            </div>
-            <BalanceBar />
-          </GraphProvider>
-        ) : (
-          "Loading"
-        )}
+        <DonBuilder protocols={protocols} strategy={strategy}  />
       </div>
-      </Web3Provider>
     </>
   );
 };

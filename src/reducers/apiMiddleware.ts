@@ -1,8 +1,8 @@
 import { Middleware } from "redux";
 import { ApiActions, onApiError, onApiSuccess } from "actions/apiActions";
-import { api } from "services/api";
 import { AuthActions, doLogin, doLogout } from "actions/authActions";
 import { IStoreState } from "interfaces";
+import { api } from "don-utils";
 
 export const apiMiddleware: Middleware<any, IStoreState> = (store) => (
     next

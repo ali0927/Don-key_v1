@@ -1,6 +1,6 @@
 import { NavBar2 } from "components/Navbar/NavBar";
 import MyAccountDetail from "JsonData/MyAccountDetail";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Row,
@@ -20,12 +20,12 @@ import { DepositsTab } from "Pages/MyAccountNew/Tabs/DepositsTab";
 import { PostTab } from "Pages/MyAccountNew/Tabs/PostTab";
 import { StratgiesTab } from "Pages/MyAccountNew/Tabs/StratgiesTab";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { getWeb3 } from "helpers";
 import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
 import "./InvestmentPage.scss";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import ButtonComponent from "components/Button/Button";
+import { getWeb3 } from "don-utils";
 export const tabs = [
   { text: "Posts", comp: <PostTab />, icon: <PostsIcon /> },
   { text: "Strategies", comp: <StratgiesTab />, icon: <StrategiesIcon /> },

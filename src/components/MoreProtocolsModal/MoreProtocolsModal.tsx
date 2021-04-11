@@ -2,7 +2,7 @@ import ModalPopup from "components/ProtocolsModal/ProtocolsModal";
 import { Row, Col, Form, InputGroup, Tab, Nav, Tabs } from "react-bootstrap";
 import ButtonComponent from "components/Button/Button";
 import { useState } from "react";
-import { IProtocolFromAPI } from "interfaces";
+import { IProtocolFromAPI } from "don-builder";
 export const MoreProtocolsModal = ({
   isOpen,
   onClose,

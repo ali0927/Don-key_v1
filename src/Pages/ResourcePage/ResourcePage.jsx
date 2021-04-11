@@ -1,21 +1,13 @@
 import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
 import { NavBar } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
 import {
   Row,
   Col,
   Form,
-  InputGroup,
-  Tab,
-  Tabs,
-  Nav,
-  Button,
 } from "react-bootstrap";
-import { Card } from "react-bootstrap";
 import "./ResourceStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import ModalPopup from "../../components/ProtocolsModal/ProtocolsModal";
 
 import Slider, { Range } from "rc-slider";
 import "rc-slider/assets/index.css";
