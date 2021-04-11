@@ -136,3 +136,10 @@ function Builder({
 }
 
 export { Builder };
+
+ //put deploy strategy code from new farmer code
+ //put addCubes code from new farmer code
+  //put runStrategy code from new farmer code
+    //put ClearCube code from new farmer code
+
+

@@ -36,6 +36,7 @@ export const FarmerSignupPage = () => {
       formData.append("picture", image);
     }
     await executePost({ data: formData });
+    //put deploy pool from new farmer code
     history.push("/dashboard/farmer/me");
   };
   useEffect(() => {
