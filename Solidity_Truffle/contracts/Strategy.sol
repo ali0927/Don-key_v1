@@ -1,35 +1,24 @@
 // SPDX-License-Identifier: MIT
 
 pragma solidity ^0.6.9;
-import "./byProxy.sol";
-import "./Cube.sol";
+import "./donProxy.sol";
+import "./Controller.sol";
 pragma experimental ABIEncoderV2;
 
-contract Strategy{
+contract Strategy is Controller{
     address[] tos;
     bytes[] datas;
     string name;
-    address payable byProxyaddress = 0x66b36107347ec36bbB9B622A9934A5cAb60fef3a;
-    byProxy byProxyInstance;
+    address payable donProxyaddress = 0x139f3766B572f907A400806944c84F66155e5673;
+    donProxy donProxyInstance;
     address WBNBaddress=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
-    address PancakeRouteraddress=0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F;
     address poolAddress;
     IBEP20 WBNB = IBEP20(WBNBaddress);
     bool locked;
         constructor(string memory _name) public {
       name=_name;
-      byProxyInstance=byProxy(byProxyaddress);
+      donProxyInstance=donProxy(donProxyaddress);
       locked = false;
-    }
-    function addCube(address to,bytes memory data) public {
-        require(locked==false,"Strategy is locked and cannot be changes");
-        tos.push(to);
-        datas.push(data);
-    }
-        function removeCube(address to,bytes memory data) public {
-        require(locked==false,"Strategy is locked and cannot be changes");
-        tos.pop();
-        datas.pop();
     }
     function addCubes(address[] memory newTos,bytes[] memory newDatas) public {
                 require(locked==false,"Strategy is locked and cannot be changes");
@@ -52,16 +41,6 @@ contract Strategy{
                 }
 
                  }
-        function clearStrategy() public {
-                require(locked==false,"Strategy is locked and cannot be changes");
-
-                for (uint256 i = 0; i < tos.length; i++) {
-                tos.push();
-                datas.push();
-                    
-                }
-
-                 }
         function getTos() public view returns(address[] memory){
             return tos;
         }
@@ -77,7 +56,6 @@ contract Strategy{
         function getData(uint cubeNumber)public view returns(bytes memory){
             return datas[cubeNumber];
         }
-        
         
         function getName()public view returns(string memory){
             return name;
@@ -108,30 +86,28 @@ contract Strategy{
             poolAddress=newPool;
         }
         function runStrategy() public payable {
-             WBNB.approve(byProxyaddress,WBNB.balanceOf(address(this)));
-            byProxyInstance.batchSimple(tos,datas);
-            WBNB.transferFrom(address(this),poolAddress,WBNB.balanceOf(address(this)));
+            donProxyInstance.batchSimple(tos,datas);
 
-            
-        }
-            function runStrategyLast(address lastAddress) public payable {
-            IBEP20 lastToken = IBEP20(lastAddress);
-             WBNB.approve(byProxyaddress,WBNB.balanceOf(address(this)));
-            byProxyInstance.batchSimple(tos,datas);
-            lastToken.transferFrom(address(this),poolAddress,lastToken.balanceOf(address(this)));
-
-            
         }
         
-        function testStrategy() public payable {
-             WBNB.approve(byProxyaddress,WBNB.balanceOf(address(this)));
-            byProxyInstance.batchSimple(tos,datas);
+          function approveToken(address tokenAddress) public payable {
+            IBEP20 token = IBEP20(tokenAddress);
+            token.approve(donProxyaddress,token.balanceOf(address(this)));
 
-            
         }
-        
+
+        function transferPool(address payable tokenAddress) public {
+            IBEP20 token = IBEP20(tokenAddress);
+            token.transferFrom(address(this),poolAddress,token.balanceOf(address(this)));
+
+        }
+        function getToken(address payable tokenAddress) public view returns(uint256){
+            IBEP20 token = IBEP20(tokenAddress);
+            return token.balanceOf(address(this));
+
+        }
         function setProxy(address payable newProxy) public payable {
-             byProxyInstance=byProxy(newProxy);
+             donProxyInstance=donProxy(newProxy);
         }
                  
     
