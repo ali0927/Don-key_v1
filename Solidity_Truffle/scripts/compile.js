@@ -33,9 +33,9 @@ const buildSources = () => {
   const sources = {};
   const contractsFiles = [
     "Strategy.sol",
-    "Cube.sol",
+    "Controller.sol",
     "IBEP20.sol",
-    "byProxy.sol",
+    "donProxy.sol",
     "POOL.sol",
     "SafeMathUpgradeable.sol",
   ];
