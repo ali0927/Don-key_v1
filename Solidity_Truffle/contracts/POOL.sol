@@ -12,24 +12,50 @@ contract POOL is Controller{
     using SafeMathUpgradeable for uint256;
     address WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
     IBEP20 private WBNBtoken = IBEP20(WBNB);
-    IBEP20 token;
-    uint256 public totalLiquidity;
     mapping (address => uint256) public liquidity;
     uint256 added;
     Strategy strategyInstance;
     bool invested;
     address payable strategy;
-    constructor () public payable{
+    string farmerName;
+    mapping (address => bool) public investors;
+    address farmer;
+    constructor (string memory _farmerName) public payable{
         admins[msg.sender]=true;
         invested=false;
+        farmerName=_farmerName;
+        farmer=msg.sender;
     }
 
+function getFarmername() public view returns (string memory){
+    return farmerName;
+}
+function getFarmeraddress() public view returns (address){
+    return farmer;
+}
+function setInvestor(address investor) public {
+    investors[investor]=true;
+}
+
+function removeInvestor(address investor) public {
+    require(investors[investor]==true,"the user is not invested in the pool");
+    investors[investor]=false;
+}
+
+function getInvestor(address investor) public view returns (bool){
+    return investors[investor];
+}
 
 function setInvested(bool investmentStatus) public returns (bool){
     require((admins[msg.sender]==true)||(msg.sender==strategy),"POOL: only an appropriate sender can do this");
     invested = investmentStatus;
     return invested;
 }
+
+function gettInvested() public view returns (bool){
+    return invested;
+}
+
 
 function setStrategy(address payable newStrategy) public returns (address){
     strategyInstance=Strategy(newStrategy);
@@ -40,9 +66,6 @@ function getStrategy() public view returns (address){
      return strategy;
 }
 
-function gettInvested() public view returns (bool){
-    return invested;
-}
 
 
 function depositLiquidity(uint WBNBtokens) public payable returns (uint256) {
