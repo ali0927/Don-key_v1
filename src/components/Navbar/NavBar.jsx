@@ -32,7 +32,7 @@ function NavBar(props) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
             <Nav.Link
-              href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
+              href="/litepaper.pdf"
               className={
                 window.location.pathname === "/"
                   ? "colorBlack pr-md-5"
@@ -108,7 +108,7 @@ function NavBar2({ hideWallet = false }) {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto mr-auto">
              <Nav.Link
-              href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
+              href="/litepaper.pdf"
               className={
                 "colorBlack pr-md-5"
               }
