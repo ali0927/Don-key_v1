@@ -10,8 +10,8 @@ import "./Strategy.sol";
 contract POOL is Controller{
 
     using SafeMathUpgradeable for uint256;
-    address WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
-    IBEP20 private WBNBtoken = IBEP20(WBNB);
+    address BUSD = 0xe9e7cea3dedca5984780bafc599bd69add087d56;
+    IBEP20 private BUSDtoken = IBEP20(BUSD);
     mapping (address => uint256) public liquidity;
     uint256 added;
     Strategy strategyInstance;
@@ -68,19 +68,19 @@ function getStrategy() public view returns (address){
 
 
 
-function depositLiquidity(uint WBNBtokens) public payable returns (uint256) {
-  added = added.add(WBNBtokens);
-  liquidity[msg.sender] = liquidity[msg.sender].add(WBNBtokens);
-  require(WBNBtoken.transferFrom(msg.sender, address(this), WBNBtokens));
+function depositLiquidity(uint BUSDtokens) public payable returns (uint256) {
+  added = added.add(BUSDtokens);
+  liquidity[msg.sender] = liquidity[msg.sender].add(BUSDtokens);
+  require(BUSDtoken.transferFrom(msg.sender, address(this), BUSDtokens));
   return liquidity[msg.sender];
 }
 
 function withdrawLiquidity() public {
 require(invested==false,"pool is invested at the moment");
-uint256 WBNBshare = WBNBtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
+uint256 BUSDshare = BUSDtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
 added=added.sub(liquidity[msg.sender]);
 liquidity[msg.sender] = 0;
-require(WBNBtoken.transferFrom( address(this),msg.sender, WBNBshare));
+require(BUSDtoken.transferFrom( address(this),msg.sender, BUSDshare));
 }
 
 function getRatio(address user) public view returns (uint){
@@ -91,8 +91,8 @@ function getRatio(address user) public view returns (uint){
 function Invest() public{
 //require(totalLiquidity!=0,"POOL:no liquidity in pool");
 //require(msg.sender==strategy||admins[msg.sender]==true,"POOL: only strategy or admin can invest");
-WBNBtoken.transferFrom(address(this),address(strategyInstance),WBNBtoken.balanceOf(address(this)));
-WBNBtoken.approve(address(strategyInstance),WBNBtoken.balanceOf(address(this)));
+BUSDtoken.transferFrom(address(this),address(strategyInstance),BUSDtoken.balanceOf(address(this)));
+BUSDtoken.approve(address(strategyInstance),BUSDtoken.balanceOf(address(this)));
 strategyInstance.runStrategy();
 }
 

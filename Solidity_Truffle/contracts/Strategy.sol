@@ -11,9 +11,7 @@ contract Strategy is Controller{
     string name;
     address payable donProxyaddress = 0x139f3766B572f907A400806944c84F66155e5673;
     donProxy donProxyInstance;
-    address WBNBaddress=0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
     address poolAddress;
-    IBEP20 WBNB = IBEP20(WBNBaddress);
     bool locked;
         constructor(string memory _name) public {
       name=_name;
