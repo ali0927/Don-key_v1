@@ -10,7 +10,7 @@ import "./Strategy.sol";
 contract POOL is Controller{
 
     using SafeMathUpgradeable for uint256;
-    address BUSD = 0xe9e7cea3dedca5984780bafc599bd69add087d56;
+    address BUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
     IBEP20 private BUSDtoken = IBEP20(BUSD);
     mapping (address => uint256) public liquidity;
     uint256 added;
@@ -32,14 +32,6 @@ function getFarmername() public view returns (string memory){
 }
 function getFarmeraddress() public view returns (address){
     return farmer;
-}
-function setInvestor(address investor) public {
-    investors[investor]=true;
-}
-
-function removeInvestor(address investor) public {
-    require(investors[investor]==true,"the user is not invested in the pool");
-    investors[investor]=false;
 }
 
 function getInvestor(address investor) public view returns (bool){
@@ -69,6 +61,7 @@ function getStrategy() public view returns (address){
 
 
 function depositLiquidity(uint BUSDtokens) public payable returns (uint256) {
+investors[msg.sender]=true;
   added = added.add(BUSDtokens);
   liquidity[msg.sender] = liquidity[msg.sender].add(BUSDtokens);
   require(BUSDtoken.transferFrom(msg.sender, address(this), BUSDtokens));
@@ -77,6 +70,7 @@ function depositLiquidity(uint BUSDtokens) public payable returns (uint256) {
 
 function withdrawLiquidity() public {
 require(invested==false,"pool is invested at the moment");
+ investors[msg.sender]=false;
 uint256 BUSDshare = BUSDtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
 added=added.sub(liquidity[msg.sender]);
 liquidity[msg.sender] = 0;
@@ -88,7 +82,7 @@ function getRatio(address user) public view returns (uint){
   return ratio;
 }
 
-function Invest() public{
+function Invest() public onlyAdmin{
 //require(totalLiquidity!=0,"POOL:no liquidity in pool");
 //require(msg.sender==strategy||admins[msg.sender]==true,"POOL: only strategy or admin can invest");
 BUSDtoken.transferFrom(address(this),address(strategyInstance),BUSDtoken.balanceOf(address(this)));

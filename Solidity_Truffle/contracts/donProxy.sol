@@ -6,7 +6,6 @@ pragma experimental ABIEncoderV2;
 
 
 contract donProxy is Controller {
-    address WBNB = 0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c;
       mapping (address => bool) public allowed;
         constructor() public {
             admins[msg.sender]=true;

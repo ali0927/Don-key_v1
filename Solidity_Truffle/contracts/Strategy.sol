@@ -27,18 +27,9 @@ contract Strategy is Controller{
                 datas.push(newDatas[i]);
                     
                 }
-
+                 locked=true;
                  }
-        function removeCubes(uint cubeNumber) public {
-            require(locked==false,"Strategy is locked and cannot be changes");
-
-                for (uint256 i = 0; i < cubeNumber; i++) {
-                tos.pop();
-                datas.pop();
-                    
-                }
-
-                 }
+                 
         function getTos() public view returns(address[] memory){
             return tos;
         }
