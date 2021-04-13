@@ -22,7 +22,7 @@ const FarmersPage = () => {
                 style={{ background: "#fff" }}
               >
                 <p className="text-center">
-                You think you are a super star farmer? Come and show everyone! Submit to become an early farmer
+                You think you are a super star farmer? Come and show everyone! Submit to become an early farmer.
                 </p>
                 <input type="hidden" name="form-name" value="newfarmer" />
 
