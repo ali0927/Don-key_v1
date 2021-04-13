@@ -1,93 +1,198 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.6.9;
 
-import "./Controller.sol";
+import "./Controller.sol";  
 import "./SafeMathUpgradeable.sol";
 import "./IBEP20.sol";
 import "./Strategy.sol";
 
 
+/**
+*   Farmer will create POOL Contract and later 
+*   farmer will create/update strategy and assign
+*   strategy to POOL.
+*/
 contract POOL is Controller{
 
     using SafeMathUpgradeable for uint256;
-    address BUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+
+    address BUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56; 
     IBEP20 private BUSDtoken = IBEP20(BUSD);
-    mapping (address => uint256) public liquidity;
-    uint256 added;
-    Strategy strategyInstance;
-    bool invested;
+    IBEP20 token;
+    uint256 private totalLiquidity;
+    uint256 private totalToken;
     address payable strategy;
-    string farmerName;
+    address poolOwner;
+    Strategy strategyInstance;
+    bool private invested;
+    string private farmerName;
+    address private farmer;
     mapping (address => bool) public investors;
-    address farmer;
-    constructor (string memory _farmerName) public payable{
+    mapping (address => uint256) private liquidity;
+
+
+    constructor (string memory _farmerName) 
+        public payable
+    {
         admins[msg.sender]=true;
-        invested=false;
         farmerName=_farmerName;
         farmer=msg.sender;
+        invested=false;
     }
 
-function getFarmername() public view returns (string memory){
-    return farmerName;
-}
-function getFarmeraddress() public view returns (address){
-    return farmer;
-}
+    /**
+     * @dev Get farmerName of the pool
+     */
+    function getFarmername()
+        external view 
+        returns (string memory)
+    {
+        return farmerName;
+    }
 
-function getInvestor(address investor) public view returns (bool){
-    return investors[investor];
-}
-
-function setInvested(bool investmentStatus) public returns (bool){
-    require((admins[msg.sender]==true)||(msg.sender==strategy),"POOL: only an appropriate sender can do this");
-    invested = investmentStatus;
-    return invested;
-}
-
-function gettInvested() public view returns (bool){
-    return invested;
-}
-
-
-function setStrategy(address payable newStrategy) public returns (address){
-    strategyInstance=Strategy(newStrategy);
-    return newStrategy;
-}
-
-function getStrategy() public view returns (address){
-     return strategy;
-}
+    /**
+     * @dev Get farmer Address of the pool
+     */
+    function getFarmeraddress()
+        external view 
+        returns (address)
+    {
+        return farmer;
+    }
 
 
+    /**
+     * @dev Get Investor Status of the pool
+     * @param _investor Investor address
+     */
+    function getInvestor(
+        address _investor
+    ) 
+        external view 
+        returns (bool)
+    {
+        return investors[_investor];
+    }
 
-function depositLiquidity(uint BUSDtokens) public payable returns (uint256) {
-investors[msg.sender]=true;
-  added = added.add(BUSDtokens);
-  liquidity[msg.sender] = liquidity[msg.sender].add(BUSDtokens);
-  require(BUSDtoken.transferFrom(msg.sender, address(this), BUSDtokens));
-  return liquidity[msg.sender];
-}
+    /**
+     * @dev update investment status and only been called by pool owner
+     * @param _investmentStatus Investment status
+     */
+    function setInvested(
+        bool _investmentStatus
+    ) 
+        external 
+        returns (bool)
+    {
+        require(
+            (admins[msg.sender] == true) || (farmer == msg.sender),
+            "POOL: only an appropriate sender can do this"
+        );
 
-function withdrawLiquidity() public {
-require(invested==false,"pool is invested at the moment");
- investors[msg.sender]=false;
-uint256 BUSDshare = BUSDtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
-added=added.sub(liquidity[msg.sender]);
-liquidity[msg.sender] = 0;
-require(BUSDtoken.transferFrom( address(this),msg.sender, BUSDshare));
-}
+        invested = _investmentStatus;
+        return invested;
+    }
 
-function getRatio(address user) public view returns (uint){
-  uint256 ratio = liquidity[user].div(added);
-  return ratio;
-}
 
-function Invest() public onlyAdmin{
-//require(totalLiquidity!=0,"POOL:no liquidity in pool");
-//require(msg.sender==strategy||admins[msg.sender]==true,"POOL: only strategy or admin can invest");
-BUSDtoken.transferFrom(address(this),address(strategyInstance),BUSDtoken.balanceOf(address(this)));
-BUSDtoken.approve(address(strategyInstance),BUSDtoken.balanceOf(address(this)));
-strategyInstance.runStrategy();
-}
+    /**
+    * @dev Assign/update startegy to POOL
+    * @param _newStrategy new startegy address
+    */
+    function setStrategy(
+        address payable _newStrategy
+    ) 
+        external
+    {
+        require(
+            _newStrategy != address(0x0),
+            'newStrategy should be a valid address');
 
+        strategy = _newStrategy;
+        strategyInstance=Strategy(_newStrategy);
+    }
+
+    /**
+    * @dev return assigned strategy to the pool
+    */
+    function getStrategy() 
+        external view 
+        returns (address)
+    {
+        return strategy;
+    }
+
+    /**
+    * @dev return investment status to the pool
+    */
+    function getInvested() 
+        public view 
+        returns (bool)
+    {
+        return invested;
+    }
+
+
+    /**
+    * @dev user can deposit/Invest there Token to the pool
+    * @param _BUSDtokens amount of BUSD token to be invested in POOL
+    */
+    function depositLiquidity(
+        uint _BUSDtokens
+    ) 
+        external payable 
+        returns (uint256)
+    {
+        investors[msg.sender]=true;
+        totalToken = totalToken.add(_BUSDtokens);
+        liquidity[msg.sender] = liquidity[msg.sender].add(_BUSDtokens);
+        require(BUSDtoken.transferFrom(msg.sender, address(this), _BUSDtokens));
+        return liquidity[msg.sender];
+    }
+
+    /**
+     * @dev user can withdraw Invested amount to the POOL 
+     */
+    function withdrawLiquidity() 
+        external
+    {
+        require(
+            invested == false,
+            "pool is invested at the moment"
+        );
+
+        investors[msg.sender]=false;
+        uint256 BUSDshare = BUSDtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
+        totalToken=totalToken.sub(liquidity[msg.sender]);
+        liquidity[msg.sender] = 0;
+        require(BUSDtoken.transferFrom( address(this),msg.sender, BUSDshare));
+    }
+
+    /**
+    * @dev amount of share in pool
+    * @param _user investor address who has invested token in POOL
+    */
+    function getRatio(
+        address _user
+    ) 
+        internal view 
+        returns (uint256 ratio)
+    {
+        ratio = liquidity[_user].div(totalToken);
+    }
+
+    /**
+    * @dev transfer all liquid BUSD token to strategy contract for further investment
+    */
+    function invest() 
+        external
+    {
+        require(
+            farmer == msg.sender || admins[msg.sender] == true,
+            "POOL: only strategy or admin can invest"
+        );
+
+        BUSDtoken.transferFrom(address(this),address(strategyInstance),BUSDtoken.balanceOf(address(this)));
+        BUSDtoken.approve(address(strategyInstance),BUSDtoken.balanceOf(address(this)));
+        strategyInstance.runStrategy();
+    }
 }
