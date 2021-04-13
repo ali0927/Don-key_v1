@@ -8,7 +8,7 @@ import { getAuthTokenForPublicAddress } from "./services/api";
 import { Web3ReactProvider } from "@web3-react/core";
 import { Web3Provider } from "@ethersproject/providers";
 import "./scss/styles.scss";
-import { AuthToken } from "don-utils";
+import { AuthToken, getWeb3 } from "don-utils";
 function getLibrary(provider: any) {
     return new Web3Provider(provider);
 }
@@ -21,6 +21,13 @@ function App() {
             //@ts-ignore
             window.ethereum.on("accountsChanged", async function (accounts: any) {
                 // Time to reload your interface with accounts[0]!
+                // detect wallet is UnLocked or not
+                const web3 = await getWeb3();
+                const coinbase = web3 ? await web3.eth.getCoinbase() : null;
+                if (!coinbase) {
+                    return;
+                }
+                
                 const { token, user } = await getAuthTokenForPublicAddress(
                     accounts[0]
                 );
