@@ -125,7 +125,7 @@ const LandingPage = () => {
               <div className="bannerLeft mt-md-5 pt-md-4">
                 <h1 className="colorBlack">Outsmart DeFi</h1>
                 <p className="mt-4">
-                  Find your favorite farmers, follow Their strategies, and boost
+                  Find your favorite farmers, follow their strategies, and boost
                   your yield
                 </p>
                 <div className="mt-5"></div>

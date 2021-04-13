@@ -11,12 +11,12 @@ const FarmersPage = () => {
       <NavBar2 hideWallet />
       <div className=" pt-5 pb-5">
         <Container>
-          <div className="row">
-            <div className="col">
+          <div className="row justify-content-center">
+            <div className="col-md-9">
               <h1 className="text-center mt-md-3">Farmers</h1>
 
               <form
-                className="newStrategyContent"
+                className="newStrategyContent p-5 rounded-sm shadow-sm"
                 name="newfarmer"
                 method="POST"
                 style={{ background: "#fff" }}
