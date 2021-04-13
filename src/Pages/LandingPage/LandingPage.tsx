@@ -16,6 +16,7 @@ import farmerCard1 from "./gabriel.svg";
 import image2 from "./popeye.svg";
 import image3 from "./image.svg";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
+import BuilderImage from "./Strategy.png";
 const StarIcon = () => {
   return (
     <svg
@@ -226,7 +227,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       The most user friendly interface in the DeFi space. create
                       complicated strategies with 0 code.
                     </Card.Text>
@@ -239,7 +240,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       Climb up the leader board and get more liquidity in your
                       pool
                     </Card.Text>
@@ -251,7 +252,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={boostyield} />
                     <Card.Title>Boost your yield</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       Make commission on your yields and get extra bonuses based
                       on your ranks and performance
                     </Card.Text>
@@ -290,7 +291,7 @@ const LandingPage = () => {
             <Col md={4} className="">
               <div className="tradingrightImg">
                 <img
-                  src="/assets/images/trading.png"
+                  src={BuilderImage}
                   className="Imagetrading"
                   alt="Imagetrading"
                 />

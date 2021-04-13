@@ -71,14 +71,7 @@
   position: relative;
   z-index: 9;
   & .card {
-    background: linear-gradient(
-        180deg,
-        rgba(221, 221, 221, 0.248) 0%,
-        rgba(255, 255, 255, 0.8) 100%
-      ),
-      $primary-color;
-    box-shadow: 2.40426px 3.1968px 7px rgba(8, 12, 35, 0.07),
-      0.5px 0.6px 1.2px rgba(8, 12, 35, 0.035);
+    background: $bggeryColor;
     border-radius: 5px;
     border: none;
     padding: 0px 10px;
