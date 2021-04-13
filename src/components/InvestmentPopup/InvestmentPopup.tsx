@@ -20,7 +20,7 @@ const InvestmentInput = ({
   return (
     <div>
       <div className="invest_input">
-        <div className="invest_input_currency">WBNB</div>
+        <div className="invest_input_currency">BUSD</div>
         <div>
           <input
             type="number"
@@ -184,7 +184,7 @@ export const InvestmentPopup = ({
                 className="cursor-pointer invest_close"
               />
               <p className="text-right">
-                <small>Balance: {balance} WBNB</small>
+                <small>Balance: {balance} BUSD</small>
               </p>
               <InvestmentInput
                 value={value}

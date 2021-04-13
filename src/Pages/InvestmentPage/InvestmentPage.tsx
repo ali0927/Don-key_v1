@@ -184,7 +184,7 @@ const InvestCard = ({
   return (
     <div className="invest_card">
       <p>Your investment Balance</p>
-      <h5 className="mb-3">{balance} WBNB</h5>
+      <h5 className="mb-3">{balance} BUSD</h5>
       <div className="row">
         <div className="col">
           <button onClick={handleButtonClick} className="invest_card_btn">

@@ -52,7 +52,7 @@ export const DashboardPage = () => {
               <thead>
               <tr>
                 <th>Name of Farmer</th>
-                <th>WBNB in Pool</th>
+                <th>BUSD in Pool</th>
                 <th>24 hours Profit</th>
                 <th>7 days Profit</th>
                 <th>Total Profit</th>
