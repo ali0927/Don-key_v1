@@ -1,30 +1,42 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.6.9;
 import "./IBEP20.sol";
+
 abstract contract Cube {
+
   mapping (address => bool) public admins;
-
-  constructor() public{
-    admins[msg.sender]=true;
-
-  }
-modifier onlyAdmin {    
-        require(admins[msg.sender]==true, "Only admin can do that");
-        _;
-    }
-    
-  // important to receive ETH
   receive() payable external {}
 
+  constructor() 
+    public
+  {
+    admins[msg.sender]=true;
+  }
 
-function addAdmin(address admin) public onlyAdmin{
-admins[admin]=true;
+  modifier onlyAdmin {    
+    require(
+      admins[msg.sender] == true,
+      "Only admin can do that");
+    _;
+  }
 
-}
 
-function checkadmin(address check) public view returns (bool) {
-return admins[check];
+  function addAdmin(
+    address _admin
+  ) 
+    public
+    onlyAdmin
+  {
+    admins[_admin]=true;
+  }
 
-}
-  // important to receive ETH
+  function checkadmin(
+    address _check
+  ) 
+    public view 
+    returns (bool)
+  {
+    return admins[_check];
+  }
+  
 }
