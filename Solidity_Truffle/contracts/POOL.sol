@@ -27,6 +27,9 @@ contract POOL is Controller{
     bool private invested;
     string private farmerName;
     address private farmer;
+    address private teamAddress = 0x8345F3AFa13a2ACC4fCd55A173eA21078aD958e8;
+    uint16 constant FARMER_REWARD = 5; // 5% of profit
+    uint16 constant TEAM_REWARD = 5; // 5% of profit
     mapping (address => bool) public investors;
     mapping (address => uint256) private liquidity;
 
@@ -159,12 +162,28 @@ contract POOL is Controller{
             invested == false,
             "pool is invested at the moment"
         );
-
         investors[msg.sender]=false;
         uint256 BUSDshare = BUSDtoken.balanceOf(address(this)).mul(getRatio(msg.sender));
+        uint256 profit = BUSDshare > liquidity[msg.sender] ? 
+                            BUSDshare - liquidity[msg.sender] :
+                            0;
+
+        if (profit > 0)
+        {
+            /* Share 5% of profit amount to Farmer as farmerReward */
+            require(BUSDtoken.transferFrom( address(this), farmer, 
+                        profit.mul(FARMER_REWARD).div(100)));
+
+            /* Share 5% of profit amount to TEAM as commission */    
+            require(BUSDtoken.transferFrom( address(this), teamAddress, 
+                        profit.mul(TEAM_REWARD).div(100)));
+        }
+
         totalToken=totalToken.sub(liquidity[msg.sender]);
         liquidity[msg.sender] = 0;
-        require(BUSDtoken.transferFrom( address(this),msg.sender, BUSDshare));
+
+        require(BUSDtoken.transferFrom( address(this), msg.sender, 
+                    BUSDshare.sub(profit.mul(FARMER_REWARD + TEAM_REWARD).div(100))));
     }
 
     /**
