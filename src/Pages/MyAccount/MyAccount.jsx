@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { NavBar2 } from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { createPortal } from "react-dom";
@@ -63,7 +63,7 @@ const MyAccount = () => {
           </div>,
           document.body
         )}
-      <NavBar2 variant="loggedin" />
+      <NavBar variant="loggedin" />
 
       <div className="navbanHead pt-5 pb-5">
         <Container>

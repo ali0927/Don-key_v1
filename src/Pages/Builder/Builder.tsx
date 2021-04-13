@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import { NavBar3 } from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import "./main.scss";
 import {  uuidv4 } from "don-utils";
 import { useHistory } from "react-router-dom";
@@ -115,7 +115,7 @@ const Builder = () => {
     <>
   
       <div className={clsx(`page-wrapper`)}>
-        <NavBar3 />
+        <NavBar variant="builder" />
         <DonBuilder protocols={protocols} strategy={strategy}  />
       </div>
     </>

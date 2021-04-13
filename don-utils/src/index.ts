@@ -3,3 +3,4 @@ export * from "./generateGradientImage";
 export * from "./api";
 export * from "./getWeb3";
 export * from "./getEstimatedAmount";
+export * from "./timeSince";

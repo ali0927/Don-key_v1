@@ -1,5 +1,5 @@
 import React from "react";
-import { NavBar, NavBar2 } from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import { Container } from "react-bootstrap";
 import { Row, Col } from "react-bootstrap";
 import { Card } from "react-bootstrap";

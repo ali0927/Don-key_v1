@@ -1,4 +1,4 @@
-import { NavBar2 } from "components/Navbar/NavBar";
+import { NavBar } from "components/Navbar/NavBar";
 import MyAccountDetail from "JsonData/MyAccountDetail";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -241,7 +241,7 @@ export const InvestmentPage = () => {
 
   return (
     <>
-      <NavBar2 variant="loggedin" />
+      <NavBar variant="loggedin" />
       <section className="bg-buru">
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>

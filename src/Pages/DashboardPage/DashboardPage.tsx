@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import ButtonComponent from "components/Button/Button";
 import { Footer } from "components/Footer/Footer";
-import { NavBar2 } from "components/Navbar/NavBar";
+import { NavBar } from "components/Navbar/NavBar";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import DataFarmer from "JsonData/DataFarmer";
 import { Form, Pagination, Row, Container, Col, Table } from "react-bootstrap";
@@ -16,7 +16,7 @@ export const DashboardPage = () => {
 
   return (
     <div className={clsx("bgColor")}>
-      <NavBar2 variant="loggedin" />
+      <NavBar variant="loggedin" />
 
       <div className="navbanHead pt-5 pb-5">
         <Container>

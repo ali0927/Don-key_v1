@@ -1,4 +1,4 @@
-import { NavBar2 } from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import { Container, Form } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import gil from "./gil.jpeg";
@@ -94,7 +94,7 @@ const TeamJSON: ITeamCardProps[] = [
 const TeamPage = () => {
   return (
     <div className="bgnav">
-      <NavBar2 hideWallet />
+      <NavBar variant="default" hideWallet />
       <div className=" pt-5 pb-5">
         <Container>
           <div className="row ">

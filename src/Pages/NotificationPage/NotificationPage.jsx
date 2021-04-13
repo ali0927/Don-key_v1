@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { NavBar2 } from "../../components/Navbar/NavBar";
+import { NavBar } from "../../components/Navbar/NavBar";
 import { Container, Overlay } from "react-bootstrap";
 import {
   Row,
@@ -27,7 +27,7 @@ const NotificationPage = () => {
   
   return (
     <div className="bgColor">
-      <NavBar2 />
+      <NavBar variant="default" />
       <div className="navbanHead pt-5 pb-5">
         <Container>
           <Row>
