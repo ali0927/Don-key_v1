@@ -344,7 +344,7 @@ const LandingPage = () => {
       <div className="community pt-5 pb-5 text-center">
         <Container>
           <h4 className="mt-4 pt-3">Join the Don-key Community</h4>
-          <p className="mt-5">Follow us Social Media</p>
+          <p className="mt-5">Follow us on Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
               <a href="https://medium.com/@don-key.finance">
