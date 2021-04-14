@@ -54,7 +54,7 @@ export const FarmerSignupPage = withWeb3(() => {
   };
 
   const deployContract = async () => {
-    const POOLJson = await import("../../JsonData/POOL.json");
+    const POOLJson = await import("../../JsonData/Pool.json");
     const contract = new web3.eth.Contract(POOLJson.abi as any);
     const accounts = await web3.eth.getAccounts();
     let payload = {

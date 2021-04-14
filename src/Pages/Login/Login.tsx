@@ -1,48 +1,26 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Form } from "react-bootstrap";
 import "./LoginStyle.scss";
 import ButtonComponent from "../../components/Button/Button";
-import { getAuthTokenForPublicAddress } from "../../services/api";
-import { Link, useHistory } from "react-router-dom";
-import { useNotification } from "../../components/Notification";
+import { useHistory } from "react-router-dom";
 import { useWalletConnectHook } from "../../hooks/useWalletConnectHook";
 import { useDispatch } from "react-redux";
 import { doLogin } from "../../actions/authActions/authActions";
-import { AuthToken, getWeb3 } from "don-utils";
+import { AuthToken } from "don-utils";
 import { Logo } from "components/Navbar/Logo";
+import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 
 const Login = () => {
   const history = useHistory();
-  const { showNotification } = useNotification();
 
   const dispatch = useDispatch();
-
+  const {doMetaMaskLogin} = useMetaMaskLogin();
   const handleMetaMaskLogin = async () => {
-    const web3 = await getWeb3();
-    if (!web3) {
-      return;
-    }
-    const coinbase = await web3.eth.getCoinbase();
-    if (!coinbase) {
-      return;
-    }
-
-    const publicAddress = coinbase.toLowerCase();
-    const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
-
-    localStorage.setItem(AuthToken, token);
-    localStorage.setItem("User", JSON.stringify(user));
-    dispatch(doLogin(user));
+    
+    await doMetaMaskLogin();
     history.push("/dashboard");
-    showNotification({
-      msg: (
-        <>
-          <p className="text-center">Metamask Account Connected</p>
-          <p className="text-center">{publicAddress}</p>
-        </>
-      ),
-    });
+  
   };
 
   useEffect(() => {

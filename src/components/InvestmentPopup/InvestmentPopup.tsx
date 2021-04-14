@@ -118,7 +118,7 @@ export const InvestmentPopup = ({
           .allowance(accounts[0], poolAddress)
           .call();
 
-        const parsedPoolContract = (await import("../../JsonData/POOL.json"))
+        const parsedPoolContract = (await import("../../JsonData/Pool.json"))
           .default;
 
         const amount = web3.utils.toWei(value);

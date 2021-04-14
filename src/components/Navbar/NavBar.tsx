@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
@@ -7,15 +7,14 @@ import "./NavbarStyle.scss";
 import NotificationJson from "../../JsonData/NotificationJson";
 import { NotificationIcon, UserIcon } from "../Icons";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { Logo } from "./Logo";
 import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
 
-
-
+import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 
 const shortenAddress = (val: any) => {
   return val.slice(0, 4) + "..." + val.slice(-4);
@@ -38,25 +37,41 @@ function NavBar(props: INavBarProps) {
 
   const getLogo = React.useCallback(() => {
     if (variant === "builder") {
-      return <LogoWhite />
+      return <LogoWhite />;
     }
-    return <Logo />
-  }, [variant])
+    return <Logo />;
+  }, [variant]);
+
+  const {doMetaMaskLogin} = useMetaMaskLogin();
+
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const handleConnection = async () => {
+    setIsDisabled(true)
+    try {
+      await doMetaMaskLogin()
+    }finally {
+      setIsDisabled(false)
+    }
+  }
+
 
   return (
     <>
-
       <>
-        <Navbar expand="lg" className={clsx("pt-4 pb-4 bg-none", {
-          "bgnav": variant !== "landing" && variant !== "builder",
-          "text-white navbar-buidler": variant === "builder",
-        })}>
+        <Navbar
+          expand="lg"
+          className={clsx("pt-4 pb-4 bg-none", {
+            bgnav: variant !== "landing" && variant !== "builder",
+            "text-white navbar-buidler": variant === "builder",
+          })}
+        >
           <Container>
             {getLogo()}
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto mr-auto">
-                {variant === "landing" &&
+                {variant === "landing" && (
                   <>
                     <Nav.Link
                       href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
@@ -67,14 +82,13 @@ function NavBar(props: INavBarProps) {
                       }
                     >
                       Litepaper
-                     </Nav.Link>
+                    </Nav.Link>
                     <NavbarLink to="/farmers" linkColor="black">
                       Farmers
-                     </NavbarLink>
+                    </NavbarLink>
                     <NavbarLink to="/team">Team</NavbarLink>
                   </>
-
-                }
+                )}
 
                 {variant === "default" && (
                   <>
@@ -83,10 +97,9 @@ function NavBar(props: INavBarProps) {
                       className={"colorBlack pr-md-5"}
                     >
                       Litepaper
-                     </Nav.Link>
+                    </Nav.Link>
                     <NavbarLink to="/farmers">Farmers</NavbarLink>
                     <NavbarLink to="/team">Team</NavbarLink>
-
                   </>
                 )}
                 {variant === "loggedin" && (
@@ -95,21 +108,17 @@ function NavBar(props: INavBarProps) {
                     <NavbarLink to="/dashboard">My Investments</NavbarLink>
                     <NavbarLink to="/dashboard/farmer/me">
                       My Farmer Page
-                      </NavbarLink>
-                    <NavbarLink to="/dashboard/developers">
-                      Developers
-                      </NavbarLink>
+                    </NavbarLink>
                   </>
                 )}
                 {variant === "builder" && (
                   <>
-
                     <NavbarLink to="/resource" linkColor="white">
                       Resources
-                     </NavbarLink>
+                    </NavbarLink>
                     <NavbarLink to="/farmers" linkColor="white">
                       Farmers
-                     </NavbarLink>
+                    </NavbarLink>
                     <NavbarLink to="#" linkColor="white">
                       Developers
                     </NavbarLink>
@@ -148,18 +157,18 @@ function NavBar(props: INavBarProps) {
                 )}
               </Nav>
             </Navbar.Collapse>
-            {variant === "landing" &&
+            {variant === "landing" && (
               <div className="position-relative mr-5 mr-sm-0">
                 <ButtonComponent
                   onClick={() => history.push("/dashboard")}
                   variant="colorBlack btn-outline px-4"
                 >
                   DAPP
-                  </ButtonComponent>
+                </ButtonComponent>
               </div>
-            }
+            )}
 
-            {(variant === "default" || variant === "loggedin") &&
+            {(variant === "default" || variant === "loggedin") && (
               <>
                 {isLoggedIn && !hideWallet ? (
                   <ButtonComponent variant="colorBlack btn-outline btnusername">
@@ -171,16 +180,18 @@ function NavBar(props: INavBarProps) {
                     <span> {address}</span>
                   </ButtonComponent>
                 ) : (
-
-                  <ButtonComponent onClick={() => history.push('/login')} variant="colorBlack btn-outline btnusername">
+                  <ButtonComponent
+                    disabled={isDisabled}
+                    onClick={handleConnection}
+                    variant="colorBlack btn-outline btnusername"
+                  >
                     Connect wallet
                   </ButtonComponent>
-
                 )}
               </>
-            }
+            )}
 
-            {variant === "builder" &&
+            {variant === "builder" && (
               <>
                 <ButtonComponent variant="btn-outline btnusername btnusername--white">
                   <img
@@ -191,19 +202,12 @@ function NavBar(props: INavBarProps) {
                   <span> {address} </span>
                 </ButtonComponent>
               </>
-            }
-
+            )}
           </Container>
         </Navbar>
-
       </>
     </>
   );
 }
-
-
-
-
-
 
 export { NavBar };

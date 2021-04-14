@@ -47,7 +47,6 @@ export default function Routes() {
           path="/farmer/strategy"
           children={<FarmerStrategyPage />}
         />
-        <Route path="/login" children={<Login />} />
         <ProtectedRoute
           path="/strategy/build"
           children={

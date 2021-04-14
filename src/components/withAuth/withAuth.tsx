@@ -1,4 +1,6 @@
 import { apiRequest } from "actions/apiActions";
+import { doLogin } from "actions/authActions";
+import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { IStoreState } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
 import React, { useEffect, useState } from "react";
@@ -14,23 +16,21 @@ export const withAuth = (element?: RouteProps["children"]) => {
     const isLoggedIn = useSelector(
       (state: IStoreState) => state.auth.isLoggedIn
     );
-
-    const history = useHistory();
     const dispatch = useDispatch();
+
+
+    const {doMetaMaskLogin} = useMetaMaskLogin();
+
     useEffect(() => {
       dispatch(
         apiRequest({
           method: "GET",
           endpoint: "/api/v1/farmer",
-          onDone: () => {
-            console.log("logged in");
+          onDone: (res) => {
+            dispatch(doLogin(res.data.user))
           },
           onFail: (res) => {
-            if (res) {
-              if (res.status === 401) {
-                history.push("/login");
-              }
-            }
+           doMetaMaskLogin()
           },
         })
       );
