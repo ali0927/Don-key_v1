@@ -16,6 +16,7 @@ import farmerCard1 from "./gabriel.svg";
 import image2 from "./popeye.svg";
 import image3 from "./image.svg";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
+import BuilderImage from "./Strategy.png";
 const StarIcon = () => {
   return (
     <svg
@@ -124,7 +125,7 @@ const LandingPage = () => {
               <div className="bannerLeft mt-md-5 pt-md-4">
                 <h1 className="colorBlack">Outsmart DeFi</h1>
                 <p className="mt-4">
-                  Find your favorite farmers, follow Their strategies, and boost
+                  Find your favorite farmers, follow their strategies, and boost
                   your yield
                 </p>
                 <div className="mt-5"></div>
@@ -151,7 +152,7 @@ const LandingPage = () => {
                 </h3>
                 <p className="parasame mt-4">
                   Discover and follow the best yield farmers with just one
-                  click. Historical APY, farming philosophy, risk apatite; You
+                  click. Historical APY, farming philosophy, risk appetite; You
                   can see it all.
                 </p>
                 <div className="position-relative d-inline-block mt-4">
@@ -226,7 +227,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       The most user friendly interface in the DeFi space. create
                       complicated strategies with 0 code.
                     </Card.Text>
@@ -239,7 +240,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       Climb up the leader board and get more liquidity in your
                       pool
                     </Card.Text>
@@ -251,7 +252,7 @@ const LandingPage = () => {
                   <Card.Body>
                     <img className="advantage-img" src={boostyield} />
                     <Card.Title>Boost your yield</Card.Title>
-                    <Card.Text className="mt-4">
+                    <Card.Text className="mt-4 text-center">
                       Make commission on your yields and get extra bonuses based
                       on your ranks and performance
                     </Card.Text>
@@ -290,7 +291,7 @@ const LandingPage = () => {
             <Col md={4} className="">
               <div className="tradingrightImg">
                 <img
-                  src="/assets/images/trading.png"
+                  src={BuilderImage}
                   className="Imagetrading"
                   alt="Imagetrading"
                 />
@@ -343,7 +344,7 @@ const LandingPage = () => {
       <div className="community pt-5 pb-5 text-center">
         <Container>
           <h4 className="mt-4 pt-3">Join the Don-key Community</h4>
-          <p className="mt-5">Follow us Social Media</p>
+          <p className="mt-5">Follow us on Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
               <a href="https://medium.com/@don-key.finance">

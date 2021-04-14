@@ -24,6 +24,9 @@
     url(./fonts/object-sans/ObjectSans-Bold.otf) format("truetype");
 }
 
+
+
+
 body {
   margin: 0;
   font-family: "Roboto" !important;
@@ -148,4 +151,14 @@ div:focus {
   height: 265px;
   display: block;
   margin: 0 auto;
+}
+
+.inherit-color {
+  color: inherit !important;
+}
+.no-underline {
+  text-decoration: none !important;
+  &:hover {
+      text-decoration: none !important;
+  }
 }

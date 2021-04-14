@@ -79,7 +79,7 @@ const TeamJSON: ITeamCardProps[] = [
   },
   {
     image: daniel,
-    name: "Daniel Jaffa",
+    name: "Daniel Jaffe",
     designation: "Co-founder & Developer",
     linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
   },

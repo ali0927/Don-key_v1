@@ -11,19 +11,18 @@ const FarmersPage = () => {
       <NavBar variant="default" hideWallet />
       <div className=" pt-5 pb-5">
         <Container>
-          <div className="row">
-            <div className="col">
+          <div className="row justify-content-center">
+            <div className="col-md-9">
               <h1 className="text-center mt-md-3">Farmers</h1>
 
               <form
-                className="newStrategyContent"
+                className="newStrategyContent p-5 rounded-sm shadow-sm"
                 name="newfarmer"
                 method="POST"
                 style={{ background: "#fff" }}
               >
                 <p className="text-center">
-                  You think you are a super star farmer? come and show everyone!
-                  Submit to become an early farmer
+                You think you are a super star farmer? Come and show everyone! Submit to become an early farmer.
                 </p>
                 <input type="hidden" name="form-name" value="newfarmer" />
 
@@ -31,7 +30,7 @@ const FarmersPage = () => {
                   <div className="row justify-content-center">
                     <div className="col-md-6">
                       <p className="text-center font-weight-bold">
-                        Please Enter Your details Below
+                        Please enter your details below
                       </p>
                       <p className="d-none">
                         <input type="text" name="bot-field" />
