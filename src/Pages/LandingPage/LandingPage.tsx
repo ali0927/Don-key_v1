@@ -152,7 +152,7 @@ const LandingPage = () => {
                 </h3>
                 <p className="parasame mt-4">
                   Discover and follow the best yield farmers with just one
-                  click. Historical APY, farming philosophy, risk apatite; You
+                  click. Historical APY, farming philosophy, risk appetite; You
                   can see it all.
                 </p>
                 <div className="position-relative d-inline-block mt-4">
