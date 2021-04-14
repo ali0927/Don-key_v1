@@ -1,49 +1,90 @@
+import { UrlJsonRpcProvider } from "@ethersproject/providers";
 import ButtonComponent from "components/Button/Button";
 import { Layout } from "components/Layout";
+import { useWeb3 } from "don-components";
+import { withWeb3 } from "hoc";
 import { useAxios } from "hooks/useAxios";
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 
-export const FarmerSignupPage = () => {
+export const FarmerSignupPage = withWeb3(() => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
 
   const history = useHistory();
-  const [errorMsg,setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
   const [{ data, error, loading }] = useAxios("/api/v1/farmer");
-  const [{  loading: posting }, executePost] = useAxios(
+  const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v1/farmer" },
     { manual: true }
   );
+  const [posting, setPosting] = useState(false);
 
+  const web3 = useWeb3();
   const handleCreate = async () => {
-    const formData = new FormData();
-    if(!name){
-      return setErrorMsg("Please Enter a Name")
-    }
-    if(!description){
-      return setErrorMsg("Please Enter a Description");
-    }
-    if(!image){
-      return setErrorMsg("Please Provide a Picture");
+    setPosting(true);
+    try {
+      const formData = new FormData();
+      if (!name) {
+        return setErrorMsg("Please Enter a Name");
+      }
+      if (!description) {
+        return setErrorMsg("Please Enter a Description");
+      }
+      if (!image) {
+        return setErrorMsg("Please Provide a Picture");
+      }
+      formData.append("name", name);
+      formData.append("description", description);
+      if (image) {
+        formData.append("picture", image);
+      }
+
+      const poolAddress = await deployContract();
+      formData.append("poolAddress", poolAddress);
+
+      await executePost({ data: formData });
+    } finally {
+      setPosting(false);
     }
 
-    formData.append("name", name);
-    formData.append("description", description);
-    if (image) {
-      formData.append("picture", image);
-    }
-    await executePost({ data: formData });
-    //put deploy pool from new farmer code
     history.push("/dashboard/farmer/me");
   };
+
+  const deployContract = async () => {
+    const POOLJson = await import("../../JsonData/POOL.json");
+    const contract = new web3.eth.Contract(POOLJson.abi as any);
+    const accounts = await web3.eth.getAccounts();
+    let payload = {
+      data: POOLJson.bytecode,
+    };
+    const gasPrice = await web3.eth.getGasPrice();
+    let parameter: any = {
+      from: accounts[0],
+      gas: web3.utils.toHex(8000000),
+      gasPrice: gasPrice,
+    };
+
+    return new Promise<string>((res, rej) => {
+      contract
+        .deploy(payload)
+        .send(parameter, (err, transactionHash) => {
+          console.log("Transaction Hash :", transactionHash);
+        })
+        .on("error", rej)
+        .then((newContractInstance) => {
+          res(newContractInstance.options.address);
+        });
+    });
+  };
+
   useEffect(() => {
-    if(errorMsg){
+    if (errorMsg) {
       setErrorMsg("");
     }
-  }, [name, description, image])
+  }, [name, description, image]);
   const renderContent = () => {
     if (error) {
       return "Some Error Occurred";
@@ -94,7 +135,7 @@ export const FarmerSignupPage = () => {
                 onChange={(e) => setImage((e.target as any).files[0])}
               />
             </Form.Group>
-            {errorMsg && <div className="text-danger mb-3" >{errorMsg}</div>}
+            {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
             <ButtonComponent onClick={handleCreate} className="btnYellow">
               Make Farmer Profile
             </ButtonComponent>
@@ -122,4 +163,4 @@ export const FarmerSignupPage = () => {
       </div>
     </Layout>
   );
-};
+});

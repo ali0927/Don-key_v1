@@ -23,7 +23,7 @@ export class FarmerController {
   static updateFarmer: RequestHandler = async (req, res) => {
     const { id, ...rest } = req.body;
     const { walletAddress } = req.user!;
-
+    
     const results = await Farmers.updateMany({
       data: rest,
       where: { metamask_account: walletAddress },
@@ -38,6 +38,7 @@ export class FarmerController {
     const results = await Farmers.create({
       data: {
         metamask_account: walletAddress,
+        poolAddress: req.body.poolAddress,
         picture: getImageUri(image.filename),
         description: req.body.description,
         name: req.body.name,

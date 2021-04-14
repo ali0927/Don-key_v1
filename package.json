@@ -27,6 +27,7 @@
     "don-builder": "*",
     "don-hooks": "*",
     "don-utils": "*",
+    "don-components": "*",
     "erc-20-abi": "^1.0.0",
     "erc20-contract-js": "^1.3.1",
     "ethereumjs-tx": "^2.1.2",

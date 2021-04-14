@@ -1,6 +1,5 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["createMany"]
 }
 
 datasource db {
@@ -174,6 +173,7 @@ model farmers {
   id               Int     @id @default(autoincrement())
   picture          String  @db.Text
   amount           String? @db.Text
+  poolAddress      String? @db.Text
 }
 
 enum Users_exp_equities {
