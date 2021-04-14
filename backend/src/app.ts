@@ -3,12 +3,12 @@ import morgan from "morgan";
 import cors from "cors";
 import path from "path";
 import { Database } from "./database";
-import { PORT } from "./env";
 import { loginRoutes } from "./routes/loginRoutes";
 import { apiRoutes } from "./routes/apiRoutes";
 import { protocolRoutes } from "./routes/protocolRoutes";
 import { checkAuth } from "./middlewares";
 import "./cron";
+import { PORT } from "./env";
 const app = express();
 
 declare global {

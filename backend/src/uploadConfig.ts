@@ -13,3 +13,17 @@ const storage = multer.diskStorage({
 
 
 export const upload = multer({ storage });
+
+
+const storageDynamic = multer.diskStorage({
+  destination:function (req, file, cb) {
+      cb(null, path.resolve(__dirname, "uploads"))
+    },  
+  filename: function (req, file, cb) {
+      const name = (uuidv4()) + ".png";
+      cb(null,name)
+    }
+})
+
+
+export const iconUpload = multer({ storage: storageDynamic });

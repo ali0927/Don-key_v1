@@ -96,6 +96,9 @@ function NavBar(props: INavBarProps) {
                     <NavbarLink to="/dashboard/farmer/me">
                       My Farmer Page
                       </NavbarLink>
+                    <NavbarLink to="/dashboard/developers">
+                      Developers
+                      </NavbarLink>
                   </>
                 )}
                 {variant === "builder" && (

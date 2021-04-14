@@ -4,8 +4,9 @@ import { NotificationController } from "../controllers/NotificationsController";
 import { ProtocolsController } from "../controllers/ProtocolsController";
 import { StrategiesController } from "../controllers/StrategiesController";
 import { UsersController } from "../controllers/UsersController";
-import { FarmerController } from  "../controllers/FarmerController";
-import { upload } from "../uploadConfig";
+import { FarmerController } from "../controllers/FarmerController";
+import { iconUpload, upload } from "../uploadConfig";
+import {DeveloperController} from "../controllers/DeveloperController";
 
 
 const apiRoutes = Router();
@@ -36,8 +37,8 @@ apiRoutes
 
 apiRoutes.route("/farmer")
     .get(FarmerController.getFarmers)
-    .post(upload.single("picture"),FarmerController.createFarmer)
-    .put(upload.single("picture"),FarmerController.updateFarmer);
+    .post(upload.single("picture"), FarmerController.createFarmer)
+    .put(upload.single("picture"), FarmerController.updateFarmer);
 
 
 apiRoutes
@@ -86,5 +87,13 @@ apiRoutes.delete(
 apiRoutes
     .route("/protocols/:id/categories")
     .put(ProtocolsController.addProtocolToCategories);
+
+
+apiRoutes.route("/cubes")
+    .post(iconUpload.single("picture"), DeveloperController.createCube)
+    .put(DeveloperController.addVote)
+    .get(DeveloperController.getCubes)
+
+
 
 export { apiRoutes };

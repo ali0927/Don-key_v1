@@ -16,6 +16,7 @@ import { lazy, Suspense } from "react";
 import { FarmerSignupPage } from "Pages/FarmerSignupPage/FarmerSignupPage";
 import { FarmerBioPage } from "Pages/FarmerBioPage";
 import { LoadingPage } from "Pages/LoadingPage";
+import { DevelopersPage } from "Pages/DevelopersPage/DevelopersPage";
 
 const Builder = lazy(() => import("../Pages/Builder"));
 
@@ -34,6 +35,11 @@ export default function Routes() {
           exact
           path="/dashboard/farmer/:id"
           children={<FarmerBioPage />}
+        />
+        <ProtectedRoute
+           exact
+           path="/dashboard/developers" 
+           children={<DevelopersPage/>}
         />
         <Route exact path="/strategy" children={<InvestmentPage />} />
         <Route

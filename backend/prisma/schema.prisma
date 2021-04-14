@@ -176,6 +176,28 @@ model farmers {
   poolAddress      String? @db.Text
 }
 
+model developers {
+  id               Int    @id @default(autoincrement())
+  iconname         String @db.VarChar(255)
+  protocol         String @db.VarChar(255)
+  githublink       String @db.VarChar(255)
+  developeraddress String @db.VarChar(255)
+  votes            Int    @default(0)
+}
+
+model farmers_emails {
+  id        Int    @id @default(autoincrement())
+  nickName  String @db.VarChar(255)
+  telegram  String @db.VarChar(255)
+  docKeyDes String @db.VarChar(255)
+}
+
+model developervote {
+  id            Int    @id @default(autoincrement())
+  devcubeid     Int
+  walletaddress String @db.VarChar(255)
+}
+
 enum Users_exp_equities {
   never
   few
