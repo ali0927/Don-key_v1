@@ -35,13 +35,27 @@ export default function Routes() {
         />
         <ProtectedRoute
           exact
-          path="/dashboard/farmer/:id"
-          children={<FarmerBioPage />}
+          path="/dashboard/farmer/me"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <FarmerBioPage />
+            </Suspense>
+          }
         />
         <ProtectedRoute
-           exact
-           path="/dashboard/developers"
-           children={<DevelopersPage/>}
+          exact
+          path="/dashboard/farmer/:id"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <FarmerBioPage />
+            </Suspense>
+          }
+        />
+
+        <ProtectedRoute
+          exact
+          path="/dashboard/developers"
+          children={<DevelopersPage />}
         />
         <ProtectedRoute
           exact

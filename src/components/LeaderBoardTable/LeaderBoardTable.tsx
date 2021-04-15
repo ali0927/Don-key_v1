@@ -2,6 +2,7 @@ import { Loader } from "don-components";
 import { IFarmer } from "interfaces";
 import { useLayoutEffect, useState } from "react";
 import { Table } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
   const [isReady, setIsReady] = useState(false);
@@ -48,10 +49,11 @@ export const LeaderBoardTable = ({
             return (
               <tr key={item.id}>
                 <td>{index + 1}</td>
-                <td className="nodata">{item.name}</td>
+                <td className="nodata">
+                  <Link to={`/dashboard/farmer/${item.id}`}>{item.name}</Link>
+                </td>
                 <td>
                   <span>
-                    {" "}
                     <PoolAmount poolAddress={item.poolAddress} />
                   </span>
                 </td>

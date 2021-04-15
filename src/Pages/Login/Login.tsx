@@ -15,12 +15,10 @@ const Login = () => {
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const {doMetaMaskLogin} = useMetaMaskLogin();
+  const { doMetaMaskLogin } = useMetaMaskLogin();
   const handleMetaMaskLogin = async () => {
-
     await doMetaMaskLogin();
     history.push("/dashboard");
-
   };
 
   useEffect(() => {

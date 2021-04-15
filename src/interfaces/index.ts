@@ -10,6 +10,7 @@ export type IFarmer = {
   name: string;
   poolAddress: string;
 };
+
 export interface IUser {
   walletAddress: string;
   GUID: string;
@@ -39,6 +40,18 @@ export interface IUser {
   };
 }
 
+export interface IFarmerUser {
+  farmer: IFarmerInter;
+}
+
+export interface IFarmerInter {
+  name?: string | null;
+  description?: string | null;
+  poolAddress?: string | null;
+  picture?: string | null;
+  strategies?: [] | null;
+}
+
 export type CallBackorVal<T> = T | ((val: T) => T);
 
 export type API_STATE = {
@@ -59,6 +72,7 @@ export interface IStoreState {
     isLoggedIn: boolean;
   };
   api: API_STATE;
+  farmer: IFarmerInter | null;
 }
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;

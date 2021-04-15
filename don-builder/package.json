@@ -34,7 +34,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "compile": "copyfiles -u 1 src/**/**/*.{html,png,jpg,scss,css,svg} dist && tsc",
-    "compile:watch": "tsc --watch"
+    "compile:watch": "tsc --watch",
+    "compile-mac": "cp -r src/* dist && tsc"
   },
   "eslintConfig": {
     "extends": [
