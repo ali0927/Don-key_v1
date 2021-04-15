@@ -4,3 +4,8 @@ export * from "./UploadIcon";
 export * from "./EraserIcon";
 export * from "./FolderIcon";
 export * from "./LikeIcon";
+export * from "./SmallFolderIcon";
+export * from "./DonKeyIcon";
+export * from "./LargeCloud";
+export * from "./SmallCloud";
+export * from "./SignupBottomBgIcon";

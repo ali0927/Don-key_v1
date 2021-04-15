@@ -4,9 +4,11 @@ import { Layout } from "components/Layout";
 import { useWeb3 } from "don-components";
 import { withWeb3 } from "hoc";
 import { useAxios } from "hooks/useAxios";
+import { DonKeyIcon, LargeCloud, SignupBottomBgIcon, SmallCloud, SmallFolderIcon } from "icons";
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
+import "./FarmerSignupPage.scss";
 
 export const FarmerSignupPage = withWeb3(() => {
   const [name, setName] = useState("");
@@ -15,9 +17,9 @@ export const FarmerSignupPage = withWeb3(() => {
 
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState("");
-  const [{ data, error, loading }] = useAxios("/api/v1/farmer", {useCache: false});
-  const [{}, executePost] = useAxios(
-    { method: "PUT", url: "/api/v1/farmer" },
+  const [{ data, error, loading }] = useAxios("/api/v1/farmer");
+  const [{ }, executePost] = useAxios(
+    { method: "POST", url: "/api/v1/farmer" },
     { manual: true }
   );
   const [posting, setPosting] = useState(false);
@@ -106,62 +108,101 @@ export const FarmerSignupPage = withWeb3(() => {
     return (
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-md-6">
-            <p className="text-center font-weight-bold">
-              Please Enter Some Details . To get Started as a Farmer
+          <div className="col-md-12">
+            <p className="text-left font-weight-bold root-heading mb-4">
+              Please Enter Some Details.  To get Started as a Farmer
             </p>
+
             <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
+              <Form.Label className="signup-field-label">Name</Form.Label>
               <Form.Control
+                className="signup-field signup-field-Name"
                 onChange={(e) => setName(e.target.value)}
                 value={name}
-                placeholder="Name"
+                placeholder="Don - Key Name"
               />
             </Form.Group>
             <Form.Group controlId="description">
-              <Form.Label>Description</Form.Label>
+              <Form.Label className="signup-field-label">Description</Form.Label>
               <Form.Control
                 as="textarea"
+                className="signup-field signup-field-description p-3"
                 rows={3}
                 onChange={(e) => setDescription(e.target.value)}
                 value={description}
-                placeholder="Description"
+                placeholder="Don - Key Description"
               />
             </Form.Group>
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
-              <Form.Label>Picture</Form.Label>
-              <Form.Control
+              <Form.Label className="signup-field-label">Picture</Form.Label>
+
+              <div className="signup-root d-flex flex-wrap align-items-center mb-5">
+                <div className="signup-upload-btn d-flex align-items-center justify-content-center mr-3">
+                  <SmallFolderIcon className="mr-2" />
+                  <div className="choose-field-label">Choose File</div>
+                  <input type="file" name="myfile" required onChange={(e) => setImage((e.target as any).files[0])} />
+                </div>
+                <div className="choose-field-label">{image ? image.name : "No file chosen"}</div>
+              </div>
+
+
+
+              {/* <Form.Control
                 type="file"
                 onChange={(e) => setImage((e.target as any).files[0])}
-              />
+              /> */}
             </Form.Group>
             {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
-            <ButtonComponent onClick={handleCreate} className="btnYellow">
+            <ButtonComponent onClick={handleCreate} className="btnYellow btnMakeProfile">
               Make Farmer Profile
             </ButtonComponent>
+
+            <DonKeyIcon className="donkeyIcon" />
           </div>
+
         </div>
+
       </div>
     );
   };
 
   return (
-    <Layout variant="loggedin">
-      <div className=" pt-5 pb-5">
-        <Container>
-          <div className="row">
-            <div className="col">
-              <form
-                className="newStrategyContent"
-                style={{ background: "#fff" }}
-              >
-                {renderContent()}
-              </form>
-            </div>
+    <>
+      <Layout variant="loggedin">
+        <div className="position-relative overflow-hidden">
+          <div className=" pt-5 pb-5 position-relative containerRoot  mb-5">
+            <LargeCloud className="position-absolute leftCloud" />
+            <LargeCloud className="position-absolute rightCloud" />
+
+            <SmallCloud className="position-absolute smallLeftCloud" />
+            <SmallCloud className="position-absolute smallRightCloud" />
+
+            <Container className="position-relative">
+
+
+              <div className="row">
+                <div className="col">
+                  <form
+                    className="newStrategyContent newStrategyContentOverride"
+                    style={{ background: "#fff" }}
+                  >
+                    {renderContent()}
+
+                  </form>
+                </div>
+              </div>
+
+            </Container>
+
           </div>
-        </Container>
-      </div>
-    </Layout>
+          <div className="d-flex justify-content-center">
+            <SignupBottomBgIcon className="signup-bottom-icon" />
+          </div>
+
+        </div>
+      </Layout>
+
+    </>
   );
 });

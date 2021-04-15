@@ -1,0 +1,144 @@
+@import "../../../public/assets/scss/variables.scss";
+
+.newStrategyContentOverride {
+    max-width: 437px;
+    margin: 0 auto;
+}
+
+.root-heading {
+    max-width: 253px;
+    font-family:Roboto;
+    font-style: normal;
+    font-size: 20px;
+    color: #222222;
+}
+
+.signup-field-label {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 19px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    text-transform: capitalize;
+    color: #232323;
+}
+
+.choose-field-label {
+    font-family: Roboto;
+    font-size: 13px; 
+    font-style: normal;
+    font-weight: 400;
+    line-height: 15px;
+    letter-spacing: 0.02em;
+}
+
+.signup-field {
+    border: 1px solid #848484 !important;
+    border-radius: 5px !important;
+    font-family: Roboto;
+}
+
+.signup-field-Name {
+    height: 50px !important;
+}
+
+.signup-field-description {
+    height: 127px !important;
+}
+
+
+.signup-root {
+    position: relative;
+    overflow: hidden;
+}
+
+
+.signup-upload-btn {
+   
+    background: linear-gradient(0deg, #F2F4F7 0%, #F0F2F5 48.04%, #FFFFFF 100%);
+    border: 1px solid #E5E6EA;
+    box-sizing: border-box;
+    min-width: 130px;
+    height: 33px;
+    box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
+    border-radius: 4px;
+   
+
+  }
+
+  .signup-upload-btn p{
+     font-size: 15px;
+  } 
+  
+
+  .signup-upload-btn input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    height: 33px;
+    width: 100%;
+  }
+
+
+  .btnMakeProfile {
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: normal !important;
+    color: #222222 !important;
+    /* min-width: 227px; */
+    padding: 34px;
+  }
+
+  .donkeyIcon {
+    position: absolute;
+    bottom: 0px;
+    right: -45px;
+  }
+
+  .leftCloud {
+    left: 10%;
+  
+    @media  (max-width: 992px) { 
+        left: 0;
+     }
+  }
+
+
+  .rightCloud {
+      right: 10%;
+      @media (max-width: 992px) { 
+        right: 0;
+     }
+  }
+
+  .smallLeftCloud {
+    top: 23%;
+    left: 21%;
+    @media (max-width: 992px) { 
+        left: 3%;
+     }
+  }
+
+  .smallRightCloud {
+    top: 23%;
+    right: 21%;
+    @media (max-width: 992px) { 
+        right: 3%;
+     }
+  }
+
+
+  .signup-bottom-icon {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: -19px;
+  }
+
+  .containerRoot {
+      z-index: 1;
+  }
