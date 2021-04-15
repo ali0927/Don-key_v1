@@ -1,0 +1,71 @@
+.invest_card {
+  background: #000;
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 4px;
+}
+.invest_card_btn {
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+  border: 0;
+  font-weight: 700;
+  background-color: #ffde61;
+  &:disabled {
+    background: #474747;
+    color: #848484;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+
+.head_wrapper {
+  margin-bottom: 11px;
+}
+
+.description_wrap {
+  padding-bottom: 87px;
+}
+
+.table_wrap {
+  padding-top: 62px;
+  padding-bottom: 100px;
+}
+
+.top_back_wrap {
+  margin-bottom: 37px;
+  display: flex;
+  align-items: center;
+  svg {
+    width: 30px;
+    height: 30px;
+  }
+  span {
+    margin-left: 11px;
+    font-weight: normal;
+    font-size: 20px;
+    line-height: 23px;
+    color: #222222;
+  }
+}
+.button_wrap_outline {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  line-height: 23px;
+  color: #222222;
+  display: flex;
+  align-items: center;
+  &.btn {
+    svg {
+      margin-right: 11px;
+    }
+  }
+  &:hover {
+    text-decoration: underline;
+    background: transparent;
+    color: #222222;
+  }
+}

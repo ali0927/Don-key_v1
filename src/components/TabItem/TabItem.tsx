@@ -8,7 +8,7 @@ export const TabItem = ({
     active,
     onClick,
 }: {
-    icon: any;
+    icon: any | null;
     text: string;
     active?: boolean;
     onClick: () => void;

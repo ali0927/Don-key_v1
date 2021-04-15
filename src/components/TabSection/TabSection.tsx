@@ -6,7 +6,7 @@ import {
 } from "react-bootstrap";
 import { TabItem } from "../TabItem/TabItem";
 
-export const TabSection = ({tabs}: {tabs: {text: string; icon: React.ReactElement; comp: any }[]}) => {
+export const TabSection = ({tabs}: {tabs: {text: string; icon: React.ReactElement | null; comp: any }[]}) => {
     const [selectedTab, setSelectedTab] = useState<string>(tabs[0].text);
 
     return (

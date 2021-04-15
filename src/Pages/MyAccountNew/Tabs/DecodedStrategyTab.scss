@@ -1,0 +1,34 @@
+.button_wrap {
+  background: black !important;
+  border: black !important;
+  width: 159px;
+  height: 40px;
+  font-size: 20px;
+  line-height: 23px;
+  text-align: center;
+}
+
+.head_right_wrap {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+.share_wrap {
+  margin-right: 40px;
+
+  svg {
+    width: 23px;
+    height: 23px;
+  }
+  span {
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    padding-left: 7px;
+  }
+}
+
+.tab_head_wrap {
+  width: 50px;
+}

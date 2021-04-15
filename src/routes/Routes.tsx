@@ -19,6 +19,7 @@ import { LoadingPage } from "Pages/LoadingPage";
 import { DevelopersPage } from "Pages/DevelopersPage/DevelopersPage";
 
 const Builder = lazy(() => import("../Pages/Builder"));
+const DecodedStrategyPage = lazy(() => import("../Pages/DecodedStrategyPage"));
 
 export default function Routes() {
   return (
@@ -52,6 +53,15 @@ export default function Routes() {
           children={
             <Suspense fallback={<LoadingPage />}>
               <Builder />
+            </Suspense>
+          }
+        />
+        <ProtectedRoute
+          exact
+          path="/dashboard/decoded-strategy/:strategyaddress"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <DecodedStrategyPage />
             </Suspense>
           }
         />
