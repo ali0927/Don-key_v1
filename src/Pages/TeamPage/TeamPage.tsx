@@ -68,26 +68,26 @@ const TeamJSON: ITeamCardProps[] = [
     image: yon,
     name: "Yonatan Martsiano",
     designation: "Co-founder & Developer",
-    linkedLink: "https://www.linkedin.com/in/yonatan-martsiano-6376a314a/",
+    //linkedLink: "https://www.linkedin.com/in/yonatan-martsiano-6376a314a/",
   },
 
   {
     image: yanir,
     name: "Yanir Goldenberg",
     designation: "Co-founder",
-    linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
+    //linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
   },
   {
     image: daniel,
     name: "Daniel Jaffe",
     designation: "Co-founder & Developer",
-    linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
+    //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
   },
   {
     image: alon,
     name: "Alon Hershberg",
     designation: "Advisor",
-    linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
+   // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
   },
 ];
 
