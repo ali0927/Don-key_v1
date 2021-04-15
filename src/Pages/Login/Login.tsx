@@ -17,10 +17,10 @@ const Login = () => {
   const dispatch = useDispatch();
   const {doMetaMaskLogin} = useMetaMaskLogin();
   const handleMetaMaskLogin = async () => {
-    
+
     await doMetaMaskLogin();
     history.push("/dashboard");
-  
+
   };
 
   useEffect(() => {

@@ -1,0 +1,189 @@
+@import "../../scss/styles.scss";
+
+.investment_header_container  {
+  .row {
+    justify-content: space-between;
+  }
+}
+
+.invest_card {
+  background: #171717;
+  border-radius: 5px;
+
+  &_title {
+    height: 21px;
+    font-size: 20px;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  &_amount {
+    height: 47px;
+    font-family: Roboto;
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 47px;
+    text-align: center;
+  }
+
+  &_btn {
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    border: 0;
+    font-weight: 700;
+    background-color: #ffde61;
+
+    &:disabled {
+      background: #474747;
+      color: #848484;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.investment_table_btn {
+  display: flex;
+  justify-content: center;
+}
+
+.bannerrightCol {
+  background: #fff;
+  border-radius: 5px;
+  padding: 27px 22px 25px;
+  margin: 17px 0 0;
+}
+
+.tablebg {
+  & td.bold {
+    font-weight: 500 !important;
+    color: $colorfullBlack !important;
+    text-decoration: underline;
+  }
+}
+
+.firstHeading {
+  font-weight: 800;
+  font-size: 42px;
+  line-height: 44px;
+  color: #070602;
+
+  &_container {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.description {
+  &_title {
+    font-family: Roboto;
+    font-weight: 900;
+    font-size: 20px;
+    line-height: 23px;
+    margin-bottom: 10px;
+  }
+
+  &_content {
+    width: 517px;
+    font-family: Roboto;
+    font-size: 15px;
+    line-height: 135%;
+    opacity: 0.8;
+    box-sizing: border-box;
+    color: #222222;
+  }
+}
+
+.header_separator {
+  margin-top: 40px;
+  opacity: 0.5;
+  border: 1px solid #c19900;
+}
+
+.detail {
+  &_box {
+    font-family: Roboto;
+    font-weight: bold;
+    color: #222222;
+    padding: 20px;
+
+    &_header {
+      height: 26px;
+      font-size: 20px;
+      line-height: 26px;
+      opacity: 0.8;
+    }
+
+    &_content {
+      width: 273px;
+      height: 18px;
+      font-size: 35px;
+      line-height: 18px;
+      letter-spacing: -0.392308px;
+      margin-top: 30px;
+    }
+  }
+
+  &_container {
+    padding: 0 0 0 5%;
+  }
+}
+
+.investment_table_btn .btn, .investment_table_btn .btn:active {
+  opacity: 0.3;
+  border: 1px solid #222222;
+  border-radius: 5px;
+  color: #222222;
+  font-family: Roboto;
+  background: transparent;
+}
+
+.investment_table_btn .btn:hover, .investment_table_btn .btn:active {
+  border: 1px solid #222222;
+  border-radius: 5px;
+  color: #222222;
+  background: transparent;
+  opacity: 1;
+}
+
+@media screen and (max-width: 991px) {
+  .firstLetter {
+    margin-bottom: 10px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .description {
+    &_content {
+      width: 100%;
+    }
+  }
+  .detail_box {
+    &_content {
+      width: 100%;
+      font-size: 28px;
+      margin-top: 10px;
+    }
+  }
+  .firstHeading {
+    &_container {
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      width: 100%;
+    }
+  }
+  .investment_header_container {
+    .row {
+      justify-content: center;
+
+      &.detail_container {
+        justify-content: space-between;
+      }
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { ProtectedRoute } from "components/ProtectedRoute";
 import { MyAccountNew } from "Pages/MyAccountNew/MyAccountNew";
 import { DashboardPage } from "Pages/DashboardPage/DashboardPage";
 import { InvestmentPage } from "Pages/InvestmentPage/InvestmentPage";
+import { InvestmentsPage } from "Pages/InvestmentsPage/InvestmentsPage";
 import TeamPage from "Pages/TeamPage/TeamPage";
 import { FarmerStrategyPage } from "Pages/FarmerStrategyPage/FarmerStrategyPage";
 import { lazy, Suspense } from "react";
@@ -39,8 +40,13 @@ export default function Routes() {
         />
         <ProtectedRoute
            exact
-           path="/dashboard/developers" 
+           path="/dashboard/developers"
            children={<DevelopersPage/>}
+        />
+        <ProtectedRoute
+          exact
+          path="/dashboard/investment"
+          children={<InvestmentsPage />}
         />
         <Route exact path="/strategy" children={<InvestmentPage />} />
         <Route

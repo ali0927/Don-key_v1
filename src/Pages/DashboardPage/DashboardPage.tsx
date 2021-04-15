@@ -11,9 +11,6 @@ import { leaderBoardData } from "../../JsonData/leaderboard";
 export const DashboardPage = () => {
   const history = useHistory();
 
-
-
-
   return (
     <div className={clsx("bgColor")}>
       <NavBar variant="loggedin" />
