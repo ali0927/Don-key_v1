@@ -70,7 +70,7 @@ const TeamJSON: ITeamCardProps[] = [
     designation: "Co-founder & Developer",
     linkedLink: "https://www.linkedin.com/in/yonatan-martsiano-6376a314a/",
   },
- 
+
   {
     image: yanir,
     name: "Yanir Goldenberg",
@@ -107,6 +107,11 @@ const TeamPage = () => {
               return <TeamCard key={team.name} {...team} />;
             })}
           </div>
+          <p>
+            No pre-sales. Team member will never sell tokens directly. All token
+            sales and launches will be announced through our official Telegram
+            and Twitter account.
+          </p>
         </Container>
       </div>
       {/*  footer */}
