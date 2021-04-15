@@ -17,7 +17,7 @@ export const FarmerSignupPage = withWeb3(() => {
   const [errorMsg, setErrorMsg] = useState("");
   const [{ data, error, loading }] = useAxios("/api/v1/farmer");
   const [{}, executePost] = useAxios(
-    { method: "POST", url: "/api/v1/farmer" },
+    { method: "PUT", url: "/api/v1/farmer" },
     { manual: true }
   );
   const [posting, setPosting] = useState(false);
@@ -54,30 +54,32 @@ export const FarmerSignupPage = withWeb3(() => {
   };
 
   const deployContract = async () => {
-    const POOLJson = await import("../../JsonData/Pool.json");
-    const contract = new web3.eth.Contract(POOLJson.abi as any);
-    const accounts = await web3.eth.getAccounts();
-    let payload = {
-      data: POOLJson.bytecode,
-    };
-    const gasPrice = await web3.eth.getGasPrice();
-    let parameter: any = {
-      from: accounts[0],
-      gas: web3.utils.toHex(8000000),
-      gasPrice: gasPrice,
-    };
+    return "0xskcakcmslasssscs"
+    // const POOLJson = await import("../../JsonData/Pool.json");
+    // const contract = new web3.eth.Contract(POOLJson.abi as any);
+    // const accounts = await web3.eth.getAccounts();
+    // const hext = web3.utils.asciiToHex(name);
+    // let payload = {
+    //   data: POOLJson.bytecode,
+    // };
+    // const gasPrice = await web3.eth.getGasPrice();
+    // let parameter: any = {
+    //   from: accounts[0],
+    //   gas: web3.utils.toHex(8000000),
+    //   gasPrice: gasPrice,
+    // };
 
-    return new Promise<string>((res, rej) => {
-      contract
-        .deploy(payload)
-        .send(parameter, (err, transactionHash) => {
-          console.log("Transaction Hash :", transactionHash);
-        })
-        .on("error", rej)
-        .then((newContractInstance) => {
-          res(newContractInstance.options.address);
-        });
-    });
+    // return new Promise<string>((res, rej) => {
+    //   contract
+    //     .deploy(payload)
+    //     .send(parameter, (err, transactionHash) => {
+    //       console.log("Transaction Hash :", transactionHash);
+    //     })
+    //     .on("error", rej)
+    //     .then((newContractInstance) => {
+    //       res(newContractInstance.options.address);
+    //     });
+    // });
   };
 
   useEffect(() => {
@@ -99,7 +101,7 @@ export const FarmerSignupPage = withWeb3(() => {
         </div>
       );
     }
-    if (data.data) {
+    if (data.data.poolAddress) {
       return "Already Signed Up";
     }
     return (

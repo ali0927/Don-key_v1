@@ -13,7 +13,6 @@ import { Logo } from "./Logo";
 import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 
 const shortenAddress = (val: any) => {
@@ -104,8 +103,8 @@ function NavBar(props: INavBarProps) {
                 )}
                 {variant === "loggedin" && (
                   <>
-                    <NavbarLink to="/">Main</NavbarLink>
-                    <NavbarLink to="/dashboard">My Investments</NavbarLink>
+                    <NavbarLink to="/dashboard">Main</NavbarLink>
+                    <NavbarLink to="/dashboard/investment">My Investments</NavbarLink>
                     <NavbarLink to="/dashboard/farmer/me">
                       My Farmer Page
                     </NavbarLink>
