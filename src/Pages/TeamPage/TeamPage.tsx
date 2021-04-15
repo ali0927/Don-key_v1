@@ -107,7 +107,7 @@ const TeamPage = () => {
               return <TeamCard key={team.name} {...team} />;
             })}
           </div>
-          <p>
+          <p className="text-center" style={{fontSize: 20}}>
             No pre-sales. Team member will never sell tokens directly. All token
             sales and launches will be announced through our official Telegram
             and Twitter account.
