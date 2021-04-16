@@ -1,14 +1,13 @@
 import { SetButton } from "../ActionUI/SetButton";
 import { usePanel } from "../Panel/Panel";
-import { IProtocol } from "../../interfaces";
-import { ICurrencyWithAddress } from "don-components";
+// import { IProtocol } from "../../interfaces";
+import { ICurrencyWithAddress,InputOutputPure } from "don-components";
 import React, { useEffect, useState } from "react";
 import { api } from "don-utils";
-import { InputOutputPure } from "./InputOutput";
 
 export const UniswapSwapToken = ({}: {
-  lastProtocol: IProtocol;
-  protocol: IProtocol;
+  // lastProtocol: IProtocol;
+  // protocol: IProtocol;
 }) => {
   const [currencies, setCurrencies] = useState<ICurrencyWithAddress[]>([]);
   const [

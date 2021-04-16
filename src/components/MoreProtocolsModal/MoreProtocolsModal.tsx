@@ -91,7 +91,7 @@ export const MoreProtocolsModal = ({
                     <div className="pl-3 pr-3 available-items">
                       <Row className="mt-4">
                         {protocols.map((item) => {
-                          if (item.showOnToolbar === "1") {
+                          if (item.showOnToolbar) {
                             return (
                               <Col lg={4} md={6}>
                                 <div className="protocolContent mb-0">

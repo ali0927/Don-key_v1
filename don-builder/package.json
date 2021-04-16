@@ -9,7 +9,8 @@
     "mxgraph": "^4.2.2",
     "don-utils": "*",
     "don-hooks": "*",
-    "don-components": "*"
+    "don-components": "*",
+    "react-flow-renderer": "^9.5.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -19,6 +20,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "typescript": "^4.1.2",
+    
     "react-scripts": "4.0.3",
     "@types/react-dom": "^17.0.0",
     "copyfiles": "^2.4.1",

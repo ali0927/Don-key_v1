@@ -2,40 +2,21 @@
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { NavBar } from "../../components/Navbar/NavBar";
-import "./main.scss";
-import {  uuidv4 } from "don-utils";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { apiRequest } from "actions/apiActions";
 import { AxiosResponse } from "axios";
-import { IProtocolFromAPI, withYFITokens} from "don-builder";
 import { getQueryParam } from "helpers";
-import { Builder as DonBuilder} from "don-builder";
+import { Builder as DonBuilder, ProtocolNode } from "don-builder";
+import { Elements } from "react-flow-renderer";
+import { pancakeConfig } from "don-pancakeswap";
+import { donkeyConfig } from "don-donkey-token";
+import "./main.scss";
+
+const protocols = [donkeyConfig, pancakeConfig];
 
 const Builder = () => {
-  const [panel, setPanel] = useState(null);
-
-  const [protocols, setProtocols] = useState<IProtocolFromAPI[]>([]);
-  const closePanel = () => setPanel(null);
-
   const history = useHistory();
-
-
-  const [strategy, setStrategy] = useState({
-    protocolCells: [
-      {
-        protocolId: uuidv4(),
-        protocol: "BY",
-        lastProtocol: null,
-        x: 200,
-        y: 150,
-        w: 110,
-        h: 110,
-        vertex: null,
-      },
-    ],
-    actionCells: [],
-  });
 
   const dispatch = useDispatch();
 
@@ -65,23 +46,20 @@ const Builder = () => {
       );
     });
   };
-  const getProtocols = () => {
-    return new Promise<AxiosResponse>((res, rej) => {
-      dispatch(
-        apiRequest({
-          method: "GET",
-          endpoint: "/api/v1/protocols",
-          onDone: res,
-          onFail: rej,
-        })
-      );
-    });
-  };
+
+  const [strategy, setStrategy] = useState<Elements>([
+    {
+      id: "1",
+      type: ProtocolNode.name,
+      position: { x: 300, y: 160 },
+      data: { imageUrl: donkeyConfig.vertextImage, name: donkeyConfig.name },
+    },
+  ]);
 
   useEffect(() => {
     const strategy = getQueryParam("id");
     const request = strategy ? getStrategy() : createStrategy();
-    Promise.all([request, getProtocols()]).then(([strategy, protocol]) => {
+    Promise.all([request]).then(([strategy, protocol]) => {
       const json = strategy.data.data.json;
       const strategyid = strategy.data.data.id;
       history.replace("/strategy/build?id=" + strategyid);
@@ -89,37 +67,19 @@ const Builder = () => {
         const data = json ? JSON.parse(json) : old;
         return { ...data, id: strategyid };
       });
-      setProtocols(protocol.data.data);
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-
-
-
-
-
-  const deployStrategy = (addresses: string[],data: any[]) => {
-    for (var i=0; i < addresses.length;i++){
-      
-    }
-  }
-
-  const enableStrategy = () => {
-
-  }
-
   return (
     <>
-  
       <div className={clsx(`page-wrapper`)}>
         <NavBar variant="builder" />
-        <DonBuilder protocols={protocols} strategy={strategy}  />
+        <DonBuilder protocols={protocols} strategy={strategy} />
       </div>
     </>
   );
 };
 
-export default withYFITokens(Builder);
+export default Builder;

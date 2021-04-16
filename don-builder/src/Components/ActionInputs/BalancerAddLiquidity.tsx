@@ -1,6 +1,6 @@
 import { useYFITokens } from "../YFITokensProvider";
-import { CryptoCurrencyInput } from "don-components";
-import { DownArrow } from "./DownArrow";
+import { CryptoCurrencyInput,DownArrow  } from "don-components";
+
 import { MTAIcon } from "./MTAIcon";
 import { MUSDIcon } from "./MUSDIcon";
 

@@ -3,7 +3,7 @@ import React from "react";
 
 
 
-export const ProtocolBar = ({  children }) => {
+export const ProtocolBar: React.FC = ({  children }) => {
   return (
     <div className="protocol-list-wrapper">
       <ul className="protocol-list" id="protocolsList">

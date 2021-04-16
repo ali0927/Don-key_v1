@@ -2,21 +2,15 @@
 import clsx from "clsx";
 import React from "react";
 import { useToggle } from "don-hooks";
-import Panel from "../Panel/Panel";
-function drag(ev) {
-  ev.dataTransfer.setData("protocol", ev.target.id);
+function drag(ev: React.DragEvent, protocol: string) {
+  ev.dataTransfer.setData("protocol", protocol);
+  ev.dataTransfer.effectAllowed = 'move';
 }
-
 const Protocol = ({
   name,
-  onClose,
-  openedPanel,
   showOnToolbar,
-  description,
-  website,
-  icon
-}) => {
-
+  icon,
+}: {name: string; showOnToolbar?: boolean; icon: string}) => {
   const [dragging, enableDragging, disableDragging] = useToggle(false);
   if (!showOnToolbar) {
     return null;
@@ -25,24 +19,15 @@ const Protocol = ({
     <li className={clsx("protocol-list-item", { dragging })}>
       <img
         src={icon}
-        style={{maxWidth: 58}}
+        style={{ maxWidth: 58 }}
         draggable
-        id={name}
         onDragStart={(e) => {
-          drag(e);
+          drag(e, name);
           enableDragging();
         }}
         onMouseEnter={disableDragging}
       />
       <div className="protocol-list-item-tooltip">{name}</div>
-      <Panel
-        icon={icon}
-        isOpen={openedPanel === name}
-        onClose={onClose}
-        title={name}
-        url={website}
-        desc={description}
-      />
     </li>
   );
 };
