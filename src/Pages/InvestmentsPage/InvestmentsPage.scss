@@ -1,50 +1,7 @@
 @import "../../scss/styles.scss";
 
-.investment_header_container  {
-  .row {
-    justify-content: space-between;
-  }
-}
 
-.invest_card {
-  background: #171717;
-  border-radius: 5px;
 
-  &_title {
-    height: 21px;
-    font-size: 20px;
-    line-height: 20px;
-    text-align: center;
-  }
-
-  &_amount {
-    height: 47px;
-    font-family: Roboto;
-    font-weight: 500;
-    font-size: 40px;
-    line-height: 47px;
-    text-align: center;
-  }
-
-  &_btn {
-    padding: 0.5rem;
-    width: 100%;
-    font-size: 14px;
-    text-align: center;
-    border: 0;
-    font-weight: 700;
-    background-color: #ffde61;
-
-    &:disabled {
-      background: #474747;
-      color: #848484;
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
-}
 
 .investment_table_btn {
   display: flex;
@@ -66,7 +23,12 @@
   }
 }
 
+.investment-heading {
+  font-family: Roboto !important;
+}
+
 .firstHeading {
+  font-family: Roboto;
   font-weight: 800;
   font-size: 42px;
   line-height: 44px;
@@ -88,7 +50,6 @@
   }
 
   &_content {
-    width: 517px;
     font-family: Roboto;
     font-size: 15px;
     line-height: 135%;
@@ -186,4 +147,21 @@
       }
     }
   }
+}
+
+
+.farmer-image {
+  height: 120px !important;
+  width: 120px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+// .image-col {
+//   max-width: "14% !important";
+// }
+
+
+.description-width {
+  max-width: 517px;
 }

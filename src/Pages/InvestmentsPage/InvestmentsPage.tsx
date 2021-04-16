@@ -13,56 +13,17 @@ import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
 import "./InvestmentsPage.scss";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
-import { getWeb3 } from "don-utils";
-import { InvestmentListData } from "./dummyInvestmentData";
+import { getWeb3, shortenAddress } from "don-utils";
+import { TotalInvestedMoney } from "./TotalInvestedMoney";
+import { useAxios } from "hooks/useAxios";
+import { IFarmer } from "./interfaces";
+import { DetailsTable } from "./DetailsTable";
+import { IMyInvestments } from "./interfaces/IMyInvestments";
+import _ from "lodash";
+import { ShowMoreContent } from "components/ShowmoreContent";
+import { useNotification } from "components/Notification";
 
-const FirstLetter = () => {
-  const ref = useRef<HTMLDivElement | null>(null);
-  return (
-    <div className="firstLetter">
-      <div ref={ref}>
-        <div>
-          <img src="/assets/images/investment.png" alt={"investment"} />
-        </div>
-      </div>
-    </div>
-  );
-};
 
-const DetailTable = () => {
-  return (
-    <>
-      <Row className="detail_container">
-        <div className="detail_box">
-          <div className="detail_box_header">Pool Address</div>
-          <div className="detail_box_content">7777@gmail.com</div>
-        </div>
-        <div className="detail_box">
-          <div className="detail_box_header">Amount In Pool</div>
-          <div className="detail_box_content">$907 000.45</div>
-        </div>
-        <div className="detail_box">
-          <div className="detail_box_header">Tokin Don - key</div>
-          <div className="detail_box_content">1 580</div>
-        </div>
-      </Row>
-    </>
-  );
-};
-
-const InvestCard = ({ balance }: { balance: string | number }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div className="invest_card">
-      <div className="invest_card_title">Total Invested Money</div>
-      <div className="invest_card_amount">140 000$</div>
-      {isOpen && (
-        <InvestmentPopup balance={balance} onClose={() => setIsOpen(false)} />
-      )}
-    </div>
-  );
-};
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
@@ -71,9 +32,7 @@ async function fetchBalance() {
   const accounts = await web3.eth.getAccounts();
 
   const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
-  console.log(WBNB.methods);
   const balance = await WBNB.methods.gettInvested().call();
-  console.log(balance);
   // var fBalance = parseFloat(
   //   parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
   // );
@@ -86,6 +45,33 @@ export const InvestmentsPage = () => {
 
   const [isReady, setIsReady] = useState(false);
 
+  const [{ data }] = useAxios(
+    { method: "GET", url: "/api/v1/farmer" },
+  );
+
+  const [{ data: farmesInvestmentData },] = useAxios(
+    { method: "GET", url: "/api/v1/farmerinvestments" },
+    { useCache: false }
+  );
+
+  const [{ }, executeDelete] = useAxios(
+    { method: "DELETE", url: "/api/v1/farmerinvestments" },
+    { manual: true }
+  );
+
+
+  const farmer: IFarmer = data ? { ...data.data } : {
+    name: "",
+    description: "",
+    picture: "",
+    amountInPool: "907000.45",
+    poolAddress: "",
+  }
+
+  const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
+
+  const { showNotification } = useNotification();
+
   useEffect(() => {
     (async () => {
       const balance = await fetchBalance();
@@ -95,6 +81,50 @@ export const InvestmentsPage = () => {
     })();
   }, []);
 
+
+  useEffect(() => {
+    if (farmesInvestmentData) {
+      setMyInvestments(farmesInvestmentData.data)
+    }
+  }, [farmesInvestmentData]);
+
+  const handleWithDraw = (farmerName: string, poolAddress: string) => async () => {
+    const updatedList = myInvestments.filter(x => x.poolAddress !== poolAddress);
+    setMyInvestments(updatedList);
+    try {
+      await executeDelete({
+        data: {
+          poolAddress: poolAddress
+        }
+      });
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
+          </>
+        )
+      })
+    }
+    catch (err) {
+      let errorMessage =  "Could not withdraw Money. An error occurred";
+      if(err && err.response && err.response.status === 404 ){
+        errorMessage =  "You have already withdraw form this pull or not invested into this pool.";
+      }
+
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{errorMessage}</p>
+          </>
+        )
+      })
+    }
+
+  }
+
+
+
+
   return (
     <div className="bgColor investment_header_container">
       <NavBar variant="loggedin" />
@@ -102,20 +132,23 @@ export const InvestmentsPage = () => {
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-              <FirstLetter />
-              <div className="firstHeading_container">
-                <div className="firstHeading mb-3">Guttastemning</div>
+
+              <div className="firstLetter image-col mr-4">
+                <img className="img-fluid farmer-image" src={"http://localhost:5000/uploads/media/0x34b2a58050e6c9a5c20b808f9827bc261b989b71.png"} alt={"investment"} />
+              </div>
+
+              <div className="firstHeading_container col-lg-6 mr-4">
+                <div className="firstHeading investment-heading mb-3">{farmer.name}</div>
                 <span className="description_title">Description</span>
-                <span className="description_content">
-                  We will run 2 main strategies:1) a long and short algo on BTC,
-                  w/ a Sortino of 5.5 (will post new backtest chart shortly, but
-                  it performs better...
+                <span className="description_content description-width">
+                  <ShowMoreContent content={farmer.description} length={140} />
                 </span>
               </div>
-              <InvestCard balance={balance} />
+
+              <TotalInvestedMoney className="col-lg-4" balance={balance} />
             </Row>
-            <div className="header_separator"/>
-            <DetailTable />
+            <div className="header_separator" />
+            <DetailsTable farmer={farmer} />
           </Container>
         </div>
       </section>
@@ -128,34 +161,33 @@ export const InvestmentsPage = () => {
                 <thead>
                   <tr>
                     <th>SERIAL NO</th>
-                    <th>NAME OF STRATEGY</th>
-                    <th>WBNB INVESTED</th>
+                    <th>NAME OF FARMER</th>
+                    <th>BUSD INVESTED</th>
                     <th>TOTAL PROFIT</th>
                     <th>WITHDRAW WBNB</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {InvestmentListData.length > 0 &&
-                    InvestmentListData.map((item, index) => {
-                      return (
-                        <>
-                          <tr key={index}>
-                            <td>{item.serialNo}</td>
-                            <td className="bold">{item.nameOfStrategy}</td>
-                            <td>{item.wbnb}</td>
-                            <td className="bold">{item.totalProfit}</td>
-                            <td className="investment_table_btn">
-                              <Button
-                                variant="outline-secondary"
-                                onClick={() => {}}
-                              >
-                                Withdraw
+                  {myInvestments.map((investment, index) => {
+                    return (
+                      <>
+                        <tr key={index}>
+                          <td>A25382</td>
+                          <td className="bold">{investment.name}</td>
+                          <td>$258 000.50</td>
+                          <td className="bold">$876 200.50</td>
+                          <td className="investment_table_btn">
+                            <Button
+                              variant="outline-secondary"
+                              onClick={handleWithDraw(investment.name, investment.poolAddress)}
+                            >
+                              Withdraw
                               </Button>
-                            </td>
-                          </tr>
-                        </>
-                      );
-                    })}
+                          </td>
+                        </tr>
+                      </>
+                    );
+                  })}
                 </tbody>
               </Table>
               {/* <div className="mt-4 pagePosition">

@@ -1,0 +1,46 @@
+@import "../../../scss/styles.scss";
+
+
+
+.invest_card {
+    background: #171717;
+    border-radius: 5px;
+    height: 141px;
+    width: 418px;
+  
+    &_title {
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: normal;
+      font-size: 20px;
+      line-height: 20px;
+    }
+  
+    &_amount {
+      font-family: Roboto;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 40px;
+      line-height: 47px;
+      text-align: center;
+    }
+  
+    &_btn {
+      padding: 0.5rem;
+      width: 100%;
+      font-size: 14px;
+      text-align: center;
+      border: 0;
+      font-weight: 700;
+      background-color: #ffde61;
+  
+      &:disabled {
+        background: #474747;
+        color: #848484;
+      }
+  
+      &:focus {
+        outline: none;
+      }
+    }
+  }

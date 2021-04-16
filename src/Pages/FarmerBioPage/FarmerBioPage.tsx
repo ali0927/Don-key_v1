@@ -16,6 +16,8 @@ import { TabSection } from "components/TabSection";
 import { MainTab } from "Pages/FarmerBioPage/Tabs/MainTab";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import ButtonComponent from "components/Button/Button";
+import { useNotification } from "components/Notification";
+import { useAxios } from "hooks/useAxios";
 
 export const tabs = [
   { text: "Main", comp: <MainTab title="Strategies" />, icon: <EmptyIcon /> },
@@ -31,7 +33,85 @@ async function fetchBalance() {
   return 0;
 }
 
-const DetailTable = ({ poolAddress }: { poolAddress: any }) => {
+const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: string }) => {
+
+  const [{ loading }, executePost] = useAxios(
+    { method: "POST", url: "/api/v1/farmerinvestments" },
+    { manual: true }
+  );
+
+  const [{ loading: deleting }, executeDelete] = useAxios(
+    { method: "DELETE", url: "/api/v1/farmerinvestments" },
+    { manual: true }
+  );
+
+  const { showNotification } = useNotification();
+
+  const handleInvestFarmer = async () => {
+    try {
+      await executePost({
+        data: {
+          poolAddress: poolAddress,
+        }
+      });
+
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{`Money Invested into Farmer ${userName} Successfully.`}</p>
+          </>
+        )
+      })
+    }
+    catch (err) {
+      let errorMessage =  "Money Was not Invested. Some Error Occurred";
+      if(err && err.response && err.response.status === 409 ){
+        errorMessage =  "You have already invested into this pool.";
+      }
+
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{errorMessage}</p>
+          </>
+        )
+      })
+    }
+  }
+
+  const handleWithDraw = async () => {
+    try {
+      await executeDelete({
+        data: {
+          toWalletAddress: poolAddress,
+        }
+      });
+
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{`Money Withdraw into Farmer ${userName} Successfully.`}</p>
+          </>
+        )
+      })
+    }
+    catch (err) {
+      let errorMessage =  "Could not withdraw Money. An error occurred";
+      if(err && err.response && err.response.status === 404 ){
+        errorMessage =  "You have already withdraw form this pull or not invested into this pool.";
+      }
+
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center">{errorMessage}</p>
+          </>
+        )
+      })
+    }
+  }
+
+
   return (
     <div className="bio-banner-rightCol">
       <Row>
@@ -51,10 +131,10 @@ const DetailTable = ({ poolAddress }: { poolAddress: any }) => {
             </div>
             <div className="list-box">
               <div>
-                <Button className="mb-3"> Invest</Button>
+                <Button className="mb-3" disabled={loading} onClick={handleInvestFarmer}> Invest</Button>
               </div>
               <div>
-                <Button>Widthraw</Button>
+                <Button disabled={deleting} onClick={handleWithDraw}>Widthraw</Button>
               </div>
             </div>
           </div>
@@ -96,6 +176,8 @@ export const FarmerBioPage = withWeb3(() => {
         </div>
       );
     }
+
+    console.log(farmerInfo)
 
     return (
       <>
@@ -158,6 +240,7 @@ export const FarmerBioPage = withWeb3(() => {
                             poolAddress={
                               farmerInfo.user && farmerInfo.user.poolAddress
                             }
+                            userName={(farmerInfo && farmerInfo.user) ? farmerInfo.user.name : ""}
                           />
                         </Col>
                       </Row>

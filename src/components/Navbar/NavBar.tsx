@@ -14,10 +14,8 @@ import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
+import {shortenAddress} from "don-utils";
 
-const shortenAddress = (val: any) => {
-  return val.slice(0, 4) + "..." + val.slice(-4);
-};
 
 const useWalletAddress = ({ short = false }) => {
   const user = useSelector((state: any) => state.auth.user);
