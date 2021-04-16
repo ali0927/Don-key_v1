@@ -33,8 +33,13 @@ async function fetchBalance() {
   return 0;
 }
 
-const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: string }) => {
-
+const DetailTable = ({
+  poolAddress,
+  userName,
+}: {
+  poolAddress: any;
+  userName: string;
+}) => {
   const [{ loading }, executePost] = useAxios(
     { method: "POST", url: "/api/v1/farmerinvestments" },
     { manual: true }
@@ -52,7 +57,7 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
       await executePost({
         data: {
           poolAddress: poolAddress,
-        }
+        },
       });
 
       showNotification({
@@ -60,13 +65,12 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
           <>
             <p className="text-center">{`Money Invested into Farmer ${userName} Successfully.`}</p>
           </>
-        )
-      })
-    }
-    catch (err) {
-      let errorMessage =  "Money Was not Invested. Some Error Occurred";
-      if(err && err.response && err.response.status === 409 ){
-        errorMessage =  "You have already invested into this pool.";
+        ),
+      });
+    } catch (err) {
+      let errorMessage = "Money Was not Invested. Some Error Occurred";
+      if (err && err.response && err.response.status === 409) {
+        errorMessage = "You have already invested into this pool.";
       }
 
       showNotification({
@@ -74,17 +78,17 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
           <>
             <p className="text-center">{errorMessage}</p>
           </>
-        )
-      })
+        ),
+      });
     }
-  }
+  };
 
   const handleWithDraw = async () => {
     try {
       await executeDelete({
         data: {
           toWalletAddress: poolAddress,
-        }
+        },
       });
 
       showNotification({
@@ -92,13 +96,13 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
           <>
             <p className="text-center">{`Money Withdraw into Farmer ${userName} Successfully.`}</p>
           </>
-        )
-      })
-    }
-    catch (err) {
-      let errorMessage =  "Could not withdraw Money. An error occurred";
-      if(err && err.response && err.response.status === 404 ){
-        errorMessage =  "You have already withdraw form this pull or not invested into this pool.";
+        ),
+      });
+    } catch (err) {
+      let errorMessage = "Could not withdraw Money. An error occurred";
+      if (err && err.response && err.response.status === 404) {
+        errorMessage =
+          "You have already withdraw form this pull or not invested into this pool.";
       }
 
       showNotification({
@@ -106,11 +110,10 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
           <>
             <p className="text-center">{errorMessage}</p>
           </>
-        )
-      })
+        ),
+      });
     }
-  }
-
+  };
 
   return (
     <div className="bio-banner-rightCol">
@@ -131,10 +134,19 @@ const DetailTable = ({ poolAddress, userName }: { poolAddress: any, userName: st
             </div>
             <div className="list-box">
               <div>
-                <Button className="mb-3" disabled={loading} onClick={handleInvestFarmer}> Invest</Button>
+                <Button
+                  className="mb-3"
+                  disabled={loading}
+                  onClick={handleInvestFarmer}
+                >
+                  {" "}
+                  Invest
+                </Button>
               </div>
               <div>
-                <Button disabled={deleting} onClick={handleWithDraw}>Widthraw</Button>
+                <Button disabled={deleting} onClick={handleWithDraw}>
+                  Widthraw
+                </Button>
               </div>
             </div>
           </div>
@@ -177,7 +189,7 @@ export const FarmerBioPage = withWeb3(() => {
       );
     }
 
-    console.log(farmerInfo)
+    console.log(farmerInfo);
 
     return (
       <>
@@ -195,35 +207,37 @@ export const FarmerBioPage = withWeb3(() => {
                             ? farmerInfo.user.name
                             : ""}
                         </h2>
-                        <div>
-                          <ButtonComponent
-                            variant="outline-secondary"
-                            className="editBio-btn"
-                            onClick={() => setModalShow(true)}
-                          >
-                            <svg
-                              width="13"
-                              height="13"
-                              viewBox="0 0 13 13"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
+                        {Object.keys(parms).length === 0 && (
+                          <div>
+                            <ButtonComponent
+                              variant="outline-secondary"
+                              className="editBio-btn"
+                              onClick={() => setModalShow(true)}
                             >
-                              <path
-                                d="M12.1266 1.96013L11.0392 0.872631C10.5423 0.375778 9.73398 0.375801 9.23715 0.872631L8.81152 1.29828L11.701 4.18799L12.1266 3.76234C12.6246 3.26432 12.6247 2.45821 12.1266 1.96013Z"
-                                fill="#36352C"
-                              />
-                              <path
-                                d="M1.01591 9.32812L0.505881 12.0825C0.48481 12.1964 0.521092 12.3133 0.602959 12.3952C0.68492 12.4771 0.801874 12.5133 0.915569 12.4923L3.66976 11.9822L1.01591 9.32812Z"
-                                fill="#36352C"
-                              />
-                              <path
-                                d="M8.31449 1.79688L1.39551 8.71639L4.28498 11.6061L11.204 4.68659L8.31449 1.79688Z"
-                                fill="#36352C"
-                              />
-                            </svg>
-                            Edit bio page
-                          </ButtonComponent>
-                        </div>
+                              <svg
+                                width="13"
+                                height="13"
+                                viewBox="0 0 13 13"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M12.1266 1.96013L11.0392 0.872631C10.5423 0.375778 9.73398 0.375801 9.23715 0.872631L8.81152 1.29828L11.701 4.18799L12.1266 3.76234C12.6246 3.26432 12.6247 2.45821 12.1266 1.96013Z"
+                                  fill="#36352C"
+                                />
+                                <path
+                                  d="M1.01591 9.32812L0.505881 12.0825C0.48481 12.1964 0.521092 12.3133 0.602959 12.3952C0.68492 12.4771 0.801874 12.5133 0.915569 12.4923L3.66976 11.9822L1.01591 9.32812Z"
+                                  fill="#36352C"
+                                />
+                                <path
+                                  d="M8.31449 1.79688L1.39551 8.71639L4.28498 11.6061L11.204 4.68659L8.31449 1.79688Z"
+                                  fill="#36352C"
+                                />
+                              </svg>
+                              Edit bio page
+                            </ButtonComponent>
+                          </div>
+                        )}
                       </div>
                       <Row>
                         <Col sm={2}>
@@ -240,7 +254,11 @@ export const FarmerBioPage = withWeb3(() => {
                             poolAddress={
                               farmerInfo.user && farmerInfo.user.poolAddress
                             }
-                            userName={(farmerInfo && farmerInfo.user) ? farmerInfo.user.name : ""}
+                            userName={
+                              farmerInfo && farmerInfo.user
+                                ? farmerInfo.user.name
+                                : ""
+                            }
                           />
                         </Col>
                       </Row>
@@ -277,12 +295,16 @@ export const FarmerBioPage = withWeb3(() => {
                 </Row>
               </Container>
             </section>
-            <TabSection tabs={tabs} />
+            {Object.keys(parms).length === 0 && (
+              <>
+                <TabSection tabs={tabs} />
+                <FarmerModal
+                  isOpen={modalShow}
+                  onClose={() => setModalShow(false)}
+                />
+              </>
+            )}
             <Footer />
-            <FarmerModal
-              isOpen={modalShow}
-              onClose={() => setModalShow(false)}
-            />
           </>
         )}
       </>

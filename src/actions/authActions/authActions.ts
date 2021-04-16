@@ -15,4 +15,3 @@ export const doLogout = () => {
 export const doMetaMaskLogin = () => {
   return async () => {};
 };
-
