@@ -126,7 +126,7 @@ const LandingPage = () => {
                 <h1 className="colorBlack">Outsmart DeFi</h1>
                 <p className="mt-4">
                   Find your favorite farmers, follow their strategies, and boost
-                  your yield
+                  your yield.
                 </p>
                 <div className="mt-5"></div>
               </div>
@@ -228,7 +228,7 @@ const LandingPage = () => {
                     <img className="advantage-img" src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-4 text-center">
-                      The most user friendly interface in the DeFi space. create
+                      The most user friendly interface in the DeFi space. Create
                       complicated strategies with 0 code.
                     </Card.Text>
                   </Card.Body>
@@ -242,7 +242,7 @@ const LandingPage = () => {
                     <Card.Title>Get liquidity</Card.Title>
                     <Card.Text className="mt-4 text-center">
                       Climb up the leader board and get more liquidity in your
-                      pool
+                      pool.
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -254,7 +254,7 @@ const LandingPage = () => {
                     <Card.Title>Boost your yield</Card.Title>
                     <Card.Text className="mt-4 text-center">
                       Make commission on your yields and get extra bonuses based
-                      on your ranks and performance
+                      on your ranks and performance.
                     </Card.Text>
                   </Card.Body>
                 </Card>
@@ -276,7 +276,7 @@ const LandingPage = () => {
                 <p className="parasame mt-4">
                   Build your DeFi strategy with a drag and drop interface
                   allowing you to adapt fast to the dynamic world of DeFi and
-                  secure your yield
+                  secure your yield.
                 </p>
                 <ButtonComponent
                   disabled
@@ -321,18 +321,18 @@ const LandingPage = () => {
                 <p className="parasame">
                   DON tokens are airdropped to all farmers based on monthly
                   trading results and take into account: ROI, Risk level, asset
-                  exposer and more. the better you are , the more you get
+                  exposer and more. The better you are, the more you get.
                 </p>
                 <h5 className="mt-4">Yield and Dividend </h5>
                 <p className="parasame">
                   DON tokens represents the farmer’s yield based on his own
-                  stratagies, in addition to a proportionate monthly dividend
-                  from Don-key’s total monthly yield
+                  strategies, in addition to a proportionate monthly dividend
+                  from Don-key’s total monthly yield.
                 </p>
                 <h5 className="mt-4">Exchangeable</h5>
                 <p className="parasame">
                   You can redeem your DON tokens at any time or hold on to them
-                  and accumulate higher future coupons
+                  and accumulate higher future coupons.
                 </p>
               </div>
             </Col>
