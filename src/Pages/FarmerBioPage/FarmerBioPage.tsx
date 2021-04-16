@@ -14,41 +14,11 @@ import { getFarmerDetails } from "actions/farmerActions";
 import { useParams } from "react-router-dom";
 import { TabSection } from "components/TabSection";
 import { MainTab } from "Pages/FarmerBioPage/Tabs/MainTab";
-import { DeveloperTab } from "Pages/FarmerBioPage/Tabs/DeveloperTab";
-import { MyFarmerTab } from "Pages/FarmerBioPage/Tabs/MyFarmerTab";
-import { MyInvestmentTab } from "Pages/FarmerBioPage/Tabs/MyInvestmentTab";
-import { StrategyAddressTab } from "Pages/FarmerBioPage/Tabs/StrategyAddressTab";
-import { WalletAddressTab } from "Pages/FarmerBioPage/Tabs/WalletAddressTab";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import ButtonComponent from "components/Button/Button";
 
 export const tabs = [
   { text: "Main", comp: <MainTab title="Strategies" />, icon: <EmptyIcon /> },
-  {
-    text: "My Investment",
-    comp: <MyInvestmentTab title="My Investment" />,
-    icon: <EmptyIcon />,
-  },
-  {
-    text: "My Farmer",
-    comp: <MyFarmerTab title="My Farmer" />,
-    icon: <EmptyIcon />,
-  },
-  {
-    text: "Developers",
-    comp: <DeveloperTab title="Developers" />,
-    icon: <EmptyIcon />,
-  },
-  {
-    text: "Wallet Address",
-    comp: <WalletAddressTab title="Wallet Address" />,
-    icon: <EmptyIcon />,
-  },
-  {
-    text: "Strategy Address",
-    comp: <StrategyAddressTab title="Strategy Address" />,
-    icon: <EmptyIcon />,
-  },
 ];
 const poolAddress = "0x921E8B9185Fe180Eb2a1770A1137F6e6E22E9B37";
 
@@ -65,19 +35,19 @@ const DetailTable = ({ poolAddress }: { poolAddress: any }) => {
   return (
     <div className="bio-banner-rightCol">
       <Row>
-        <Col md={5}>
+        <Col md={7}>
           <div className="bg-white poolCol">
             <div className="list-box">
-              <h5 className="heading-title">Pool addres</h5>
+              <h5 className="heading-title">Pool address</h5>
               <div>{poolAddress}</div>
             </div>
           </div>
         </Col>
-        <Col md={7}>
+        <Col md={5}>
           <div className="text-white poolValueCol">
             <div className="list-box">
               <div>Total Pool Value</div>{" "}
-              <h5 className="heading-title">Pool addres</h5>
+              <h5 className="heading-title">100BUSD</h5>
             </div>
             <div className="list-box">
               <div>
@@ -223,7 +193,6 @@ export const FarmerBioPage = withWeb3(() => {
                   </Col>
                 </Row>
               </Container>
-              {/* <MyAccountNewGraph /> */}
             </section>
             <TabSection tabs={tabs} />
             <Footer />

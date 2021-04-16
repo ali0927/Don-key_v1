@@ -73,7 +73,9 @@ export const MainTab = ({ title }: { title: string }) => {
         <section className="bg-white build-strategy-sec text-center">
           <Container>
             <h3 className="sec-title">Build your DeFi strategy</h3>
-            <Button variant="dark">Create your first strategy</Button>
+            <Link to="/strategy/new" className="btn btn-dark">
+              Create your first strategy
+            </Link>
             <p>
               <img src="/assets/images/build-strategy-img.svg" alt="Image" />
             </p>

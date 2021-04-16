@@ -7,7 +7,7 @@ export const setFarmerDetail = (args: CallBackorVal<IFarmerUser>) => {
 };
 
 interface parmsId {
-  id?: number;
+  id?: number | string;
 }
 
 export const getFarmerDetails = (param: parmsId): AppThunk => {
@@ -18,11 +18,68 @@ export const getFarmerDetails = (param: parmsId): AppThunk => {
         endpoint: `/api/v1/farmer${param && param.id ? "/" + param.id : ""}`,
         data: "",
         onDone: (res) => {
-          dispatch(setFarmerDetail(res.data.data));
+          if (
+            res.data.data !== undefined &&
+            res.data.data !== null &&
+            res.data.data.poolAddress !== undefined &&
+            res.data.data.poolAddress === null
+          ) {
+            window.location.href = "/dashboard/farmer/signup";
+          } else {
+            dispatch(setFarmerDetail(res.data.data));
+          }
         },
         onFail: (res) => {
           if (res.status === 404 || res.status === 401) {
             window.location.href = "/dashboard/farmer/signup";
+          }
+        },
+      })
+    );
+  };
+};
+
+interface updateFarmerInter {
+  name?: string;
+  description?: string;
+}
+export const updateFarmerDetails = (
+  farmerInfo: updateFarmerInter
+): AppThunk => {
+  return (dispatch) => {
+    dispatch(
+      apiRequest({
+        method: "PUT",
+        endpoint: `/api/v1/farmer`,
+        data: farmerInfo,
+        onDone: (res) => {
+          dispatch(setFarmerDetail(res.data.data));
+        },
+        onFail: (res) => {
+          if (res.status === 404 || res.status === 401) {
+          }
+        },
+      })
+    );
+  };
+};
+
+interface strategyArr {
+  strategyInfo?: any;
+}
+
+export const addStrategyDetails = (strategyInfo: strategyArr): AppThunk => {
+  return (dispatch) => {
+    dispatch(
+      apiRequest({
+        method: "POST",
+        endpoint: `/api/v1/strategy`,
+        data: strategyInfo,
+        onDone: (res) => {
+          dispatch(getFarmerDetails({ id: "me" }));
+        },
+        onFail: (res) => {
+          if (res.status === 404 || res.status === 401) {
           }
         },
       })

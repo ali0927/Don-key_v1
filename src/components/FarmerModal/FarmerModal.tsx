@@ -12,9 +12,18 @@ import {
 } from "react-bootstrap";
 import ButtonComponent from "components/Button/Button";
 import { useState } from "react";
-import { IProtocolFromAPI } from "don-builder";
 import "./FarmerModal.scss";
 import { FormGroup } from "@material-ui/core";
+import { useSelector, useDispatch } from "react-redux";
+import { useForm } from "react-hook-form";
+import { updateFarmerDetails } from "actions/farmerActions";
+
+type FarmerInfoChange = {
+  name: string;
+  description?: string;
+  picture?: File;
+};
+
 export const FarmerModal = ({
   isOpen,
   onClose,
@@ -22,8 +31,25 @@ export const FarmerModal = ({
   isOpen: boolean;
   onClose: () => void;
 }) => {
-  const [modalShow1, setModalShow1] = useState(false);
-  // const [key, setKey] = (useState < string) | (null > "swap");
+  const [posting, setPosting] = useState(false);
+  const farmerInfo = useSelector((state: any) => state.farmer);
+  const [errorMsg, setErrorMsg] = useState("");
+  const dispatch = useDispatch();
+
+  /**
+   * * @useForm hooks
+   */
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+  } = useForm<FarmerInfoChange>();
+
+  const handleUpdateFarmer = (value: FarmerInfoChange) => {
+    dispatch(updateFarmerDetails(value));
+  };
 
   return (
     <>
@@ -34,7 +60,6 @@ export const FarmerModal = ({
       >
         <h4 className="main-heading">
           <span className="editIcon">
-            {" "}
             <svg
               width="13"
               height="13"
@@ -58,7 +83,7 @@ export const FarmerModal = ({
           </span>
           Edit farmer bio page
         </h4>
-        <Form>
+        <Form autoComplete="off" onSubmit={handleSubmit(handleUpdateFarmer)}>
           <FormGroup>
             <div className="uploadImgWrapper">
               <div className="imgBox">
@@ -126,17 +151,22 @@ export const FarmerModal = ({
             <input
               type="text"
               className="form-control"
-              placeholder="Don - key finance"
+              placeholder="Name"
+              defaultValue={farmerInfo.user.name}
             />
           </FormGroup>
           <FormGroup>
             <FormLabel>Description</FormLabel>
-            <textarea
-              className="form-control"
-              placeholder="Don - key finance"
-            />
+            <textarea className="form-control" placeholder="Description">
+              {farmerInfo.user.description}
+            </textarea>
           </FormGroup>
-          <Button className="btn-block">Save Bio page</Button>
+          {/* <Button className="btn-block">Save Bio page</Button> */}
+          <input
+            className="btn-block btn btn-primary"
+            type="submit"
+            value={"Save Bio page"}
+          />
         </Form>
       </ModalPopup>
     </>
