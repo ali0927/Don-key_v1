@@ -24,9 +24,6 @@
     url(./fonts/object-sans/ObjectSans-Bold.otf) format("truetype");
 }
 
-
-
-
 body {
   margin: 0;
   font-family: "Roboto" !important;
@@ -36,7 +33,9 @@ body {
 div:focus {
   outline: none;
 }
-
+img {
+  max-width: 100%;
+}
 .blur {
   -webkit-filter: blur(5px);
   -moz-filter: blur(5px);
@@ -159,6 +158,6 @@ div:focus {
 .no-underline {
   text-decoration: none !important;
   &:hover {
-      text-decoration: none !important;
+    text-decoration: none !important;
   }
 }

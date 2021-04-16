@@ -1,6 +1,5 @@
 import { NavBar } from "components/Navbar/NavBar";
-import MyAccountDetail from "JsonData/MyAccountDetail";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Table, Spinner, Button } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { EmptyIcon } from "components/Icons";
@@ -8,21 +7,20 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
 import "./FarmerBioPage.scss";
-import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { getWeb3 } from "don-utils";
 import { withWeb3 } from "hoc";
 import { useSelector, useDispatch } from "react-redux";
 import { getFarmerDetails } from "actions/farmerActions";
 import { useParams } from "react-router-dom";
-import { MyAccountNewGraph } from "components/MyAccountNewGraph";
 import { TabSection } from "components/TabSection";
-import { DepositsTab } from "Pages/MyAccountNew/Tabs/DepositsTab";
 import { MainTab } from "Pages/FarmerBioPage/Tabs/MainTab";
 import { DeveloperTab } from "Pages/FarmerBioPage/Tabs/DeveloperTab";
 import { MyFarmerTab } from "Pages/FarmerBioPage/Tabs/MyFarmerTab";
 import { MyInvestmentTab } from "Pages/FarmerBioPage/Tabs/MyInvestmentTab";
 import { StrategyAddressTab } from "Pages/FarmerBioPage/Tabs/StrategyAddressTab";
 import { WalletAddressTab } from "Pages/FarmerBioPage/Tabs/WalletAddressTab";
+import { FarmerModal } from "components/FarmerModal/FarmerModal";
+import ButtonComponent from "components/Button/Button";
 
 export const tabs = [
   { text: "Main", comp: <MainTab title="Strategies" />, icon: <EmptyIcon /> },
@@ -81,9 +79,13 @@ const DetailTable = ({ poolAddress }: { poolAddress: any }) => {
               <div>Total Pool Value</div>{" "}
               <h5 className="heading-title">Pool addres</h5>
             </div>
-            <div className="list-box d-flex">
-              <Button className="mr-3"> Invest</Button>
-              <Button>Widthraw</Button>
+            <div className="list-box">
+              <div>
+                <Button className="mb-3"> Invest</Button>
+              </div>
+              <div>
+                <Button>Widthraw</Button>
+              </div>
             </div>
           </div>
         </Col>
@@ -94,7 +96,7 @@ const DetailTable = ({ poolAddress }: { poolAddress: any }) => {
 
 export const FarmerBioPage = withWeb3(() => {
   const [balance, setBalance] = useState(0);
-
+  const [modalShow, setModalShow] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const farmerInfo = useSelector((state: any) => state.farmer);
 
@@ -110,7 +112,6 @@ export const FarmerBioPage = withWeb3(() => {
   }, []);
 
   useEffect(() => {
-    console.log(parms);
     dispatch(getFarmerDetails(parms));
   }, [parms]);
 
@@ -143,9 +144,10 @@ export const FarmerBioPage = withWeb3(() => {
                             : ""}
                         </h2>
                         <div>
-                          <Button
+                          <ButtonComponent
                             variant="outline-secondary"
                             className="editBio-btn"
+                            onClick={() => setModalShow(true)}
                           >
                             <svg
                               width="13"
@@ -168,7 +170,7 @@ export const FarmerBioPage = withWeb3(() => {
                               />
                             </svg>
                             Edit bio page
-                          </Button>
+                          </ButtonComponent>
                         </div>
                       </div>
                       <Row>
@@ -221,11 +223,14 @@ export const FarmerBioPage = withWeb3(() => {
                   </Col>
                 </Row>
               </Container>
-              <MyAccountNewGraph />
+              {/* <MyAccountNewGraph /> */}
             </section>
             <TabSection tabs={tabs} />
-
             <Footer />
+            <FarmerModal
+              isOpen={modalShow}
+              onClose={() => setModalShow(false)}
+            />
           </>
         )}
       </>

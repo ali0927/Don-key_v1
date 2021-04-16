@@ -1,0 +1,85 @@
+.editFarmerBio-Modal {
+  .modal-dialog {
+    max-width: 440px !important;
+    .modal-content {
+      padding: 3rem;
+    }
+    .main-heading {
+      font-size: 16px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      margin-bottom: 2.2rem;
+      .editIcon {
+        background: #f4e41c;
+        border-radius: 2px;
+        width: 27px;
+        height: 27px;
+        margin-right: 12px;
+        display: block;
+        text-align: center;
+        line-height: 27px;
+      }
+    }
+    .uploadImgWrapper {
+      display: flex;
+      align-items: center;
+      .imgBox {
+        width: 80px;
+        height: 80px;
+        border-radius: 100%;
+        overflow: hidden;
+        margin-right: 20px;
+      }
+      .deleteIcon {
+        width: 38px;
+        height: 38px;
+        background: #f3f3f4;
+        border-radius: 5px;
+        text-align: center;
+        line-height: 38px;
+        cursor: pointer;
+      }
+      .custom-file {
+        max-width: 130px;
+        margin-right: 10px;
+      }
+      .custom-file-label {
+        background: #fffac0;
+        border-radius: 5px;
+        box-shadow: none;
+        border: 0;
+
+        &:after {
+          display: none;
+        }
+      }
+    }
+    .MuiFormGroup-root {
+      margin-bottom: 30px;
+    }
+    .form-label {
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 16px;
+    }
+    .form-control {
+      height: 50px;
+      background: #ffffff;
+      border: 1px solid #848484;
+      border-radius: 5px;
+    }
+    textarea.form-control {
+      height: 120px;
+      resize: none;
+    }
+    .btn {
+      background: #f4e41c;
+      box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
+      border-radius: 5px;
+      height: 50px;
+      color: #222;
+      border-color: transparent;
+    }
+  }
+}
