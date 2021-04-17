@@ -178,7 +178,11 @@ export const FarmerBioPage = withWeb3(() => {
   useEffect(() => {
     (async () => {
       const balance = await fetchBalance();
-      setBalance(balance);
+
+      // NOTE: When working wit Ether and Weis it is not correct to operate with `int` and `float` as it have known issues
+      // with precision. To work with flat numbers correctly it is better to represent it as strings and use
+      // Bignumber.js or Big.js to avoid losing precision (it is extremely important when working with money!)
+      setBalance(parseFloat(balance));
       setIsReady(true);
     })();
   }, []);
