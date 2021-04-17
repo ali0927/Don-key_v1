@@ -99,26 +99,17 @@ function NavBar(props: INavBarProps) {
                     <NavbarLink to="/team">Team</NavbarLink>
                   </>
                 )}
-                {variant === "loggedin" && (
+                {(variant === "loggedin" || variant=="builder") && (
                   <>
-                    <NavbarLink to="/dashboard">Main</NavbarLink>
-                    <NavbarLink to="/dashboard/investment">My Investments</NavbarLink>
-                    <NavbarLink to="/dashboard/farmer/me">
+                    <NavbarLink to="/dashboard" linkColor={variant==="builder" ? "white": "black"}>Main</NavbarLink>
+                    <NavbarLink to="/dashboard/investment" linkColor={variant==="builder" ? "white": "black"}>My Investments</NavbarLink>
+                    <NavbarLink to="/dashboard/farmer/me" linkColor={variant==="builder" ? "white": "black"}>
                       My Farmer Page
                     </NavbarLink>
                   </>
                 )}
-                {variant === "builder" && (
-                  <>
-                    <NavbarLink to="/resource" linkColor="white">
-                      Resources
-                    </NavbarLink>
-                    <NavbarLink to="/farmers" linkColor="white">
-                      Farmers
-                    </NavbarLink>
-                    <NavbarLink to="#" linkColor="white">
-                      Developers
-                    </NavbarLink>
+                
+         
 
                     {/* <div className="">
                 <Dropdown className="dropNav1">
@@ -150,8 +141,7 @@ function NavBar(props: INavBarProps) {
                   <UserIcon className="user-icon" />
                 </a>
               </div> */}
-                  </>
-                )}
+
               </Nav>
             </Navbar.Collapse>
             {variant === "landing" && (
