@@ -1,11 +1,11 @@
 import { NavBar } from "components/Navbar/NavBar";
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Table, Spinner, Button } from "react-bootstrap";
+import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { EmptyIcon } from "components/Icons";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import Web3 from "web3";
-import PoolAbi from "./PoolAbi.json";
+import poolContractJson from "../../JsonData/Pool.json";
 import "./FarmerBioPage.scss";
 import { getWeb3 } from "don-utils";
 import { withWeb3 } from "hoc";
@@ -24,13 +24,23 @@ export const tabs = [
 ];
 const poolAddress = "0x921E8B9185Fe180Eb2a1770A1137F6e6E22E9B37";
 
-async function fetchBalance() {
-  const web3 = (await getWeb3()) as Web3;
-  const accounts = await web3.eth.getAccounts();
+async function fetchBalance(userPoolAddress = '') {
+  userPoolAddress = userPoolAddress || poolAddress;
 
-  const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
-  const balance = await WBNB.methods.gettInvested().call();
-  return 0;
+  const web3 = (await getWeb3()) as Web3;
+
+  // NOTE: Left for reference, not required here
+  // NOTE: Please take a look how to import and use Pool ABI!!!
+
+  // const accounts = await web3.eth.getAccounts();
+  // const WBNB = new web3.eth.Contract(poolContractJson.abi as any, userPoolAddress);
+  // (window as any).WBNB = WBNB;
+
+  (window as any)._web3 = web3;
+
+  const balance = web3.utils.fromWei(await web3.eth.getBalance(userPoolAddress), 'ether');
+
+  return balance;
 }
 
 const DetailTable = ({
