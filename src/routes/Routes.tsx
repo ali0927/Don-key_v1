@@ -1,37 +1,42 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import LandingPage from "../Pages/LandingPage";
-import Login from "../Pages/Login";
-import ResourcePage from "../Pages/ResourcePage";
-import FarmersPage from "../Pages/FarmersPage";
-import NotificationPage from "../Pages/NotificationPage";
-import SelectTemplate from "../Pages/SelectTemplate";
-import StrategyConfirmation from "../Pages/StrategyConfirmation";
+import LandingPage from "Pages/LandingPage";
 import { ProtectedRoute } from "components/ProtectedRoute";
-import { MyAccountNew } from "Pages/MyAccountNew/MyAccountNew";
-import { DashboardPage } from "Pages/DashboardPage/DashboardPage";
-import { InvestmentPage } from "Pages/InvestmentPage/InvestmentPage";
-import { InvestmentsPage } from "Pages/InvestmentsPage/InvestmentsPage";
-import TeamPage from "Pages/TeamPage/TeamPage";
-import { FarmerStrategyPage } from "Pages/FarmerStrategyPage/FarmerStrategyPage";
 import { lazy, Suspense } from "react";
-import { FarmerSignupPage } from "Pages/FarmerSignupPage/FarmerSignupPage";
-import { FarmerBioPage } from "Pages/FarmerBioPage";
 import { LoadingPage } from "Pages/LoadingPage";
-import { DevelopersPage } from "Pages/DevelopersPage/DevelopersPage";
 
-const Builder = lazy(() => import("../Pages/Builder"));
-const DecodedStrategyPage = lazy(() => import("../Pages/DecodedStrategyPage"));
+const Builder = lazy(() => import("Pages/Builder"));
+const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
+const DashboardPage = lazy(() => import("Pages/DashboardPage"));
+const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
+const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
+const FarmerSubscribePage = lazy(() => import("Pages/FarmersPage"));
+const TeamPage = lazy(() => import("Pages/TeamPage"));
+const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
+const SelectTemplate = lazy(() => import("Pages/SelectTemplate"));
+const FarmerSignupPage = lazy(() => import("Pages/FarmerSignupPage"));
 
 export default function Routes() {
   return (
     <Router>
       <Switch>
         <Route exact path="/" children={<LandingPage />} />
-        <Route exact path="/dashboard" children={<DashboardPage />} />
+        <Route
+          exact
+          path="/dashboard"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <DashboardPage />
+            </Suspense>
+          }
+        />
         <ProtectedRoute
           exact
           path="/dashboard/farmer/signup"
-          children={<FarmerSignupPage />}
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <FarmerSignupPage />
+            </Suspense>
+          }
         />
         <ProtectedRoute
           exact
@@ -51,22 +56,23 @@ export default function Routes() {
             </Suspense>
           }
         />
-
         <ProtectedRoute
           exact
           path="/dashboard/developers"
-          children={<DevelopersPage />}
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <DevelopersPage />
+            </Suspense>
+          }
         />
         <ProtectedRoute
           exact
           path="/dashboard/investment"
-          children={<InvestmentsPage />}
-        />
-        <Route exact path="/strategy" children={<InvestmentPage />} />
-        <Route
-          exact
-          path="/farmer/strategy"
-          children={<FarmerStrategyPage />}
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <InvestmentsPage />
+            </Suspense>
+          }
         />
         <ProtectedRoute
           path="/strategy/build"
@@ -85,19 +91,31 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <Route path="/resource" children={<ResourcePage />} />
-        <Route path="/farmers" children={<FarmersPage />} />
-        <Route path="/team" children={<TeamPage />} />
-        <ProtectedRoute path="/myaccount" children={<FarmerStrategyPage />} />
-        <Route path="/myaccount_new">
-          <MyAccountNew />
-        </Route>
-        <Route path="/strategy/new" children={<SelectTemplate />} />
         <Route
-          path="/strategy/confirmation"
-          children={<StrategyConfirmation />}
+          path="/farmers"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <FarmerSubscribePage />
+            </Suspense>
+          }
         />
-        <Route path="/notification" children={<NotificationPage />} />
+        <Route
+          path="/team"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <TeamPage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/strategy/new"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+              <SelectTemplate />
+            </Suspense>
+          }
+        />
       </Switch>
     </Router>
   );

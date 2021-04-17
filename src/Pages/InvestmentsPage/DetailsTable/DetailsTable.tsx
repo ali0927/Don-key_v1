@@ -14,7 +14,7 @@ export const DetailsTable: React.FC<{ farmer: IFarmer }> = (props) => {
             <Row className="detail_container">
                 <div className="detail_box">
                     <div className="detail_box_header">Pool Address</div>
-                    <div className="detail_box_content">{shortenAddress(farmer.poolAddress)}</div>
+                    <div className="detail_box_content">{shortenAddress(farmer.poolAddress|| "")}</div>
                 </div>
                 <div className="detail_box">
                     <div className="detail_box_header">Amount In Pool</div>

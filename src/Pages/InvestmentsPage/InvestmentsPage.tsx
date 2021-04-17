@@ -5,15 +5,12 @@ import {
   Row,
   Button,
   Table,
-  // Pagination,
-  // Form,
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
 import "./InvestmentsPage.scss";
-import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
-import { getWeb3, shortenAddress } from "don-utils";
+import { getWeb3 } from "don-utils";
 import { TotalInvestedMoney } from "./TotalInvestedMoney";
 import { useAxios } from "hooks/useAxios";
 import { IFarmer } from "./interfaces";
@@ -22,8 +19,7 @@ import { IMyInvestments } from "./interfaces/IMyInvestments";
 import _ from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useNotification } from "components/Notification";
-
-
+import { LoadingPage } from "Pages/LoadingPage";
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
@@ -45,28 +41,27 @@ export const InvestmentsPage = () => {
 
   const [isReady, setIsReady] = useState(false);
 
-  const [{ data }] = useAxios(
-    { method: "GET", url: "/api/v1/farmer" },
-  );
+  const [{ data }] = useAxios({ method: "GET", url: "/api/v1/farmer" });
 
-  const [{ data: farmesInvestmentData },] = useAxios(
+  const [{ data: farmesInvestmentData, loading }] = useAxios(
     { method: "GET", url: "/api/v1/farmerinvestments" },
     { useCache: false }
   );
 
-  const [{ }, executeDelete] = useAxios(
+  const [{}, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v1/farmerinvestments" },
     { manual: true }
   );
 
-
-  const farmer: IFarmer = data ? { ...data.data } : {
-    name: "",
-    description: "",
-    picture: "",
-    amountInPool: "907000.45",
-    poolAddress: "",
-  }
+  const farmer: IFarmer = data
+    ? { ...data.data }
+    : {
+        name: "",
+        description: "",
+        picture: "",
+        amountInPool: "907000.45",
+        poolAddress: "",
+      };
 
   const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
 
@@ -81,34 +76,38 @@ export const InvestmentsPage = () => {
     })();
   }, []);
 
-
   useEffect(() => {
     if (farmesInvestmentData) {
-      setMyInvestments(farmesInvestmentData.data)
+      setMyInvestments(farmesInvestmentData.data);
     }
   }, [farmesInvestmentData]);
 
-  const handleWithDraw = (farmerName: string, poolAddress: string) => async () => {
-    const updatedList = myInvestments.filter(x => x.poolAddress !== poolAddress);
+  const handleWithDraw = (
+    farmerName: string,
+    poolAddress: string
+  ) => async () => {
+    const updatedList = myInvestments.filter(
+      (x) => x.poolAddress !== poolAddress
+    );
     setMyInvestments(updatedList);
     try {
       await executeDelete({
         data: {
-          poolAddress: poolAddress
-        }
+          poolAddress: poolAddress,
+        },
       });
       showNotification({
         msg: (
           <>
             <p className="text-center">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
           </>
-        )
-      })
-    }
-    catch (err) {
-      let errorMessage =  "Could not withdraw Money. An error occurred";
-      if(err && err.response && err.response.status === 404 ){
-        errorMessage =  "You have already withdraw form this pull or not invested into this pool.";
+        ),
+      });
+    } catch (err) {
+      let errorMessage = "Could not withdraw Money. An error occurred";
+      if (err && err.response && err.response.status === 404) {
+        errorMessage =
+          "You have already withdraw form this pull or not invested into this pool.";
       }
 
       showNotification({
@@ -116,13 +115,14 @@ export const InvestmentsPage = () => {
           <>
             <p className="text-center">{errorMessage}</p>
           </>
-        )
-      })
+        ),
+      });
     }
+  };
 
+  if(!data){
+    return <LoadingPage />
   }
-
-
 
 
   return (
@@ -132,16 +132,23 @@ export const InvestmentsPage = () => {
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-
               <div className="firstLetter image-col mr-4">
-                <img className="img-fluid farmer-image" src={"http://localhost:5000/uploads/media/0x34b2a58050e6c9a5c20b808f9827bc261b989b71.png"} alt={"investment"} />
+                {/* <img
+                  className="img-fluid farmer-image"
+                  src={
+                    ""
+                  }
+                  alt={"investment"}
+                /> */}
               </div>
 
               <div className="firstHeading_container col-lg-6 mr-4">
-                <div className="firstHeading investment-heading mb-3">{farmer.name}</div>
+                <div className="firstHeading investment-heading mb-3">
+                  {farmer.name}
+                </div>
                 <span className="description_title">Description</span>
                 <span className="description_content description-width">
-                  <ShowMoreContent content={farmer.description} length={140} />
+                  <ShowMoreContent content={farmer.description || ""} length={140} />
                 </span>
               </div>
 
@@ -179,10 +186,13 @@ export const InvestmentsPage = () => {
                           <td className="investment_table_btn">
                             <Button
                               variant="outline-secondary"
-                              onClick={handleWithDraw(investment.name, investment.poolAddress)}
+                              onClick={handleWithDraw(
+                                investment.name,
+                                investment.poolAddress
+                              )}
                             >
                               Withdraw
-                              </Button>
+                            </Button>
                           </td>
                         </tr>
                       </>

@@ -4,7 +4,7 @@ import { WalletConnectConnector } from "@web3-react/walletconnect-connector";
 const POLLING_INTERVAL = 12000;
 
 export const injected = new InjectedConnector({
-    supportedChainIds: [1, 3, 4, 5, 42],
+    supportedChainIds: [56],
 });
 
 export const walletconnect = new WalletConnectConnector({

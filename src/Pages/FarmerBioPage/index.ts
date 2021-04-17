@@ -1,1 +1,1 @@
-export * from "./FarmerBioPage";
+export {FarmerBioPage as default } from "./FarmerBioPage";

@@ -26,7 +26,7 @@ export const FarmerSignupPage = withWeb3(() => {
   const [{ data, error, loading }] = useAxios("/api/v1/farmer");
   const [{ }, executePost] = useAxios(
     { method: "PUT", url: "/api/v1/farmer" },
-    { manual: true }
+    { manual: true, useCache: false }
   );
   const [posting, setPosting] = useState(false);
 

@@ -87,6 +87,7 @@
     "@typed-mxgraph/typed-mxgraph": "^0.0.5-0",
     "@types/lodash": "^4.14.168",
     "@types/react-dom": "^17.0.0",
+    "@types/styled-components": "^5.1.9",
     "@types/react-lottie": "^1.2.5",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",

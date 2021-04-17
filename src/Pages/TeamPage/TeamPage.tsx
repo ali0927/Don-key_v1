@@ -1,11 +1,11 @@
 import { NavBar } from "../../components/Navbar/NavBar";
-import { Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import gil from "./gil.jpeg";
-import yon from "./yonatan.jpeg";
-import alon from "./alon.jpeg";
-import yanir from "./yanir.jpeg";
-import daniel from "./daniell.jpeg";
+import gil from "./images/gil.jpeg";
+import yon from "./images/yonatan.jpeg";
+import alon from "./images/alon.jpeg";
+import yanir from "./images/yanir.jpeg";
+import daniel from "./images/daniell.jpeg";
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export type ITeamCardProps = {
@@ -68,30 +68,30 @@ const TeamJSON: ITeamCardProps[] = [
     image: yon,
     name: "Yonatan Martsiano",
     designation: "Co-founder & Developer",
-    linkedLink: "https://www.linkedin.com/in/yonatan-martsiano-6376a314a/",
+    //linkedLink: "https://www.linkedin.com/in/yonatan-martsiano-6376a314a/",
   },
- 
+
   {
     image: yanir,
     name: "Yanir Goldenberg",
     designation: "Co-founder",
-    linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
+    //linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
   },
   {
     image: daniel,
     name: "Daniel Jaffe",
     designation: "Co-founder & Developer",
-    linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
+    //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
   },
   {
     image: alon,
     name: "Alon Hershberg",
     designation: "Advisor",
-    linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
+   // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
   },
 ];
 
-const TeamPage = () => {
+export const TeamPage = () => {
   return (
     <div className="bgnav">
       <NavBar variant="default" hideWallet />
@@ -107,6 +107,11 @@ const TeamPage = () => {
               return <TeamCard key={team.name} {...team} />;
             })}
           </div>
+          <p className="text-center" style={{fontSize: 20}}>
+            No pre-sales. Team member will never sell tokens directly. All token
+            sales and launches will be announced through our official Telegram
+            and Twitter account.
+          </p>
         </Container>
       </div>
       {/*  footer */}

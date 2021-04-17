@@ -1,5 +1,5 @@
 import { BiInfoCircle } from "react-icons/bi";
-import { CloseIcon } from "Pages/Onboarding/CloseIcon";
+import {FaCross} from "react-icons/fa";
 import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
 import { useEffect, useState } from "react";
@@ -179,7 +179,7 @@ export const InvestmentPopup = ({
           </div>
           <div className="col invest_col">
             <div>
-              <CloseIcon
+              <FaCross
                 onClick={onClose}
                 className="cursor-pointer invest_close"
               />

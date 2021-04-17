@@ -2,14 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { Provider } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.scss";
-import "./fonts/object-sans/ObjectSans-Bold.otf";
-import "./fonts/CodecPro/CodecPro-News.ttf";
-import { store } from "./store";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { Providers } from "Providers";
 
 Sentry.init({
   dsn:
@@ -24,9 +21,9 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
-      <Provider store={store}>
+      <Providers>
         <App />
-      </Provider>
+      </Providers>
     </Sentry.ErrorBoundary>
   </React.StrictMode>,
   document.getElementById("root")
