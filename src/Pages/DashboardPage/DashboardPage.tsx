@@ -10,7 +10,8 @@ import { LeaderBoardTable } from "./LeaderBoardTable";
 import { LeaderBoardData } from "./LeaderBoardJsonData";
 import { GoToBuilderSection } from "./GoToBuilderSection";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { LoadingPage } from "Pages/LoadingPage";
+import { StyledLink } from "../../components/StyledLink";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -51,23 +52,6 @@ const Heading = styled.h3`
 `;
 
 
-const StyledLink = styled(Link)`
-background-color: #222;
-color: #fff;
-font-family:Roboto;
-font-weight: 400;
-font-size: 16px;
-padding: 15px 40px;
-box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12), 0px 8px 24px -4px rgba(24, 39, 75, 0.08);
-border-radius: 5px;
-transition: background-color 0.3s linear;
-&:hover {
-  text-decoration: none;
-  color: #fff;
-  background-color: #333;
-}
-`
-
 export const DashboardPage = () => {
   const [{ loading, data, error }] = useAxios("/api/v2/farmer");
 
@@ -75,19 +59,23 @@ export const DashboardPage = () => {
     if (data) {
       return data.data.map((item: any) => {
         return {
-          id: item.id,
+          GUID: item.GUID,
           name: item.name,
+          description: item.description,
           picture: item.picture,
-          poolAddress: item.poolAddress,
-          profit24: item.profit24hours,
-          profit7: item.profit7days,
-          profitTotal: item.profit,
+          poolAddress: item.poolAddress ,
+          profit24hours: item.profit24hours || "$2 280,00",
+          profit7days: item.profit7days || "$2 280,00",
+          profit: item.profit|| "$2 280,00",
         } as IFarmer;
       });
     }
     return [];
   }, [data]);
 
+  if(loading){
+    return <LoadingPage />
+  }
   return (
     <Layout className="bgColor dashboard-root" variant="loggedin">
       <div className="bgnav pt-5 borderCollapse">
@@ -128,7 +116,7 @@ export const DashboardPage = () => {
           </TableContiner>
         ) : (
           <TableContiner>
-            <LeaderBoardTable isReady={!loading} leaders={LeaderBoardData} />
+            <LeaderBoardTable isReady={!loading} leaders={farmers} />
           </TableContiner>
         )}
       </div>

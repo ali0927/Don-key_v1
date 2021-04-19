@@ -1,7 +1,6 @@
 import { IFarmer } from "interfaces";
-import { ILeader } from "./ILeader";
 
 export interface ILeaderBoardTableProps {
-    leaders: ILeader[];
+    leaders: IFarmer[];
     isReady?: boolean;
 }

@@ -1,14 +1,14 @@
 import { ThunkAction } from "redux-thunk";
 
 export type IFarmer = {
-  rank: number;
-  profit24: string;
-  profit7: string;
-  profitTotal: string;
-  picture: string;
-  id: number;
-  name: string;
   poolAddress: string;
+  picture: string;
+  name: string;
+  description: string;
+  profit24hours: string | null;
+  profit7days: string | null;
+  profit: string | null;
+  GUID: string;
 };
 
 export interface IUser {

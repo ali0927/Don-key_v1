@@ -1,4 +1,4 @@
-import ModalPopup from "components/ProtocolsModal/ProtocolsModal";
+import ModalPopup from "components/ModalPopup/ModalPopup";
 import { Row, Col, Form, InputGroup, Tab, Nav, Tabs } from "react-bootstrap";
 import ButtonComponent from "components/Button/Button";
 import { useState } from "react";

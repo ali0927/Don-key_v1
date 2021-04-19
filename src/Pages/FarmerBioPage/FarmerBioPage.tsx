@@ -1,31 +1,26 @@
 import { NavBar } from "components/Navbar/NavBar";
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import { EmptyIcon } from "components/Icons";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import Web3 from "web3";
-import poolContractJson from "../../JsonData/Pool.json";
-import "./FarmerBioPage.scss";
 import { getWeb3 } from "don-utils";
 import { withWeb3 } from "hoc";
-import { useSelector, useDispatch } from "react-redux";
-import { getFarmerDetails } from "actions/farmerActions";
-import { useParams } from "react-router-dom";
-import { TabSection } from "components/TabSection";
-import { MainTab } from "Pages/FarmerBioPage/Tabs/MainTab";
+import { useSelector } from "react-redux";
+import { Link, useParams } from "react-router-dom";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
-import ButtonComponent from "components/Button/Button";
-import { useNotification } from "components/Notification";
+import { IFarmerInter, IStoreState } from "interfaces";
+import { EditIcon } from "icons/EditIcon";
+import { StrategyTable } from "components/StrategyTable";
+import { DetailTable } from "./DetailTable";
+import styled from "styled-components";
+import { capitalize } from "lodash";
 import { useAxios } from "hooks/useAxios";
-import { IStoreState } from "interfaces";
+import { StyledLink } from "components/StyledLink";
 
-export const tabs = [
-  { text: "Main", comp: <MainTab title="Strategies" />, icon: <EmptyIcon /> },
-];
 const poolAddress = "0x921E8B9185Fe180Eb2a1770A1137F6e6E22E9B37";
 
-async function fetchBalance(userPoolAddress = '') {
+async function fetchBalance(userPoolAddress = "") {
   userPoolAddress = userPoolAddress || poolAddress;
 
   const web3 = (await getWeb3()) as Web3;
@@ -39,143 +34,58 @@ async function fetchBalance(userPoolAddress = '') {
 
   (window as any)._web3 = web3;
 
-  const balance = web3.utils.fromWei(await web3.eth.getBalance(userPoolAddress), 'ether');
+  const balance = web3.utils.fromWei(
+    await web3.eth.getBalance(userPoolAddress),
+    "ether"
+  );
 
   return balance;
 }
 
-const DetailTable = ({
-  poolAddress,
-  userName,
-}: {
-  poolAddress: any;
-  userName: string;
-}) => {
-  const [{ loading }, executePost] = useAxios(
-    { method: "POST", url: "/api/v1/farmerinvestments" },
-    { manual: true }
-  );
+const StyledFarmerImage = styled.img`
+  object-fit: cover;
+  width: 100%;
+  max-width: 160px;
+`;
 
-  const [{ loading: deleting }, executeDelete] = useAxios(
-    { method: "DELETE", url: "/api/v1/farmerinvestments" },
-    { manual: true }
-  );
+const OutlinedButton = styled.button`
+  background-color: transparent;
+  border: 1px solid rgba(128, 118, 2, 1);
+  border-radius: 5px;
+  font-size: 16px;
+  color: rgba(54, 53, 44, 1);
+  display: flex;
+  align-items: center;
+  padding: 5px 20px 5px 15px;
+  transition: all 0.3s linear;
+  &:hover {
+    background-color: #fff;
+    border-color: #fff;
+  }
+`;
 
-  const { showNotification } = useNotification();
-
-  const handleInvestFarmer = async () => {
-    try {
-      await executePost({
-        data: {
-          poolAddress: poolAddress,
-        },
-      });
-
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{`Money Invested into Farmer ${userName} Successfully.`}</p>
-          </>
-        ),
-      });
-    } catch (err) {
-      let errorMessage = "Money Was not Invested. Some Error Occurred";
-      if (err && err.response && err.response.status === 409) {
-        errorMessage = "You have already invested into this pool.";
-      }
-
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{errorMessage}</p>
-          </>
-        ),
-      });
-    }
-  };
-
-  const handleWithDraw = async () => {
-    try {
-      await executeDelete({
-        data: {
-          toWalletAddress: poolAddress,
-        },
-      });
-
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{`Money Withdraw into Farmer ${userName} Successfully.`}</p>
-          </>
-        ),
-      });
-    } catch (err) {
-      let errorMessage = "Could not withdraw Money. An error occurred";
-      if (err && err.response && err.response.status === 404) {
-        errorMessage =
-          "You have already withdraw form this pull or not invested into this pool.";
-      }
-
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{errorMessage}</p>
-          </>
-        ),
-      });
-    }
-  };
-
-  return (
-    <div className="bio-banner-rightCol">
-      <Row>
-        <Col md={7}>
-          <div className="bg-white poolCol">
-            <div className="list-box">
-              <h5 className="heading-title">Pool address</h5>
-              <div>{poolAddress}</div>
-            </div>
-          </div>
-        </Col>
-        <Col md={5}>
-          <div className="text-white poolValueCol">
-            <div className="list-box">
-              <div>Total Pool Value</div>{" "}
-              <h5 className="heading-title">100BUSD</h5>
-            </div>
-            <div className="list-box">
-              <div>
-                <Button
-                  className="mb-3"
-                  disabled={loading}
-                  onClick={handleInvestFarmer}
-                >
-                  {" "}
-                  Invest
-                </Button>
-              </div>
-              <div>
-                <Button disabled={deleting} onClick={handleWithDraw}>
-                  Widthraw
-                </Button>
-              </div>
-            </div>
-          </div>
-        </Col>
-      </Row>
-    </div>
-  );
-};
+const StyledHeading = styled.h2`
+  font-family: "Roboto";
+  font-size: 30px;
+`;
 
 export const FarmerBioPage = withWeb3(() => {
   const [balance, setBalance] = useState(0);
   const [modalShow, setModalShow] = useState(false);
-  const [isReady, setIsReady] = useState(false);
-  const farmerInfo = useSelector((state: IStoreState) => state.farmer);
 
-  let parms = useParams();
+  const farmer = useSelector((state: IStoreState) => state.farmer);
+
+  const { id: farmerId } = useParams<{ id: string }>();
+
+  const [
+    { loading, data: farmerFromApi },
+    fetchFarmer,
+  ] = useAxios(`/api/v2/farmer/${farmerId}`, { manual: true });
 
   useEffect(() => {
+    if (farmerId && farmer?.GUID !== farmerId) {
+      fetchFarmer();
+    }
     (async () => {
       const balance = await fetchBalance();
 
@@ -183,16 +93,64 @@ export const FarmerBioPage = withWeb3(() => {
       // with precision. To work with flat numbers correctly it is better to represent it as strings and use
       // Bignumber.js or Big.js to avoid losing precision (it is extremely important when working with money!)
       setBalance(parseFloat(balance));
-      setIsReady(true);
+   
     })();
   }, []);
 
-  // useEffect(() => {
-  //   dispatch(getFarmerDetails(parms));
-  // }, [parms]);
+  const isCurrentFarmer = farmer?.GUID === farmerId || !farmerId;
+  const farmerInfo: IFarmerInter = isCurrentFarmer
+    ? farmer
+    : farmerFromApi?.data;
+  const renderStrategies = () => {
+    const strategyCount = farmerInfo.strategies?.length || 0;
+    if (strategyCount === 0) {
+      if (isCurrentFarmer) {
+        return (
+          <section className="bg-white build-strategy-sec text-center">
+            <Container>
+              <h3 className="sec-title">Build your DeFi strategy</h3>
+              <Link to="/strategy/new" className="btn btn-dark">
+                Create your first strategy
+              </Link>
+              <p>
+                <img src="/assets/images/build-strategy-img.svg" alt="Image" />
+              </p>
+            </Container>
+          </section>
+        );
+      }
+    }
+    if (strategyCount > 0) {
+      return (
+        <div className="my-5">
+          <Container>
+            <Row>
+              <Col
+                className="d-flex align-items-center justify-content-between mb-5"
+                sm={12}
+              >
+                <StyledHeading>My Strategies</StyledHeading>
+                <StyledLink to={"/strategy/new"}>Add Strategy</StyledLink>
+              </Col>
+              <Col sm={12}>
+                <StrategyTable
+                  strategies={farmerInfo.strategies!.map((item) => ({
+                    name: item.name || "",
+                    profit: "$200,000.0",
+                    id: item.id,
+                  }))}
+                />
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      );
+    }
+    return null;
+  };
 
   const renderContent = () => {
-    if (farmerInfo === null) {
+    if ((loading && farmerId) || farmer === null) {
       return (
         <div
           className="d-flex align-items-center justify-content-center"
@@ -202,8 +160,6 @@ export const FarmerBioPage = withWeb3(() => {
         </div>
       );
     }
-
-    console.log(farmerInfo);
 
     return (
       <>
@@ -215,47 +171,37 @@ export const FarmerBioPage = withWeb3(() => {
                 <Container>
                   <Row>
                     <Col sm={12}>
-                      <div className="d-flex">
+                      <div className="d-flex align-items-center">
                         <h2 className="firstHeading mb-3">
-                          {farmerInfo ? farmerInfo.name : ""}
+                          Don - {capitalize(farmerInfo.name || "")}
                         </h2>
-                        {Object.keys(parms).length === 0 && (
-                          <div>
-                            <ButtonComponent
-                              variant="outline-secondary"
-                              className="editBio-btn"
+                        {isCurrentFarmer && (
+                          <>
+                            <OutlinedButton
+                              className="ml-3"
                               onClick={() => setModalShow(true)}
                             >
-                              <svg
-                                width="13"
-                                height="13"
-                                viewBox="0 0 13 13"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path
-                                  d="M12.1266 1.96013L11.0392 0.872631C10.5423 0.375778 9.73398 0.375801 9.23715 0.872631L8.81152 1.29828L11.701 4.18799L12.1266 3.76234C12.6246 3.26432 12.6247 2.45821 12.1266 1.96013Z"
-                                  fill="#36352C"
-                                />
-                                <path
-                                  d="M1.01591 9.32812L0.505881 12.0825C0.48481 12.1964 0.521092 12.3133 0.602959 12.3952C0.68492 12.4771 0.801874 12.5133 0.915569 12.4923L3.66976 11.9822L1.01591 9.32812Z"
-                                  fill="#36352C"
-                                />
-                                <path
-                                  d="M8.31449 1.79688L1.39551 8.71639L4.28498 11.6061L11.204 4.68659L8.31449 1.79688Z"
-                                  fill="#36352C"
-                                />
-                              </svg>
+                              <EditIcon className="mr-2" />
                               Edit bio page
-                            </ButtonComponent>
-                          </div>
+                            </OutlinedButton>
+                            {modalShow && (
+                              <FarmerModal
+                                isOpen={modalShow}
+                                onClose={() => setModalShow(false)}
+                              />
+                            )}
+                          </>
                         )}
                       </div>
                       <Row>
                         <Col sm={2}>
-                          <div className=" managePoolImage">
-                            {farmerInfo && farmerInfo.picture ? (
-                              <img src={farmerInfo.picture} alt="Image" />
+                          <div className="managePoolImage">
+                            {farmerInfo.picture ? (
+                              <StyledFarmerImage
+                                src={farmerInfo.picture}
+                                className="img-fluid"
+                                alt="farmer"
+                              />
                             ) : (
                               ""
                             )}
@@ -263,12 +209,7 @@ export const FarmerBioPage = withWeb3(() => {
                         </Col>
                         <Col sm={10}>
                           <DetailTable
-                            poolAddress={farmerInfo && farmerInfo.poolAddress}
-                            userName={
-                              farmerInfo && farmerInfo.name
-                                ? farmerInfo.name
-                                : ""
-                            }
+                            poolAddress={farmerInfo.poolAddress || ""}
                           />
                         </Col>
                       </Row>
@@ -285,35 +226,19 @@ export const FarmerBioPage = withWeb3(() => {
                 <Row>
                   <Col md={8} lg={7}>
                     <h4 className="investment_title font-weight-bolder">
-                      {" "}
                       Description
                     </h4>
                     <p style={{ fontSize: 15 }}>
-                      {farmerInfo ? (
-                        <ShowMoreContent
-                          length={200}
-                          content={farmerInfo.description || ""}
-                        />
-                      ) : (
-                        ""
-                      )}
+                      <ShowMoreContent
+                        length={200}
+                        content={farmerInfo.description || ""}
+                      />
                     </p>
-                  </Col>
-                  <Col sm={12}>
-                    <hr />
                   </Col>
                 </Row>
               </Container>
             </section>
-            {Object.keys(parms).length === 0 && (
-              <>
-                <TabSection tabs={tabs} />
-                <FarmerModal
-                  isOpen={modalShow}
-                  onClose={() => setModalShow(false)}
-                />
-              </>
-            )}
+            {renderStrategies()}
             <Footer />
           </>
         )}
@@ -321,5 +246,5 @@ export const FarmerBioPage = withWeb3(() => {
     );
   };
 
-  return <>{renderContent()}</>;
+  return <div style={{ background: "#F4F4F4" }}>{renderContent()}</div>;
 });
