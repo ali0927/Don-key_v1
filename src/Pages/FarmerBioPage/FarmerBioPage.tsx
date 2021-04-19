@@ -18,29 +18,7 @@ import { capitalize } from "lodash";
 import { useAxios } from "hooks/useAxios";
 import { StyledLink } from "components/StyledLink";
 
-const poolAddress = "0x921E8B9185Fe180Eb2a1770A1137F6e6E22E9B37";
 
-async function fetchBalance(userPoolAddress = "") {
-  userPoolAddress = userPoolAddress || poolAddress;
-
-  const web3 = (await getWeb3()) as Web3;
-
-  // NOTE: Left for reference, not required here
-  // NOTE: Please take a look how to import and use Pool ABI!!!
-
-  // const accounts = await web3.eth.getAccounts();
-  // const WBNB = new web3.eth.Contract(poolContractJson.abi as any, userPoolAddress);
-  // (window as any).WBNB = WBNB;
-
-  (window as any)._web3 = web3;
-
-  const balance = web3.utils.fromWei(
-    await web3.eth.getBalance(userPoolAddress),
-    "ether"
-  );
-
-  return balance;
-}
 
 const StyledFarmerImage = styled.img`
   object-fit: cover;
@@ -87,12 +65,12 @@ export const FarmerBioPage = withWeb3(() => {
       fetchFarmer();
     }
     (async () => {
-      const balance = await fetchBalance();
+      // const balance = await fetchBalance();
 
       // NOTE: When working wit Ether and Weis it is not correct to operate with `int` and `float` as it have known issues
       // with precision. To work with flat numbers correctly it is better to represent it as strings and use
       // Bignumber.js or Big.js to avoid losing precision (it is extremely important when working with money!)
-      setBalance(parseFloat(balance));
+      // setBalance(parseFloat(balance));
    
     })();
   }, []);

@@ -1,90 +1,34 @@
-import { apiRequest } from "actions/apiActions";
-import { AppThunk, CallBackorVal,IFarmerInter } from "interfaces";
+import { api } from "don-utils";
+import { AppThunk, IFarmerInter } from "interfaces";
 import { action } from "typesafe-actions";
 
 export const setFarmerDetail = (args: IFarmerInter) => {
   return action("FARMER_DETAIL", args);
 };
 
-interface parmsId {
-  id?: number | string;
-}
-
-export const getFarmerDetails = (param: parmsId): AppThunk => {
-  return (dispatch, getState) => {
-    dispatch(
-      apiRequest({
-        method: "GET",
-        endpoint: `/api/v1/farmer${param && param.id ? "/" + param.id : ""}`,
-        data: "",
-        onDone: (res) => {
-          if (
-            res.data.data !== undefined &&
-            res.data.data !== null &&
-            res.data.data.poolAddress !== undefined &&
-            res.data.data.poolAddress === null
-          ) {
-             // no redirection
-            window.location.href = "/dashboard/farmer/signup";
-          } else {
-            dispatch(setFarmerDetail(res.data.data));
-          }
-        },
-        onFail: (res) => {
-          if (res.status === 404 || res.status === 401) {
-            // no redirection
-            // window.location.href = "/dashboard/farmer/signup";
-          }
-        },
-      })
-    );
-  };
-};
-
-interface updateFarmerInter {
+export const updateFarmerDetails = ({
+  name,
+  description,
+  picture,
+}: {
   name?: string;
   description?: string;
-}
-export const updateFarmerDetails = (
-  farmerInfo: updateFarmerInter
-): AppThunk => {
-  return (dispatch) => {
-    dispatch(
-      apiRequest({
-        method: "PUT",
-        endpoint: `/api/v1/farmer`,
-        data: farmerInfo,
-        onDone: (res) => {
-          dispatch(setFarmerDetail(res.data.data));
-        },
-        onFail: (res) => {
-          if (res.status === 404 || res.status === 401) {
-          }
-        },
-      })
-    );
-  };
-};
+  picture?: File | null;
+}): AppThunk => {
+  return async (dispatch) => {
+    const formdata = new FormData();
+    if (name) {
+      formdata.append("name", name);
+    }
+    if (description) {
+      formdata.append("description", description);
+    }
+    if (picture) {
+      formdata.append("picture", picture);
+    }
 
-interface strategyArr {
-  strategyInfo?: any;
-}
+    const res = await api.put(`/api/v2/farmer/`, formdata);
 
-export const addStrategyDetails = (strategyInfo: strategyArr): AppThunk => {
-  return (dispatch) => {
-    dispatch(
-      apiRequest({
-        method: "POST",
-        endpoint: `/api/v1/strategy`,
-        data: strategyInfo,
-        onDone: (res) => {
-          dispatch(getFarmerDetails({ id: "me" }));
-        },
-        onFail: (res) => {
-          if (res.status === 404 || res.status === 401) {
-          }
-        },
-      })
-    );
+    dispatch(setFarmerDetail(res.data.data));
   };
 };

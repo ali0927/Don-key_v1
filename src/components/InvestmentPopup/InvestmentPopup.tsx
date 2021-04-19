@@ -2,52 +2,10 @@ import { BiInfoCircle } from "react-icons/bi";
 import { FaCross } from "react-icons/fa";
 import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
-import { useEffect, useState } from "react";
-
-import Web3 from "web3";
+import { useState } from "react";
 import { useToggle } from "don-hooks";
-import { getWeb3 } from "don-utils";
 import { useAxios } from "hooks/useAxios";
-import { useNotification } from "components/Notification";
-
-const InvestmentInput = ({
-  value,
-  setValue,
-  max,
-}: {
-  value: string;
-  setValue: (val: string) => void;
-  max: number;
-}) => {
-  return (
-    <div>
-      <div className="invest_input">
-        <div className="invest_input_currency">BUSD</div>
-        <div>
-          <input
-            type="number"
-            placeholder="0"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            className="invest_input_elm"
-          />
-        </div>
-      </div>
-      <div className="invest_percent">
-        {[0, 20, 50, 80, 100].map((val) => {
-          return (
-            <span
-              onClick={() => setValue(((val / 100) * max).toFixed(2))}
-              style={{ opacity: val / 100 + 0.2 }}
-            >
-              {val}%
-            </span>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
+import { InvestmentInput } from "./InvestmentInput";
 
 export const InvestmentPopup = ({
   balance,
@@ -72,46 +30,6 @@ export const InvestmentPopup = ({
 
 
 
-  // const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
-  const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
-
-  async function fetchPoolLiquidity() {
-    const web3 = (await getWeb3()) as Web3;
-    const accounts = await web3.eth.getAccounts();
-
-    const parsedPoolContract = (await import("../../JsonData/NPOOL.json"))
-      .default;
-    //@ts-ignore
-    const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-
-    const poolLiquidity = await pool.methods.getLiquidity().call();
-    return poolLiquidity;
-  }
-
-  async function investMoney(amount: string) {
-    const web3 = (await getWeb3()) as Web3;
-
-    const accounts = await web3.eth.getAccounts();
-
-    var executedStrategy = await web3.eth.sendTransaction({
-      from: accounts[0],
-      to: poolAddress,
-      value: web3.utils.toWei(amount, "ether")
-    })
-    console.log("Sent", executedStrategy);
-
-  }
-
-  const [poolLiquidity, setPoolLiquidity] = useState(0);
-
-  const updatePoolLiquidity = async () => {
-    const val = await fetchPoolLiquidity();
-    setPoolLiquidity(parseFloat(val));
-  };
-
-  useEffect(() => {
-    updatePoolLiquidity();
-  }, []);
 
   const handleInvest = async () => {
     if (isLoading) {
@@ -119,33 +37,7 @@ export const InvestmentPopup = ({
     }
     enable();
     try {
-      if (poolLiquidity === 0) {
-        const web3 = (await getWeb3()) as Web3;
-        const accounts = await web3.eth.getAccounts();
-        const abi = require("erc-20-abi");
-
-        const WBNB = new web3.eth.Contract(
-          abi,
-          WBNBAddress
-        );
-
-        const currentAllowance = await WBNB.methods
-          .allowance(accounts[0], poolAddress)
-          .call();
-
-        const parsedPoolContract = (await import("../../JsonData/Pool.json"))
-          .default;
-
-        const amount = web3.utils.toWei(value);
-        //@ts-ignore
-        const pool = new web3.eth.Contract(parsedPoolContract.abi, poolAddress);
-        await pool.methods.depositLiquidity(amount).send({ from: accounts[0] });
-        await updatePoolLiquidity();
-      }
-      if (poolLiquidity > 0) {
-        await investMoney(value);
-      }
-
+     
      await executePost({ data: { poolAddress } });
       if (onSuccess) {
         onSuccess();
@@ -167,9 +59,7 @@ export const InvestmentPopup = ({
     if (isLoading) {
       return <Spinner animation="border" size={"sm"} color="#fff" />;
     }
-    if (poolLiquidity > 0) {
-      return "Run Strategy";
-    }
+
     return "Invest";
   };
 
@@ -222,7 +112,7 @@ export const InvestmentPopup = ({
             <div className="row">
               <div className="col">
                 <button
-                  disabled={poolLiquidity === 0 && !value}
+                  disabled={!value}
                   onClick={handleInvest}
                   className="invest_btn"
                 >

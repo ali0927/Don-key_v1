@@ -1,4 +1,3 @@
-import { UrlJsonRpcProvider } from "@ethersproject/providers";
 import ButtonComponent from "components/Button/Button";
 import { Layout } from "components/Layout";
 import { useWeb3 } from "don-components";

@@ -17,7 +17,7 @@ import {
 import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { useNotification } from "components/Notification";
-
+import styled from "styled-components";
 const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState(0);
@@ -39,6 +39,13 @@ const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   }
   return <>{poolAmount} BUSD</>;
 };
+
+
+const StyledImage = styled.img`
+width: 45px;
+height: 45px;
+`
+
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   const { leaders, isReady } = props;
@@ -94,7 +101,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                 >
                   <TableData>{index + 1}</TableData>
                   <TableData>
-                    <img src={item.picture} />
+                    <StyledImage  src={item.picture} />
                   </TableData>
                   <TableData>{item.name}</TableData>
 
