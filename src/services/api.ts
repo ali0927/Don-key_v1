@@ -5,7 +5,7 @@ import { api, getWeb3 } from "don-utils";
 
 
 export const getNonce = async (publicAddress: string) => {
-  const res = await api.post("/api/v1/nonce", {
+  const res = await api.post("/api/v2/login/nonce", {
     walletAddress: publicAddress,
   });
   const {
@@ -16,7 +16,7 @@ export const getNonce = async (publicAddress: string) => {
 
 
 export const getAuthToken = async (publicAddress: string, signature: string) => {
-  const resps = await api.post("/api/v1/login", {
+  const resps = await api.post("/api/v2/login", {
     signature,
     walletAddress: publicAddress,
   });

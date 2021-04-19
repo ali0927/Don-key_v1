@@ -4,9 +4,7 @@ import produce from "immer";
 import { IStoreState } from "interfaces";
 import { Reducer } from "redux";
 
-const INITIAL_STATE = {
-  user: null,
-};
+
 
 export const farmerReducer: Reducer<IStoreState["farmer"], IFarmerActions> = (
   state = null,
@@ -15,11 +13,8 @@ export const farmerReducer: Reducer<IStoreState["farmer"], IFarmerActions> = (
   switch (action.type) {
     case "FARMER_DETAIL": {
       const farmer = action.payload;
-
-      return {
-        ...state,
-        user: farmer,
-      };
+      
+      return farmer;
     }
     default: {
       return state;

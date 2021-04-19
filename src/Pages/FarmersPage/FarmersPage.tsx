@@ -3,12 +3,11 @@ import { Container, Form } from "react-bootstrap";
 import "./FarmersStyle.scss";
 import { Footer } from "components/Footer/Footer";
 import ButtonComponent from "components/Button/Button";
-import { useState } from "react";
-import axios from "axios";
+
 const FarmersPage = () => {
   return (
     <div className="bgnav">
-      <NavBar variant="default" hideWallet />
+      <NavBar variant="landing" hideWallet />
       <div className=" pt-5 pb-5">
         <Container>
           <div className="row justify-content-center">

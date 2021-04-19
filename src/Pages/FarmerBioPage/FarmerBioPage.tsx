@@ -18,6 +18,7 @@ import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import ButtonComponent from "components/Button/Button";
 import { useNotification } from "components/Notification";
 import { useAxios } from "hooks/useAxios";
+import { IStoreState } from "interfaces";
 
 export const tabs = [
   { text: "Main", comp: <MainTab title="Strategies" />, icon: <EmptyIcon /> },
@@ -170,9 +171,8 @@ export const FarmerBioPage = withWeb3(() => {
   const [balance, setBalance] = useState(0);
   const [modalShow, setModalShow] = useState(false);
   const [isReady, setIsReady] = useState(false);
-  const farmerInfo = useSelector((state: any) => state.farmer);
+  const farmerInfo = useSelector((state: IStoreState) => state.farmer);
 
-  const dispatch = useDispatch();
   let parms = useParams();
 
   useEffect(() => {
@@ -187,9 +187,9 @@ export const FarmerBioPage = withWeb3(() => {
     })();
   }, []);
 
-  useEffect(() => {
-    dispatch(getFarmerDetails(parms));
-  }, [parms]);
+  // useEffect(() => {
+  //   dispatch(getFarmerDetails(parms));
+  // }, [parms]);
 
   const renderContent = () => {
     if (farmerInfo === null) {
@@ -208,7 +208,7 @@ export const FarmerBioPage = withWeb3(() => {
     return (
       <>
         <NavBar variant="loggedin" />
-        {farmerInfo && farmerInfo.user && (
+        {farmerInfo && (
           <>
             <section className="bg-buru">
               <div className="navbanHead rounded-0 pt-5 pb-5">
@@ -217,9 +217,7 @@ export const FarmerBioPage = withWeb3(() => {
                     <Col sm={12}>
                       <div className="d-flex">
                         <h2 className="firstHeading mb-3">
-                          {farmerInfo && farmerInfo.user
-                            ? farmerInfo.user.name
-                            : ""}
+                          {farmerInfo ? farmerInfo.name : ""}
                         </h2>
                         {Object.keys(parms).length === 0 && (
                           <div>
@@ -256,8 +254,8 @@ export const FarmerBioPage = withWeb3(() => {
                       <Row>
                         <Col sm={2}>
                           <div className=" managePoolImage">
-                            {farmerInfo && farmerInfo.user ? (
-                              <img src={farmerInfo.user.picture} alt="Image" />
+                            {farmerInfo && farmerInfo.picture ? (
+                              <img src={farmerInfo.picture} alt="Image" />
                             ) : (
                               ""
                             )}
@@ -265,12 +263,10 @@ export const FarmerBioPage = withWeb3(() => {
                         </Col>
                         <Col sm={10}>
                           <DetailTable
-                            poolAddress={
-                              farmerInfo.user && farmerInfo.user.poolAddress
-                            }
+                            poolAddress={farmerInfo && farmerInfo.poolAddress}
                             userName={
-                              farmerInfo && farmerInfo.user
-                                ? farmerInfo.user.name
+                              farmerInfo && farmerInfo.name
+                                ? farmerInfo.name
                                 : ""
                             }
                           />
@@ -293,10 +289,10 @@ export const FarmerBioPage = withWeb3(() => {
                       Description
                     </h4>
                     <p style={{ fontSize: 15 }}>
-                      {farmerInfo && farmerInfo.user ? (
+                      {farmerInfo ? (
                         <ShowMoreContent
                           length={200}
-                          content={farmerInfo.user.description}
+                          content={farmerInfo.description || ""}
                         />
                       ) : (
                         ""

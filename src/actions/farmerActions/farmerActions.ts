@@ -1,8 +1,8 @@
 import { apiRequest } from "actions/apiActions";
-import { AppThunk, CallBackorVal, IFarmerUser } from "interfaces";
+import { AppThunk, CallBackorVal,IFarmerInter } from "interfaces";
 import { action } from "typesafe-actions";
 
-export const setFarmerDetail = (args: CallBackorVal<IFarmerUser>) => {
+export const setFarmerDetail = (args: IFarmerInter) => {
   return action("FARMER_DETAIL", args);
 };
 
@@ -24,6 +24,7 @@ export const getFarmerDetails = (param: parmsId): AppThunk => {
             res.data.data.poolAddress !== undefined &&
             res.data.data.poolAddress === null
           ) {
+             // no redirection
             window.location.href = "/dashboard/farmer/signup";
           } else {
             dispatch(setFarmerDetail(res.data.data));
@@ -31,7 +32,8 @@ export const getFarmerDetails = (param: parmsId): AppThunk => {
         },
         onFail: (res) => {
           if (res.status === 404 || res.status === 401) {
-            window.location.href = "/dashboard/farmer/signup";
+            // no redirection
+            // window.location.href = "/dashboard/farmer/signup";
           }
         },
       })

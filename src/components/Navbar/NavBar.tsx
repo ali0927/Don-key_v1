@@ -2,20 +2,18 @@ import React, { useState } from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
-import { Navbar, Nav, Dropdown } from "react-bootstrap";
+import { Navbar, Nav } from "react-bootstrap";
 import "./NavbarStyle.scss";
-import NotificationJson from "../../JsonData/NotificationJson";
-import { NotificationIcon, UserIcon } from "../Icons";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { Logo } from "./Logo";
 import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
-import {shortenAddress} from "don-utils";
-
+import { shortenAddress } from "don-utils";
+import { IStoreState } from "interfaces";
 
 const useWalletAddress = ({ short = false }) => {
   const user = useSelector((state: any) => state.auth.user);
@@ -25,9 +23,46 @@ const useWalletAddress = ({ short = false }) => {
   return short ? shortenAddress(walletAddress) : walletAddress;
 };
 
+export const NotificationComp = () => {
+  return (
+    <div className="">
+      {/* <Dropdown className="dropNav1">
+        <Dropdown.Toggle
+          id="dropdown-basic"
+          className=" mr-0 ml-2 ml-md-0 mr-md-2"
+        >
+          <NotificationIcon className="notification-icon" />
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <p className="notifyHead">Notifications</p>
+
+          {NotificationJson.map((item, index) => {
+            return (
+              <Dropdown.Item href="#">
+                <p>{item.notification}</p>
+                <span>{timeSince(item.date)}</span>
+              </Dropdown.Item>
+            );
+          })}
+          <div className="viewDrop">
+            <a href="#"> View All</a>
+          </div>
+        </Dropdown.Menu>
+      </Dropdown>
+
+      <a href="#" className="mr-3">
+        <UserIcon className="user-icon" />
+      </a> */}
+    </div>
+  );
+};
+
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
-  const isAuth = useSelector((state: any) => state.auth);
+  const isAuth = useSelector((state: IStoreState) => state.auth);
+  const farmerDetails = useSelector((state: IStoreState) => state.farmer);
+
   const { isLoggedIn } = isAuth;
   const address = useWalletAddress({ short: true });
   const history = useHistory();
@@ -39,19 +74,18 @@ function NavBar(props: INavBarProps) {
     return <Logo />;
   }, [variant]);
 
-  const {doMetaMaskLogin} = useMetaMaskLogin();
+  const { doMetaMaskLogin } = useMetaMaskLogin();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleConnection = async () => {
-    setIsDisabled(true)
+    setIsDisabled(true);
     try {
-      await doMetaMaskLogin()
-    }finally {
-      setIsDisabled(false)
+      await doMetaMaskLogin();
+    } finally {
+      setIsDisabled(false);
     }
-  }
-
+  };
 
   return (
     <>
@@ -72,11 +106,7 @@ function NavBar(props: INavBarProps) {
                   <>
                     <Nav.Link
                       href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
-                      className={
-                        window.location.pathname === "/"
-                          ? "colorBlack pr-md-5"
-                          : "colorBlack pr-md-5 active"
-                      }
+                      className={"colorBlack pr-md-5"}
                     >
                       Litepaper
                     </Nav.Link>
@@ -87,61 +117,37 @@ function NavBar(props: INavBarProps) {
                   </>
                 )}
 
-                {variant === "default" && (
+                {(variant === "loggedin" || variant == "builder") && (
                   <>
-                    <Nav.Link
-                      href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
-                      className={"colorBlack pr-md-5"}
+                    <NavbarLink
+                      to="/dashboard"
+                      linkColor={variant === "builder" ? "white" : "black"}
                     >
-                      Litepaper
-                    </Nav.Link>
-                    <NavbarLink to="/farmers">Farmers</NavbarLink>
-                    <NavbarLink to="/team">Team</NavbarLink>
-                  </>
-                )}
-                {(variant === "loggedin" || variant=="builder") && (
-                  <>
-                    <NavbarLink to="/dashboard" linkColor={variant==="builder" ? "white": "black"}>Main</NavbarLink>
-                    <NavbarLink to="/dashboard/investment" linkColor={variant==="builder" ? "white": "black"}>My Investments</NavbarLink>
-                    <NavbarLink to="/dashboard/farmer/me" linkColor={variant==="builder" ? "white": "black"}>
-                      My Farmer Page
+                      Main
                     </NavbarLink>
+                    <NavbarLink
+                      to="/dashboard/investment"
+                      linkColor={variant === "builder" ? "white" : "black"}
+                    >
+                      My Investments
+                    </NavbarLink>
+                    {farmerDetails?.poolAddress ? (
+                      <NavbarLink
+                        to="/dashboard/farmer/me"
+                        linkColor={variant === "builder" ? "white" : "black"}
+                      >
+                        My Farmer Bio
+                      </NavbarLink>
+                    ) : (
+                      <NavbarLink
+                        to="/dashboard/farmer/signup"
+                        linkColor={variant === "builder" ? "white" : "black"}
+                      >
+                        Become a Farmer
+                      </NavbarLink>
+                    )}
                   </>
                 )}
-                
-         
-
-                    {/* <div className="">
-                <Dropdown className="dropNav1">
-                  <Dropdown.Toggle
-                    id="dropdown-basic"
-                    className=" mr-0 ml-2 ml-md-0 mr-md-2"
-                  >
-                    <NotificationIcon className="notification-icon" />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <p className="notifyHead">Notifications</p>
-
-                    {NotificationJson.map((item, index) => {
-                      return (
-                        <Dropdown.Item href="#">
-                          <p>{item.notification}</p>
-                          <span>{timeSince(item.date)}</span>
-                        </Dropdown.Item>
-                      );
-                    })}
-                    <div className="viewDrop">
-                      <a href="#"> View All</a>
-                    </div>
-                  </Dropdown.Menu>
-                </Dropdown>
-
-                <a href="#" className="mr-3">
-                  <UserIcon className="user-icon" />
-                </a>
-              </div> */}
-
               </Nav>
             </Navbar.Collapse>
             {variant === "landing" && (
@@ -155,7 +161,7 @@ function NavBar(props: INavBarProps) {
               </div>
             )}
 
-            {(variant === "default" || variant === "loggedin") && (
+            {variant === "loggedin" && (
               <>
                 {isLoggedIn && !hideWallet ? (
                   <ButtonComponent variant="colorBlack btn-outline btnusername">

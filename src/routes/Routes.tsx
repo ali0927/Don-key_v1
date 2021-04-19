@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "Pages/LandingPage";
 import { ProtectedRoute } from "components/ProtectedRoute";
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
+import TeamPage from "Pages/TeamPage";
+import FarmersPage from "Pages/FarmersPage";
 
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
 const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
 const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
-const FarmerSubscribePage = lazy(() => import("Pages/FarmersPage"));
-const TeamPage = lazy(() => import("Pages/TeamPage"));
 const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
 const SelectTemplate = lazy(() => import("Pages/SelectTemplate"));
 const FarmerSignupPage = lazy(() => import("Pages/FarmerSignupPage"));
@@ -20,7 +20,9 @@ export default function Routes() {
     <Router>
       <Switch>
         <Route exact path="/" children={<LandingPage />} />
-        <Route
+        <Route path="/farmers" children={<FarmersPage />} />
+        <Route path="/team" children={<TeamPage />} />
+        <ProtectedRoute
           exact
           path="/dashboard"
           children={
@@ -91,24 +93,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <Route
-          path="/farmers"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <FarmerSubscribePage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/team"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <TeamPage />
-            </Suspense>
-          }
-        />
-
-        <Route
+        <ProtectedRoute
           path="/strategy/new"
           children={
             <Suspense fallback={<LoadingPage />}>

@@ -1,3 +1,10 @@
+[context.master]
+  environment = { REACT_APP_API_URL = "https://api.don-key.finance"}
+[context.dev]
+  environment = { REACT_APP_API_URL = "https://api.dev.don-key.finance"}
+[context.deploy-preview]
+  environment = { REACT_APP_API_URL = "https://api.dev.don-key.finance"}
+  
 [[redirects]]
   from = "/*"
   to = "/index.html"

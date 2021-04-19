@@ -37,7 +37,7 @@ export const MyAccountNew = () => {
     };
     return (
         <>
-            <NavBar variant="default" />
+            <NavBar variant="loggedin" />
             <section className="bg-buru">
                 <div className="navbanHead rounded-0 pt-5 pb-5">
                     <Container>

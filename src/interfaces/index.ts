@@ -40,16 +40,23 @@ export interface IUser {
   };
 }
 
-export interface IFarmerUser {
-  farmer: IFarmerInter;
-}
+export type IStrategy = {
+  name?: string;
+  id: string;
+};
 
 export interface IFarmerInter {
-  name?: string | null;
-  description?: string | null;
   poolAddress?: string | null;
   picture?: string | null;
-  strategies?: [] | null;
+  GUID: string;
+  name?: string | null;
+  last_signin: string;
+  description?: string | null;
+  role: "user" | "admin";
+  is_active: boolean;
+  walletAddress: string;
+  username?: string | null;
+  strategies?: IStrategy[] | null;
 }
 
 export type CallBackorVal<T> = T | ((val: T) => T);

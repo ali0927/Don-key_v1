@@ -4,4 +4,5 @@ export * from "./api";
 export * from "./getWeb3";
 export * from "./getEstimatedAmount";
 export * from "./timeSince";
-export * from "./shortenAddress"
+export * from "./shortenAddress";
+export * from "./getVisiblePages";

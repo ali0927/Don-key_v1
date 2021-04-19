@@ -7,7 +7,7 @@ export const Layout = ({
   className = "bgnav",
 }: {
   children: React.ReactNode;
-  variant?: "landing" | "loggedin" | "default";
+  variant?: "landing" | "loggedin" ;
   className?: string;
 }) => {
   return (

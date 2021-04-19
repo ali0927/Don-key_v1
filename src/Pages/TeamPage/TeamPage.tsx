@@ -94,7 +94,7 @@ const TeamJSON: ITeamCardProps[] = [
 export const TeamPage = () => {
   return (
     <div className="bgnav">
-      <NavBar variant="default" hideWallet />
+      <NavBar variant="landing" hideWallet />
       <div className=" pt-5 pb-5">
         <Container>
           <div className="row ">

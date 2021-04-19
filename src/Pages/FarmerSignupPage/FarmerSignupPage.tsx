@@ -15,6 +15,23 @@ import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import "./FarmerSignupPage.scss";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { IStoreState } from "interfaces";
+
+const SignUpForm = styled.form`
+  background-color: #fff;
+  padding: 50px;
+  min-height: 500px;
+  border-radius: 5px;
+  max-width: 437px;
+`;
+
+const StyledDonkey = styled(DonKeyIcon)`
+  position: absolute;
+  bottom: 20px;
+  right: -64px;
+`;
 
 export const FarmerSignupPage = withWeb3(() => {
   const [name, setName] = useState("");
@@ -23,13 +40,13 @@ export const FarmerSignupPage = withWeb3(() => {
 
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState("");
-  const [{ data, error, loading }] = useAxios("/api/v1/farmer");
-  const [{ }, executePost] = useAxios(
-    { method: "PUT", url: "/api/v1/farmer" },
+  const farmer = useSelector((state: IStoreState) => state.farmer);
+  const [{}, executePost] = useAxios(
+    { method: "PUT", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
   );
   const [posting, setPosting] = useState(false);
-
+  
   const web3 = useWeb3();
   const handleCreate = async () => {
     setPosting(true);
@@ -95,10 +112,7 @@ export const FarmerSignupPage = withWeb3(() => {
     }
   }, [name, description, image]);
   const renderContent = () => {
-    if (error) {
-      return "Some Error Occurred";
-    }
-    if (loading || posting) {
+    if (posting) {
       return (
         <div
           className="d-flex align-items-center justify-content-center"
@@ -108,8 +122,10 @@ export const FarmerSignupPage = withWeb3(() => {
         </div>
       );
     }
-    if (data?.data?.poolAddress) {
-      history.push("/dashboard/farmer/me");
+    if (farmer?.poolAddress) {
+      return <div className="text-center">
+        You Have Already Signed Up
+      </div>;
     }
     return (
       <div className="container">
@@ -160,11 +176,6 @@ export const FarmerSignupPage = withWeb3(() => {
                   {image ? image.name : "No file chosen"}
                 </div>
               </div>
-
-              {/* <Form.Control
-                type="file"
-                onChange={(e) => setImage((e.target as any).files[0])}
-              /> */}
             </Form.Group>
             {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
             <ButtonComponent
@@ -174,7 +185,7 @@ export const FarmerSignupPage = withWeb3(() => {
               Make Farmer Profile
             </ButtonComponent>
 
-            <DonKeyIcon className="donkeyIcon" />
+            <StyledDonkey />
           </div>
         </div>
       </div>
@@ -193,14 +204,9 @@ export const FarmerSignupPage = withWeb3(() => {
             <SmallCloud className="position-absolute smallRightCloud" />
 
             <Container className="position-relative">
-              <div className="row">
-                <div className="col">
-                  <form
-                    className="newStrategyContent newStrategyContentOverride"
-                    style={{ background: "#fff" }}
-                  >
-                    {renderContent()}
-                  </form>
+              <div className="row justify-content-center">
+                <div className="col-md-5">
+                  <SignUpForm>{renderContent()}</SignUpForm>
                 </div>
               </div>
             </Container>
