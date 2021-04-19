@@ -9,7 +9,7 @@ import "./LeaderBoardTable.scss";
 import { Form } from "react-bootstrap";
 import { LeftArrow, RightArrowIcon } from "icons";
 import { Pagination } from "../../../components/Pagnination";
-import { Table, TableHead, TableHeading, TableBody, TableData, TableRow } from "../../../components/Table";
+import { Table, TableHead, TableHeading, TableBody, TableData, TableRow, TableResponsive } from "../../../components/Table";
 import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 
@@ -36,7 +36,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
         history.push(`/dashboard/farmer/${id}`)
     }
 
-    const openInvestmentDialog = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const openInvestmentDialog = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
         setOpenInvestment(true);
     }
@@ -56,56 +56,57 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
 
     return (
         <>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableHeading>#</TableHeading>
-                        <TableHeading></TableHeading>
-                        <TableHeading>FARMER NAME</TableHeading>
-                        <TableHeading>STRATEGY NAME</TableHeading>
-                        <TableHeading>TOTAL VALUE</TableHeading>
-                        <TableHeading>24h PROFIT</TableHeading>
-                        <TableHeading>7 DAYS PROFIT</TableHeading>
-                        <TableHeading>INITIAL PROFIT</TableHeading>
-                        <TableHeading>MY INVESTMENT</TableHeading>
-                        <TableHeading>ACTION</TableHeading>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {" "}
-                    <>
-                        {leaders.map((item, index) => {
-                            return (
-                                <TableRow key={item.id} onClick={handleLeaderClick(item.id)}>
-                                    <TableData>{index + 1}</TableData>
-                                    <TableData><img src={item.icon} /></TableData>
-                                    <TableData>
-                                        {item.farmerName}
-                                    </TableData>
-                                    <TableData>
-                                        {item.strategyName}
-                                    </TableData>
-                                    <TableData>
-                                        {item.totalValue}
-                                    </TableData>
-                                    <TableData>
-                                        {item.profit24}
-                                    </TableData>
-                                    <TableData>
-                                        {item.days7proft}
-                                    </TableData>
-                                    <TableData>
-                                        {item.initialProfit}
-                                    </TableData>
-                                    <TableData>
-                                        {item.myInvestment}
-                                    </TableData>
-                                    <TableData>
-                                        <LightGrayButton type="submit" onClick={openInvestmentDialog}>
-                                            Invest
+            <TableResponsive>
+                <Table>
+                    <TableHead>
+                        <TableRow isHoverOnRow={false}>
+                            <TableHeading>#</TableHeading>
+                            <TableHeading></TableHeading>
+                            <TableHeading>FARMER NAME</TableHeading>
+                            <TableHeading>STRATEGY NAME</TableHeading>
+                            <TableHeading>TOTAL VALUE</TableHeading>
+                            <TableHeading>24h PROFIT</TableHeading>
+                            <TableHeading>7 DAYS PROFIT</TableHeading>
+                            <TableHeading>INITIAL PROFIT</TableHeading>
+                            <TableHeading>MY INVESTMENT</TableHeading>
+                            <TableHeading>ACTION</TableHeading>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {" "}
+                        <>
+                            {leaders.map((item, index) => {
+                                return (
+                                    <TableRow isHoverOnRow key={item.id} onClick={handleLeaderClick(item.id)}>
+                                        <TableData>{index + 1}</TableData>
+                                        <TableData><img src={item.icon} /></TableData>
+                                        <TableData>
+                                            {item.farmerName}
+                                        </TableData>
+                                        <TableData>
+                                            {item.strategyName}
+                                        </TableData>
+                                        <TableData>
+                                            {item.totalValue}
+                                        </TableData>
+                                        <TableData>
+                                            {item.profit24}
+                                        </TableData>
+                                        <TableData>
+                                            {item.days7proft}
+                                        </TableData>
+                                        <TableData>
+                                            {item.initialProfit}
+                                        </TableData>
+                                        <TableData>
+                                            {item.myInvestment}
+                                        </TableData>
+                                        <TableData>
+                                            <LightGrayButton type="submit" onClick={openInvestmentDialog}>
+                                                Invest
                                        </LightGrayButton>
-                                    </TableData>
-                                    {/* <td>
+                                        </TableData>
+                                        {/* <td>
                                     <span>
                                         <PoolAmount poolAddress={item.poolAddress} />
                                     </span>
@@ -115,15 +116,15 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                                 </td>
                                 <td>{item.profit7 || "-"}</td>
                                 <td>{item.profitTotal || "-"}</td> */}
-                                </TableRow>
-                            );
-                        })}
-                    </>
-                </TableBody>
-            </Table>
-
+                                    </TableRow>
+                                );
+                            })}
+                        </>
+                    </TableBody>
+                </Table>
+            </TableResponsive>
             {openInvestment &&
-               <InvestmentPopup balance={10000} onClose={closeInvestmentDialog}/>
+                <InvestmentPopup balance={10000} onClose={closeInvestmentDialog} />
             }
 
             <Pagination rowscount={100} />

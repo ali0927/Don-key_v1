@@ -1,9 +1,15 @@
 import styled from "styled-components";
 
-const Table = styled.table({
+
+const TableResponsive = styled.div({
     display: "block",
     width: "100%",
     overflowX: "auto",
+})
+
+const Table = styled.table({
+    
+    width: "100%",
     background: "#fff",
     marginBottom: "1rem",
     borderRadius: 5,
@@ -11,15 +17,15 @@ const Table = styled.table({
 
 const TableHead = styled.thead({});
 
-const TableRow = styled.tr({
-    height: 100,
-    borderBottom: "1px solid #dee2e6",
-    transition: "background 0.3s",
-    "&:hover": {
-        background: "#F3F3F3",
-        cursor: "pointer",
-    },
-});
+const TableRow = styled.tr`
+       height: 100px;
+       border-bottom: 1px solid #dee2e6;
+       transition: background 0.3s;
+       &:hover {
+           background: ${(props: { isHoverOnRow?: boolean }) => props.isHoverOnRow ? "#F3F3F3" : ""};
+           cursor: ${(props: { isHoverOnRow?: boolean }) => props.isHoverOnRow ? "pointer" : "auto"};
+       },
+`;
 
 const TableBody = styled.tbody({});
 
@@ -54,6 +60,7 @@ const TableData = styled.td({
 
 
 export {
+    TableResponsive,
     Table,
     TableRow,
     TableBody,

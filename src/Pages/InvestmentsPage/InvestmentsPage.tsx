@@ -4,7 +4,7 @@ import {
   Container,
   Row,
   Button,
-  Table,
+  Col,
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import Web3 from "web3";
@@ -20,6 +20,19 @@ import _ from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useNotification } from "components/Notification";
 import { LoadingPage } from "Pages/LoadingPage";
+import styled from "styled-components";
+import { Table, TableBody, TableData, TableHead, TableHeading, TableResponsive, TableRow } from "components/Table";
+
+const HeadingTitle = styled.p({
+  fontFamily: "Roboto",
+  fontSize: "45px",
+  fontStyle: "normal",
+  fontWeight: 800,
+  letterSpacing: "0em",
+  textAlign: "left",
+  color: "#070602",
+});
+
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
@@ -48,7 +61,7 @@ export const InvestmentsPage = () => {
     { useCache: false }
   );
 
-  const [{}, executeDelete] = useAxios(
+  const [{ }, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v1/farmerinvestments" },
     { manual: true }
   );
@@ -56,12 +69,12 @@ export const InvestmentsPage = () => {
   const farmer: IFarmer = data
     ? { ...data.data }
     : {
-        name: "",
-        description: "",
-        picture: "",
-        amountInPool: "907000.45",
-        poolAddress: "",
-      };
+      name: "",
+      description: "",
+      picture: "",
+      amountInPool: "907000.45",
+      poolAddress: "",
+    };
 
   const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
 
@@ -120,7 +133,7 @@ export const InvestmentsPage = () => {
     }
   };
 
-  if(!data){
+  if (!data) {
     return <LoadingPage />
   }
 
@@ -132,17 +145,20 @@ export const InvestmentsPage = () => {
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-              <div className="firstLetter image-col mr-4">
-                {/* <img
+              <Col>
+                <HeadingTitle>My Investments</HeadingTitle>
+              </Col>
+              {/* <div className="firstLetter image-col mr-4">
+                 <img
                   className="img-fluid farmer-image"
                   src={
                     ""
                   }
                   alt={"investment"}
-                /> */}
-              </div>
+                />
+              </div> */}
 
-              <div className="firstHeading_container col-lg-6 mr-4">
+              {/* <div className="firstHeading_container col-lg-6 mr-4">
                 <div className="firstHeading investment-heading mb-3">
                   {farmer.name}
                 </div>
@@ -152,38 +168,38 @@ export const InvestmentsPage = () => {
                 </span>
               </div>
 
-              <TotalInvestedMoney className="col-lg-4" balance={balance} />
+              <TotalInvestedMoney className="col-lg-4" balance={balance} /> */}
             </Row>
-            <div className="header_separator" />
-            <DetailsTable farmer={farmer} />
+            {/* <div className="header_separator" />
+            <DetailsTable farmer={farmer} /> */}
           </Container>
         </div>
       </section>
       <section>
         <div className="mt-4 mb-5 tablebgHead">
           <Container>
-            <h5 className="d-inline-block mt-4 mb-5">My Investments</h5>
-            <div className="tablebg tablebgAuto">
-              <Table responsive className="table">
-                <thead>
-                  <tr>
-                    <th>SERIAL NO</th>
-                    <th>NAME OF FARMER</th>
-                    <th>BUSD INVESTED</th>
-                    <th>TOTAL PROFIT</th>
-                    <th>WITHDRAW WBNB</th>
-                  </tr>
-                </thead>
-                <tbody>
+
+            <TableResponsive>
+              <Table>
+                <TableHead>
+                  <TableRow isHoverOnRow={false}>
+                    <TableHeading>SERIAL NO</TableHeading>
+                    <TableHeading>NAME OF FARMER</TableHeading>
+                    <TableHeading>BUSD INVESTED</TableHeading>
+                    <TableHeading>TOTAL PROFIT</TableHeading>
+                    <TableHeading>WITHDRAW WBNB</TableHeading>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
                   {myInvestments.map((investment, index) => {
                     return (
                       <>
-                        <tr key={index}>
-                          <td>A25382</td>
-                          <td className="bold">{investment.name}</td>
-                          <td>$258 000.50</td>
-                          <td className="bold">$876 200.50</td>
-                          <td className="investment_table_btn">
+                        <TableRow key={index}>
+                          <TableData>A25382</TableData>
+                          <TableData className="bold">{investment.name}</TableData>
+                          <TableData>$258 000.50</TableData>
+                          <TableData className="bold">$876 200.50</TableData>
+                          <TableData className="investment_table_btn">
                             <Button
                               variant="outline-secondary"
                               onClick={handleWithDraw(
@@ -193,14 +209,15 @@ export const InvestmentsPage = () => {
                             >
                               Withdraw
                             </Button>
-                          </td>
-                        </tr>
+                          </TableData>
+                        </TableRow>
                       </>
                     );
                   })}
-                </tbody>
+                </TableBody>
               </Table>
-              {/* <div className="mt-4 pagePosition">
+            </TableResponsive>
+            {/* <div className="mt-4 pagePosition">
                 <p className="pageTable">Showing 1-10 of 120</p>
                 <div className="paginationTable">
                   <Pagination>
@@ -234,14 +251,14 @@ export const InvestmentsPage = () => {
                   </Form.Group>
                 </div>
               </div> */}
-              {/* {InvestmentListData.length !== 0 && (
+            {/* {InvestmentListData.length !== 0 && (
                 <div className="investment_no_data">
                   <Button className="btnYellow">
                     Find some Farmers to Invest
                   </Button>
                 </div>
               )} */}
-            </div>
+
           </Container>
         </div>
       </section>
