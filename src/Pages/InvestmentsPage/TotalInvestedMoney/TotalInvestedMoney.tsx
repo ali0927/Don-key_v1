@@ -16,7 +16,7 @@ export const TotalInvestedMoney: React.FC<ITotalInvestedMoneyProps> = (props) =>
                 <div className="invest_card_title">Total Invested Money</div>
                 <div className="invest_card_amount w-100">140 000$</div>
                 {isOpen && (
-                    <InvestmentPopup balance={balance} onClose={() => setIsOpen(false)} />
+                    <InvestmentPopup poolAddress="" balance={balance} onClose={() => setIsOpen(false)} />
                 )}
             </div>
         </div>

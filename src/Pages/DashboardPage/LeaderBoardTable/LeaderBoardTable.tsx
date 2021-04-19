@@ -12,6 +12,7 @@ import { Pagination } from "../../../components/Pagnination";
 import { Table, TableHead, TableHeading, TableBody, TableData, TableRow, TableResponsive } from "../../../components/Table";
 import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
+import { useNotification } from "components/Notification";
 
 
 
@@ -30,19 +31,55 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
 
     const { leaders, isReady } = props;
     const [openInvestment, setOpenInvestment] = useState(false);
+    const [state, setState]= useState({
+        farmerName: "",
+        poolAddress: "",
+    })
+    const { showNotification } = useNotification();
     const history = useHistory();
+
+
 
     const handleLeaderClick = (id: string) => () => {
         history.push(`/dashboard/farmer/${id}`)
     }
 
-    const openInvestmentDialog = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const openInvestmentDialog =(farmerName: string, poolAddress: string)=> (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
+        setState({
+            farmerName: farmerName,
+            poolAddress: poolAddress,
+        })
         setOpenInvestment(true);
     }
 
     const closeInvestmentDialog = () => {
+        setState({
+            farmerName: "",
+            poolAddress: "",
+        })
         setOpenInvestment(false);
+    }
+
+
+    const handleInvestmentSuccess =(farmerName: string) =>() => {
+        showNotification({
+            msg: (
+                <>
+                    <p className="text-center">{`100BUSD was invested in farmer ${farmerName}`}</p>
+                </>
+            ),
+        });
+    }
+
+    const handleInvestmentFailure =(farmerName: string)=> () => {
+        showNotification({
+            msg: (
+              <>
+                <p className="text-center">{`100BUSD wasn't invested in farmer ${farmerName}. Please try again`}</p>
+              </>
+            ),
+          });
     }
 
 
@@ -63,7 +100,6 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                             <TableHeading>#</TableHeading>
                             <TableHeading></TableHeading>
                             <TableHeading>FARMER NAME</TableHeading>
-                            <TableHeading>STRATEGY NAME</TableHeading>
                             <TableHeading>TOTAL VALUE</TableHeading>
                             <TableHeading>24h PROFIT</TableHeading>
                             <TableHeading>7 DAYS PROFIT</TableHeading>
@@ -84,9 +120,6 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                                             {item.farmerName}
                                         </TableData>
                                         <TableData>
-                                            {item.strategyName}
-                                        </TableData>
-                                        <TableData>
                                             {item.totalValue}
                                         </TableData>
                                         <TableData>
@@ -102,7 +135,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                                             {item.myInvestment}
                                         </TableData>
                                         <TableData>
-                                            <LightGrayButton type="submit" onClick={openInvestmentDialog}>
+                                            <LightGrayButton type="submit" onClick={openInvestmentDialog(item.farmerName,"0x8Fb5C79F2e9714b9A8B7002651ea8BC0B5aB61Bd")}>
                                                 Invest
                                        </LightGrayButton>
                                         </TableData>
@@ -124,7 +157,12 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                 </Table>
             </TableResponsive>
             {openInvestment &&
-                <InvestmentPopup balance={10000} onClose={closeInvestmentDialog} />
+                <InvestmentPopup
+                    poolAddress={state.poolAddress}
+                    balance={10000}
+                    onSuccess={handleInvestmentSuccess(state.farmerName)}
+                    onFailure={handleInvestmentFailure(state.farmerName)}
+                    onClose={closeInvestmentDialog} />
             }
 
             <Pagination rowscount={100} />

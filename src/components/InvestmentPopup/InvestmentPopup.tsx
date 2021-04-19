@@ -1,5 +1,5 @@
 import { BiInfoCircle } from "react-icons/bi";
-import {FaCross} from "react-icons/fa";
+import { FaCross } from "react-icons/fa";
 import { Modal, Spinner } from "react-bootstrap";
 import "./InvestmentPopup.scss";
 import { useEffect, useState } from "react";
@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 import Web3 from "web3";
 import { useToggle } from "don-hooks";
 import { getWeb3 } from "don-utils";
+import { useAxios } from "hooks/useAxios";
+import { useNotification } from "components/Notification";
 
 const InvestmentInput = ({
   value,
@@ -49,15 +51,28 @@ const InvestmentInput = ({
 
 export const InvestmentPopup = ({
   balance,
+  poolAddress,
   onClose,
+  onSuccess,
+  onFailure
 }: {
   balance: string | number;
+  poolAddress: string;
   onClose: () => void;
+  onSuccess?: () => void;
+  onFailure?: () => void;
 }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
 
-  const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
+  const [ {},executePost] = useAxios(
+    { method: "POST", url: "/api/v1/farmerinvestments" },
+    { manual: true }
+  );
+
+
+
+  // const poolAddress = "0xd80Cf8EB5E3ee66dEf811193c3740D29a2A0bb87";
   const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 
   async function fetchPoolLiquidity() {
@@ -75,16 +90,16 @@ export const InvestmentPopup = ({
 
   async function investMoney(amount: string) {
     const web3 = (await getWeb3()) as Web3;
-  
+
     const accounts = await web3.eth.getAccounts();
 
     var executedStrategy = await web3.eth.sendTransaction({
       from: accounts[0],
-      to:  poolAddress,
+      to: poolAddress,
       value: web3.utils.toWei(amount, "ether")
     })
     console.log("Sent", executedStrategy);
-    
+
   }
 
   const [poolLiquidity, setPoolLiquidity] = useState(0);
@@ -130,7 +145,19 @@ export const InvestmentPopup = ({
       if (poolLiquidity > 0) {
         await investMoney(value);
       }
-    } finally {
+
+     await executePost({ data: { poolAddress } });
+      if (onSuccess) {
+        onSuccess();
+      }
+
+    }
+    catch (err) {
+      if (onFailure) {
+        onFailure();
+      }
+    }
+    finally {
       disable();
     }
     onClose();
