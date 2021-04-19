@@ -76,6 +76,7 @@
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
     "@types/react-select": "^4.0.13",
+    "@types/styled-components": "^5.1.9",
     "cross-env": "^7.0.3",
     "sass": "^1.30.0",
     "typesafe-actions": "^5.1.0"

@@ -17,6 +17,7 @@ import image2 from "./popeye.svg";
 import image3 from "./image.svg";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import BuilderImage from "./Strategy.png";
+import { RoundedCompletedSection } from "./RoundedCompletedSection/RoundedCompletedSection";
 const StarIcon = () => {
   return (
     <svg
@@ -339,6 +340,12 @@ const LandingPage = () => {
           </Row>
         </Container>
       </div>
+
+
+       {/** RoundedCompleted Section */}
+
+       <RoundedCompletedSection/>
+
 
       {/*  Join the Don-key Community */}
       <div className="community pt-5 pb-5 text-center">
