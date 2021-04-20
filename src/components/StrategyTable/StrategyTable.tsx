@@ -7,52 +7,183 @@ import {
   TableResponsive,
   TableRow,
 } from "components/Table";
+import { useAxios } from "hooks/useAxios";
+import moment from "moment";
+import { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
-
-const defaultStrategies = [
-  {
-    name: "Great march of the crypto Curve DAL * *",
-    profit: "$300 100,50",
-    id: "1"
-  },
-  {
-    name: "Great march of the crypto Curve DAL * *",
-    profit: "$300 100,50",
-    id: "2"
-  },
-  {
-    name: "Great march of the crypto Curve DAL * *",
-    profit: "$300 100,50",
-    id: "3"
-  },
-];
 
 const OutlinedButton = styled.button`
   background-color: transparent;
   border: 1px solid rgba(0, 0, 0, 0.4);
   color: rgba(34, 34, 34, 1);
   border-radius: 5px;
-  padding: 5px 40px;
+  width: 100%;
+  padding: 5px 20px;
+  font-size: 12px;
+  &:disabled {
+    border-color: #d9d9d9;
+    color: #d9d9d9;
+  }
 `;
 
-export const StrategyTable = ({
-  strategies = defaultStrategies,
+type IStrategy = {
+  createdAt: string;
+  is_active: boolean;
+  lastRan: string | null;
+  updatedAt: string;
+  status: string | null;
+  name: string | null;
+  profit: string | null;
+  id: number;
+};
+
+const formatDate = (
+  date: string | null | undefined,
+  defaultVal: string = ""
+) => {
+  try {
+    if (date) {
+      return moment(date).format("MMMM Do YY");
+    }
+    return defaultVal;
+  } catch (e) {
+    return defaultVal;
+  }
+};
+
+const StrategyRow = ({
+  strategy: item,
+  updating,
+  setUpdating,
+  onRefetch,
 }: {
-  strategies?: { name: string; profit: string; id: string; }[];
+  strategy: IStrategy;
+  updating: boolean;
+  setUpdating: (val: boolean) => void;
+  onRefetch?: () => void;
+}) => {
+  const [{ loading }, toggleActive] = useAxios(
+    { url: `/api/v2/strategy/${item.id}`, method: "PUT" },
+    { manual: true }
+  );
+
+  const makeActive = async () => {
+    setUpdating(true);
+    try {
+      await toggleActive({ data: { is_active: true } });
+      onRefetch && onRefetch();
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const renderText = () => {
+    if (loading) {
+      return <Spinner animation="border" size={"sm"} color="#222" />;
+    }
+    return item.is_active ? "-" : "Make Active";
+  };
+  return (
+    <TableRow key={item.id}>
+      <TableData>{item.name}</TableData>
+      <TableData>{item.profit || "No Profit"}</TableData>
+      <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
+      <TableData>{item.status || "In-Active"}</TableData>
+      <TableData>{formatDate(item.updatedAt)}</TableData>
+      <TableData>{formatDate(item.updatedAt)}</TableData>
+      <TableData className="text-center">
+        {item.is_active ? "Yes" : "No"}
+      </TableData>
+      <TableData>
+        <OutlinedButton
+          disabled={updating || item.is_active}
+          onClick={makeActive}
+        >
+          {renderText()}
+        </OutlinedButton>
+      </TableData>
+    </TableRow>
+  );
+};
+
+export const StrategyTable = ({
+  strategies,
+  onRefetch,
+}: {
+  strategies: IStrategy[];
+  onRefetch: () => void;
+}) => {
+  const [updating, setUpdating] = useState(false);
+
+  return (
+    <TableResponsive>
+      <Table>
+        <colgroup>
+          <col width={"25%"} />
+          <col width={"9%"} />
+          <col width={"9%"} />
+          <col width={"9%"} />
+          <col width={"12%"} />
+          <col width={"12%"} />
+          <col width={"10%"} />
+          <col width={"14%"} />
+        </colgroup>
+        <TableHead>
+          <TableRow>
+            <TableHeading>Name</TableHeading>
+            <TableHeading>Profit</TableHeading>
+            <TableHeading>Last Ran</TableHeading>
+            <TableHeading>Status</TableHeading>
+            <TableHeading>Last Updated</TableHeading>
+            <TableHeading>Created On</TableHeading>
+            <TableHeading className="text-center">Active</TableHeading>
+            <TableHeading>Make Active</TableHeading>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {strategies.map((item, i) => {
+            return (
+              <StrategyRow
+                updating={updating}
+                setUpdating={setUpdating}
+                strategy={item}
+                onRefetch={onRefetch}
+              />
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableResponsive>
+  );
+};
+
+export const StrategyTableForInvestor = ({
+  strategies,
+}: {
+  strategies: IStrategy[];
 }) => {
   return (
     <TableResponsive>
       <Table>
         <colgroup>
-          <col width={"60%"} />
-          <col width={"20%"} />
-          <col width={"20%"} />
+          <col width={"25%"} />
+          <col width={"9%"} />
+          <col width={"9%"} />
+          <col width={"9%"} />
+          <col width={"12%"} />
+          <col width={"12%"} />
+          <col width={"10%"} />
         </colgroup>
         <TableHead>
           <TableRow>
-            <TableHeading>NAME OF STRATEGY</TableHeading>
-            <TableHeading>TOTAL PROFIT</TableHeading>
-            <TableHeading>RUN STRATEGY</TableHeading>
+            <TableHeading>Name</TableHeading>
+            <TableHeading>Profit</TableHeading>
+            <TableHeading>Last Ran</TableHeading>
+            <TableHeading>Status</TableHeading>
+            <TableHeading>Last Updated</TableHeading>
+            <TableHeading>Created On</TableHeading>
+            <TableHeading className="text-center">Active</TableHeading>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -60,11 +191,13 @@ export const StrategyTable = ({
             return (
               <TableRow key={item.id}>
                 <TableData>{item.name}</TableData>
-                <TableData>{item.profit}</TableData>
-                <TableData>
-                  <OutlinedButton onClick={() => {}}>
-                    Run Strategy
-                  </OutlinedButton>
+                <TableData>{item.profit || "No Profit"}</TableData>
+                <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
+                <TableData>{item.status || "In-Active"}</TableData>
+                <TableData>{formatDate(item.updatedAt)}</TableData>
+                <TableData>{formatDate(item.updatedAt)}</TableData>
+                <TableData className="text-center">
+                  {item.is_active ? "Yes" : "No"}
                 </TableData>
               </TableRow>
             );

@@ -1,4 +1,4 @@
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
 import { useEffect, useRef, useState } from "react";
 import { FormGroup } from "@material-ui/core";
 import { useSelector, useDispatch } from "react-redux";
@@ -7,27 +7,8 @@ import { EditIcon } from "icons/EditIcon";
 import styled from "styled-components";
 import { UploadFarmerPicIcon } from "icons/UploadFarmerPicIcon";
 import "Pages/FarmerSignupPage/FarmerSignupPage.scss";
-import { FaTimes } from "react-icons/fa";
-import { CloseIcon } from "icons/CloseIcon";
 import { updateFarmerDetails } from "actions/farmerActions";
-import { useAxios } from "hooks/useAxios";
-const ModalContent = styled.div`
-  padding: 3rem 3rem;
-  color: rgba(45, 41, 0, 1);
-`;
-
-const ModalHeading = styled.h3`
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 1rem;
-`;
-
-const IconWrapper = styled.span`
-  background-color: rgba(244, 228, 28, 1);
-  border-radius: 2px;
-  display: inline-flex;
-  padding: 5px;
-`;
+import { DonModal } from "components/DonModal/DonModal";
 
 const UploadPicButton = styled.button`
   background-color: rgba(255, 250, 192, 1);
@@ -42,13 +23,6 @@ const StyledImage = styled.img`
   width: 80px;
   height: 80px;
   object-fit: contain;
-`;
-
-const StyledCloseIcon = styled(CloseIcon)`
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  cursor: pointer;
 `;
 
 export const FarmerModal = ({
@@ -83,9 +57,6 @@ export const FarmerModal = ({
     setInfoState((old) => ({ ...old, [key]: val }));
   };
 
-
-
-
   const handleUpdateFarmer = async () => {
     if (!infoState.name) {
       return setErrorMsg("Enter name of Farmer");
@@ -103,12 +74,12 @@ export const FarmerModal = ({
           picture: selectedFile,
         };
         await dispatch(updateFarmerDetails(updateInfo));
-        onClose()
+        onClose();
       }
     } catch (e) {
       setLoading(false);
       setErrorMsg("Please Try Again Later");
-    } 
+    }
   };
 
   useEffect(() => {
@@ -130,71 +101,61 @@ export const FarmerModal = ({
   }
   return (
     <>
-      <Modal
-        centered
-        show={isOpen}
-        contentClassName="shadow-sm"
-        onHide={onClose}
+      <DonModal
+        isOpen={isOpen}
+        title="Edit farmer bio page"
+        icon={<EditIcon />}
+        onClose={onClose}
       >
-        <ModalContent>
-          <StyledCloseIcon onClick={onClose} />
-          <ModalHeading>
-            <IconWrapper className="mr-2">
-              <EditIcon />
-            </IconWrapper>
-            Edit farmer bio page
-          </ModalHeading>
+        <FormGroup>
+          <div className="d-flex align-items-center my-2">
+            {farmerInfo.picture ? (
+              <StyledImage src={imageUrl || farmerInfo.picture} />
+            ) : null}
 
-          <FormGroup>
-            <div className="d-flex align-items-center my-2">
-              {farmerInfo.picture ? (
-                <StyledImage src={imageUrl || farmerInfo.picture} />
-              ) : null}
-
-              <UploadPicButton onClick={clickInput} className="ml-3">
-                <input
-                  ref={inputRef}
-                  className="d-none"
-                  type="file"
-                  onChange={(e) =>
-                    setSelectedFile(e.target.files ? e.target.files[0] : null)
-                  }
-                />
-                <UploadFarmerPicIcon className="mr-3" />
-                new picture
-              </UploadPicButton>
-            </div>
-          </FormGroup>
-          <FormGroup>
-            <Form.Label className="signup-field-label">Name</Form.Label>
-            <Form.Control
-              className="signup-field signup-field-Name"
-              onChange={(e) => handleChange("name", e.target.value)}
-              value={infoState.name}
-              placeholder="Don - Key Name"
-            />
-          </FormGroup>
-          <FormGroup className="mt-3">
-            <Form.Label className="signup-field-label">Description</Form.Label>
-            <Form.Control
-              as="textarea"
-              className="signup-field signup-field-description p-3"
-              rows={3}
-              onChange={(e) => handleChange("description", e.target.value)}
-              value={infoState.description}
-              placeholder="Don - Key Description"
-            />
-          </FormGroup>
-          {errorMsg && <p className="text-danger mb-0 mt-3">{errorMsg}</p>}
-          <Button
-            onClick={handleUpdateFarmer}
-            disabled={loading}
-            className="btn-block btnYellow mt-4"
-          >
-            Save
-          </Button>
-        </ModalContent>
-      </Modal>
+            <UploadPicButton onClick={clickInput} className="ml-3">
+              <input
+                ref={inputRef}
+                className="d-none"
+                type="file"
+                onChange={(e) =>
+                  setSelectedFile(e.target.files ? e.target.files[0] : null)
+                }
+              />
+              <UploadFarmerPicIcon className="mr-3" />
+              new picture
+            </UploadPicButton>
+          </div>
+        </FormGroup>
+        <FormGroup>
+          <Form.Label className="signup-field-label">Name</Form.Label>
+          <Form.Control
+            className="signup-field signup-field-Name"
+            onChange={(e) => handleChange("name", e.target.value)}
+            value={infoState.name}
+            placeholder="Don - Key Name"
+          />
+        </FormGroup>
+        <FormGroup className="mt-3">
+          <Form.Label className="signup-field-label">Description</Form.Label>
+          <Form.Control
+            as="textarea"
+            className="signup-field signup-field-description p-3"
+            rows={3}
+            onChange={(e) => handleChange("description", e.target.value)}
+            value={infoState.description}
+            placeholder="Don - Key Description"
+          />
+        </FormGroup>
+        {errorMsg && <p className="text-danger mb-0 mt-3">{errorMsg}</p>}
+        <Button
+          onClick={handleUpdateFarmer}
+          disabled={loading}
+          className="btn-block btnYellow mt-4"
+        >
+          Save
+        </Button>
+      </DonModal>
     </>
   );
 };

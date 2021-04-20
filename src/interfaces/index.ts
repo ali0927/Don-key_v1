@@ -46,17 +46,15 @@ export type IStrategy = {
 };
 
 export interface IFarmerInter {
-  poolAddress?: string | null;
-  picture?: string | null;
+  poolAddress: string ;
+  picture: string ;
   GUID: string;
-  name?: string | null;
+  name: string;
   last_signin: string;
-  description?: string | null;
-  role: "user" | "admin";
+  description: string;
   is_active: boolean;
   walletAddress: string;
   username?: string | null;
-  strategies?: IStrategy[] | null;
 }
 
 export type CallBackorVal<T> = T | ((val: T) => T);

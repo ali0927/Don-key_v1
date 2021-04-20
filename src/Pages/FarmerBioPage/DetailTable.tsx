@@ -4,6 +4,8 @@ import { useAxios } from "hooks/useAxios";
 import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
+import { shortenAddress } from "don-utils";
+import { useMediaQuery } from "@material-ui/core";
 
 const Poolinfo = styled.div`
   font-size: 16px;
@@ -13,15 +15,12 @@ const Poolinfo = styled.div`
   align-items: center;
   justify-content: center;
   padding: 2.2rem;
-  margin-bottom: 30px;
 `;
 
 const InvestmentDisplay = styled.div`
   background: #000;
   color: #fff;
-  display: flex;
   padding: 1.5rem;
-  justify-content: space-between;
   border-radius: 4px;
 `;
 
@@ -43,52 +42,51 @@ const InvestCardButton = styled.button`
   }
 `;
 
-export const DetailTable = ({
-  poolAddress,
 
-}: {
-  poolAddress: string;
- 
-}) => {
 
+export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
 
-
+  const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   return (
-    <Row>
-      <Col md={7}>
-        <Poolinfo className="bg-white">
+    <>
+      <Col className="my-4 my-lg-0" lg={6}>
+        <Poolinfo className="bg-white h-100">
           <div className="list-box">
             <h5 className="heading-title">Pool address</h5>
-            <div>{poolAddress}</div>
+            <div >{isSmall ? shortenAddress(poolAddress) : poolAddress}</div>
           </div>
         </Poolinfo>
       </Col>
-      <Col md={5}>
-        <InvestmentDisplay>
-          <div>
-            <div>Total Pool Value</div>{" "}
-            <h5 className="heading-title">100BUSD</h5>
-          </div>
-          <div>
-            {showInvestmentPopup && (
-              <InvestmentPopup
-                poolAddress={poolAddress}
-                balance={1000}
-                onClose={() => setShowInvestmentPopup(false)}
-              />
-            )}
-            <InvestCardButton
-              className="mb-3"
-            
-              onClick={() => setShowInvestmentPopup(true)}
-            >
-              Invest
-            </InvestCardButton>
+      <Col lg={4} >
+        <InvestmentDisplay className="h-100">
+          <div className="row">
+            <div className="col-md-6">
+              <div>Total Pool Value</div>{" "}
+              <h5 className="heading-title">100BUSD</h5>
+            </div>
+            <div className="col-md-6">
+              {showInvestmentPopup && (
+                <InvestmentPopup
+                  poolAddress={poolAddress}
+                  balance={1000}
+                  onClose={() => setShowInvestmentPopup(false)}
+                />
+              )}
+              <InvestCardButton
+                className="mb-3"
+                onClick={() => setShowInvestmentPopup(true)}
+              >
+                Invest
+              </InvestCardButton>
+              <InvestCardButton onClick={() => setShowInvestmentPopup(true)}>
+                Withdraw
+              </InvestCardButton>
+            </div>
           </div>
         </InvestmentDisplay>
       </Col>
-    </Row>
+    </>
   );
 };
