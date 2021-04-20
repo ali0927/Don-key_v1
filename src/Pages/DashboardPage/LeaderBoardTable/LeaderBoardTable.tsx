@@ -13,6 +13,7 @@ import {
   TableBody,
   TableData,
   TableRow,
+  TableResponsive,
 } from "../../../components/Table";
 import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
@@ -22,7 +23,7 @@ const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState(0);
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => { }, []);
   if (!isReady) {
     return <>-</>;
   }
@@ -33,7 +34,7 @@ const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState(0);
 
-  useLayoutEffect(() => {}, []);
+  useLayoutEffect(() => { }, []);
   if (!isReady) {
     return <>-</>;
   }
@@ -50,20 +51,53 @@ height: 45px;
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   const { leaders, isReady } = props;
   const [openInvestment, setOpenInvestment] = useState(false);
+  const [state, setState] = useState({
+    farmerName: "",
+    poolAddress: "",
+  });
+  const { showNotification } = useNotification();
   const history = useHistory();
 
   const handleLeaderClick = (id: string) => () => {
     history.push(`/dashboard/farmer/${id}`);
   };
 
-  const openInvestmentDialog = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const openInvestmentDialog =(farmerName: string, poolAddress: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
+    setState({
+      farmerName: farmerName,
+      poolAddress: poolAddress,
+    });
     setOpenInvestment(true);
   };
 
   const closeInvestmentDialog = () => {
+    setState({
+      farmerName: "",
+      poolAddress: "",
+    });
     setOpenInvestment(false);
   };
+
+  const handleInvestmentSuccess =(farmerName: string) => () => {
+    showNotification({
+      msg: (
+        <>
+          <p className="text-center">{`100BUSD was invested in farmer ${farmerName}`}</p>
+        </>
+      ),
+    });
+  }
+
+  const handleInvestmentFailure = () => {
+    showNotification({
+      msg: (
+        <>
+          <p className="text-center">{`You have already invested into this pool.`}</p>
+        </>
+      ),
+    });
+  }
 
   if (!isReady) {
     return (
@@ -75,64 +109,67 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
 
   return (
     <>
-      <Table className="text-center">
-        <TableHead>
-          <TableRow style={{height: 75}}>
-            <TableHeading>#</TableHeading>
-            <TableHeading></TableHeading>
-            <TableHeading>FARMER NAME</TableHeading>
-            <TableHeading>TOTAL VALUE</TableHeading>
-            <TableHeading>24h PROFIT</TableHeading>
-            <TableHeading>7 DAYS PROFIT</TableHeading>
-            <TableHeading>Total PROFIT</TableHeading>
-            <TableHeading>MY INVESTMENT</TableHeading>
-            <TableHeading>ACTION</TableHeading>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {" "}
-          <>
-            {leaders.map((item, index) => {
-              return (
-                <TableRow
-                  isHoverOnRow
-                  key={item.GUID}
-                  onClick={handleLeaderClick(item.GUID)}
-                >
-                  <TableData>{index + 1}</TableData>
-                  <TableData>
-                    <StyledImage  src={item.picture} />
-                  </TableData>
-                  <TableData>{item.name}</TableData>
+      <TableResponsive>
+        <Table className="text-center">
+          <TableHead>
+            <TableRow style={{ height: 75 }}>
+              <TableHeading>#</TableHeading>
+              <TableHeading></TableHeading>
+              <TableHeading>FARMER NAME</TableHeading>
+              <TableHeading>TOTAL VALUE</TableHeading>
+              <TableHeading>24h PROFIT</TableHeading>
+              <TableHeading>7 DAYS PROFIT</TableHeading>
+              <TableHeading>Total PROFIT</TableHeading>
+              <TableHeading>MY INVESTMENT</TableHeading>
+              <TableHeading>ACTION</TableHeading>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {" "}
+            <>
+              {leaders.map((item, index) => {
+                return (
+                  <TableRow
+                    isHoverOnRow
+                    key={item.GUID}
+                    onClick={handleLeaderClick(item.GUID)}
+                  >
+                    <TableData>{index + 1}</TableData>
+                    <TableData>
+                      <StyledImage src={item.picture} />
+                    </TableData>
+                    <TableData>{item.name}</TableData>
 
-                  <TableData>
-                    <PoolAmount poolAddress={item.poolAddress} />
-                  </TableData>
-                  <TableData>{item.profit24hours}</TableData>
-                  <TableData>{item.profit7days}</TableData>
-                  <TableData>{item.profit}</TableData>
-                  <TableData>
-                    <MyInvestment poolAddress={item.poolAddress} />
-                  </TableData>
-                  <TableData>
-                    <LightGrayButton
-                      type="submit"
-                      onClick={openInvestmentDialog}
-                    >
-                      Invest
+                    <TableData>
+                      <PoolAmount poolAddress={item.poolAddress} />
+                    </TableData>
+                    <TableData>{item.profit24hours}</TableData>
+                    <TableData>{item.profit7days}</TableData>
+                    <TableData>{item.profit}</TableData>
+                    <TableData>
+                      <MyInvestment poolAddress={item.poolAddress} />
+                    </TableData>
+                    <TableData>
+                      <LightGrayButton
+                        type="submit"
+                        onClick={openInvestmentDialog(item.name, item.poolAddress)}
+                      >
+                        Invest
                     </LightGrayButton>
-                  </TableData>
-                </TableRow>
-              );
-            })}
-          </>
-        </TableBody>
-      </Table>
-
+                    </TableData>
+                  </TableRow>
+                );
+              })}
+            </>
+          </TableBody>
+        </Table>
+      </TableResponsive>
       {openInvestment && (
         <InvestmentPopup
-          poolAddress=""
+          poolAddress={state.poolAddress}
           balance={10000}
+          onSuccess={handleInvestmentSuccess(state.farmerName)}
+          onFailure={handleInvestmentFailure}
           onClose={closeInvestmentDialog}
         />
       )}

@@ -19,3 +19,6 @@ export * from "./HasdaIcon";
 export * from "./FinanceIcon";
 export * from "./BdollarIcon";
 export * from "./CurveIcon";
+export * from "./SelectArrow";
+export * from "./ZeroInvestmentIcon";
+export * from "./RocketIcon";

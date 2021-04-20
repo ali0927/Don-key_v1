@@ -24,7 +24,7 @@ export const InvestmentPopup = ({
   const [isLoading, enable, disable] = useToggle();
 
   const [ {},executePost] = useAxios(
-    { method: "POST", url: "/api/v1/farmerinvestments" },
+    { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
 

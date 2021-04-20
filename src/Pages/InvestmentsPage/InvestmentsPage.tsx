@@ -5,6 +5,7 @@ import {
   Row,
   Button,
   Col,
+  Spinner,
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import Web3 from "web3";
@@ -22,6 +23,8 @@ import { useNotification } from "components/Notification";
 import { LoadingPage } from "Pages/LoadingPage";
 import styled from "styled-components";
 import { Table, TableBody, TableData, TableHead, TableHeading, TableResponsive, TableRow } from "components/Table";
+import { LightGrayButton } from "components/Button";
+import { RocketIcon, ZeroInvestmentIcon } from "icons";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -32,6 +35,51 @@ const HeadingTitle = styled.p({
   textAlign: "left",
   color: "#070602",
 });
+
+const ZeroInvestmentBox = styled.div({
+  minHeight: 600,
+  display: "flex",
+  justifyContent: "center",
+  position: "relative",
+});
+
+const ZeroInvestmentInnerBox = styled.div({
+  maxWidth: 599,
+
+});
+
+const ZeroInvestmentContent = styled.div({
+  fontFamily: "Roboto",
+  fontStyle: "normal",
+  fontWeight: 800,
+  textAlign: "center",
+  fontSize: "50px",
+});
+
+const BlackButton = styled(LightGrayButton)({
+  fontSize: "16px !important",
+  width: "192px !important",
+  background: "#222222 !important",
+  color: "#fff !important",
+  height: "50px !important",
+  marginTop: "2rem",
+});
+
+const CenteredBox = styled.div({
+  display: "flex",
+  justifyContent: "center",
+  flexWrap: "wrap",
+});
+
+const CustomizeRockerIcon = styled(RocketIcon)({
+  position: "absolute",
+  left: 0,
+  bottom: "-10%",
+});
+
+const AnimationDiv = styled.div({
+  minHeight: 500,
+})
 
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
@@ -57,12 +105,12 @@ export const InvestmentsPage = () => {
   const [{ data }] = useAxios({ method: "GET", url: "/api/v1/farmer" });
 
   const [{ data: farmesInvestmentData, loading }] = useAxios(
-    { method: "GET", url: "/api/v1/farmerinvestments" },
+    { method: "GET", url: "/api/v2/investments" },
     { useCache: false }
   );
 
   const [{ }, executeDelete] = useAxios(
-    { method: "DELETE", url: "/api/v1/farmerinvestments" },
+    { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
 
@@ -88,6 +136,7 @@ export const InvestmentsPage = () => {
       setIsReady(true);
     })();
   }, []);
+
 
   useEffect(() => {
     if (farmesInvestmentData) {
@@ -132,6 +181,7 @@ export const InvestmentsPage = () => {
       });
     }
   };
+
 
   if (!data) {
     return <LoadingPage />
@@ -178,45 +228,69 @@ export const InvestmentsPage = () => {
       <section>
         <div className="mt-4 mb-5 tablebgHead">
           <Container>
+            {loading &&
+              <>
+                <AnimationDiv className="d-flex align-items-center justify-content-center">
+                  <Spinner animation="border" />
+                </AnimationDiv>
+              </>
 
-            <TableResponsive>
-              <Table>
-                <TableHead>
-                  <TableRow isHoverOnRow={false}>
-                    <TableHeading>SERIAL NO</TableHeading>
-                    <TableHeading>NAME OF FARMER</TableHeading>
-                    <TableHeading>BUSD INVESTED</TableHeading>
-                    <TableHeading>TOTAL PROFIT</TableHeading>
-                    <TableHeading>WITHDRAW WBNB</TableHeading>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {myInvestments.map((investment, index) => {
-                    return (
-                      <>
-                        <TableRow key={index}>
-                          <TableData>A25382</TableData>
-                          <TableData className="bold">{investment.name}</TableData>
-                          <TableData>$258 000.50</TableData>
-                          <TableData className="bold">$876 200.50</TableData>
-                          <TableData className="investment_table_btn">
-                            <Button
-                              variant="outline-secondary"
-                              onClick={handleWithDraw(
-                                investment.name,
-                                investment.poolAddress
-                              )}
-                            >
-                              Withdraw
+            }
+            {(!loading && myInvestments.length > 0) &&
+              <TableResponsive>
+                <Table>
+                  <TableHead>
+                    <TableRow isHoverOnRow={false}>
+                      <TableHeading>SERIAL NO</TableHeading>
+                      <TableHeading>NAME OF FARMER</TableHeading>
+                      <TableHeading>BUSD INVESTED</TableHeading>
+                      <TableHeading>TOTAL PROFIT</TableHeading>
+                      <TableHeading>WITHDRAW WBNB</TableHeading>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {myInvestments.map((investment, index) => {
+                      return (
+                        <>
+                          <TableRow key={index}>
+                            <TableData>A25382</TableData>
+                            <TableData className="bold">{investment.name}</TableData>
+                            <TableData>$258 000.50</TableData>
+                            <TableData className="bold">$876 200.50</TableData>
+                            <TableData className="investment_table_btn">
+                              <Button
+                                variant="outline-secondary"
+                                onClick={handleWithDraw(
+                                  investment.name,
+                                  investment.poolAddress
+                                )}
+                              >
+                                Withdraw
                             </Button>
-                          </TableData>
-                        </TableRow>
-                      </>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </TableResponsive>
+                            </TableData>
+                          </TableRow>
+                        </>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableResponsive>
+            }
+
+            {(!loading && myInvestments.length ===0 ) &&
+              <>
+                <ZeroInvestmentBox>
+                  <ZeroInvestmentInnerBox>
+                    <ZeroInvestmentContent>Find Some Farmers For Investment</ZeroInvestmentContent>
+                    <CenteredBox className="mb-5"><BlackButton>Find Farmers</BlackButton></CenteredBox>
+                    <CenteredBox className="mt-5"><ZeroInvestmentIcon /></CenteredBox>
+                  </ZeroInvestmentInnerBox>
+                  <CustomizeRockerIcon />
+                </ZeroInvestmentBox>
+              </>
+
+            }
+
             {/* <div className="mt-4 pagePosition">
                 <p className="pageTable">Showing 1-10 of 120</p>
                 <div className="paginationTable">

@@ -23,7 +23,7 @@ const FarmerTitle = styled.p({
   color: "#070602",
 });
 
-const TableContiner = styled.div`
+const CustomizedContainer = styled.div`
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
@@ -79,7 +79,7 @@ export const DashboardPage = () => {
   return (
     <Layout className="bgColor dashboard-root" variant="loggedin">
       <div className="bgnav pt-5 borderCollapse">
-        <Container>
+        <CustomizedContainer>
           <Row>
             <Col>
               {farmers.length === 0 ? (
@@ -94,14 +94,14 @@ export const DashboardPage = () => {
               )}
             </Col>
           </Row>
-          {farmers.length !== 0 && <LeaderBoardSearch />}
-        </Container>
+          {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>}
+        </CustomizedContainer>
       </div>
 
       {/* Table */}
       <div className="leaderbord-top mb-5s">
         {farmers.length === 0 ? (
-          <TableContiner>
+          <CustomizedContainer>
             <div className="container">
               <div className="row justify-content-center">
                 <div className="col-md-8 mt-5 pt-5">
@@ -113,11 +113,11 @@ export const DashboardPage = () => {
                 </div>
               </div>
             </div>
-          </TableContiner>
+          </CustomizedContainer>
         ) : (
-          <TableContiner>
+          <CustomizedContainer>
             <LeaderBoardTable isReady={!loading} leaders={farmers} />
-          </TableContiner>
+          </CustomizedContainer>
         )}
       </div>
 
