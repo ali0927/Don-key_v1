@@ -12,6 +12,7 @@ import { Elements } from "react-flow-renderer";
 import { pancakeConfig } from "don-pancakeswap";
 import { donkeyConfig } from "don-donkey-token";
 import "./main.scss";
+import { BuilderButton } from "components/BuilderButton";
 
 const protocols = [donkeyConfig, pancakeConfig];
 
@@ -77,6 +78,9 @@ const Builder = () => {
       <div className={clsx(`page-wrapper`)}>
         <NavBar variant="builder" />
         <DonBuilder protocols={protocols} strategy={strategy} />
+        <BuilderButton style={{position: "absolute", top: 100, right: 20}}>Deploy Strategy</BuilderButton>
+        <BuilderButton style={{position: "absolute", top: 180, right: 20}}>Add Cubes</BuilderButton>
+        <BuilderButton style={{position: "absolute", top: 260, right: 20}}>Lock Strategy</BuilderButton>
       </div>
     </>
   );
