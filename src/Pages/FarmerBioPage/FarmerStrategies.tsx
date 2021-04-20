@@ -9,7 +9,7 @@ import { useAxios } from "hooks/useAxios";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 
-const AddNewStrategy = ({ onDone }: { onDone?: () => void }) => {
+const AddNewStrategy = ({ text, onDone }: {text: string; onDone?: () => void }) => {
   const [isOpen, open, close] = useToggle();
 
   return (
@@ -21,7 +21,7 @@ const AddNewStrategy = ({ onDone }: { onDone?: () => void }) => {
           open();
         }}
       >
-        Add Strategy
+       {text}
       </StyledLink>
       {isOpen && (
         <AddStrategyModal isOpen={isOpen} onClose={close} onSuccess={onDone} />
@@ -71,14 +71,23 @@ export const FarmerStrategies = ({
         );
       }
       return (
-        <section className="bg-white build-strategy-sec text-center">
+        <section className="py-5">
           <Container>
-            <h3>Build your DeFi strategy</h3>
-            <StyledLink to="/strategy/new" className="btn btn-dark">
-              Create your first strategy
-            </StyledLink>
-
-            <img src="/assets/images/build-strategy-img.svg" alt="Image" />
+            <h3 className="text-center mb-5">Build your DeFi strategy</h3>
+            <div className="row justify-content-center">
+              <div className="col-md-7 d-flex flex-column align-items-center">
+                <div className="mb-3">
+                  <AddNewStrategy text={"Create Your First Strategy"} onDone={refetchData} />
+                </div>
+                <div>
+                  <img
+                    style={{mixBlendMode: "multiply"}}
+                    src="/assets/images/build-strategy-img.svg"
+                    alt="Image"
+                  />
+                </div>
+              </div>
+            </div>
           </Container>
         </section>
       );
@@ -92,7 +101,7 @@ export const FarmerStrategies = ({
                 sm={12}
               >
                 <StyledHeading>Strategies</StyledHeading>
-                {!isInvestor && <AddNewStrategy onDone={refetchData} />}
+                {!isInvestor && <AddNewStrategy text="Add Strategy" onDone={refetchData} />}
               </Col>
               <Col sm={12}>
                 {isInvestor ? (

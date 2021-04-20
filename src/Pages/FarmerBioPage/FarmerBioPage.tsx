@@ -1,22 +1,10 @@
 import { NavBar } from "components/Navbar/NavBar";
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import { ShowMoreContent } from "components/ShowmoreContent";
-import Web3 from "web3";
-import { getWeb3 } from "don-utils";
 import { withWeb3 } from "hoc";
 import { useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
-import { FarmerModal } from "components/FarmerModal/FarmerModal";
-import { IFarmerInter, IStoreState } from "interfaces";
-import { EditIcon } from "icons/EditIcon";
-import { StrategyTable } from "components/StrategyTable";
-import { DetailTable } from "./DetailTable";
-import styled from "styled-components";
-import { capitalize } from "lodash";
-import { useAxios } from "hooks/useAxios";
-import { StyledLink } from "components/StyledLink";
+import {  Redirect, useParams } from "react-router-dom";
+import {  IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
@@ -46,6 +34,10 @@ export const FarmerBioPage = withWeb3(() => {
   if (!farmer) {
     return null;
   }
+  if(!farmer.poolAddress){
+    return <Redirect to="/dashboard/farmer/signup" />
+  }
+
 
   return (
     <div style={{ background: "#F4F4F4" }}>

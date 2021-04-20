@@ -15,8 +15,9 @@ import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
 import "./FarmerSignupPage.scss";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
+import { setFarmerDetail } from "actions/farmerActions";
 
 const SignUpForm = styled.form`
   background-color: #fff;
@@ -41,12 +42,15 @@ export const FarmerSignupPage = withWeb3(() => {
   const [errorMsg, setErrorMsg] = useState("");
   const farmer = useSelector((state: IStoreState) => state.farmer);
   const [{}, executePost] = useAxios(
-    { method: "PUT", url: "/api/v2/farmer" },
+    { method: "POST", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
   );
   const [posting, setPosting] = useState(false);
   
   const web3 = useWeb3();
+  const [spinnermsg, setSpinnerMsg] = useState("");
+
+  const dispatch = useDispatch();
   const handleCreate = async () => {
     setPosting(true);
     try {
@@ -65,11 +69,13 @@ export const FarmerSignupPage = withWeb3(() => {
       if (image) {
         formData.append("picture", image);
       }
-
+      setSpinnerMsg("Creating Pool Contract");
       const poolAddress = await deployContract();
       formData.append("poolAddress", poolAddress);
-
-      await executePost({ data: formData });
+      setSpinnerMsg("Creating Farmer Account");
+      const res = await executePost({ data: formData });
+      setSpinnerMsg("Redirecting To Your Farmer Profile");
+      dispatch(setFarmerDetail(res.data.data));
     } finally {
       setPosting(false);
     }
@@ -114,10 +120,13 @@ export const FarmerSignupPage = withWeb3(() => {
     if (posting) {
       return (
         <div
-          className="d-flex align-items-center justify-content-center"
+          className="d-flex flex-column align-items-center justify-content-center"
           style={{ minHeight: 400 }}
         >
           <Spinner animation="border" color="dark" />
+          <div className="mt-4">
+            {spinnermsg}
+          </div>
         </div>
       );
     }

@@ -99,7 +99,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* Table */}
-      <div className="leaderbord-top mb-5s">
+      <div className="leaderbord-top mb-5">
         {farmers.length === 0 ? (
           <CustomizedContainer>
             <div className="container">
