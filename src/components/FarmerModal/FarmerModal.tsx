@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { UploadFarmerPicIcon } from "icons/UploadFarmerPicIcon";
 import "Pages/FarmerSignupPage/FarmerSignupPage.scss";
 import { updateFarmerDetails } from "actions/farmerActions";
-import { DonModal } from "components/DonModal/DonModal";
+import { DonCommonmodal } from "components/DonModal";
 
 const UploadPicButton = styled.button`
   background-color: rgba(255, 250, 192, 1);
@@ -101,7 +101,9 @@ export const FarmerModal = ({
   }
   return (
     <>
-      <DonModal
+      <DonCommonmodal
+        variant="v1"
+        size="xs"
         isOpen={isOpen}
         title="Edit farmer bio page"
         icon={<EditIcon />}
@@ -155,7 +157,7 @@ export const FarmerModal = ({
         >
           Save
         </Button>
-      </DonModal>
+      </DonCommonmodal>
     </>
   );
 };

@@ -1,5 +1,7 @@
 import { FormGroup } from "@material-ui/core";
-import { DonModal } from "components/DonModal";
+import { ContainedButton } from "components/Button";
+import { DonKeySpinner } from "components/DonkeySpinner";
+import { DonCommonmodal } from "components/DonModal";
 import { useAxios } from "hooks/useAxios";
 
 import { useEffect, useState } from "react";
@@ -27,7 +29,7 @@ export const AddStrategyModal = ({
 
   const renderButtonText = () => {
     if (loading) {
-      return <Spinner animation="border" size={"sm"} color="#fff" />;
+      return <DonKeySpinner />;
     }
 
     return "Create";
@@ -52,7 +54,9 @@ export const AddStrategyModal = ({
   }, [name]);
 
   return (
-    <DonModal
+    <DonCommonmodal
+      variant="v1"
+      size="xs"
       icon={<FaPlus />}
       isOpen={isOpen}
       onClose={onClose}
@@ -68,9 +72,9 @@ export const AddStrategyModal = ({
         />
       </FormGroup>
       {errorMsg && <p className="text-danger mb-0 mt-3">{errorMsg}</p>}
-      <button disabled={loading} onClick={handleCreate} className="invest_btn mt-3">
+      <ContainedButton disabled={loading} onClick={handleCreate} className="mt-3">
         {renderButtonText()}
-      </button>
-    </DonModal>
+      </ContainedButton>
+    </DonCommonmodal>
   );
 };

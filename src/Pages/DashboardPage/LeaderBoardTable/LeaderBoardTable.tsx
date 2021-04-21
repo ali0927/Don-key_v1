@@ -19,6 +19,7 @@ import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { useNotification } from "components/Notification";
 import styled from "styled-components";
+import { AxiosResponse } from "axios";
 const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState(0);
@@ -62,7 +63,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     history.push(`/dashboard/farmer/${id}`);
   };
 
-  const openInvestmentDialog =(farmerName: string, poolAddress: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+  const openInvestmentDialog = (farmerName: string, poolAddress: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     setState({
       farmerName: farmerName,
@@ -79,7 +80,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     setOpenInvestment(false);
   };
 
-  const handleInvestmentSuccess =(farmerName: string) => () => {
+  const handleInvestmentSuccess = (farmerName: string) => () => {
     showNotification({
       msg: (
         <>
@@ -89,11 +90,15 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     });
   }
 
-  const handleInvestmentFailure = () => {
+  const handleInvestmentFailure = (response?: AxiosResponse<any>) => {
+    let message = "Try again letter.";
+    if (response && response.status === 409) {
+      message = "You have already invested into this pool.";
+    }
     showNotification({
       msg: (
         <>
-          <p className="text-center">{`You have already invested into this pool.`}</p>
+          <p className="text-center">{message}</p>
         </>
       ),
     });

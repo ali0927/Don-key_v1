@@ -25,6 +25,9 @@ import styled from "styled-components";
 import { Table, TableBody, TableData, TableHead, TableHeading, TableResponsive, TableRow } from "components/Table";
 import { LightGrayButton } from "components/Button";
 import { RocketIcon, ZeroInvestmentIcon } from "icons";
+import { WithDrawPopup } from "components/WithDrawPopup";
+import { useHistory } from "react-router";
+import { AxiosResponse } from "axios";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -102,7 +105,9 @@ export const InvestmentsPage = () => {
 
   const [isReady, setIsReady] = useState(false);
 
-  const [{ data }] = useAxios({ method: "GET", url: "/api/v1/farmer" });
+  const history = useHistory();
+
+  const [{ data }] = useAxios({ method: "GET", url: "/api/v2/farmer" });
 
   const [{ data: farmesInvestmentData, loading }] = useAxios(
     { method: "GET", url: "/api/v2/investments" },
@@ -126,6 +131,12 @@ export const InvestmentsPage = () => {
 
   const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
 
+  const [withDraw, setWidthDraw] = useState({
+    open: false,
+    farmerName: "",
+    poolAddress: "",
+  });
+
   const { showNotification } = useNotification();
 
   useEffect(() => {
@@ -144,43 +155,55 @@ export const InvestmentsPage = () => {
     }
   }, [farmesInvestmentData]);
 
-  const handleWithDraw = (
-    farmerName: string,
-    poolAddress: string
-  ) => async () => {
+  const handleSuccess = (farmerName: string) => () => {
     const updatedList = myInvestments.filter(
       (x) => x.poolAddress !== poolAddress
     );
     setMyInvestments(updatedList);
-    try {
-      await executeDelete({
-        data: {
-          poolAddress: poolAddress,
-        },
-      });
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
-          </>
-        ),
-      });
-    } catch (err) {
-      let errorMessage = "Could not withdraw Money. An error occurred";
-      if (err && err.response && err.response.status === 404) {
-        errorMessage =
-          "You have already withdraw form this pull or not invested into this pool.";
-      }
-
-      showNotification({
-        msg: (
-          <>
-            <p className="text-center">{errorMessage}</p>
-          </>
-        ),
-      });
-    }
+    showNotification({
+      msg: (
+        <>
+          <p className="text-center">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
+        </>
+      ),
+    });
   };
+
+  const handleError = (response?: AxiosResponse<any>) => {
+    let errorMessage = "Could not withdraw Money. An error occurred";
+    if (response && response.status === 404) {
+      errorMessage =
+        "You have already withdraw form this pull or not invested into this pool.";
+    }
+
+    showNotification({
+      msg: (
+        <>
+          <p className="text-center">{errorMessage}</p>
+        </>
+      ),
+    });
+  }
+
+  const handleOpenWithDraw = (farmerName: string, poolAddress: string) => () => {
+    setWidthDraw({
+      open: true,
+      farmerName: farmerName,
+      poolAddress: poolAddress,
+    });
+  }
+
+  const handleCloseWithDraw = () => {
+    setWidthDraw({
+      open: false,
+      farmerName: "",
+      poolAddress: "",
+    });
+  }
+
+  const handleFindFarmers = () => {
+    history.push("/dashboard");
+  }
 
 
   if (!data) {
@@ -260,7 +283,7 @@ export const InvestmentsPage = () => {
                             <TableData className="investment_table_btn">
                               <Button
                                 variant="outline-secondary"
-                                onClick={handleWithDraw(
+                                onClick={handleOpenWithDraw(
                                   investment.name,
                                   investment.poolAddress
                                 )}
@@ -277,12 +300,12 @@ export const InvestmentsPage = () => {
               </TableResponsive>
             }
 
-            {(!loading && myInvestments.length ===0 ) &&
+            {(!loading && myInvestments.length === 0) &&
               <>
                 <ZeroInvestmentBox>
                   <ZeroInvestmentInnerBox>
                     <ZeroInvestmentContent>Find Some Farmers For Investment</ZeroInvestmentContent>
-                    <CenteredBox className="mb-5"><BlackButton>Find Farmers</BlackButton></CenteredBox>
+                    <CenteredBox className="mb-5"><BlackButton onClick={handleFindFarmers}>Find Farmers</BlackButton></CenteredBox>
                     <CenteredBox className="mt-5"><ZeroInvestmentIcon /></CenteredBox>
                   </ZeroInvestmentInnerBox>
                   <CustomizeRockerIcon />
@@ -337,6 +360,14 @@ export const InvestmentsPage = () => {
         </div>
       </section>
       <Footer />
+      {withDraw.open &&
+        <WithDrawPopup
+          open={withDraw.open}
+          poolAddress={withDraw.poolAddress}
+          onSuccess={handleSuccess(withDraw.farmerName)}
+          onError={handleError}
+          onClose={handleCloseWithDraw} />
+      }
     </div>
   );
 };
