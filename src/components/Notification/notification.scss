@@ -27,3 +27,9 @@
     transform: translateX(-50%) translateY(0);
   }
 }
+.msg {
+  height: calc(100% - 92px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

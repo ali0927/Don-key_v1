@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { Web3Provider } from "don-components";
 import { uuidv4 } from "don-utils";
-import React, { useMemo, useReducer, useRef, useState } from "react";
+import React, { useMemo, useReducer, useRef, useState, useEffect } from "react";
 import Protocol from "../Components/Protocol/Protocol";
 import { ProtocolBar } from "../Components/ProtocolBar";
 import { IBuilderActionsContext, IProtocolFromAPI } from "../interfaces";
@@ -91,16 +91,18 @@ const edgeTypes = {
 
 function Builder({
   protocols,
-  strategy: initialstrategy,
+  strategy,
+  onChange
 }: {
   protocols: IProtocolFromAPI[];
   strategy: Elements;
+  onChange: (value: Elements) => void;
 }) {
   const [state, setState] = useState<{
     elements: Elements;
     nextNode: Elements[0] | null;
     prevNode: Elements[0] | null;
-  }>({ elements: initialstrategy, nextNode: null, prevNode: null });
+  }>({ elements: strategy, nextNode: null, prevNode: null });
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [
     reactFlowInstance,
@@ -120,6 +122,14 @@ function Builder({
     });
     return protocolMap;
   }, [protocols]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if(state && state?.elements?.length > 1 && state?.elements?.length > strategy?.length) {
+      onChange(state?.elements);
+    }
+
+  },[state?.elements, strategy])
 
   const actions: IBuilderActionsContext = useMemo(() => {
     return {
