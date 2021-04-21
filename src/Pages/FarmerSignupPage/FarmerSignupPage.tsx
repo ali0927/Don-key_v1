@@ -13,11 +13,16 @@ import {
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useHistory } from "react-router";
-import "./FarmerSignupPage.scss";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
 import { setFarmerDetail } from "actions/farmerActions";
+import { DonKeyTextField } from "components/DonKeyTextField";
+import { FileUploadButton } from "components/FileUploadButton";
+
+const Root = styled.div`
+   z-index: 1;
+`
 
 const SignUpForm = styled.form`
   background-color: #fff;
@@ -33,20 +38,58 @@ const StyledDonkey = styled(DonKeyIcon)`
   right: -64px;
 `;
 
+const RootHeading = styled.p`
+  max-width: 253px;
+  font-family: Roboto;
+  font-style: normal;
+  font-size: 20px;
+  color: #222222;
+`;
+
+const LargeLeftCloud = styled(LargeCloud)`
+  left: 10%;
+  @media (max-width: 992px) {
+    left: 0;
+  }
+`;
+
+const LargeRightCloud = styled(LargeCloud)`
+  right: 10%;
+  @media (max-width: 992px) {
+     right: 0;
+  }
+`;
+
+const SmallLeftCloud = styled(SmallCloud)`
+  top: 23%;
+  left: 21%;
+  @media (max-width: 992px) {
+     left: 3%;
+  }
+`;
+
+const SmallRightCloud = styled(SmallCloud)`
+  top: 23%;
+  right: 21%;
+  @media (max-width: 992px) {
+    right: 3%;
+  }
+`
+
 export const FarmerSignupPage = withWeb3(() => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | undefined>();
 
   const history = useHistory();
   const [errorMsg, setErrorMsg] = useState("");
   const farmer = useSelector((state: IStoreState) => state.farmer);
-  const [{}, executePost] = useAxios(
+  const [{ }, executePost] = useAxios(
     { method: "POST", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
   );
   const [posting, setPosting] = useState(false);
-  
+
   const web3 = useWeb3();
   const [spinnermsg, setSpinnerMsg] = useState("");
 
@@ -139,51 +182,33 @@ export const FarmerSignupPage = withWeb3(() => {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-md-12">
-            <p className="text-left font-weight-bold root-heading mb-4">
+            <RootHeading className="text-left font-weight-bold mb-4">
               Please Enter Some Details. To get Started as a Farmer
-            </p>
+            </RootHeading>
 
-            <Form.Group controlId="name">
-              <Form.Label className="signup-field-label">Name</Form.Label>
-              <Form.Control
-                className="signup-field signup-field-Name"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
-                placeholder="Don - Key Name"
-              />
-            </Form.Group>
-            <Form.Group controlId="description">
-              <Form.Label className="signup-field-label">
-                Description
-              </Form.Label>
-              <Form.Control
-                as="textarea"
-                className="signup-field signup-field-description p-3"
-                rows={3}
-                onChange={(e) => setDescription(e.target.value)}
-                value={description}
-                placeholder="Don - Key Description"
-              />
-            </Form.Group>
+            <DonKeyTextField
+              label="Name"
+              value={name}
+              placeholder="Don - Key Name"
+              onChange={(value) => setName(value)}
+            />
+
+            <DonKeyTextField
+              label="Description"
+              value={description}
+              rows={3}
+              multiline
+              placeholder="Don - Key Description"
+              onChange={(value) => setDescription(value)}
+            />
 
             <Form.Group controlId="exampleForm.ControlTextarea1">
               <Form.Label className="signup-field-label">Picture</Form.Label>
 
-              <div className="signup-root d-flex flex-wrap align-items-center mb-5">
-                <div className="signup-upload-btn d-flex align-items-center justify-content-center mr-3">
-                  <SmallFolderIcon className="mr-2" />
-                  <div className="choose-field-label">Choose File</div>
-                  <input
-                    type="file"
-                    name="myfile"
-                    required
-                    onChange={(e) => setImage((e.target as any).files[0])}
-                  />
-                </div>
-                <div className="choose-field-label">
-                  {image ? image.name : "No file chosen"}
-                </div>
-              </div>
+              <FileUploadButton
+                file={image}
+                onChange={(image) => setImage(image)} />
+
             </Form.Group>
             {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
             <ButtonComponent
@@ -204,21 +229,23 @@ export const FarmerSignupPage = withWeb3(() => {
     <>
       <Layout variant="loggedin">
         <div className="position-relative overflow-hidden">
-          <div className=" pt-5 pb-5 position-relative containerRoot  mb-5">
-            <LargeCloud className="position-absolute leftCloud" />
-            <LargeCloud className="position-absolute rightCloud" />
+          <Root className=" pt-5 pb-5 position-relative mb-5">
+            <LargeLeftCloud className="position-absolute" />
+            <LargeRightCloud className="position-absolute" />
 
-            <SmallCloud className="position-absolute smallLeftCloud" />
-            <SmallCloud className="position-absolute smallRightCloud" />
+            <SmallLeftCloud className="position-absolute" />
+            <SmallRightCloud className="position-absolute" />
 
             <Container className="position-relative">
               <div className="row justify-content-center">
                 <div className="col-md-5">
+
                   <SignUpForm>{renderContent()}</SignUpForm>
+
                 </div>
               </div>
             </Container>
-          </div>
+          </Root>
           <div className="d-flex justify-content-center">
             <SignupBottomBgIcon className="signup-bottom-icon" />
           </div>

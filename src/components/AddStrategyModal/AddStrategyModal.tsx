@@ -1,6 +1,7 @@
 import { FormGroup } from "@material-ui/core";
 import { ContainedButton } from "components/Button";
 import { DonKeySpinner } from "components/DonkeySpinner";
+import { DonKeyTextField } from "components/DonKeyTextField";
 import { DonCommonmodal } from "components/DonModal";
 import { useAxios } from "hooks/useAxios";
 
@@ -62,15 +63,12 @@ export const AddStrategyModal = ({
       onClose={onClose}
       title="Add a New Strategy"
     >
-      <FormGroup>
-        <Form.Label className="signup-field-label">Strategy Name</Form.Label>
-        <Form.Control
-          className="signup-field signup-field-Name"
-          onChange={(e) => setName(e.target.value)}
-          value={name}
-          placeholder="Strategy Name"
-        />
-      </FormGroup>
+      <DonKeyTextField
+        label="Strategy Name"
+        value={name}
+        placeholder="Strategy Name"
+        onChange={(value) => setName(value)}
+      />
       {errorMsg && <p className="text-danger mb-0 mt-3">{errorMsg}</p>}
       <ContainedButton disabled={loading} onClick={handleCreate} className="mt-3">
         {renderButtonText()}

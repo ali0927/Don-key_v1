@@ -6,9 +6,10 @@ import { IStoreState } from "interfaces";
 import { EditIcon } from "icons/EditIcon";
 import styled from "styled-components";
 import { UploadFarmerPicIcon } from "icons/UploadFarmerPicIcon";
-import "Pages/FarmerSignupPage/FarmerSignupPage.scss";
+// import "Pages/FarmerSignupPage/FarmerSignupPage.scss";
 import { updateFarmerDetails } from "actions/farmerActions";
-import { DonCommonmodal } from "components/DonModal";
+import { DonCommonmodal } from "components/DonModal/DonCommonModal";
+import { DonKeyTextField } from "components/DonKeyTextField";
 
 const UploadPicButton = styled.button`
   background-color: rgba(255, 250, 192, 1);
@@ -129,26 +130,24 @@ export const FarmerModal = ({
             </UploadPicButton>
           </div>
         </FormGroup>
-        <FormGroup>
-          <Form.Label className="signup-field-label">Name</Form.Label>
-          <Form.Control
-            className="signup-field signup-field-Name"
-            onChange={(e) => handleChange("name", e.target.value)}
-            value={infoState.name}
-            placeholder="Don - Key Name"
-          />
-        </FormGroup>
-        <FormGroup className="mt-3">
-          <Form.Label className="signup-field-label">Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            className="signup-field signup-field-description p-3"
-            rows={3}
-            onChange={(e) => handleChange("description", e.target.value)}
-            value={infoState.description}
-            placeholder="Don - Key Description"
-          />
-        </FormGroup>
+
+        <DonKeyTextField
+          label="Name"
+          value={infoState.name}
+          placeholder="Don - Key Name"
+          onChange={(value) => handleChange("name", value)}
+        />
+
+       <DonKeyTextField
+          label="Description"
+          multiline
+          className="mt-3"
+          value={infoState.description}
+          placeholder="Don - Key Description"
+          rows={3}
+          onChange={(value) => handleChange("description", value)}
+        />
+
         {errorMsg && <p className="text-danger mb-0 mt-3">{errorMsg}</p>}
         <Button
           onClick={handleUpdateFarmer}
