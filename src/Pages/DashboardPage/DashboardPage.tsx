@@ -7,8 +7,6 @@ import { IFarmer } from "interfaces";
 import { useMemo } from "react";
 import { LeaderBoardSearch } from "./LeaderBoardSearch";
 import { LeaderBoardTable } from "./LeaderBoardTable";
-import { LeaderBoardData } from "./LeaderBoardJsonData";
-import { GoToBuilderSection } from "./GoToBuilderSection";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { StyledLink } from "../../components/StyledLink";

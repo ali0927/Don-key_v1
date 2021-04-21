@@ -1,9 +1,7 @@
-import ButtonComponent from "components/Button/Button";
 import { Loader } from "don-components";
-import { IFarmer } from "interfaces";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
 
-import { Link, useHistory } from "react-router-dom";
+import {  useHistory } from "react-router-dom";
 import { ILeaderBoardTableProps } from "./interfaces";
 import "./LeaderBoardTable.scss";
 import {
@@ -19,28 +17,12 @@ import { LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { useNotification } from "components/Notification";
 import styled from "styled-components";
+import { PoolAmount } from "components/PoolAmount";
+import { MyInvestment } from "components/MyInvestment";
 import { AxiosResponse } from "axios";
-const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [poolAmount, setPoolAmount] = useState(0);
 
-  useLayoutEffect(() => { }, []);
-  if (!isReady) {
-    return <>-</>;
-  }
-  return <>{poolAmount} BUSD</>;
-};
 
-const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [poolAmount, setPoolAmount] = useState(0);
 
-  useLayoutEffect(() => { }, []);
-  if (!isReady) {
-    return <>-</>;
-  }
-  return <>{poolAmount} BUSD</>;
-};
 
 
 const StyledImage = styled.img`
@@ -172,7 +154,6 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
       {openInvestment && (
         <InvestmentPopup
           poolAddress={state.poolAddress}
-          balance={10000}
           onSuccess={handleInvestmentSuccess(state.farmerName)}
           onFailure={handleInvestmentFailure}
           onClose={closeInvestmentDialog}

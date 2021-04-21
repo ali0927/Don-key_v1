@@ -34,7 +34,7 @@ export const FarmerBioPage = withWeb3(() => {
   if (!farmer) {
     return null;
   }
-  if(!farmer.poolAddress){
+  if(isCurrentFarmer && !farmer.poolAddress){
     return <Redirect to="/dashboard/farmer/signup" />
   }
 

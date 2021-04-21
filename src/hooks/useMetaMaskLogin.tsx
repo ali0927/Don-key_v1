@@ -1,6 +1,7 @@
 import { doLogin } from "actions/authActions";
 import { useNotification } from "components/Notification";
-import { AuthToken, getWeb3 } from "don-utils";
+import { useWeb3 } from "don-components";
+import { AuthToken } from "don-utils";
 import { useDispatch } from "react-redux";
 import { getAuthTokenForPublicAddress } from "services/api";
 
@@ -8,8 +9,8 @@ export const useMetaMaskLogin = () => {
   const dispatch = useDispatch();
   const { showNotification } = useNotification();
 
+  const web3 = useWeb3()
   const handleMetaMaskLogin = async () => {
-    const web3 = await getWeb3();
     if (!web3) {
       return;
     }

@@ -1,21 +1,24 @@
 import { BiInfoCircle } from "react-icons/bi";
 import { FaCross } from "react-icons/fa";
 import { Modal, Spinner } from "react-bootstrap";
-import { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
-import { InvestmentInput } from "../InvestmentInput";
-import { DonCommonmodal } from "../DonModal";
-import styled from "styled-components";
-import { ContainedButton, OutlinedButton } from "../Button";
-import { AxiosResponse} from "axios";
+import { withWeb3 } from "hoc";
+import { useWeb3 } from "don-components";
+import { BigNumber } from "bignumber.js";
+import { getBUSDTokenContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
+import { DonCommonmodal } from "components/DonModal";
+import styled from "styled-components";
+import { ContainedButton, OutlinedButton } from "components/Button";
+import { InvestmentInput } from "components/InvestmentInput";
 
 const CaptionContent = styled.p`
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 400;
-    color: #6c757d !important;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  color: #6c757d !important;
 `;
 
 const ButtonWrapper = styled.div({
@@ -23,66 +26,117 @@ const ButtonWrapper = styled.div({
   width: "40%",
 });
 
+const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
+  const [state, setState] = useState({ balance: "", isReady: false });
+  const web3 = useWeb3();
 
+  const fetchBalance = async () => {
+    const accounts = await web3.eth.getAccounts();
+    //@ts-ignore
+    const busdtoken = await getBUSDTokenContract(web3);
+    const balance = await busdtoken.methods.balanceOf(accounts[0]).call();
+    setState({
+      balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
+      isReady: true,
+    });
+    onDone &&
+      onDone(new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2));
+  };
+  useLayoutEffect(() => {
+    fetchBalance();
+  }, []);
+
+  if (!state.isReady) {
+    return <>-</>;
+  }
+  return <>{state.balance}</>;
+};
 
 export const InvestmentPopup = ({
-  balance,
   poolAddress,
   onClose,
   onSuccess,
-  onFailure
+  onFailure,
 }: {
-  balance: string | number;
   poolAddress: string;
   onClose: () => void;
   onSuccess?: () => void;
-  onFailure?: (err?: AxiosResponse<any>) => void;
+  onFailure?: () => void;
 }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
-
-  const [{ }, executePost] = useAxios(
+  const [balance, setBalance] = useState("0");
+  const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
 
-
-
-
+  const web3 = useWeb3();
   const handleInvest = async () => {
     if (isLoading) {
       return;
     }
     enable();
-    try {
 
-     await executePost({ data: { poolAddress } });
+    const POOLJson = await import("JsonData/Pool.json");
+    try {
+      const pool = new web3.eth.Contract(POOLJson.abi as any, poolAddress);
+      const busdtoken = await getBUSDTokenContract(web3);
+      const accounts = await web3.eth.getAccounts();
+      let allowance = await busdtoken.methods
+        .allowance(accounts[0], poolAddress)
+        .call();
+      allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
+      const amount = new BigNumber(value);
+      if (amount.gt(allowance)) {
+        const differance = amount.minus(allowance);
+        // ask for more allowance
+        const requiredAmount = amount.plus(differance).plus(100).toString();
+        await busdtoken.methods
+          .approve(poolAddress, web3.utils.toWei(requiredAmount, "ether"))
+          .send({
+            from: accounts[0],
+            gas: "1000000",
+          });
+      }
+
+      await pool.methods
+        .depositLiquidity(web3.utils.toWei(value, "ether"))
+        .send({
+          from: accounts[0],
+          gas: "1000000",
+        });
+      await executePost({ data: { poolAddress } });
       if (onSuccess) {
         onSuccess();
       }
-
-    }
-    catch (err) {
+    } catch (err) {
+      console.log(err);
       if (onFailure) {
-        onFailure(err.response);
+        onFailure();
       }
-    }
-    finally {
+    } finally {
       disable();
     }
-    onClose();
   };
 
   const renderButtonText = () => {
     if (isLoading) {
-      return <DonKeySpinner/>;
+      return <DonKeySpinner />;
     }
 
     return "Invest";
   };
 
   return (
-    <DonCommonmodal title="Invest" variant="common" isOpen={true} size="md"  titleRightContent={`Balance: ${balance} BUSD`} onClose={onClose}>
+    <DonCommonmodal
+      title="Invest"
+      variant="common"
+      isOpen={true}
+      size="md"
+      titleRightContent={`Balance: ${(<MyBalanceInBUSD />)} BUSD`}
+      onClose={onClose}
+    >
       <div className="row">
         <div className="col-md-5 mr-4">
           <CaptionContent className="d-flex mt-2 justify-content-between">
@@ -106,36 +160,21 @@ export const InvestmentPopup = ({
 
         <div className="col-md-6 ml-4">
           <div className="row">
-
-            <InvestmentInput
-              value={value}
-              setValue={setValue}
-              max={parseInt(balance as string)}
-            />
+            <InvestmentInput value={value} setValue={setValue} max={balance} />
           </div>
           <div className="row mt-5">
-
             <ButtonWrapper>
-              <ContainedButton
-                disabled={!value}
-                onClick={handleInvest}
-              >
+              <ContainedButton disabled={!value} onClick={handleInvest}>
                 {renderButtonText()}
               </ContainedButton>
             </ButtonWrapper>
 
-
             <ButtonWrapper>
-              <OutlinedButton
-                onClick={onClose}
-              >
-                Cancel
-                </OutlinedButton>
+              <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
             </ButtonWrapper>
-
           </div>
         </div>
-      </div >
-    </DonCommonmodal >
+      </div>
+    </DonCommonmodal>
   );
 };

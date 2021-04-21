@@ -76,7 +76,7 @@ const SmallRightCloud = styled(SmallCloud)`
   }
 `
 
-export const FarmerSignupPage = withWeb3(() => {
+export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | undefined>();
@@ -167,16 +167,12 @@ export const FarmerSignupPage = withWeb3(() => {
           style={{ minHeight: 400 }}
         >
           <Spinner animation="border" color="dark" />
-          <div className="mt-4">
-            {spinnermsg}
-          </div>
+          <div className="mt-4">{spinnermsg}</div>
         </div>
       );
     }
     if (farmer?.poolAddress) {
-      return <div className="text-center">
-        You Have Already Signed Up
-      </div>;
+      return <div className="text-center">You Have Already Signed Up</div>;
     }
     return (
       <div className="container">
@@ -253,4 +249,4 @@ export const FarmerSignupPage = withWeb3(() => {
       </Layout>
     </>
   );
-});
+};

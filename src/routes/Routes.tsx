@@ -5,6 +5,7 @@ import React, { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
 import TeamPage from "Pages/TeamPage";
 import FarmersPage from "Pages/FarmersPage";
+import { Web3Provider } from "don-components";
 
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
@@ -22,6 +23,7 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/team" children={<TeamPage />} />
+
         <ProtectedRoute
           exact
           path="/dashboard"

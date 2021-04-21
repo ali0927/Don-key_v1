@@ -1,3 +1,5 @@
+import BigNumber from "bignumber.js";
+import { useMemo } from "react";
 import styled from "styled-components";
 
 const InvestmentRoot = styled.div({
@@ -50,8 +52,11 @@ export const InvestmentInput = ({
 }: {
   value: string;
   setValue: (val: string) => void;
-  max: number;
+  max: string;
 }) => {
+  const maxNum = useMemo(() => {
+    return new BigNumber(max);
+  }, [max])
   return (
     <div className="w-100">
       <InvestmentRoot>
@@ -66,9 +71,10 @@ export const InvestmentInput = ({
       </InvestmentRoot>
       <InvestmentPrecentage>
         {[0, 20, 50, 80, 100].map((val) => {
+           const updatedVal = maxNum.multipliedBy(new BigNumber(val).dividedBy(new BigNumber(100))).toFixed(2);
           return (
             <span
-              onClick={() => setValue(((val / 100) * max).toFixed(2))}
+              onClick={() => setValue(updatedVal)}
               style={{ opacity: val / 100 + 0.2 }}
             >
               {val}%

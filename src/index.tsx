@@ -8,16 +8,19 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { Providers } from "Providers";
 
-Sentry.init({
-  dsn:
-    "https://a02e8e703bab44d39b5cb4323ebce3ed@o571223.ingest.sentry.io/5719005",
-  integrations: [new Integrations.BrowserTracing()],
+if(process.env.NODE_ENV === "production"){
+  Sentry.init({
+    dsn:
+      "https://a02e8e703bab44d39b5cb4323ebce3ed@o571223.ingest.sentry.io/5719005",
+    integrations: [new Integrations.BrowserTracing()],
+  
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 0.4,
+  });
+}
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 0.4,
-});
 ReactDOM.render(
   <React.StrictMode>
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>

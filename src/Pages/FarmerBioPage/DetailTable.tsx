@@ -1,11 +1,12 @@
 import { Row, Col, Button } from "react-bootstrap";
-import { useNotification } from "components/Notification";
-import { useAxios } from "hooks/useAxios";
 import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { shortenAddress } from "don-utils";
 import { useMediaQuery } from "@material-ui/core";
+import { PoolAmount } from "components/PoolAmount";
+import { MyInvestment } from "components/MyInvestment";
+import { useIsInvested } from "hooks/useIsInvested";
 
 const Poolinfo = styled.div`
   font-size: 16px;
@@ -42,12 +43,12 @@ const InvestCardButton = styled.button`
   }
 `;
 
-
-
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
+
+  const { isInvested } = useIsInvested(poolAddress);
 
   return (
     <>
@@ -55,22 +56,31 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
         <Poolinfo className="bg-white h-100">
           <div className="list-box">
             <h5 className="heading-title">Pool address</h5>
-            <div >{isSmall ? shortenAddress(poolAddress) : poolAddress}</div>
+            <div>{isSmall ? shortenAddress(poolAddress) : poolAddress}</div>
           </div>
         </Poolinfo>
       </Col>
-      <Col lg={4} >
+      <Col lg={4}>
         <InvestmentDisplay className="h-100">
           <div className="row">
             <div className="col-md-6">
               <div>Total Pool Value</div>{" "}
-              <h5 className="heading-title">100BUSD</h5>
+              <h5 className="heading-title">
+                <PoolAmount poolAddress={poolAddress} />
+              </h5>
+              {isInvested && (
+                <>
+                  <div>My Investment</div>{" "}
+                  <h5 className="heading-title">
+                    <MyInvestment poolAddress={poolAddress} />
+                  </h5>
+                </>
+              )}
             </div>
             <div className="col-md-6">
               {showInvestmentPopup && (
                 <InvestmentPopup
                   poolAddress={poolAddress}
-                  balance={1000}
                   onClose={() => setShowInvestmentPopup(false)}
                 />
               )}
@@ -80,9 +90,11 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
               >
                 Invest
               </InvestCardButton>
-              <InvestCardButton onClick={() => setShowInvestmentPopup(true)}>
-                Withdraw
-              </InvestCardButton>
+              {isInvested && (
+                <InvestCardButton onClick={() => setShowInvestmentPopup(true)}>
+                  Withdraw
+                </InvestCardButton>
+              )}
             </div>
           </div>
         </InvestmentDisplay>

@@ -48,7 +48,7 @@ export const FarmerBio = ({
   const lastActive = useMemo(() => {
     return moment.duration(moment().diff(moment(last_signin))).humanize();
   }, [last_signin]);
-
+  
   return (
     <>
       <Container>

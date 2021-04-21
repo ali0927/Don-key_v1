@@ -1,4 +1,3 @@
-import { useWeb3React } from "@web3-react/core";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { useEffect } from "react";
 import Routes from "./routes/Routes";

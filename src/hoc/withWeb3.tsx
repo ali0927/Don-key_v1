@@ -1,13 +1,21 @@
-import { Web3Provider } from "don-components";
+import { useWeb3, Web3Provider } from "don-components";
 import { LoadingPage } from "Pages/LoadingPage";
 
-export const withWeb3 = <T extends object>(Comp: React.ComponentType<T>) => {
+export const withWeb3 = <T extends object>(
+  Comp: React.ComponentType<T>,
+  Loader = LoadingPage
+) => {
   const WrappedWithWeb3 = (props: T) => {
-    return (
-      <Web3Provider loader={<LoadingPage />}>
-        <Comp {...props} />
-      </Web3Provider>
-    );
+    const web3 = useWeb3();
+    if (!web3) {
+      return (
+        <Web3Provider loader={<Loader />}>
+          <Comp {...props} />
+        </Web3Provider>
+      );
+    } else {
+      return <Comp {...props} />;
+    }
   };
   return WrappedWithWeb3;
 };
