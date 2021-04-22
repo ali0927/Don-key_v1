@@ -310,7 +310,7 @@ const LandingPage = () => {
             <Col md={4} className="mr-md-4">
               <div className="toeknImg">
                 <img
-                  src="/assets/images/token.png"
+                  src="/assets/images/don-key-logo.svg"
                   className="d-inline-block"
                   alt="Image"
                 />
