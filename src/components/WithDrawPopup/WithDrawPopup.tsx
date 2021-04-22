@@ -9,24 +9,22 @@ import { IWithDrawPopupProps } from "./interfaces";
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress } = props;
 
-  const [value, setValue] = React.useState("0");
+  const [ setValue] = React.useState("0");
 
   const [{ loading }, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
 
-  const handleChange = (value: string) => {
-    setValue(value);
-  };
 
   const handleWithDraw = async () => {
     try {
-      await executeDelete({
-        data: {
-          poolAddress: poolAddress,
-        },
-      });
+      // TODO: need to implement
+      // await executeDelete({
+      //   data: {
+      //     poolAddress: poolAddress,
+      //   },
+      // });
       props.onSuccess();
     } catch (err) {
       props.onError(err);
@@ -43,7 +41,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         onClose={props.onClose}
       >
         <div className="mt-3">
-          <InvestmentInput value={value} max={"100"} setValue={handleChange} />
+          Are you sure you want to withdraw all your investment ?
         </div>
         <div className="d-flex mt-5">
           <ContainedButton

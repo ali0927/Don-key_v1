@@ -7,6 +7,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
 import { useIsInvested } from "hooks/useIsInvested";
+import { WithDrawPopup } from "components/WithDrawPopup";
 
 const Poolinfo = styled.div`
   font-size: 16px;
@@ -50,6 +51,8 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   const { isInvested } = useIsInvested(poolAddress);
 
+  const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
+
   return (
     <>
       <Col className="my-4 my-lg-0" lg={6}>
@@ -91,9 +94,18 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                 Invest
               </InvestCardButton>
               {isInvested && (
-                <InvestCardButton onClick={() => setShowInvestmentPopup(true)}>
+                <InvestCardButton onClick={() => setShowWithdrawPopup(true)}>
                   Withdraw
                 </InvestCardButton>
+              )}
+              {showWithdrawPopup && (
+                <WithDrawPopup
+                  open
+                  onClose={() => setShowWithdrawPopup(false)}
+                  onError={() => {}}
+                  onSuccess={() => {}}
+                  poolAddress={poolAddress}
+                />
               )}
             </div>
           </div>
