@@ -62,9 +62,9 @@ export const DashboardPage = () => {
           description: item.description,
           picture: item.picture,
           poolAddress: item.poolAddress ,
-          profit24hours: item.profit24hours || "$2 280,00",
-          profit7days: item.profit7days || "$2 280,00",
-          profit: item.profit|| "$2 280,00",
+          profit24hours: item.profit24hours || "-",
+          profit7days: item.profit7days || "-",
+          profit: item.profit|| "-",
         } as IFarmer;
       });
     }
