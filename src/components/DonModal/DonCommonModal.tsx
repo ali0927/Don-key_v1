@@ -37,7 +37,7 @@ export const DonCommonmodal = ({
   variant: "common" | "v1";
   icon?: React.ReactElement;
   size?: DialogProps["maxWidth"];
-  titleRightContent?: string;
+  titleRightContent?: React.ReactElement;
   children: React.ReactNode;
 }) => {
 

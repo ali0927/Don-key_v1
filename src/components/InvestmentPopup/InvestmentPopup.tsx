@@ -89,11 +89,8 @@ export const InvestmentPopup = ({
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
       const amount = new BigNumber(value);
       if (amount.gt(allowance)) {
-        const differance = amount.minus(allowance);
-        // ask for more allowance
-        const requiredAmount = amount.plus(differance).plus(100).toString();
         await busdtoken.methods
-          .approve(poolAddress, web3.utils.toWei(requiredAmount, "ether"))
+          .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
           .send({
             from: accounts[0],
             gas: "1000000",
@@ -134,7 +131,7 @@ export const InvestmentPopup = ({
       variant="common"
       isOpen={true}
       size="md"
-      titleRightContent={`Balance: ${(<MyBalanceInBUSD />)} BUSD`}
+      titleRightContent={<>Balance: {(<MyBalanceInBUSD onDone={setBalance} />)} BUSD</>}
       onClose={onClose}
     >
       <div className="row">
