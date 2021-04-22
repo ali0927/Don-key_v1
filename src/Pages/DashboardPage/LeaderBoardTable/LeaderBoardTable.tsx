@@ -1,7 +1,7 @@
 import { Loader } from "don-components";
 import { useState } from "react";
 
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { ILeaderBoardTableProps } from "./interfaces";
 import "./LeaderBoardTable.scss";
 import {
@@ -21,15 +21,14 @@ import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
 import { AxiosResponse } from "axios";
 
-
-
-
-
 const StyledImage = styled.img`
-width: 45px;
-height: 45px;
-`
+  width: 45px;
+  height: 45px;
+`;
 
+const EmptyTableHeading = styled(TableHeading)`
+  min-width: 75px;
+`;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   const { leaders, isReady } = props;
@@ -45,7 +44,9 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     history.push(`/dashboard/farmer/${id}`);
   };
 
-  const openInvestmentDialog = (farmerName: string, poolAddress: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
+  const openInvestmentDialog = (farmerName: string, poolAddress: string) => (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
     e.stopPropagation();
     setState({
       farmerName: farmerName,
@@ -70,7 +71,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
         </>
       ),
     });
-  }
+  };
 
   const handleInvestmentFailure = (response?: AxiosResponse<any>) => {
     let message = "Try again letter.";
@@ -84,7 +85,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
         </>
       ),
     });
-  }
+  };
 
   if (!isReady) {
     return (
@@ -101,12 +102,12 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
           <TableHead>
             <TableRow style={{ height: 75 }}>
               <TableHeading>#</TableHeading>
-              <TableHeading></TableHeading>
+              <EmptyTableHeading></EmptyTableHeading>
               <TableHeading>FARMER NAME</TableHeading>
               <TableHeading>TOTAL VALUE</TableHeading>
               <TableHeading>24h PROFIT</TableHeading>
               <TableHeading>7 DAYS PROFIT</TableHeading>
-              <TableHeading>Total PROFIT</TableHeading>
+              <TableHeading> Total PROFIT</TableHeading>
               <TableHeading>MY INVESTMENT</TableHeading>
               <TableHeading>ACTION</TableHeading>
             </TableRow>
@@ -139,10 +140,13 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                     <TableData>
                       <LightGrayButton
                         type="submit"
-                        onClick={openInvestmentDialog(item.name, item.poolAddress)}
+                        onClick={openInvestmentDialog(
+                          item.name,
+                          item.poolAddress
+                        )}
                       >
                         Invest
-                    </LightGrayButton>
+                      </LightGrayButton>
                     </TableData>
                   </TableRow>
                 );
