@@ -130,29 +130,27 @@ export const InvestmentPopup = ({
       title="Invest"
       variant="common"
       isOpen={true}
-      size="md"
-      titleRightContent={<>Balance: {(<MyBalanceInBUSD onDone={setBalance} />)} BUSD</>}
+      size="xs"
+      titleRightContent={
+        <>Balance: {<MyBalanceInBUSD onDone={setBalance} />} BUSD</>
+      }
       onClose={onClose}
     >
-      <div className="row">
-        <div className="col-md-3"></div>
-        <div className="col-md-6">
-          <div className="row">
-            <InvestmentInput value={value} setValue={setValue} max={balance} />
-          </div>
-          <div className="row mt-5">
-            <ButtonWrapper>
-              <ContainedButton disabled={!value} onClick={handleInvest}>
-                {renderButtonText()}
-              </ContainedButton>
-            </ButtonWrapper>
-
-            <ButtonWrapper>
-              <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
-            </ButtonWrapper>
-          </div>
+      <div>
+        <div className="mt-4">
+          <InvestmentInput value={value} setValue={setValue} max={balance} />
         </div>
-        <div className="col-md-3"></div>
+        <div className="d-flex justify-content-between mt-5">
+          <ButtonWrapper>
+            <ContainedButton disabled={!value} onClick={handleInvest}>
+              {renderButtonText()}
+            </ContainedButton>
+          </ButtonWrapper>
+
+          <ButtonWrapper className="mr-0">
+            <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
+          </ButtonWrapper>
+        </div>
       </div>
     </DonCommonmodal>
   );
