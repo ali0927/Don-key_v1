@@ -1,3 +1,4 @@
+import { AccountChangeListener } from "components/AccountChangeListener";
 import { withAuth } from "components/withAuth";
 import { Web3Provider } from "don-components";
 import { LoadingPage } from "Pages/LoadingPage";
@@ -8,7 +9,12 @@ export const ProtectedRoute = (props: RouteProps) => {
   const extras = useMemo(() => {
     const comp = withAuth(props.children);
     return {
-      children: <Web3Provider loader={<LoadingPage />}>{comp}</Web3Provider>,
+      children: (
+        <Web3Provider loader={<LoadingPage />}>
+          <AccountChangeListener />
+          {comp}
+        </Web3Provider>
+      ),
     };
   }, [props.children]);
 

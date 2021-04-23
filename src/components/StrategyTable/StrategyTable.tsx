@@ -1,3 +1,4 @@
+import { StrategyName } from "components/StrategyName";
 import {
   Table,
   TableBody,
@@ -32,8 +33,8 @@ type IStrategy = {
   is_active: boolean;
   lastRan: string | null;
   updatedAt: string;
+  strategyAddress: string | null;
   status: string | null;
-  name: string | null;
   profit: string | null;
   id: number;
 };
@@ -84,9 +85,10 @@ const StrategyRow = ({
     }
     return item.is_active ? "-" : "Make Active";
   };
+  
   return (
     <TableRow key={item.id}>
-      <TableData>{item.name}</TableData>
+      <TableData><StrategyName strategyAddress={item.strategyAddress} /></TableData>
       <TableData>{item.profit || "No Profit"}</TableData>
       <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
       <TableData>{item.status || "In-Active"}</TableData>
@@ -190,7 +192,7 @@ export const StrategyTableForInvestor = ({
           {strategies.map((item, i) => {
             return (
               <TableRow key={item.id}>
-                <TableData>{item.name}</TableData>
+                <TableData><StrategyName strategyAddress={item.strategyAddress} /></TableData>
                 <TableData>{item.profit || "No Profit"}</TableData>
                 <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
                 <TableData>{item.status || "In-Active"}</TableData>

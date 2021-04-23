@@ -23,7 +23,6 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/team" children={<TeamPage />} />
-
         <ProtectedRoute
           exact
           path="/dashboard"

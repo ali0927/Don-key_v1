@@ -113,8 +113,8 @@ export const FarmerSignupPage = () => {
         formData.append("picture", image);
       }
       setSpinnerMsg("Creating Pool Contract");
-      const poolAddress = await deployContract();
-      formData.append("poolAddress", poolAddress);
+      // const poolAddress = await deployContract();
+      formData.append("poolAddress", "poolAddress");
       setSpinnerMsg("Creating Farmer Account");
       const res = await executePost({ data: formData });
       setSpinnerMsg("Redirecting To Your Farmer Profile");

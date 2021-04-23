@@ -1,6 +1,5 @@
 import { Row, Container, Col, Table } from "react-bootstrap";
 import "./DashboardPage.scss";
-import { leaderBoardData } from "../../JsonData/leaderboard";
 import { Layout } from "components/Layout";
 import { useAxios } from "hooks/useAxios";
 import { IFarmer } from "interfaces";
@@ -58,7 +57,7 @@ export const DashboardPage = () => {
       return data.data.map((item: any) => {
         return {
           GUID: item.GUID,
-          name: item.name,
+          name: `Don - ${item.name}`,
           description: item.description,
           picture: item.picture,
           poolAddress: item.poolAddress ,
