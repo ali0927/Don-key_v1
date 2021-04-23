@@ -135,27 +135,8 @@ export const InvestmentPopup = ({
       onClose={onClose}
     >
       <div className="row">
-        <div className="col-md-5 mr-4">
-          <CaptionContent className="d-flex mt-2 justify-content-between">
-            <span>USD Value</span>
-            <span>$240</span>
-          </CaptionContent>
-          <CaptionContent className="d-flex  justify-content-between">
-            <span>GAS FEE</span>
-            <span>$13</span>
-          </CaptionContent>
-          <p className="d-flex justify-content-between">
-            <span>TOTAL</span>
-            <span>$254</span>
-          </p>
-          <p className="mb-0 mt-3 cursor-pointer">
-            <small>
-              Important <BiInfoCircle />{" "}
-            </small>
-          </p>
-        </div>
-
-        <div className="col-md-6 ml-4">
+        <div className="col-md-3"></div>
+        <div className="col-md-6">
           <div className="row">
             <InvestmentInput value={value} setValue={setValue} max={balance} />
           </div>
@@ -171,6 +152,7 @@ export const InvestmentPopup = ({
             </ButtonWrapper>
           </div>
         </div>
+        <div className="col-md-3"></div>
       </div>
     </DonCommonmodal>
   );
