@@ -115,7 +115,8 @@ export const InvestmentPopup = ({
       //     gas: "100000",
       //   });
       // console.log(tx1);
-      const tx = await pool.methods.invest().send({ from: accounts[0], gas: "100000" })
+      const tx = await pool.methods.invest().send({ from: accounts[0]})
+
       console.log(tx);
       await executePost({ data: { poolAddress } });
       if (key1) {
