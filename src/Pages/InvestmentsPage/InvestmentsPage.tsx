@@ -163,7 +163,7 @@ export const InvestmentsPage = () => {
     showNotification({
       msg: (
         <>
-          <p className="text-center">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
+          <p className="text-center m-0">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
         </>
       ),
     });
@@ -179,9 +179,10 @@ export const InvestmentsPage = () => {
     showNotification({
       msg: (
         <>
-          <p className="text-center">{errorMessage}</p>
+          <p className="text-center m-0">{errorMessage}</p>
         </>
       ),
+      type: "error"
     });
   }
 

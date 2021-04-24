@@ -28,8 +28,8 @@ export const useMetaMaskLogin = () => {
     showNotification({
       msg: (
         <>
-          <p className="text-center">Metamask Account Connected</p>
-          <p className="text-center">{publicAddress}</p>
+          <p className="text-center m-0">Metamask Account Connected</p>
+          <p className="text-center m-0">{publicAddress}</p>
         </>
       ),
     });

@@ -13,6 +13,12 @@ import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
 import { ContainedButton, OutlinedButton } from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
+import { useSnackbar } from "notistack";
+import {
+  ErrorSnackbar,
+  ProgressSnackbar,
+  SuccessSnackbar,
+} from "components/Snackbars";
 
 const CaptionContent = styled.p`
   font-family: Roboto;
@@ -55,13 +61,9 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
 export const InvestmentPopup = ({
   poolAddress,
   onClose,
-  onSuccess,
-  onFailure,
 }: {
   poolAddress: string;
   onClose: () => void;
-  onSuccess?: () => void;
-  onFailure?: () => void;
 }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable, disable] = useToggle();
@@ -72,6 +74,8 @@ export const InvestmentPopup = ({
   );
 
   const web3 = useWeb3();
+  const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+
   const handleInvest = async () => {
     if (isLoading) {
       return;
@@ -79,6 +83,7 @@ export const InvestmentPopup = ({
     enable();
 
     const POOLJson = await import("JsonData/Pool.json");
+    let key1: string | number | null = null;
     try {
       const pool = new web3.eth.Contract(POOLJson.abi as any, poolAddress);
       const busdtoken = await getBUSDTokenContract(web3);
@@ -88,12 +93,17 @@ export const InvestmentPopup = ({
         .call();
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
       const amount = new BigNumber(value);
+      onClose();
+      key1 = enqueueSnackbar("Transaction is In Progress", {
+        content: (key, msg) => <ProgressSnackbar message={msg as string} />,
+        persist: true,
+      });
       if (amount.gt(allowance)) {
         await busdtoken.methods
           .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
           .send({
             from: accounts[0],
-            gas: "1000000",
+            gas: "100000",
           });
       }
 
@@ -101,19 +111,29 @@ export const InvestmentPopup = ({
         .depositLiquidity(web3.utils.toWei(value, "ether"))
         .send({
           from: accounts[0],
-          gas: "1000000",
+          gas: "100000",
         });
       await executePost({ data: { poolAddress } });
-      if (onSuccess) {
-        onSuccess();
+      if (key1) {
+        closeSnackbar(key1);
       }
+
+      enqueueSnackbar("Money invested into Pool Successfully", {
+        content: (key, msg) => <SuccessSnackbar message={msg as string} />,
+        autoHideDuration: 5000,
+        persist: false
+      });
+ 
     } catch (err) {
       console.log(err);
-      if (onFailure) {
-        onFailure();
+      if (key1) {
+        closeSnackbar(key1);
       }
-    } finally {
-      disable();
+      enqueueSnackbar("Transaction failed.", {
+        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
+        autoHideDuration: 5000,
+        persist: false
+      });
     }
   };
 
@@ -138,11 +158,11 @@ export const InvestmentPopup = ({
     >
       <div>
         <div className="mt-4">
-          <InvestmentInput value={value} setValue={setValue} max={balance} />
+          <InvestmentInput value={value} disabled={isLoading} setValue={setValue} max={balance} />
         </div>
         <div className="d-flex justify-content-between mt-5">
           <ButtonWrapper>
-            <ContainedButton disabled={!value} onClick={handleInvest}>
+            <ContainedButton disabled={!value || isLoading} onClick={handleInvest}>
               {renderButtonText()}
             </ContainedButton>
           </ButtonWrapper>

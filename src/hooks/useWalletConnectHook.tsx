@@ -25,10 +25,10 @@ export const useWalletConnectHook = () => {
         showNotification({
             msg: (
                 <>
-                    <p className="text-center">
+                    <p className="text-center m-0">
                         WalletConnect Account Connected
                     </p>
-                    <p className="text-center">{publicAddress}</p>
+                    <p className="text-center m-0">{publicAddress}</p>
                 </>
             ),
         });

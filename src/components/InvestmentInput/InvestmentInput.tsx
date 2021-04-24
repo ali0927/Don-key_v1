@@ -49,10 +49,12 @@ export const InvestmentInput = ({
   value,
   setValue,
   max,
+  disabled
 }: {
   value: string;
   setValue: (val: string) => void;
   max: string;
+  disabled?:boolean;
 }) => {
   const maxNum = useMemo(() => {
     return new BigNumber(max);
@@ -65,7 +67,9 @@ export const InvestmentInput = ({
           <InvestmentInputElement
             type="number"
             placeholder="0"
+            min={0}
             value={value}
+            disabled={disabled}
             onChange={(e) => setValue(e.target.value)} />
         </div>
       </InvestmentRoot>

@@ -63,29 +63,6 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     setOpenInvestment(false);
   };
 
-  const handleInvestmentSuccess = (farmerName: string) => () => {
-    showNotification({
-      msg: (
-        <>
-          <p className="text-center">{`100BUSD was invested in farmer ${farmerName}`}</p>
-        </>
-      ),
-    });
-  };
-
-  const handleInvestmentFailure = (response?: AxiosResponse<any>) => {
-    let message = "Try again letter.";
-    if (response && response.status === 409) {
-      message = "You have already invested into this pool.";
-    }
-    showNotification({
-      msg: (
-        <>
-          <p className="text-center">{message}</p>
-        </>
-      ),
-    });
-  };
 
   if (!isReady) {
     return (
@@ -158,8 +135,6 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
       {openInvestment && (
         <InvestmentPopup
           poolAddress={state.poolAddress}
-          onSuccess={handleInvestmentSuccess(state.farmerName)}
-          onFailure={handleInvestmentFailure}
           onClose={closeInvestmentDialog}
         />
       )}

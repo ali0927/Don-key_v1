@@ -71,6 +71,13 @@ export type API_STATE = {
   };
 };
 
+type ITransactions = {
+  [id: string]: {
+    status: "PENDING" | "SUCCESS" | "ERROR";
+    message: string;
+  }
+}
+
 export interface IStoreState {
   auth: {
     user: IUser | null;
@@ -78,6 +85,7 @@ export interface IStoreState {
   };
   api: API_STATE;
   farmer: IFarmerInter | null;
+  transactions: ITransactions;
 }
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;
