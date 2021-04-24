@@ -98,24 +98,24 @@ export const InvestmentPopup = ({
         persist: true,
       });
       console.log(allowance.toString());
-      if (amount.gt(allowance)) {
+      // if (amount.gt(allowance)) {
       
-        await busdtoken.methods
-          .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
-          .send({
-            from: accounts[0],
-            gas: "100000",
-          });
-      }
+      //   await busdtoken.methods
+      //     .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
+      //     .send({
+      //       from: accounts[0],
+      //       gas: "100000",
+      //     });
+      // }
 
-      const tx1 = await pool.methods
-        .depositLiquidity(web3.utils.toWei(value, "ether"))
-        .send({
-          from: accounts[0],
-          gas: "100000",
-        });
-      console.log(tx1);
-      const tx = await pool.methods.invest().send({ from: accounts[0] })
+      // const tx1 = await pool.methods
+      //   .depositLiquidity(web3.utils.toWei(value, "ether"))
+      //   .send({
+      //     from: accounts[0],
+      //     gas: "100000",
+      //   });
+      // console.log(tx1);
+      const tx = await pool.methods.invest().send({ from: accounts[0], gas: "100000" })
       console.log(tx);
       await executePost({ data: { poolAddress } });
       if (key1) {
