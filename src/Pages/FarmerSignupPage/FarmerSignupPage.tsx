@@ -19,6 +19,7 @@ import { IStoreState } from "interfaces";
 import { setFarmerDetail } from "actions/farmerActions";
 import { DonKeyTextField } from "components/DonKeyTextField";
 import { FileUploadButton } from "components/FileUploadButton";
+import { ContainedButton } from "components/Button";
 
 const Root = styled.div`
    z-index: 1;
@@ -112,47 +113,48 @@ export const FarmerSignupPage = () => {
       if (image) {
         formData.append("picture", image);
       }
-      setSpinnerMsg("Creating Pool Contract");
-      const poolAddress = await deployContract();
-      formData.append("poolAddress", poolAddress);
+
       setSpinnerMsg("Creating Farmer Account");
       const res = await executePost({ data: formData });
-      setSpinnerMsg("Redirecting To Your Farmer Profile");
+      
       dispatch(setFarmerDetail(res.data.data));
     } finally {
       setPosting(false);
     }
 
-    history.push("/dashboard/farmer/me");
   };
 
-  const deployContract = async () => {
-    const POOLJson = await import("../../JsonData/Pool.json");
-    const contract = new web3.eth.Contract(POOLJson.abi as any);
-    const accounts = await web3.eth.getAccounts();
+  // const deployContract = async () => {
+  //   const POOLJson = await import("../../JsonData/Pool.json");
+  //   const contract = new web3.eth.Contract(POOLJson.abi as any);
+  //   const accounts = await web3.eth.getAccounts();
 
-    let payload = {
-      data: POOLJson.bytecode,
-    };
-    const gasPrice = await web3.eth.getGasPrice();
-    let parameter: any = {
-      from: accounts[0],
-      gas: web3.utils.toHex(8000000),
-      gasPrice: gasPrice,
-    };
+  //   let payload = {
+  //     data: POOLJson.bytecode,
+  //   };
+  //   const gasPrice = await web3.eth.getGasPrice();
+  //   let parameter: any = {
+  //     from: accounts[0],
+  //     gas: web3.utils.toHex(8000000),
+  //     gasPrice: gasPrice,
+  //   };
 
-    return new Promise<string>((res, rej) => {
-      contract
-        .deploy(payload)
-        .send(parameter, (err, transactionHash) => {
-          console.log("Transaction Hash :", transactionHash);
-        })
-        .on("error", rej)
-        .then((newContractInstance) => {
-          res(newContractInstance.options.address);
-        });
-    });
-  };
+  //   return new Promise<string>((res, rej) => {
+  //     contract
+  //       .deploy(payload)
+  //       .send(parameter, (err, transactionHash) => {
+  //         console.log("Transaction Hash :", transactionHash);
+  //       })
+  //       .on("error", rej)
+  //       .then((newContractInstance) => {
+  //         res(newContractInstance.options.address);
+  //       });
+  //   });
+  // };
+
+  // const handlePoolCreation = () => {
+  //   setPosting(true);
+  // }
 
   useEffect(() => {
     if (errorMsg) {
@@ -171,6 +173,16 @@ export const FarmerSignupPage = () => {
         </div>
       );
     }
+    if(farmer?.status === "under_review"){
+      return <div className="text-center">Your Account is under review</div>
+    }
+
+    if(farmer?.status === "active" && !farmer?.poolAddress){
+      return <div className="d-flex align-items-center justify-content-center">
+         You can start Farming once your pool is Deployed
+      </div>
+    }
+
     if (farmer?.poolAddress) {
       return <div className="text-center">You Have Already Signed Up</div>;
     }

@@ -1,4 +1,5 @@
 import { AddStrategyModal } from "components/AddStrategyModal";
+import { RunStrategy } from "components/RunStrategy";
 import {
   StrategyTable,
   StrategyTableForInvestor,
@@ -9,7 +10,13 @@ import { useAxios } from "hooks/useAxios";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 
-const AddNewStrategy = ({ text, onDone }: {text: string; onDone?: () => void }) => {
+const AddNewStrategy = ({
+  text,
+  onDone,
+}: {
+  text: string;
+  onDone?: () => void;
+}) => {
   const [isOpen, open, close] = useToggle();
 
   return (
@@ -21,7 +28,7 @@ const AddNewStrategy = ({ text, onDone }: {text: string; onDone?: () => void }) 
           open();
         }}
       >
-       {text}
+        {text}
       </StyledLink>
       {isOpen && (
         <AddStrategyModal isOpen={isOpen} onClose={close} onSuccess={onDone} />
@@ -35,9 +42,10 @@ const StyledHeading = styled.h2`
   font-size: 30px;
 `;
 
+
 export const FarmerStrategies = ({
   farmerId,
-  isInvestor,
+  isInvestor
 }: {
   farmerId: string;
   isInvestor?: boolean;
@@ -77,11 +85,14 @@ export const FarmerStrategies = ({
             <div className="row justify-content-center">
               <div className="col-md-7 d-flex flex-column align-items-center">
                 <div className="mb-3">
-                  <AddNewStrategy text={"Create Your First Strategy"} onDone={refetchData} />
+                  <AddNewStrategy
+                    text={"Create Your First Strategy"}
+                    onDone={refetchData}
+                  />
                 </div>
                 <div>
                   <img
-                    style={{mixBlendMode: "multiply"}}
+                    style={{ mixBlendMode: "multiply" }}
                     src="/assets/images/build-strategy-img.svg"
                     alt="Image"
                   />
@@ -101,7 +112,11 @@ export const FarmerStrategies = ({
                 sm={12}
               >
                 <StyledHeading>Strategies</StyledHeading>
-                {!isInvestor && <AddNewStrategy text="Add Strategy" onDone={refetchData} />}
+                {!isInvestor && strategiesData.data.length === 1 ? (
+                  <RunStrategy  strategy={strategiesData.data[0]} />
+                ) : (
+                  <AddNewStrategy text="Add Strategy" onDone={refetchData} />
+                )}
               </Col>
               <Col sm={12}>
                 {isInvestor ? (

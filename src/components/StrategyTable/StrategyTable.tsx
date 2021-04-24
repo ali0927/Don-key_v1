@@ -11,6 +11,7 @@ import {
 import { useAxios } from "hooks/useAxios";
 import moment from "moment";
 import { useState } from "react";
+import { IStrategy } from "interfaces";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -28,16 +29,6 @@ const OutlinedButton = styled.button`
   }
 `;
 
-type IStrategy = {
-  createdAt: string;
-  is_active: boolean;
-  lastRan: string | null;
-  updatedAt: string;
-  strategyAddress: string | null;
-  status: string | null;
-  profit: string | null;
-  id: number;
-};
 
 const formatDate = (
   date: string | null | undefined,

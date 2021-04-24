@@ -40,15 +40,12 @@ export interface IUser {
   };
 }
 
-export type IStrategy = {
-  name?: string;
-  id: string;
-};
 
 export interface IFarmerInter {
-  poolAddress: string ;
-  picture: string ;
+  poolAddress: string;
+  picture: string;
   GUID: string;
+  status: "not_signed_up" | "under_review" | "active" | "inactive";
   name: string;
   last_signin: string;
   description: string;
@@ -56,6 +53,18 @@ export interface IFarmerInter {
   walletAddress: string;
   username?: string | null;
 }
+export type IStrategy = {
+  createdAt: string;
+  is_active: boolean;
+  lastRan: string | null;
+  updatedAt: string;
+  strategyAddress: string | null;
+  status: string | null;
+  profit: string | null;
+  id: number;
+};
+
+
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 
@@ -75,8 +84,8 @@ type ITransactions = {
   [id: string]: {
     status: "PENDING" | "SUCCESS" | "ERROR";
     message: string;
-  }
-}
+  };
+};
 
 export interface IStoreState {
   auth: {
