@@ -1,3 +1,4 @@
+import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { EditIcon } from "icons/EditIcon";
 import { StrategyTable } from "components/StrategyTable";
@@ -9,6 +10,7 @@ import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import { useMemo, useState } from "react";
 import moment from "moment";
 import { IFarmerInter } from "interfaces";
+
 const StyledFarmerImage = styled.img`
   object-fit: cover;
   width: 120px;
@@ -33,8 +35,17 @@ const OutlinedButton = styled.button`
 `;
 
 const LastLoginText = styled.div`
-font-size: 12px;
-`
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+`;
+
+const Online = styled.span`
+  width: 10px;
+  height: 10px;
+  background: #448124;
+  border-radius: 100%;
+`;
 
 export const FarmerBio = ({
   farmer: { description, last_signin, name, picture, poolAddress },
@@ -45,19 +56,29 @@ export const FarmerBio = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
 
+
+
+
   const lastActive = useMemo(() => {
     return moment.duration(moment().diff(moment(last_signin))).humanize();
   }, [last_signin]);
-  
+
+  const diff = useMemo(() => {
+    const Current = moment(new Date());
+    const LastDateTime = moment(last_signin);
+    return Current.diff(LastDateTime, "minute") >= 2 ? "offline" : "online";
+  }, [last_signin]);
+
+
+
+
   return (
     <>
       <Container>
         <Row>
           <Col sm={12}>
             <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
-              <h2 className="mb-2 mb-md-0">
-                Don - {capitalize(name || "")}
-              </h2>
+              <h2 className="mb-2 mb-md-0">Don - {capitalize(name || "")}</h2>
               {!isInvestor && (
                 <div className="d-flex align-items-center justify-content-center">
                   <OutlinedButton
@@ -90,7 +111,15 @@ export const FarmerBio = ({
             </Row>
           </Col>
           <Col sm={12}>
-            <LastLoginText>last active: {lastActive} ago</LastLoginText>
+            {(!isInvestor || diff === "online") && (
+              <LastLoginText>
+                <Online className="mr-1" />
+                Online
+              </LastLoginText>
+            )}
+            {isInvestor && diff === "offline" && (
+              <LastLoginText>last active: {lastActive} ago</LastLoginText>
+            )}
           </Col>
         </Row>
       </Container>
