@@ -354,7 +354,7 @@ const LandingPage = () => {
           <p className="mt-5">Follow us on Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
-              <a href="https://medium.com/@don-key.finance">
+              <a href="https://medium.com/@don-key-finance">
                 <svg
                   width={25}
                   height={24}
