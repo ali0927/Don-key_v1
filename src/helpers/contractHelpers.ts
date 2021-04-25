@@ -52,6 +52,7 @@ export const addCubesToTestStrategy = async (
   const strategyContract = await getStrategyContract(web3, strategyAddress);
   const BUSDContract = await getBUSDTokenContract(web3);
   const amount = await BUSDContract.methods.balanceOf(poolAddress).call();
+  console.log('amount', amount)
   const accounts = await web3.eth.getAccounts();
   const approveBUSD = BUSDContract.methods
     .approve(PancakeRouterAddress, amount)
