@@ -7,7 +7,7 @@ import { useAxios } from "hooks/useAxios";
 import { withWeb3 } from "hoc";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
-import { getBUSDTokenContract, getPoolContract } from "helpers";
+import { addCubesToTestStrategy, getBUSDTokenContract, getPoolContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -97,27 +97,26 @@ export const InvestmentPopup = ({
         content: (key, msg) => <ProgressSnackbar message={msg as string} />,
         persist: true,
       });
-      console.log(allowance.toString());
-      // if (amount.gt(allowance)) {
+     
+      if (amount.gt(allowance)) {
       
-      //   await busdtoken.methods
-      //     .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
-      //     .send({
-      //       from: accounts[0],
-      //       gas: "100000",
-      //     });
-      // }
-
-      // const tx1 = await pool.methods
-      //   .depositLiquidity(web3.utils.toWei(value, "ether"))
-      //   .send({
-      //     from: accounts[0],
-      //     gas: "100000",
-      //   });
-      // console.log(tx1);
+        await busdtoken.methods
+          .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
+          .send({
+            from: accounts[0],
+          });
+      }
+    
+      const tx1 = await pool.methods
+        .depositLiquidity(web3.utils.toWei(value, "ether"))
+        .send({
+          from: accounts[0],
+        });
+      console.log(tx1, "depositLiquidity");
+      await addCubesToTestStrategy(web3, poolAddress);
       const tx = await pool.methods.invest().send({ from: accounts[0]})
 
-      console.log(tx);
+      console.log(tx, "invest Method");
       await executePost({ data: { poolAddress } });
       if (key1) {
         closeSnackbar(key1);

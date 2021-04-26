@@ -17,7 +17,7 @@ export const getBUSDTokenContract = async (web3: Web3) => {
 };
 
 export const getPoolContract = async (web3: Web3, poolAddress: string) => {
-  const POOLJson = await import("JsonData/Pool1.json");
+  const POOLJson = await import("JsonData/pool2.json");
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
 };
 
@@ -25,7 +25,7 @@ export const getStrategyContract = async (
   web3: Web3,
   strategyAddress: string
 ) => {
-  const StrategyJsn = await import("JsonData/Strategy1.json");
+  const StrategyJsn = await import("JsonData/strategy2.json");
 
   return new web3.eth.Contract(StrategyJsn.abi as any, strategyAddress);
 };
@@ -45,10 +45,12 @@ export const getPancakeContract = async (web3: Web3) => {
 
 export const addCubesToTestStrategy = async (
   web3: Web3,
-  strategyAddress: string,
+
   poolAddress: string
 ) => {
   const pancakeContract = await getPancakeContract(web3);
+  const poolContract = await getPoolContract(web3, poolAddress);
+  const strategyAddress = await poolContract.methods.getStrategy().call();
   const strategyContract = await getStrategyContract(web3, strategyAddress);
   const BUSDContract = await getBUSDTokenContract(web3);
   const amount = await BUSDContract.methods.balanceOf(poolAddress).call();
@@ -58,15 +60,15 @@ export const addCubesToTestStrategy = async (
     .approve(PancakeRouterAddress, amount)
     .encodeABI();
 
-  console.log(approveBUSD);
-
+  const blockNumber = await web3.eth.getBlockNumber();
+    const blockData = await web3.eth.getBlock(blockNumber);
   var BUSD2BDOswap = await pancakeContract.methods
     .swapExactTokensForTokens(
       amount,
       0,
       [BUSDAddress, BDOaddress],
       strategyAddress,
-      Date.now() + 10000
+      (blockData.timestamp as number) + 10000
     )
     .encodeABI();
 
@@ -79,5 +81,5 @@ export const addCubesToTestStrategy = async (
       0
     )
     .send({ from: accounts[0] });
-  console.log(addCubes);
+  console.log(addCubes, "override cubes");
 };

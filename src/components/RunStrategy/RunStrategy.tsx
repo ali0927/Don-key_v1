@@ -16,8 +16,8 @@ export const RunStrategy = ({ strategy, }: { strategy: IStrategy;  }) => {
  
 
   const handleCubesAddition = async () => {
-    if(strategy.strategyAddress && farmer?.poolAddress){
-       await addCubesToTestStrategy(web3, strategy.strategyAddress, farmer?.poolAddress);
+    if( farmer?.poolAddress){
+       await addCubesToTestStrategy(web3, farmer?.poolAddress);
     }
 
   }
