@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import styled from "styled-components";
 import { useState } from "react";
@@ -8,6 +9,8 @@ import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
+import { getPoolContract } from "helpers";
+import { useWeb3 } from "don-components";
 
 const Poolinfo = styled.div`
   font-size: 16px;
@@ -46,12 +49,26 @@ const InvestCardButton = styled.button`
 
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
+  const [totalLPTokens, setTotalLPTokens] = useState(0)
+  const [userLPTokens, setUserLPTokens] = useState(0)
+  const web3 = useWeb3()
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const { isInvested } = useIsInvested(poolAddress);
 
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
+
+  useEffect(() => {
+    async function apiCall() {
+      const pool = await getPoolContract(web3,poolAddress);
+      let lptokensresponse = await pool.methods.balanceOf('0x77aE8Ed18134F30F68CCd139127F1509AD5A3B27').call();
+      setUserLPTokens(lptokensresponse)
+      let total = await pool.methods.totalSupply().call();
+      setTotalLPTokens(total)
+    }
+    apiCall();
+}, [])
 
   return (
     <>
@@ -77,6 +94,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                   <h5 className="heading-title">
                     <MyInvestment poolAddress={poolAddress} />
                   </h5>
+                  <p style={{fontSize: 10}}>LP Tokens: {userLPTokens} out of {totalLPTokens} total</p>
                 </>
               )}
             </div>
