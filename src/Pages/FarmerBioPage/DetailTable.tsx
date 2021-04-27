@@ -61,8 +61,9 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   useEffect(() => {
     async function apiCall() {
+      const accounts = await web3.eth.getAccounts();
       const pool = await getPoolContract(web3,poolAddress);
-      let lptokensresponse = await pool.methods.balanceOf('0x77aE8Ed18134F30F68CCd139127F1509AD5A3B27').call();
+      let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
       setUserLPTokens(lptokensresponse)
       let total = await pool.methods.totalSupply().call();
       setTotalLPTokens(total)
