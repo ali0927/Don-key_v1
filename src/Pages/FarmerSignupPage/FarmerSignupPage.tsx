@@ -1,3 +1,4 @@
+import * as React from "react";
 import ButtonComponent from "components/Button/Button";
 import { Layout } from "components/Layout";
 import { useWeb3 } from "don-components";
@@ -19,11 +20,13 @@ import { IStoreState } from "interfaces";
 import { setFarmerDetail } from "actions/farmerActions";
 import { DonKeyTextField } from "components/DonKeyTextField";
 import { FileUploadButton } from "components/FileUploadButton";
+import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
+import { validate } from "./helpers";
 import { ContainedButton } from "components/Button";
 
 const Root = styled.div`
-   z-index: 1;
-`
+  z-index: 1;
+`;
 
 const SignUpForm = styled.form`
   background-color: #fff;
@@ -57,7 +60,7 @@ const LargeLeftCloud = styled(LargeCloud)`
 const LargeRightCloud = styled(LargeCloud)`
   right: 10%;
   @media (max-width: 992px) {
-     right: 0;
+    right: 0;
   }
 `;
 
@@ -65,7 +68,7 @@ const SmallLeftCloud = styled(SmallCloud)`
   top: 23%;
   left: 21%;
   @media (max-width: 992px) {
-     left: 3%;
+    left: 3%;
   }
 `;
 
@@ -75,19 +78,40 @@ const SmallRightCloud = styled(SmallCloud)`
   @media (max-width: 992px) {
     right: 3%;
   }
-`
+`;
+
+const SignupBottomIcon = styled(SignupBottomBgIcon)`
+  position: absolute;
+  bottom: 0;
+  margin-bottom: -19px;
+`;
+
+const CustomContainer = styled(Container)`
+  margin-bottom: 9%;
+`;
 
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | undefined>();
 
-  const history = useHistory();
+  const [nameInfoState, setNameInfoState] = React.useState<
+    IDonKeyFieldInfoState | undefined
+  >();
+  const [desInfoState, setDesInfoState] = React.useState<
+    IDonKeyFieldInfoState | undefined
+  >();
   const [errorMsg, setErrorMsg] = useState("");
+  const history = useHistory();
+
   const farmer = useSelector((state: IStoreState) => state.farmer);
-  const [{ }, executePost] = useAxios(
+  const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
+  );
+  const [{ loading }, executeVerify] = useAxios(
+    { method: "POST", url: "/api/v2/usernameverify" },
+    { manual: true }
   );
   const [posting, setPosting] = useState(false);
 
@@ -95,16 +119,32 @@ export const FarmerSignupPage = () => {
   const [spinnermsg, setSpinnerMsg] = useState("");
 
   const dispatch = useDispatch();
+  const isFormError =
+    (nameInfoState && nameInfoState.type === "error") ||
+    (desInfoState && desInfoState.type === "error");
   const handleCreate = async () => {
     setPosting(true);
     try {
       const formData = new FormData();
-      if (!name) {
-        return setErrorMsg("Please Enter a Name");
+      const isNameError = validate(name, [
+        { rule: "required", errMessage: "Name is required." },
+      ]);
+      const isDesError = validate(description, [
+        { rule: "required", errMessage: "Description is required." },
+      ]);
+      if (isFormError) {
+        return;
       }
-      if (!description) {
-        return setErrorMsg("Please Enter a Description");
+      if (isNameError) {
+        return setNameInfoState({
+          type: "error",
+          msg: isNameError.msg,
+        });
       }
+      if (isDesError) {
+        return setDesInfoState({ type: "error", msg: isDesError.msg });
+      }
+
       if (!image) {
         return setErrorMsg("Please Provide a Picture");
       }
@@ -116,12 +156,11 @@ export const FarmerSignupPage = () => {
 
       setSpinnerMsg("Creating Farmer Account");
       const res = await executePost({ data: formData });
-      
+
       dispatch(setFarmerDetail(res.data.data));
     } finally {
       setPosting(false);
     }
-
   };
 
   // const deployContract = async () => {
@@ -156,11 +195,75 @@ export const FarmerSignupPage = () => {
   //   setPosting(true);
   // }
 
+  const handleChange = async (value: string) => {
+    setName(value);
+    setNameInfoState(undefined);
+  };
+
+  const isUserAvailable = async (value: string) => {
+    const result = await executeVerify({ data: { name: value } });
+    if (result.data.data) {
+      return setNameInfoState({
+        type: "success",
+        msg: "name is available",
+      });
+    } else {
+      return setNameInfoState({
+        type: "error",
+        msg: "This username is already in use.",
+      });
+    }
+  };
+
+  const handleBlur = async (value: string) => {
+    const error = validate(value, [
+      { rule: "required", errMessage: "Username is required." },
+      {
+        rule: "min:3",
+        errMessage: "Username should contain atleast 3 Characters.",
+      },
+      {
+        rule: "regex:^[a-zA-Z_][A-Za-z0-9 ]+$",
+        errMessage:
+          "Username must start with a letter. Allowed characters are A-z a-z and 0-9",
+      },
+      { rule: "max:25", errMessage: "Username can be max characters long." },
+    ]);
+    if (error) {
+      setNameInfoState({
+        type: "error",
+        msg: error.msg,
+      });
+    } else {
+      await isUserAvailable(value);
+    }
+  };
+
+  const handleDesChange = (value: string) => {
+    setDescription(value);
+    setDesInfoState(undefined);
+  };
+
+  const handleDesBlur = (value: string) => {
+    const error = validate(value, [
+      { rule: "required", errMessage: "Description is required." },
+      {
+        rule: "min:10",
+        errMessage: "Description should contain atleast 10 Characters.",
+      },
+      { rule: "max:300", errMessage: "Description can be max characters long." },
+    ]);
+    if (error) {
+      return setDesInfoState({ type: "error", msg: error.msg });
+    }
+  };
+
   useEffect(() => {
     if (errorMsg) {
       setErrorMsg("");
     }
   }, [name, description, image]);
+
   const renderContent = () => {
     if (posting) {
       return (
@@ -173,14 +276,16 @@ export const FarmerSignupPage = () => {
         </div>
       );
     }
-    if(farmer?.status === "under_review"){
-      return <div className="text-center">Your Account is under review</div>
+    if (farmer?.status === "under_review") {
+      return <div className="text-center">Your Account is under review</div>;
     }
 
-    if(farmer?.status === "active" && !farmer?.poolAddress){
-      return <div className="d-flex align-items-center justify-content-center">
-         You can start Farming once your pool is Deployed
-      </div>
+    if (farmer?.status === "active" && !farmer?.poolAddress) {
+      return (
+        <div className="d-flex align-items-center justify-content-center">
+          You can start Farming once your pool is Deployed
+        </div>
+      );
     }
 
     if (farmer?.poolAddress) {
@@ -197,8 +302,11 @@ export const FarmerSignupPage = () => {
             <DonKeyTextField
               label="Name"
               value={name}
+              loading={loading}
+              info={nameInfoState}
               placeholder="Don - Key Name"
-              onChange={(value) => setName(value)}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
 
             <DonKeyTextField
@@ -206,19 +314,25 @@ export const FarmerSignupPage = () => {
               value={description}
               rows={3}
               multiline
+              info={desInfoState}
               placeholder="Don - Key Description"
-              onChange={(value) => setDescription(value)}
+              onBlur={handleDesBlur}
+              onChange={handleDesChange}
             />
 
-            <Form.Group controlId="exampleForm.ControlTextarea1">
+            <Form.Group
+              className="mb-5"
+              controlId="exampleForm.ControlTextarea1"
+            >
               <Form.Label className="signup-field-label">Picture</Form.Label>
 
               <FileUploadButton
                 file={image}
-                onChange={(image) => setImage(image)} />
-
+                fileExtensions=".png,	.jpg, .jpeg, .jfif, .pjpeg, .pjp,.gif,.avif,.apng,.svg,.webp"
+                errorMessage={errorMsg}
+                onChange={(image) => setImage(image)}
+              />
             </Form.Group>
-            {errorMsg && <div className="text-danger mb-3">{errorMsg}</div>}
             <ButtonComponent
               onClick={handleCreate}
               className="btnYellow btnMakeProfile"
@@ -244,18 +358,14 @@ export const FarmerSignupPage = () => {
             <SmallLeftCloud className="position-absolute" />
             <SmallRightCloud className="position-absolute" />
 
-            <Container className="position-relative">
+            <CustomContainer className="position-relative">
               <div className="row justify-content-center">
-                <div className="col-md-5">
-
-                  <SignUpForm>{renderContent()}</SignUpForm>
-
-                </div>
+                <SignUpForm className="col-lg-7">{renderContent()}</SignUpForm>
               </div>
-            </Container>
+            </CustomContainer>
           </Root>
           <div className="d-flex justify-content-center">
-            <SignupBottomBgIcon className="signup-bottom-icon" />
+            <SignupBottomIcon />
           </div>
         </div>
       </Layout>
