@@ -9,6 +9,13 @@ import { useHistory } from "react-router";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 
+
+const Image = styled.img`
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+`
+
 export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const { isReady } = props;
 
@@ -52,7 +59,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
       <>
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
-            icon={<img src={leader.picture} />}
+            icon={<Image src={leader.picture} />}
             contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
             title={leader.name}
             // investers={5874}
