@@ -115,7 +115,12 @@ export const FarmerStrategies = ({
                 {!isInvestor && strategiesData.data.length === 1 ? (
                   <RunStrategy  strategy={strategiesData.data[0]} />
                 ) : (
-                  <AddNewStrategy text="Add Strategy" onDone={refetchData} />
+                  <>
+                  {!isInvestor &&
+                       <AddNewStrategy text="Add Strategy" onDone={refetchData} />
+                  }
+               
+                  </>
                 )}
               </Col>
               <Col sm={12}>

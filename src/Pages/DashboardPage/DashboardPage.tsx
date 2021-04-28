@@ -117,7 +117,7 @@ export const DashboardPage = () => {
         ) : (
           <CustomizedContainer>
             <TopThreeFarmers isReady={!loading} leaders={farmers}/>
-            <LeaderBoardTable isReady={!loading} leaders={farmers} />
+            <LeaderBoardTable isReady={!loading} leaders={farmers} isDisable/>
           </CustomizedContainer>
         )}
       </div>

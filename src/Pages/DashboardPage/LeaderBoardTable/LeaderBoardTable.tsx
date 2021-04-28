@@ -55,41 +55,48 @@ const CommingSoon = styled.img`
   right: -53%;
 `;
 
-const BlurTable = styled.div`
-    position: absolute;
-    height: 100%;
-    backdrop-filter: blur(4px);
-    width: 100%;
+const BlurTable = styled(TableResponsive)`
+  filter: ${(props: { disable: boolean }) =>
+    props.disable ? "blur(4px)" : "unset"};
+  width: 100%;
 `;
 
 const JoinUsWrapper = styled.div`
-   display: flex;
-   position: absolute;
-   left: 0;
-   right: 0;
-   width: 100% !important;
-   border-top: 1px solid rgba(189,189,189,1);
-   border-bottom: 1px solid rgba(189,189,189,1);
-   top: 50%;
-   align-items: center;
-   transform: translateY(-50%);
-   justify-content: center;
-   background: #fff;
+  display: flex;
+  position: absolute;
+  left: 0;
+  right: 0;
+  width: 100% !important;
+  border-top: 1px solid rgba(189, 189, 189, 1);
+  border-bottom: 1px solid rgba(189, 189, 189, 1);
+  top: 50%;
+  align-items: center;
+  transform: translateY(-50%);
+  justify-content: center;
+  background: #fff;
+  z-index: 3;
 `;
 const JoinUsButton = styled(ContainedButton)`
-    width: fit-content;
-    font-weight: 500;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    padding-left: 40px;
-    font-size: 16px;
-    padding-right: 40px;
-    line-height: 19px;
-    letter-spacing: .03em;
+  width: fit-content;
+  font-weight: 500;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 40px;
+  font-size: 16px;
+  padding-right: 40px;
+  line-height: 19px;
+  letter-spacing: 0.03em;
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;,
 `;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
-  const { leaders, isReady } = props;
+  const { leaders, isReady, isDisable = false } = props;
   const [openInvestment, setOpenInvestment] = useState(false);
   const [state, setState] = useState({
     farmerName: "",
@@ -99,21 +106,27 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   const history = useHistory();
 
   const handleLeaderClick = (id: string) => () => {
-    history.push(`/dashboard/farmer/${id}`);
+    if (!isDisable) {
+      history.push(`/dashboard/farmer/${id}`);
+    }
   };
   const handleJoinUseClick = () => {
-    history.push("/dashboard/farmer/signup");
-  }
+    if (isDisable) {
+      history.push("/dashboard/farmer/signup");
+    }
+  };
 
   const openInvestmentDialog = (farmerName: string, poolAddress: string) => (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.stopPropagation();
-    setState({
-      farmerName: farmerName,
-      poolAddress: poolAddress,
-    });
-    setOpenInvestment(true);
+    if (!isDisable) {
+      setState({
+        farmerName: farmerName,
+        poolAddress: poolAddress,
+      });
+      setOpenInvestment(true);
+    }
   };
 
   const closeInvestmentDialog = () => {
@@ -139,69 +152,75 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
         <CommingSoon src={comingsoon} />
       </HeadingWrapper>
       <div className="position-relative">
-        <BlurTable/>
-        <JoinUsWrapper className="pt-4 pb-4">
-           <Heading>Join our farmers team</Heading>
-           <JoinUsButton className="ml-5" onClick={handleJoinUseClick}>Join us</JoinUsButton>
-        </JoinUsWrapper>
-      <TableResponsive>
-        <Table className="text-center">
-          <TableHead>
-            <TableRow style={{ height: 75 }}>
-              <TableHeading>#</TableHeading>
-              <EmptyTableHeading></EmptyTableHeading>
-              <TableHeading>FARMER NAME</TableHeading>
-              <TableHeading>TOTAL VALUE</TableHeading>
-              <TableHeading>24h PROFIT</TableHeading>
-              <TableHeading>7 DAYS PROFIT</TableHeading>
-              <TableHeading> Total PROFIT</TableHeading>
-              <TableHeading>MY INVESTMENT</TableHeading>
-              <TableHeading>ACTION</TableHeading>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {" "}
-            <>
-              {leaderBoardData.map((item, index) => {
-                return (
-                  <TableRow
-                    isHoverOnRow
-                    key={item.GUID}
-                    onClick={handleLeaderClick(item.GUID)}
-                  >
-                    <TableData>{index + 1}</TableData>
-                    <TableData>
-                      <StyledImage src={item.picture} />
-                    </TableData>
-                    <TableData>{item.name}</TableData>
+        {isDisable && (
+          <>
+          <Overlay/>
+          <JoinUsWrapper className="pt-4 pb-4">
+            <Heading>Join our farmers team</Heading>
+            <JoinUsButton className="ml-5" onClick={handleJoinUseClick}>
+              Join us
+            </JoinUsButton>
+          </JoinUsWrapper>
+          </>
+        )}
+        <BlurTable disable={isDisable}>
+          <Table className="text-center">
+            <TableHead>
+              <TableRow style={{ height: 75 }}>
+                <TableHeading>#</TableHeading>
+                <EmptyTableHeading></EmptyTableHeading>
+                <TableHeading>FARMER NAME</TableHeading>
+                <TableHeading>TOTAL VALUE</TableHeading>
+                <TableHeading>24h PROFIT</TableHeading>
+                <TableHeading>7 DAYS PROFIT</TableHeading>
+                <TableHeading> Total PROFIT</TableHeading>
+                <TableHeading>MY INVESTMENT</TableHeading>
+                <TableHeading>ACTION</TableHeading>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {" "}
+              <>
+                {leaderBoardData.map((item, index) => {
+                  return (
+                    <TableRow
+                      isHoverOnRow
+                      key={item.GUID}
+                      onClick={handleLeaderClick(item.GUID)}
+                    >
+                      <TableData>{index + 1}</TableData>
+                      <TableData>
+                        <StyledImage src={item.picture} />
+                      </TableData>
+                      <TableData>{item.name}</TableData>
 
-                    <TableData>
-                      <PoolAmount poolAddress={item.poolAddress} />
-                    </TableData>
-                    <TableData>{item.profit24hours}</TableData>
-                    <TableData>{item.profit7days}</TableData>
-                    <TableData>{item.profit}</TableData>
-                    <TableData>
-                      <MyInvestment poolAddress={item.poolAddress} />
-                    </TableData>
-                    <TableData>
-                      <LightGrayButton
-                        type="submit"
-                        onClick={openInvestmentDialog(
-                          item.name,
-                          item.poolAddress
-                        )}
-                      >
-                        Invest
-                      </LightGrayButton>
-                    </TableData>
-                  </TableRow>
-                );
-              })}
-            </>
-          </TableBody>
-        </Table>
-      </TableResponsive>
+                      <TableData>
+                        <PoolAmount poolAddress={item.poolAddress} />
+                      </TableData>
+                      <TableData>{item.profit24hours}</TableData>
+                      <TableData>{item.profit7days}</TableData>
+                      <TableData>{item.profit}</TableData>
+                      <TableData>
+                        <MyInvestment poolAddress={item.poolAddress} />
+                      </TableData>
+                      <TableData>
+                        <LightGrayButton
+                          type="submit"
+                          onClick={openInvestmentDialog(
+                            item.name,
+                            item.poolAddress
+                          )}
+                        >
+                          Invest
+                        </LightGrayButton>
+                      </TableData>
+                    </TableRow>
+                  );
+                })}
+              </>
+            </TableBody>
+          </Table>
+        </BlurTable>
       </div>
       {openInvestment && (
         <InvestmentPopup

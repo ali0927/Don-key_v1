@@ -23,6 +23,9 @@ import { FileUploadButton } from "components/FileUploadButton";
 import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
 import { validate } from "./helpers";
 import { ContainedButton } from "components/Button";
+import { AxiosError } from "axios";
+import { useSnackbar } from "notistack";
+import { ErrorSnackbar } from "components/Snackbars";
 
 const Root = styled.div`
   z-index: 1;
@@ -106,6 +109,7 @@ export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | undefined>();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [nameInfoState, setNameInfoState] = React.useState<
     IDonKeyFieldInfoState | undefined
@@ -170,7 +174,20 @@ export const FarmerSignupPage = () => {
       const res = await executePost({ data: formData });
 
       dispatch(setFarmerDetail(res.data.data));
-    } finally {
+    }
+    catch(error){
+      let message = "Please try again.";
+      if(error.response && error.response.status === 400 && error.response.data){
+           message = error.response.data["data"];
+      } 
+      enqueueSnackbar(message, {
+        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
+        autoHideDuration: 5000,
+        persist: false
+      });
+      console.log(error.response,)
+    }
+     finally {
       setPosting(false);
     }
   };
@@ -268,6 +285,10 @@ export const FarmerSignupPage = () => {
     if (error) {
       return setDesInfoState({ type: "error", msg: error.msg });
     }
+    return setDesInfoState({
+      type: "success",
+      msg: "",
+    });
   };
 
   useEffect(() => {
