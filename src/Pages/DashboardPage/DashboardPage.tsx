@@ -9,6 +9,7 @@ import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { StyledLink } from "../../components/StyledLink";
+import { TopThreeFarmers } from "./TopThreeFarmers";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -64,6 +65,8 @@ export const DashboardPage = () => {
           profit24hours: item.profit24hours || "-",
           profit7days: item.profit7days || "-",
           profit: item.profit|| "-",
+          descriptionTitle: item.descriptionTitle,
+          status: item.status
         } as IFarmer;
       });
     }
@@ -91,7 +94,7 @@ export const DashboardPage = () => {
               )}
             </Col>
           </Row>
-          {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>}
+          {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
         </CustomizedContainer>
       </div>
 
@@ -113,6 +116,7 @@ export const DashboardPage = () => {
           </CustomizedContainer>
         ) : (
           <CustomizedContainer>
+            <TopThreeFarmers isReady={!loading} leaders={farmers}/>
             <LeaderBoardTable isReady={!loading} leaders={farmers} />
           </CustomizedContainer>
         )}

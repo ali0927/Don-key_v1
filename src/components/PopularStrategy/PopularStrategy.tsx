@@ -4,6 +4,7 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { useHistory } from "react-router";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
+import styled from "styled-components";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -65,6 +66,10 @@ const Graph1 = () => {
   );
 };
 
+const DescriptionContent = styled.p`
+   min-height: 36px;
+`
+
 export const PopularStrategy = ({
   graph = <Graph1 />,
   totalValue = "$200 000.32",
@@ -75,35 +80,54 @@ export const PopularStrategy = ({
   content = `I expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the level`,
   icon = <StratIcon text="SA" showDot />,
   investers,
+  onCardClick,
+  onButtonClick,
 }: {
   graph?: React.ReactNode;
   title?: string;
-  totalValue?: string;
+  totalValue?: string | React.ReactElement;
   contentTitle?: string;
   content?: string;
   apy?: string;
   comingsoon?: boolean;
   investers?: number;
   icon?: React.ReactElement;
+  onCardClick?: () => void;
+  onButtonClick?: () => void;
 }) => {
   const history = useHistory();
 
-  const goToStrategy = () => {
-    history.push("/strategy");
+  // const goToStrategy = () => {
+  //   history.push("/strategy");
+  // };
+
+  const handleCardClick = () => {
+    if (!comingSoonProp && onCardClick) {
+      onCardClick();
+    }
   };
+
+  const ButtonClick = () => {
+    if (onButtonClick) {
+      onButtonClick();
+    }
+  };
+
   const heading = <h5 className="ml-3 mb-0">{title}</h5>;
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
         <div
-          onClick={!comingSoonProp ? goToStrategy: undefined}
-          className={clsx("popularstrategy__title ", {"cursor-pointer": !comingSoonProp})}
+          onClick={handleCardClick}
+          className={clsx("popularstrategy__title ", {
+            "cursor-pointer": !comingSoonProp,
+          })}
         >
           {icon}
           {investers ? (
             <div>
               {heading}
-              <small style={{fontSize: 14}} className="ml-3">
+              <small style={{ fontSize: 14 }} className="ml-3">
                 <span className="font-weight-bold">{investers}</span> investors
               </small>
             </div>
@@ -126,9 +150,9 @@ export const PopularStrategy = ({
           </div>
         </div>
         <h5 className="mt-4 popularstrategy__content__title">{contentTitle}</h5>
-        <p className="popularstrategy__content__text">
-          <ShowMoreContent content={content} length={120} />
-        </p>
+        <DescriptionContent className="popularstrategy__content__text">
+          <ShowMoreContent content={content} length={100} />
+        </DescriptionContent>
         {comingSoonProp ? (
           <div className="position-relative">
             <button disabled className="popularstrategy__btn">
@@ -137,7 +161,7 @@ export const PopularStrategy = ({
             <img className="coming-soon" src={comingsoon} />
           </div>
         ) : (
-          <button onClick={goToStrategy} className="popularstrategy__btn">
+          <button onClick={ButtonClick} className="popularstrategy__btn">
             Invest
           </button>
         )}

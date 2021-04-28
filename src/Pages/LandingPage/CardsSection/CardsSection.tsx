@@ -9,6 +9,7 @@ import farmerCard1 from "../gabriel.svg";
 import image2 from "../popeye.svg";
 import image3 from "../image.svg";
 import { Heading3, LandingParagraph } from "../components";
+import { useHistory } from "react-router";
 
 
 const CardBanner = styled.div`
@@ -166,6 +167,12 @@ const Graph3 = () => {
 };
 
 export const CardsSection: React.FC = () => {
+  const history = useHistory();
+
+  const handleClick = () => {
+    history.push("/strategy");
+  }
+
   return (
     <>
       <CardBanner className="mt-5">
@@ -203,6 +210,8 @@ export const CardsSection: React.FC = () => {
                       apy="40%"
                       comingsoon
                       totalValue="$178,890"
+                      onButtonClick={handleClick}
+                      onCardClick={handleClick}
                     />
                   </div>
                 </div>
@@ -221,6 +230,8 @@ export const CardsSection: React.FC = () => {
                       apy="134%"
                       comingsoon
                       totalValue="$1,354,560"
+                      onButtonClick={handleClick}
+                      onCardClick={handleClick}
                     />
                   </div>
                   <div className="mt-4">
@@ -234,6 +245,8 @@ export const CardsSection: React.FC = () => {
                       content="I’ll bring you to the well of new and show you the harvest looking for crazy APY’s sometimes Rek"
                       apy="167%"
                       totalValue="$870,650"
+                      onButtonClick={handleClick}
+                      onCardClick={handleClick}
                     />
                   </div>
                 </div>

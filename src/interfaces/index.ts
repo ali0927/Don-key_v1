@@ -9,6 +9,8 @@ export type IFarmer = {
   profit7days: string | null;
   profit: string | null;
   GUID: string;
+  descriptionTitle: string | null;
+  status: 'not_signed_up' |'under_review' | 'active' | 'inactive' |'comingsoon';
 };
 
 export interface IUser {

@@ -90,6 +90,18 @@ const CustomContainer = styled(Container)`
   margin-bottom: 9%;
 `;
 
+const MakeFarmerProfileBtn = styled(ContainedButton)`
+   width: fit-content;
+   border-radius: 5px;
+   padding: 12px 15px;
+   font-size: 16px;
+   line-height: 19px;
+   letter-spacing: .03em;
+   color: #070602;
+   font-weight: 500;
+}
+`;
+
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -333,12 +345,7 @@ export const FarmerSignupPage = () => {
                 onChange={(image) => setImage(image)}
               />
             </Form.Group>
-            <ButtonComponent
-              onClick={handleCreate}
-              className="btnYellow btnMakeProfile"
-            >
-              Make Farmer Profile
-            </ButtonComponent>
+            <MakeFarmerProfileBtn onClick={handleCreate}>    Make Farmer Profile</MakeFarmerProfileBtn>
 
             <StyledDonkey />
           </div>

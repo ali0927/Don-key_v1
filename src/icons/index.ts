@@ -22,3 +22,4 @@ export * from "./CurveIcon";
 export * from "./SelectArrow";
 export * from "./ZeroInvestmentIcon";
 export * from "./RocketIcon";
+export * from "./GraphIcon";
