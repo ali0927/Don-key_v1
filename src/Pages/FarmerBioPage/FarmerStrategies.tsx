@@ -54,6 +54,8 @@ export const FarmerStrategies = ({
     `/api/v2/farmer/${farmerId}/strategies`
   );
 
+  console.log("DATA-------------",strategiesData)
+
   const renderContent = () => {
     if (loading) {
       return (

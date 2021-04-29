@@ -1,12 +1,6 @@
 import { NavBar } from "components/Navbar/NavBar";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Container,
-  Row,
-  Button,
-  Col,
-  Spinner,
-} from "react-bootstrap";
+import { Container, Row, Button, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import Web3 from "web3";
 import PoolAbi from "./PoolAbi.json";
@@ -22,12 +16,26 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { useNotification } from "components/Notification";
 import { LoadingPage } from "Pages/LoadingPage";
 import styled from "styled-components";
-import { Table, TableBody, TableData, TableHead, TableHeading, TableResponsive, TableRow } from "components/Table";
+import {
+  Table,
+  TableBody,
+  TableData,
+  TableHead,
+  TableHeading,
+  TableResponsive,
+  TableRow,
+} from "components/Table";
 import { LightGrayButton } from "components/Button";
 import { RocketIcon, ZeroInvestmentIcon } from "icons";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
+import { PoolAmount } from "components/PoolAmount";
+import { MyInvestment } from "components/MyInvestment";
+import { useIsInvested } from "hooks/useIsInvested";
+import { StrategyName } from "components/StrategyName";
+import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
+import { UserWalletBoard } from "components/UserWalletBoard";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -48,7 +56,6 @@ const ZeroInvestmentBox = styled.div({
 
 const ZeroInvestmentInnerBox = styled.div({
   maxWidth: 599,
-
 });
 
 const ZeroInvestmentContent = styled.div({
@@ -82,8 +89,49 @@ const CustomizeRockerIcon = styled(RocketIcon)({
 
 const AnimationDiv = styled.div({
   minHeight: 500,
-})
+});
 
+const EmptyTableHeading = styled(TableHeading)`
+  min-width: 75px;
+`;
+
+const StyledImage = styled.img`
+  width: 45px;
+  height: 45px;
+`;
+
+const CustomTableHeading = styled(TableHeading)`
+  text-align: center;
+`;
+
+const CustomTableData = styled(TableData)`
+  text-align: center;
+`;
+
+const InvestmentDisplay = styled.div`
+  background: #000;
+  color: #fff;
+  padding: 1.5rem;
+  border-radius: 4px;
+`;
+
+const InvestCardButton = styled.button`
+  padding: 0.5rem 2rem;
+  width: 100%;
+  font-size: 14px;
+  text-align: center;
+  border-radius: 4px;
+  border: 0;
+  background-color: rgba(245, 242, 144, 1);
+  transition: all 0.3s linear;
+  color: #000;
+  &:hover {
+    opacity: 0.8;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
@@ -114,20 +162,10 @@ export const InvestmentsPage = () => {
     { useCache: false }
   );
 
-  const [{ }, executeDelete] = useAxios(
+  const [{}, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
-
-  const farmer: IFarmer = data
-    ? { ...data.data }
-    : {
-      name: "",
-      description: "",
-      picture: "",
-      amountInPool: "907000.45",
-      poolAddress: "",
-    };
 
   const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
 
@@ -147,7 +185,6 @@ export const InvestmentsPage = () => {
       setIsReady(true);
     })();
   }, []);
-
 
   useEffect(() => {
     if (farmesInvestmentData) {
@@ -182,17 +219,20 @@ export const InvestmentsPage = () => {
           <p className="text-center m-0">{errorMessage}</p>
         </>
       ),
-      type: "error"
+      type: "error",
     });
-  }
+  };
 
-  const handleOpenWithDraw = (farmerName: string, poolAddress: string) => () => {
+  const handleOpenWithDraw = (
+    farmerName: string,
+    poolAddress: string
+  ) => () => {
     setWidthDraw({
       open: true,
       farmerName: farmerName,
       poolAddress: poolAddress,
     });
-  }
+  };
 
   const handleCloseWithDraw = () => {
     setWidthDraw({
@@ -200,17 +240,15 @@ export const InvestmentsPage = () => {
       farmerName: "",
       poolAddress: "",
     });
-  }
+  };
 
   const handleFindFarmers = () => {
     history.push("/dashboard");
-  }
-
+  };
 
   if (!data) {
-    return <LoadingPage />
+    return <LoadingPage />;
   }
-
 
   return (
     <div className="bgColor investment_header_container">
@@ -219,8 +257,11 @@ export const InvestmentsPage = () => {
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-              <Col>
+              <Col lg={8}>
                 <HeadingTitle>My Investments</HeadingTitle>
+              </Col>
+              <Col lg={4}>
+                <UserWalletBoard poolAddress={poolAddress} />
               </Col>
               {/* <div className="firstLetter image-col mr-4">
                  <img
@@ -252,24 +293,25 @@ export const InvestmentsPage = () => {
       <section>
         <div className="mt-4 mb-5 tablebgHead">
           <Container>
-            {loading &&
+            {loading && (
               <>
                 <AnimationDiv className="d-flex align-items-center justify-content-center">
                   <Spinner animation="border" />
                 </AnimationDiv>
               </>
-
-            }
-            {(!loading && myInvestments.length > 0) &&
+            )}
+            {!loading && myInvestments.length > 0 && (
               <TableResponsive>
                 <Table>
                   <TableHead>
                     <TableRow isHoverOnRow={false}>
-                      <TableHeading>SERIAL NO</TableHeading>
-                      <TableHeading>NAME OF FARMER</TableHeading>
-                      <TableHeading>BUSD INVESTED</TableHeading>
-                      <TableHeading>TOTAL PROFIT</TableHeading>
-                      <TableHeading>WITHDRAW WBNB</TableHeading>
+                      <CustomTableHeading>#</CustomTableHeading>
+                      <EmptyTableHeading></EmptyTableHeading>
+                      <CustomTableHeading>NAME OF FARMER</CustomTableHeading>
+                      <CustomTableHeading>NAME OF STRATEGY</CustomTableHeading>
+                      <CustomTableHeading>BUSD INVESTED</CustomTableHeading>
+                      <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                      <CustomTableHeading>WITHDRAW BUSD</CustomTableHeading>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -277,21 +319,40 @@ export const InvestmentsPage = () => {
                       return (
                         <>
                           <TableRow key={index}>
-                            <TableData>A25382</TableData>
-                            <TableData className="bold">{investment.name}</TableData>
-                            <TableData>$258 000.50</TableData>
-                            <TableData className="bold">$876 200.50</TableData>
-                            <TableData className="investment_table_btn">
-                              <Button
-                                variant="outline-secondary"
+                            <CustomTableData>{index + 1}</CustomTableData>
+                            <CustomTableData>
+                              <StyledImage src={investment.picture} />
+                            </CustomTableData>
+                            <CustomTableData className="bold">
+                              {investment.name}
+                            </CustomTableData>
+                            <CustomTableData className="bold">
+                              {investment.strategies.length > 0 ? (
+                                <>
+                                  <StrategyName
+                                    strategyAddress={
+                                      investment.strategies[0].strategyAddress
+                                    }
+                                  />
+                                </>
+                              ) : (
+                                "-"
+                              )}
+                            </CustomTableData>
+                            <CustomTableData>  <MyInvestment poolAddress={investment.poolAddress} /></CustomTableData>
+                            <CustomTableData className="bold">
+                              $0
+                            </CustomTableData>
+                            <CustomTableData className="investment_table_btn">
+                              <LightGrayButton
                                 onClick={handleOpenWithDraw(
                                   investment.name,
                                   investment.poolAddress
                                 )}
                               >
                                 Withdraw
-                            </Button>
-                            </TableData>
+                              </LightGrayButton>
+                            </CustomTableData>
                           </TableRow>
                         </>
                       );
@@ -299,21 +360,28 @@ export const InvestmentsPage = () => {
                   </TableBody>
                 </Table>
               </TableResponsive>
-            }
+            )}
 
-            {(!loading && myInvestments.length === 0) &&
+            {!loading && myInvestments.length === 0 && (
               <>
                 <ZeroInvestmentBox>
                   <ZeroInvestmentInnerBox>
-                    <ZeroInvestmentContent>Find Some Farmers For Investment</ZeroInvestmentContent>
-                    <CenteredBox className="mb-5"><BlackButton onClick={handleFindFarmers}>Find Farmers</BlackButton></CenteredBox>
-                    <CenteredBox className="mt-5"><ZeroInvestmentIcon /></CenteredBox>
+                    <ZeroInvestmentContent>
+                      Find Some Farmers For Investment
+                    </ZeroInvestmentContent>
+                    <CenteredBox className="mb-5">
+                      <BlackButton onClick={handleFindFarmers}>
+                        Find Farmers
+                      </BlackButton>
+                    </CenteredBox>
+                    <CenteredBox className="mt-5">
+                      <ZeroInvestmentIcon />
+                    </CenteredBox>
                   </ZeroInvestmentInnerBox>
                   <CustomizeRockerIcon />
                 </ZeroInvestmentBox>
               </>
-
-            }
+            )}
 
             {/* <div className="mt-4 pagePosition">
                 <p className="pageTable">Showing 1-10 of 120</p>
@@ -356,19 +424,19 @@ export const InvestmentsPage = () => {
                   </Button>
                 </div>
               )} */}
-
           </Container>
         </div>
       </section>
       <Footer />
-      {withDraw.open &&
+      {withDraw.open && (
         <WithDrawPopup
           open={withDraw.open}
           poolAddress={withDraw.poolAddress}
           onSuccess={handleSuccess(withDraw.farmerName)}
           onError={handleError}
-          onClose={handleCloseWithDraw} />
-      }
+          onClose={handleCloseWithDraw}
+        />
+      )}
     </div>
   );
 };
