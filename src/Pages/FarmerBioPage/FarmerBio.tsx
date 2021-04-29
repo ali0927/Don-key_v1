@@ -70,8 +70,6 @@ export const FarmerBio = ({
   }, [last_signin]);
 
 
-
-
   return (
     <>
       <Container>

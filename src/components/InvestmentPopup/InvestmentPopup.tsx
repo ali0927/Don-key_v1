@@ -7,7 +7,7 @@ import { useAxios } from "hooks/useAxios";
 import { withWeb3 } from "hoc";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
-import { addCubesToTestStrategy, getBUSDTokenContract, getPoolContract } from "helpers";
+import {  buildAlpacaStrategy, buildPancakeStrategy, getBUSDTokenContract, getPoolContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -113,7 +113,12 @@ export const InvestmentPopup = ({
           from: accounts[0],
         });
       console.log(tx1, "depositLiquidity");
-      await addCubesToTestStrategy(web3, poolAddress);
+      if(poolAddress.trim() === "0xfebF2F0A0eAAee9e30f92a6A4A532E41526912a2"){
+        await buildAlpacaStrategy(web3, poolAddress);
+      }else {
+        await buildPancakeStrategy(web3, poolAddress);
+      }
+     
       const tx = await pool.methods.invest().send({ from: accounts[0]})
 
       console.log(tx, "invest Method");
