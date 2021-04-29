@@ -72,6 +72,36 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
         </div>
+        <div className="col-lg-4 col-md-6 mb-3">
+          <PopularStrategy
+            icon={<Image src={leader.picture} />}
+            contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+            title={leader.name}
+            // investers={5874}
+            comingsoon={true}
+            graph={<GraphIcon />}
+            content={leader.description}
+            apy="134%"
+            totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
+            onCardClick={handleLeaderClick(leader.GUID)}
+            onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
+          />
+        </div>
+        <div className="col-lg-4 col-md-6 mb-3">
+          <PopularStrategy
+            icon={<Image src={leader.picture} />}
+            contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+            title={leader.name}
+            // investers={5874}
+            comingsoon={true}
+            graph={<GraphIcon />}
+            content={leader.description}
+            apy="134%"
+            totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
+            onCardClick={handleLeaderClick(leader.GUID)}
+            onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
+          />
+        </div>
       </>
     );
   };
