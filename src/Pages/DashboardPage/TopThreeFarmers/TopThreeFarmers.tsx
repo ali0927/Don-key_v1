@@ -19,7 +19,7 @@ const Image = styled.img`
 export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const { isReady } = props;
 
-  const leaders = props.leaders.slice(0, 3);
+  const leaders = props.leaders;
   const [openInvestment, setOpenInvestment] = React.useState(false);
   const [state, setState] = React.useState({
     farmerName: "",
