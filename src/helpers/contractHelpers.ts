@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
-var BDOaddress = "0x190b589cf9Fb8DDEabBFeae36a813FFb2A702454";
+const BDOaddress = "0x190b589cf9Fb8DDEabBFeae36a813FFb2A702454";
 const PancakeRouterAddress = "0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F";
 const IBUSDAddress = "0x7C9e73d4C71dae564d41F78d56439bB4ba87592f";
 const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
@@ -106,22 +106,12 @@ export const buildPancakeStrategy = async (web3: Web3, poolAddress: string) => {
 
 const convertBUSDToIBUSD = async (
   web3: Web3,
-  amount: BigNumber,
+  amount: string,
 ) => {
   const IBUSDContract = await getIBUSDContract(web3);
 
-  const totalToken = await IBUSDContract.methods.totalToken().call();
-
-  const total = new BigNumber(totalToken).minus(amount);
-
-  const totalSupply = await await IBUSDContract.methods.totalSupply().call();
-  const multiplier = new BigNumber(totalSupply).div(total);
-  const amountofIBUSD = total.isEqualTo(0)
-    ? amount
-    : amount.multipliedBy(multiplier);
-
-  const newAm = amountofIBUSD.toFixed(0);
-  return newAm;
+  const totalToken = await IBUSDContract.methods.debtValToShare(amount).call()
+  return totalToken;
 };
 
 export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
@@ -132,7 +122,7 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
   const strategyAddress = await poolContract.methods.getStrategy().call();
   const strategyContract = await getStrategyContract(web3, strategyAddress);
   const Amount = await BUSDContract.methods.balanceOf(poolAddress).call();
-  const BNAmount = new BigNumber(Amount);
+
   const ApproveBUSD = await BUSDContract.methods
     .approve(IBUSDAddress, Amount)
     .encodeABI();
@@ -141,7 +131,7 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
   // // // deposit busd to get ibusd
   const DepositBUSD = await IBUSDContract.methods.deposit(Amount).encodeABI();
 
-  const ibusdValue = await convertBUSDToIBUSD(web3, BNAmount);
+  const ibusdValue = await convertBUSDToIBUSD(web3, Amount);
 
   console.log(web3.utils.fromWei(ibusdValue, "ether"), "balance in iBUSD");
 
@@ -152,8 +142,7 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
 
   const accounts = await web3.eth.getAccounts();
 
-  var poolId =
-    "0x0000000000000000000000000000000000000000000000000000000000000003";
+  var poolId = 3;
 
   var stakeMoney = await FairLaunchContract.methods
     .deposit(strategyAddress, poolId, ibusdValue)
@@ -169,3 +158,8 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
 
   console.log("Alpaca Cubes Added");
 };
+
+
+export const withdrawFromAlpacaStrategy = () => {
+  
+}

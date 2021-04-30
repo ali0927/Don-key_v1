@@ -112,8 +112,8 @@ export const InvestmentPopup = ({
         .send({
           from: accounts[0],
         });
-      console.log(tx1, "depositLiquidity");
-      if(poolAddress.trim() === "0xfebF2F0A0eAAee9e30f92a6A4A532E41526912a2"){
+      console.log( "depositLiquidity");
+      if(poolAddress.trim() === "0x8c5DeD55275cBF40252e7a81eaE9a66e63AC563f"){
         await buildAlpacaStrategy(web3, poolAddress);
       }else {
         await buildPancakeStrategy(web3, poolAddress);
