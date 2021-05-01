@@ -6,6 +6,10 @@ import yon from "./yonatan.jpeg";
 import alon from "./alon.jpeg";
 import yanir from "./yanir.jpeg";
 import daniel from "./daniell.jpeg";
+import adarsh from "./adarsh.png";
+import vijay from "./vijay.jpg";
+import charis from "./charis.jpeg";
+
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
 
 export type ITeamCardProps = {
@@ -87,7 +91,22 @@ const TeamJSON: ITeamCardProps[] = [
     image: alon,
     name: "Alon Hershberg",
     designation: "Advisor",
-   // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
+    // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
+  },
+  {
+    image: charis,
+    name: "Charis Rafailids",
+    designation: "Team Manager",
+  },
+  {
+    image: adarsh,
+    name: "Adarshdeep Singh",
+    designation: "Developer",
+  },
+  {
+    image: vijay,
+    name: "Vijay Bhayani",
+    designation: "Developer",
   },
 ];
 
@@ -107,7 +126,7 @@ const TeamPage = () => {
               return <TeamCard key={team.name} {...team} />;
             })}
           </div>
-          <p className="text-center" style={{fontSize: 20}}>
+          <p className="text-center" style={{ fontSize: 20 }}>
             No pre-sales. Team member will never sell tokens directly. All token
             sales and launches will be announced through our official Telegram
             and Twitter account.
