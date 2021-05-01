@@ -104,13 +104,10 @@ export const buildPancakeStrategy = async (web3: Web3, poolAddress: string) => {
   console.log(addCubes, "override cubes");
 };
 
-const convertBUSDToIBUSD = async (
-  web3: Web3,
-  amount: string,
-) => {
+const convertBUSDToIBUSD = async (web3: Web3, amount: string) => {
   const IBUSDContract = await getIBUSDContract(web3);
 
-  const totalToken = await IBUSDContract.methods.debtValToShare(amount).call()
+  const totalToken = await IBUSDContract.methods.debtValToShare(amount).call();
   return totalToken;
 };
 
@@ -159,7 +156,30 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
   console.log("Alpaca Cubes Added");
 };
 
+export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
+  const contract = await getPoolContract(web3, poolAddress);
+  const amount = await contract.methods.getTotalliquidity().call();
+  return amount;
+};
 
-export const withdrawFromAlpacaStrategy = () => {
-  
-}
+export const getLpTokensTotal = async (web3: Web3, poolAddress: string) => {
+  const accounts = await web3.eth.getAccounts();
+  const pool = await getPoolContract(web3, poolAddress);
+  const lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
+  const total = await pool.methods.totalSupply().call();
+  return { user: lptokensresponse, total };
+};
+
+export const calculateWithdrawAmount = async (
+  web3: Web3,
+  poolAddress: string
+) => {
+  const totalBusd = await getTotalPoolValue(web3, poolAddress);
+  const { user, total } = await getLpTokensTotal(web3, poolAddress);
+  const amount =  new BigNumber(user)
+  .div(new BigNumber(total))
+  .multipliedBy(web3.utils.fromWei(totalBusd))
+  return amount.toFixed(2);
+};
+
+export const withdrawFromAlpacaStrategy = () => {};
