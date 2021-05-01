@@ -101,12 +101,12 @@ const TeamJSON: ITeamCardProps[] = [
   {
     image: adarsh,
     name: "Adarshdeep Singh",
-    designation: "Developer",
+    designation: "Senior Frontend Developer",
   },
   {
     image: vijay,
     name: "Vijay Bhayani",
-    designation: "Developer",
+    designation: "Senior Solidity Developer",
   },
 ];
 
