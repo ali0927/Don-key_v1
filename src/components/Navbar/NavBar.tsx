@@ -95,7 +95,8 @@ function NavBar(props: INavBarProps) {
         setWrongNetwork(true)
         enqueueSnackbar('Wrong Network. You must be on Binance Smart Chain to continue. Please select the appropriate network via Metamask', {
           content: (key, msg) => <ErrorSnackbar message={msg as string} />,
-          persist: true
+          autoHideDuration: 10000,
+          persist: false
         });
       }
     }
