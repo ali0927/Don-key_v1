@@ -112,11 +112,11 @@ export const InvestmentPopup = ({
           });
       }
 
-      // const tx1 = await pool.methods
-      //   .depositLiquidity(web3.utils.toWei(value, "ether"))
-      //   .send({
-      //     from: accounts[0],
-      //   });
+      await pool.methods
+        .depositLiquidity(web3.utils.toWei(value, "ether"))
+        .send({
+          from: accounts[0],
+        });
 
       if (poolAddress.trim() === "0x8c5DeD55275cBF40252e7a81eaE9a66e63AC563f") {
         await buildAlpacaStrategy(web3, poolAddress);
@@ -124,7 +124,7 @@ export const InvestmentPopup = ({
         await buildPancakeStrategy(web3, poolAddress);
       }
 
-      // const tx = await pool.methods.invest().send({ from: accounts[0]})
+      await pool.methods.invest().send({ from: accounts[0]});
 
       await executePost({ data: { poolAddress } });
       if (key1) {
