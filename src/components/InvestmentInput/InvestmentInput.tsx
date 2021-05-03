@@ -74,10 +74,11 @@ export const InvestmentInput = ({
         </div>
       </InvestmentRoot>
       <InvestmentPrecentage>
-        {[0, 20, 50, 80, 100].map((val) => {
+        {[0, 20, 50, 80, 100].map((val, index) => {
            const updatedVal = maxNum.multipliedBy(new BigNumber(val).dividedBy(new BigNumber(100))).toFixed(2);
           return (
             <span
+              key={index}
               onClick={() => setValue(updatedVal)}
               style={{ opacity: val / 100 + 0.2 }}
             >

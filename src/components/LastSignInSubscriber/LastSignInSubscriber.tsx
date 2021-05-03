@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import { useAxios } from "hooks/useAxios";
 import { IStoreState } from "interfaces";
 import * as React from "react";
@@ -20,7 +21,7 @@ export const LastSignInSubscriber: React.FC = () => {
           clearInterval(interval);
       });
     }
-
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [farmer]);
 
   return null;

@@ -1,24 +1,16 @@
 import clsx from "clsx";
 import { Footer } from "components/Footer/Footer";
 import { NavBar } from "components/Navbar/NavBar";
-import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import "./DevelopersPage.scss";
-import { leaderBoardData } from "../../JsonData/leaderboard";
 import {
   Form,
-  Pagination,
   Row,
   Container,
   Col,
-  Table,
-  Button,
-  FormGroup,
   Spinner,
 } from "react-bootstrap";
 import ButtonComponent from "components/Button/Button";
 import { EraserIcon, FileIcon, FolderIcon, UploadIcon } from "icons";
-import DataFarmer from "../../JsonData/DataFarmer";
-import { VoteIcon } from "icons/VoteIcon";
 import React, { useState } from "react";
 import { DeveloperCubeModal } from "./DeveloperCubeModal";
 import { AddIcon } from "../../icons";
@@ -27,7 +19,6 @@ import {
   IDeveloperCubeProps,
   IUserVottedCubes,
 } from "./interfaces";
-import { handleInputChange } from "react-select/src/utils";
 import { useAxios } from "hooks/useAxios";
 import { CubeTable } from "./CubeTable";
 import _ from "lodash";

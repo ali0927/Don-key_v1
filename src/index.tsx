@@ -22,13 +22,13 @@ if(process.env.NODE_ENV === "production"){
 }
 
 ReactDOM.render(
-  <React.StrictMode>
+  <>
     <Sentry.ErrorBoundary fallback={"An error has occurred"}>
       <Providers>
         <App />
       </Providers>
     </Sentry.ErrorBoundary>
-  </React.StrictMode>,
+  </>,
   document.getElementById("root")
 );
 

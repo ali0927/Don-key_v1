@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import { IDeveloperCubeModalProps } from "./interfaces/IDeveloperCubeModalProps";
 import "./DeveloperCubeModal.scss";
 import clsx from "clsx";
@@ -27,7 +27,7 @@ export const DeveloperCubeModal: React.FC<IDeveloperCubeModalProps> = (
       <Modal.Header closeButton className="p-0">
         <Modal.Title
           id="contained-modal-title-vcenter"
-          as="p"
+          // as="p"
           className="d-flex align-items-center w-100"
         >
           <div className="mr-3">{headerIcon}</div>

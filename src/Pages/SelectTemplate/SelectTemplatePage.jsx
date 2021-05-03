@@ -1,5 +1,3 @@
-import React from "react";
-import { NavBar } from "../../components/Navbar/NavBar";
 import { Row, Col } from "react-bootstrap";
 import "./SelectTemplateStyle.scss";
 import CreateStrategy from "../../JsonData/CreateStrategyJson";
@@ -25,11 +23,11 @@ const SelectTemplatePage = () => {
               <Col md={4}>
                 <div className="cardStrategy">
                   <h5 className="mb-2">
-                    <img src={item.image} className="pr-2" alt="Image" />
+                    <img src={item.image} className="pr-2" alt="ImageNotFound" />
                     {item.name}
                   </h5>
                   <div className="strategyimg">
-                    <img src={item.picture} alt="Image" />
+                    <img src={item.picture} alt="ImageNotFound"/>
                   </div>
                   <Row className="mt-3">
                     <Col md={6} className="text-left">

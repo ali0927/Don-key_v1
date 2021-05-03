@@ -1,4 +1,3 @@
-import { Web3Provider } from "@ethersproject/providers";
 import Web3 from "web3";
 
 export function getLibrary(provider: any) {

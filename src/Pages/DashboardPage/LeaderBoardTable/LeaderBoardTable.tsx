@@ -15,11 +15,9 @@ import {
 } from "../../../components/Table";
 import { ContainedButton, LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
-import { useNotification } from "components/Notification";
 import styled from "styled-components";
 import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
-import { AxiosResponse } from "axios";
 import comingsoon from "images/comingsoon.svg";
 import { leaderBoardData } from "./leaderboardjson";
 
@@ -96,13 +94,12 @@ const Overlay = styled.div`
 `;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
-  const { leaders, isReady, isDisable = false } = props;
+  const { isReady, isDisable = false } = props;
   const [openInvestment, setOpenInvestment] = useState(false);
   const [state, setState] = useState({
     farmerName: "",
     poolAddress: "",
   });
-  const { showNotification } = useNotification();
   const history = useHistory();
 
   const handleLeaderClick = (id: string) => () => {
@@ -179,13 +176,12 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {" "}
               <>
                 {leaderBoardData.map((item, index) => {
                   return (
                     <TableRow
                       isHoverOnRow
-                      key={item.GUID}
+                      key={index}
                       onClick={handleLeaderClick(item.GUID)}
                     >
                       <TableData>{index + 1}</TableData>

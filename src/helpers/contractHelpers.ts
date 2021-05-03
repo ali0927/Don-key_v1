@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
@@ -74,7 +75,6 @@ export const buildPancakeStrategy = async (web3: Web3, poolAddress: string) => {
   const strategyContract = await getStrategyContract(web3, strategyAddress);
   const BUSDContract = await getBUSDTokenContract(web3);
   const amount = await BUSDContract.methods.balanceOf(poolAddress).call();
-  console.log("amount", amount);
   const accounts = await web3.eth.getAccounts();
   const approveBUSD = BUSDContract.methods
     .approve(PancakeRouterAddress, amount)
@@ -92,7 +92,6 @@ export const buildPancakeStrategy = async (web3: Web3, poolAddress: string) => {
     )
     .encodeABI();
 
-  console.log(BUSD2BDOswap);
 
   var addCubes = await strategyContract.methods
     .overrideCubes(
@@ -101,7 +100,6 @@ export const buildPancakeStrategy = async (web3: Web3, poolAddress: string) => {
       0
     )
     .send({ from: accounts[0] });
-  console.log(addCubes, "override cubes");
 };
 
 const convertBUSDToIBUSD = async (web3: Web3, amount: string) => {
@@ -124,13 +122,11 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
     .approve(IBUSDAddress, Amount)
     .encodeABI();
 
-  console.log("approved alpake");
   // // // deposit busd to get ibusd
   const DepositBUSD = await IBUSDContract.methods.deposit(Amount).encodeABI();
 
   const ibusdValue = await convertBUSDToIBUSD(web3, Amount);
 
-  console.log(web3.utils.fromWei(ibusdValue, "ether"), "balance in iBUSD");
 
   // // stake ibusd to get allocated alpaca contract
   const APPROVEForStake = await IBUSDContract.methods
@@ -153,7 +149,6 @@ export const buildAlpacaStrategy = async (web3: Web3, poolAddress: string) => {
     )
     .send({ from: accounts[0] });
 
-  console.log("Alpaca Cubes Added");
 };
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {

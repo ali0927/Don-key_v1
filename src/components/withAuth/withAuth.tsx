@@ -43,7 +43,6 @@ export const withAuth = (element?: RouteProps["children"]) => {
                 })
               );
             } else {
-              console.log("Server is down");
             }
           },
         })

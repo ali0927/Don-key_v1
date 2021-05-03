@@ -1,6 +1,5 @@
 import { NotificationProvider } from "components/Notification";
 import { TooltipProvider } from "components/TooltipProvider";
-import { Web3Provider } from "don-components";
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "store";

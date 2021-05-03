@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import styled from "styled-components";
 import { Heading3,LandingParagraph } from "../components";
 
 export const DonTokenSection: React.FC = () => {
@@ -14,7 +13,7 @@ export const DonTokenSection: React.FC = () => {
                 <img
                   src="/assets/images/token.png"
                   className="d-inline-block"
-                  alt="Image"
+                  alt="ImageNotFound"
                 />
               </div>
             </Col>

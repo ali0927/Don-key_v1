@@ -1,8 +1,7 @@
 import { NavBar } from "../../components/Navbar/NavBar";
-import { Container, Form } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import "./FarmersStyle.scss";
 import { Footer } from "components/Footer/Footer";
-import ButtonComponent from "components/Button/Button";
 import styled from "styled-components";
 import { DonKeyTextField } from "components/DonKeyTextField";
 import * as React from "react";
@@ -30,10 +29,7 @@ const CustomizedButton = styled(ContainedButton)`
    padding: 12px 15px;
    font-size: 16px;
    line-height: 19px;
-  width: auto;
-}
-
-`
+   width: auto;`
 
 const FarmersPage = () => {
   const [state, setState] = React.useState<IFarmerData>({

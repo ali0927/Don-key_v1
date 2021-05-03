@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable no-empty-pattern */
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import { NavBar } from "../../components/Navbar"
@@ -18,7 +19,7 @@ const protocols = [donkeyConfig, pancakeConfig];
 const Builder = () => {
   const history = useHistory();
   const [
-    { data: createData, loading: createLoading, error: createError },
+    { data: createData, loading: createLoading,  },
     executeCreate
   ] = useAxios(
     {
@@ -28,7 +29,7 @@ const Builder = () => {
   )
 
   const [
-    { data: getData, loading: getLoading, error: getError },
+    { data: getData, loading: getLoading,  },
     executeGet
   ] = useAxios(
     {
@@ -38,7 +39,7 @@ const Builder = () => {
   )
 
   const [
-    { data: putData, loading: putLoading, error: putError },
+    {},
     executePut
   ] = useAxios(
     {

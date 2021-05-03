@@ -27,6 +27,7 @@ const [isReady, setIsReady] = useState(false)
  
   useEffect(() => {
     getIsInvested()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return {isReady, isInvested}
 }

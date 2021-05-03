@@ -1,10 +1,9 @@
 import { StyledLink } from "components/StyledLink";
-import { useWeb3 } from "don-components";
 import { IStoreState, IStrategy } from "interfaces";
 import { useSelector } from "react-redux";
 
 export const RunStrategy = ({ strategy }: { strategy: IStrategy }) => {
-  const web3 = useWeb3();
+  //const web3 = useWeb3();
   const farmer = useSelector((state: IStoreState) => state.farmer);
 
   const handleCubesAddition = async () => {

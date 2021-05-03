@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useWeb3 } from "don-components";
-import { getBUSDTokenContract, getPoolContract, getTotalPoolValue } from "helpers";
+import { getTotalPoolValue } from "helpers";
 import { useLayoutEffect, useState } from "react";
 
 
@@ -24,6 +24,7 @@ export const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
 
   useLayoutEffect(() => {
     getPoolValue()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   if (!isReady) {
     return <>-</>;

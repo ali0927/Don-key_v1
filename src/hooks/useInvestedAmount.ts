@@ -1,4 +1,3 @@
-import BigNumber from "bignumber.js";
 import { useWeb3 } from "don-components";
 import {  getInvestedAmount } from "helpers";
 import { useEffect, useState } from "react";
@@ -25,6 +24,7 @@ export const useInvestedAmount = (poolAddress:string) => {
  
   useEffect(() => {
     getPoolValue()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   return {investedAmmount, isReady};
 }

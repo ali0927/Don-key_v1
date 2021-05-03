@@ -117,7 +117,7 @@ function NavBar(props: INavBarProps) {
                   </>
                 )}
 
-                {(variant === "loggedin" || variant == "builder") && (
+                {(variant === "loggedin" || variant === "builder") && (
                   <>
                     <NavbarLink
                       to="/dashboard"
@@ -168,7 +168,7 @@ function NavBar(props: INavBarProps) {
                     <img
                       src="/assets/images/usericon.png"
                       className="d-inline-block align-top mr-md-2"
-                      alt="Image"
+                      alt="ImageNotFound"
                     />
                     <span> {address}</span>
                   </ButtonComponent>
@@ -190,7 +190,7 @@ function NavBar(props: INavBarProps) {
                   <img
                     src="/assets/images/usericon.png"
                     className="d-inline-block align-top mr-md-2"
-                    alt="Image"
+                    alt="ImageNotFound"
                   />
                   <span> {address} </span>
                 </ButtonComponent>

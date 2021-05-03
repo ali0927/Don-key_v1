@@ -6,11 +6,11 @@ export type INotification = {
   duration?: number;
   type?: "error" | "success";
 };
-export type NotificationContext = {
+export type NotificationContextType = {
   showNotification: (val: INotification) => void;
 };
 
-const NotificationContext = createContext<NotificationContext | null>(null);
+const NotificationContext = createContext<NotificationContextType | null>(null);
 
 export const NotificationProvider = ({
   children,
@@ -36,4 +36,4 @@ export const NotificationProvider = ({
 };
 
 export const useNotification = () =>
-  useContext(NotificationContext) as NotificationContext;
+  useContext(NotificationContext) as NotificationContextType;

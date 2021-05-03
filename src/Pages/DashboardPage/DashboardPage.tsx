@@ -1,10 +1,9 @@
-import { Row, Container, Col, Table } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import "./DashboardPage.scss";
 import { Layout } from "components/Layout";
 import { useAxios } from "hooks/useAxios";
 import { IFarmer } from "interfaces";
 import { useMemo } from "react";
-import { LeaderBoardSearch } from "./LeaderBoardSearch";
 import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
@@ -51,7 +50,7 @@ const Heading = styled.h3`
 
 
 export const DashboardPage = () => {
-  const [{ loading, data, error }] = useAxios("/api/v2/farmer");
+  const [{ loading, data }] = useAxios("/api/v2/farmer");
 
   const farmers: IFarmer[] = useMemo(() => {
     if (data) {
@@ -108,7 +107,7 @@ export const DashboardPage = () => {
                   <img
                     src="/assets/images/build-strategy-img.svg"
                     style={{ mixBlendMode: "multiply" }}
-                    alt="Image"
+                    alt="ImageNotFound"
                   />
                 </div>
               </div>

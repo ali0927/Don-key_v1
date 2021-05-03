@@ -54,8 +54,6 @@ export const FarmerStrategies = ({
     `/api/v2/farmer/${farmerId}/strategies`
   );
 
-  console.log("DATA-------------",strategiesData)
-
   const renderContent = () => {
     if (loading) {
       return (
@@ -96,7 +94,7 @@ export const FarmerStrategies = ({
                   <img
                     style={{ mixBlendMode: "multiply" }}
                     src="/assets/images/build-strategy-img.svg"
-                    alt="Image"
+                    alt="ImageNotFound"
                   />
                 </div>
               </div>

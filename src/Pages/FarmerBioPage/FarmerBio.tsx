@@ -1,7 +1,5 @@
-import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { EditIcon } from "icons/EditIcon";
-import { StrategyTable } from "components/StrategyTable";
 import { DetailTable } from "./DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";

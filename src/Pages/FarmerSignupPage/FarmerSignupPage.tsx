@@ -1,19 +1,15 @@
+/* eslint-disable no-empty-pattern */
 import * as React from "react";
-import ButtonComponent from "components/Button/Button";
 import { Layout } from "components/Layout";
-import { useWeb3 } from "don-components";
-import { withWeb3 } from "hoc";
 import { useAxios } from "hooks/useAxios";
 import {
   DonKeyIcon,
   LargeCloud,
   SignupBottomBgIcon,
   SmallCloud,
-  SmallFolderIcon,
 } from "icons";
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
-import { useHistory } from "react-router";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
@@ -23,7 +19,6 @@ import { FileUploadButton } from "components/FileUploadButton";
 import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
 import { validate } from "./helpers";
 import { ContainedButton } from "components/Button";
-import { AxiosError } from "axios";
 import { useSnackbar } from "notistack";
 import { ErrorSnackbar } from "components/Snackbars";
 
@@ -118,7 +113,6 @@ export const FarmerSignupPage = () => {
     IDonKeyFieldInfoState | undefined
   >();
   const [errorMsg, setErrorMsg] = useState("");
-  const history = useHistory();
 
   const farmer = useSelector((state: IStoreState) => state.farmer);
   const [{}, executePost] = useAxios(
@@ -131,7 +125,7 @@ export const FarmerSignupPage = () => {
   );
   const [posting, setPosting] = useState(false);
 
-  const web3 = useWeb3();
+  //const web3 = useWeb3();
   const [spinnermsg, setSpinnerMsg] = useState("");
 
   const dispatch = useDispatch();
@@ -185,7 +179,6 @@ export const FarmerSignupPage = () => {
         autoHideDuration: 5000,
         persist: false
       });
-      console.log(error.response,)
     }
      finally {
       setPosting(false);
@@ -211,7 +204,6 @@ export const FarmerSignupPage = () => {
   //     contract
   //       .deploy(payload)
   //       .send(parameter, (err, transactionHash) => {
-  //         console.log("Transaction Hash :", transactionHash);
   //       })
   //       .on("error", rej)
   //       .then((newContractInstance) => {
@@ -295,6 +287,7 @@ export const FarmerSignupPage = () => {
     if (errorMsg) {
       setErrorMsg("");
     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, description, image]);
 
   const renderContent = () => {

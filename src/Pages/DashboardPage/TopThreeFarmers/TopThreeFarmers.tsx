@@ -49,11 +49,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     
     setOpenInvestment(false);
   };
-
-  const hanldeCardClick =(id: string) => () => {
-    history.push(`/dashboard/farmer/${id}`);
-  }
-
+  
   const StrategyCard = (leader: IFarmer) => {
     return (
       <>
@@ -116,11 +112,11 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
 
   return (
     <>
-      <div className="row col-lg-12">
+   
         {leaders.map((leader, index) => {
-          return <>{StrategyCard(leader)}</>;
+          return <div className="row col-lg-12" key={index}>{StrategyCard(leader)}</div>;
         })}
-      </div>
+
 
       {openInvestment && (
         <InvestmentPopup

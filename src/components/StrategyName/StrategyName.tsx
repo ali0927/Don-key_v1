@@ -30,6 +30,7 @@ export const StrategyName = ({
   };
   useLayoutEffect(() => {
     fetchName();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if(!strategyAddress){

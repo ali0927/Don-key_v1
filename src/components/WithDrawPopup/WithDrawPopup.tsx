@@ -20,9 +20,13 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   React.useEffect(() => {
     (async() => {
+      try{
       const amount = await calculateWithdrawAmount(web3, poolAddress);
       setWithdrawalValue(amount)
+      }
+      catch(err){}
     })();
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleWithDraw = async () => {

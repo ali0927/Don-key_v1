@@ -1,18 +1,11 @@
+/* eslint-disable no-empty-pattern */
 import { NavBar } from "components/Navbar/NavBar";
-import React, { useEffect, useRef, useState } from "react";
-import { Container, Row, Button, Col, Spinner } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import Web3 from "web3";
-import PoolAbi from "./PoolAbi.json";
 import "./InvestmentsPage.scss";
-import { getWeb3 } from "don-utils";
-import { TotalInvestedMoney } from "./TotalInvestedMoney";
 import { useAxios } from "hooks/useAxios";
-import { IFarmer } from "./interfaces";
-import { DetailsTable } from "./DetailsTable";
 import { IMyInvestments } from "./interfaces/IMyInvestments";
-import _ from "lodash";
-import { ShowMoreContent } from "components/ShowmoreContent";
 import { useNotification } from "components/Notification";
 import { LoadingPage } from "Pages/LoadingPage";
 import styled from "styled-components";
@@ -30,11 +23,8 @@ import { RocketIcon, ZeroInvestmentIcon } from "icons";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
-import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
-import { useIsInvested } from "hooks/useIsInvested";
 import { StrategyName } from "components/StrategyName";
-import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { UserWalletBoard } from "components/UserWalletBoard";
 
 const HeadingTitle = styled.p({
@@ -108,50 +98,49 @@ const CustomTableData = styled(TableData)`
   text-align: center;
 `;
 
-const InvestmentDisplay = styled.div`
-  background: #000;
-  color: #fff;
-  padding: 1.5rem;
-  border-radius: 4px;
-`;
+// const InvestmentDisplay = styled.div`
+//   background: #000;
+//   color: #fff;
+//   padding: 1.5rem;
+//   border-radius: 4px;
+// `;
 
-const InvestCardButton = styled.button`
-  padding: 0.5rem 2rem;
-  width: 100%;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 4px;
-  border: 0;
-  background-color: rgba(245, 242, 144, 1);
-  transition: all 0.3s linear;
-  color: #000;
-  &:hover {
-    opacity: 0.8;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
+// const InvestCardButton = styled.button`
+//   padding: 0.5rem 2rem;
+//   width: 100%;
+//   font-size: 14px;
+//   text-align: center;
+//   border-radius: 4px;
+//   border: 0;
+//   background-color: rgba(245, 242, 144, 1);
+//   transition: all 0.3s linear;
+//   color: #000;
+//   &:hover {
+//     opacity: 0.8;
+//   }
+//   &:focus {
+//     outline: none;
+//   }
+// `;
 
 const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
-async function fetchBalance() {
-  const web3 = (await getWeb3()) as Web3;
-  const accounts = await web3.eth.getAccounts();
+// async function fetchBalance() {
+//   //const web3 = (await getWeb3()) as Web3;
+//   //const accounts = await web3.eth.getAccounts();
 
-  const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
-  const balance = await WBNB.methods.gettInvested().call();
-  // var fBalance = parseFloat(
-  //   parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
-  // );
-  // console.log()
-  return 0;
-}
+//   //const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
+//   //const balance = await WBNB.methods.gettInvested().call();
+//   // var fBalance = parseFloat(
+//   //   parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
+//   // );
+//   return 0;
+// }
 
 export const InvestmentsPage = () => {
-  const [balance, setBalance] = useState(0);
+//  const [balance, setBalance] = useState(0);
 
-  const [isReady, setIsReady] = useState(false);
+  //const [isReady, setIsReady] = useState(false);
 
   const history = useHistory();
 
@@ -162,7 +151,7 @@ export const InvestmentsPage = () => {
     { useCache: false }
   );
 
-  const [{}, executeDelete] = useAxios(
+  const [{}] = useAxios(
     { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
@@ -179,10 +168,10 @@ export const InvestmentsPage = () => {
 
   useEffect(() => {
     (async () => {
-      const balance = await fetchBalance();
-      setBalance(balance);
+      //const balance = await fetchBalance();
+      //setBalance(balance);
 
-      setIsReady(true);
+    //  setIsReady(true);
     })();
   }, []);
 
@@ -317,7 +306,6 @@ export const InvestmentsPage = () => {
                   <TableBody>
                     {myInvestments.map((investment, index) => {
                       return (
-                        <>
                           <TableRow key={index}>
                             <CustomTableData>{index + 1}</CustomTableData>
                             <CustomTableData>
@@ -354,7 +342,6 @@ export const InvestmentsPage = () => {
                               </LightGrayButton>
                             </CustomTableData>
                           </TableRow>
-                        </>
                       );
                     })}
                   </TableBody>

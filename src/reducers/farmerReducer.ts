@@ -1,6 +1,4 @@
-import { AuthActions } from "actions/authActions";
 import { IFarmerActions } from "actions/farmerActions";
-import produce from "immer";
 import { IStoreState } from "interfaces";
 import { Reducer } from "redux";
 

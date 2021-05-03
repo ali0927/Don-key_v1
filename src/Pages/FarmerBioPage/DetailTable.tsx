@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
@@ -69,6 +69,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
       setTotalLPTokens(total)
     }
     apiCall();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [])
 
   return (

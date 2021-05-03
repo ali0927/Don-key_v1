@@ -1,7 +1,5 @@
 import "./popularstrategy.scss";
-import graph from "../MyAccountNewGraph/graph.svg";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { useHistory } from "react-router";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
@@ -95,7 +93,6 @@ export const PopularStrategy = ({
   onCardClick?: () => void;
   onButtonClick?: () => void;
 }) => {
-  const history = useHistory();
 
   // const goToStrategy = () => {
   //   history.push("/strategy");
@@ -158,7 +155,7 @@ export const PopularStrategy = ({
             <button disabled className="popularstrategy__btn">
               Invest
             </button>
-            <img className="coming-soon" src={comingsoon} />
+            <img className="coming-soon" src={comingsoon} alt="ImageNotFound"/>
           </div>
         ) : (
           <button onClick={ButtonClick} className="popularstrategy__btn">

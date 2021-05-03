@@ -27,8 +27,8 @@ export const GraphIcon: React.FC<IIconProps> = (props) => {
         <path
           d="M245.23 53.3149C234.917 53.4064 239.882 29.6979 227.374 39.9977C220.013 42.9929 214.288 3.61235 205.891 2.3281C197.493 1.04385 196.214 79.4824 188.74 76.8347C181.267 74.187 182.049 64.7739 172.194 61.0397C162.339 57.3055 161.837 81.4149 152.961 82.4705C144.086 83.526 143.392 21.1624 134.23 21.1624C125.067 21.1624 124.982 56.1324 115.299 55.159C105.615 54.1856 108.134 85.0249 97.7369 85.0249C87.3402 85.0249 81.3614 50.5602 72.2207 53.2234C63.0801 55.8865 65.4895 49.4094 56.0941 39.9977C46.6987 30.5859 46.0528 56.7958 37.2592 55.159C28.4656 53.5222 24.1721 32.5962 16.3642 42.2049C9.2979 50.9009 8.54447 76.9488 1.08646 76.9488"
           stroke="black"
-          stroke-width="2"
-          stroke-linecap="round"
+          strokeWidth="2"
+          strokeLinecap="round"
         />
         <defs>
           <linearGradient
@@ -39,8 +39,8 @@ export const GraphIcon: React.FC<IIconProps> = (props) => {
             y2="98.4821"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#646464" />
-            <stop offset="1" stop-color="#646464" stop-opacity="0" />
+            <stop stopColor="#646464" />
+            <stop offset="1" stopColor="#646464" stopOpacity="0" />
           </linearGradient>
         </defs>
       </svg>

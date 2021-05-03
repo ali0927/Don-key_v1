@@ -27,13 +27,13 @@ const validationsRulesList: any = {
 };
 
 const extractRule = (rule: string) => {
-  let finalRule: { key: string; value: string } | string = "";
+  // let finalRule: { key: string; value: string } | string = "";
   if (rule.indexOf(":") > 0) {
     const arr = rule.split(":");
-    return (finalRule = {
+    return  {
       key: arr[0],
       value: arr[1],
-    });
+    };
   }
   return rule;
 };

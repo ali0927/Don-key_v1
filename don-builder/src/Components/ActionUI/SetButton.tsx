@@ -6,7 +6,6 @@ export const SetButton = ({  action, onInsert,disabled }: {action: string; onIns
 
     const handleClick = () => {
         // const cell = insertAction(action);
-        // console.log(cell);
         // onInsert && onInsert(cell);
     };
 

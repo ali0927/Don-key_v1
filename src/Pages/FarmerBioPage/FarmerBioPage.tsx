@@ -1,5 +1,5 @@
 import { NavBar } from "components/Navbar/NavBar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Footer } from "components/Footer/Footer";
 import { withWeb3 } from "hoc";
 import { useSelector } from "react-redux";
@@ -8,11 +8,8 @@ import {  IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
-import * as React from "react";
-import { useAxios } from "hooks/useAxios";
 
 export const FarmerBioPage = withWeb3(() => {
-  const [balance, setBalance] = useState(0);
 
   const farmer = useSelector((state: IStoreState) => state.farmer);
 

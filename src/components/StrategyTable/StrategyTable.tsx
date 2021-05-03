@@ -138,6 +138,7 @@ export const StrategyTable = ({
           {strategies.map((item, i) => {
             return (
               <StrategyRow
+                key={item.id}
                 updating={updating}
                 setUpdating={setUpdating}
                 strategy={item}
