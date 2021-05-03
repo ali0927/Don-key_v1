@@ -105,7 +105,7 @@ function NavBar(props: INavBarProps) {
                 {variant === "landing" && (
                   <>
                     <Nav.Link
-                      href="https://www.docdroid.net/va1jKlE/by-litepaper-8-pdf"
+                      href="/litepaper.pdf"
                       className={"colorBlack pr-md-5"}
                     >
                       Litepaper

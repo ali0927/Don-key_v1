@@ -1,11 +1,10 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "Pages/LandingPage";
 import { ProtectedRoute } from "components/ProtectedRoute";
-import React, { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
 import TeamPage from "Pages/TeamPage";
 import FarmersPage from "Pages/FarmersPage";
-import { Web3Provider } from "don-components";
 
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));

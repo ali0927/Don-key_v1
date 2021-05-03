@@ -6,6 +6,7 @@ import { BecomeAFarmerSection } from "./BecomeAFarmerSection";
 import { StrategyBuilderSection } from "./StrategyBuilderSection";
 import { DonTokenSection } from "./DonTokensSection";
 import { JoinCommunity } from "./JoinCommunity";
+import { RoundedCompletedSection } from "./RoundedCompletedSection";
 
 
 
@@ -28,6 +29,12 @@ const LandingPage = () => {
 
       {/* DON Tokens */}
       <DonTokenSection/>
+
+
+       {/** RoundedCompleted Section */}
+
+       <RoundedCompletedSection/>
+
 
       {/*  Join the Don-key Community */}
       <JoinCommunity/>

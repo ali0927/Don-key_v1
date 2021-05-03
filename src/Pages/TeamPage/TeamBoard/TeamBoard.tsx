@@ -7,7 +7,7 @@ const UserBoard = styled.div``;
 
 const UserRoot = styled.div`
   background: #fff;
-  borderradius: 4px;
+  border-radius: 4px;
 `;
 
 const Thumb = styled.div`
