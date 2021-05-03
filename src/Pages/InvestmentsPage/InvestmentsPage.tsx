@@ -138,7 +138,7 @@ const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 // }
 
 export const InvestmentsPage = () => {
-//  const [balance, setBalance] = useState(0);
+  //  const [balance, setBalance] = useState(0);
 
   //const [isReady, setIsReady] = useState(false);
 
@@ -170,8 +170,7 @@ export const InvestmentsPage = () => {
     (async () => {
       //const balance = await fetchBalance();
       //setBalance(balance);
-
-    //  setIsReady(true);
+      //  setIsReady(true);
     })();
   }, []);
 
@@ -250,7 +249,9 @@ export const InvestmentsPage = () => {
                 <HeadingTitle>My Investments</HeadingTitle>
               </Col>
               <Col lg={4}>
-                <UserWalletBoard poolAddress={poolAddress} />
+                {myInvestments.length > 0 && (
+                  <UserWalletBoard poolAddress={poolAddress} />
+                )}
               </Col>
               {/* <div className="firstLetter image-col mr-4">
                  <img
@@ -306,42 +307,45 @@ export const InvestmentsPage = () => {
                   <TableBody>
                     {myInvestments.map((investment, index) => {
                       return (
-                          <TableRow key={index}>
-                            <CustomTableData>{index + 1}</CustomTableData>
-                            <CustomTableData>
-                              <StyledImage src={investment.picture} />
-                            </CustomTableData>
-                            <CustomTableData className="bold">
-                              {investment.name}
-                            </CustomTableData>
-                            <CustomTableData className="bold">
-                              {investment.strategies.length > 0 ? (
-                                <>
-                                  <StrategyName
-                                    strategyAddress={
-                                      investment.strategies[0].strategyAddress
-                                    }
-                                  />
-                                </>
-                              ) : (
-                                "-"
+                        <TableRow key={index}>
+                          <CustomTableData>{index + 1}</CustomTableData>
+                          <CustomTableData>
+                            <StyledImage src={investment.picture} />
+                          </CustomTableData>
+                          <CustomTableData className="bold">
+                            {investment.name}
+                          </CustomTableData>
+                          <CustomTableData className="bold">
+                            {investment.strategies.length > 0 ? (
+                              <>
+                                <StrategyName
+                                  strategyAddress={
+                                    investment.strategies[0].strategyAddress
+                                  }
+                                />
+                              </>
+                            ) : (
+                              "-"
+                            )}
+                          </CustomTableData>
+                          <CustomTableData>
+                            {" "}
+                            <MyInvestment
+                              poolAddress={investment.poolAddress}
+                            />
+                          </CustomTableData>
+                          <CustomTableData className="bold">$0</CustomTableData>
+                          <CustomTableData className="investment_table_btn">
+                            <LightGrayButton
+                              onClick={handleOpenWithDraw(
+                                investment.name,
+                                investment.poolAddress
                               )}
-                            </CustomTableData>
-                            <CustomTableData>  <MyInvestment poolAddress={investment.poolAddress} /></CustomTableData>
-                            <CustomTableData className="bold">
-                              $0
-                            </CustomTableData>
-                            <CustomTableData className="investment_table_btn">
-                              <LightGrayButton
-                                onClick={handleOpenWithDraw(
-                                  investment.name,
-                                  investment.poolAddress
-                                )}
-                              >
-                                Withdraw
-                              </LightGrayButton>
-                            </CustomTableData>
-                          </TableRow>
+                            >
+                              Withdraw
+                            </LightGrayButton>
+                          </CustomTableData>
+                        </TableRow>
                       );
                     })}
                   </TableBody>
