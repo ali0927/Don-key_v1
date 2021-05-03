@@ -27,7 +27,7 @@ export const ShowMoreContent = ({
                         setShowMore(false);
                     }}
                 >
-                    Hide more
+                    Show less
                 </a>
             </>
         );

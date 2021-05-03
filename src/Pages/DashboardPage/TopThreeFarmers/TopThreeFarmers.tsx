@@ -71,14 +71,14 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
-            contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+            contentTitle={"New Strategy"}
             title={leader.name}
             // investers={5874}
             comingsoon={true}
             graph={<GraphIcon />}
-            content={leader.description}
-            apy="134%"
-            totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
+            content={"Strategy coming soon"}
+            apy="111%"
+            totalValue={"1010 BUSD"}
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
@@ -86,14 +86,14 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
-            contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+            contentTitle={"New Strategy"}
             title={leader.name}
             // investers={5874}
             comingsoon={true}
             graph={<GraphIcon />}
-            content={leader.description}
-            apy="134%"
-            totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
+            content={"Strategy coming soon"}
+            apy="122%"
+            totalValue={"2020 BUSD"}
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
