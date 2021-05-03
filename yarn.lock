@@ -13218,13 +13218,6 @@ react-select@^4.1.0:
     react-input-autosize "^3.0.0"
     react-transition-group "^4.3.0"
 
-react-toastify@^7.0.0-rc3:
-  version "7.0.0-rc3"
-  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-7.0.0-rc3.tgz#c5b396a97deff6afa8ce0087d5e164e99b681cce"
-  integrity sha512-uziPNslFvBO4Gaz9Y3ElZRILWc9aU68yEIMdlHajAQo6o8hNdGAVtjWcyREJwA+rHYdEfdsNR27eIm7695lvWg==
-  dependencies:
-    clsx "^1.1.1"
-
 react-transition-group@^4.3.0, react-transition-group@^4.4.0, react-transition-group@^4.4.1:
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/react-transition-group/-/react-transition-group-4.4.1.tgz#63868f9325a38ea5ee9535d828327f85773345c9"
