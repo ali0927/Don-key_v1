@@ -2,7 +2,7 @@ import { ContainedButton, OutlinedButton } from "components/Button";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import { useWeb3 } from "don-components";
-import { calculateWithdrawAmount } from "helpers";
+import { calculateWithdrawAmount, getPoolContract } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
@@ -17,7 +17,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   const web3 = useWeb3();
   const [withdrawalValue, setWithdrawalValue] = React.useState("-");
-
+  
   React.useEffect(() => {
     (async() => {
       try{
@@ -32,6 +32,10 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const handleWithDraw = async () => {
     try {
       // TODO: need to implement
+      const accounts = await web3.eth.getAccounts();
+      const pool = await getPoolContract(web3,poolAddress);
+      await pool.methods.withdrawLiquidity().send({from: accounts[0]})
+      
       await executeDelete({
         data: {
           poolAddress: poolAddress,

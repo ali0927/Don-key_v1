@@ -49,8 +49,8 @@ const InvestCardButton = styled.button`
 
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
-  const [totalLPTokens, setTotalLPTokens] = useState(0)
-  const [userLPTokens, setUserLPTokens] = useState(0)
+  const [totalLPTokens, setTotalLPTokens] = useState("0")
+  const [userLPTokens, setUserLPTokens] = useState("0")
   const web3 = useWeb3()
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
@@ -64,9 +64,9 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
       const accounts = await web3.eth.getAccounts();
       const pool = await getPoolContract(web3,poolAddress);
       let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-      setUserLPTokens(lptokensresponse)
+      setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"))
       let total = await pool.methods.totalSupply().call();
-      setTotalLPTokens(total)
+      setTotalLPTokens(web3.utils.fromWei(total, "ether"))
     }
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps

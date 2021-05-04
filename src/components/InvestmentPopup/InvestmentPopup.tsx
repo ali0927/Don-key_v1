@@ -6,8 +6,6 @@ import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
-  buildAlpacaStrategy,
-  buildPancakeStrategy,
   getBUSDTokenContract,
   getPoolContract,
 } from "helpers";
