@@ -1,10 +1,12 @@
 import { AccountChangeListener } from "components/AccountChangeListener";
 import { LastSignInSubscriber } from "components/LastSignInSubscriber";
+import { Web3NetworkDetector } from "components/Web3NetworkDetector";
 import { withAuth } from "components/withAuth";
 import { Web3Provider } from "don-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { useMemo } from "react";
 import { Route, RouteProps } from "react-router-dom";
+
 
 export const ProtectedRoute = (props: RouteProps) => {
   const extras = useMemo(() => {
@@ -15,6 +17,7 @@ export const ProtectedRoute = (props: RouteProps) => {
         <Web3Provider loader={<LoadingPage />}>
           <AccountChangeListener />
           <LastSignInSubscriber/>
+          <Web3NetworkDetector />
           {comp}
         </Web3Provider>
       ),

@@ -15,7 +15,7 @@ import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { shortenAddress } from "don-utils";
 import { IStoreState } from "interfaces";
 import { useWeb3 } from "don-components";
-import { ErrorSnackbar } from "components/Snackbars"
+import { ErrorSnackbar } from "components/Snackbars";
 import { useSnackbar } from "notistack";
 
 declare global {
@@ -71,37 +71,9 @@ function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
   const isAuth = useSelector((state: IStoreState) => state.auth);
   const farmerDetails = useSelector((state: IStoreState) => state.farmer);
-  const [network, setNetwork] = useState<number | null>(null)
-
   const { isLoggedIn } = isAuth;
   const address = useWalletAddress({ short: true });
   const history = useHistory();
-  const web3 = useWeb3()
-  const [wrongNetwork, setWrongNetwork] = useState(false)
-  const { enqueueSnackbar } = useSnackbar();
-
-  useEffect(()=>{
-    if (network){
-      console.log(window.ethereum)
-      window.ethereum.on('chainChanged', () => window.location.reload());
-    }
-  },[network])
-
-  useEffect(() => {
-    async function apiCall() {;
-      let network = await web3.eth.net.getId()  
-      setNetwork(network);    
-      if (network !== 56){
-        setWrongNetwork(true)
-        enqueueSnackbar('Wrong Network. You must be on Binance Smart Chain to continue. Please select the appropriate network via Metamask', {
-          content: (key, msg) => <ErrorSnackbar message={msg as string} />,
-          autoHideDuration: 10000,
-          persist: false
-        });
-      }
-    }
-    apiCall();
-}, [])
 
   const getLogo = React.useCallback(() => {
     if (variant === "builder") {

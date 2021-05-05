@@ -84,6 +84,12 @@ export const getLpTokensTotal = async (web3: Web3, poolAddress: string) => {
   return { user: lptokensresponse, total };
 };
 
+export const getBUSDBalance = async (web3: Web3, address: string) => {
+  const BUSDContract = await getBUSDTokenContract(web3);
+  const balance = await BUSDContract.methods.balanceOf(address).call();
+  return balance;
+}
+
 export const calculateWithdrawAmount = async (
   web3: Web3,
   poolAddress: string
