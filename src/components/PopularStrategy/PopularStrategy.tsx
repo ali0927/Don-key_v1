@@ -88,7 +88,7 @@ export const PopularStrategy = ({
   content?: string;
   apy?: string;
   comingsoon?: boolean;
-  investers?: number;
+  investers?: number | null;
   icon?: React.ReactElement;
   onCardClick?: () => void;
   onButtonClick?: () => void;

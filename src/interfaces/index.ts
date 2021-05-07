@@ -10,6 +10,8 @@ export type IFarmer = {
   profit: string | null;
   GUID: string;
   descriptionTitle: string | null;
+  apy?: string;
+  investors?: null | number;
   status: 'not_signed_up' |'under_review' | 'active' | 'inactive' |'comingsoon';
 };
 

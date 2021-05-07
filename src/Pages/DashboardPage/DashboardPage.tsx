@@ -48,7 +48,6 @@ const Heading = styled.h3`
   font-weight: 800;
 `;
 
-
 export const DashboardPage = () => {
   const [{ loading, data }] = useAxios("/api/v2/farmer");
 
@@ -60,20 +59,22 @@ export const DashboardPage = () => {
           name: `Don - ${item.name}`,
           description: item.description,
           picture: item.picture,
-          poolAddress: item.poolAddress ,
+          poolAddress: item.poolAddress,
           profit24hours: item.profit24hours || "-",
           profit7days: item.profit7days || "-",
-          profit: item.profit|| "-",
+          profit: item.profit || "-",
           descriptionTitle: item.descriptionTitle,
-          status: item.status
+          status: item.status,
+          apy: item.strategy.apy,
+          investors: item.investors,
         } as IFarmer;
       });
     }
     return [];
   }, [data]);
 
-  if(loading){
-    return <LoadingPage />
+  if (loading) {
+    return <LoadingPage />;
   }
   return (
     <Layout className="bgColor dashboard-root" variant="loggedin">
@@ -84,7 +85,7 @@ export const DashboardPage = () => {
               {farmers.length === 0 ? (
                 <div className="d-flex align-items-center flex-column">
                   <Heading>No Farmers Yet</Heading>
-                  <StyledLink className="mt-4" to="dashboard/farmer/signup" >
+                  <StyledLink className="mt-4" to="dashboard/farmer/signup">
                     Become the First Farmer
                   </StyledLink>
                 </div>
@@ -115,8 +116,8 @@ export const DashboardPage = () => {
           </CustomizedContainer>
         ) : (
           <CustomizedContainer>
-            <TopThreeFarmers isReady={!loading} leaders={farmers}/>
-            <LeaderBoardTable isReady={!loading} leaders={farmers} isDisable/>
+            <TopThreeFarmers isReady={!loading} leaders={farmers} />
+            <LeaderBoardTable isReady={!loading} leaders={farmers} isDisable />
           </CustomizedContainer>
         )}
       </div>

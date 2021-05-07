@@ -8,6 +8,7 @@ import { Loader } from "don-components";
 import { useHistory } from "react-router";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
+import BigNumber from "bignumber.js";
 
 
 const Image = styled.img`
@@ -51,6 +52,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   };
   
   const StrategyCard = (leader: IFarmer) => {
+    const APY = leader.apy ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%": "143%";
     return (
       <>
         <div className="col-lg-4 col-md-6 mb-3">
@@ -58,11 +60,11 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             icon={<Image src={leader.picture} />}
             contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
             title={leader.name}
-            // investers={5874}
+            investers={leader.investors}
             comingsoon={leader.status === "comingsoon"}
             graph={<GraphIcon />}
             content={leader.description}
-            apy="134%"
+            apy={APY}
             totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
