@@ -58,7 +58,7 @@ export const getStrategyContract = async (
 export const getInvestedAmount = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress);
   const accounts = await web3.eth.getAccounts();
-  const investment = await contract.methods.getUserInvestedAmount(accounts[0]).call();
+  const investment = await contract.methods.getInvestorClaimableAmount(accounts[0]).call();
   const num = new BigNumber(web3.utils.fromWei(investment, "ether"));
   return num;
 };
@@ -72,7 +72,7 @@ export const getPancakeContract = async (web3: Web3) => {
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress);
-  const amount = await contract.methods.getTotalInvestAmount().call();
+  const amount = await contract.methods.getinvestedAmountWithReward().call();
   return amount;
 };
 
