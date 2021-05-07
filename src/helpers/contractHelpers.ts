@@ -94,11 +94,11 @@ export const calculateWithdrawAmount = async (
   web3: Web3,
   poolAddress: string
 ) => {
-  const totalBusd = await getTotalPoolValue(web3, poolAddress);
-  const { user, total } = await getLpTokensTotal(web3, poolAddress);
-  const amount =  new BigNumber(user)
-  .div(new BigNumber(total))
-  .multipliedBy(web3.utils.fromWei(totalBusd))
-  return amount.toFixed(2);
+  const accounts = await web3.eth.getAccounts();
+  const poolContract = await getPoolContract(web3, poolAddress);
+  const claimableAmount = poolContract.methods.getInvestorClaimableAmount(accounts[0]).call()
+  const amount =  new BigNumber(web3.utils.fromWei(claimableAmount)).toFixed(2);
+ 
+  return amount;
 };
 
