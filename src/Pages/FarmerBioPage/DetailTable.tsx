@@ -94,7 +94,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                 <>
                   <div>My Investment</div>{" "}
                   <h5 className="heading-title">
-                    <MyInvestment poolAddress={poolAddress} />
+                    <MyInvestment poolAddress={poolAddress} userLPTokens={userLPTokens} totalLPTokens={totalLPTokens}/>
                   </h5>
                   <p style={{fontSize: 10}}>LP Tokens: {userLPTokens} out of {totalLPTokens} total</p>
                 </>
