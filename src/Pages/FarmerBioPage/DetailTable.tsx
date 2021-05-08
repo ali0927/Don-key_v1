@@ -7,6 +7,8 @@ import { shortenAddress } from "don-utils";
 import { useMediaQuery } from "@material-ui/core";
 import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
+import { MyInitialInvestment } from "components/MyInitialInvestment";
+import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { getPoolContract } from "helpers";
@@ -92,9 +94,17 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
               </h5>
               {isInvested && (
                 <>
-                  <div>My Investment</div>{" "}
+                  <div>My Initial Investment</div>{" "}
                   <h5 className="heading-title">
-                    <MyInvestment poolAddress={poolAddress} userLPTokens={userLPTokens} totalLPTokens={totalLPTokens}/>
+                    <MyInitialInvestment poolAddress={poolAddress}/>
+                  </h5>
+                  <div>My Current Holdings</div>{" "}
+                  <h5 className="heading-title">
+                    <MyInvestment poolAddress={poolAddress}/>
+                  </h5>
+                  <div>Total Profit/Loss</div>{" "}
+                  <h5 className="heading-title">
+                    <TotalProfitLoss poolAddress={poolAddress}/>
                   </h5>
                   <p style={{fontSize: 10}}>LP Tokens: {userLPTokens} out of {totalLPTokens} total</p>
                 </>
