@@ -113,9 +113,9 @@ export const FarmerBio = ({
                 Online
               </LastLoginText>
             )}
-            {isInvestor && diff === "offline" && (
+            {/* {isInvestor && diff === "offline" && (
               <LastLoginText>last active: {lastActive} ago</LastLoginText>
-            )}
+            )} */}
           </Col>
         </Row>
       </Container>

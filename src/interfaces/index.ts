@@ -49,6 +49,7 @@ export interface IFarmerInter {
   poolAddress: string;
   picture: string;
   GUID: string;
+  investors?: null | number;
   status: "not_signed_up" | "under_review" | "active" | "inactive";
   name: string;
   last_signin: string;

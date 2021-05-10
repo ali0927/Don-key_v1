@@ -70,7 +70,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
         </div>
-        <div className="col-lg-4 col-md-6 mb-3">
+        {/* <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
             contentTitle={"New Strategy"}
@@ -99,7 +99,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
-        </div>
+        </div> */}
       </>
     );
   };
@@ -114,18 +114,17 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
 
   return (
     <>
-   
+    <div className="row col-lg-12">
         {leaders.map((leader, index) => {
-          return <div className="row col-lg-12" key={index}>{StrategyCard(leader)}</div>;
+          return StrategyCard(leader)
         })}
-
-
       {openInvestment && (
         <InvestmentPopup
           poolAddress={state.poolAddress}
           onClose={closeInvestmentDialog}
         />
       )}
+    </div>
     </>
   );
 };
