@@ -64,6 +64,7 @@ export type IStrategy = {
   lastRan: string | null;
   updatedAt: string;
   strategyAddress: string | null;
+  strategyDescription?: string | null;
   status: string | null;
   profit: string | null;
   id: number;

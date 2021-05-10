@@ -9,6 +9,7 @@ import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
+import { ShowMoreContent } from "components/ShowmoreContent";
 
 const AddNewStrategy = ({
   text,
@@ -108,7 +109,7 @@ export const FarmerStrategies = ({
           <Container>
             <Row>
               <Col
-                className="d-flex align-items-center justify-content-between mb-5"
+                className="d-flex align-items-center justify-content-between mb-1"
                 sm={12}
               >
                 <StyledHeading>Strategies</StyledHeading>
@@ -123,6 +124,16 @@ export const FarmerStrategies = ({
                   </>
                 )}
               </Col>
+              <Container className="mt-2">
+                <Row>
+                  <Col md={12} lg={12}>
+                    <h4 className="">Description</h4>
+                    <p style={{ fontSize: 15 }}>
+                      <ShowMoreContent length={100} content={strategiesData.data[0].strategyDescription} />
+                    </p>
+                  </Col>
+                </Row>
+            </Container>
               <Col sm={12}>
                 {isInvestor ? (
                   <StrategyTableForInvestor strategies={strategiesData.data} />

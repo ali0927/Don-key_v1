@@ -25,8 +25,6 @@ export const TotalProfitLoss = ({ poolAddress }: { poolAddress: string}) => {
   }, []);
 
   useEffect(()=>{
-    console.log('here')
-    console.log()
     setTotalProfitLoss(amountWithdraw - amountInitial)
   },[amountInitial, amountWithdraw])
 
