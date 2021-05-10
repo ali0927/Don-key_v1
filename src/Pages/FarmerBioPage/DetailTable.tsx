@@ -81,6 +81,8 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
           <div className="list-box">
             <h5 className="heading-title">Pool address</h5>
             <div>{isSmall ? shortenAddress(poolAddress) : poolAddress}</div>
+            <br />
+            <h5 className="heading-title">APY: 25%</h5>
           </div>
         </Poolinfo>
       </Col>

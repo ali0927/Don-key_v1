@@ -15,8 +15,8 @@ export const FarmerBioFromApi = ({farmerId}: {farmerId: string}) => {
     </div>
   }
 
-  const bio = farmerFromApi.data;
+  const bio = farmerFromApi.data.farmer;
 
-  return <FarmerBio isInvestor farmer={bio} />
+  return <FarmerBio isInvestor farmer={bio} investorCount={farmerFromApi.data.investorCount.count}/>
 
 }

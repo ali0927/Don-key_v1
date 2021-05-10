@@ -38,6 +38,12 @@ const LastLoginText = styled.div`
   align-items: center;
 `;
 
+const InvestorCountText = styled.div`
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+`;
+
 const Online = styled.span`
   width: 10px;
   height: 10px;
@@ -48,14 +54,13 @@ const Online = styled.span`
 export const FarmerBio = ({
   farmer: { description, last_signin, name, picture, poolAddress },
   isInvestor,
+  investorCount
 }: {
   farmer: IFarmerInter;
   isInvestor?: boolean;
+  investorCount?: number;
 }) => {
   const [modalShow, setModalShow] = useState(false);
-
-
-
 
   const lastActive = useMemo(() => {
     return moment.duration(moment().diff(moment(last_signin))).humanize();
@@ -113,9 +118,7 @@ export const FarmerBio = ({
                 Online
               </LastLoginText>
             )}
-            {/* {isInvestor && diff === "offline" && (
-              <LastLoginText>last active: {lastActive} ago</LastLoginText>
-            )} */}
+            <InvestorCountText>Investor Count: {investorCount !== undefined ? investorCount : 0}</InvestorCountText>
           </Col>
         </Row>
       </Container>
