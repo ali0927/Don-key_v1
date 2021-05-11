@@ -8,6 +8,8 @@ import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import { useMemo, useState } from "react";
 import moment from "moment";
 import { IFarmerInter } from "interfaces";
+import { TwitterIcon } from "components/TwitterIcon";
+import { TelegramIcon } from "components/TelegramIcon";
 
 const StyledFarmerImage = styled.img`
   object-fit: cover;
@@ -52,13 +54,15 @@ const Online = styled.span`
 `;
 
 export const FarmerBio = ({
-  farmer: { description, last_signin, name, picture, poolAddress },
+  farmer: { description, last_signin, name, picture, poolAddress, telegram, twitter },
   isInvestor,
   investorCount
 }: {
   farmer: IFarmerInter;
   isInvestor?: boolean;
   investorCount?: number;
+  telegram?: string;
+  twitter?: string;
 }) => {
   const [modalShow, setModalShow] = useState(false);
 
@@ -111,28 +115,40 @@ export const FarmerBio = ({
               <DetailTable poolAddress={poolAddress} />
             </Row>
           </Col>
-          <Col sm={12}>
-            {(!isInvestor || diff === "online") && (
+          <Col sm={2}>
+            {/* {(!isInvestor || diff === "online") && (
               <LastLoginText>
                 <Online className="mr-1" />
                 Online
               </LastLoginText>
-            )}
-            <InvestorCountText>Investor Count: {investorCount !== undefined ? investorCount : 0}</InvestorCountText>
+            )} */}
+            <div style={{display:'flex', maxWidth:'50%', justifyContent:'space-around'}}>
+            {twitter &&
+            <TwitterIcon fill={'#000'} handle={twitter}></TwitterIcon>
+          }
+            {telegram &&
+            <TelegramIcon fill={'#000'} handle={telegram}></TelegramIcon>
+          }
+            </div>
+          <InvestorCountText>Investor Count: {investorCount !== undefined ? investorCount : 0}</InvestorCountText>
           </Col>
         </Row>
       </Container>
 
+      {description.length > 0 &&
       <Container className="mt-2">
         <Row>
           <Col md={8} lg={7}>
             <h4 className="">Description</h4>
+            
             <p style={{ fontSize: 15 }}>
               <ShowMoreContent length={100} content={description} />
             </p>
+          
           </Col>
         </Row>
       </Container>
+       }
     </>
   );
 };

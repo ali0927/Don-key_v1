@@ -181,6 +181,9 @@ export const InvestmentPopup = ({
           </ButtonWrapper>
         </div>
       </div>
+      <p className="mt-4">
+        <small><b>Note: </b>1% of your investment amount will be used towards harvesting & handling fees.</small>
+      </p>
     </DonCommonmodal>
   );
 };

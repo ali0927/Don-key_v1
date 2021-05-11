@@ -57,6 +57,8 @@ export interface IFarmerInter {
   is_active: boolean;
   walletAddress: string;
   username?: string | null;
+  telegram?: string | null;
+  twitter?: string | null;
 }
 export type IStrategy = {
   createdAt: string;
