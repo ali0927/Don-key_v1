@@ -6,6 +6,7 @@ import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { shortenAddress } from "don-utils";
 import { useMediaQuery } from "@material-ui/core";
 import { PoolAmount } from "components/PoolAmount";
+import { PoolReserveAmount } from "components/PoolReserveAmount";
 import { MyInvestment } from "components/MyInvestment";
 import { MyInitialInvestment } from "components/MyInitialInvestment";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
@@ -93,6 +94,10 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
               <div>Total Pool Value</div>{" "}
               <h5 className="heading-title">
                 <PoolAmount poolAddress={poolAddress} />
+              </h5>
+              <div>Total Reserve Value</div>{" "}
+              <h5 className="heading-title">
+                <PoolReserveAmount poolAddress={poolAddress} />
               </h5>
               {isInvested && (
                 <>
