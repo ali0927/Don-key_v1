@@ -11,7 +11,7 @@ import { MyInitialInvestment } from "components/MyInitialInvestment";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { getPoolContract, getTotalPoolValue } from "helpers";
+import { getLpTokensTotal, getPoolContract, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 
 const Poolinfo = styled.div`
@@ -119,6 +119,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                   onClose={() => setShowInvestmentPopup(false)}
                   onSuccess={() => {
                     getTotalPoolValue(web3, poolAddress)
+                    getLpTokensTotal(web3, poolAddress)
                   }}
                 />
               )}
@@ -138,7 +139,10 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                   open
                   onClose={() => setShowWithdrawPopup(false)}
                   onError={() => {}}
-                  onSuccess={() => {}}
+                  onSuccess={() => {
+                    getTotalPoolValue(web3, poolAddress);
+                    getLpTokensTotal(web3, poolAddress)
+                  }}
                   poolAddress={poolAddress}
                 />
               )}

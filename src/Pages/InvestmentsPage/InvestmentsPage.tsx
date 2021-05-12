@@ -3,6 +3,7 @@ import { NavBar } from "components/Navbar/NavBar";
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
+import { useWeb3 } from "don-components";
 import "./InvestmentsPage.scss";
 import { useAxios } from "hooks/useAxios";
 import { IMyInvestments } from "./interfaces/IMyInvestments";
@@ -26,6 +27,7 @@ import { AxiosResponse } from "axios";
 import { MyInvestment } from "components/MyInvestment";
 import { StrategyName } from "components/StrategyName";
 import { UserWalletBoard } from "components/UserWalletBoard";
+import { getLpTokensTotal, getTotalPoolValue } from "helpers";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -142,6 +144,8 @@ export const InvestmentsPage = () => {
 
   //const [isReady, setIsReady] = useState(false);
 
+  const web3 = useWeb3();
+
   const history = useHistory();
 
   const [{ data }] = useAxios({ method: "GET", url: "/api/v2/farmer" });
@@ -211,16 +215,14 @@ export const InvestmentsPage = () => {
     });
   };
 
-  const handleOpenWithDraw = (
-    farmerName: string,
-    poolAddress: string
-  ) => () => {
-    setWidthDraw({
-      open: true,
-      farmerName: farmerName,
-      poolAddress: poolAddress,
-    });
-  };
+  const handleOpenWithDraw =
+    (farmerName: string, poolAddress: string) => () => {
+      setWidthDraw({
+        open: true,
+        farmerName: farmerName,
+        poolAddress: poolAddress,
+      });
+    };
 
   const handleCloseWithDraw = () => {
     setWidthDraw({
@@ -423,7 +425,11 @@ export const InvestmentsPage = () => {
         <WithDrawPopup
           open={withDraw.open}
           poolAddress={withDraw.poolAddress}
-          onSuccess={handleSuccess(withDraw.farmerName)}
+          onSuccess={() => {
+            handleSuccess(withDraw.farmerName);
+            getTotalPoolValue(web3, poolAddress);
+            getLpTokensTotal(web3, poolAddress);
+          }}
           onError={handleError}
           onClose={handleCloseWithDraw}
         />
