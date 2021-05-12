@@ -6,6 +6,8 @@ export type IFarmer = {
   name: string;
   description: string;
   profit24hours: string | null;
+  twitter?: string | null;
+  telegram?: string | null;
   profit7days: string | null;
   profit: string | null;
   GUID: string;

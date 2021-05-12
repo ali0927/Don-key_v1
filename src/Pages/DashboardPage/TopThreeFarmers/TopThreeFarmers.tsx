@@ -62,6 +62,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             title={leader.name}
             investers={leader.investors}
             comingsoon={leader.status === "comingsoon"}
+            twitter={leader.twitter ? leader.twitter : null}
+            telegram={leader.telegram}
             graph={<GraphIcon />}
             content={leader.description}
             apy={APY}

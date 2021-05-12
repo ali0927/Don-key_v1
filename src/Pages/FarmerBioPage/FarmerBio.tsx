@@ -122,14 +122,14 @@ export const FarmerBio = ({
                 Online
               </LastLoginText>
             )} */}
-            <div style={{display:'flex', maxWidth:'50%', justifyContent:'space-around'}}>
+          <div style={{display:'flex', maxWidth:'50%', justifyContent:'space-around'}}>
             {twitter &&
             <TwitterIcon fill={'#000'} handle={twitter}></TwitterIcon>
           }
             {telegram &&
             <TelegramIcon fill={'#000'} handle={telegram}></TelegramIcon>
           }
-            </div>
+          </div>
           <InvestorCountText>Investor Count: {investorCount !== undefined ? investorCount : 0}</InvestorCountText>
           </Col>
         </Row>

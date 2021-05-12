@@ -3,6 +3,10 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
+import { TelegramIcon } from "components/TelegramIcon";
+import { TwitterIcon } from "components/TwitterIcon";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
+
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -73,6 +77,8 @@ export const PopularStrategy = ({
   totalValue = "$200 000.32",
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,
+  telegram,
+  twitter,
   contentTitle = "STRATEGY BTCUSD Feel Free to BYield new",
   title = `Saly Strategies WOW`,
   content = `I expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the level`,
@@ -87,6 +93,8 @@ export const PopularStrategy = ({
   contentTitle?: string;
   content?: string;
   apy?: string;
+  telegram?: string | null;
+  twitter?: string | null;
   comingsoon?: boolean;
   investers?: number | null;
   icon?: React.ReactElement;
@@ -114,24 +122,36 @@ export const PopularStrategy = ({
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
-        <div
-          onClick={handleCardClick}
-          className={clsx("popularstrategy__title ", {
-            "cursor-pointer": !comingSoonProp,
-          })}
-        >
-          {icon}
-          {investers ? (
-            <div>
-              {heading}
-              <small style={{ fontSize: 14 }} className="ml-3">
-                <span className="font-weight-bold">{investers}</span> investors
-              </small>
-            </div>
-          ) : (
-            heading
-          )}
-        </div>
+          <Container>
+            <Row>
+              <Col sm={9}  onClick={handleCardClick}
+                className={clsx("popularstrategy__title ", {
+                  "cursor-pointer": !comingSoonProp,
+                })}>
+                {icon}
+                {investers ? (
+                <div>
+                  {heading}
+                  <small style={{ fontSize: 14 }} className="ml-3">
+                    <span className="font-weight-bold">{investers}</span> investors
+                  </small>
+                </div>
+              ) : (
+                heading
+              )}
+              </Col>
+              <Col sm={3}>
+              <div style={{display:'flex', justifyContent:'space-around', marginTop: 5}}>
+                {telegram &&
+                  <TelegramIcon fill={'#000'} handle={telegram} height={20} width={20}></TelegramIcon>
+                }
+                {twitter &&
+                  <TwitterIcon fill={'#000'} handle={twitter} height={20} width={20}></TwitterIcon>
+                }
+              </div>
+              </Col>
+            </Row>
+          </Container>
         <div className="popularstrategy__graph__wrapper">{graph}</div>
       </div>
 

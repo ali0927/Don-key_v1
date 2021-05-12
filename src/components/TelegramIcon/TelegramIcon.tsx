@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-export const TelegramIcon = ({fill, handle}: {fill: string | undefined, handle: string | undefined}) => {
+export const TelegramIcon = ({fill, handle, width = 24, height = 24}: {fill: string | undefined, handle: string | undefined, width?: number | undefined, height?: number | undefined}) => {
     return (
         <>
         <a href={"https://t.me/" + handle} target="_blank" rel="noreferrer">
             <svg
-                width={25}
-                height={24}
+                width={width}
+                height={height}
                 viewBox="0 0 25 24"
                 fill={fill}
                 xmlns="http://www.w3.org/2000/svg"
