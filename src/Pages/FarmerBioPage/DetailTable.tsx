@@ -11,7 +11,13 @@ import { MyInitialInvestment } from "components/MyInitialInvestment";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { getLpTokensTotal, getPoolContract, getTotalPoolValue } from "helpers";
+import {
+  getLpTokensTotal,
+  getPoolContract,
+  calculateInitialInvestment,
+  calculateWithdrawAmount,
+  getTotalPoolValue,
+} from "helpers";
 import { useWeb3 } from "don-components";
 
 const Poolinfo = styled.div`
@@ -51,9 +57,12 @@ const InvestCardButton = styled.button`
 
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
-  const [totalLPTokens, setTotalLPTokens] = useState("0")
-  const [userLPTokens, setUserLPTokens] = useState("0")
-  const web3 = useWeb3()
+  const [totalLPTokens, setTotalLPTokens] = useState("0");
+  const [userLPTokens, setUserLPTokens] = useState("0");
+  const [totalPoolValue, setTotalPoolValue] = useState("0");
+  const [initialInvestment, setInitialInvestment] = useState("0");
+  const [currentHoldings, setCurrentHoldings] = useState("0");
+  const web3 = useWeb3();
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
@@ -64,16 +73,40 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   useEffect(() => {
     async function apiCall() {
       const accounts = await web3.eth.getAccounts();
-      const pool = await getPoolContract(web3,poolAddress);
+      const pool = await getPoolContract(web3, poolAddress);
       let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-      setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"))
+      setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
       let total = await pool.methods.totalSupply().call();
-      setTotalLPTokens(web3.utils.fromWei(total, "ether"))
+      setTotalLPTokens(web3.utils.fromWei(total, "ether"));
+
+      let poolValue = await getTotalPoolValue(web3, poolAddress);
+      setTotalPoolValue(web3.utils.fromWei(poolValue, "ether"));
+
+      let amount = await calculateInitialInvestment(web3, poolAddress);
+      setInitialInvestment(amount);
+
+      let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
+      setCurrentHoldings(withdrawAmount);
     }
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [])
+  }, []);
 
+  const onSuccess = async () => {
+    let d = await getTotalPoolValue(web3, poolAddress);
+    setTotalPoolValue(web3.utils.fromWei(d, "ether"));
+    const accounts = await web3.eth.getAccounts();
+    const pool = await getPoolContract(web3, poolAddress);
+    let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
+    setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
+    let total = await pool.methods.totalSupply().call();
+    setTotalLPTokens(web3.utils.fromWei(total, "ether"));
+
+    let amount = await calculateInitialInvestment(web3, poolAddress);
+    setInitialInvestment(amount);
+    let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
+    setCurrentHoldings(withdrawAmount);
+  };
   return (
     <>
       <Col className="my-4 my-lg-0" lg={6}>
@@ -92,23 +125,25 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
             <div className="col-md-6">
               <div>Total Pool Value</div>{" "}
               <h5 className="heading-title">
-                <PoolAmount poolAddress={poolAddress} />
+                {Number(totalPoolValue).toFixed(2)}
               </h5>
               {isInvested && (
                 <>
                   <div>My Initial Investment</div>{" "}
                   <h5 className="heading-title">
-                    <MyInitialInvestment poolAddress={poolAddress}/>
+                    {Number(initialInvestment).toFixed(2)}
                   </h5>
                   <div>My Current Holdings</div>{" "}
                   <h5 className="heading-title">
-                    <MyInvestment poolAddress={poolAddress}/>
+                    {Number(currentHoldings).toFixed(8)}
                   </h5>
                   <div>Total Profit/Loss</div>{" "}
                   <h5 className="heading-title">
-                    <TotalProfitLoss poolAddress={poolAddress}/>
+                    <TotalProfitLoss poolAddress={poolAddress} />
                   </h5>
-                  <p style={{fontSize: 10}}>LP Tokens: {userLPTokens} out of {totalLPTokens} total</p>
+                  <p style={{ fontSize: 10 }}>
+                    LP Tokens: {userLPTokens} out of {totalLPTokens} total
+                  </p>
                 </>
               )}
             </div>
@@ -117,10 +152,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                 <InvestmentPopup
                   poolAddress={poolAddress}
                   onClose={() => setShowInvestmentPopup(false)}
-                  onSuccess={() => {
-                    getTotalPoolValue(web3, poolAddress)
-                    getLpTokensTotal(web3, poolAddress)
-                  }}
+                  onSuccess={onSuccess}
                 />
               )}
               <InvestCardButton
@@ -139,10 +171,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
                   open
                   onClose={() => setShowWithdrawPopup(false)}
                   onError={() => {}}
-                  onSuccess={() => {
-                    getTotalPoolValue(web3, poolAddress);
-                    getLpTokensTotal(web3, poolAddress)
-                  }}
+                  onSuccess={onSuccess}
                   poolAddress={poolAddress}
                 />
               )}
