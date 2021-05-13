@@ -3,10 +3,8 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
-import { TelegramIcon } from "components/TelegramIcon";
-import { TwitterIcon } from "components/TwitterIcon";
-import { Col, Container, Row, Spinner } from "react-bootstrap";
-
+import {  OverlayTrigger } from "react-bootstrap";
+import {useState} from "react";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -106,6 +104,8 @@ export const PopularStrategy = ({
   //   history.push("/strategy");
   // };
 
+  const [show, setShow] = useState(false);
+
   const handleCardClick = () => {
     if (!comingSoonProp && onCardClick) {
       onCardClick();
@@ -122,37 +122,36 @@ export const PopularStrategy = ({
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
-          <Container>
-            <Row>
-              <Col sm={9}  onClick={handleCardClick}
-                className={clsx("popularstrategy__title ", {
-                  "cursor-pointer": !comingSoonProp,
-                })}>
-                {icon}
-                {investers ? (
-                <div>
-                  {heading}
-                  <small style={{ fontSize: 14 }} className="ml-3">
-                    <span className="font-weight-bold">{investers}</span> investors
-                  </small>
-                </div>
-              ) : (
-                heading
-              )}
-              </Col>
-              <Col sm={3}>
-              <div style={{display:'flex', justifyContent:'space-around', marginTop: 5}}>
-                {telegram &&
-                  <TelegramIcon fill={'#000'} handle={telegram} height={20} width={20}></TelegramIcon>
-                }
-                {twitter &&
-                  <TwitterIcon fill={'#000'} handle={twitter} height={20} width={20}></TwitterIcon>
-                }
+        <div
+          onClick={handleCardClick}
+          className={clsx("popularstrategy__title ", {
+            "cursor-pointer": !comingSoonProp,
+          })}
+        >
+          {icon}
+          {investers ? (
+            <div>
+              {heading}
+              <small style={{ fontSize: 14 }} className="ml-3">
+                <span className="font-weight-bold">{investers}</span> investors
+              </small>
+            </div>
+          ) : (
+            heading
+          )}
+        </div>
+        <div className="popularstrategy__graph__wrapper">
+        <OverlayTrigger
+            placement="top"
+            key="top"
+            overlay={
+              <div style={{padding:40, background: 'white'}}>
+              <img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph" width="800" height="200"/>
               </div>
-              </Col>
-            </Row>
-          </Container>
-        <div className="popularstrategy__graph__wrapper">{graph}</div>
+              }
+            ><div><img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph"/></div>
+        </OverlayTrigger>
+          </div>
       </div>
 
       <div className="popularstrategy__content">
@@ -186,3 +185,5 @@ export const PopularStrategy = ({
     </div>
   );
 };
+
+
