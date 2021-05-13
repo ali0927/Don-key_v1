@@ -65,8 +65,10 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
 export const InvestmentPopup = ({
   poolAddress,
   onClose,
+  onSuccess
 }: {
   poolAddress: string;
+  onSuccess?: () => void;
   onClose: () => void;
 }) => {
   const [value, setValue] = useState("");
@@ -120,7 +122,9 @@ export const InvestmentPopup = ({
       if (key1) {
         closeSnackbar(key1);
       }
-
+      
+      onSuccess && onSuccess();
+      
       enqueueSnackbar("Money invested into Pool Successfully", {
         content: (key, msg) => <SuccessSnackbar message={msg as string} />,
         autoHideDuration: 5000,

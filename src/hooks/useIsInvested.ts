@@ -25,5 +25,5 @@ export const useIsInvested = (poolAddress: string) => {
     getIsInvested();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return { isReady, isInvested };
+  return { isReady, isInvested, getIsInvested };
 };
