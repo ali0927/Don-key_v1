@@ -9,7 +9,7 @@ const Root = styled.div`
 
 const Heading = styled.p`
   font-family: Roboto;
-  font-size: 48px;
+  font-size: 35px;
   font-style: normal;
   font-weight: 800;
   line-height: 64px;
@@ -34,9 +34,9 @@ export const CatchLuckSection: React.FC = () => {
     <>
       <Root>
         <Container>
-          <Heading>Catch your luck by the tail</Heading>
+          <Heading> Be part of Don-key’s first 600 users to particapite in the Beta version. </Heading>
           <SubHeading>
-            Our achievement in the journey depicted in numbers
+          Follow our best farmers and gain passive
           </SubHeading>
 
         

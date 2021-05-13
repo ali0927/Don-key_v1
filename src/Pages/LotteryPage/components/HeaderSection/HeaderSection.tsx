@@ -1,23 +1,13 @@
 import { ContainedButton } from "components/Button";
-import {
-  DonKeyLeftToRightFace,
-  LargeEllipse,
-  MeadiumEllipse,
-  LeftArrow,
-  ShareIcon,
-  LeftArrowMediumSIze,
-} from "icons";
+
 import { SmallEllipse } from "icons/SmallEllipse";
 import React from "react";
 import { Col, Container } from "react-bootstrap";
+import { useHistory } from "react-router";
 import styled from "styled-components";
-import {
-  Ellipsce1,
-  Ellipsce2,
-  Ellipsce3,
-  Ellipsce4,
-  Ellipsce5,
-} from "./Ellipses";
+import { DonkeyLeftPanel } from "../DonkeyLeftPanel/DonkeyLeftPanel";
+import { RootHeader } from "../RootHeader/RootHeader";
+
 import { Timer } from "./Timer";
 
 const Header = styled.div`
@@ -59,63 +49,33 @@ const TakePartButton = styled(ContainedButton)`
   }
 `;
 
-const DonkeyWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const IconsWrapper = styled.div`
-  width: 100%;
-  min-height: 56px;
-  background: #f4e41c;
-`;
-
 export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
+  const history = useHistory();
+
+  const handleTakePart = () => {
+    history.push("/lottery/participate");
+  };
+
   return (
     <>
-      <IconsWrapper className="d-flex align-items-center">
-        <Container className="d-flex justify-content-between mt-2">
-          <LeftArrowMediumSIze />
-          <ShareIcon />
-        </Container>
-      </IconsWrapper>
+      <RootHeader />
       <Header>
         <Container>
           <div className="row">
             <div className="col-md-6">
-              <Ellipsce1>
-                <LargeEllipse />
-              </Ellipsce1>
-              <Ellipsce2>
-                <LargeEllipse />
-              </Ellipsce2>
-              <Ellipsce3>
-                <MeadiumEllipse />
-              </Ellipsce3>
-              <Ellipsce4>
-                <MeadiumEllipse />
-              </Ellipsce4>
-
-              <Ellipsce5>
-                <SmallEllipse />
-              </Ellipsce5>
-
-              <DonkeyWrapper>
-                <DonKeyLeftToRightFace />
-              </DonkeyWrapper>
+              <DonkeyLeftPanel />
             </div>
 
             <div className="col-md-6">
               <LaunchingSoon>LAUNCHED SOON</LaunchingSoon>
-              <MainHeading>The best tools to enter the platform</MainHeading>
+              <MainHeading>Follow some of Don-key’s best farmers</MainHeading>
 
               <div className="row d-flex justify-content-between align-items-center mt-4 mb-4">
                 <Timer timerDate={props.timerDate} />
               </div>
 
-              <TakePartButton className="mt-5 mb-5">
-                Take part in the lottery
+              <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
+                Join the lottery
               </TakePartButton>
             </div>
           </div>

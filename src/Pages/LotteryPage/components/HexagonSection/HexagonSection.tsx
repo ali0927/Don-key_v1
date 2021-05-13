@@ -99,9 +99,9 @@ export const HexagonSection: React.FC = () => {
     <>
       <Container className="d-flex justify-content-center">
         <Wrapper className="row">
-          <div className="col-md-4 d-flex justify-content-center">{Hexagon("14+", "Happy Clients")}</div>
-          <div className="col-md-4  d-flex justify-content-center">{Hexagon("$540K", "Amount invested")}</div>
-          <div className="col-md-4 d-flex justify-content-center">{Hexagon("25+", "Number of lotaries")}</div>
+          <div className="col-md-4 d-flex justify-content-center">{Hexagon("14+", "Users")}</div>
+          <div className="col-md-4  d-flex justify-content-center">{Hexagon("$540K", "Liquidity ")}</div>
+          <div className="col-md-4 d-flex justify-content-center">{Hexagon("25+", "DON")}</div>
         </Wrapper>
       </Container>
     </>
