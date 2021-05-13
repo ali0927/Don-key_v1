@@ -62,6 +62,8 @@ export const DashboardPage = () => {
           poolAddress: item.poolAddress,
           profit24hours: item.profit24hours || "-",
           profit7days: item.profit7days || "-",
+          telegram: item.telegram,
+          twitter: item.twitter,
           profit: item.profit || "-",
           descriptionTitle: item.descriptionTitle,
           status: item.status,

@@ -76,6 +76,12 @@ export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   return amount;
 };
 
+export const getTotalReservePoolValue = async (web3: Web3, poolAddress: string) => {
+  const contract = await getPoolContract(web3, poolAddress);
+  const amount = await contract.methods.getCurrentBUSDBalance().call();
+  return amount;
+};
+
 export const getLpTokensTotal = async (web3: Web3, poolAddress: string) => {
   const accounts = await web3.eth.getAccounts();
   const pool = await getPoolContract(web3, poolAddress);

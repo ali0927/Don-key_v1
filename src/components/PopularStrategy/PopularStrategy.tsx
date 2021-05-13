@@ -3,6 +3,8 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
+import {  OverlayTrigger } from "react-bootstrap";
+import {useState} from "react";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -73,6 +75,8 @@ export const PopularStrategy = ({
   totalValue = "$200 000.32",
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,
+  telegram,
+  twitter,
   contentTitle = "STRATEGY BTCUSD Feel Free to BYield new",
   title = `Saly Strategies WOW`,
   content = `I expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the level`,
@@ -87,6 +91,8 @@ export const PopularStrategy = ({
   contentTitle?: string;
   content?: string;
   apy?: string;
+  telegram?: string | null;
+  twitter?: string | null;
   comingsoon?: boolean;
   investers?: number | null;
   icon?: React.ReactElement;
@@ -97,6 +103,8 @@ export const PopularStrategy = ({
   // const goToStrategy = () => {
   //   history.push("/strategy");
   // };
+
+  const [show, setShow] = useState(false);
 
   const handleCardClick = () => {
     if (!comingSoonProp && onCardClick) {
@@ -132,7 +140,18 @@ export const PopularStrategy = ({
             heading
           )}
         </div>
-        <div className="popularstrategy__graph__wrapper">{graph}</div>
+        <div className="popularstrategy__graph__wrapper">
+        <OverlayTrigger
+            placement="top"
+            key="top"
+            overlay={
+              <div style={{padding:40, background: 'white'}}>
+              <img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph" width="800" height="200"/>
+              </div>
+              }
+            ><div><img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph"/></div>
+        </OverlayTrigger>
+          </div>
       </div>
 
       <div className="popularstrategy__content">
@@ -166,3 +185,5 @@ export const PopularStrategy = ({
     </div>
   );
 };
+
+
