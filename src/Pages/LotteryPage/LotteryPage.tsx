@@ -14,7 +14,6 @@ export const LotteryPage: React.FC = () => {
         <CatchLuckSection />
         <HexagonSection/>
         <DescriptionSection/>
-        <Footer/>
     </>
   );
 };

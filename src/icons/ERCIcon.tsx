@@ -1,5 +1,5 @@
-import * as React from "react";
-import { IIconProps } from "./interfaces";
+import * as React from "react"
+import { IIconProps } from "./interfaces"
 
 export const ERCIcon = (props: IIconProps) => {
   return (
@@ -30,5 +30,6 @@ export const ERCIcon = (props: IIconProps) => {
         />
       </defs>
     </svg>
-  );
-};
+  )
+}
+

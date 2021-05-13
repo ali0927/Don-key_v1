@@ -32,7 +32,7 @@ export * from "./InfoOvalIcon";
 export * from "./ShareIcon";
 export * from "./LeftArrowMediumSize";
 export * from "./ERCIcon";
-export * from "./BEPIcon";
 export * from "./EmailIcon";
 export * from "./LaptopRocketIcon";
 export * from "./DonKeyLabel";
+export * from "./BEP20";

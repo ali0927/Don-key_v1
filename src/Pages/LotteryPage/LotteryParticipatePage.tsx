@@ -4,9 +4,14 @@ import { RootHeader } from "./components/RootHeader/RootHeader";
 import styled from "styled-components";
 import { DonkeyLeftPanel } from "./components/DonkeyLeftPanel/DonkeyLeftPanel";
 import { Container } from "react-bootstrap";
-import { EmailIcon, ERCIcon } from "icons";
+import { BEP20, EmailIcon, ERCIcon } from "icons";
 import { ContainedButton } from "components/Button";
 import { useHistory } from "react-router";
+interface ILotteryParticipate {
+  erc: string;
+  bep: string;
+  email: string;
+}
 
 const Header = styled.div`
   width: 100%;
@@ -84,15 +89,37 @@ const Caption = styled.p`
 export const LotteryParticipatePage: React.FC = () => {
   const history = useHistory();
 
-  const handleStack = (e:React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>) => {
-     e.preventDefault();
+  const [state, setState] = React.useState<ILotteryParticipate>({
+    erc: "",
+    bep: "",
+    email: "",
+  });
+
+  const handleBack = () => {
+    history.push("/lottery")
+  }
+
+  const handleChange =
+    (name: keyof ILotteryParticipate) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setState({
+        ...state,
+        [name]: e.target.value,
+      });
+    };
+
+  const handleStack = (
+    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
     history.push("/lottery/participate/congratulations");
-   
   };
+
+  const isAmountInputsRequired = state.bep === "" && state.erc === "";
 
   return (
     <>
-      <RootHeader />
+      <RootHeader onBack={handleBack}/>
       <Header>
         <Container>
           <div className="row">
@@ -109,18 +136,30 @@ export const LotteryParticipatePage: React.FC = () => {
                       <ERCIcon />
                       <Label className="ml-2">ERC20</Label>
                     </div>
-                    <InputSmall type="number" required placeholder="$ DON 1500" />
+                    <InputSmall
+                      type="number"
+                      value={state.erc}
+                      required={isAmountInputsRequired}
+                      onChange={handleChange("erc")}
+                      placeholder="$ DON 1500"
+                    />
                   </div>
                   <div className="col-md-2" />
 
                   <div className="col-md-3">
                     <div className="d-flex">
-                      <ERCIcon />
+                      <BEP20 />
                       <div>
-                        <Label className="ml-2">ERC20</Label>
+                        <Label className="ml-2">BEP20</Label>
                       </div>
                     </div>
-                    <InputSmall type="number" required placeholder="$ DON 1500" />
+                    <InputSmall
+                      type="number"
+                      value={state.bep}
+                      required={isAmountInputsRequired}
+                      onChange={handleChange("bep")}
+                      placeholder="$ DON 1500"
+                    />
                   </div>
                 </div>
 
@@ -133,18 +172,20 @@ export const LotteryParticipatePage: React.FC = () => {
                       </div>
                     </div>
 
-                    <Input type="email" required placeholder="donboss@gmail.com" />
+                    <Input
+                      type="email"
+                      required
+                      placeholder="donboss@gmail.com"
+                    />
                     <Caption className="mt-2">
                       Enter your mail to get the lottery result Don-key
                     </Caption>
                   </div>
                 </div>
                 <StackeButton type="submit" className="mt-5 mb-3">
-                  Stack
+                  Stake
                 </StackeButton>
-                
               </form>
-          
             </div>
           </div>
         </Container>

@@ -9,12 +9,19 @@ const IconsWrapper = styled.div`
   background: #f4e41c;
 `;
 
-export const RootHeader: React.FC = () => {
+export const RootHeader: React.FC<{onBack?: ()=> void;}> = (props) => {
+
+  const handleBack = () => {
+    if(props.onBack){
+      props.onBack();
+    }
+  }
+
   return (
     <>
       <IconsWrapper className="d-flex align-items-center">
         <Container className="d-flex justify-content-between mt-2">
-          <LeftArrowMediumSIze />
+          <LeftArrowMediumSIze onClick={handleBack} />
           <ShareIcon />
         </Container>
       </IconsWrapper>

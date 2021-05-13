@@ -7,6 +7,7 @@ import { StrategyBuilderSection } from "./StrategyBuilderSection";
 import { DonTokenSection } from "./DonTokensSection";
 import { JoinCommunity } from "./JoinCommunity";
 import { RoundedCompletedSection } from "./RoundedCompletedSection";
+import { LotteryPage } from "Pages/LotteryPage";
 
 
 
@@ -15,6 +16,8 @@ const LandingPage = () => {
   return (
     <div>
       <NavBar />
+
+      <LotteryPage/>
 
       {/* Banner */}
       <BannerSection/>
