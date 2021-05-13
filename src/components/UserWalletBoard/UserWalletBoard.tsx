@@ -1,11 +1,19 @@
 import { PoolAmount } from "components/PoolAmount";
 import { useIsInvested } from "hooks/useIsInvested";
-import * as React from "react";
+import  React,{useState} from "react";
 import { IUserWalletProps } from "./interface";
 import styled from "styled-components";
 import { MyInvestment } from "components/MyInvestment";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { WithDrawPopup } from "components/WithDrawPopup";
+import { useWeb3 } from "don-components";
+import {
+  getLpTokensTotal,
+  getPoolContract,
+  calculateInitialInvestment,
+  calculateWithdrawAmount,
+  getTotalPoolValue,
+} from "helpers";
 
 const InvestmentDisplay = styled.div`
   background: #000;
@@ -39,6 +47,24 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = React.useState(false);
   const [showWithdrawPopup, setShowWithdrawPopup] = React.useState(false);
 
+  const [poolValue, setTotalPoolValue] = useState("0")
+
+  const web3 = useWeb3()
+
+  const onSuccess = async () => {
+    let d = await getTotalPoolValue(web3, poolAddress);
+    setTotalPoolValue(web3.utils.fromWei(d, "ether"));
+    const accounts = await web3.eth.getAccounts();
+    const pool = await getPoolContract(web3, poolAddress);
+    // let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
+    // setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
+    // let total = await pool.methods.totalSupply().call();
+    // setTotalLPTokens(web3.utils.fromWei(total, "ether"));
+
+    // let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
+    // setCurrentHoldings(withdrawAmount);
+  };
+
   return (
     <>
       <InvestmentDisplay className="h-100">
@@ -46,7 +72,7 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
           <div className="col-md-6">
             <div>Total Pool Value</div>{" "}
             <h5 className="heading-title">
-              <PoolAmount poolAddress={poolAddress} />
+              {Number(poolValue).toString()}
             </h5>
             {isInvested && (
               <>
@@ -65,6 +91,7 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
             {showInvestmentPopup && (
               <InvestmentPopup
                 poolAddress={poolAddress}
+                onSuccess={onSuccess}
                 onClose={() => setShowInvestmentPopup(false)}
               />
             )}
