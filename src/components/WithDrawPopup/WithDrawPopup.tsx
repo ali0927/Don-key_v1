@@ -32,7 +32,7 @@ const checkIfUserWithDrawlWorked = async(web3: Web3) => {
       }
       if(retries === 0){
         if(!balanceisGreater){
-          rej();
+          rej("hey bastard");
         }
       }
       await waitFor(10000);
@@ -94,12 +94,18 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       if (key) {
         closeSnackbar(key);
       }
+      console.log("first failure check")
       enqueueSnackbar("Withdrawal SuccessFull", {
         content: (key, msg) => <SuccessSnackbar message={msg as string} />,
         persist: false,
       }) as string;
+      
+      console.log("second failure check")
+
       props.onSuccess();
+
     } catch (err) {
+      console.trace(err, "error from withdrawal")
       if (key) {
         closeSnackbar(key);
       }
