@@ -66,7 +66,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
-  const { isInvested } = useIsInvested(poolAddress);
+  const { isInvested, getIsInvested } = useIsInvested(poolAddress);
 
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
@@ -93,6 +93,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   }, []);
 
   const onSuccess = async () => {
+
     let d = await getTotalPoolValue(web3, poolAddress);
     setTotalPoolValue(web3.utils.fromWei(d, "ether"));
     const accounts = await web3.eth.getAccounts();
@@ -106,6 +107,8 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
     setInitialInvestment(amount);
     let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
     setCurrentHoldings(withdrawAmount);
+
+    await getIsInvested();
   };
   return (
     <>
