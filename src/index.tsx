@@ -8,6 +8,9 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { Providers } from "Providers";
 
+
+
+
 if(process.env.NODE_ENV === "production"){
   Sentry.init({
     dsn:

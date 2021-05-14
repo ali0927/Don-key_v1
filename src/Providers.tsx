@@ -4,21 +4,28 @@ import React from "react";
 import { Provider } from "react-redux";
 import { store } from "store";
 import { SnackbarProvider } from "notistack";
+import { ApolloProvider } from "@apollo/client";
+import {client} from "./apolloClient";
+
 export const Providers: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <Provider store={store}>
-      <NotificationProvider>
-        <SnackbarProvider
-          anchorOrigin={{
-            vertical: "bottom",
-            horizontal: "right",
-          }}
-        >
-          <TooltipProvider>{children}</TooltipProvider>
-        </SnackbarProvider>
-      </NotificationProvider>
-    </Provider>
+   
+      <Provider store={store}>
+         <ApolloProvider client={client}>
+        <NotificationProvider>
+          <SnackbarProvider
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "right",
+            }}
+          >
+            <TooltipProvider>{children}</TooltipProvider>
+          </SnackbarProvider>
+        </NotificationProvider>
+        </ApolloProvider>
+      </Provider>
+   
   );
 };

@@ -1,6 +1,10 @@
+import { useQuery } from "@apollo/client";
+import BigNumber from "bignumber.js";
+import gql from "graphql-tag";
 import React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
+import { convertToInternationalCurrencySystem } from "./helpers/convertToInternationalCurrency";
 
 const Wrapper = styled.div`
   min-width: 770px;
@@ -79,7 +83,37 @@ const SubHeading = styled.p`
   text-align: center;
 `;
 
+const TOKEN_DATA = gql`
+  query tokens($tokenAddress: Bytes!) {
+    token(id: $tokenAddress) {
+      name
+      symbol
+      decimals
+      derivedETH
+      tradeVolumeUSD
+      totalLiquidity
+    }
+  }
+`;
+
 export const HexagonSection: React.FC = () => {
+  const { loading, error, data } = useQuery(TOKEN_DATA, {
+    variables: {
+      tokenAddress: "0x6b175474e89094c44da98b954eedeac495271d0f",
+    },
+  });
+
+  console.log("Data--", ((data && data.token)? data.token : "loading"))
+
+  const derivedETH = data && data.token.derivedETH ;
+  const derivedETHMillion = convertToInternationalCurrencySystem(new BigNumber(derivedETH).toNumber()).toString();
+  const totalLiquidity = data && data.token.totalLiquidity;
+  const totalLiquidityMillion = convertToInternationalCurrencySystem(new BigNumber(totalLiquidity).toNumber()).toString();
+  const tadeVolumeUSD = data && data.token.tradeVolumeUSD ;
+  const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(new BigNumber(tadeVolumeUSD).toNumber()).toString();
+
+
+
   const Hexagon = (heading: string, subheading: string) => {
     return (
       <>
@@ -99,9 +133,17 @@ export const HexagonSection: React.FC = () => {
     <>
       <Container className="d-flex justify-content-center">
         <Wrapper className="row">
-          <div className="col-md-4 d-flex justify-content-center">{Hexagon("14+", "Users")}</div>
-          <div className="col-md-4  d-flex justify-content-center">{Hexagon("$540K", "Liquidity ")}</div>
-          <div className="col-md-4 d-flex justify-content-center">{Hexagon("25+", "DON")}</div>
+        <div className="col-md-4 d-flex justify-content-center">
+            {Hexagon("$"+derivedETHMillion, "$DON price")}
+          </div>
+          
+          <div className="col-md-4  d-flex justify-content-center">
+            {Hexagon("$"+totalLiquidityMillion, "24 hours volume")}
+          </div>
+          <div className="col-md-4 d-flex justify-content-center">
+            {Hexagon("$"+tadeVolumeUSDMillion, "Market Cap")}
+          </div>
+         
         </Wrapper>
       </Container>
     </>

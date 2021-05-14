@@ -11,37 +11,38 @@ import { LotteryPage } from "Pages/LotteryPage";
 
 
 
+
+
 const LandingPage = () => {
+
 
   return (
     <div>
       <NavBar />
 
-      <LotteryPage/>
+      <LotteryPage />
 
       {/* Banner */}
-      <BannerSection/>
-   
-      {/* Cards */}
-      <CardsSection/>
+      <BannerSection />
 
-      <BecomeAFarmerSection/>
+      {/* Cards */}
+      <CardsSection />
+
+      <BecomeAFarmerSection />
       {/* Trading strategy builder */}
 
-      <StrategyBuilderSection/>
+      <StrategyBuilderSection />
 
       {/* DON Tokens */}
-      <DonTokenSection/>
+      <DonTokenSection />
 
+      {/** RoundedCompleted Section */}
 
-       {/** RoundedCompleted Section */}
-
-       <RoundedCompletedSection/>
-
+      <RoundedCompletedSection />
 
       {/*  Join the Don-key Community */}
-      <JoinCommunity/>
-      
+      <JoinCommunity />
+
       {/*  footer */}
       <Footer />
     </div>
