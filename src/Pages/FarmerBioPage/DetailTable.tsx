@@ -13,7 +13,6 @@ import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import {
-  getLpTokensTotal,
   getPoolContract,
   calculateInitialInvestment,
   calculateWithdrawAmount,
@@ -21,41 +20,6 @@ import {
 } from "helpers";
 import { useWeb3 } from "don-components";
 import { ContainedButton } from "components/Button";
-
-const Poolinfo = styled.div`
-  font-size: 16px;
-  border-radius: 5px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2.2rem;
-`;
-
-const InvestmentDisplay = styled.div`
-  background: #000;
-  color: #fff;
-  padding: 1.5rem;
-  border-radius: 4px;
-`;
-
-const InvestCardButton = styled.button`
-  padding: 0.5rem 2rem;
-  width: 100%;
-  font-size: 14px;
-  text-align: center;
-  border-radius: 4px;
-  border: 0;
-  background-color: rgba(245, 242, 144, 1);
-  transition: all 0.3s linear;
-  color: #000;
-  &:hover {
-    opacity: 0.8;
-  }
-  &:focus {
-    outline: none;
-  }
-`;
 
 const CardWrapper = styled.div`
   min-height: 250px;
@@ -102,7 +66,6 @@ const Columns = styled.div`
   min-height: 50px;
   :last-child {
     border-right: none;
-    padding-right: 5%;
   }
 `;
 
@@ -237,74 +200,73 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <>
-      <div className="col-md-5 mb-5">
-        <CardWrapper className="p-3" color="white">
-          <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
-            <div>
-              <CardLabel color="black"> Pool Address</CardLabel>
-              <CardValue color="black">
-                {isSmall ? shortenAddress(poolAddress) : poolAddress}
-              </CardValue>
-            </div>
-          </PoolCardInnerInfo>
-          <div className="row">
-            {getFirstCardcolumns("APK", "25%", "black")}
-            {getFirstCardcolumns("ROI", "31.2%", "black")}
-            {getFirstCardcolumns("Followers", "1,753", "black")}
-            {getFirstCardcolumns("Dominance", "71%", "black")}
+    <div className="col-md-5 mb-5">
+      <CardWrapper className="p-3" color="white">
+        <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
+          <div>
+            <CardLabel color="black"> Pool Address</CardLabel>
+            <CardValue color="black">
+              {isSmall ? shortenAddress(poolAddress) : poolAddress}
+            </CardValue>
           </div>
-        </CardWrapper>
+        </PoolCardInnerInfo>
+        <div className="row">
+          {getFirstCardcolumns("APK", "25%", "black")}
+          {getFirstCardcolumns("ROI", "31.2%", "black")}
+          {getFirstCardcolumns("Followers", "1,753", "black")}
+          {getFirstCardcolumns("Dominance", "71%", "black")}
+        </div>
+      </CardWrapper>
       </div>
+      <div className="col-md-5 mb-5 p">
+      <CardWrapper className="p-2" color="black">
+        <CardInnerInfo className="d-flex justify-content-center align-items-center">
+          <div>
+            <CardLabel color="white"> Total Pool Value </CardLabel>
+            <CardValue color="white">
+              {Number(totalPoolValue).toFixed(2)}
+            </CardValue>
 
-      <div className="col-md-5 mb-5">
-        <CardWrapper className="p-2" color="black">
-          <CardInnerInfo className="d-flex justify-content-center align-items-center">
-            <div>
-              <CardLabel color="white"> Total Pool Value </CardLabel>
-              <CardValue color="white">
-                {Number(totalPoolValue).toFixed(2)}
-              </CardValue>
-
-              <div className="d-flex mt-2 mb-2">
-                <CutomButton onClick={() => setShowInvestmentPopup(true)}>
-                  Invest
-                </CutomButton>
-                <CutomButton
-                  onClick={() => setShowWithdrawPopup(true)}
-                  className="ml-2"
-                >
-                  WithDraw
-                </CutomButton>
-              </div>
+            <div className="d-flex mt-2 mb-2">
+              <CutomButton onClick={() => setShowInvestmentPopup(true)}>
+                Invest
+              </CutomButton>
+              <CutomButton
+                onClick={() => setShowWithdrawPopup(true)}
+                className="ml-2"
+              >
+                WithDraw
+              </CutomButton>
             </div>
-          </CardInnerInfo>
-          <div className="row">
-            {getSecondCardColumns(
-              "Initial Investment",
-              Number(initialInvestment).toFixed(2).toString(),
-              "white"
-            )}
-
-            {getSecondCardColumns(
-              "Profit/Loss",
-              <TotalProfitLoss poolAddress={poolAddress} />,
-              "white"
-            )}
-            {getSecondCardColumns(
-              "Total Reserve Value",
-              <PoolReserveAmount poolAddress={poolAddress} />,
-              "white"
-            )}
-            {getSecondCardColumns(
-              "My Current Holdings",
-              Number(currentHoldings).toFixed(8).toString(),
-              "white"
-            )}
           </div>
-          <TokensParagraph className="pt-2 pb-2">
-            LP Tokens: {userLPTokens} out of {totalLPTokens} total
-          </TokensParagraph>
-        </CardWrapper>
+        </CardInnerInfo>
+        <div className="row">
+          {getSecondCardColumns(
+            "Initial Investment",
+            Number(initialInvestment).toFixed(2).toString(),
+            "white"
+          )}
+
+          {getSecondCardColumns(
+            "Profit/Loss",
+            <TotalProfitLoss poolAddress={poolAddress} />,
+            "white"
+          )}
+          {getSecondCardColumns(
+            "Total Reserve Value",
+            <PoolReserveAmount poolAddress={poolAddress} />,
+            "white"
+          )}
+          {getSecondCardColumns(
+            "My Current Holdings",
+            Number(currentHoldings).toFixed(8).toString(),
+            "white"
+          )}
+        </div>
+        <TokensParagraph className="pt-2 pb-2">
+          LP Tokens: {userLPTokens} out of {totalLPTokens} total
+        </TokensParagraph>
+      </CardWrapper>
       </div>
       {showInvestmentPopup && (
         <InvestmentPopup

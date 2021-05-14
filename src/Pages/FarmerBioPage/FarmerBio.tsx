@@ -102,7 +102,7 @@ export const FarmerBio = ({
                 </div>
               )}
             </div>
-            <Row>
+            <Row className="justify-content-between">
               <Col md={1} className="mr-5">
                 <div className="d-flex align-items-center justify-content-center justify-content-lg-start h-100">
                   <StyledFarmerImage
