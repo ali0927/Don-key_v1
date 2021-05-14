@@ -3,8 +3,8 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
-import {  OverlayTrigger, Container, Row, Col } from "react-bootstrap";
-import {useState} from "react";
+import { OverlayTrigger, Container, Row, Col } from "react-bootstrap";
+import { useState } from "react";
 import { TwitterIcon } from "components/TwitterIcon";
 import { TelegramIcon } from "components/TelegramIcon";
 
@@ -70,8 +70,8 @@ const Graph1 = () => {
 };
 
 const DescriptionContent = styled.p`
-   min-height: 36px;
-`
+  min-height: 36px;
+`;
 
 export const PopularStrategy = ({
   graph = <Graph1 />,
@@ -102,7 +102,6 @@ export const PopularStrategy = ({
   onCardClick?: () => void;
   onButtonClick?: () => void;
 }) => {
-
   // const goToStrategy = () => {
   //   history.push("/strategy");
   // };
@@ -125,36 +124,56 @@ export const PopularStrategy = ({
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
-      <Container>
-            <Row>
-              <Col sm={9}  onClick={handleCardClick}
-                className={clsx("popularstrategy__title ", {
-                  "cursor-pointer": !comingSoonProp,
-                })}>
-                {icon}
-                {investers ? (
+        <Container>
+          <Row>
+            <Col
+              sm={9}
+              onClick={handleCardClick}
+              className={clsx("popularstrategy__title ", {
+                "cursor-pointer": !comingSoonProp,
+              })}
+            >
+              {icon}
+              {investers ? (
                 <div>
                   {heading}
                   <small style={{ fontSize: 14 }} className="ml-3">
-                    <span className="font-weight-bold">{investers}</span> investors
+                    <span className="font-weight-bold">{investers}</span>{" "}
+                    investors
                   </small>
                 </div>
               ) : (
                 heading
               )}
-              </Col>
-              <Col sm={3}>
-              <div style={{display:'flex', justifyContent:'space-around', marginTop: 5}}>
-                {telegram &&
-                  <TelegramIcon fill={'#000'} handle={telegram} height={20} width={20}></TelegramIcon>
-                }
-                {twitter &&
-                  <TwitterIcon fill={'#000'} handle={twitter} height={20} width={20}></TwitterIcon>
-                }
+            </Col>
+            <Col sm={3}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-around",
+                  marginTop: 5,
+                }}
+              >
+                {telegram && (
+                  <TelegramIcon
+                    fill={"#000"}
+                    handle={telegram}
+                    height={20}
+                    width={20}
+                  ></TelegramIcon>
+                )}
+                {twitter && (
+                  <TwitterIcon
+                    fill={"#000"}
+                    handle={twitter}
+                    height={20}
+                    width={20}
+                  ></TwitterIcon>
+                )}
               </div>
-              </Col>
-            </Row>
-          </Container>
+            </Col>
+          </Row>
+        </Container>
 
         {/* <div
           onClick={handleCardClick}
@@ -175,17 +194,34 @@ export const PopularStrategy = ({
           )}
         </div> */}
         <div className="popularstrategy__graph__wrapper">
-        <OverlayTrigger
-            placement="top"
-            key="top"
-            overlay={
-              <div style={{padding:40, background: 'white'}}>
-              <img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph" width="800" height="200"/>
-              </div>
+          {graph ? (
+            graph
+          ) : (
+            <OverlayTrigger
+              placement="top"
+              key="top"
+              overlay={
+                <div style={{ padding: 40, background: "white" }}>
+                  <img
+                    src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png"
+                    className="imageToShow"
+                    alt="graph"
+                    width="800"
+                    height="200"
+                  />
+                </div>
               }
-            ><div><img src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png" className="imageToShow" alt="graph"/></div>
-        </OverlayTrigger>
-          </div>
+            >
+              <div>
+                <img
+                  src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png"
+                  className="imageToShow"
+                  alt="graph"
+                />
+              </div>
+            </OverlayTrigger>
+          )}
+        </div>
       </div>
 
       <div className="popularstrategy__content">
@@ -208,7 +244,7 @@ export const PopularStrategy = ({
             <button disabled className="popularstrategy__btn">
               Invest
             </button>
-            <img className="coming-soon" src={comingsoon} alt="ImageNotFound"/>
+            <img className="coming-soon" src={comingsoon} alt="ImageNotFound" />
           </div>
         ) : (
           <button onClick={ButtonClick} className="popularstrategy__btn">
@@ -219,5 +255,3 @@ export const PopularStrategy = ({
     </div>
   );
 };
-
-
