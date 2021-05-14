@@ -3,8 +3,11 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
-import {  OverlayTrigger } from "react-bootstrap";
+import {  OverlayTrigger, Container, Row, Col } from "react-bootstrap";
 import {useState} from "react";
+import { TwitterIcon } from "components/TwitterIcon";
+import { TelegramIcon } from "components/TelegramIcon";
+
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -122,7 +125,38 @@ export const PopularStrategy = ({
   return (
     <div className="popularstrategy">
       <div className="popularstrategy__graph">
-        <div
+      <Container>
+            <Row>
+              <Col sm={9}  onClick={handleCardClick}
+                className={clsx("popularstrategy__title ", {
+                  "cursor-pointer": !comingSoonProp,
+                })}>
+                {icon}
+                {investers ? (
+                <div>
+                  {heading}
+                  <small style={{ fontSize: 14 }} className="ml-3">
+                    <span className="font-weight-bold">{investers}</span> investors
+                  </small>
+                </div>
+              ) : (
+                heading
+              )}
+              </Col>
+              <Col sm={3}>
+              <div style={{display:'flex', justifyContent:'space-around', marginTop: 5}}>
+                {telegram &&
+                  <TelegramIcon fill={'#000'} handle={telegram} height={20} width={20}></TelegramIcon>
+                }
+                {twitter &&
+                  <TwitterIcon fill={'#000'} handle={twitter} height={20} width={20}></TwitterIcon>
+                }
+              </div>
+              </Col>
+            </Row>
+          </Container>
+
+        {/* <div
           onClick={handleCardClick}
           className={clsx("popularstrategy__title ", {
             "cursor-pointer": !comingSoonProp,
@@ -139,7 +173,7 @@ export const PopularStrategy = ({
           ) : (
             heading
           )}
-        </div>
+        </div> */}
         <div className="popularstrategy__graph__wrapper">
         <OverlayTrigger
             placement="top"
