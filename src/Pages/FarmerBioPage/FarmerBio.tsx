@@ -103,7 +103,7 @@ export const FarmerBio = ({
               )}
             </div>
             <Row>
-              <Col md={2}>
+              <Col md={1} className="mr-5">
                 <div className="d-flex align-items-center justify-content-center justify-content-lg-start h-100">
                   <StyledFarmerImage
                     src={picture}
