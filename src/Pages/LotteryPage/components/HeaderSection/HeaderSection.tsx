@@ -58,7 +58,7 @@ export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
 
   return (
     <>
-      <RootHeader />
+      <RootHeader hideBackButton />
       <Header>
         <Container>
           <div className="row">
@@ -74,9 +74,9 @@ export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
                 <Timer timerDate={props.timerDate} />
               </div>
 
-              <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
+              {/* <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
                 Join the lottery
-              </TakePartButton>
+              </TakePartButton> */}
             </div>
           </div>
         </Container>

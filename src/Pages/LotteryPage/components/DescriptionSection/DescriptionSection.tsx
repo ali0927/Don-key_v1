@@ -3,6 +3,7 @@ import { InfoOvalIcon } from "icons";
 import * as React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
+import DonImage from "./donkeyimg.jpg";
 
 const Root = styled.div`
   min-height: 580px;
@@ -55,6 +56,23 @@ const CallToAction = styled(ContainedButton)`
   }
 `;
 
+const ImageIconWrraper = styled.div`
+  height: 72px;
+  width: 72px;
+  background: #FFF471;
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+  
+`;
+const ImageIcon = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 100%;
+`;
+
 export const DescriptionSection: React.FC = () => {
   return (
     <>
@@ -62,19 +80,23 @@ export const DescriptionSection: React.FC = () => {
         <Container className="d-flex justify-content-center h-100 pt-5 pb-5">
           <DescriptionBlock className="m-5">
             <OvalWrapper>
-              <InfoOvalIcon />
+              <ImageIconWrraper>
+                <ImageIcon src={DonImage} alt="donkeyImageNotFount" />
+              </ImageIconWrraper>
             </OvalWrapper>
             <ContentWrapper>
-              <DescriptionTitle>Description</DescriptionTitle>
+              <DescriptionTitle>How it works</DescriptionTitle>
               <Content className="p-5">
-                To participate in the lottery, you need to buy a token, and then
-                invest on their website, after that you become part of the
-                lottery, where after one week it will be announced who won it.
-                The winner will have access to the platform
+                Don-key will open its DAPP with a group of some of the best
+                yield farmers and their strategies. 600 happy Don-key holders,
+                will be able to enter, explore and follow the farmers and their
+                strategies gaining access to passive yield and accelerated $DON
+                token airdrops. Participating in the lottery requires staking
+                $DON tokens in the upcoming lottery pool.
               </Content>
-              <div className="d-flex justify-content-center">
+              {/* <div className="d-flex justify-content-center">
                 <CallToAction>Call To Action</CallToAction>
-              </div>
+              </div> */}
             </ContentWrapper>
           </DescriptionBlock>
         </Container>

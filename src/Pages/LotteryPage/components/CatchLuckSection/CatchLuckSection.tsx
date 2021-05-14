@@ -17,15 +17,15 @@ const Heading = styled.p`
   text-align: left;
 `;
 
-const SubHeading = styled.p`
-  font-family: Roboto;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 32px;
-  letter-spacing: 0em;
-  text-align: left;
-`;
+// const SubHeading = styled.p`
+//   font-family: Roboto;
+//   font-size: 18px;
+//   font-style: normal;
+//   font-weight: 400;
+//   line-height: 32px;
+//   letter-spacing: 0em;
+//   text-align: left;
+// `;
 
 
 
@@ -34,10 +34,10 @@ export const CatchLuckSection: React.FC = () => {
     <>
       <Root>
         <Container>
-          <Heading> Be part of Don-key’s first 600 users to particapite in the Beta version. </Heading>
-          <SubHeading>
+          <Heading> Be part of Don-key’s first 600 users to participate in the Beta DAPP </Heading>
+          {/* <SubHeading>
           Follow our best farmers and gain passive
-          </SubHeading>
+          </SubHeading> */}
 
         
         </Container>

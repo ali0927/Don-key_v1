@@ -17,12 +17,20 @@ import { IStoreState } from "interfaces";
 import { useWeb3 } from "don-components";
 import { ErrorSnackbar } from "components/Snackbars";
 import { useSnackbar } from "notistack";
+import comingsoon from "images/comingsoon.svg";
+import styled from "styled-components";
 
 declare global {
   interface Window {
     ethereum: any;
   }
 }
+
+const ImageCommingSoon = styled.img`
+  position: absolute;
+  top: -25px;
+  right: 3%;
+`;
 
 const useWalletAddress = ({ short = false }) => {
   const user = useSelector((state: any) => state.auth.user);
@@ -159,14 +167,19 @@ function NavBar(props: INavBarProps) {
               </Nav>
             </Navbar.Collapse>
             {variant === "landing" && (
-              <div className="position-relative mr-5 mr-sm-0">
-                <ButtonComponent
-                  onClick={() => history.push("/dashboard")}
-                  variant="colorBlack btn-outline px-4"
-                >
-                  DAPP
-                </ButtonComponent>
-              </div>
+              <>
+                <div className="position-relative mr-5 mr-sm-0">
+                  <ButtonComponent
+                    disabled
+                    // onClick={() => history.push("/dashboard")}
+                    variant="colorBlack btn-outline position-relative px-4"
+                    // className="mt-4"
+                  >
+                    <ImageCommingSoon src={comingsoon} />
+                    DAPP
+                  </ButtonComponent>
+                </div>
+              </>
             )}
 
             {variant === "loggedin" && (
