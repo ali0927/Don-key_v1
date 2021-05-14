@@ -10,12 +10,11 @@ import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
 
-
 const Image = styled.img`
-    width: 45px;
-    height: 45px;
-    border-radius: 5px;
-`
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+`;
 
 export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const { isReady } = props;
@@ -33,43 +32,51 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     history.push(`/dashboard/farmer/${id}`);
   };
 
-  const openInvestmentDialog = (farmerName: string, poolAddress: string)  => () => {
-    // e.stopPropagation();
-    setState({
-      farmerName: farmerName,
-      poolAddress: poolAddress,
-    });
-    setOpenInvestment(true);
-  };
+  const openInvestmentDialog =
+    (farmerName: string, poolAddress: string) => () => {
+      // e.stopPropagation();
+      setState({
+        farmerName: farmerName,
+        poolAddress: poolAddress,
+      });
+      setOpenInvestment(true);
+    };
 
   const closeInvestmentDialog = () => {
     setState({
       farmerName: "",
       poolAddress: "",
     });
-    
+
     setOpenInvestment(false);
   };
-  
+
   const StrategyCard = (leader: IFarmer) => {
-    const APY = leader.apy ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%": "143%";
+    const APY = leader.apy
+      ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
+      : "143%";
     return (
       <>
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
-            contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+            contentTitle={
+              leader.descriptionTitle ? leader.descriptionTitle : ""
+            }
             title={leader.name}
             investers={leader.investors}
             comingsoon={leader.status === "comingsoon"}
             twitter={leader.twitter ? leader.twitter : null}
             telegram={leader.telegram}
-            graph={<GraphIcon />}
+            // graph={<GraphIcon />}
             content={leader.description}
             apy={APY}
-            totalValue={ <PoolAmount poolAddress={leader.poolAddress} />}
+            totalValue={<PoolAmount poolAddress={leader.poolAddress} />}
             onCardClick={handleLeaderClick(leader.GUID)}
-            onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
+            onButtonClick={openInvestmentDialog(
+              leader.name,
+              leader.poolAddress
+            )}
           />
         </div>
         {/* <div className="col-lg-4 col-md-6 mb-3">
@@ -116,17 +123,17 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
 
   return (
     <>
-    <div className="row col-lg-12">
+      <div className="row col-lg-12">
         {leaders.map((leader, index) => {
-          return StrategyCard(leader)
+          return StrategyCard(leader);
         })}
-      {openInvestment && (
-        <InvestmentPopup
-          poolAddress={state.poolAddress}
-          onClose={closeInvestmentDialog}
-        />
-      )}
-    </div>
+        {openInvestment && (
+          <InvestmentPopup
+            poolAddress={state.poolAddress}
+            onClose={closeInvestmentDialog}
+          />
+        )}
+      </div>
     </>
   );
 };

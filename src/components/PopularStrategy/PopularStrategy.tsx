@@ -74,7 +74,7 @@ const DescriptionContent = styled.p`
 `;
 
 export const PopularStrategy = ({
-  graph = <Graph1 />,
+  graph,
   totalValue = "$200 000.32",
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,

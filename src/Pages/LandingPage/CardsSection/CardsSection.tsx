@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import ButtonComponent from "components/Button/Button";
 import comingsoon from "images/comingsoon.svg";
@@ -9,7 +9,6 @@ import image2 from "../popeye.svg";
 import image3 from "../image.svg";
 import { Heading3, LandingParagraph } from "../components";
 import { useHistory } from "react-router";
-
 
 const CardBanner = styled.div`
   position: relative;
@@ -78,16 +77,49 @@ const BorderCurve = styled.div`
   top: 0;
 `;
 
-
-
-
 const ImageCommingSoon = styled.img`
   position: absolute;
   top: -25px;
   right: 3%;
 `;
 
-
+const Graph1 = () => {
+  return (
+    <svg
+      width={251}
+      height={114}
+      viewBox="0 0 251 114"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        opacity={0.2}
+        d="M7.471 76.216l-5.143 3.857v33.429h243.643v-58.5l-3.857 2.571L238 60l-10.672 11.073-7.071-8.357-7.072-23.786-5.785-6.428L203 40.5l-2.672 10.645-10.286 28.928-4.5-3.857L178 58.5l-5.958-7.355H166.9l-10.929 33.428h-4.5L138 3l-3.243-1.355L132 4l-2 6.5-2.958 13.002-10.285 36-5.143-4.5-10.286-26.358L94.9 25.43l-6.429 3.215-12.857 26.357-7.714 5.785-6.429 19.286-3.214 1.929-3.857-5.786L44.114 38.93l-5.143-6.428-5.143 3.214-12.214 21.857-5.786 3.214-8.357 15.429z"
+        fill="url(#prefix__paint0_linear)"
+      />
+      <circle cx={245.188} cy={56.145} r={5} fill="#000" />
+      <path
+        d="M245.641 56.561c-10.32.092-11.474 10.704-18.839 13.712-7.365 3.009-10.44-35.85-18.842-37.14-8.402-1.29-11.364 49.713-18.842 47.053-7.478-2.66-8.039-25.687-17.9-29.438-9.861-3.75-9.02 34.04-17.9 35.1C144.437 86.907 144.586 1 135.418 1s-10.095 58.391-19.785 57.414c-9.689-.978-9.882-33.49-20.284-33.49-10.403 0-13.672 28.87-22.819 31.545-9.145 2.675-6.849 33.171-16.25 23.717-9.4-9.454-8.159-45.41-16.957-47.054-8.8-1.644-11.707 21.381-19.29 25.282C12.448 62.314 8.816 80.3 1.354 80.3"
+        stroke="#000"
+        strokeWidth={2}
+        strokeLinecap="round"
+      />
+      <defs>
+        <linearGradient
+          id="prefix__paint0_linear"
+          x1={124.15}
+          y1={1.645}
+          x2={124.15}
+          y2={101.93}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#646464" />
+          <stop offset={1} stopColor="#646464" stopOpacity={0} />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+};
 
 const Graph2 = () => {
   return (
@@ -170,7 +202,7 @@ export const CardsSection: React.FC = () => {
 
   const handleClick = () => {
     history.push("/strategy");
-  }
+  };
 
   return (
     <>
@@ -195,14 +227,15 @@ export const CardsSection: React.FC = () => {
                   >
                     Discover best farmers
                   </ButtonComponent>
-                  <ImageCommingSoon src={comingsoon} alt="ImageNotFound"/>
+                  <ImageCommingSoon src={comingsoon} alt="ImageNotFound" />
                 </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <div className="col-lg-9 mt-5">
                     <PopularStrategy
-                      icon={<img src={farmerCard1} alt="ImageNotFound"/>}
+                      icon={<img src={farmerCard1} alt="ImageNotFound" />}
                       investers={568}
+                      graph={<Graph1 />}
                       contentTitle="STRATEGY BSC only here pay min gas"
                       title="Don – next_door_neighbor "
                       content="missed the first farming craze, Binance Smart Chain is where it is happening "
@@ -235,7 +268,7 @@ export const CardsSection: React.FC = () => {
                   </div>
                   <div className="mt-4">
                     <PopularStrategy
-                      icon={<img src={image3} alt="ImageNotFound"/>}
+                      icon={<img src={image3} alt="ImageNotFound" />}
                       contentTitle="STRATEGY all or nothing here  "
                       title="Don – Unblinding"
                       graph={<Graph3 />}
@@ -253,7 +286,7 @@ export const CardsSection: React.FC = () => {
             </Row>
           </Container>
         </CardBannerAdvantage>
-      {/* Advantage */}
+        {/* Advantage */}
       </CardBanner>
     </>
   );
