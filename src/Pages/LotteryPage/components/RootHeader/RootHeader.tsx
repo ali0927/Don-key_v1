@@ -1,9 +1,24 @@
 import clsx from "clsx";
 import { LeftArrowMediumSIze, ShareIcon } from "icons";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
-import { TwitterIcon, TwitterShareButton } from "react-share";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappShareButton,
+  EmailShareButton,
+  RedditShareButton,
+  TelegramShareButton,
+  TumblrShareButton,
+  TwitterShareButton,
+  ViberShareButton,
+  EmailIcon,
+  TelegramIcon,
+  WhatsappIcon,
+  RedditIcon,
+} from "react-share";
 
 const IconsWrapper = styled.div`
   width: 100%;
@@ -16,11 +31,16 @@ export const RootHeader: React.FC<{
   onBack?: () => void;
 }> = (props) => {
   const { hideBackButton } = props;
+  const [shareIcons, setShareIcons] = useState(false);
 
   const handleBack = () => {
     if (props.onBack) {
       props.onBack();
     }
+  };
+
+  const toggleShareIcons = () => {
+    setShareIcons(!shareIcons);
   };
 
   return (
@@ -33,9 +53,47 @@ export const RootHeader: React.FC<{
           })}
         >
           {!hideBackButton && <LeftArrowMediumSIze onClick={handleBack} />}
-          <TwitterShareButton url={"https://don-key.finance"} title={"Twitter"}>
-            <ShareIcon />
-          </TwitterShareButton>
+          {!shareIcons && <ShareIcon onClick={toggleShareIcons} />}
+          {shareIcons && (
+            <div style={{ display: "flex" }}>
+              <TwitterShareButton
+                url={"https://don-key.finance"}
+                title={"Twitter"}
+              >
+                <TwitterIcon size={32} round />
+              </TwitterShareButton>
+              <FacebookShareButton
+                url={"https://don-key.finance"}
+                title={"Facebook"}
+              >
+                <FacebookIcon size={32} round />
+              </FacebookShareButton>
+              <EmailShareButton
+                url={"https://don-key.finance"}
+                title={"Facebook Messenger"}
+              >
+                <EmailIcon size={32} round />
+              </EmailShareButton>
+              <WhatsappShareButton
+                url={"https://don-key.finance"}
+                title={"Facebook Messenger"}
+              >
+                <WhatsappIcon size={32} round />
+              </WhatsappShareButton>
+              <TelegramShareButton
+                url={"https://don-key.finance"}
+                title={"Facebook Messenger"}
+              >
+                <TelegramIcon size={32} round />
+              </TelegramShareButton>
+              <RedditShareButton
+                url={"https://don-key.finance"}
+                title={"Facebook Messenger"}
+              >
+                <RedditIcon size={32} round />
+              </RedditShareButton>
+            </div>
+          )}
         </Container>
       </IconsWrapper>
     </>
