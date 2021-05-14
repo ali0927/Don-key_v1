@@ -83,6 +83,14 @@ const SubHeading = styled.p`
   text-align: center;
 `;
 
+const ETH_PRICE = gql`
+  query bundle {
+    bundle(id: "1") {
+      ethPrice
+    }
+  }
+`;
+
 const TOKEN_DATA = gql`
   query tokens($tokenAddress: Bytes!) {
     token(id: $tokenAddress) {
@@ -97,22 +105,28 @@ const TOKEN_DATA = gql`
 `;
 
 export const HexagonSection: React.FC = () => {
-  const { loading, error, data } = useQuery(TOKEN_DATA, {
+  const {data:ethPriceInfo} = useQuery(ETH_PRICE);
+
+  console.log(ethPriceInfo)
+  const {  data } = useQuery(TOKEN_DATA, {
     variables: {
       tokenAddress: "0x6b175474e89094c44da98b954eedeac495271d0f",
     },
   });
 
-  console.log("Data--", ((data && data.token)? data.token : "loading"))
+  console.log("Data--", data && data.token ? data.token : "loading");
 
-  const derivedETH = data && data.token.derivedETH ;
-  const derivedETHMillion = convertToInternationalCurrencySystem(new BigNumber(derivedETH).toNumber()).toString();
+  const derivedETH = data && data.token.derivedETH;
+  const ethPriceInUSD = ethPriceInfo&& ethPriceInfo.bundle.ethPrice;
+  const finalDerivedEth =( parseFloat(derivedETH) * parseFloat(ethPriceInUSD)).toFixed(2);
   const totalLiquidity = data && data.token.totalLiquidity;
-  const totalLiquidityMillion = convertToInternationalCurrencySystem(new BigNumber(totalLiquidity).toNumber()).toString();
-  const tadeVolumeUSD = data && data.token.tradeVolumeUSD ;
-  const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(new BigNumber(tadeVolumeUSD).toNumber()).toString();
-
-
+  const totalLiquidityMillion = convertToInternationalCurrencySystem(
+    new BigNumber(totalLiquidity).toNumber()
+  ).toString();
+  const tadeVolumeUSD = data && data.token.tradeVolumeUSD;
+  const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
+    new BigNumber(tadeVolumeUSD).toNumber()
+  ).toString();
 
   const Hexagon = (heading: string, subheading: string) => {
     return (
@@ -133,17 +147,16 @@ export const HexagonSection: React.FC = () => {
     <>
       <Container className="d-flex justify-content-center">
         <Wrapper className="row">
-        <div className="col-md-4 d-flex justify-content-center">
-            {Hexagon("$"+derivedETHMillion, "$DON price")}
+          <div className="col-md-4 d-flex justify-content-center">
+            {Hexagon("$" + finalDerivedEth, "$DON price")}
           </div>
-          
+
           <div className="col-md-4  d-flex justify-content-center">
-            {Hexagon("$"+totalLiquidityMillion, "24 hours volume")}
+            {Hexagon("$" + totalLiquidityMillion, "24 hours volume")}
           </div>
           <div className="col-md-4 d-flex justify-content-center">
-            {Hexagon("$"+tadeVolumeUSDMillion, "Market Cap")}
+            {Hexagon("$" + tadeVolumeUSDMillion, "Market Cap")}
           </div>
-         
         </Wrapper>
       </Container>
     </>

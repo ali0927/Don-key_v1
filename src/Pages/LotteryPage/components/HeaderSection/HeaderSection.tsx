@@ -17,15 +17,15 @@ const Header = styled.div`
   padding-top: 7%;
 `;
 
-const LaunchingSoon = styled.p`
-  font-family: Roboto;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 18px;
-  letter-spacing: 0.585em;
-  text-align: left;
-`;
+// const LaunchingSoon = styled.p`
+//   font-family: Roboto;
+//   font-size: 15px;
+//   font-style: normal;
+//   font-weight: 500;
+//   line-height: 18px;
+//   letter-spacing: 0.585em;
+//   text-align: left;
+// `;
 
 const MainHeading = styled.p`
   font-family: Roboto;
@@ -67,8 +67,8 @@ export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
             </div>
 
             <div className="col-md-6">
-              <LaunchingSoon>LAUNCHED SOON</LaunchingSoon>
-              <MainHeading>Follow some of Don-key’s best farmers</MainHeading>
+              {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
+              <MainHeading>Whitelist lottery for Beta users opens in</MainHeading>
 
               <div className="row d-flex justify-content-between align-items-center mt-4 mb-4">
                 <Timer timerDate={props.timerDate} />
