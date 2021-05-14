@@ -105,20 +105,22 @@ const TOKEN_DATA = gql`
 `;
 
 export const HexagonSection: React.FC = () => {
-  const {data:ethPriceInfo} = useQuery(ETH_PRICE);
+  const { data: ethPriceInfo } = useQuery(ETH_PRICE);
 
-  console.log(ethPriceInfo)
-  const {  data } = useQuery(TOKEN_DATA, {
+  console.log(ethPriceInfo);
+  const { data } = useQuery(TOKEN_DATA, {
     variables: {
-      tokenAddress: "0x6b175474e89094c44da98b954eedeac495271d0f",
+      tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
 
   console.log("Data--", data && data.token ? data.token : "loading");
 
   const derivedETH = data && data.token.derivedETH;
-  const ethPriceInUSD = ethPriceInfo&& ethPriceInfo.bundle.ethPrice;
-  const finalDerivedEth =( parseFloat(derivedETH) * parseFloat(ethPriceInUSD)).toFixed(2);
+  const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
+  const finalDerivedEth = (
+    parseFloat(derivedETH) * parseFloat(ethPriceInUSD)
+  ).toFixed(2);
   const totalLiquidity = data && data.token.totalLiquidity;
   const totalLiquidityMillion = convertToInternationalCurrencySystem(
     new BigNumber(totalLiquidity).toNumber()

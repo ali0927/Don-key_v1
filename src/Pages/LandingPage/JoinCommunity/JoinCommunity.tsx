@@ -70,7 +70,11 @@ export const JoinCommunity: React.FC = () => {
           <p className="mt-5">Follow us on Social Media</p>
           <ul className="pl-0 mt-3 pb-3">
             <li>
-              <a href="https://medium.com/@don-key.finance">
+              <a
+                href="https://medium.com/@don-key.finance"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <svg
                   width={25}
                   height={24}
@@ -97,7 +101,11 @@ export const JoinCommunity: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="https://t.me/don_key_finance">
+              <a
+                href="https://t.me/don_key_finance"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <svg
                   width={25}
                   height={24}
@@ -124,7 +132,11 @@ export const JoinCommunity: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="https://www.coingecko.com/en/coins/don-key">
+              <a
+                href="https://www.coingecko.com/en/coins/don-key"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <svg
                   id="Layer_1"
                   width={25}
@@ -201,7 +213,11 @@ export const JoinCommunity: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="https://twitter.com/Don_key_finance">
+              <a
+                href="https://twitter.com/Don_key_finance"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <svg
                   width={25}
                   height={24}
@@ -228,7 +244,11 @@ export const JoinCommunity: React.FC = () => {
               </a>
             </li>
             <li>
-              <a href="https://coinmarketcap.com/currencies/don-key/ico/">
+              <a
+                href="https://coinmarketcap.com/currencies/don-key/ico/"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <svg
                   width={25}
                   height={24}
