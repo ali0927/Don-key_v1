@@ -17,9 +17,8 @@ const waitFor = (input: number) => {
   })
 }
 
-const checkIfUserWithDrawlWorked = async(web3: Web3) => {
+const checkIfUserWithDrawlWorked = async(web3: Web3, initialUserBalance: any) => {
   const accounts = await web3.eth.getAccounts();  
-  const initialUserBalance = await getBUSDBalance(web3,accounts[0]);
 
   return new Promise((res,rej) => {
     let retries = 3;
@@ -27,12 +26,13 @@ const checkIfUserWithDrawlWorked = async(web3: Web3) => {
       const newBalance = await getBUSDBalance(web3,accounts[0]);
       const balanceisGreater = new BigNumber(newBalance).gt(initialUserBalance);
       retries--;
+
       if(balanceisGreater){
         res(newBalance);
       }
       if(retries === 0){
         if(!balanceisGreater){
-          rej();
+          rej("Withdrawal failed");
         }
       }
       await waitFor(10000);
@@ -74,9 +74,11 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   const handleWithDraw = async () => {
     let key: string | undefined = undefined;
+    
     try {
       setLoading(true);
       const accounts = await web3.eth.getAccounts();
+      const initialUserBalance = await getBUSDBalance(web3,accounts[0]);
       const pool = await getPoolContract(web3, poolAddress);
       onClose();
       
@@ -85,7 +87,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         persist: true,
       }) as string;
       await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
-      await checkIfUserWithDrawlWorked(web3);
+      await checkIfUserWithDrawlWorked(web3, initialUserBalance);
       await executeDelete({
         data: {
           poolAddress: poolAddress,
@@ -94,12 +96,18 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       if (key) {
         closeSnackbar(key);
       }
+      console.log("first failure check")
       enqueueSnackbar("Withdrawal SuccessFull", {
         content: (key, msg) => <SuccessSnackbar message={msg as string} />,
         persist: false,
       }) as string;
+      
+      console.log("second failure check")
+
       props.onSuccess();
+
     } catch (err) {
+      console.trace(err, "error from withdrawal")
       if (key) {
         closeSnackbar(key);
       }
