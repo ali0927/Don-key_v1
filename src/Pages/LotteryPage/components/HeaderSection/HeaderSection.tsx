@@ -49,6 +49,8 @@ const TakePartButton = styled(ContainedButton)`
   }
 `;
 
+
+
 export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
   const history = useHistory();
 
@@ -62,11 +64,11 @@ export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
       <Header>
         <Container>
           <div className="row">
-            <div className="col-md-6">
+            <div className="col-lg-6">
               <DonkeyLeftPanel />
             </div>
 
-            <div className="col-md-6">
+            <div className="col-lg-6">
               {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
               <MainHeading>Whitelist lottery for Beta users opens in</MainHeading>
 

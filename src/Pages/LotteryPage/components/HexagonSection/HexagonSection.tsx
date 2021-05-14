@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { convertToInternationalCurrencySystem } from "./helpers/convertToInternationalCurrency";
 
 const Wrapper = styled.div`
-  min-width: 770px;
+  max-width: 90%;
   min-height: 300px;
   margin-top: -9%;
   width: 100%;
@@ -147,14 +147,14 @@ export const HexagonSection: React.FC = () => {
     <>
       <Container className="d-flex justify-content-center">
         <Wrapper className="row">
-          <div className="col-md-4 d-flex justify-content-center">
+          <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
             {Hexagon("$" + finalDerivedEth, "$DON price")}
           </div>
 
-          <div className="col-md-4  d-flex justify-content-center">
+          <div className="col-lg-4 col-md-6  mb-2 d-flex justify-content-center">
             {Hexagon("$" + totalLiquidityMillion, "24 hours volume")}
           </div>
-          <div className="col-md-4 d-flex justify-content-center">
+          <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
             {Hexagon("$" + tadeVolumeUSDMillion, "Market Cap")}
           </div>
         </Wrapper>

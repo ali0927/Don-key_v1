@@ -31,7 +31,14 @@ const TimerLabel = styled.p`
   text-align: center;
 `;
 
-export const Timer: React.FC<{timerDate: string}> = (props) => {
+const DotsWrraper = styled.div`
+   display: flex;
+   justify-content: center;
+   width: 100%;
+`;
+
+
+export const Timer: React.FC<{ timerDate: string }> = (props) => {
   const countDownDate = new Date(props.timerDate).getTime();
 
   React.useEffect(() => {
@@ -76,50 +83,53 @@ export const Timer: React.FC<{timerDate: string}> = (props) => {
 
   return (
     <>
-      <div className="col-md-3 d-flex align-items-center d-flex align-items-center">
-        <TimerCard className="mt-2 mb-2">
+  
+        <TimerCard className="col-md-2 d-flex align-items-center d-flex align-items-center mt-2 mb-2 w-100 ">
           <div>
             <TimerNumber id="days">0</TimerNumber>
             <TimerLabel>DAYS</TimerLabel>
           </div>
         </TimerCard>
-        <div className="ml-3">
-          <TimerDots />
-        </div>
-      </div>
+    
 
-      <div className="col-md-3 d-flex align-items-center">
-        <TimerCard className="mt-2 mb-2">
+      <DotsWrraper className="col-md-1 col-sm-12 col-xs-12 col-lg-1">
+        <TimerDots />
+      </DotsWrraper>
+
+     
+        <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
           <div>
             <TimerNumber id="hours">0</TimerNumber>
             <TimerLabel>HOURS</TimerLabel>
           </div>
         </TimerCard>
-        <div className="ml-3">
-          <TimerDots />
-        </div>
-      </div>
+      
 
-      <div className="col-md-3 d-flex align-items-center">
-        <TimerCard className="mt-2 mb-2">
+      <DotsWrraper className="col-md-1 col-sm-12 col-xs-12 col-lg-1">
+        <TimerDots />
+      </DotsWrraper>
+
+   
+        <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
           <div>
             <TimerNumber id="min">0</TimerNumber>
             <TimerLabel>MINUTES</TimerLabel>
           </div>
         </TimerCard>
-        <div className="ml-3">
-          <TimerDots />
-        </div>
-      </div>
+      
 
-      <div className="col-md-3 d-flex align-items-center">
-        <TimerCard className="mt-2 mb-2">
+      <DotsWrraper className="col-md-1 col-sm-12 col-xs-12 col-lg-1">
+        <TimerDots />
+      </DotsWrraper>
+
+     
+        <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
           <div>
             <TimerNumber id="sec">0</TimerNumber>
             <TimerLabel>SECONDS</TimerLabel>
           </div>
         </TimerCard>
-      </div>
+      
     </>
   );
 };

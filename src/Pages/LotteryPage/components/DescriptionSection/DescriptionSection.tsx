@@ -10,7 +10,6 @@ const Root = styled.div`
 `;
 
 const DescriptionBlock = styled.div`
-  min-width: 770px;
   width: 100%;
   min-height: 380px;
   background: #f4e41c;
@@ -78,7 +77,8 @@ export const DescriptionSection: React.FC = () => {
     <>
       <Root>
         <Container className="d-flex justify-content-center h-100 pt-5 pb-5">
-          <DescriptionBlock className="m-5">
+           <div className="row justify-content-center">
+          <DescriptionBlock className="col-md-10  m-5">
             <OvalWrapper>
               <ImageIconWrraper>
                 <ImageIcon src={DonImage} alt="donkeyImageNotFount" />
@@ -99,6 +99,7 @@ export const DescriptionSection: React.FC = () => {
               </div> */}
             </ContentWrapper>
           </DescriptionBlock>
+          </div>
         </Container>
       </Root>
     </>
