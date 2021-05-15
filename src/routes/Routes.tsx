@@ -26,9 +26,17 @@ export default function Routes() {
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/team" children={<TeamPage />} />
         {/* <Route exact path="/lottery" children={<LotteryPage />} />
-        <Route exact path="/lottery/participate" children={<LotteryParticipatePage />} />
-        <Route exact path="/lottery/participate/congratulations" children={<LotteryCongratulations />} />
-        <ProtectedRoute
+        <Route
+          exact
+          path="/lottery/participate"
+          children={<LotteryParticipatePage />}
+        />
+        <Route
+          exact
+          path="/lottery/participate/congratulations"
+          children={<LotteryCongratulations />}
+        /> */}
+        {/*<ProtectedRoute
           exact
           path="/dashboard"
           children={

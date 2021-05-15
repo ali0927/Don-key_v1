@@ -4,8 +4,8 @@ import { LogoWhite } from "./LogoWhite";
 import styled from "styled-components";
 
 const CustomFooter = styled.footer`
-       background: #070602;
-`
+  background: #070602;
+`;
 
 export const Footer = () => {
   return (
@@ -15,6 +15,13 @@ export const Footer = () => {
           <Col>
             <div className="d-flex justify-content-between align-items-center">
               <LogoWhite />
+              <p style={{ color: "#fff" }}>
+                Contract address:
+                <a href="https://etherscan.io/address/0x217ddead61a42369a266f1fb754eb5d3ebadc88a">
+                  {" "}
+                  0x217ddead61a42369a266f1fb754eb5d3ebadc88a
+                </a>
+              </p>
               <p className="text-white ml-5"> All Rights Reserved 2021</p>
             </div>
           </Col>
