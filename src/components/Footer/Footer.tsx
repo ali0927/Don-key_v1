@@ -15,13 +15,30 @@ export const Footer = () => {
           <Col>
             <div className="d-flex justify-content-between align-items-center">
               <LogoWhite />
-              <p style={{ color: "#fff" }}>
-                Contract address:
-                <a href="https://etherscan.io/address/0x217ddead61a42369a266f1fb754eb5d3ebadc88a">
-                  {" "}
-                  0x217ddead61a42369a266f1fb754eb5d3ebadc88a
-                </a>
-              </p>
+              <div>
+                <p style={{ color: "#fff" }}>
+                  ERC-20 Contract address:
+                  <a
+                    href="https://etherscan.io/address/0x217ddead61a42369a266f1fb754eb5d3ebadc88a"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {" "}
+                    0x217ddead61a42369a266f1fb754eb5d3ebadc88a
+                  </a>
+                </p>
+                <p style={{ color: "#fff" }}>
+                  BEP-20 Contract address:
+                  <a
+                    href="https://bscscan.com/address/0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {" "}
+                    0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255
+                  </a>
+                </p>
+              </div>
               <p className="text-white ml-5"> All Rights Reserved 2021</p>
             </div>
           </Col>
