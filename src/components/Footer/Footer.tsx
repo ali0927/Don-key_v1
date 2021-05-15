@@ -15,7 +15,6 @@ export const Footer = () => {
           <Col sm="2">
             <LogoWhite />
           </Col>
-          {/* <div className="d-flex justify-content-between align-items-center"> */}
           <Col sm="8" style={{ textAlign: "center" }}>
             <div>
               <p style={{ color: "#fff" }}>
@@ -45,7 +44,6 @@ export const Footer = () => {
           <Col sm="2" style={{ textAlign: "center" }}>
             <p className="text-white"> All Rights Reserved 2021</p>
           </Col>
-          {/* </div> */}
         </Row>
       </Container>
     </CustomFooter>
