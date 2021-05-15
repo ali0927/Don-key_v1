@@ -7,6 +7,8 @@ import { Container } from "react-bootstrap";
 import { BEP20, EmailIcon, ERCIcon } from "icons";
 import { ContainedButton } from "components/Button";
 import { useHistory } from "react-router";
+import { Column } from "./components/Column/Column";
+import { BlackBoxCard } from "./components/BlackBoxCard/BlackBoxCard";
 interface ILotteryParticipate {
   erc: string;
   bep: string;
@@ -86,6 +88,7 @@ const Caption = styled.p`
   color: #a69a03;
 `;
 
+
 export const LotteryParticipatePage: React.FC = () => {
   const history = useHistory();
 
@@ -96,8 +99,8 @@ export const LotteryParticipatePage: React.FC = () => {
   });
 
   const handleBack = () => {
-    history.push("/lottery")
-  }
+    history.push("/lottery");
+  };
 
   const handleChange =
     (name: keyof ILotteryParticipate) =>
@@ -119,7 +122,7 @@ export const LotteryParticipatePage: React.FC = () => {
 
   return (
     <>
-      <RootHeader onBack={handleBack}/>
+      <RootHeader onBack={handleBack} />
       <Header>
         <Container>
           <div className="row">
@@ -128,6 +131,9 @@ export const LotteryParticipatePage: React.FC = () => {
             </div>
             <div className="col-md-6">
               <Heading>Deposit funds to participate in the lottery</Heading>
+
+           
+
 
               <form onSubmit={handleStack}>
                 <div className="row mt-5 mb-4">
@@ -182,10 +188,14 @@ export const LotteryParticipatePage: React.FC = () => {
                     </Caption>
                   </div>
                 </div>
+
+                <BlackBoxCard/>
                 <StackeButton type="submit" className="mt-5 mb-3">
                   Stake
                 </StackeButton>
               </form>
+
+            
             </div>
           </div>
         </Container>
