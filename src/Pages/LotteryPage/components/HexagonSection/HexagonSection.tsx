@@ -107,12 +107,11 @@ const TOKEN_DATA = gql`
 export const HexagonSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE);
 
-  const {  data } = useQuery(TOKEN_DATA, {
+  const { data } = useQuery(TOKEN_DATA, {
     variables: {
       tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
-
 
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
@@ -152,10 +151,10 @@ export const HexagonSection: React.FC = () => {
           </div>
 
           <div className="col-lg-4 col-md-6  mb-2 d-flex justify-content-center">
-            {Hexagon("$" + totalLiquidityMillion, "24 hours volume")}
+            {Hexagon("$" + tadeVolumeUSDMillion, "24 hours volume")}
           </div>
           <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
-            {Hexagon("$" + tadeVolumeUSDMillion, "Market Cap")}
+            {Hexagon("$" + totalLiquidityMillion, "Market Cap")}
           </div>
         </Wrapper>
       </Container>
