@@ -126,6 +126,11 @@ export const HexagonSection: React.FC = () => {
   const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
     new BigNumber(tadeVolumeUSD).toNumber()
   ).toString();
+  const circulatingSupply = 6378433;
+  console.log(parseFloat(finalDerivedEth));
+  const marketCap = convertToInternationalCurrencySystem(
+    new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
+  ).toString();
 
   const Hexagon = (heading: string, subheading: string) => {
     return (
@@ -151,10 +156,10 @@ export const HexagonSection: React.FC = () => {
           </div>
 
           <div className="col-lg-4 col-md-6  mb-2 d-flex justify-content-center">
-            {Hexagon("$" + tadeVolumeUSDMillion, "24 hours volume")}
+            {Hexagon("$" + tadeVolumeUSDMillion, "24-hour volume")}
           </div>
           <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
-            {Hexagon("$" + totalLiquidityMillion, "Market Cap")}
+            {Hexagon("$" + marketCap, "Market Cap")}
           </div>
         </Wrapper>
       </Container>
