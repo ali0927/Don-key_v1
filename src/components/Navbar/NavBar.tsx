@@ -130,6 +130,8 @@ function NavBar(props: INavBarProps) {
                       Farmers
                     </NavbarLink>
                     <NavbarLink to="/team">Team</NavbarLink>
+                    <NavbarLink target="openInNewTab" to="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c">$DON BEP20</NavbarLink>
+                    <NavbarLink target="openInNewTab" to="https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2">$DON ERC20</NavbarLink>
                   </>
                 )}
 

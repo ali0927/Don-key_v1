@@ -27,13 +27,20 @@ const CustomizedLink = styled(Link)`
 
 `
 
-export const NavbarLink = ({ to, children, linkColor = "black" }: { to: string; children: React.ReactNode; linkColor?: "white" | "black" }) => {
+export const NavbarLink = ({ to, children, linkColor = "black",target="openInCurrentTab" }: { to: string; children: React.ReactNode; linkColor?: "white" | "black";target?: "openInNewTab" | "openInCurrentTab"; }) => {
   const { pathname } = useLocation();
   const history = useHistory();
 
   const handleLinkClick = (to: any) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault();
-    history.push(to);
+    if(target=== "openInCurrentTab"){
+      e.preventDefault();
+      history.push(to);
+    }
+    else {
+      const win = window.open(to, "_blank");
+      //@ts-ignore
+      win.focus();
+    }
 
   }
 
@@ -42,6 +49,7 @@ export const NavbarLink = ({ to, children, linkColor = "black" }: { to: string; 
       className={clsx("pr-md-5", { active: pathname === to, "colorBlack": linkColor === "black", "text-white": linkColor === "white" })}
       // component={Nav.Link}
       to={to}
+      target={target === "openInCurrentTab" ? "_self" : "_blank"}
       onClick={handleLinkClick(to)}
     >
       {children}
