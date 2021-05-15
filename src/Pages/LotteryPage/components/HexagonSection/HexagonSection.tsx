@@ -107,14 +107,12 @@ const TOKEN_DATA = gql`
 export const HexagonSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE);
 
-  console.log(ethPriceInfo);
-  const { data } = useQuery(TOKEN_DATA, {
+  const {  data } = useQuery(TOKEN_DATA, {
     variables: {
       tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
 
-  console.log("Data--", data && data.token ? data.token : "loading");
 
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
