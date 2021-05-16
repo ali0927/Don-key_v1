@@ -43,4 +43,5 @@ export const TeamPage = () => {
   );
 };
 
+
 export default TeamPage;
