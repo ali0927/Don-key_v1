@@ -13,6 +13,8 @@ export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
 export const StakingBSCAddress = WBNBDONLP;
 export const StakingEthAddress = USDTDONLP;
+
+
 let busdtoken: Contract | null = null;
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
@@ -145,7 +147,7 @@ export const getLPTokenContract  = async (web3: Web3, isBSC = false) => {
   const stakingJSON = await import("JsonData/BUSDToken.json");
 
   const contract = new web3.eth.Contract(
-    stakingJSON as any,
+    stakingJSON.default as any,
     isBSC ? WBNBDONLP : USDTDONLP
   );
 

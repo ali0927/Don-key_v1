@@ -1,6 +1,5 @@
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
-import Staking from "JsonData/Staking.json";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { getStakingContract } from "helpers";
 
@@ -14,8 +13,8 @@ export const useStakedLPTokens = () => {
       (async () => {
         const accounts = await web3.eth.getAccounts();
         const stakingContract = await getStakingContract(web3, isBSC);
-        const amount = await stakingContract.methods.stakersInfo(accounts[0]).call();
-        setstakedLpTokens(amount);
+        const staked = await stakingContract.methods.stakersInfo(accounts[0]).call();
+        setstakedLpTokens(staked.amount);
       })();
     }
   }, [isReady]);

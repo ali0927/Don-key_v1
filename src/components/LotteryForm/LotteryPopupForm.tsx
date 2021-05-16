@@ -47,10 +47,10 @@ export const LotteryPopupForm = ({
     const accounts=  await web3.eth.getAccounts();
     const stakingContract = await getStakingContract(web3,isBSC);
     const lpTokenContract = await getLPTokenContract(web3,isBSC);
-    await lpTokenContract.methods.approve(state.amount).send({from: accounts[0]});
-    await stakingContract.methods.stake(state.amount).send({from: accounts[0]});
-
-  };
+    await lpTokenContract.methods.approve(web3.utils.toWei(state.amount)).send({from: accounts[0]});
+    await stakingContract.methods.stake(web3.utils.toWei(state.amount)).send({from: accounts[0]});
+    
+  };  
 
   return (
     <>
@@ -74,7 +74,7 @@ export const LotteryPopupForm = ({
                 value={state.amount}
                 required
                 onChange={handleChange("amount")}
-                placeholder="$ DON 1500"
+                placeholder="USDT/DON LP Tokens"
               />
             </div>
           )}
@@ -92,7 +92,7 @@ export const LotteryPopupForm = ({
                 value={state.amount}
                 required
                 onChange={handleChange("amount")}
-                placeholder="$ DON 1500"
+                placeholder="WBNB/DON Lp Tokens"
               />
             </div>
           )}
