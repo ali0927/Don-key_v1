@@ -41,7 +41,8 @@ export const LotteryParticipatePage: React.FC = () => {
                 </div>
 
                 <Heading className="text-center my-3">
-                  Deposit funds to participate in the lottery
+                  Deposit DON LP token to gain $DON rewards and participate in
+                  the lottery
                 </Heading>
                 <LotteryForm />
               </div>
