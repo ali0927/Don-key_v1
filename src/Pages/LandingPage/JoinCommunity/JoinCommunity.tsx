@@ -71,7 +71,7 @@ export const JoinCommunity: React.FC = () => {
           <ul className="pl-0 mt-3 pb-3">
             <li>
               <a
-                href="https://medium.com/@don-key.finance"
+                href="https://don-key-finance.medium.com/"
                 target="_blank"
                 rel="noreferrer"
               >
