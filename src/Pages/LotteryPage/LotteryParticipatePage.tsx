@@ -3,10 +3,11 @@ import { Footer } from "components/Footer";
 import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { DonKeyLeftToRightFace } from "icons";
-import { useHistory } from "react-router";
 import { NavBar } from "components/Navbar";
 import { Web3Provider } from "don-components";
 import { LotteryForm } from "components/LotteryForm/LotteryForm";
+import { LoadingPage } from "Pages/LoadingPage";
+import { NetworkProvider } from "components/NetworkProvider/NetworkProvider";
 
 const Header = styled.div`
   width: 100%;
@@ -25,30 +26,30 @@ const Heading = styled.p`
 `;
 
 export const LotteryParticipatePage: React.FC = () => {
-
-
   return (
-    <Web3Provider>
-      <NavBar />
-      <Header className="py-5">
-        <Container>
-          <div className="row">
-            <div className="col-md-12">
-              <div className="d-flex align-items-center justify-content-center">
-                <div style={{ width: 100, position: "relative" }}>
-                  <DonKeyLeftToRightFace />
+    <Web3Provider loader={<LoadingPage />}>
+      <NetworkProvider>
+        <NavBar />
+        <Header className="py-5">
+          <Container>
+            <div className="row">
+              <div className="col-md-12">
+                <div className="d-flex align-items-center justify-content-center">
+                  <div style={{ width: 100, position: "relative" }}>
+                    <DonKeyLeftToRightFace />
+                  </div>
                 </div>
-              </div>
 
-              <Heading className="text-center my-3">
-                Deposit funds to participate in the lottery
-              </Heading>
-              <LotteryForm />
+                <Heading className="text-center my-3">
+                  Deposit funds to participate in the lottery
+                </Heading>
+                <LotteryForm />
+              </div>
             </div>
-          </div>
-        </Container>
-      </Header>
-      <Footer />
+          </Container>
+        </Header>
+        <Footer />
+      </NetworkProvider>
     </Web3Provider>
   );
 };

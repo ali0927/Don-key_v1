@@ -118,3 +118,10 @@ export const calculateInitialInvestment = async (
   return amount;
 };
 
+
+
+// export const getStakingContract = async (web3: Web3, id: number) => {
+
+//   const 
+
+// }

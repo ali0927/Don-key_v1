@@ -1,15 +1,15 @@
 import { ContainedButton } from "components/Button";
-import { DonCommonmodal } from "components/DonModal";
 import { useWeb3 } from "don-components";
-import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
-import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
-import { BlackBoxCard } from "Pages/LotteryPage/components/BlackBoxCard/BlackBoxCard";
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
-import { BsQuestion, BsQuestionCircle } from "react-icons/bs";
-import { useHistory } from "react-router";
+import { BsQuestionCircle } from "react-icons/bs";
 import styled from "styled-components";
-const Label = styled.p`
+import { LotteryPopupForm } from "./LotteryPopupForm";
+import { useNetwork } from "components/NetworkProvider/NetworkProvider";
+import BigNumber from "bignumber.js";
+import { useAvailableLpTokens } from "./useAvailableLpTokens";
+import { useStakedLPTokens } from "./useStakedLPTokens";
+import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
+export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
@@ -20,7 +20,7 @@ const Label = styled.p`
   margin-top: 5px;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   height: 38px;
   width: 80%;
   border-radius: 5px;
@@ -35,7 +35,7 @@ const Input = styled.input`
   }
 `;
 
-const InputSmall = styled.input`
+export const InputSmall = styled.input`
   height: 38px;
   border: 0px !important;
   border-radius: 5px;
@@ -54,7 +54,7 @@ const StackeButton = styled(ContainedButton)`
   }
 `;
 
-const Caption = styled.p`
+export const Caption = styled.p`
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
@@ -64,42 +64,6 @@ const Caption = styled.p`
   text-align: left;
   color: #a69a03;
 `;
-
-interface ILotteryParticipate {
-  erc: string;
-  bep: string;
-  email: string;
-}
-
-const useNetwork = () => {
-  const [network, setNetwork] = useState<string | null>(null);
-  const [id, setId] = useState<number | null>(null);
-  const [isReady, setIsReady] = useState(false);
-
-  const web3 = useWeb3();
-
-  useEffect(() => {
-    if (window.ethereum) {
-      window.ethereum.on("chainChanged", () => window.location.reload());
-      web3.eth.getChainId().then((id) => {
-        if (id === 1) {
-          setNetwork("Ethereum Mainnet");
-        } else if (id === 56) {
-          setNetwork("BSC Mainnet");
-        } else {
-          setNetwork("Unsupported Network");
-        }
-        setId(id);
-        setIsReady(true);
-      });
-    }
-  }, []);
-  return {
-    network,
-    id,
-    isReady,
-  };
-};
 
 const WhiteCard = styled.div`
   background-color: #fff;
@@ -111,126 +75,50 @@ const RewardsAmount = styled.div`
   font-size: 4rem;
   font-weight: 800;
   font-family: Roboto;
-  ${(props: { disabled: boolean }) =>
-    props.disabled && `color: #d9d9d9;`}
+  ${(props: { disabled: boolean }) => props.disabled && `color: #d9d9d9;`}
 `;
 
-const LotterPopupForm = ({
-  id,
-  isRegistered,
-  isOpen,
-  onClose,
-  onSuccess,
-}: {
-  id: number | null;
-  isRegistered: boolean;
-  isOpen: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-}) => {
-  const [state, setState] = useState<ILotteryParticipate>({
-    erc: "",
-    bep: "",
-    email: "",
-  });
-  const history = useHistory();
+const PancakeSwapLink =
+  "https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+const UniswapLink =
+  "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
-  const handleChange =
-    (name: keyof ILotteryParticipate) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setState({
-        ...state,
-        [name]: e.target.value,
-      });
-    };
+export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
+export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
-  const handleStack = (
-    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
-    history.push("/lottery/participate/congratulations");
-  };
-
-  const isAmountInputsRequired = state.bep === "" && state.erc === "";
-
-  return (
-    <>
-      <DonCommonmodal
-        variant="v1"
-        size="xs"
-        isOpen={isOpen}
-        title={isRegistered ? "Stake money" : "Register to win Lottery"}
-        icon={<AddIcon />}
-        onClose={onClose}
-      >
-        <div className="row mt-5 mb-4">
-          {id === 1 && (
-            <div className="col-md-3">
-              <div className="d-flex">
-                <ERCIcon />
-                <Label className="ml-2">ERC20</Label>
-              </div>
-              <InputSmall
-                type="number"
-                value={state.erc}
-                required={isAmountInputsRequired}
-                onChange={handleChange("erc")}
-                placeholder="$ DON 1500"
-              />
-            </div>
-          )}
-
-          {id === 56 && (
-            <div className="col-md-3">
-              <div className="d-flex">
-                <BEP20 />
-                <div>
-                  <Label className="ml-2">BEP20</Label>
-                </div>
-              </div>
-              <InputSmall
-                type="number"
-                value={state.bep}
-                required={isAmountInputsRequired}
-                onChange={handleChange("bep")}
-                placeholder="$ DON 1500"
-              />
-            </div>
-          )}
-        </div>
-        {!isRegistered && (
-          <div className="row">
-            <div className="col-md-12">
-              <div className="d-flex">
-                <EmailIcon />
-                <div>
-                  <Label className="ml-2">Email address</Label>
-                </div>
-              </div>
-
-              <Input type="email" required placeholder="donboss@gmail.com" />
-              <Caption className="mt-2">
-                Enter your mail to get the lottery result Don-key
-              </Caption>
-            </div>
-          </div>
-        )}
-        <ContainedButton onClick={onSuccess}>
-          {isRegistered ? "Stake" : "Participate"}
-        </ContainedButton>
-      </DonCommonmodal>
-    </>
-  );
-};
+export const StakingBSCAddress = WBNBDONLP;
+export const StakingEthAddress = USDTDONLP;
 
 export const LotteryForm = () => {
   const [isUserInLottery, setIsUserInLottery] = useState(false);
 
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const { id, isReady, network } = useNetwork();
-  const [] = useState();
+  const { isReady, network, isEthereum } = useNetwork();
+
   const web3 = useWeb3();
+  const { lpTokens } = useAvailableLpTokens();
+  const { lpTokens: stakedTokens } = useStakedLPTokens();
+  const { lpTokens: totalStaked } = useTotalStakedLpTokens();
+
+  const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
+
+  const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
+
+  const stakedTokensInEther = stakedTokens
+    ? web3.utils.fromWei(stakedTokens)
+    : "-";
+  const totalStakedInEther = totalStaked
+    ? web3.utils.fromWei(totalStaked)
+    : "-";
+
+  useEffect(() => {
+    if (stakedTokens) {
+      if (new BigNumber(stakedTokens).gt(0)) {
+        setIsUserInLottery(true);
+      }
+    }
+  }, [stakedTokens]);
 
   return (
     <>
@@ -245,16 +133,24 @@ export const LotteryForm = () => {
               </div>
               <div className="mb-2">
                 - <span className="font-weight-bold">Available LP Tokens</span>{" "}
-                : 1.0000 DON <a href="#"> Get More</a>
+                : {availableTokensinEther} {tokenSymbol}{" "}
+                <a
+                  rel="nofollow"
+                  target="_blank"
+                  href={isEthereum ? UniswapLink : PancakeSwapLink}
+                >
+                  {" "}
+                  Get More
+                </a>
               </div>
               <div className="mb-2">
                 - <span className="font-weight-bold">Staked LP Tokens</span> :
-                10.0000 DON
+                {stakedTokensInEther} {tokenSymbol}
               </div>
               <div className="mb-2">
                 -{" "}
                 <span className="font-weight-bold">Total Staked LP Tokens</span>{" "}
-                : 1000.0000 DON
+                : {totalStakedInEther} {tokenSymbol}
               </div>
               <div className="mb-2">
                 - <span className="font-weight-bold">APY</span> : 112%
@@ -307,8 +203,7 @@ export const LotteryForm = () => {
           </WhiteCard>
         </div>
         {isPopupOpen && (
-          <LotterPopupForm
-            id={id}
+          <LotteryPopupForm
             isOpen={isPopupOpen}
             isRegistered={isUserInLottery}
             onClose={() => setIsPopupOpen(false)}
