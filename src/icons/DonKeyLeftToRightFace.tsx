@@ -4,8 +4,6 @@ import {IIconProps} from "./interfaces";
 export const DonKeyLeftToRightFace =(props: IIconProps) => {
   return (
     <svg
-      width={274}
-      height={349}
       viewBox="0 0 274 349"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
