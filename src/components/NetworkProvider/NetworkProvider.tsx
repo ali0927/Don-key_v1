@@ -7,6 +7,10 @@ type INetworkContext = {
   isEthereum: boolean;
   isBSC: boolean;
 };
+export const NetworksMap = {
+  Ethereum: 1,
+  BSC: 56,
+};
 const NetworkContext = createContext<INetworkContext | null>(null);
 export const useNetwork = () => useContext(NetworkContext) as INetworkContext;
 
@@ -25,9 +29,9 @@ export const NetworkProvider = ({
     if (window.ethereum) {
       window.ethereum.on("chainChanged", () => window.location.reload());
       web3.eth.getChainId().then((id) => {
-        if (id === 1) {
+        if (id === NetworksMap.Ethereum) {
           setNetwork("Ethereum Mainnet");
-        } else if (id === 56) {
+        } else if (id === NetworksMap.BSC) {
           setNetwork("BSC Mainnet");
         } else {
           setNetwork("Unsupported Network");
@@ -37,10 +41,6 @@ export const NetworkProvider = ({
       });
     }
   }, []);
-  const NetworksMap = {
-    Ethereum: 1,
-    BSC: 56,
-  };
 
   return (
     <NetworkContext.Provider

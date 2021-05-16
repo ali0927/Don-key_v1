@@ -4,8 +4,9 @@ import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { useWeb3 } from "don-components";
 import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
 import { useState } from "react";
-import { Label, InputSmall, Input, Caption, StakingEthAddress, StakingBSCAddress } from "./LotteryForm";
+import { Label, InputSmall, Input, Caption } from "./LotteryForm";
 import StakingJSON from "JsonData/Staking.json";
+import { getLPTokenContract, getStakingContract } from "helpers";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -38,13 +39,16 @@ export const LotteryPopupForm = ({
       });
     };
   
-  const handleStake = (
+  const handleStake = async (
     e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
   ) => {
     e.preventDefault();
-    const stakingContract = new web3.eth.Contract(StakingJSON.abi as any, isEthereum ? StakingEthAddress: StakingBSCAddress);
-    
-    stakingContract.methods.stake()
+
+    const accounts=  await web3.eth.getAccounts();
+    const stakingContract = await getStakingContract(web3,isBSC);
+    const lpTokenContract = await getLPTokenContract(web3,isBSC);
+    await lpTokenContract.methods.approve(state.amount).send({from: accounts[0]});
+    await stakingContract.methods.stake(state.amount).send({from: accounts[0]});
 
   };
 

@@ -2,35 +2,26 @@ import { useWeb3 } from "don-components";
 import { useEffect, useMemo, useState } from "react";
 import ERC20 from "JsonData/BUSDToken.json";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
-import { USDTDONLP, WBNBDONLP } from "./LotteryForm";
+import { getLPTokenContract } from "helpers";
 
 export const useAvailableLpTokens = () => {
   const web3 = useWeb3();
-  const { isReady, isEthereum } = useNetwork();
-  const [availableLpToken, setAvailableLpTokens] = useState<string | null>(null);
-
-  const lpTokenContract = useMemo(() => {
-    if (isReady) {
-      return new web3.eth.Contract(
-        ERC20 as any,
-        isEthereum ? USDTDONLP : WBNBDONLP
-      );
-    }
-    return null;
-  }, [isReady, isEthereum]);
+  const { isReady, isEthereum, isBSC } = useNetwork();
+  const [availableLpToken, setAvailableLpTokens] =
+    useState<string | null>(null);
 
   useEffect(() => {
-    if (lpTokenContract) {
+    if (isReady) {
       (async () => {
         const accounts = await web3.eth.getAccounts();
-
+        const lpTokenContract = await getLPTokenContract(web3, isBSC);
         const amount = await lpTokenContract.methods
           .balanceOf(accounts[0])
           .call();
         setAvailableLpTokens(amount);
       })();
     }
-  }, [lpTokenContract]);
+  }, [isReady]);
 
   return {
     isReady: availableLpToken !== null,

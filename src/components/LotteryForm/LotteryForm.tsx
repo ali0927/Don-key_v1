@@ -83,11 +83,7 @@ const PancakeSwapLink =
 const UniswapLink =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
-export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
-export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
-export const StakingBSCAddress = WBNBDONLP;
-export const StakingEthAddress = USDTDONLP;
 
 export const LotteryForm = () => {
   const [isUserInLottery, setIsUserInLottery] = useState(false);

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BigNumber from "bignumber.js";
+import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -7,7 +8,11 @@ const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 const PancakeRouterAddress = "0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F";
 const IBUSDAddress = "0x7C9e73d4C71dae564d41F78d56439bB4ba87592f";
 const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
+export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
+export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
+export const StakingBSCAddress = WBNBDONLP;
+export const StakingEthAddress = USDTDONLP;
 let busdtoken: Contract | null = null;
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
@@ -58,7 +63,9 @@ export const getStrategyContract = async (
 export const getInvestedAmount = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress);
   const accounts = await web3.eth.getAccounts();
-  const investment = await contract.methods.getInvestorClaimableAmount(accounts[0]).call();
+  const investment = await contract.methods
+    .getInvestorClaimableAmount(accounts[0])
+    .call();
   const num = new BigNumber(web3.utils.fromWei(investment, "ether"));
   return num;
 };
@@ -68,15 +75,16 @@ export const getPancakeContract = async (web3: Web3) => {
   return new web3.eth.Contract(pancake.default as any, PancakeRouterAddress);
 };
 
-
-
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress);
   const amount = await contract.methods.getinvestedAmountWithReward().call();
   return amount;
 };
 
-export const getTotalReservePoolValue = async (web3: Web3, poolAddress: string) => {
+export const getTotalReservePoolValue = async (
+  web3: Web3,
+  poolAddress: string
+) => {
   const contract = await getPoolContract(web3, poolAddress);
   const amount = await contract.methods.getCurrentBUSDBalance().call();
   return amount;
@@ -94,7 +102,7 @@ export const getBUSDBalance = async (web3: Web3, address: string) => {
   const BUSDContract = await getBUSDTokenContract(web3);
   const balance = await BUSDContract.methods.balanceOf(address).call();
   return balance;
-}
+};
 
 export const calculateWithdrawAmount = async (
   web3: Web3,
@@ -102,8 +110,10 @@ export const calculateWithdrawAmount = async (
 ) => {
   const accounts = await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress);
-  const claimableAmount = await poolContract.methods.getFinalClaimableAmount(accounts[0]).call();
-  const amount =  new BigNumber(web3.utils.fromWei(claimableAmount)).toString();
+  const claimableAmount = await poolContract.methods
+    .getFinalClaimableAmount(accounts[0])
+    .call();
+  const amount = new BigNumber(web3.utils.fromWei(claimableAmount)).toString();
   return amount;
 };
 
@@ -113,15 +123,31 @@ export const calculateInitialInvestment = async (
 ) => {
   const accounts = await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress);
-  const initialAmount = await poolContract.methods.getUserInvestedAmount(accounts[0]).call();
-  const amount =  new BigNumber(web3.utils.fromWei(initialAmount)).toString();
+  const initialAmount = await poolContract.methods
+    .getUserInvestedAmount(accounts[0])
+    .call();
+  const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
   return amount;
 };
 
+export const getStakingContract = async (web3: Web3, isBSC = false) => {
+  const stakingJSON = await import("JsonData/Staking.json");
 
+  const contract = new web3.eth.Contract(
+    stakingJSON.abi as any,
+    isBSC ? StakingBSCAddress : StakingEthAddress
+  );
 
-// export const getStakingContract = async (web3: Web3, id: number) => {
+  return contract;
+};
 
-//   const 
+export const getLPTokenContract  = async (web3: Web3, isBSC = false) => {
+  const stakingJSON = await import("JsonData/BUSDToken.json");
 
-// }
+  const contract = new web3.eth.Contract(
+    stakingJSON as any,
+    isBSC ? WBNBDONLP : USDTDONLP
+  );
+
+  return contract;
+};
