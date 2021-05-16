@@ -1,6 +1,6 @@
 import { ContainedButton } from "components/Button";
 import { useWeb3 } from "don-components";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BsQuestionCircle } from "react-icons/bs";
 import styled from "styled-components";
 import { LotteryPopupForm } from "./LotteryPopupForm";
@@ -9,6 +9,7 @@ import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
 import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
+import { getStakingContract } from "helpers";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -83,20 +84,15 @@ const PancakeSwapLink =
 const UniswapLink =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
-
-
 export const LotteryForm = () => {
-  const [isUserInLottery, setIsUserInLottery] = useState(false);
-
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const { isReady, network, isEthereum } = useNetwork();
+  const { isReady, network, isEthereum, isBSC } = useNetwork();
 
   const web3 = useWeb3();
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
-
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
@@ -107,13 +103,25 @@ export const LotteryForm = () => {
   const totalStakedInEther = totalStaked
     ? web3.utils.fromWei(totalStaked)
     : "-";
+  const [disableButtons, setDisableButtons] = useState(false);
 
-  useEffect(() => {
-    if (stakedTokens) {
-      if (new BigNumber(stakedTokens).gt(0)) {
-        setIsUserInLottery(true);
-      }
+  const handleUnstake = async () => {
+    const staking = await getStakingContract(web3, isBSC);
+    setDisableButtons(true);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await staking.methods.unstake().send({ from: accounts[0] });
+    } catch (e) {
+    } finally {
+      setDisableButtons(false);
     }
+  };
+
+  const hasStakedAmount = useMemo(() => {
+    if (stakedTokens) {
+      return new BigNumber(stakedTokens).gt(0);
+    }
+    return false;
   }, [stakedTokens]);
 
   return (
@@ -154,8 +162,9 @@ export const LotteryForm = () => {
             </div>
 
             <div className="d-flex align-items-center justify-content-between">
-              {!isUserInLottery ? (
+              {!hasStakedAmount ? (
                 <StackeButton
+                  disabled={disableButtons}
                   onClick={() => setIsPopupOpen(true)}
                   type="submit"
                 >
@@ -163,15 +172,17 @@ export const LotteryForm = () => {
                 </StackeButton>
               ) : (
                 <StackeButton
+                  disabled={disableButtons}
                   onClick={() => setIsPopupOpen(true)}
                   type="submit"
                 >
                   Stake
                 </StackeButton>
               )}
-              {isUserInLottery && (
+              {hasStakedAmount && (
                 <StackeButton
-                  onClick={() => setIsPopupOpen(true)}
+                  disabled={disableButtons}
+                  onClick={handleUnstake}
                   type="submit"
                 >
                   Unstake
@@ -184,13 +195,13 @@ export const LotteryForm = () => {
           <WhiteCard className="h-100 d-flex flex-column justify-content-between">
             <h3 className="text-center">Rewards</h3>
             <div className="mb-2 d-flex flex-column align-items-center ">
-              <RewardsAmount disabled={!isUserInLottery}>
+              <RewardsAmount disabled={!hasStakedAmount}>
                 0.00000 DON
               </RewardsAmount>
             </div>
             <div className="mb-2 d-flex flex-column align-items-center ">
               <ContainedButton
-                disabled={!isUserInLottery}
+                disabled={!hasStakedAmount || disableButtons}
                 style={{ maxWidth: 200 }}
               >
                 Harvest
@@ -201,10 +212,9 @@ export const LotteryForm = () => {
         {isPopupOpen && (
           <LotteryPopupForm
             isOpen={isPopupOpen}
-            isRegistered={isUserInLottery}
+            isRegistered={hasStakedAmount}
             onClose={() => setIsPopupOpen(false)}
             onSuccess={() => {
-              setIsUserInLottery(true);
               setIsPopupOpen(false);
             }}
           />

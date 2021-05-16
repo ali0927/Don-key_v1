@@ -5,7 +5,6 @@ import { useWeb3 } from "don-components";
 import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
 import { useState } from "react";
 import { Label, InputSmall, Input, Caption } from "./LotteryForm";
-import StakingJSON from "JsonData/Staking.json";
 import { getLPTokenContract, getStakingContract } from "helpers";
 export interface ILotteryParticipate {
   amount: string;
@@ -49,7 +48,7 @@ export const LotteryPopupForm = ({
     const lpTokenContract = await getLPTokenContract(web3,isBSC);
     await lpTokenContract.methods.approve(web3.utils.toWei(state.amount)).send({from: accounts[0]});
     await stakingContract.methods.stake(web3.utils.toWei(state.amount)).send({from: accounts[0]});
-    
+    onSuccess();
   };  
 
   return (
@@ -114,7 +113,7 @@ export const LotteryPopupForm = ({
             </div>
           </div>
         )}
-        <ContainedButton onClick={onSuccess}>
+        <ContainedButton onClick={handleStake}>
           {isRegistered ? "Stake" : "Participate"}
         </ContainedButton>
       </DonCommonmodal>
