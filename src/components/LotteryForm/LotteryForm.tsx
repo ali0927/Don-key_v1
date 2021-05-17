@@ -157,14 +157,14 @@ export const LotteryForm = () => {
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens
-    ? parseFloat(web3.utils.fromWei(lpTokens)).toFixed(2)
+    ? parseFloat(web3.utils.fromWei(lpTokens)).toFixed(5)
     : "-";
 
   const stakedTokensInEther = stakedTokens
-    ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(2)
+    ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(5)
     : "-";
   const totalStakedInEther = totalStaked
-    ? parseFloat(web3.utils.fromWei(totalStaked)).toFixed(2)
+    ? parseFloat(web3.utils.fromWei(totalStaked)).toFixed(5)
     : "-";
 
   const rewardsInEther = rewards
@@ -273,12 +273,7 @@ export const LotteryForm = () => {
                 </CardItem>
                 <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">APY</ItemHeading>
-                  <ItemInfo>
-                    {" "}
-                    {apyPercent &&
-                      parseFloat(apyPercent).toLocaleString("en")}{" "}
-                    %
-                  </ItemInfo>
+                  <ItemInfo> {apyPercent}%</ItemInfo>
                 </CardItem>
               </div>
 
