@@ -58,6 +58,9 @@ const StakeButton = styled(ContainedButton)`
   &:hover {
     background: #2e2e2e;
   }
+  &:disabled {
+    background: #2e2e2e;
+  }
 `;
 
 const UnstakeButton = styled(ContainedButton)`
@@ -67,7 +70,10 @@ const UnstakeButton = styled(ContainedButton)`
   padding: 10px 30px;
   border: 1px solid #070602;
   &:hover {
-    background: #fff;
+    background: #d9d9d9;
+  }
+  &:disabled {
+    background: #d9d9d9;
   }
 `;
 export const Caption = styled.p`
@@ -257,8 +263,9 @@ export const LotteryForm = () => {
               </div>
 
               <div className="d-flex align-items-center justify-content-center">
-                <div>
+                <div className="d-flex">
                   <StakeButton
+                    className="mr-3"
                     disabled={disableButtons}
                     onClick={() => setIsPopupOpen(true)}
                     type="submit"
