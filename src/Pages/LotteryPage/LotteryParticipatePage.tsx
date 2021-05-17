@@ -9,21 +9,38 @@ import { LotteryForm } from "components/LotteryForm/LotteryForm";
 import { LoadingPage } from "Pages/LoadingPage";
 import { NetworkProvider } from "components/NetworkProvider/NetworkProvider";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
+import donkeySvg from "./Donkey.svg";
 
 const Header = styled.div`
   width: 100%;
-  min-height: 605px;
   background: #f4e41c;
+  position: relative;
+  overflow: hidden;
 `;
 
 const Heading = styled.p`
-  font-family: Roboto;
+  font-family: "Roboto";
   font-size: 40px;
   font-style: normal;
-  font-weight: 400;
+  text-transform: uppercase;
+  font-weight: 800;
   line-height: 52px;
   letter-spacing: 0em;
   text-align: left;
+  position: relative;
+  z-index: 1;
+  padding: 6rem 0;
+`;
+
+const StyledImage = styled.img`
+  position: absolute;
+  right: -130px;
+  bottom: -130px;
+  max-width: 100%;
+  z-index: 0;
+  @media (max-width: 400px) {
+    transform: scale(0.6);
+  }
 `;
 
 export const LotteryParticipatePage: React.FC = () => {
@@ -32,25 +49,26 @@ export const LotteryParticipatePage: React.FC = () => {
       <NetworkProvider>
         <RefreshProvider>
           <NavBar />
-          <Header className="py-5">
+          <Header className="py-5 ">
             <Container>
               <div className="row">
-                <div className="col-md-12">
-                  <div className="d-flex align-items-center justify-content-center">
-                    <div style={{ width: 100, position: "relative" }}>
-                      <DonKeyLeftToRightFace />
-                    </div>
-                  </div>
-
-                  <Heading className="text-center my-3">
+                <div className="col-md-8">
+                  <Heading className="my-3">
                     Deposit DON LP token to gain $DON rewards and participate in
                     the lottery
                   </Heading>
-                  <LotteryForm />
+                </div>
+                <div className="col-md-4">
+                  <div className="d-flex align-items-center justify-content-center">
+                    <StyledImage src={donkeySvg} />
+                  </div>
                 </div>
               </div>
             </Container>
           </Header>
+
+          <LotteryForm />
+
           <Footer />
         </RefreshProvider>
       </NetworkProvider>
