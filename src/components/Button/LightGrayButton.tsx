@@ -22,8 +22,7 @@ export const ContainedButton = styled.button`
       align-items: center;
       justify-content: center;
       width: 100%;
-      background-color: #000D09; 
-      color: #fff;
+      background-color: #f4e41c; 
       border: none;
       font-size: 14px;
       font-weight: 400;
