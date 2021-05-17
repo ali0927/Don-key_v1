@@ -271,10 +271,10 @@ export const LotteryForm = () => {
                     {totalStakedInEther} {tokenSymbol}
                   </ItemInfo>
                 </CardItem>
-                <CardItem className="col-2">
+                {/* <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">APY</ItemHeading>
                   <ItemInfo> {apyPercent}%</ItemInfo>
-                </CardItem>
+                </CardItem> */}
               </div>
 
               <div className="d-flex align-items-center justify-content-center">
