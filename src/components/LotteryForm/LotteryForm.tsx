@@ -46,6 +46,7 @@ export const InputSmall = styled.input`
   border-radius: 5px;
   padding: 5px;
   padding-left: 15px;
+  width: 100%;
 `;
 
 const StackeButton = styled(ContainedButton)`
