@@ -10,7 +10,8 @@ import {
   getStakingContract,
   StakingEthAddress,
 } from "helpers";
-import { Form, InputGroup, Col } from "react-bootstrap";
+import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
+import { useRefresh } from "./useRefresh";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -19,21 +20,23 @@ export interface ILotteryParticipate {
 export const LotteryPopupForm = ({
   isRegistered,
   isOpen,
+  availableAmount,
   onClose,
   onSuccess,
 }: {
   isRegistered: boolean;
   isOpen: boolean;
+  availableAmount: string | null;
   onClose: () => void;
   onSuccess: () => void;
 }) => {
   const [state, setState] = useState<ILotteryParticipate>({
-    amount: "",
+    amount: availableAmount || "",
     email: "",
   });
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidAmount, setInvalidAmount] = useState(false);
-
+  const { refresh } = useRefresh();
   const web3 = useWeb3();
   const { isBSC, isEthereum } = useNetwork();
   const handleChange =
@@ -51,26 +54,33 @@ export const LotteryPopupForm = ({
       });
     };
 
-  const handleStake = async (
-    e: React.MouseEvent<HTMLButtonElement> | React.FormEvent<HTMLFormElement>
-  ) => {
-    e.preventDefault();
+  const [loading, setLoading] = useState(false);
 
+  const handleStake = async () => {
     const accounts = await web3.eth.getAccounts();
-    const stakingContract = await getStakingContract(web3, isBSC);
-    const lpTokenContract = await getLPTokenContract(web3, isBSC);
-    await lpTokenContract.methods
-      .approve(web3.utils.toWei(state.amount))
-      .send({ from: accounts[0] });
-    await stakingContract.methods
-      .stake(web3.utils.toWei(state.amount))
-      .send({ from: accounts[0] });
-    onSuccess();
+    setLoading(true);
+    try {
+      const stakingContract = await getStakingContract(web3, isBSC);
+      const lpTokenContract = await getLPTokenContract(web3, isBSC);
+      await lpTokenContract.methods
+        .approve(
+          stakingContract.options.address,
+          web3.utils.toWei(state.amount)
+        )
+        .send({ from: accounts[0] });
+      await stakingContract.methods
+        .stake(web3.utils.toWei(state.amount))
+        .send({ from: accounts[0] });
+      refresh();
+      onSuccess();
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (state.amount.length > 0 && state.email.length > 0) {
-      onSuccess();
+      await handleStake();
     } else {
       if (state.email.length === 0) {
         setInvalidEmail(true);
@@ -115,6 +125,7 @@ export const LotteryPopupForm = ({
               </div>
               <InputSmall
                 type="number"
+                disabled={loading}
                 value={state.amount}
                 required
                 onChange={handleChange("amount")}
@@ -138,6 +149,7 @@ export const LotteryPopupForm = ({
                 type="number"
                 value={state.amount}
                 required
+                disabled={loading}
                 onChange={handleChange("amount")}
                 placeholder="WBNB/DON Lp Tokens"
               />
@@ -159,6 +171,7 @@ export const LotteryPopupForm = ({
               <Input
                 type="email"
                 required
+                disabled={loading}
                 placeholder="donboss@gmail.com"
                 onChange={(e) => handleEmailChange(e)}
               />
@@ -171,8 +184,14 @@ export const LotteryPopupForm = ({
             </div>
           </div>
         )}
-        <ContainedButton onClick={() => handleSubmit()}>
-          {isRegistered ? "Stake" : "Participate"}
+        <ContainedButton disabled={loading} onClick={handleSubmit}>
+          {loading ? (
+            <Spinner animation="border" size="sm" />
+          ) : isRegistered ? (
+            "Stake"
+          ) : (
+            "Participate"
+          )}
         </ContainedButton>
       </DonCommonmodal>
     </>

@@ -3,10 +3,12 @@ import { useEffect, useMemo, useState } from "react";
 import ERC20 from "JsonData/BUSDToken.json";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { getLPTokenContract } from "helpers";
+import { useRefresh } from "./useRefresh";
 
 export const useAvailableLpTokens = () => {
   const web3 = useWeb3();
-  const { isReady, isEthereum, isBSC } = useNetwork();
+  const { isReady,  isBSC } = useNetwork();
+  const {dependsOn} = useRefresh();
   const [availableLpToken, setAvailableLpTokens] =
     useState<string | null>(null);
 
@@ -21,7 +23,7 @@ export const useAvailableLpTokens = () => {
         setAvailableLpTokens(amount);
       })();
     }
-  }, [isReady]);
+  }, [isReady,dependsOn]);
 
   return {
     isReady: availableLpToken !== null,
