@@ -11,7 +11,7 @@ export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
 export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
 export const StakingBSCAddress = "0xADfDB11Fc49509de5b22C7fb010517D37C14A50A";
-export const StakingEthAddress = "0xEDB573187B1aED8AAB90ec913118B76428F11931";
+export const StakingEthAddress = "0x4b65F12519A82de23a09865A83672DA308fC76F6";
 
 
 let busdtoken: Contract | null = null;

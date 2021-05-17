@@ -36,7 +36,7 @@ export default function Routes() {
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
         />
-        {/* <ProtectedRoute
+        <ProtectedRoute
           exact
           path="/dashboard"
           children={
@@ -114,7 +114,7 @@ export default function Routes() {
               <SelectTemplate />
             </Suspense>
           }
-        /> */}
+        />
       </Switch>
     </Router>
   );
