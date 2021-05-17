@@ -113,7 +113,9 @@ export const LotteryForm = () => {
     ? web3.utils.fromWei(totalStaked)
     : "-";
 
-  const rewardsInEther = rewards ? web3.utils.fromWei(rewards) : "-";
+  const rewardsInEther = rewards
+    ? parseFloat(web3.utils.fromWei(rewards)).toFixed(3)
+    : "-";
 
   const [disableButtons, setDisableButtons] = useState(false);
 
@@ -155,11 +157,12 @@ export const LotteryForm = () => {
   useEffect(() => {
     (async () => {
       const accounts = await web3.eth.getAccounts();
-      const res = await api.get(`/api/v2/lottery?wallet_address=${accounts[0]}`);
+      const res = await api.get(
+        `/api/v2/lottery?wallet_address=${accounts[0]}`
+      );
       setRegisteredEmail(res.data.data.email);
-
-    })()
-  }, [])
+    })();
+  }, []);
 
   return (
     <>
