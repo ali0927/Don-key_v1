@@ -221,18 +221,18 @@ export const LotteryForm = () => {
 
   return (
     <section style={{ backgroundColor: "#F4F4F4" }}>
-      <div className="container">
+      <div className="container" style={{maxWidth: 1250}} >
         <div className="row py-5">
           <div className="col-md-9">
             <WhiteCard className="h-100 d-flex flex-column justify-content-around">
               <div className="row">
-                <CardItem className="col-2 px-0">
+                <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">
                     Network
                   </ItemHeading>
                   <ItemInfo> {isReady ? network : "-"}</ItemInfo>
                 </CardItem>
-                <CardItem className="col-3">
+                <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">
                     Available LP Tokens
                   </ItemHeading>
@@ -258,7 +258,7 @@ export const LotteryForm = () => {
                     {totalStakedInEther} {tokenSymbol}
                   </ItemInfo>
                 </CardItem>
-                <CardItem className="col-1 px-0">
+                <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">APY</ItemHeading>
                   <ItemInfo> {apyPercent} %</ItemInfo>
                 </CardItem>
