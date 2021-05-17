@@ -10,7 +10,7 @@ import { Footer } from "components/Footer";
 export const LotteryPage: React.FC = () => {
   return (
     <>
-      <HeaderSection timerDate={"May 17, 2021 18:00:00 UTC"} />
+      <HeaderSection timerDate={"May 17, 2021 15:00:00 UTC"} />
       <CatchLuckSection />
       <HexagonSection />
       <DescriptionSection />
