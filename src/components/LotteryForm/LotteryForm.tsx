@@ -151,7 +151,9 @@ export const LotteryForm = () => {
 
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
-  const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
+  const availableTokensinEther = lpTokens
+    ? parseFloat(web3.utils.fromWei(lpTokens)).toFixed(2)
+    : "-";
 
   const stakedTokensInEther = stakedTokens
     ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(2)
