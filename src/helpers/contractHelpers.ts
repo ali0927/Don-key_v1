@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import axios from "axios";
 import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
@@ -9,14 +10,23 @@ const IBUSDAddress = "0x7C9e73d4C71dae564d41F78d56439bB4ba87592f";
 const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
 export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
 export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
-
+export const DONTokenAddressBSC = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
+export const DONTokenAddressEth = "0x217ddead61a42369a266f1fb754eb5d3ebadc88a";
 export const StakingBSCAddress = "0xADfDB11Fc49509de5b22C7fb010517D37C14A50A";
 export const StakingEthAddress = "0x4b65F12519A82de23a09865A83672DA308fC76F6";
-
+export const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
+export const USDTAddressEth = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 
 let busdtoken: Contract | null = null;
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
+
+export const getERCContract = async (web3: Web3, address: string) => {
+  const BUSDJson = await import("JsonData/BUSDToken.json");
+  busdtoken = new web3.eth.Contract(BUSDJson.default as any, address);
+  return busdtoken;
+};
+
 export const getBUSDTokenContract = async (web3: Web3) => {
   if (busdtoken) {
     return busdtoken;
@@ -142,7 +152,7 @@ export const getStakingContract = async (web3: Web3, isBSC = false) => {
   return contract;
 };
 
-export const getLPTokenContract  = async (web3: Web3, isBSC = false) => {
+export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
   const lpJSON = await import("JsonData/BUSDToken.json");
 
   const contract = new web3.eth.Contract(
@@ -151,4 +161,93 @@ export const getLPTokenContract  = async (web3: Web3, isBSC = false) => {
   );
 
   return contract;
+};
+
+export const getDonPrice = async (isBSC = false) => {
+  if (isBSC) {
+    const res = await axios.get(
+      `https://api.pancakeswap.info/api/v2/tokens/${DONTokenAddressBSC}`
+    );
+    return res.data.data.price;
+  }
+
+  const res = await axios.post(
+    `https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2`,
+    {
+      query: `query  {
+    bundle(id: "1") {
+      ethPrice
+    }
+  
+    token(id: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a") {
+      name
+      symbol
+      decimals
+      derivedETH
+    	
+      tradeVolumeUSD
+      totalLiquidity
+    }
+  }`,
+    }
+  );
+  const donPrice = new BigNumber(res.data.data.bundle.ethPrice).multipliedBy(
+    res.data.data.token.derivedETH
+  );
+
+  return donPrice.toFixed(10);
+};
+
+export const toEther = (val: string) => {
+  return Web3.utils.fromWei(val, "ether");
+};
+
+export const getWBNBPrice = async () => {
+  const res = await axios.get(
+    `https://api.pancakeswap.info/api/v2/tokens/${WBNBAddress}`
+  );
+  return res.data.data.price;
+};
+
+export const gettotalSWAPLPoolValue = async (web3: Web3, isBSC = false) => {
+  const tokenContract = await getERCContract(
+    web3,
+    isBSC ? WBNBAddress : USDTAddressEth
+  );
+  const balance = await tokenContract.methods
+    .balanceOf(isBSC ? WBNBDONLP : USDTDONLP)
+    .call();
+  const timestwo = new BigNumber(toEther(balance)).multipliedBy(2);
+  if (isBSC) {
+    const wbnbPrice = await getWBNBPrice();
+    return timestwo.multipliedBy(wbnbPrice);
+  }
+  return timestwo;
+};
+
+export const calculateAPY = async (web3: Web3, isBSC = false) => {
+  const stakingContract = await getStakingContract(web3, isBSC);
+  const lpContract = await getLPTokenContract(web3, isBSC);
+
+  let totalStakedTokens = new BigNumber(
+    toEther(await stakingContract.methods.totalSupply().call())
+  );
+  const donPrice = await getDonPrice(isBSC);
+  const rewardRate = toEther(await stakingContract.methods.rewardRate().call());
+  const totalLPSupply = toEther(await lpContract.methods.totalSupply().call());
+  const totalLPAmount = await gettotalSWAPLPoolValue(web3, isBSC);
+  const SECOND_PER_YEAR = 3600 * 24 * 365.25;
+
+  const nominator = new BigNumber(donPrice)
+    .multipliedBy(SECOND_PER_YEAR)
+    .multipliedBy(rewardRate);
+
+  totalStakedTokens = totalStakedTokens.gt(0)
+    ? totalStakedTokens
+    : new BigNumber("1");
+  const denominator = new BigNumber(totalStakedTokens)
+    .div(totalLPSupply)
+    .multipliedBy(totalLPAmount);
+
+  return nominator.div(denominator).multipliedBy(100);
 };

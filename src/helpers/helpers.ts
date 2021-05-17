@@ -17,6 +17,3 @@ export const getQueryParam = (name: string) => {
 export const tuplify = <T extends any[]>(...args: T) => {
     return args;
 };
-
-
-

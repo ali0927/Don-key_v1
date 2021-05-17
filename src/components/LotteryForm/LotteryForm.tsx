@@ -12,6 +12,7 @@ import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
 import { getStakingContract } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
+import { useApy } from "./useApy";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -96,7 +97,7 @@ export const LotteryForm = () => {
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
   const { rewards } = useEarnedRewards();
-  const {dependsOn, refresh} = useRefresh();
+  const { refresh } = useRefresh();
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
@@ -120,7 +121,7 @@ export const LotteryForm = () => {
       await staking.methods.exit().send({ from: accounts[0] });
     } catch (e) {
     } finally {
-      refresh()
+      refresh();
       setDisableButtons(false);
     }
   };
@@ -140,10 +141,12 @@ export const LotteryForm = () => {
       await staking.methods.getReward().send({ from: accounts[0] });
     } catch (e) {
     } finally {
-      refresh()
+      refresh();
       setDisableButtons(false);
     }
   };
+
+  const { apyPercent } = useApy();
 
   return (
     <>
@@ -154,7 +157,7 @@ export const LotteryForm = () => {
               <h3>User </h3>
               <div className="mb-2">
                 - <span className="font-weight-bold">Network</span> :{" "}
-                {isReady ? network : "-"} <BsQuestionCircle />
+                {isReady ? network : "-"}
               </div>
               <div className="mb-2">
                 - <span className="font-weight-bold">Available LP Tokens</span>{" "}
@@ -178,7 +181,8 @@ export const LotteryForm = () => {
                 : {totalStakedInEther} {tokenSymbol}
               </div>
               <div className="mb-2">
-                - <span className="font-weight-bold">APY</span> : 112%
+                - <span className="font-weight-bold">APY</span> :{" "}
+                {apyPercent || "-"}%
               </div>
             </div>
 
