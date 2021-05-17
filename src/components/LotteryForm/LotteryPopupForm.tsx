@@ -13,6 +13,8 @@ import {
 import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
+import { useNotification } from "components/Notification";
+import { useTransactionNotification } from "./useTransactionNotification";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -35,6 +37,9 @@ export const LotteryPopupForm = ({
     amount: availableAmount || "",
     email: "",
   });
+  const { showProgress, showSuccess, showFailure } =
+    useTransactionNotification();
+
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [invalidAmount, setInvalidAmount] = useState(false);
   const { refresh } = useRefresh();
@@ -63,6 +68,7 @@ export const LotteryPopupForm = ({
     try {
       const stakingContract = await getStakingContract(web3, isBSC);
       const lpTokenContract = await getLPTokenContract(web3, isBSC);
+      showProgress("Approve LP Token for Spend");
       if (!isRegistered) {
         await api.post(`/api/v2/lottery`, {
           wallet_address: accounts[0],
@@ -75,11 +81,15 @@ export const LotteryPopupForm = ({
           web3.utils.toWei(state.amount)
         )
         .send({ from: accounts[0] });
+      showProgress("Stake LP Token on Don-key");
       await stakingContract.methods
         .stake(web3.utils.toWei(state.amount))
         .send({ from: accounts[0] });
+      showSuccess("LP Tokens Staked");
       refresh();
       onSuccess();
+    } catch (e) {
+      showFailure("Transaction Failed");
     } finally {
       setLoading(false);
     }

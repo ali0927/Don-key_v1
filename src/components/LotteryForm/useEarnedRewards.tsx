@@ -9,6 +9,18 @@ export const useEarnedRewards = () => {
   const { isReady, isBSC } = useNetwork();
   const [earned, setEarned] = useState<string | null>(null);
   const {dependsOn} = useRefresh();
+  const [updateRewards, setUpdateRewards] = useState(0);
+
+  const update = () => setUpdateRewards(old => old +1);
+
+  useEffect(() => {
+    const inter = setInterval(() => {
+      update()
+    }, 2000)
+    return () => {
+      clearInterval(inter);
+    }
+  }, [])
   useEffect(() => {
     if (isReady) {
       (async () => {
@@ -18,7 +30,7 @@ export const useEarnedRewards = () => {
         setEarned(rewards);
       })();
     }
-  }, [isReady, dependsOn]);
+  }, [isReady, dependsOn, updateRewards]);
 
   return {
     isReady: earned !== null,

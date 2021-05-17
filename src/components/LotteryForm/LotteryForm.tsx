@@ -14,6 +14,7 @@ import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
 import { api } from "don-utils";
+import { useTransactionNotification } from "./useTransactionNotification";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -99,7 +100,7 @@ export const LotteryForm = () => {
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
   const { rewards } = useEarnedRewards();
   const { refresh } = useRefresh();
-
+  const {showProgress, showSuccess, showFailure} = useTransactionNotification();
   const [registeredEmail, setRegisteredEmail] = useState("");
 
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
@@ -123,9 +124,12 @@ export const LotteryForm = () => {
     const staking = await getStakingContract(web3, isBSC);
     setDisableButtons(true);
     try {
+      showProgress("Unstaking Amount and Harvesting Rewards")
       const accounts = await web3.eth.getAccounts();
       await staking.methods.exit().send({ from: accounts[0] });
+      showSuccess("Transaction Successfull");
     } catch (e) {
+      showFailure("Transaction Failed")
     } finally {
       refresh();
       setDisableButtons(false);
@@ -143,9 +147,12 @@ export const LotteryForm = () => {
     const staking = await getStakingContract(web3, isBSC);
     setDisableButtons(true);
     try {
+      showProgress("Harvesting Rewards")
       const accounts = await web3.eth.getAccounts();
       await staking.methods.getReward().send({ from: accounts[0] });
+      showSuccess("Rewards Harvested")
     } catch (e) {
+      showFailure("Transaction Failed")
     } finally {
       refresh();
       setDisableButtons(false);
