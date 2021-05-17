@@ -145,6 +145,11 @@ export const LotteryPopupForm = ({
                 disabled={loading}
                 value={state.amount}
                 required
+                style={
+                  invalidAmount
+                    ? { border: "2px solid red" }
+                    : { border: "2px solid gray" }
+                }
                 onChange={handleChange("amount")}
                 placeholder="USDT/DON LP Tokens"
               />
@@ -167,6 +172,11 @@ export const LotteryPopupForm = ({
                 value={state.amount}
                 required
                 disabled={loading}
+                style={
+                  invalidAmount
+                    ? { border: "2px solid red" }
+                    : { border: "2px solid gray" }
+                }
                 onChange={handleChange("amount")}
                 placeholder="WBNB/DON Lp Tokens"
               />
@@ -185,11 +195,16 @@ export const LotteryPopupForm = ({
                   <Label className="ml-2">Email address</Label>
                 </div>
               </div>
-              <Input
+              <InputSmall
                 type="email"
                 required
                 disabled={loading}
                 placeholder="donboss@gmail.com"
+                style={
+                  invalidEmail
+                    ? { border: "2px solid red" }
+                    : { border: "2px solid gray" }
+                }
                 onChange={(e) => handleEmailChange(e)}
               />
               {invalidEmail && (

@@ -43,7 +43,6 @@ export const Input = styled.input`
 
 export const InputSmall = styled.input`
   height: 38px;
-  border: 0px !important;
   border-radius: 5px;
   padding: 5px;
   padding-left: 15px;
