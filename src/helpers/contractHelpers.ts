@@ -13,7 +13,7 @@ export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 export const DONTokenAddressBSC = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
 export const DONTokenAddressEth = "0x217ddead61a42369a266f1fb754eb5d3ebadc88a";
 export const StakingBSCAddress = "0xe2451a1F50Dc718eF2b37D2C29539121B18b9d24";
-export const StakingEthAddress = "0x4b65F12519A82de23a09865A83672DA308fC76F6";
+export const StakingEthAddress = "0x21A05270dCeCB199C8E41E8297c15e6e1328aE48";
 export const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 export const USDTAddressEth = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 
