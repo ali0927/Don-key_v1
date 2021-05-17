@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { HeaderSection } from "./components";
-import styled from "styled-components";
 import { CatchLuckSection } from "./components/CatchLuckSection";
-import { Container } from "react-bootstrap";
 import { HexagonSection } from "./components/HexagonSection/HexagonSection";
 import { DescriptionSection } from "./components/DescriptionSection";
-import { Footer } from "components/Footer";
 
+const LotteryStartTime = "May 17, 2021 15:00:00 UTC";
+const LotteryClosingTime = "May 27, 2021 18:00:00 UTC";
 export const LotteryPage: React.FC = () => {
   return (
     <>
-      <HeaderSection timerDate={"May 17, 2021 15:00:00 UTC"} />
+      <HeaderSection
+        timerDate={LotteryStartTime}
+        closingTime={LotteryClosingTime}
+      />
       <CatchLuckSection />
       <HexagonSection />
+
       <DescriptionSection />
     </>
   );

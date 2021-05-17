@@ -1,7 +1,8 @@
 import { ContainedButton } from "components/Button";
 
 import { SmallEllipse } from "icons/SmallEllipse";
-import React from "react";
+import moment from "moment";
+import React, { useEffect, useMemo, useState } from "react";
 import { Col, Container } from "react-bootstrap";
 import { useHistory } from "react-router";
 import styled from "styled-components";
@@ -12,20 +13,11 @@ import { Timer } from "./Timer";
 
 const Header = styled.div`
   width: 100%;
-  min-height: 600px;
+  min-height: 450px;
   background: #f4e41c;
-  padding-top: 7%;
+  padding-top: 2rem;
 `;
 
-// const LaunchingSoon = styled.p`
-//   font-family: Roboto;
-//   font-size: 15px;
-//   font-style: normal;
-//   font-weight: 500;
-//   line-height: 18px;
-//   letter-spacing: 0.585em;
-//   text-align: left;
-// `;
 
 const MainHeading = styled.p`
   font-family: Roboto;
@@ -49,36 +41,58 @@ const TakePartButton = styled(ContainedButton)`
   }
 `;
 
-export const HeaderSection: React.FC<{ timerDate: string }> = (props) => {
+export const HeaderSection: React.FC<{
+  timerDate: string;
+  closingTime: string;
+}> = (props) => {
   const history = useHistory();
-
+  const [update, setUpdated] = useState(false);
+  const hasStarted = useMemo(() => {
+    const difference = moment().utc().diff(moment(props.timerDate));
+    return difference > 0;
+  }, [update]);
   const handleTakePart = () => {
     history.push("/lottery/participate");
   };
-
+  useEffect(() => {
+    const inter = setInterval(() => {
+      setUpdated((val) => !val);
+    }, 1000);
+    return () => {
+      clearInterval(inter);
+    };
+  }, []);
   return (
     <>
       <RootHeader hideBackButton />
       <Header>
         <Container>
           <div className="row">
-            <div className="col-lg-6">
+            <div className="col-lg-6 d-flex justify-content-center">
+              <div className="w-50 position-relative">
               <DonkeyLeftPanel />
+              </div>
             </div>
 
             <div className="col-lg-6">
               {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
               <MainHeading>
-                Whitelist lottery for Beta DAPP opens in
+                {hasStarted
+                  ? "Whitelist lottery is now open, lottery closes in"
+                  : "Whitelist lottery for Beta DAPP opens in"}
               </MainHeading>
 
               <div className="row d-flex justify-content-between align-items-center mt-4 mb-4">
-                <Timer timerDate={props.timerDate} />
+                <Timer
+                  timerDate={hasStarted ? props.closingTime : props.timerDate}
+                />
               </div>
 
-              {/* <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
-                Join the lottery
-              </TakePartButton> */}
+              {hasStarted && (
+                <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
+                  Stake and Participate
+                </TakePartButton>
+              )}
             </div>
           </div>
         </Container>

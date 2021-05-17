@@ -78,7 +78,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [countDownDate]);
 
   return (
     <>
