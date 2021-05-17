@@ -134,6 +134,11 @@ const ItemInfo = styled.p`
   line-height: 19px;
 `;
 
+const PancakeSwapLink =
+  "https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+const UniswapLink =
+  "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
+
 export const LotteryForm = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -221,7 +226,7 @@ export const LotteryForm = () => {
 
   return (
     <section style={{ backgroundColor: "#F4F4F4" }}>
-      <div className="container" style={{maxWidth: 1250}} >
+      <div className="container" style={{ maxWidth: 1250 }}>
         <div className="row py-5">
           <div className="col-md-9">
             <WhiteCard className="h-100 d-flex flex-column justify-content-around">
@@ -239,6 +244,14 @@ export const LotteryForm = () => {
                   <ItemInfo>
                     {availableTokensinEther} {tokenSymbol}
                   </ItemInfo>
+                  <a
+                    rel="nofollow"
+                    target="_blank"
+                    href={isEthereum ? UniswapLink : PancakeSwapLink}
+                  >
+                    {" "}
+                    Get More
+                  </a>
                 </CardItem>
                 <CardItem className="col-3">
                   <ItemHeading className="font-weight-bold">
