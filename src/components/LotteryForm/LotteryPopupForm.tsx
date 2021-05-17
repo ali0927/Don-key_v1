@@ -129,7 +129,7 @@ export const LotteryPopupForm = ({
         variant="v1"
         size="xs"
         isOpen={isOpen}
-        title={isRegistered ? "Stake money" : "Register to win Lottery"}
+        title={isRegistered ? "Stake LP Tokens" : "Register to win Lottery"}
         icon={<AddIcon />}
         onClose={onClose}
       >
