@@ -9,11 +9,13 @@ import {
   getLPTokenContract,
   getStakingContract,
   StakingEthAddress,
+  toEther,
 } from "helpers";
 import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
+import BigNumber from "bignumber.js";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -74,12 +76,18 @@ export const LotteryPopupForm = ({
           email: state.email,
         });
       }
-      await lpTokenContract.methods
-        .approve(
-          stakingContract.options.address,
-          web3.utils.toWei(state.amount)
-        )
-        .send({ from: accounts[0] });
+      let allowance = await lpTokenContract.methods
+        .allowance(accounts[0], stakingContract.options.address)
+        .call();
+
+      if (new BigNumber(web3.utils.toWei(state.amount)).gt(allowance)) {
+        await lpTokenContract.methods
+          .approve(
+            stakingContract.options.address,
+            web3.utils.toWei(state.amount)
+          )
+          .send({ from: accounts[0] });
+      }
       showProgress("Stake LP Token on Don-key");
       await stakingContract.methods
         .stake(web3.utils.toWei(state.amount))
