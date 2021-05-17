@@ -100,7 +100,8 @@ export const LotteryForm = () => {
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
   const { rewards } = useEarnedRewards();
   const { refresh } = useRefresh();
-  const {showProgress, showSuccess, showFailure} = useTransactionNotification();
+  const { showProgress, showSuccess, showFailure } =
+    useTransactionNotification();
   const [registeredEmail, setRegisteredEmail] = useState("");
 
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
@@ -124,12 +125,12 @@ export const LotteryForm = () => {
     const staking = await getStakingContract(web3, isBSC);
     setDisableButtons(true);
     try {
-      showProgress("Unstaking Amount and Harvesting Rewards")
+      showProgress("Unstaking Amount and Harvesting Rewards");
       const accounts = await web3.eth.getAccounts();
       await staking.methods.exit().send({ from: accounts[0] });
       showSuccess("Transaction Successfull");
     } catch (e) {
-      showFailure("Transaction Failed")
+      showFailure("Transaction Failed");
     } finally {
       refresh();
       setDisableButtons(false);
@@ -147,12 +148,12 @@ export const LotteryForm = () => {
     const staking = await getStakingContract(web3, isBSC);
     setDisableButtons(true);
     try {
-      showProgress("Harvesting Rewards")
+      showProgress("Harvesting Rewards");
       const accounts = await web3.eth.getAccounts();
       await staking.methods.getReward().send({ from: accounts[0] });
-      showSuccess("Rewards Harvested")
+      showSuccess("Rewards Harvested");
     } catch (e) {
-      showFailure("Transaction Failed")
+      showFailure("Transaction Failed");
     } finally {
       refresh();
       setDisableButtons(false);
@@ -161,14 +162,14 @@ export const LotteryForm = () => {
 
   const { apyPercent } = useApy();
 
+  const fetchEmail = async () => {
+    const accounts = await web3.eth.getAccounts();
+    const res = await api.get(`/api/v2/lottery?wallet_address=${accounts[0]}`);
+    setRegisteredEmail(res.data.data.email);
+  };
+
   useEffect(() => {
-    (async () => {
-      const accounts = await web3.eth.getAccounts();
-      const res = await api.get(
-        `/api/v2/lottery?wallet_address=${accounts[0]}`
-      );
-      setRegisteredEmail(res.data.data.email);
-    })();
+    fetchEmail();
   }, []);
 
   return (
@@ -263,8 +264,12 @@ export const LotteryForm = () => {
             availableAmount={availableTokensinEther}
             isOpen={isPopupOpen}
             isRegistered={!!registeredEmail}
-            onClose={() => setIsPopupOpen(false)}
+            onClose={() => {
+              setIsPopupOpen(false);
+              fetchEmail();
+            }}
             onSuccess={() => {
+              fetchEmail();
               setIsPopupOpen(false);
             }}
           />

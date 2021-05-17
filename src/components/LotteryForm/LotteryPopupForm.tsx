@@ -13,7 +13,6 @@ import {
 import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
-import { useNotification } from "components/Notification";
 import { useTransactionNotification } from "./useTransactionNotification";
 export interface ILotteryParticipate {
   amount: string;
