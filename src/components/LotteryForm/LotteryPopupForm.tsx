@@ -222,7 +222,7 @@ export const LotteryPopupForm = ({
           ) : isRegistered ? (
             "Stake"
           ) : (
-            "Participate"
+            "Stake & Participate"
           )}
         </ContainedButton>
       </DonCommonmodal>
