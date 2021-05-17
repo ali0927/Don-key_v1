@@ -12,6 +12,7 @@ import {
 } from "helpers";
 import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
+import { api } from "don-utils";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -62,6 +63,12 @@ export const LotteryPopupForm = ({
     try {
       const stakingContract = await getStakingContract(web3, isBSC);
       const lpTokenContract = await getLPTokenContract(web3, isBSC);
+      if (!isRegistered) {
+        await api.post(`/api/v2/lottery`, {
+          wallet_address: accounts[0],
+          email: state.email,
+        });
+      }
       await lpTokenContract.methods
         .approve(
           stakingContract.options.address,
@@ -79,7 +86,8 @@ export const LotteryPopupForm = ({
   };
 
   const handleSubmit = async () => {
-    if (state.amount.length > 0 && state.email.length > 0) {
+    const condition = isRegistered ? isRegistered : state.email.length > 0;
+    if (state.amount.length > 0 && condition) {
       await handleStake();
     } else {
       if (state.email.length === 0) {

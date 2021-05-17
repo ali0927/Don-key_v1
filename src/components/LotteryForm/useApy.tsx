@@ -7,7 +7,7 @@ import { useRefresh } from "./useRefresh";
 export const useApy = () => {
   const [apyPercent, setApyPercent] = useState<string | null>(null);
   const { isBSC, isReady } = useNetwork();
-  const { refresh } = useRefresh();
+  const { dependsOn } = useRefresh();
   const web3 = useWeb3();
   useEffect(() => {
     if (isReady) {
@@ -17,7 +17,7 @@ export const useApy = () => {
         setApyPercent(apy.toFixed(0));
       })();
     }
-  }, [refresh, isReady]);
+  }, [dependsOn, isReady]);
 
   return {
     isReady: apyPercent !== null,

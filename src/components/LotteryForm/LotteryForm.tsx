@@ -13,6 +13,7 @@ import { getStakingContract } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
+import { api } from "don-utils";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -98,6 +99,9 @@ export const LotteryForm = () => {
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
   const { rewards } = useEarnedRewards();
   const { refresh } = useRefresh();
+
+  const [registeredEmail, setRegisteredEmail] = useState("");
+
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
@@ -147,6 +151,15 @@ export const LotteryForm = () => {
   };
 
   const { apyPercent } = useApy();
+
+  useEffect(() => {
+    (async () => {
+      const accounts = await web3.eth.getAccounts();
+      const res = await api.get(`/api/v2/lottery?wallet_address=${accounts[0]}`);
+      setRegisteredEmail(res.data.data.email);
+
+    })()
+  }, [])
 
   return (
     <>
@@ -239,7 +252,7 @@ export const LotteryForm = () => {
           <LotteryPopupForm
             availableAmount={availableTokensinEther}
             isOpen={isPopupOpen}
-            isRegistered={hasStakedAmount}
+            isRegistered={!!registeredEmail}
             onClose={() => setIsPopupOpen(false)}
             onSuccess={() => {
               setIsPopupOpen(false);
