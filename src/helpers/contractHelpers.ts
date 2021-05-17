@@ -217,7 +217,7 @@ export const gettotalSWAPLPoolValue = async (web3: Web3, isBSC = false) => {
   const balance = await tokenContract.methods
     .balanceOf(isBSC ? WBNBDONLP : USDTDONLP)
     .call();
-  const timestwo = new BigNumber(toEther(balance)).multipliedBy(2);
+  const timestwo = new BigNumber(isBSC ? toEther(balance) : new BigNumber(balance).dividedBy(10 ** 6)).multipliedBy(2);
   if (isBSC) {
     const wbnbPrice = await getWBNBPrice();
     return timestwo.multipliedBy(wbnbPrice);
@@ -248,6 +248,5 @@ export const calculateAPY = async (web3: Web3, isBSC = false) => {
   const denominator = new BigNumber(totalStakedTokens)
     .div(totalLPSupply)
     .multipliedBy(totalLPAmount);
-
   return nominator.div(denominator).multipliedBy(100);
 };
