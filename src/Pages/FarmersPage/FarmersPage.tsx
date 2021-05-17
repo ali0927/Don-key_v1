@@ -25,11 +25,12 @@ const TextField = styled(DonKeyTextField)`
 `;
 
 const CustomizedButton = styled(ContainedButton)`
-   font-weight: 500;
-   padding: 12px 15px;
-   font-size: 16px;
-   line-height: 19px;
-   width: auto;`
+  font-weight: 500;
+  padding: 12px 15px;
+  font-size: 16px;
+  line-height: 19px;
+  width: auto;
+`;
 
 const FarmersPage = () => {
   const [state, setState] = React.useState<IFarmerData>({

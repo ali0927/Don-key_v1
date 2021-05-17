@@ -107,10 +107,10 @@ export const LotteryForm = () => {
   const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
 
   const stakedTokensInEther = stakedTokens
-    ? web3.utils.fromWei(stakedTokens)
+    ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(2)
     : "-";
   const totalStakedInEther = totalStaked
-    ? web3.utils.fromWei(totalStaked)
+    ? parseFloat(web3.utils.fromWei(totalStaked)).toFixed(2)
     : "-";
 
   const rewardsInEther = rewards
