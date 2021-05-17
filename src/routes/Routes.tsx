@@ -25,7 +25,7 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/farmers" children={<FarmersPage />} />
         <Route path="/team" children={<TeamPage />} />
-        <Route exact path="/lottery" children={<LotteryPage />} />
+        {/* <Route exact path="/lottery" children={<LotteryPage />} />
         <Route
           exact
           path="/lottery/participate"
@@ -35,7 +35,7 @@ export default function Routes() {
           exact
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
-        />
+        /> */}
         {/* <ProtectedRoute
           exact
           path="/dashboard"
