@@ -10,7 +10,7 @@ const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
 export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
 export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
-export const StakingBSCAddress = "0x08C0F2905eF8EdF88b21cF6f02a048e8B59Da005";
+export const StakingBSCAddress = "0xADfDB11Fc49509de5b22C7fb010517D37C14A50A";
 export const StakingEthAddress = "0xEDB573187B1aED8AAB90ec913118B76428F11931";
 
 
