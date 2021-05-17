@@ -48,17 +48,27 @@ export const InputSmall = styled.input`
   padding-left: 15px;
 `;
 
-const StackeButton = styled(ContainedButton)`
-  height: 45px;
-  width: 160px;
+const StakeButton = styled(ContainedButton)`
   border-radius: 5px;
   background: #070602;
   color: #fff;
+  padding: 10px 30px;
+
   &:hover {
-    background: #070602;
+    background: #2e2e2e;
   }
 `;
 
+const UnstakeButton = styled(ContainedButton)`
+  border-radius: 5px;
+  background: #fff;
+  color: #070602;
+  padding: 10px 30px;
+  border: 1px solid #070602;
+  &:hover {
+    background: #fff;
+  }
+`;
 export const Caption = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -74,19 +84,49 @@ const WhiteCard = styled.div`
   background-color: #fff;
   border-radius: 0.5rem;
   padding: 2rem;
+  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
+    0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+  border-radius: 10px;
 `;
 
 const RewardsAmount = styled.div`
-  font-size: 4rem;
-  font-weight: 800;
+  font-weight: 500;
+  font-size: 50px;
   font-family: Roboto;
   ${(props: { disabled: boolean }) => props.disabled && `color: #d9d9d9;`}
 `;
 
-const PancakeSwapLink =
-  "https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
-const UniswapLink =
-  "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
+const RewardsTitle = styled.h3`
+  font-weight: 800;
+  font-size: 16px;
+`;
+
+const CardItem = styled.div`
+  padding: 1rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  word-break: break-all;
+  justify-content: center;
+  &:not(:last-child) {
+    border-right: 0.5px solid rgb(0 13 9 / 24%);
+  }
+`;
+const ItemHeading = styled.h5`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+`;
+
+const ItemInfo = styled.p`
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 19px;
+`;
 
 export const LotteryForm = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -172,108 +212,109 @@ export const LotteryForm = () => {
   }, []);
 
   return (
-    <>
-      <div className="row py-5">
-        <div className="col-md-6">
-          <WhiteCard className="h-100 d-flex flex-column justify-content-between">
-            <div>
-              <h3>User </h3>
-              <div className="mb-2">
-                - <span className="font-weight-bold">Network</span> :{" "}
-                {isReady ? network : "-"}
+    <section style={{ backgroundColor: "#F4F4F4" }}>
+      <div className="container">
+        <div className="row py-5">
+          <div className="col-md-9">
+            <WhiteCard className="h-100 d-flex flex-column justify-content-around">
+              <div className="row">
+                <CardItem className="col-2">
+                  <ItemHeading className="font-weight-bold">
+                    Network
+                  </ItemHeading>
+                  <ItemInfo> {isReady ? network : "-"}</ItemInfo>
+                </CardItem>
+                <CardItem className="col-3">
+                  <ItemHeading className="font-weight-bold">
+                    Available LP Tokens
+                  </ItemHeading>
+                  <ItemInfo>
+                    {availableTokensinEther} {tokenSymbol}
+                  </ItemInfo>
+                </CardItem>
+                <CardItem className="col-2">
+                  <ItemHeading className="font-weight-bold">
+                    Staked LP Tokens
+                  </ItemHeading>
+                  <ItemInfo>
+                    {" "}
+                    {stakedTokensInEther} {tokenSymbol}
+                  </ItemInfo>
+                </CardItem>
+                <CardItem className="col-3">
+                  <ItemHeading className="font-weight-bold">
+                    Total Staked LP Tokens
+                  </ItemHeading>
+                  <ItemInfo>
+                    {" "}
+                    {totalStakedInEther} {tokenSymbol}
+                  </ItemInfo>
+                </CardItem>
+                <CardItem className="col-2">
+                  <ItemHeading className="font-weight-bold">APY</ItemHeading>
+                  <ItemInfo> {apyPercent} %</ItemInfo>
+                </CardItem>
               </div>
-              <div className="mb-2">
-                - <span className="font-weight-bold">Available LP Tokens</span>{" "}
-                : {availableTokensinEther} {tokenSymbol}{" "}
-                <a
-                  rel="nofollow"
-                  target="_blank"
-                  href={isEthereum ? UniswapLink : PancakeSwapLink}
-                >
-                  {" "}
-                  Get More
-                </a>
-              </div>
-              <div className="mb-2">
-                - <span className="font-weight-bold">Staked LP Tokens</span> :
-                {stakedTokensInEther} {tokenSymbol}
-              </div>
-              <div className="mb-2">
-                -{" "}
-                <span className="font-weight-bold">Total Staked LP Tokens</span>{" "}
-                : {totalStakedInEther} {tokenSymbol}
-              </div>
-              <div className="mb-2">
-                - <span className="font-weight-bold">APY</span> :{" "}
-                {apyPercent || "-"}%
-              </div>
-            </div>
 
-            <div className="d-flex align-items-center justify-content-between">
-              {!hasStakedAmount ? (
-                <StackeButton
-                  disabled={disableButtons}
-                  onClick={() => setIsPopupOpen(true)}
-                  type="submit"
+              <div className="d-flex align-items-center justify-content-center">
+                <div>
+                  <StakeButton
+                    disabled={disableButtons}
+                    onClick={() => setIsPopupOpen(true)}
+                    type="submit"
+                  >
+                    Stake
+                  </StakeButton>
+
+                  {hasStakedAmount && (
+                    <UnstakeButton
+                      disabled={disableButtons}
+                      onClick={handleUnstake}
+                      type="submit"
+                    >
+                      Unstake
+                    </UnstakeButton>
+                  )}
+                </div>
+              </div>
+            </WhiteCard>
+          </div>
+          <div className="col-md-3 mt-3 mt-sm-0">
+            <WhiteCard className="h-100 d-flex flex-column justify-content-between">
+              <RewardsTitle className="text-center">Rewards</RewardsTitle>
+              <div className="mb-2 d-flex flex-column py-4 align-items-center ">
+                <RewardsAmount disabled={!hasStakedAmount}>
+                  {rewardsInEther}
+                </RewardsAmount>
+              </div>
+              <div className="mb-2 d-flex flex-column align-items-center ">
+                <ContainedButton
+                  disabled={!hasStakedAmount || disableButtons}
+                  onClick={handleHarvest}
+                  style={{ maxWidth: 200 }}
                 >
-                  Participate
-                </StackeButton>
-              ) : (
-                <StackeButton
-                  disabled={disableButtons}
-                  onClick={() => setIsPopupOpen(true)}
-                  type="submit"
-                >
-                  Stake
-                </StackeButton>
-              )}
-              {hasStakedAmount && (
-                <StackeButton
-                  disabled={disableButtons}
-                  onClick={handleUnstake}
-                  type="submit"
-                >
-                  Unstake
-                </StackeButton>
-              )}
-            </div>
-          </WhiteCard>
+                  Harvest
+                </ContainedButton>
+              </div>
+            </WhiteCard>
+          </div>
+          {isPopupOpen && (
+            <LotteryPopupForm
+              availableAmount={availableTokensinEther}
+              isOpen={isPopupOpen}
+              isRegistered={!!registeredEmail}
+              onClose={() => {
+                setIsPopupOpen(false);
+                fetchEmail();
+              }}
+              onSuccess={() => {
+                fetchEmail();
+                setIsPopupOpen(false);
+              }}
+            />
+          )}
         </div>
-        <div className="col-md-6">
-          <WhiteCard className="h-100 d-flex flex-column justify-content-between">
-            <h3 className="text-center">Rewards</h3>
-            <div className="mb-2 d-flex flex-column align-items-center ">
-              <RewardsAmount disabled={!hasStakedAmount}>
-                {rewardsInEther} DON
-              </RewardsAmount>
-            </div>
-            <div className="mb-2 d-flex flex-column align-items-center ">
-              <ContainedButton
-                disabled={!hasStakedAmount || disableButtons}
-                onClick={handleHarvest}
-                style={{ maxWidth: 200 }}
-              >
-                Harvest
-              </ContainedButton>
-            </div>
-          </WhiteCard>
-        </div>
-        {isPopupOpen && (
-          <LotteryPopupForm
-            availableAmount={availableTokensinEther}
-            isOpen={isPopupOpen}
-            isRegistered={!!registeredEmail}
-            onClose={() => {
-              setIsPopupOpen(false);
-              fetchEmail();
-            }}
-            onSuccess={() => {
-              fetchEmail();
-              setIsPopupOpen(false);
-            }}
-          />
-        )}
       </div>
-    </>
+    </section>
   );
 };
