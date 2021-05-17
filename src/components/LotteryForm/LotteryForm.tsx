@@ -107,8 +107,7 @@ const CardItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  word-break: break-all;
-  justify-content: center;
+  word-break: break-word;
   &:not(:last-child) {
     border-right: 0.5px solid rgb(0 13 9 / 24%);
   }
@@ -218,7 +217,7 @@ export const LotteryForm = () => {
           <div className="col-md-9">
             <WhiteCard className="h-100 d-flex flex-column justify-content-around">
               <div className="row">
-                <CardItem className="col-2">
+                <CardItem className="col-2 px-0">
                   <ItemHeading className="font-weight-bold">
                     Network
                   </ItemHeading>
@@ -232,7 +231,7 @@ export const LotteryForm = () => {
                     {availableTokensinEther} {tokenSymbol}
                   </ItemInfo>
                 </CardItem>
-                <CardItem className="col-2">
+                <CardItem className="col-3">
                   <ItemHeading className="font-weight-bold">
                     Staked LP Tokens
                   </ItemHeading>
@@ -250,7 +249,7 @@ export const LotteryForm = () => {
                     {totalStakedInEther} {tokenSymbol}
                   </ItemInfo>
                 </CardItem>
-                <CardItem className="col-2">
+                <CardItem className="col-1 px-0">
                   <ItemHeading className="font-weight-bold">APY</ItemHeading>
                   <ItemInfo> {apyPercent} %</ItemInfo>
                 </CardItem>
@@ -279,7 +278,7 @@ export const LotteryForm = () => {
               </div>
             </WhiteCard>
           </div>
-          <div className="col-md-3 mt-3 mt-sm-0">
+          <div className="col-md-3 mt-3 mt-md-0">
             <WhiteCard className="h-100 d-flex flex-column justify-content-between">
               <RewardsTitle className="text-center">Rewards</RewardsTitle>
               <div className="mb-2 d-flex flex-column py-4 align-items-center ">
