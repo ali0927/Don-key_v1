@@ -245,7 +245,7 @@ export const LotteryForm = () => {
                     {availableTokensinEther} {tokenSymbol}
                   </ItemInfo>
                   <a
-                    rel="nofollow"
+                    rel="noreferrer nofollow"
                     target="_blank"
                     href={isEthereum ? UniswapLink : PancakeSwapLink}
                   >
@@ -273,7 +273,12 @@ export const LotteryForm = () => {
                 </CardItem>
                 <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">APY</ItemHeading>
-                  <ItemInfo> {apyPercent} %</ItemInfo>
+                  <ItemInfo>
+                    {" "}
+                    {apyPercent &&
+                      parseFloat(apyPercent).toLocaleString("en")}{" "}
+                    %
+                  </ItemInfo>
                 </CardItem>
               </div>
 
