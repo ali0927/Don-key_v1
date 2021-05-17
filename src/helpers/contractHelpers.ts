@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import BigNumber from "bignumber.js";
-import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -11,8 +10,8 @@ const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
 export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
 export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
 
-export const StakingBSCAddress = WBNBDONLP;
-export const StakingEthAddress = USDTDONLP;
+export const StakingBSCAddress = "0x08C0F2905eF8EdF88b21cF6f02a048e8B59Da005";
+export const StakingEthAddress = "0xEDB573187B1aED8AAB90ec913118B76428F11931";
 
 
 let busdtoken: Contract | null = null;
@@ -133,7 +132,7 @@ export const calculateInitialInvestment = async (
 };
 
 export const getStakingContract = async (web3: Web3, isBSC = false) => {
-  const stakingJSON = await import("JsonData/Staking.json");
+  const stakingJSON = await import("JsonData/KiraStaking.json");
 
   const contract = new web3.eth.Contract(
     stakingJSON.abi as any,
@@ -144,10 +143,10 @@ export const getStakingContract = async (web3: Web3, isBSC = false) => {
 };
 
 export const getLPTokenContract  = async (web3: Web3, isBSC = false) => {
-  const stakingJSON = await import("JsonData/BUSDToken.json");
+  const lpJSON = await import("JsonData/BUSDToken.json");
 
   const contract = new web3.eth.Contract(
-    stakingJSON.default as any,
+    lpJSON.default as any,
     isBSC ? WBNBDONLP : USDTDONLP
   );
 

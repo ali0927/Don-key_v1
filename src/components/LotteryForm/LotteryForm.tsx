@@ -10,6 +10,8 @@ import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
 import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
 import { getStakingContract } from "helpers";
+import { useEarnedRewards } from "./useEarnedRewards";
+import { useRefresh } from "./useRefresh";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -93,6 +95,8 @@ export const LotteryForm = () => {
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { lpTokens: totalStaked } = useTotalStakedLpTokens();
+  const { rewards } = useEarnedRewards();
+  const {dependsOn, refresh} = useRefresh();
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens ? web3.utils.fromWei(lpTokens) : "-";
@@ -103,6 +107,9 @@ export const LotteryForm = () => {
   const totalStakedInEther = totalStaked
     ? web3.utils.fromWei(totalStaked)
     : "-";
+
+  const rewardsInEther = rewards ? web3.utils.fromWei(rewards) : "-";
+
   const [disableButtons, setDisableButtons] = useState(false);
 
   const handleUnstake = async () => {
@@ -110,9 +117,10 @@ export const LotteryForm = () => {
     setDisableButtons(true);
     try {
       const accounts = await web3.eth.getAccounts();
-      await staking.methods.unstake().send({ from: accounts[0] });
+      await staking.methods.exit().send({ from: accounts[0] });
     } catch (e) {
     } finally {
+      refresh()
       setDisableButtons(false);
     }
   };
@@ -123,6 +131,19 @@ export const LotteryForm = () => {
     }
     return false;
   }, [stakedTokens]);
+
+  const handleHarvest = async () => {
+    const staking = await getStakingContract(web3, isBSC);
+    setDisableButtons(true);
+    try {
+      const accounts = await web3.eth.getAccounts();
+      await staking.methods.getReward().send({ from: accounts[0] });
+    } catch (e) {
+    } finally {
+      refresh()
+      setDisableButtons(false);
+    }
+  };
 
   return (
     <>
@@ -196,12 +217,13 @@ export const LotteryForm = () => {
             <h3 className="text-center">Rewards</h3>
             <div className="mb-2 d-flex flex-column align-items-center ">
               <RewardsAmount disabled={!hasStakedAmount}>
-                0.00000 DON
+                {rewardsInEther} DON
               </RewardsAmount>
             </div>
             <div className="mb-2 d-flex flex-column align-items-center ">
               <ContainedButton
                 disabled={!hasStakedAmount || disableButtons}
+                onClick={handleHarvest}
                 style={{ maxWidth: 200 }}
               >
                 Harvest
@@ -211,6 +233,7 @@ export const LotteryForm = () => {
         </div>
         {isPopupOpen && (
           <LotteryPopupForm
+            availableAmount={availableTokensinEther}
             isOpen={isPopupOpen}
             isRegistered={hasStakedAmount}
             onClose={() => setIsPopupOpen(false)}

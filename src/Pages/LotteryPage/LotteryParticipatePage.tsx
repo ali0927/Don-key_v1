@@ -8,6 +8,7 @@ import { Web3Provider } from "don-components";
 import { LotteryForm } from "components/LotteryForm/LotteryForm";
 import { LoadingPage } from "Pages/LoadingPage";
 import { NetworkProvider } from "components/NetworkProvider/NetworkProvider";
+import { RefreshProvider } from "components/LotteryForm/useRefresh";
 
 const Header = styled.div`
   width: 100%;
@@ -29,27 +30,29 @@ export const LotteryParticipatePage: React.FC = () => {
   return (
     <Web3Provider loader={<LoadingPage />}>
       <NetworkProvider>
-        <NavBar />
-        <Header className="py-5">
-          <Container>
-            <div className="row">
-              <div className="col-md-12">
-                <div className="d-flex align-items-center justify-content-center">
-                  <div style={{ width: 100, position: "relative" }}>
-                    <DonKeyLeftToRightFace />
+        <RefreshProvider>
+          <NavBar />
+          <Header className="py-5">
+            <Container>
+              <div className="row">
+                <div className="col-md-12">
+                  <div className="d-flex align-items-center justify-content-center">
+                    <div style={{ width: 100, position: "relative" }}>
+                      <DonKeyLeftToRightFace />
+                    </div>
                   </div>
-                </div>
 
-                <Heading className="text-center my-3">
-                  Deposit DON LP token to gain $DON rewards and participate in
-                  the lottery
-                </Heading>
-                <LotteryForm />
+                  <Heading className="text-center my-3">
+                    Deposit DON LP token to gain $DON rewards and participate in
+                    the lottery
+                  </Heading>
+                  <LotteryForm />
+                </div>
               </div>
-            </div>
-          </Container>
-        </Header>
-        <Footer />
+            </Container>
+          </Header>
+          <Footer />
+        </RefreshProvider>
       </NetworkProvider>
     </Web3Provider>
   );
