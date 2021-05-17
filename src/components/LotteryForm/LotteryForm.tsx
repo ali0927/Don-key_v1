@@ -244,7 +244,7 @@ export const LotteryForm = () => {
             <h3 className="text-center">Rewards</h3>
             <div className="mb-2 d-flex flex-column align-items-center ">
               <RewardsAmount disabled={!hasStakedAmount}>
-                {rewardsInEther} DON
+                {rewardsInEther} $DON
               </RewardsAmount>
             </div>
             <div className="mb-2 d-flex flex-column align-items-center ">
