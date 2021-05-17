@@ -285,7 +285,7 @@ export const LotteryForm = () => {
               <div className="d-flex align-items-center justify-content-center">
                 <div className="d-flex">
                   <StakeButton
-                    className="mr-3"
+                    className="mr-3 mt-2"
                     disabled={disableButtons}
                     onClick={() => setIsPopupOpen(true)}
                     type="submit"
