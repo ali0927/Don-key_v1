@@ -323,7 +323,7 @@ export const LotteryForm = () => {
           </div>
           {isPopupOpen && (
             <LotteryPopupForm
-              availableAmount={availableTokensinEther}
+              availableAmount={lpTokens ? web3.utils.fromWei(lpTokens) : "0"}
               isOpen={isPopupOpen}
               isRegistered={!!registeredEmail}
               onClose={() => {
