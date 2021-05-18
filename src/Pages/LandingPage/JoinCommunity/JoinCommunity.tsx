@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Container } from "react-bootstrap";
+import { FaReddit } from "react-icons/fa";
 import styled from "styled-components";
 
 const CommunityRoot = styled.div`
@@ -241,6 +242,15 @@ export const JoinCommunity: React.FC = () => {
                     </clipPath>
                   </defs>
                 </svg>
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://www.reddit.com/r/don_key_finance/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FaReddit size={24} color="#fff" />
               </a>
             </li>
             <li>
