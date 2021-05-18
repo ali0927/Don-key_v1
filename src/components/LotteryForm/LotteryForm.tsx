@@ -1,21 +1,18 @@
 import { ContainedButton } from "components/Button";
 import { useWeb3 } from "don-components";
 import { useEffect, useMemo, useState } from "react";
-import { BsQuestionCircle } from "react-icons/bs";
 import styled from "styled-components";
 import { LotteryPopupForm } from "./LotteryPopupForm";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
-import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
 import { calculateTVL, getStakingContract } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
-import { isRegExp } from "lodash";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -136,23 +133,23 @@ const ItemInfo = styled.p`
 `;
 
 const PancakeSwapLink =
-  "https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+  "https://exchange.pancakeswap.finance/#/add/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255";
 const UniswapLink =
-  "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
+  "https://app.uniswap.org/#/add/v2/0xdAC17F958D2ee523a2206206994597C13D831ec7/0x217ddEad61a42369A266F1Fb754EB5d3EBadc88a";
 
 const useTVL = () => {
   const [tvl, setTVL] = useState<string | null>(null);
   const web3 = useWeb3();
   const { isBSC, isReady } = useNetwork();
-  const {dependsOn} = useRefresh();
+  const { dependsOn } = useRefresh();
   useEffect(() => {
-    if(isReady){
+    if (isReady) {
       (async () => {
         const tvl = await calculateTVL(web3, isBSC);
         setTVL(tvl);
       })();
     }
-  }, [isReady,dependsOn]);
+  }, [isReady, dependsOn]);
 
   return { tvl };
 };
@@ -180,7 +177,6 @@ export const LotteryForm = () => {
   const stakedTokensInEther = stakedTokens
     ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(5)
     : "-";
-
 
   const rewardsInEther = rewards
     ? parseFloat(web3.utils.fromWei(rewards)).toFixed(3)
@@ -264,7 +260,6 @@ export const LotteryForm = () => {
                     target="_blank"
                     href={isEthereum ? UniswapLink : PancakeSwapLink}
                   >
-                    {" "}
                     Get More
                   </a>
                 </CardItem>
@@ -279,7 +274,15 @@ export const LotteryForm = () => {
                 </CardItem>
                 <CardItem className="col-3">
                   <ItemHeading className="font-weight-bold">TVL</ItemHeading>
-                  <ItemInfo> {tvl ? tvl : "-"}$</ItemInfo>
+                  <ItemInfo>
+                    {" "}
+                    {tvl
+                      ? new BigNumber(tvl).toNumber().toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })
+                      : "-"}
+                  </ItemInfo>
                 </CardItem>
 
                 <CardItem className="col-2">

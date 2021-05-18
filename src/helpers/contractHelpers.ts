@@ -266,5 +266,5 @@ export const calculateTVL = async (web3: Web3, isBSC = false) => {
   return totalStakedTokens
     .dividedBy(totalLPSupply)
     .multipliedBy(totalLPAmount)
-    .toFixed(0);
+    .toFixed(2);
 };
