@@ -30,7 +30,7 @@ export default function Routes() {
           path="/lottery/participate"
           children={<LotteryParticipatePage />}
         />
-        {/* <Route
+        <Route
           exact
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
@@ -113,7 +113,7 @@ export default function Routes() {
               <SelectTemplate />
             </Suspense>
           }
-        /> */}
+        />
       </Switch>
     </Router>
   );
