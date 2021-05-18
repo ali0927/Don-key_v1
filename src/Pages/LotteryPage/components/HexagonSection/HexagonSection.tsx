@@ -5,6 +5,7 @@ import React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
 import { convertToInternationalCurrencySystem } from "./helpers/convertToInternationalCurrency";
+import { useAxios } from "hooks/useAxios";
 
 const Wrapper = styled.div`
   max-width: 90%;
@@ -106,6 +107,10 @@ const TOKEN_DATA = gql`
 
 export const HexagonSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE);
+  const [{ data: coingecko }] = useAxios({
+    method: "GET",
+    url: "https://api.coingecko.com/api/v3/coins/don-key",
+  });
 
   const { data } = useQuery(TOKEN_DATA, {
     variables: {
@@ -113,6 +118,11 @@ export const HexagonSection: React.FC = () => {
     },
   });
 
+  const volume24hrs = coingecko
+    ? convertToInternationalCurrencySystem(
+        new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
+      ).toString()
+    : 0;
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
@@ -127,7 +137,6 @@ export const HexagonSection: React.FC = () => {
     new BigNumber(tadeVolumeUSD).toNumber()
   ).toString();
   const circulatingSupply = 6378433;
-  console.log(parseFloat(finalDerivedEth));
   const marketCap = convertToInternationalCurrencySystem(
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
@@ -156,7 +165,7 @@ export const HexagonSection: React.FC = () => {
           </div>
 
           <div className="col-lg-4 col-md-6  mb-2 d-flex justify-content-center">
-            {Hexagon("$" + tadeVolumeUSDMillion, "24-hour volume")}
+            {Hexagon("$" + volume24hrs, "24-hour volume")}
           </div>
           <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
             {Hexagon("$" + marketCap, "Market Cap")}
