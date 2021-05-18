@@ -4,29 +4,30 @@ import { IDonKeyFieldInfoState, IDonKeyFieldProps } from "./interfaces";
 import styled from "styled-components";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import clsx from "clsx";
+import { ProvidedRequiredArgumentsRule } from "graphql";
 
 const FormGroup = styled(Form.Group)`
   & textarea::-webkit-scrollbar {
     width: 4px !important;
     border-radius: 10px;
-  };
+  }
 
   /* Track */
   & textarea::-webkit-scrollbar-track {
     background: #f1f1f1;
-  };
+  }
 
   /* Handle */
   & textarea::-webkit-scrollbar-thumb {
     background: #bbb;
     border-radius: 10px;
-  };
+  }
 
   /* Handle on hover */
   & textarea::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
-`
+`;
 
 const Label = styled(Form.Label)`
   font-family: Roboto;
@@ -59,7 +60,7 @@ const FormControl = styled(Form.Control)`
   &:focus {
     box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
     outline: none;
-  };
+  }
 `;
 
 const MultilineFormControl = styled(FormControl)`
@@ -135,6 +136,7 @@ export const DonKeyTextField: React.FC<IDonKeyFieldProps> = (props) => {
           placeholder={placeholder}
           onFocus={handleOnFocus}
           onBlur={handleBlur}
+          required={isRequired}
         />
       );
     }
@@ -155,11 +157,10 @@ export const DonKeyTextField: React.FC<IDonKeyFieldProps> = (props) => {
 
   return (
     <>
-
       <FormGroup className={clsx("", props.className)} controlId={label}>
         <Label>
           {label}
-          {isRequired && <span>Required</span>}
+          {isRequired && ` (required)`}
         </Label>
         <div className="position-relative">
           {formControl()}
@@ -172,7 +173,6 @@ export const DonKeyTextField: React.FC<IDonKeyFieldProps> = (props) => {
         </div>
         {info && <Caption info={info.type}>{info.msg}</Caption>}
       </FormGroup>
-     
     </>
   );
 };

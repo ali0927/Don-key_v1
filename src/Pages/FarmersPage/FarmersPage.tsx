@@ -73,22 +73,24 @@ const FarmersPage = () => {
                       </p>
                       <TextField
                         label="Nick name"
-                        value={""}
+                        value={state.name}
                         placeholder="Nick name"
                         onChange={handleChange("name")}
+                        isRequired
                       />
 
                       <TextField
                         label="Telegram"
-                        value={""}
+                        value={state.telegram}
                         placeholder="Telegram User"
                         onChange={handleChange("telegram")}
+                        isRequired
                       />
 
                       <TextField
                         multiline
                         label="What kind of Don-key are you?"
-                        value={""}
+                        value={state.donkey}
                         rows={3}
                         placeholder="I'm the kind of farmer you all want to farm"
                         onChange={handleChange("donkey")}
