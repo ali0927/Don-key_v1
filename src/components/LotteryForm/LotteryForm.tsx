@@ -9,12 +9,13 @@ import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
 import { useTotalStakedLpTokens } from "./useTotalStakedLpTokens";
-import { getStakingContract } from "helpers";
+import { calculateTVL, getStakingContract } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
+import { isRegExp } from "lodash";
 export const Label = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -139,6 +140,23 @@ const PancakeSwapLink =
 const UniswapLink =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
+const useTVL = () => {
+  const [tvl, setTVL] = useState<string | null>(null);
+  const web3 = useWeb3();
+  const { isBSC, isReady } = useNetwork();
+  const {dependsOn} = useRefresh();
+  useEffect(() => {
+    if(isReady){
+      (async () => {
+        const tvl = await calculateTVL(web3, isBSC);
+        setTVL(tvl);
+      })();
+    }
+  }, [isReady,dependsOn]);
+
+  return { tvl };
+};
+
 export const LotteryForm = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -147,13 +165,12 @@ export const LotteryForm = () => {
   const web3 = useWeb3();
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
-  const { lpTokens: totalStaked } = useTotalStakedLpTokens();
   const { rewards } = useEarnedRewards();
   const { refresh } = useRefresh();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
   const [registeredEmail, setRegisteredEmail] = useState("");
-
+  const { tvl } = useTVL();
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens
@@ -163,9 +180,7 @@ export const LotteryForm = () => {
   const stakedTokensInEther = stakedTokens
     ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(5)
     : "-";
-  const totalStakedInEther = totalStaked
-    ? parseFloat(web3.utils.fromWei(totalStaked)).toFixed(5)
-    : "-";
+
 
   const rewardsInEther = rewards
     ? parseFloat(web3.utils.fromWei(rewards)).toFixed(3)
@@ -263,13 +278,8 @@ export const LotteryForm = () => {
                   </ItemInfo>
                 </CardItem>
                 <CardItem className="col-3">
-                  <ItemHeading className="font-weight-bold">
-                    Total Staked LP Tokens
-                  </ItemHeading>
-                  <ItemInfo>
-                    {" "}
-                    {totalStakedInEther} {tokenSymbol}
-                  </ItemInfo>
+                  <ItemHeading className="font-weight-bold">TVL</ItemHeading>
+                  <ItemInfo> {tvl ? tvl : "-"}$</ItemInfo>
                 </CardItem>
 
                 <CardItem className="col-2">
