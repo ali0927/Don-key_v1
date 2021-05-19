@@ -23,7 +23,7 @@ export const DonTokenSection: React.FC = () => {
                 <LandingParagraph>
                   DON tokens are airdropped to all farmers based on monthly
                   trading results and take into account: ROI, Risk level, asset
-                  exposer and more. the better you are , the more you get
+                  exposure and more. the better you are , the more you get
                 </LandingParagraph>
                 <h5 className="mt-4">Yield and Dividend </h5>
                 <LandingParagraph>
