@@ -10,7 +10,6 @@ import {
   Ellipsce5,
 } from "../HeaderSection/Ellipses";
 import donkeySvg from "../../../../Pages/LotteryPage/Donkey.svg";
-import DonkeyRightToLeft from "../../../../Pages/LotteryPage/DonkeyRightToLeft.svg";
 
 const DonkeyWrapper = styled.div`
   width: 100%;
@@ -28,6 +27,9 @@ const StyledImage = styled.img`
   transform: scaleX(-1);
   @media (max-width: 400px) {
     transform: scale(0.6);
+  }
+  @media (max-width: 10250px) {
+    position: relative;
   }
 `;
 
