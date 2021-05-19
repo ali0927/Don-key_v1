@@ -132,7 +132,7 @@ function NavBar(props: INavBarProps) {
                     <NavbarLink to="/team">Team</NavbarLink>
                     <NavbarLink
                       target="openInNewTab"
-                      to="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+                      to="https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255&outputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
                     >
                       $DON BEP20
                     </NavbarLink>
