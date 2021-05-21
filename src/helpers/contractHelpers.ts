@@ -96,8 +96,7 @@ export const getTotalReservePoolValue = async (
   web3: Web3,
   poolAddress: string
 ) => {
-  const contract = await getPoolContract(web3, poolAddress);
-  const amount = await contract.methods.getCurrentBUSDBalance().call();
+  const amount = await (await getBUSDTokenContract(web3)).methods.balanceOf(poolAddress).call();
   return amount;
 };
 
