@@ -28,7 +28,7 @@ export const DonTokenSection: React.FC = () => {
                 <h5 className="mt-4">Yield and Dividend </h5>
                 <LandingParagraph>
                   DON tokens represents the farmer’s yield based on his own
-                  stratagies, in addition to a proportionate monthly dividend
+                  strategies, in addition to a proportionate monthly dividend
                   from Don-key’s total monthly yield
                 </LandingParagraph>
                 <h5 className="mt-4">Exchangeable</h5>
