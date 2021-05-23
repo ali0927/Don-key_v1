@@ -182,12 +182,12 @@ function NavBar(props: INavBarProps) {
               <>
                 <div className="position-relative mr-5 mr-sm-0">
                   <ButtonComponent
-                    disabled
-                    // onClick={() => history.push("/dashboard")}
+                    // disabled
+                    onClick={() => history.push("/dashboard")}
                     variant="colorBlack btn-outline position-relative px-4"
                     // className="mt-4"
                   >
-                    <ImageCommingSoon src={comingsoon} />
+                    {/* <ImageCommingSoon src={comingsoon} /> */}
                     DAPP
                   </ButtonComponent>
                 </div>
