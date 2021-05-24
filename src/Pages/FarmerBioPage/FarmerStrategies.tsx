@@ -38,11 +38,16 @@ const AddNewStrategy = ({
   );
 };
 
-const StyledHeading = styled.h2`
+const StyledHeading = styled.p`
   font-family: "Roboto";
-  font-size: 30px;
+  font-size: 40px;
 `;
 
+const DescriptionTitle = styled.p`
+  font-family: "Roboto";
+  font-size: 20px;
+  margin-bottom: 0px;
+`;
 
 export const FarmerStrategies = ({
   farmerId,
@@ -124,12 +129,12 @@ export const FarmerStrategies = ({
                   </>
                 )}
               </Col>
-              <Container className="mt-2">
+              <Container className="mt-2 mb-4">
                 <Row>
                   <Col md={12} lg={12}>
-                    <h4 className="">Description</h4>
+                    <DescriptionTitle>Description</DescriptionTitle>
                     <p style={{ fontSize: 15 }}>
-                      <ShowMoreContent length={100} content={strategiesData.data[0].strategyDescription} />
+                      <ShowMoreContent length={80} content={strategiesData.data[0].strategyDescription || "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"} />
                     </p>
                   </Col>
                 </Row>

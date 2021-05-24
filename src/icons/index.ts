@@ -36,3 +36,8 @@ export * from "./EmailIcon";
 export * from "./LaptopRocketIcon";
 export * from "./DonKeyLabel";
 export * from "./BEP20";
+export * from "./DotsIcon";
+export * from "./StatisticRoi";
+export * from "./Statistic";
+export * from "./AwardIcon";
+export * from "./Followers";

@@ -12,7 +12,7 @@ import { useAxios } from "hooks/useAxios";
 import moment from "moment";
 import { useState } from "react";
 import { IStrategy } from "interfaces";
-import { Spinner } from "react-bootstrap";
+import { Form, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 
 const OutlinedButton = styled.button`
@@ -29,6 +29,15 @@ const OutlinedButton = styled.button`
   }
 `;
 
+const SwitchRoot = styled.div`
+  label::before {
+    box-shadow: none !important;
+    cursor: pointer;
+  };
+  label::after {
+    cursor: pointer;
+  }
+`;
 
 const formatDate = (
   date: string | null | undefined,
@@ -76,25 +85,24 @@ const StrategyRow = ({
     }
     return item.is_active ? "-" : "Make Active";
   };
-  
+
   return (
     <TableRow key={item.id}>
-      <TableData><StrategyName strategyAddress={item.strategyAddress} /></TableData>
+      <TableData>
+        <StrategyName strategyAddress={item.strategyAddress} />
+      </TableData>
       <TableData>{item.profit || "No Profit"}</TableData>
       <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
       <TableData>{item.status || "In-Active"}</TableData>
       <TableData>{formatDate(item.updatedAt)}</TableData>
       <TableData>{formatDate(item.updatedAt)}</TableData>
-      <TableData className="text-center">
+      {/* <TableData className="text-center">
         {item.is_active ? "Yes" : "No"}
-      </TableData>
+      </TableData> */}
       <TableData>
-        <OutlinedButton
-          disabled={updating || item.is_active}
-          onClick={makeActive}
-        >
-          {renderText()}
-        </OutlinedButton>
+        <SwitchRoot>
+          <Form.Check type="switch" checked={updating}  disabled={updating || item.is_active}  onClick={makeActive}  />
+        </SwitchRoot>
       </TableData>
     </TableRow>
   );
@@ -130,8 +138,8 @@ export const StrategyTable = ({
             <TableHeading>Status</TableHeading>
             <TableHeading>Last Updated</TableHeading>
             <TableHeading>Created On</TableHeading>
-            <TableHeading className="text-center">Active</TableHeading>
-            <TableHeading>Make Active</TableHeading>
+            {/* <TableHeading className="text-center">Active</TableHeading> */}
+            <TableHeading>Active</TableHeading>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -184,7 +192,9 @@ export const StrategyTableForInvestor = ({
           {strategies.map((item, i) => {
             return (
               <TableRow key={item.id}>
-                <TableData><StrategyName strategyAddress={item.strategyAddress} /></TableData>
+                <TableData>
+                  <StrategyName strategyAddress={item.strategyAddress} />
+                </TableData>
                 <TableData>{item.profit || "No Profit"}</TableData>
                 <TableData>{formatDate(item.lastRan) || "Never"}</TableData>
                 <TableData>{item.status || "In-Active"}</TableData>

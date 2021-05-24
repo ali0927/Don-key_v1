@@ -10,6 +10,7 @@ import moment from "moment";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { TelegramIcon } from "components/TelegramIcon";
+import { DotsIcon } from "icons";
 
 const StyledFarmerImage = styled.img`
   object-fit: cover;
@@ -53,6 +54,11 @@ const Online = styled.span`
   border-radius: 100%;
 `;
 
+const ImageOuter = styled.div`
+  background: #fff;
+  border-radius: 15px;
+`;
+
 export const FarmerBio = ({
   farmer: {
     description,
@@ -88,7 +94,7 @@ export const FarmerBio = ({
     <>
       <Container>
         <Row>
-          <Col sm={12}>
+          <Col lg={12} className="mt-3">
             <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
               <h2 className="mb-2 mb-md-0">Don - {capitalize(name || "")}</h2>
               {!isInvestor && (
@@ -109,60 +115,65 @@ export const FarmerBio = ({
                 </div>
               )}
             </div>
-            <Row className="justify-content-between">
-              <Col md={1} className="mr-5">
-                <div className="d-flex align-items-center justify-content-center justify-content-lg-start h-100">
-                  <StyledFarmerImage
-                    src={picture}
-                    className="img-fluid"
-                    alt="farmer"
-                  />
-                </div>
-              </Col>
-              <DetailTable poolAddress={poolAddress} />
-            </Row>
           </Col>
-          <Col sm={2}>
-            {/* {(!isInvestor || diff === "online") && (
+        </Row>
+
+        <Row className="mt-3 mb-4">
+          <Col lg={2}>
+            <div className="d-flex align-items-center justify-content-center justify-content-lg-start h-100 flex-wrap">
+              <ImageOuter>
+                <StyledFarmerImage
+                  src={picture}
+                  className="img-fluid"
+                  alt="farmer"
+                />
+              </ImageOuter>
+              <div className="w-100 ml-3 mt-2">
+                {/* {(!isInvestor || diff === "online") && (
               <LastLoginText>
                 <Online className="mr-1" />
                 Online
               </LastLoginText>
             )} */}
-            <div
-              style={{
-                display: "flex",
-                maxWidth: "50%",
-                justifyContent: "space-around",
-              }}
-            >
-              {twitter && (
-                <TwitterIcon fill={"#000"} handle={twitter}></TwitterIcon>
-              )}
-              {telegram && (
-                <TelegramIcon fill={"#000"} handle={telegram}></TelegramIcon>
-              )}
+    
+                <InvestorCountText>
+                  Investor Count:{" "}
+                  {investorCount !== undefined ? investorCount : 0}
+                </InvestorCountText>
+              </div>
             </div>
-            <InvestorCountText>
-              Investor Count: {investorCount !== undefined ? investorCount : 0}
-            </InvestorCountText>
+          </Col>
+
+          <Col lg={5}>
+            {description.length > 0 && (
+              <>
+                <div className="d-flex justify-content-between">
+                  <h4 className="mr-">Description</h4>
+                <div className="d-flex">
+                  <div className="mr-3"><TwitterIcon  fill={"#000"} handle={twitter || "#"}></TwitterIcon></div>
+                  <div><TelegramIcon fill={"#000"} handle={telegram || "#"}></TelegramIcon></div>
+                </div>
+                </div>
+
+                <p style={{ fontSize: 15 }}>
+                  <ShowMoreContent length={100} content={description} />
+                </p>
+              </>
+            )}
+          </Col>
+
+          <Col
+            lg={5}
+            className="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-center"
+          >
+            <DotsIcon />
           </Col>
         </Row>
+
+        <Row className="mt-5">
+          <DetailTable poolAddress={poolAddress} />
+        </Row>
       </Container>
-
-      {description.length > 0 && (
-        <Container className="mt-2">
-          <Row>
-            <Col md={8} lg={7}>
-              <h4 className="">Description</h4>
-
-              <p style={{ fontSize: 15 }}>
-                <ShowMoreContent length={100} content={description} />
-              </p>
-            </Col>
-          </Row>
-        </Container>
-      )}
     </>
   );
 };

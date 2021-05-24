@@ -20,6 +20,7 @@ import {
 } from "helpers";
 import { useWeb3 } from "don-components";
 import { ContainedButton } from "components/Button";
+import {  AwardIcon, FollowersIcon, StatisticIcon, StatisticRoi } from "icons";
 
 const CardWrapper = styled.div`
   min-height: 250px;
@@ -33,7 +34,7 @@ const CardInnerInfo = styled.div`
 `;
 
 const PoolCardInnerInfo = styled.div`
-  min-height: 194px;
+  min-height: 153px;
 `;
 
 const CardLabel = styled.p`
@@ -49,6 +50,17 @@ const CardLabel = styled.p`
   width: 100%;
 `;
 
+const CardPoolAddress = styled.p`
+  font-family: Roboto;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: #000000;
+`;
+
 const CardValue = styled.p`
   font-family: Roboto;
   font-size: 18px;
@@ -59,6 +71,11 @@ const CardValue = styled.p`
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
+`;
+
+
+const FirstCardRow = styled.div`
+  margin-bottom: 34px;
 `;
 
 const Columns = styled.div`
@@ -107,11 +124,14 @@ const CutomButton = styled(ContainedButton)`
 `;
 
 const TokensParagraph = styled.p`
-  font-size: 10px;
+  font-size: 13px;
   margin: 0px;
+  margin-top: 10px;
   text-align: center;
   color: #fff;
 `;
+
+
 
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
@@ -171,12 +191,15 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const getFirstCardcolumns = (
     label: string,
     value: string | React.ReactNode,
-    color: "black" | "white"
+    color: "black" | "white",
+    icon: React.ReactNode,
   ) => {
     return (
       <Columns className="col-md-3 d-flex align-items-center justify-content-center">
         <div>
-          <ColumnsTitle color={color}>{label}</ColumnsTitle>
+          <ColumnsTitle className="d-flex align-items-center" color={color}>
+            <>{icon}{label}</>
+            </ColumnsTitle>
           <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
         </div>
       </Columns>
@@ -186,12 +209,13 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const getSecondCardColumns = (
     label: string,
     value: string | React.ReactNode,
-    color: "black" | "white"
+    color: "black" | "white",
+ 
   ) => {
     return (
       <Columns className="col-md-3 d-flex align-items-center justify-content-center">
         <div>
-          <ColumnsTitle1 color={color}>{label}</ColumnsTitle1>
+         <ColumnsTitle1 color={color}> {label}</ColumnsTitle1>
           <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
         </div>
       </Columns>
@@ -200,25 +224,25 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   return (
     <>
-    <div className="col-md-5 mb-5">
+    <div className="col-lg-6 mb-5">
       <CardWrapper className="p-3" color="white">
         <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
           <div>
             <CardLabel color="black"> Pool Address</CardLabel>
-            <CardValue color="black">
+            <CardPoolAddress>
               {isSmall ? shortenAddress(poolAddress) : poolAddress}
-            </CardValue>
+            </CardPoolAddress>
           </div>
         </PoolCardInnerInfo>
-        <div className="row">
-          {getFirstCardcolumns("APK", "25%", "black")}
-          {getFirstCardcolumns("ROI", "31.2%", "black")}
-          {getFirstCardcolumns("Followers", "1,753", "black")}
-          {getFirstCardcolumns("Dominance", "71%", "black")}
-        </div>
+        <FirstCardRow className="row">
+          {getFirstCardcolumns("APK", "25%", "black",<div className="mr-1"><StatisticIcon /></div>)}
+          {getFirstCardcolumns("ROI", "31.2%", "black",<div className="mr-1"><StatisticRoi /></div>)}
+          {getFirstCardcolumns("Followers", "1,753", "black",<div className="mr-1"><FollowersIcon /></div>)}
+          {getFirstCardcolumns("Dominance", "71%", "black",<div className="mr-1"><AwardIcon /></div>)}
+        </FirstCardRow>
       </CardWrapper>
       </div>
-      <div className="col-md-5 mb-5 p">
+      <div className="col-lg-6 mb-5 p">
       <CardWrapper className="p-2" color="black">
         <CardInnerInfo className="d-flex justify-content-center align-items-center">
           <div>
