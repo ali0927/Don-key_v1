@@ -201,20 +201,28 @@ export const PopularStrategy = ({
               placement="top"
               key="top"
               overlay={
-                <div style={{ padding: 40, background: "white" }}>
+                <div
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
                   <img
-                    src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png"
+                    src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpaca.jpg"
                     className="imageToShow"
                     alt="graph"
-                    width="800"
-                    height="200"
+                    width="45%"
+                    style={{
+                      background: "white",
+                      padding: 20,
+                      margin: "0 auto",
+                    }}
                   />
                 </div>
               }
             >
               <div>
                 <img
-                  src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpacaGraph.png"
+                  src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpaca.jpg"
                   className="imageToShow"
                   alt="graph"
                 />
