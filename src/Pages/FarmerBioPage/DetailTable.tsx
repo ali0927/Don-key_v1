@@ -22,11 +22,14 @@ import { useWeb3 } from "don-components";
 import { ContainedButton } from "components/Button";
 import {  AwardIcon, FollowersIcon, StatisticIcon, StatisticRoi } from "icons";
 
+
+
 const CardWrapper = styled.div`
   min-height: 250px;
   background: ${(props: { color: "black" | "white" }) =>
     props.color === "black" ? "#171717" : "#ffffff"};
   border-radius: 10px;
+  box-shadow: 4.01577px 8.05442px 118px rgba(0, 0, 0, 0.05), 2.60281px 5.22045px 69.1065px rgba(0, 0, 0, 0.037963), 1.54681px 3.10244px 37.5852px rgba(0, 0, 0, 0.0303704), 0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025), 0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296), 0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037);
 `;
 
 const CardInnerInfo = styled.div`

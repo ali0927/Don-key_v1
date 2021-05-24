@@ -8,6 +8,10 @@ import {  IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
+import GridImg from "./bg.png";
+import styled from "styled-components";
+
+
 
 export const FarmerBioPage = withWeb3(() => {
 
@@ -51,10 +55,12 @@ export const FarmerBioPage = withWeb3(() => {
           <FarmerBioFromApi farmerId={farmerId} />
         )}
       </section>
+      <div  style={{ backgroundImage:`url(${GridImg})` }}>
       <FarmerStrategies
         farmerId={farmerId || (farmer?.GUID as string)}
         isInvestor={!isCurrentFarmer}
       />
+      </div>
       <Footer />
     </div>
   );
