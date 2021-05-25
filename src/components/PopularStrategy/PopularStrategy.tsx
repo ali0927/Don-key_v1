@@ -154,17 +154,15 @@ export const PopularStrategy = ({
               })}
             >
               {icon}
-              {investers ? (
-                <div>
-                  {heading}
-                  <small style={{ fontSize: 14 }} className="ml-3">
-                    <span className="font-weight-bold">{investers}</span>{" "}
-                    investors
-                  </small>
-                </div>
-              ) : (
-                heading
-              )}
+              <div>
+                {heading}
+                <small style={{ fontSize: 14 }} className="ml-3">
+                  <span className="font-weight-bold">
+                    {investers ? investers : 0}
+                  </span>{" "}
+                  investors
+                </small>
+              </div>
             </Col>
             <Col sm={3}>
               <div
