@@ -9,6 +9,7 @@ import { useHistory } from "react-router";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
+import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 
 const Image = styled.img`
   width: 45px;
@@ -127,6 +128,9 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         {leaders.map((leader, index) => {
           return StrategyCard(leader);
         })}
+        <div className="col-lg-4 col-md-6 mb-3">
+          <ComingSoonFarmer timerDate={"June 8, 2021 20:00:00 UTC"}/>
+        </div>
         {openInvestment && (
           <InvestmentPopup
             poolAddress={state.poolAddress}
