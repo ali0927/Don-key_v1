@@ -112,7 +112,6 @@ export const InvestmentBlackBox = ({
   const { profitloss, investedTotal, initialInvestmentTotal, roi } =
     useCalInvestmentsChart(web3, myInvestments);
 
-  const [withDrawloading, setWithDrawLoading] = React.useState(false);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [{}, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v2/investments" },
@@ -123,7 +122,6 @@ export const InvestmentBlackBox = ({
     let key: string | undefined = undefined;
     try {
       if (myInvestments.length > 0) {
-        setWithDrawLoading(true);
         const accounts = await web3.eth.getAccounts();
         const initialUserBalance = await getBUSDBalance(web3, accounts[0]);
         for (let investment of myInvestments) {
