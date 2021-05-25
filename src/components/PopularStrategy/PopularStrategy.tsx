@@ -233,6 +233,7 @@ export const PopularStrategy = ({
                     width="45%"
                     style={{
                       background: "white",
+                      maxWidth: "1300px",
                       padding: 20,
                       margin: "0 auto",
                       borderRadius: 10,
