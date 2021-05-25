@@ -71,7 +71,7 @@ export const InvestmentPopup = ({
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
-  const [hideFooter, setHideFooter]= useState(false);
+  const [hideFooter, setHideFooter] = useState(false);
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -184,14 +184,6 @@ export const InvestmentPopup = ({
           </ButtonWrapper>
         </div>
       </div>
-      {!hideFooter && (
-        <p className="mt-4">
-          <small>
-            <b>Note: </b>1% of your investment amount will be used towards
-            harvesting & handling fees.
-          </small>
-        </p>
-      )}
     </DonCommonmodal>
   );
 };
