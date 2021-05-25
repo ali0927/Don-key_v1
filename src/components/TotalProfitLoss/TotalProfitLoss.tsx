@@ -3,7 +3,7 @@ import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import { calculateWithdrawAmount, calculateInitialInvestment } from "helpers";
 
-export const TotalProfitLoss = ({ poolAddress }: { poolAddress: string}) => {
+export const TotalProfitLoss = ({ poolAddress, refresh =false }: { poolAddress: string; refresh?: boolean}) => {
   
   const [totalProfitLoss, setTotalProfitLoss] = useState(0);
   const [amountWithdraw, setAmountWithdraw] = useState(0);
@@ -22,7 +22,7 @@ export const TotalProfitLoss = ({ poolAddress }: { poolAddress: string}) => {
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
   useEffect(()=>{
     setTotalProfitLoss(amountWithdraw - amountInitial)
