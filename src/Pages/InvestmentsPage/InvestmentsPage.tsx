@@ -27,7 +27,10 @@ import { AxiosResponse } from "axios";
 import { MyInvestment } from "components/MyInvestment";
 import { StrategyName } from "components/StrategyName";
 import { UserWalletBoard } from "components/UserWalletBoard";
-import { getLpTokensTotal, getTotalPoolValue } from "helpers";
+import { getLpTokensTotal, getPoolContract, getTotalPoolValue } from "helpers";
+import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
+import { useSelector } from "react-redux";
+import { IStoreState } from "interfaces";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -125,7 +128,6 @@ const CustomTableData = styled(TableData)`
 //   }
 // `;
 
-const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 
 // async function fetchBalance() {
 //   //const web3 = (await getWeb3()) as Web3;
@@ -140,6 +142,7 @@ const poolAddress = "0x9276BD1ca27DDaB5881642f0BF7B1a0C43542d16";
 // }
 
 export const InvestmentsPage = () => {
+  const poolAddress = useSelector((state: IStoreState) => state.farmer)?.poolAddress as string;
   //  const [balance, setBalance] = useState(0);
 
   //const [isReady, setIsReady] = useState(false);
@@ -180,7 +183,20 @@ export const InvestmentsPage = () => {
 
   useEffect(() => {
     if (farmesInvestmentData) {
-      setMyInvestments(farmesInvestmentData.data);
+        const CalInvestments = async() => {
+          const investments: IMyInvestments[] = farmesInvestmentData.data;
+          const finalInvestments: IMyInvestments[] = [];
+          for(let invest of investments){
+            const contract = await getPoolContract(web3, invest.poolAddress);
+            const accounts = await web3.eth.getAccounts();
+            const isInvested = await contract.methods.isInvestor(accounts[0]).call();
+            if(isInvested){
+              finalInvestments.push(invest);
+            }
+          }
+          setMyInvestments(finalInvestments);
+        }
+        CalInvestments();
     }
   }, [farmesInvestmentData]);
 
@@ -247,12 +263,14 @@ export const InvestmentsPage = () => {
         <div className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-              <Col lg={8}>
+              <Col lg={6}>
                 <HeadingTitle>My Investments</HeadingTitle>
               </Col>
-              <Col lg={4}>
+              <Col lg={6}>
                 {myInvestments.length > 0 && (
-                  <UserWalletBoard poolAddress={poolAddress} />
+                  <>
+                     <InvestmentBlackBox poolAddress={poolAddress} myInvestments={myInvestments}/>
+                  </>
                 )}
               </Col>
               {/* <div className="firstLetter image-col mr-4">
