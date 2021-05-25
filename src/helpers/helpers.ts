@@ -30,7 +30,9 @@ export const getROI =async(web3: any, poolAddress: string) => {
     const initialInvestment = await calculateInitialInvestment(web3, poolAddress);
     
     const profit =   parseFloat(investedAmount) - parseFloat(initialInvestment);
-
+    if(profit === 0 || initialInvestment === ""){
+        return 0;
+    }
     const roi = profit/parseFloat(initialInvestment);
     return roi;
 }
