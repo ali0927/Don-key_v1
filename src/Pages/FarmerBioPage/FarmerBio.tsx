@@ -13,6 +13,7 @@ import { TelegramIcon } from "components/TelegramIcon";
 import { DotsIcon } from "icons";
 
 const StyledFarmerImage = styled.img`
+  border-radius: 15px;
   object-fit: cover;
   width: 120px;
   height: 120px;
