@@ -8,7 +8,7 @@ import { Timer } from "./Timer";
 const Papper = styled.div`
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
   border-radius: 10px;
-  width: 374px;
+  /* width: 374px; */
 `;
 
 const PapperTop = styled.div`
