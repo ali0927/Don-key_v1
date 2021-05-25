@@ -1,5 +1,6 @@
 import { ContainedButton } from "components/Button";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { DonKeyLeftToRightFace } from "icons";
 import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
@@ -76,6 +77,11 @@ const ComingSoonButton = styled(ContainedButton)`
   }
 `;
 
+const DonKeyIcon = styled(DonKeyLeftToRightFace)`
+     height: 51px;
+     width: 51px;
+`;
+
 export const ComingSoonFarmer = (props: {timerDate: string}) => {
   return (
     <>
@@ -83,7 +89,9 @@ export const ComingSoonFarmer = (props: {timerDate: string}) => {
         <PapperTop className="p-3">
           <Row>
             <Col lg={12} className="d-flex align-items-center">
-              <ImageWrapper />
+              <ImageWrapper>
+                <DonKeyIcon/>
+              </ImageWrapper>
               <Title className="ml-2">New Farmer</Title>
             </Col>
           </Row>
