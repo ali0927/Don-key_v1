@@ -13,8 +13,14 @@ export type IFarmer = {
   GUID: string;
   descriptionTitle: string | null;
   apy?: string;
+  strategyImage?: string;
   investors?: null | number;
-  status: 'not_signed_up' |'under_review' | 'active' | 'inactive' |'comingsoon';
+  status:
+    | "not_signed_up"
+    | "under_review"
+    | "active"
+    | "inactive"
+    | "comingsoon";
 };
 
 export interface IUser {
@@ -46,7 +52,6 @@ export interface IUser {
   };
 }
 
-
 export interface IFarmerInter {
   poolAddress: string;
   picture: string;
@@ -73,8 +78,6 @@ export type IStrategy = {
   profit: string | null;
   id: number;
 };
-
-
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 

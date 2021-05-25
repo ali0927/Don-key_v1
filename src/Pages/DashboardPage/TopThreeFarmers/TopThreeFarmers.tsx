@@ -70,6 +70,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             twitter={leader.twitter ? leader.twitter : null}
             telegram={leader.telegram}
             // graph={<GraphIcon />}
+            strategyImage={leader.strategyImage}
             content={leader.description}
             apy={APY}
             totalValue={<PoolAmount poolAddress={leader.poolAddress} />}
@@ -129,7 +130,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           return StrategyCard(leader);
         })}
         <div className="col-lg-4 col-md-6 mb-3">
-          <ComingSoonFarmer timerDate={"June 8, 2021 20:00:00 UTC"}/>
+          <ComingSoonFarmer timerDate={"June 8, 2021 20:00:00 UTC"} />
         </div>
         {openInvestment && (
           <InvestmentPopup
