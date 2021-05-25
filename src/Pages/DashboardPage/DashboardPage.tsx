@@ -67,7 +67,8 @@ export const DashboardPage = () => {
           profit: item.profit || "-",
           descriptionTitle: item.descriptionTitle,
           status: item.status,
-          // apy: item.strategy.apy,
+          apy: item.strategy.apy,
+          strategyImage: item.strategy.strategyImage,
           investors: item.investors,
         } as IFarmer;
       });

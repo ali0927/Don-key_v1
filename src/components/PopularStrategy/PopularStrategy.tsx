@@ -69,23 +69,22 @@ const Graph1 = () => {
   );
 };
 
-
 const Papper = styled.div`
-    background-color: rgb(251,251,251);
-    box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
-    border-radius: 10px;
-    font-size: 13px;
-    h5 {
-        font-weight: 700;
-    }
+  background-color: rgb(251, 251, 251);
+  box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
+  border-radius: 10px;
+  font-size: 13px;
+  h5 {
+    font-weight: 700;
+  }
 `;
 
 const PapperInner = styled.div`
-    padding: 1rem;
-    border-radius: 10px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-    background-color: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  background-color: #fff;
 `;
 
 const DescriptionContent = styled.p`
@@ -98,6 +97,7 @@ export const PopularStrategy = ({
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,
   telegram,
+  strategyImage,
   twitter,
   contentTitle = "STRATEGY BTCUSD Feel Free to BYield new",
   title = `Saly Strategies WOW`,
@@ -112,6 +112,7 @@ export const PopularStrategy = ({
   totalValue?: string | React.ReactElement;
   contentTitle?: string;
   content?: string;
+  strategyImage?: string;
   apy?: string;
   telegram?: string | null;
   twitter?: string | null;
@@ -153,17 +154,15 @@ export const PopularStrategy = ({
               })}
             >
               {icon}
-              {investers ? (
-                <div>
-                  {heading}
-                  <small style={{ fontSize: 14 }} className="ml-3">
-                    <span className="font-weight-bold">{investers}</span>{" "}
-                    investors
-                  </small>
-                </div>
-              ) : (
-                heading
-              )}
+              <div>
+                {heading}
+                <small style={{ fontSize: 14 }} className="ml-3">
+                  <span className="font-weight-bold">
+                    {investers ? investers : 0}
+                  </span>{" "}
+                  investors
+                </small>
+              </div>
             </Col>
             <Col sm={3}>
               <div
@@ -226,12 +225,13 @@ export const PopularStrategy = ({
                   }}
                 >
                   <img
-                    src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpaca.jpg"
+                    src={strategyImage}
                     className="imageToShow"
                     alt="graph"
                     width="45%"
                     style={{
                       background: "white",
+                      maxWidth: "1300px",
                       padding: 20,
                       margin: "0 auto",
                       borderRadius: 10,
@@ -243,11 +243,7 @@ export const PopularStrategy = ({
               }
             >
               <div>
-                <img
-                  src="https://don-key.fra1.digitaloceanspaces.com/farmer-icons/alpaca.jpg"
-                  className="imageToShow"
-                  alt="graph"
-                />
+                <img src={strategyImage} className="imageToShow" alt="graph" />
               </div>
             </OverlayTrigger>
           )}
