@@ -270,7 +270,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
           {getSecondCardColumns(
             "Profit/Loss",
-            <TotalProfitLoss poolAddress={poolAddress} />,
+            <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
             "white"
           )}
           {getSecondCardColumns(
