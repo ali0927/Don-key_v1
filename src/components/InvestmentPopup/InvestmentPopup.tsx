@@ -5,10 +5,7 @@ import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
-import {
-  getBUSDTokenContract,
-  getPoolContract,
-} from "helpers";
+import { getBUSDTokenContract, getPoolContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -65,7 +62,7 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
 export const InvestmentPopup = ({
   poolAddress,
   onClose,
-  onSuccess
+  onSuccess,
 }: {
   poolAddress: string;
   onSuccess?: () => void;
@@ -74,6 +71,7 @@ export const InvestmentPopup = ({
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
+  const [hideFooter, setHideFooter]= useState(false);
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -90,6 +88,7 @@ export const InvestmentPopup = ({
 
     let key1: string | number | null = null;
     try {
+      setHideFooter(true);
       const pool = await getPoolContract(web3, poolAddress);
       const busdtoken = await getBUSDTokenContract(web3);
       const accounts = await web3.eth.getAccounts();
@@ -122,9 +121,9 @@ export const InvestmentPopup = ({
       if (key1) {
         closeSnackbar(key1);
       }
-      
+
       onSuccess && onSuccess();
-      
+
       enqueueSnackbar("Money invested into Pool Successfully", {
         content: (key, msg) => <SuccessSnackbar message={msg as string} />,
         autoHideDuration: 5000,
@@ -185,9 +184,14 @@ export const InvestmentPopup = ({
           </ButtonWrapper>
         </div>
       </div>
-      <p className="mt-4">
-        <small><b>Note: </b>1% of your investment amount will be used towards harvesting & handling fees.</small>
-      </p>
+      {!hideFooter && (
+        <p className="mt-4">
+          <small>
+            <b>Note: </b>1% of your investment amount will be used towards
+            harvesting & handling fees.
+          </small>
+        </p>
+      )}
     </DonCommonmodal>
   );
 };

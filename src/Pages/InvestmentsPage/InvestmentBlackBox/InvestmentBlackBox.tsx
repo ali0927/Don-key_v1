@@ -1,13 +1,25 @@
 import { ContainedButton } from "components/Button";
 import { PoolReserveAmount } from "components/PoolReserveAmount";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
-import { calculateInitialInvestment, calculateWithdrawAmount, getPoolContract, getTotalPoolValue } from "helpers";
-import React, { useState,useEffect } from "react";
+import {
+  calculateInitialInvestment,
+  calculateWithdrawAmount,
+  checkIfUserWithDrawlWorked,
+  getBUSDBalance,
+  getPoolContract,
+  getTotalPoolValue,
+} from "helpers";
+import React, { useState, useEffect } from "react";
 import { useWeb3 } from "don-components";
 import styled from "styled-components";
 import { BigNumber } from "bignumber.js";
 import { parse } from "graphql";
 import { IMyInvestments } from "../interfaces";
+import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
+import { useCalInvestmentsChart } from "./useCalInvestmenstChart";
+import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
+import { useSnackbar } from "notistack";
+import { useAxios } from "hooks/useAxios";
 
 const CardWrapper = styled.div`
   min-height: 250px;
@@ -88,61 +100,73 @@ const Columns = styled.div`
   }
 `;
 
+export const InvestmentBlackBox = ({
+  myInvestments,
+}: {
+  myInvestments: IMyInvestments[];
+}) => {
+  const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
+  const web3 = useWeb3();
 
+  const { profitloss, investedTotal, initialInvestmentTotal, roi } =
+    useCalInvestmentsChart(web3, myInvestments);
 
-export const InvestmentBlackBox = ({ poolAddress, myInvestments }: { poolAddress: string, myInvestments: IMyInvestments[] }) => {
-   
-    const [initialInvestment, setInitialInvestment] = useState("0");
-    const [totalInvestment, SetTotalInvestment]= useState(0);
-    const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
+  const [withDrawloading, setWithDrawLoading] = React.useState(false);
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  const [{}, executeDelete] = useAxios(
+    { method: "DELETE", url: "/api/v2/investments" },
+    { manual: true }
+  );
 
+  const handleWithDrawAll = async () => {
+    let key: string | undefined = undefined;
+    try {
+      if (myInvestments.length > 0) {
+        setWithDrawLoading(true);
+        const accounts = await web3.eth.getAccounts();
+        const initialUserBalance = await getBUSDBalance(web3, accounts[0]);
+        for (let investment of myInvestments) {
+          const pool = await getPoolContract(web3, investment.poolAddress);
 
-    const [myShare, setMyShare] = useState(0);
-    const [roi, setRoi] = useState("0");
+          key = enqueueSnackbar("Withdrawal is in Progress", {
+            content: (key, msg) => <ProgressSnackbar message={msg as string} />,
+            persist: true,
+          }) as string;
 
-    const web3 = useWeb3();
-  
+          await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
+          await checkIfUserWithDrawlWorked(web3, initialUserBalance);
+          await executeDelete({
+            data: {
+              poolAddress: investment.poolAddress,
+            },
+          });
 
-    React.useEffect(() => {
-        async function apiCall() {
-          const accounts = await web3.eth.getAccounts();
-          const pool = await getPoolContract(web3, poolAddress);
-
-          let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-          lptokensresponse = new BigNumber(lptokensresponse);
-          let totalShares = await pool.methods.totalSupply().call();
-          totalShares = new BigNumber(totalShares);
-          const myShares = lptokensresponse.dividedBy(totalShares);
-          setMyShare(myShares);
-      
-    
-          const amount = await calculateInitialInvestment(web3, poolAddress);
-          setInitialInvestment(amount);
-    
-          const withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
-          const profit =parseFloat(withdrawAmount) - parseFloat(amount);
-
-          const roi =  (profit/parseFloat(amount)).toString();
-          
-          setRoi(roi);
-
-          let total = 0;
-
-          for(let investment of myInvestments){
-            const investedAmount = await calculateWithdrawAmount(web3, investment.poolAddress);
-            total = (total + parseFloat(investedAmount))
-          } 
-
-          SetTotalInvestment(total);
+          if (key) {
+            closeSnackbar(key);
+          }
+          console.log("first failure check");
+          enqueueSnackbar("Withdrawal SuccessFull", {
+            content: (key, msg) => <SuccessSnackbar message={msg as string} />,
+            persist: false,
+          }) as string;
         }
-        apiCall();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+      }
+    } catch (err) {
+      console.trace(err, "error from withdrawal");
+      if (key) {
+        closeSnackbar(key);
+      }
+      enqueueSnackbar("Withdrawal Failed", {
+        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
+        persist: false,
+      }) as string;
+    }
+  };
 
   const getSecondCardColumns = (
     label: string,
-    value: string | React.ReactNode,
+    value: string | React.ReactNode
   ) => {
     return (
       <Columns className="col-md-3 d-flex justify-content-center">
@@ -160,11 +184,11 @@ export const InvestmentBlackBox = ({ poolAddress, myInvestments }: { poolAddress
         <CardInnerInfo className="d-flex justify-content-center align-items-center">
           <div>
             <CardLabel> My Holdings </CardLabel>
-            <CardValue>{totalInvestment}</CardValue>
+            <CardValue>{investedTotal}</CardValue>
 
             <div className="d-flex mt-2 mb-2 justify-content-center">
               <CutomButton
-                onClick={() => setShowWithdrawPopup(true)}
+                onClick={handleWithDrawAll}
                 className="ml-2"
               >
                 WithDraw
@@ -172,27 +196,14 @@ export const InvestmentBlackBox = ({ poolAddress, myInvestments }: { poolAddress
             </div>
           </div>
         </CardInnerInfo>
-        <div className="row">
+        <div className="row justify-content-center">
           {getSecondCardColumns(
             "Initial Investment",
-            Number(initialInvestment).toFixed(2).toString()
-          
+            "$ " + initialInvestmentTotal
           )}
 
-          {getSecondCardColumns(
-            "Profit/Loss",
-            <TotalProfitLoss poolAddress={poolAddress} />,
-         
-          )}
-          {getSecondCardColumns(
-            "My ROI",
-             roi
-            
-          )}
-          {getSecondCardColumns(
-            "My share",
-           Number(myShare).toFixed(2).toString()
-          )}
+          {getSecondCardColumns("Profit/Loss", profitloss)}
+          {getSecondCardColumns("My ROI", roi)}
         </div>
       </CardWrapper>
     </>

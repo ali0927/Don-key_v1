@@ -36,24 +36,18 @@ const OutlinedButton = styled.button`
   }
 `;
 
-const LastLoginText = styled.div`
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-`;
+// const LastLoginText = styled.div`
+//   font-size: 12px;
+//   display: flex;
+//   align-items: center;
+// `;
 
-const InvestorCountText = styled.div`
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-`;
-
-const Online = styled.span`
-  width: 10px;
-  height: 10px;
-  background: #448124;
-  border-radius: 100%;
-`;
+// const Online = styled.span`
+//   width: 10px;
+//   height: 10px;
+//   background: #448124;
+//   border-radius: 100%;
+// `;
 
 const ImageOuter = styled.div`
   background: #fff;
@@ -136,11 +130,6 @@ export const FarmerBio = ({
                 Online
               </LastLoginText>
             )} */}
-    
-                <InvestorCountText>
-                  Investor Count:{" "}
-                  {investorCount !== undefined ? investorCount : 0}
-                </InvestorCountText>
               </div>
             </div>
           </Col>
@@ -150,10 +139,20 @@ export const FarmerBio = ({
               <>
                 <div className="d-flex justify-content-between">
                   <h4 className="mr-">Description</h4>
-                <div className="d-flex">
-                  <div className="mr-3"><TwitterIcon  fill={"#000"} handle={twitter || "#"}></TwitterIcon></div>
-                  <div><TelegramIcon fill={"#000"} handle={telegram || "#"}></TelegramIcon></div>
-                </div>
+                  <div className="d-flex">
+                    <div className="mr-3">
+                      <TwitterIcon
+                        fill={"#000"}
+                        handle={twitter || "#"}
+                      ></TwitterIcon>
+                    </div>
+                    <div>
+                      <TelegramIcon
+                        fill={"#000"}
+                        handle={telegram || "#"}
+                      ></TelegramIcon>
+                    </div>
+                  </div>
                 </div>
 
                 <p style={{ fontSize: 15 }}>
@@ -172,7 +171,10 @@ export const FarmerBio = ({
         </Row>
 
         <Row className="mt-5">
-          <DetailTable poolAddress={poolAddress} />
+          <DetailTable
+            poolAddress={poolAddress}
+            investorCount={investorCount !== undefined ? investorCount : 0}
+          />
         </Row>
       </Container>
     </>

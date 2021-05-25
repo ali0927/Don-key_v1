@@ -4,7 +4,7 @@ import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
 import { useWeb3 } from "don-components";
-import { calculateWithdrawAmount, getBUSDBalance, getBUSDTokenContract, getPoolContract } from "helpers";
+import { calculateWithdrawAmount, checkIfUserWithDrawlWorked, getBUSDBalance, getBUSDTokenContract, getPoolContract } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import { useSnackbar } from "notistack";
 import * as React from "react";
@@ -17,33 +17,7 @@ const waitFor = (input: number) => {
   })
 }
 
-const checkIfUserWithDrawlWorked = async(web3: Web3, initialUserBalance: any) => {
-  const accounts = await web3.eth.getAccounts();  
 
-  return new Promise((res,rej) => {
-    let retries = 3;
-    async function  checkBalance() {
-      const newBalance = await getBUSDBalance(web3,accounts[0]);
-      const balanceisGreater = new BigNumber(newBalance).gt(initialUserBalance);
-      retries--;
-
-      if(balanceisGreater){
-        res(newBalance);
-      }
-      if(retries === 0){
-        if(!balanceisGreater){
-          rej("Withdrawal failed");
-        }
-      }
-      await waitFor(10000);
-      await checkBalance();
-    }
-
-    checkBalance();
-   
-  })
-
-}
 
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {

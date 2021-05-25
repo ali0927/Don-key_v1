@@ -41,3 +41,4 @@ export * from "./StatisticRoi";
 export * from "./Statistic";
 export * from "./AwardIcon";
 export * from "./Followers";
+export * from "./LinkIcon";

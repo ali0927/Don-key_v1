@@ -27,10 +27,18 @@ import { AxiosResponse } from "axios";
 import { MyInvestment } from "components/MyInvestment";
 import { StrategyName } from "components/StrategyName";
 import { UserWalletBoard } from "components/UserWalletBoard";
-import { getLpTokensTotal, getPoolContract, getTotalPoolValue } from "helpers";
+import {
+  checkIfUserWithDrawlWorked,
+  getBUSDBalance,
+  getLpTokensTotal,
+  getPoolContract,
+  getTotalPoolValue,
+} from "helpers";
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
+import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
+import { useSnackbar } from "notistack";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -128,7 +136,6 @@ const CustomTableData = styled(TableData)`
 //   }
 // `;
 
-
 // async function fetchBalance() {
 //   //const web3 = (await getWeb3()) as Web3;
 //   //const accounts = await web3.eth.getAccounts();
@@ -142,7 +149,8 @@ const CustomTableData = styled(TableData)`
 // }
 
 export const InvestmentsPage = () => {
-  const poolAddress = useSelector((state: IStoreState) => state.farmer)?.poolAddress as string;
+  const poolAddress = useSelector((state: IStoreState) => state.farmer)
+    ?.poolAddress as string;
   //  const [balance, setBalance] = useState(0);
 
   //const [isReady, setIsReady] = useState(false);
@@ -183,26 +191,27 @@ export const InvestmentsPage = () => {
 
   useEffect(() => {
     if (farmesInvestmentData) {
-        const CalInvestments = async() => {
-          const investments: IMyInvestments[] = farmesInvestmentData.data;
-          const finalInvestments: IMyInvestments[] = [];
-          console.log(investments);
-          for(let invest of investments){
-            try {
-              const contract = await getPoolContract(web3, invest.poolAddress);
-              const accounts = await web3.eth.getAccounts();
-                const isInvested = await contract.methods.isInvestor(accounts[0]).call();
-                console.log(isInvested, "IsInvested");
-                if(isInvested){
-                  finalInvestments.push(invest);
-                }
-            } catch(e){
-              console.error(e);
+      const CalInvestments = async () => {
+        const investments: IMyInvestments[] = farmesInvestmentData.data;
+        const finalInvestments: IMyInvestments[] = [];
+        for (let invest of investments) {
+          try {
+            const contract = await getPoolContract(web3, invest.poolAddress);
+            const accounts = await web3.eth.getAccounts();
+            const isInvested = await contract.methods
+              .isInvestor(accounts[0])
+              .call();
+            console.log(isInvested, "IsInvested");
+            if (isInvested) {
+              finalInvestments.push(invest);
             }
+          } catch (e) {
+            console.error(e);
           }
-          setMyInvestments(finalInvestments);
         }
-        CalInvestments();
+        setMyInvestments(finalInvestments);
+      };
+      CalInvestments();
     }
   }, [farmesInvestmentData]);
 
@@ -258,6 +267,8 @@ export const InvestmentsPage = () => {
     history.push("/dashboard");
   };
 
+
+
   if (!data) {
     return <LoadingPage />;
   }
@@ -275,7 +286,7 @@ export const InvestmentsPage = () => {
               <Col lg={6}>
                 {myInvestments.length > 0 && (
                   <>
-                     <InvestmentBlackBox poolAddress={poolAddress} myInvestments={myInvestments}/>
+                    <InvestmentBlackBox myInvestments={myInvestments} />
                   </>
                 )}
               </Col>
