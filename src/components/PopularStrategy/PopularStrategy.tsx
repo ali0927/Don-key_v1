@@ -69,6 +69,25 @@ const Graph1 = () => {
   );
 };
 
+
+const Papper = styled.div`
+    background-color: rgb(251,251,251);
+    box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
+    border-radius: 10px;
+    font-size: 13px;
+    h5 {
+        font-weight: 700;
+    }
+`;
+
+const PapperInner = styled.div`
+    padding: 1rem;
+    border-radius: 10px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: #fff;
+`;
+
 const DescriptionContent = styled.p`
   min-height: 36px;
 `;
@@ -122,8 +141,8 @@ export const PopularStrategy = ({
 
   const heading = <h5 className="ml-3 mb-0">{title}</h5>;
   return (
-    <div className="popularstrategy">
-      <div className="popularstrategy__graph">
+    <Papper>
+      <PapperInner>
         <Container>
           <Row>
             <Col
@@ -233,7 +252,7 @@ export const PopularStrategy = ({
             </OverlayTrigger>
           )}
         </div>
-      </div>
+      </PapperInner>
 
       <div className="popularstrategy__content">
         <div className="popularstrategy__content__info">
@@ -263,6 +282,6 @@ export const PopularStrategy = ({
           </button>
         )}
       </div>
-    </div>
+    </Papper>
   );
 };
