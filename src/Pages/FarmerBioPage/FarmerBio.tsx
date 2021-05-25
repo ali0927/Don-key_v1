@@ -115,7 +115,7 @@ export const FarmerBio = ({
 
         <Row className="mt-3 mb-4">
           <Col lg={2}>
-            <div className="d-flex align-items-center justify-content-center justify-content-lg-start h-100 flex-wrap">
+            <div className="d-flex align-items-center justify-content-center justify-content-lg-start flex-wrap">
               <ImageOuter>
                 <StyledFarmerImage
                   src={picture}

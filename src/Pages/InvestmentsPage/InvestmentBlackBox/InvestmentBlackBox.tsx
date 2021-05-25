@@ -17,7 +17,11 @@ import { parse } from "graphql";
 import { IMyInvestments } from "../interfaces";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useCalInvestmentsChart } from "./useCalInvestmenstChart";
-import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
+import {
+  ErrorSnackbar,
+  ProgressSnackbar,
+  SuccessSnackbar,
+} from "components/Snackbars";
 import { useSnackbar } from "notistack";
 import { useAxios } from "hooks/useAxios";
 
@@ -78,7 +82,7 @@ const ColumnsTitle = styled.p`
   line-height: 19px;
   letter-spacing: 0em;
   text-align: center;
-  color: #fff;
+  color: #cec6c6;
 `;
 
 const ColumnsSubTitle = styled.p`
@@ -185,10 +189,7 @@ export const InvestmentBlackBox = ({
             <CardValue>{investedTotal}</CardValue>
 
             <div className="d-flex mt-2 mb-2 justify-content-center">
-              <CutomButton
-                onClick={handleWithDrawAll}
-                className="ml-2"
-              >
+              <CutomButton onClick={handleWithDrawAll} className="ml-2">
                 WithDraw
               </CutomButton>
             </div>

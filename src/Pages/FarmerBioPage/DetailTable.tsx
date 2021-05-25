@@ -20,18 +20,27 @@ import {
 } from "helpers";
 import { useWeb3 } from "don-components";
 import { ContainedButton } from "components/Button";
-import {  AwardIcon, FollowersIcon, LinkIcon, StatisticIcon, StatisticRoi } from "icons";
+import {
+  AwardIcon,
+  FollowersIcon,
+  LinkIcon,
+  StatisticIcon,
+  StatisticRoi,
+} from "icons";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useDominance } from "./useDominance";
-
-
 
 const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
     props.color === "black" ? "#171717" : "#ffffff"};
   border-radius: 10px;
-  box-shadow: 4.01577px 8.05442px 118px rgba(0, 0, 0, 0.05), 2.60281px 5.22045px 69.1065px rgba(0, 0, 0, 0.037963), 1.54681px 3.10244px 37.5852px rgba(0, 0, 0, 0.0303704), 0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025), 0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296), 0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037);
+  box-shadow: 4.01577px 8.05442px 118px rgba(0, 0, 0, 0.05),
+    2.60281px 5.22045px 69.1065px rgba(0, 0, 0, 0.037963),
+    1.54681px 3.10244px 37.5852px rgba(0, 0, 0, 0.0303704),
+    0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025),
+    0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296),
+    0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037);
 `;
 
 const CardInnerInfo = styled.div`
@@ -41,8 +50,6 @@ const CardInnerInfo = styled.div`
 const PoolCardInnerInfo = styled.div`
   min-height: 153px;
 `;
-
-
 
 const CardLabel = styled.p`
   font-family: Roboto;
@@ -59,7 +66,6 @@ const CardLabel = styled.p`
 
 const TotalPoolValueLabel = styled(CardLabel)`
   font-weight: 500;
-  
 `;
 
 const CardPoolAddress = styled.p`
@@ -85,10 +91,7 @@ const CardValue = styled.p`
     props.color === "black" ? "#000000" : "#fff"};
 `;
 
-
-const FirstCardRow = styled.div`
-
-`;
+const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
   border-right: 1px solid #ededf2;
@@ -110,6 +113,17 @@ const ColumnsTitle = styled.div`
     props.color === "black" ? "#000000" : "#fff"};
 `;
 
+const ColumnsTitleColored = styled.div`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: ${(props: { color: any }) => props.color};
+`;
+
 const ColumnsSubTitle = styled.p`
   font-family: Roboto;
   font-size: 14px;
@@ -122,7 +136,18 @@ const ColumnsSubTitle = styled.p`
     props.color === "black" ? "#070602" : "#fff"};
 `;
 
-const ColumnsTitle1 = styled(ColumnsTitle)`
+const ColumnsSubTitleColored = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  word-break: break-word;
+  letter-spacing: 0em;
+  text-align: center;
+  color: ${(props: { color: any }) => props.color};
+`;
+
+const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-size: 11px;
 `;
 
@@ -135,40 +160,37 @@ const CutomButton = styled(ContainedButton)`
   }
 `;
 
-
-
-
 const usePoolApy = () => {
-
   const [] = useState();
+};
 
-
-}
-
-export const DetailTable = ({ poolAddress,investorCount }: { poolAddress: string;investorCount: number }) => {
+export const DetailTable = ({
+  poolAddress,
+  investorCount,
+}: {
+  poolAddress: string;
+  investorCount: number;
+}) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
   const [totalPoolValue, setTotalPoolValue] = useState("0");
   const [currentHoldings, setCurrentHoldings] = useState("0");
-  const {dominance} = useDominance(poolAddress);
+  const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
-  const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress
+  const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
 
-  const {roi,farmerRoi, initialInvestment, myShare} = useROIAndInitialInvestment(web3, finalPoolAddress);
+  const { roi, farmerRoi, initialInvestment, myShare } =
+    useROIAndInitialInvestment(web3, finalPoolAddress);
 
-  
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
-
 
   const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     async function apiCall() {
-
       let poolValue = await getTotalPoolValue(web3, poolAddress);
       setTotalPoolValue(web3.utils.fromWei(poolValue, "ether"));
-
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
       setCurrentHoldings(withdrawAmount);
@@ -178,22 +200,30 @@ export const DetailTable = ({ poolAddress,investorCount }: { poolAddress: string
   }, [refresh]);
 
   const onSuccess = () => {
-    setRefresh(old => !old);
-  }
+    setRefresh((old) => !old);
+  };
 
   const getFirstCardcolumns = (
     label: string,
     value: string | number | React.ReactNode,
     color: "black" | "white",
-    icon: React.ReactNode,
+    icon: React.ReactNode
   ) => {
     return (
       <Columns className="col-md-3 d-flex justify-content-center">
         <div className="mt-3">
-          <ColumnsTitle className="d-flex justify-content-center mb-2" color={color}>
-            <>{icon}{label}</>
-            </ColumnsTitle>
-          <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
+          <ColumnsTitle
+            className="d-flex justify-content-center mb-2"
+            color={color}
+          >
+            <>
+              {icon}
+              {label}
+            </>
+          </ColumnsTitle>
+          <ColumnsSubTitleColored color={"#808080"}>
+            {value}
+          </ColumnsSubTitleColored>
         </div>
       </Columns>
     );
@@ -202,13 +232,12 @@ export const DetailTable = ({ poolAddress,investorCount }: { poolAddress: string
   const getSecondCardColumns = (
     label: string,
     value: string | React.ReactNode,
-    color: "black" | "white",
- 
+    color: "black" | "white"
   ) => {
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
-        <div  className="mt-3">
-         <ColumnsTitle1 color={color}> {label}</ColumnsTitle1>
+        <div className="mt-3">
+          <ColumnsTitle1 color={"#CEC6C6"}> {label}</ColumnsTitle1>
           <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
         </div>
       </Columns>
@@ -217,75 +246,107 @@ export const DetailTable = ({ poolAddress,investorCount }: { poolAddress: string
 
   return (
     <>
-    <div className="col-lg-6 mb-5">
-      <CardWrapper className="p-3" color="white">
-        <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
-          <div>
-            <div className="d-flex align-items-baseline">
-              <TotalPoolValueLabel color="black"> Total Pool Value</TotalPoolValueLabel>
-              <a href={'https://bscscan.com/address/'+poolAddress} target="_blank" className="ml-2"><LinkIcon/></a>
+      <div className="col-lg-6 mb-5">
+        <CardWrapper className="p-3" color="white">
+          <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
+            <div>
+              <div className="d-flex align-items-baseline">
+                <TotalPoolValueLabel color="black">
+                  {" "}
+                  Total Pool Value
+                </TotalPoolValueLabel>
+                <a
+                  href={"https://bscscan.com/address/" + poolAddress}
+                  target="_blank"
+                  className="ml-2"
+                >
+                  <LinkIcon />
+                </a>
+              </div>
+              <CardPoolAddress>
+                $ {Number(totalPoolValue).toFixed(2)}
+                {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
+              </CardPoolAddress>
             </div>
-            <CardPoolAddress>
-              $ {Number(totalPoolValue).toFixed(2)}
-              {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
-            </CardPoolAddress>
-          </div>
-        </PoolCardInnerInfo>
-        <FirstCardRow className="row">
-          {getFirstCardcolumns("APY", "25%", "black",<div className="mr-1"><StatisticIcon /></div>)}
-          {getFirstCardcolumns("ROI", roi, "black",<div className="mr-1"><StatisticRoi /></div>)}
-          {getFirstCardcolumns("Followers", investorCount, "black",<div className="mr-1"><FollowersIcon /></div>)}
-          {getFirstCardcolumns("Dominance", dominance, "black",<div className="mr-1"><AwardIcon /></div>)}
-        </FirstCardRow>
-      </CardWrapper>
+          </PoolCardInnerInfo>
+          <FirstCardRow className="row">
+            {getFirstCardcolumns(
+              "APY",
+              "25%",
+              "black",
+              <div className="mr-1">
+                <StatisticIcon />
+              </div>
+            )}
+            {getFirstCardcolumns(
+              "ROI",
+              roi,
+              "black",
+              <div className="mr-1">
+                <StatisticRoi />
+              </div>
+            )}
+            {getFirstCardcolumns(
+              "Followers",
+              investorCount,
+              "black",
+              <div className="mr-1">
+                <FollowersIcon />
+              </div>
+            )}
+            {getFirstCardcolumns(
+              "Dominance",
+              dominance,
+              "black",
+              <div className="mr-1">
+                <AwardIcon />
+              </div>
+            )}
+          </FirstCardRow>
+        </CardWrapper>
       </div>
       <div className="col-lg-6 mb-5 p">
-      <CardWrapper className="p-2" color="black">
-        <CardInnerInfo className="d-flex justify-content-center align-items-center">
-          <div>
-            <CardLabel color="white"> My current holdings </CardLabel>
-            <CardValue color="white">
-             $  {Number(currentHoldings).toFixed(8).toString()}
-            </CardValue>
+        <CardWrapper className="p-2" color="black">
+          <CardInnerInfo className="d-flex justify-content-center align-items-center">
+            <div>
+              <CardLabel color="white"> My current holdings </CardLabel>
+              <CardValue color="white">
+                $ {Number(currentHoldings).toFixed(8).toString()}
+              </CardValue>
 
-            <div className="d-flex mt-2 mb-2">
-              <CutomButton onClick={() => setShowInvestmentPopup(true)}>
-                Invest
-              </CutomButton>
-              <CutomButton
-                onClick={() => setShowWithdrawPopup(true)}
-                className="ml-2"
-              >
-                WithDraw
-              </CutomButton>
+              <div className="d-flex mt-2 mb-2">
+                <CutomButton onClick={() => setShowInvestmentPopup(true)}>
+                  Invest
+                </CutomButton>
+                <CutomButton
+                  onClick={() => setShowWithdrawPopup(true)}
+                  className="ml-2"
+                >
+                  WithDraw
+                </CutomButton>
+              </div>
             </div>
-          </div>
-        </CardInnerInfo>
-        <div className="row">
-          {getSecondCardColumns(
-            "Initial Investment",
-            Number(initialInvestment).toFixed(2).toString(),
-            "white"
-          )}
+          </CardInnerInfo>
+          <div className="row">
+            {getSecondCardColumns(
+              "Initial Investment",
+              Number(initialInvestment).toFixed(2).toString(),
+              "white"
+            )}
 
-          {getSecondCardColumns(
-            "Profit/Loss",
-            <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
-            "white"
-          )}
-          {getSecondCardColumns(
-            "My ROI",
-            farmerRoi,
-            "white"
-          )}
-          {getSecondCardColumns(
-            "My share",
-            Number(myShare).toFixed(2)+" %",
-            "white"
-          )}
-        </div>
-     
-      </CardWrapper>
+            {getSecondCardColumns(
+              "Profit/Loss",
+              <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
+              "white"
+            )}
+            {getSecondCardColumns("My ROI", farmerRoi, "white")}
+            {getSecondCardColumns(
+              "My share",
+              Number(myShare).toFixed(2) + " %",
+              "white"
+            )}
+          </div>
+        </CardWrapper>
       </div>
       {showInvestmentPopup && (
         <InvestmentPopup
