@@ -136,6 +136,13 @@ const TokensParagraph = styled.p`
 
 
 
+const usePoolApy = () => {
+
+  const [] = useState();
+
+
+}
+
 export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
   const [totalLPTokens, setTotalLPTokens] = useState("0");
@@ -147,10 +154,11 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
-  const { isInvested, getIsInvested } = useIsInvested(poolAddress);
-
+  
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
+
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     async function apiCall() {
       const accounts = await web3.eth.getAccounts();
@@ -171,25 +179,11 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
     }
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
 
-  const onSuccess = async () => {
-    let d = await getTotalPoolValue(web3, poolAddress);
-    setTotalPoolValue(web3.utils.fromWei(d, "ether"));
-    const accounts = await web3.eth.getAccounts();
-    const pool = await getPoolContract(web3, poolAddress);
-    let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-    setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
-    let total = await pool.methods.totalSupply().call();
-    setTotalLPTokens(web3.utils.fromWei(total, "ether"));
-
-    let amount = await calculateInitialInvestment(web3, poolAddress);
-    setInitialInvestment(amount);
-    let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
-    setCurrentHoldings(withdrawAmount);
-
-    await getIsInvested();
-  };
+  const onSuccess = () => {
+    setRefresh(old => !old);
+  }
 
   const getFirstCardcolumns = (
     label: string,
@@ -238,7 +232,7 @@ export const DetailTable = ({ poolAddress }: { poolAddress: string }) => {
           </div>
         </PoolCardInnerInfo>
         <FirstCardRow className="row">
-          {getFirstCardcolumns("APK", "25%", "black",<div className="mr-1"><StatisticIcon /></div>)}
+          {getFirstCardcolumns("APY", "25%", "black",<div className="mr-1"><StatisticIcon /></div>)}
           {getFirstCardcolumns("ROI", "31.2%", "black",<div className="mr-1"><StatisticRoi /></div>)}
           {getFirstCardcolumns("Followers", "1,753", "black",<div className="mr-1"><FollowersIcon /></div>)}
           {getFirstCardcolumns("Dominance", "71%", "black",<div className="mr-1"><AwardIcon /></div>)}

@@ -186,12 +186,18 @@ export const InvestmentsPage = () => {
         const CalInvestments = async() => {
           const investments: IMyInvestments[] = farmesInvestmentData.data;
           const finalInvestments: IMyInvestments[] = [];
+          console.log(investments);
           for(let invest of investments){
-            const contract = await getPoolContract(web3, invest.poolAddress);
-            const accounts = await web3.eth.getAccounts();
-            const isInvested = await contract.methods.isInvestor(accounts[0]).call();
-            if(isInvested){
-              finalInvestments.push(invest);
+            try {
+              const contract = await getPoolContract(web3, invest.poolAddress);
+              const accounts = await web3.eth.getAccounts();
+                const isInvested = await contract.methods.isInvestor(accounts[0]).call();
+                console.log(isInvested, "IsInvested");
+                if(isInvested){
+                  finalInvestments.push(invest);
+                }
+            } catch(e){
+              console.error(e);
             }
           }
           setMyInvestments(finalInvestments);
