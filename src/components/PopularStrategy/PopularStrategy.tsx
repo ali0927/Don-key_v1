@@ -89,7 +89,7 @@ const PapperInner = styled.div`
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #fff;
-  height:100%;
+  height: 100%;
 `;
 
 const DescriptionContent = styled.p`
@@ -100,13 +100,12 @@ const GraphWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem 0;
-  height: 295px;
+  padding: 0 2rem;
 `;
 
 const TitleRow = styled.div`
   align-items: flex-start;
-  min-height: 94px;
+  min-height: 74px;
 `;
 
 export const PopularStrategy = ({
@@ -280,33 +279,33 @@ export const PopularStrategy = ({
           </div>
         </div>
         <h5 className="mt-4 popularstrategy__content__title">{contentTitle}</h5>
-       <div className="d-flex flex-column justify-content-between h-100">
-        <DescriptionContent className="popularstrategy__content__text">
-          <ShowMoreContent content={content} length={100} />
-        </DescriptionContent>
+        <div className="d-flex flex-column justify-content-between h-100">
+          <DescriptionContent className="popularstrategy__content__text">
+            <ShowMoreContent content={content} length={100} />
+          </DescriptionContent>
 
-        <div>
-          {comingSoonProp ? (
-            <div className="position-relative">
-              <ButtonWidget varaint="outlined" height="40px" disabled>
+          <div>
+            {comingSoonProp ? (
+              <div className="position-relative">
+                <ButtonWidget varaint="outlined" height="40px" disabled>
+                  Invest
+                </ButtonWidget>
+                <img
+                  className="coming-soon"
+                  src={comingsoon}
+                  alt="ImageNotFound"
+                />
+              </div>
+            ) : (
+              <ButtonWidget
+                varaint="outlined"
+                height="40px"
+                onClick={ButtonClick}
+              >
                 Invest
               </ButtonWidget>
-              <img
-                className="coming-soon"
-                src={comingsoon}
-                alt="ImageNotFound"
-              />
-            </div>
-          ) : (
-            <ButtonWidget
-              varaint="outlined"
-              height="40px"
-              onClick={ButtonClick}
-            >
-              Invest
-            </ButtonWidget>
-          )}
-        </div>
+            )}
+          </div>
         </div>
       </div>
     </Papper>
