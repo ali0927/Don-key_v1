@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
+import { theme } from "theme";
 
 const Root = styled.div`
   min-height: 250px;
-  background: #f4e41c;
+  background:${theme.palette.background.yellow};
 `;
 
 const Heading = styled.p`

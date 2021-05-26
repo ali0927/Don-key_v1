@@ -8,6 +8,7 @@ import au21 from "./investorlogos/au21.svg";
 import blackEdage from "./investorlogos/blackedge.svg";
 import moonwhale from "./investorlogos/moonwhile.svg";
 import gbv from "./investorlogos/gbv.svg";
+import { theme } from "theme";
 const StyledP = styled.p`
   border-left: 3px solid #070602;
   font-size: 25px;
@@ -26,7 +27,7 @@ const images = [
 ];
 
 const InvestorSection = styled.section`
-  background-color: #f4e41c;
+  background:${theme.palette.background.yellow};
   padding: 6rem 0;
 `;
 

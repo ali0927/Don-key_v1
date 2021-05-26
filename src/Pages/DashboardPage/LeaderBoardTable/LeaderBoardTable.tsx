@@ -13,7 +13,7 @@ import {
   TableRow,
   TableResponsive,
 } from "../../../components/Table";
-import { ContainedButton, LightGrayButton } from "components/Button";
+import { ButtonWidget, ContainedButton, LightGrayButton } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import styled from "styled-components";
 import { PoolAmount } from "components/PoolAmount";
@@ -154,9 +154,9 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
           <Overlay/>
           <JoinUsWrapper className="pt-4 pb-4">
             <Heading>Join our farmers team</Heading>
-            <JoinUsButton className="ml-5" onClick={handleJoinUseClick}>
+            <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="141px" className="ml-5" onClick={handleJoinUseClick}>
               Join us
-            </JoinUsButton>
+            </ButtonWidget>
           </JoinUsWrapper>
           </>
         )}

@@ -9,6 +9,7 @@ import image2 from "../popeye.svg";
 import image3 from "../image.svg";
 import { Heading3, LandingParagraph } from "../components";
 import { useHistory } from "react-router";
+import { theme } from "theme";
 
 const CardBanner = styled.div`
   position: relative;
@@ -18,7 +19,7 @@ const CardBanner = styled.div`
 const CardBannerAdvantage = styled.div`
   position: relative;
   width: 100%;
-  background-color: #f4e41c;
+  background:${theme.palette.background.yellow};
   // margin-top: -8%;
   padding: 9% 0%;
   padding-bottom: 20px;

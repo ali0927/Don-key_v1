@@ -4,9 +4,11 @@ import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
 import BuilderImage from "../Strategy.png";
+import { theme } from "theme";
+import { ButtonWidget } from "components/Button";
 
 const Root = styled.div`
-  background-color: #f4e41c;
+  background:${theme.palette.background.yellow};
   overflow: hidden;
 `;
 
@@ -69,14 +71,16 @@ export const StrategyBuilderSection: React.FC = () => {
                   allowing you to adapt fast to the dynamic world of DeFi and
                   secure your yield
                 </Paragraph>
-                <ButtonComponent
+                <ButtonWidget
+                  varaint="outlined"
+                  height="50px"
+                  width="152px"
                   disabled
-                  variant="colorBlack btn-outline position-relative"
-                  className="mt-4"
+                  className="position-relative mt-4"
                 >
                   <ImageCommingSoon src={comingsoon} />
                   Build strategy
-                </ButtonComponent>
+                </ButtonWidget>
               </div>
             </Col>
             <Col md={4}>

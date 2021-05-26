@@ -9,7 +9,7 @@ import { getBUSDTokenContract, getPoolContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
-import { ContainedButton, OutlinedButton } from "components/Button";
+import { ButtonWidget, ContainedButton, OutlinedButton } from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
 import { useSnackbar } from "notistack";
 import {
@@ -171,16 +171,18 @@ export const InvestmentPopup = ({
         </div>
         <div className="d-flex justify-content-between mt-5">
           <ButtonWrapper>
-            <ContainedButton
+            <ButtonWidget
+              varaint="contained" fontSize="14px"  containedVariantColor="lightYellow" height="30px" width="119px" 
               disabled={!value || isLoading}
               onClick={handleInvest}
             >
               {renderButtonText()}
-            </ContainedButton>
+            </ButtonWidget>
           </ButtonWrapper>
 
           <ButtonWrapper className="mr-0">
-            <OutlinedButton onClick={onClose}>Cancel</OutlinedButton>
+             <ButtonWidget
+              varaint="outlined" fontSize="14px" height="30px" width="119px"  onClick={onClose}>Cancel</ButtonWidget>
           </ButtonWrapper>
         </div>
       </div>

@@ -3,6 +3,7 @@ import { InfoOvalIcon } from "icons";
 import * as React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
+import { theme } from "theme";
 import DonImage from "./donkeyimg.png";
 
 const Root = styled.div`
@@ -12,7 +13,7 @@ const Root = styled.div`
 const DescriptionBlock = styled.div`
   width: 100%;
   min-height: 380px;
-  background: #f4e41c;
+  background:${theme.palette.background.yellow};
   border-radius: 5px;
 `;
 

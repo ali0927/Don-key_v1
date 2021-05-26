@@ -54,6 +54,11 @@ const ImageOuter = styled.div`
   border-radius: 15px;
 `;
 
+const Title = styled.h2`
+  font-family: Roboto;
+  font-weight: 600;
+`;
+
 export const FarmerBio = ({
   farmer: {
     description,
@@ -91,7 +96,7 @@ export const FarmerBio = ({
         <Row>
           <Col lg={12} className="mt-3">
             <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
-              <h2 className="mb-2 mb-md-0">Don - {capitalize(name || "")}</h2>
+              <Title className="mb-2 mb-md-0">Don - {capitalize(name || "")}</Title>
               {!isInvestor && (
                 <div className="d-flex align-items-center justify-content-center">
                   <OutlinedButton

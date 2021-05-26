@@ -13,13 +13,11 @@ import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import {
-  getPoolContract,
-  calculateInitialInvestment,
   calculateWithdrawAmount,
   getTotalPoolValue,
 } from "helpers";
 import { useWeb3 } from "don-components";
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 import {
   AwardIcon,
   FollowersIcon,
@@ -44,12 +42,9 @@ const CardWrapper = styled.div`
 `;
 
 const CardInnerInfo = styled.div`
-  min-height: 160px;
-`;
-
-const PoolCardInnerInfo = styled.div`
   min-height: 153px;
 `;
+
 
 const CardLabel = styled.p`
   font-family: Roboto;
@@ -247,9 +242,9 @@ export const DetailTable = ({
   return (
     <>
       <div className="col-lg-6 mb-5">
-        <CardWrapper className="p-3" color="white">
-          <PoolCardInnerInfo className="d-flex justify-content-center align-items-center">
-            <div>
+        <CardWrapper className="p-2" color="white">
+          <CardInnerInfo className="d-flex justify-content-center mb-2">
+            <div style={{marginTop: 40}}>
               <div className="d-flex align-items-baseline">
                 <TotalPoolValueLabel color="black">
                   {" "}
@@ -268,7 +263,7 @@ export const DetailTable = ({
                 {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
               </CardPoolAddress>
             </div>
-          </PoolCardInnerInfo>
+          </CardInnerInfo>
           <FirstCardRow className="row">
             {getFirstCardcolumns(
               "APY",
@@ -280,7 +275,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "ROI",
-              roi,
+              roi + " %",
               "black",
               <div className="mr-1">
                 <StatisticRoi />
@@ -296,7 +291,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Dominance",
-              dominance,
+              dominance +" %",
               "black",
               <div className="mr-1">
                 <AwardIcon />
@@ -307,23 +302,24 @@ export const DetailTable = ({
       </div>
       <div className="col-lg-6 mb-5 p">
         <CardWrapper className="p-2" color="black">
-          <CardInnerInfo className="d-flex justify-content-center align-items-center">
-            <div>
+          <CardInnerInfo className="d-flex justify-content-center mb-3">
+            <div style={{marginTop: 53}}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
                 $ {Number(currentHoldings).toFixed(8).toString()}
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
-                <CutomButton onClick={() => setShowInvestmentPopup(true)}>
+                <ButtonWidget varaint="contained" fontSize="14px"  containedVariantColor="lightYellow" height="30px" width="119px" onClick={() => setShowInvestmentPopup(true)}>
                   Invest
-                </CutomButton>
-                <CutomButton
+                </ButtonWidget>
+                <ButtonWidget  fontSize="14px" 
+                   varaint="contained" height="30px"  containedVariantColor="lightYellow" width="119px"
                   onClick={() => setShowWithdrawPopup(true)}
                   className="ml-2"
                 >
-                  WithDraw
-                </CutomButton>
+                  Withdraw
+                </ButtonWidget>
               </div>
             </div>
           </CardInnerInfo>
@@ -339,7 +335,7 @@ export const DetailTable = ({
               <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
               "white"
             )}
-            {getSecondCardColumns("My ROI", farmerRoi, "white")}
+            {getSecondCardColumns("My ROI", farmerRoi+" %", "white")}
             {getSecondCardColumns(
               "My share",
               Number(myShare).toFixed(2) + " %",

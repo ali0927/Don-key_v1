@@ -5,6 +5,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { Timer } from "./Timer";
+import {theme} from "theme";
 
 const Papper = styled.div`
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
@@ -28,7 +29,7 @@ const PapperBottom = styled.div`
 const ImageWrapper = styled.div`
   width: 51px;
   height: 51px;
-  background-color: #fff251;
+  background-color: ${theme.palette.background.yellow};
   border-radius: 5px;
 `;
 
@@ -65,7 +66,7 @@ const DescriptionContent = styled.div`
 
 const ComingSoonButton = styled(ContainedButton)`
   background: #000000;
-  color: #fff251;
+  color: ${theme.palette.background.yellow};
   font-family: Roboto;
   font-size: 16px;
   font-style: italic;
@@ -73,7 +74,7 @@ const ComingSoonButton = styled(ContainedButton)`
 
   :hover {
     background: #000000;
-    color: #fff251;
+    color: ${theme.palette.background.yellow};
   }
 `;
 

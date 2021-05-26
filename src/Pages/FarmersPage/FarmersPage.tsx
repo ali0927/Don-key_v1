@@ -7,9 +7,10 @@ import { DonKeyTextField } from "components/DonKeyTextField";
 import * as React from "react";
 import { IFarmerData } from "./interfaces";
 import { ContainedButton } from "components/Button";
+import { theme } from "theme";
 
 const RootWrapper = styled.div`
-  background-color: #f4e41c;
+  background-color: ${theme.palette.background.yellow};
 `;
 
 const CustomForm = styled.form`

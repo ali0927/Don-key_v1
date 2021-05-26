@@ -7,6 +7,7 @@ import { OverlayTrigger, Container, Row, Col } from "react-bootstrap";
 import { useState } from "react";
 import { TwitterIcon } from "components/TwitterIcon";
 import { TelegramIcon } from "components/TelegramIcon";
+import { ButtonWidget } from "components/Button";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -74,6 +75,7 @@ const Papper = styled.div`
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
   border-radius: 10px;
   font-size: 13px;
+  height: 100%;
   h5 {
     font-weight: 700;
   }
@@ -89,6 +91,21 @@ const PapperInner = styled.div`
 
 const DescriptionContent = styled.p`
   min-height: 36px;
+`;
+
+
+const GraphWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    height: 295px;
+
+`;
+
+const TitleRow = styled.div`
+   align-items: flex-start;
+   min-height: 94px;
 `;
 
 export const PopularStrategy = ({
@@ -145,7 +162,7 @@ export const PopularStrategy = ({
     <Papper>
       <PapperInner>
         <Container>
-          <Row>
+          <TitleRow className="row">
             <Col
               sm={9}
               onClick={handleCardClick}
@@ -190,7 +207,7 @@ export const PopularStrategy = ({
                 )}
               </div>
             </Col>
-          </Row>
+          </TitleRow>
         </Container>
 
         {/* <div
@@ -211,7 +228,7 @@ export const PopularStrategy = ({
             heading
           )}
         </div> */}
-        <div className="popularstrategy__graph__wrapper">
+        <GraphWrapper>
           {graph ? (
             graph
           ) : (
@@ -247,7 +264,7 @@ export const PopularStrategy = ({
               </div>
             </OverlayTrigger>
           )}
-        </div>
+        </GraphWrapper>
       </PapperInner>
 
       <div className="popularstrategy__content">
@@ -267,15 +284,15 @@ export const PopularStrategy = ({
         </DescriptionContent>
         {comingSoonProp ? (
           <div className="position-relative">
-            <button disabled className="popularstrategy__btn">
+            <ButtonWidget varaint="outlined" height="40px" disabled >
               Invest
-            </button>
+            </ButtonWidget>
             <img className="coming-soon" src={comingsoon} alt="ImageNotFound" />
           </div>
         ) : (
-          <button onClick={ButtonClick} className="popularstrategy__btn">
+          <ButtonWidget  varaint="outlined" height="40px" onClick={ButtonClick}>
             Invest
-          </button>
+          </ButtonWidget>
         )}
       </div>
     </Papper>

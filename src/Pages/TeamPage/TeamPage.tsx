@@ -4,9 +4,10 @@ import { Footer } from "components/Footer/Footer";
 import styled from "styled-components";
 import { TeamBoard } from "./TeamBoard";
 import { TeamJSON } from "./TeamsData";
+import { theme } from "theme";
 
 const Root = styled.div`
-  background-color: #f4e41c;
+  background-color: ${theme.palette.background.yellow};
 `;
 
 const Paragraph = styled.p`

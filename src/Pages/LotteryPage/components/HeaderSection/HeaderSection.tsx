@@ -1,4 +1,4 @@
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 
 import { SmallEllipse } from "icons/SmallEllipse";
 import moment from "moment";
@@ -8,13 +8,13 @@ import { useHistory } from "react-router";
 import styled from "styled-components";
 import { DonkeyLeftPanel } from "../DonkeyLeftPanel/DonkeyLeftPanel";
 import { RootHeader } from "../RootHeader/RootHeader";
-
+import {theme} from "../../../../theme";
 import { Timer } from "./Timer";
 
 const Header = styled.div`
   width: 100%;
   min-height: 450px;
-  background: #f4e41c;
+  background:${theme.palette.background.yellow};
   padding-top: 2rem;
 `;
 
@@ -89,9 +89,9 @@ export const HeaderSection: React.FC<{
               </div>
 
               {hasStarted && (
-                <TakePartButton className="mt-5 mb-5" onClick={handleTakePart}>
+                <ButtonWidget varaint="contained" height="60px" width="252px" className="mt-5 mb-5" onClick={handleTakePart}>
                   Stake and Participate
-                </TakePartButton>
+                </ButtonWidget>
               )}
             </div>
           </div>

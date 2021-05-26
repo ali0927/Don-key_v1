@@ -19,11 +19,12 @@ import {
   WhatsappIcon,
   RedditIcon,
 } from "react-share";
+import { theme } from "theme";
 
 const IconsWrapper = styled.div`
   width: 100%;
   min-height: 56px;
-  background: #f4e41c;
+  background:${theme.palette.background.yellow};
 `;
 
 export const RootHeader: React.FC<{

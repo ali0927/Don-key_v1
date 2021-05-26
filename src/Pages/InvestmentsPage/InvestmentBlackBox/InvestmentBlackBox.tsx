@@ -1,4 +1,4 @@
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 import { PoolReserveAmount } from "components/PoolReserveAmount";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import {
@@ -189,9 +189,9 @@ export const InvestmentBlackBox = ({
             <CardValue>{investedTotal}</CardValue>
 
             <div className="d-flex mt-2 mb-2 justify-content-center">
-              <CutomButton onClick={handleWithDrawAll} className="ml-2">
-                WithDraw
-              </CutomButton>
+              <ButtonWidget varaint="contained"  containedVariantColor="lightYellow" fontSize="14px" height="30px" width="119px"  onClick={handleWithDrawAll} className="ml-2">
+                Withdraw
+              </ButtonWidget>
             </div>
           </div>
         </CardInnerInfo>

@@ -2,6 +2,7 @@ import * as React from "react";
 import { Container } from "react-bootstrap";
 import { FaReddit } from "react-icons/fa";
 import styled from "styled-components";
+import { theme } from "theme";
 
 const CommunityRoot = styled.div`
   background: #222222;
@@ -16,7 +17,7 @@ const CommunityRoot = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffca00;
+    color:${theme.palette.background.yellow};
 
     /* media queries */
     @media (max-width: 767px) {
