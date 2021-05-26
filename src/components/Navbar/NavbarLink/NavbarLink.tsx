@@ -4,56 +4,72 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 import styled from "styled-components";
 
-const CustomizedLink = styled(Link)`
-    font-weight: 400; 
-    font-size: 16px;
-    line-height: 19px;
-    display: -webkit-flex;
-    display: flex;
-    -webkit-align-items: center;
-    align-items: center;
-    padding: .5rem 1rem;
-    padding-left: 0px;
-    text-decoration: none !important;
-    background-color: transparent;
-
-    @media (min-width: 992px){
-      padding-left: .5rem;
-    }
-
-    @media (min-width: 768px){
-      padding-right: 3rem!important;
-    }
-
-`
-
-export const NavbarLink = ({ to, children, linkColor = "black",target="openInCurrentTab" }: { to: string; children: React.ReactNode; linkColor?: "white" | "black";target?: "openInNewTab" | "openInCurrentTab"; }) => {
-  const { pathname } = useLocation();
-  const history = useHistory();
-
-  const handleLinkClick = (to: any) => (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if(target=== "openInCurrentTab"){
-      e.preventDefault();
-      history.push(to);
-    }
-    else {
-      const win = window.open(to, "_blank");
-      //@ts-ignore
-      win.focus();
-    }
-
+const styles = `
+font-weight: 400;
+  font-size: 16px;
+  line-height: 19px;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-align-items: center;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  padding-left: 0px;
+  text-decoration: none !important;
+  background-color: transparent;
+  cursor: pointer;
+  @media (min-width: 992px) {
+    padding-left: 0.5rem;
   }
 
+  @media (min-width: 768px) {
+    padding-right: 3rem !important;
+  }`;
+
+const CustomizedLink = styled(Link)`
+  ${styles}
+`;
+const Customizeda = styled.a`
+  ${styles}
+`;
+
+export const NavbarLink = ({
+  to,
+  children,
+  linkColor = "black",
+  target = "openInCurrentTab",
+  link,
+}: {
+  to: string;
+  children: React.ReactNode;
+  linkColor?: "white" | "black";
+  link?: boolean;
+  target?: "openInNewTab" | "openInCurrentTab";
+}) => {
+  const { pathname } = useLocation();
+
+  const className = clsx("pr-md-5", {
+    active: pathname === to,
+    colorBlack: linkColor === "black",
+    "text-white": linkColor === "white",
+  });
+  if (link) {
+    return (
+      <Customizeda
+        className={className}
+        href={to}
+        target={target === "openInCurrentTab" ? "_self" : "_blank"}
+      >
+        {children}
+      </Customizeda>
+    );
+  }
   return (
     <CustomizedLink
-      className={clsx("pr-md-5", { active: pathname === to, "colorBlack": linkColor === "black", "text-white": linkColor === "white" })}
-      // component={Nav.Link}
+      className={className}
       to={to}
       target={target === "openInCurrentTab" ? "_self" : "_blank"}
-      onClick={handleLinkClick(to)}
     >
       {children}
     </CustomizedLink>
-      
-    );
-  };
+  );
+};
