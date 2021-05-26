@@ -39,6 +39,7 @@ import { useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
 import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
 import { useSnackbar } from "notistack";
+import {theme} from "theme";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -147,6 +148,14 @@ const CustomTableData = styled(TableData)`
 //   // );
 //   return 0;
 // }
+
+const Section = styled.section`
+   background-color: ${theme.palette.background.yellow};
+`;
+
+const Head = styled.section`
+   background-color: ${theme.palette.background.yellow};
+`;
 
 export const InvestmentsPage = () => {
   const poolAddress = useSelector((state: IStoreState) => state.farmer)
@@ -276,8 +285,8 @@ export const InvestmentsPage = () => {
   return (
     <div className="bgColor investment_header_container">
       <NavBar variant="loggedin" />
-      <section className="bg-buru">
-        <div className="navbanHead rounded-0 pt-5 pb-5">
+      <Section>
+        <Head className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
               <Col lg={6}>
@@ -315,8 +324,8 @@ export const InvestmentsPage = () => {
             {/* <div className="header_separator" />
             <DetailsTable farmer={farmer} /> */}
           </Container>
-        </div>
-      </section>
+        </Head>
+      </Section>
       <section>
         <div className="mt-4 mb-5 tablebgHead">
           <Container>

@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { StyledLink } from "../../components/StyledLink";
 import { TopThreeFarmers } from "./TopThreeFarmers";
+import {theme} from "theme";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -48,6 +49,10 @@ const Heading = styled.h3`
   font-weight: 800;
 `;
 
+const RootWrapper = styled.div`
+   background-color: ${theme.palette.background.yellow};
+`;
+
 export const DashboardPage = () => {
   const [{ loading, data }] = useAxios("/api/v2/farmer");
 
@@ -81,7 +86,7 @@ export const DashboardPage = () => {
   }
   return (
     <Layout className="bgColor dashboard-root" variant="loggedin">
-      <div className="bgnav pt-5 borderCollapse">
+      <RootWrapper className="pt-5 borderCollapse">
         <CustomizedContainer>
           <Row>
             <Col>
@@ -99,7 +104,7 @@ export const DashboardPage = () => {
           </Row>
           {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
         </CustomizedContainer>
-      </div>
+      </RootWrapper>
 
       {/* Table */}
       <div className="leaderbord-top mb-5">

@@ -19,6 +19,7 @@ import { ErrorSnackbar } from "components/Snackbars";
 import { useSnackbar } from "notistack";
 import comingsoon from "images/comingsoon.svg";
 import styled from "styled-components";
+import {theme} from "theme";
 
 declare global {
   interface Window {
@@ -75,6 +76,10 @@ export const NotificationComp = () => {
   );
 };
 
+const StyledNavBar = styled(Navbar)`
+   background-color: ${theme.palette.background.yellow};
+`;
+
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
   const isAuth = useSelector((state: IStoreState) => state.auth);
@@ -106,7 +111,7 @@ function NavBar(props: INavBarProps) {
   return (
     <>
       <>
-        <Navbar
+        <StyledNavBar
           expand="lg"
           className={clsx("pt-4 pb-4 bg-none", {
             bgnav: variant !== "landing" && variant !== "builder",
@@ -232,7 +237,7 @@ function NavBar(props: INavBarProps) {
               </>
             )}
           </Container>
-        </Navbar>
+        </StyledNavBar>
       </>
     </>
   );
