@@ -28,5 +28,5 @@ export const TotalProfitLoss = ({ poolAddress, refresh =false }: { poolAddress: 
     setTotalProfitLoss(amountWithdraw - amountInitial)
   },[amountInitial, amountWithdraw])
 
-  return <>{totalProfitLoss} BUSD</>;
+  return <>{totalProfitLoss.toFixed(2)} BUSD</>;
 };
