@@ -3,20 +3,16 @@ import { useEffect } from "react";
 import { Footer } from "components/Footer/Footer";
 import { withWeb3 } from "hoc";
 import { useSelector } from "react-redux";
-import {  Redirect, useParams } from "react-router-dom";
-import {  IStoreState } from "interfaces";
+import { Redirect, useParams } from "react-router-dom";
+import { IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
 import GridImg from "./bg.png";
 import styled from "styled-components";
 
-
-
 export const FarmerBioPage = withWeb3(() => {
-
   const farmer = useSelector((state: IStoreState) => state.farmer);
-
 
   const { id: farmerId } = useParams<{ id: string }>();
 
@@ -35,31 +31,28 @@ export const FarmerBioPage = withWeb3(() => {
     })();
   }, []);
 
-
-
   if (!farmer) {
     return null;
   }
-  if(isCurrentFarmer && !farmer.poolAddress){
-    return <Redirect to="/dashboard/farmer/signup" />
+  if (isCurrentFarmer && !farmer.poolAddress) {
+    return <Redirect to="/dashboard/farmer/signup" />;
   }
-
 
   return (
     <div style={{ background: "#F4F4F4" }}>
       <NavBar variant="loggedin" />
       <section className="bg-buru">
         {isCurrentFarmer ? (
-          <FarmerBio farmer={farmer}/>
+          <FarmerBio farmer={farmer} />
         ) : (
           <FarmerBioFromApi farmerId={farmerId} />
         )}
       </section>
-      <div  style={{ backgroundImage:`url(${GridImg})` }}>
-      <FarmerStrategies
-        farmerId={farmerId || (farmer?.GUID as string)}
-        isInvestor={!isCurrentFarmer}
-      />
+      <div style={{ backgroundImage: `url(${GridImg})` }}>
+        <FarmerStrategies
+          farmerId={farmerId || (farmer?.GUID as string)}
+          isInvestor={!isCurrentFarmer}
+        />
       </div>
       <Footer />
     </div>
