@@ -51,6 +51,10 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
 
     setOpenInvestment(false);
   };
+  const [refresh, setRefresh] = React.useState(false);
+  const refreshData = () => {
+    setRefresh((old) => !old);
+  };
 
   const StrategyCard = (leader: IFarmer) => {
     const APY = leader.apy
@@ -73,7 +77,9 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             strategyImage={leader.strategyImage}
             content={leader.description}
             apy={APY}
-            totalValue={<PoolAmount poolAddress={leader.poolAddress} />}
+            totalValue={
+              <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
+            }
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(
               leader.name,
@@ -134,6 +140,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         </div>
         {openInvestment && (
           <InvestmentPopup
+            onSuccess={refreshData}
             poolAddress={state.poolAddress}
             onClose={closeInvestmentDialog}
           />

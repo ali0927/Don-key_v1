@@ -3,11 +3,13 @@ import { useNotification } from "components/Notification";
 import { useWeb3 } from "don-components";
 import { AuthToken } from "don-utils";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 import { getAuthTokenForPublicAddress } from "services/api";
 
 export const useMetaMaskLogin = () => {
   const dispatch = useDispatch();
   const { showNotification } = useNotification();
+  const history = useHistory();
 
   const web3 = useWeb3()
   const handleMetaMaskLogin = async () => {
@@ -20,7 +22,8 @@ export const useMetaMaskLogin = () => {
     }
 
     const publicAddress = coinbase.toLowerCase();
-    const { token, user } = await getAuthTokenForPublicAddress(publicAddress);
+    try{
+    const { token, user } = await getAuthTokenForPublicAddress(publicAddress)
 
     localStorage.setItem(AuthToken, token);
 
@@ -33,6 +36,24 @@ export const useMetaMaskLogin = () => {
         </>
       ),
     });
+  }
+  catch(err){
+   
+      let errMessage = "Please try again";
+      console.log(err.response)
+      if(err.response && err.response.data && err.response.data.data && err.response.data.data.msg){
+        errMessage = err.response.data.data.msg;
+      }
+      history.push("/")
+      showNotification({
+        msg: (
+          <>
+            <p className="text-center m-0">{errMessage}</p>
+          </>
+        ),
+        type: "error",
+      });
+  }
   };
   return { doMetaMaskLogin: handleMetaMaskLogin };
 };
