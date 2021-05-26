@@ -335,7 +335,6 @@ export const InvestmentsPage = () => {
                       <CustomTableHeading>#</CustomTableHeading>
                       <EmptyTableHeading></EmptyTableHeading>
                       <CustomTableHeading>NAME OF FARMER</CustomTableHeading>
-                      <CustomTableHeading>NAME OF STRATEGY</CustomTableHeading>
                       <CustomTableHeading>BUSD INVESTED</CustomTableHeading>
                       <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
                       <CustomTableHeading>WITHDRAW BUSD</CustomTableHeading>
@@ -352,19 +351,7 @@ export const InvestmentsPage = () => {
                           <CustomTableData className="bold">
                             {investment.name}
                           </CustomTableData>
-                          <CustomTableData className="bold">
-                            {investment.strategies.length > 0 ? (
-                              <>
-                                <StrategyName
-                                  strategyAddress={
-                                    investment.strategies[0].strategyAddress
-                                  }
-                                />
-                              </>
-                            ) : (
-                              "-"
-                            )}
-                          </CustomTableData>
+              
                           <CustomTableData>
                             {" "}
                             <MyInvestment
