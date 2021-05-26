@@ -5,7 +5,7 @@ import React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { Timer } from "./Timer";
-import {theme} from "theme";
+import { theme } from "theme";
 
 const Papper = styled.div`
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
@@ -79,11 +79,11 @@ const ComingSoonButton = styled(ContainedButton)`
 `;
 
 const DonKeyIcon = styled(DonKeyLeftToRightFace)`
-     height: 51px;
-     width: 51px;
+  height: 51px;
+  width: 51px;
 `;
 
-export const ComingSoonFarmer = (props: {timerDate: string}) => {
+export const ComingSoonFarmer = (props: { timerDate: string }) => {
   return (
     <>
       <Papper>
@@ -91,7 +91,7 @@ export const ComingSoonFarmer = (props: {timerDate: string}) => {
           <Row>
             <Col lg={12} className="d-flex align-items-center">
               <ImageWrapper>
-                <DonKeyIcon/>
+                <DonKeyIcon />
               </ImageWrapper>
               <Title className="ml-2">New Farmer</Title>
             </Col>
@@ -107,7 +107,7 @@ export const ComingSoonFarmer = (props: {timerDate: string}) => {
               <DescriptionContent>
                 <ShowMoreContent
                   content={
-                    "Farming is a way to offset risk within your portfolio, whether that is hedging assets through"
+                    "All Don-key's are farmers, but not all farmers are Don-key's. We are screening the best of the best for you to follow soon"
                   }
                   length={85}
                 />
