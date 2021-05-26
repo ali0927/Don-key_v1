@@ -59,7 +59,9 @@ export const FarmerCards = (props: any) => {
       </div>
       <div className="farmer-card-bottom p-4 d-flex flex-column align-items-center">
         <Card.Text className="mt-4 mb-4 text-center w-100">
-          <div><b>{props.content}</b> Investors</div>
+          <div>
+            <b>{props.content}</b> Investors
+          </div>
           <div className="d-flex justify-content-between px-5 py-2 mt-4 mb-3">
             <span>
               APY:

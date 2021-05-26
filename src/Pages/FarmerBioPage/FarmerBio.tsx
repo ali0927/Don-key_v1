@@ -96,7 +96,9 @@ export const FarmerBio = ({
         <Row>
           <Col lg={12} className="mt-3">
             <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
-              <Title className="mb-2 mb-md-0">Don - {capitalize(name || "")}</Title>
+              <Title className="mb-2 mb-md-0">
+                Don - {capitalize(name || "")}
+              </Title>
               {!isInvestor && (
                 <div className="d-flex align-items-center justify-content-center">
                   <OutlinedButton
@@ -126,6 +128,7 @@ export const FarmerBio = ({
                   src={picture}
                   className="img-fluid"
                   alt="farmer"
+                  style={{ borderRadius: 0 }}
                 />
               </ImageOuter>
               <div className="w-100 ml-3 mt-2">

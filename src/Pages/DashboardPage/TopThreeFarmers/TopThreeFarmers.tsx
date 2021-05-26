@@ -64,7 +64,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
       <>
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
-            icon={<Image src={leader.picture} />}
+            icon={<Image src={leader.picture} style={{ borderRadius: 0 }} />}
             contentTitle={
               leader.descriptionTitle ? leader.descriptionTitle : ""
             }
