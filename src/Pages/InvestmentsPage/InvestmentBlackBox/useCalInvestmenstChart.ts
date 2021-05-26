@@ -46,9 +46,9 @@ export const useCalInvestmentsChart = (web3: any,myInvestments: IMyInvestments[]
       }, []);
 
       return {
-        profitloss: profitloss.toString(),
+        profitloss: profitloss.toFixed(2).toString(),
         investedTotal: investedTotal,
         initialInvestmentTotal: Number(initialInvestmentTotal).toFixed(2).toString(),
-        roi: roi,
+        roi: roi.toFixed(2),
       }
 }

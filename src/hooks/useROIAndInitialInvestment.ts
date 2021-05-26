@@ -24,7 +24,7 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string) => {
         setMyShare(myShares);
 
         const totalRoi = poolValue.dividedBy(lptokensresponse);
-        setTotalRoi(totalRoi.toString());
+        setTotalRoi(totalRoi.toFixed(2).toString());
 
         const startingInvestment = await calculateInitialInvestment(web3, poolAddress);
         const roi = await getROI(web3, poolAddress);
@@ -33,7 +33,7 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string) => {
     
     
         
-        setRoi(roi.toString());
+        setRoi(roi.toFixed(2).toString());
     
        
       }
