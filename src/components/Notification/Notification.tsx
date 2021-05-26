@@ -25,11 +25,16 @@ const StyledNotification = styled.div`
   z-index: 100;
   border-radius: 3px;
   ${(props: { variant: INotification["type"] }) =>
-    props.variant === "success" &&
+    props.variant === "success" ?
     `
     background-color: #37b06f;
     color: #fff;
-  `}
+  ` : `
+  background-color:  #cc0000;
+    color: #fff;
+  `
+    
+  }
   animation: ${slideDown} 0.5s linear;
 `;
 
