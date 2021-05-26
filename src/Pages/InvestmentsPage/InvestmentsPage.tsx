@@ -176,7 +176,7 @@ export const InvestmentsPage = () => {
 
   const [{ data }] = useAxios({ method: "GET", url: "/api/v2/farmer" });
 
-  const [{ data: farmesInvestmentData, loading }] = useAxios(
+  const [{ data: farmesInvestmentData }] = useAxios(
     { method: "GET", url: "/api/v2/investments" },
     { useCache: false }
   );
@@ -185,7 +185,7 @@ export const InvestmentsPage = () => {
     { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
-
+  const [loading, setLoading] = useState(true);
   const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
 
   const [withDraw, setWidthDraw] = useState({
@@ -224,6 +224,7 @@ export const InvestmentsPage = () => {
             console.error(e);
           }
         }
+        setLoading(false);
         setMyInvestments(finalInvestments);
       };
       CalInvestments();
