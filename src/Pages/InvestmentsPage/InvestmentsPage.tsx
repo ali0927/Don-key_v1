@@ -37,9 +37,13 @@ import {
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
-import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
+import {
+  ErrorSnackbar,
+  ProgressSnackbar,
+  SuccessSnackbar,
+} from "components/Snackbars";
 import { useSnackbar } from "notistack";
-import {theme} from "theme";
+import { theme } from "theme";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -110,7 +114,8 @@ const CustomTableHeading = styled(TableHeading)`
 
 const CustomTableData = styled(TableData)`
   text-align: center;
-  cursor: ${(props: { cursor?: string }) => props.cursor ? props.cursor : "auto" };
+  cursor: ${(props: { cursor?: string }) =>
+    props.cursor ? props.cursor : "auto"};
 `;
 
 // const InvestmentDisplay = styled.div`
@@ -151,11 +156,11 @@ const CustomTableData = styled(TableData)`
 // }
 
 const Section = styled.section`
-   background-color: ${theme.palette.background.yellow};
+  background-color: ${theme.palette.background.yellow};
 `;
 
 const Head = styled.section`
-   background-color: ${theme.palette.background.yellow};
+  background-color: ${theme.palette.background.yellow};
 `;
 
 export const InvestmentsPage = () => {
@@ -277,11 +282,9 @@ export const InvestmentsPage = () => {
     history.push("/dashboard");
   };
 
-  const RedirectToFarmerProfile =(poolAddress: string)=> () => {
-    history.push("/farmer/"+poolAddress);
-  }
-
-
+  const RedirectToFarmerProfile = (poolAddress: string) => () => {
+    history.push("/farmer/" + poolAddress);
+  };
 
   if (!data) {
     return <LoadingPage />;
@@ -362,10 +365,16 @@ export const InvestmentsPage = () => {
                           <CustomTableData>
                             <StyledImage src={investment.picture} />
                           </CustomTableData>
-                          <CustomTableData cursor="pointer" onClick={RedirectToFarmerProfile(investment.poolAddress)} className="bold">
+                          <CustomTableData
+                            cursor="pointer"
+                            onClick={RedirectToFarmerProfile(
+                              investment.poolAddress
+                            )}
+                            className="bold"
+                          >
                             {investment.name}
                           </CustomTableData>
-              
+
                           <CustomTableData>
                             {" "}
                             <MyInvestment

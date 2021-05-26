@@ -12,10 +12,7 @@ import { MyInitialInvestment } from "components/MyInitialInvestment";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import {
-  calculateWithdrawAmount,
-  getTotalPoolValue,
-} from "helpers";
+import { calculateWithdrawAmount, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import { ButtonWidget, ContainedButton } from "components/Button";
 import {
@@ -44,7 +41,6 @@ const CardWrapper = styled.div`
 const CardInnerInfo = styled.div`
   min-height: 153px;
 `;
-
 
 const CardLabel = styled.p`
   font-family: Roboto;
@@ -89,7 +85,7 @@ const CardValue = styled.p`
 const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
-  border-right: 1px solid #B4B4B4;
+  border-right: 1px solid #b4b4b4;
   min-height: 50px;
   :last-child {
     border-right: none;
@@ -232,7 +228,10 @@ export const DetailTable = ({
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
         <div className="mt-3 d-flex align-items-center justify-content-center flex-wrap">
-          <ColumnsTitle1 className="w-100" color={"#CEC6C6"}> {label}</ColumnsTitle1>
+          <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
+            {" "}
+            {label}
+          </ColumnsTitle1>
           <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
         </div>
       </Columns>
@@ -244,7 +243,7 @@ export const DetailTable = ({
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
           <CardInnerInfo className="d-flex justify-content-center mb-2">
-            <div style={{marginTop: 40}}>
+            <div style={{ marginTop: 40 }}>
               <div className="d-flex align-items-baseline">
                 <TotalPoolValueLabel color="black">
                   {" "}
@@ -259,7 +258,11 @@ export const DetailTable = ({
                 </a>
               </div>
               <CardPoolAddress>
-                $ {Number(totalPoolValue).toFixed(2)}
+                ${" "}
+                {Number(totalPoolValue).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
                 {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
               </CardPoolAddress>
             </div>
@@ -291,7 +294,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Dominance",
-              dominance +" %",
+              dominance + " %",
               "black",
               <div className="mr-2">
                 <AwardIcon />
@@ -303,18 +306,34 @@ export const DetailTable = ({
       <div className="col-lg-6 mb-5 p">
         <CardWrapper className="p-2" color="black">
           <CardInnerInfo className="d-flex justify-content-center mb-3">
-            <div style={{marginTop: 53}}>
+            <div style={{ marginTop: 53 }}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
-                $ {Number(currentHoldings).toFixed(8).toString()}
+                ${" "}
+                {Number(currentHoldings).toLocaleString("en-US", {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
-                <ButtonWidget varaint="contained" fontSize="14px" className="mr-3" containedVariantColor="lightYellow" height="30px" width="119px" onClick={() => setShowInvestmentPopup(true)}>
+                <ButtonWidget
+                  varaint="contained"
+                  fontSize="14px"
+                  className="mr-3"
+                  containedVariantColor="lightYellow"
+                  height="30px"
+                  width="119px"
+                  onClick={() => setShowInvestmentPopup(true)}
+                >
                   Invest
                 </ButtonWidget>
-                <ButtonWidget  fontSize="14px" 
-                   varaint="contained" height="30px"  containedVariantColor="lightYellow" width="119px"
+                <ButtonWidget
+                  fontSize="14px"
+                  varaint="contained"
+                  height="30px"
+                  containedVariantColor="lightYellow"
+                  width="119px"
                   onClick={() => setShowWithdrawPopup(true)}
                   className="ml-3"
                 >
@@ -335,7 +354,7 @@ export const DetailTable = ({
               <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
               "white"
             )}
-            {getSecondCardColumns("My ROI", farmerRoi+" %", "white")}
+            {getSecondCardColumns("My ROI", farmerRoi + " %", "white")}
             {getSecondCardColumns(
               "My share",
               Number(myShare).toFixed(2) + " %",

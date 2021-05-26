@@ -165,7 +165,7 @@ export const PopularStrategy = ({
         <Container>
           <TitleRow className="row">
             <Col
-              sm={9}
+              sm={12}
               onClick={handleCardClick}
               className={clsx("popularstrategy__title ", {
                 "cursor-pointer": !comingSoonProp,
@@ -182,7 +182,7 @@ export const PopularStrategy = ({
                 </small>
               </div>
             </Col>
-            <Col sm={3}>
+            {/* <Col sm={3}>
               <div
                 style={{
                   display: "flex",
@@ -207,7 +207,7 @@ export const PopularStrategy = ({
                   ></TwitterIcon>
                 )}
               </div>
-            </Col>
+            </Col> */}
           </TitleRow>
         </Container>
 
