@@ -89,7 +89,7 @@ const CardValue = styled.p`
 const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
-  border-right: 1px solid #ededf2;
+  border-right: 1px solid #B4B4B4;
   min-height: 50px;
   :last-child {
     border-right: none;
@@ -143,7 +143,7 @@ const ColumnsSubTitleColored = styled.p`
 `;
 
 const ColumnsTitle1 = styled(ColumnsTitleColored)`
-  font-size: 11px;
+  font-size: 14px;
 `;
 
 const CutomButton = styled(ContainedButton)`
@@ -206,9 +206,9 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex justify-content-center">
-        <div className="mt-3">
+        <div className="mt-3  d-flex align-items-center justify-content-center flex-wrap">
           <ColumnsTitle
-            className="d-flex justify-content-center mb-2"
+            className="d-flex justify-content-center mb-2 w-100"
             color={color}
           >
             <>
@@ -231,8 +231,8 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
-        <div className="mt-3">
-          <ColumnsTitle1 color={"#CEC6C6"}> {label}</ColumnsTitle1>
+        <div className="mt-3 d-flex align-items-center justify-content-center flex-wrap">
+          <ColumnsTitle1 className="w-100" color={"#CEC6C6"}> {label}</ColumnsTitle1>
           <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
         </div>
       </Columns>
@@ -269,7 +269,7 @@ export const DetailTable = ({
               "APY",
               "25%",
               "black",
-              <div className="mr-1">
+              <div className="mr-2">
                 <StatisticIcon />
               </div>
             )}
@@ -277,7 +277,7 @@ export const DetailTable = ({
               "ROI",
               roi + " %",
               "black",
-              <div className="mr-1">
+              <div className="mr-2">
                 <StatisticRoi />
               </div>
             )}
@@ -285,7 +285,7 @@ export const DetailTable = ({
               "Followers",
               investorCount,
               "black",
-              <div className="mr-1">
+              <div className="mr-2">
                 <FollowersIcon />
               </div>
             )}
@@ -293,7 +293,7 @@ export const DetailTable = ({
               "Dominance",
               dominance +" %",
               "black",
-              <div className="mr-1">
+              <div className="mr-2">
                 <AwardIcon />
               </div>
             )}
@@ -310,13 +310,13 @@ export const DetailTable = ({
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
-                <ButtonWidget varaint="contained" fontSize="14px"  containedVariantColor="lightYellow" height="30px" width="119px" onClick={() => setShowInvestmentPopup(true)}>
+                <ButtonWidget varaint="contained" fontSize="14px" className="mr-3" containedVariantColor="lightYellow" height="30px" width="119px" onClick={() => setShowInvestmentPopup(true)}>
                   Invest
                 </ButtonWidget>
                 <ButtonWidget  fontSize="14px" 
                    varaint="contained" height="30px"  containedVariantColor="lightYellow" width="119px"
                   onClick={() => setShowWithdrawPopup(true)}
-                  className="ml-2"
+                  className="ml-3"
                 >
                   Withdraw
                 </ButtonWidget>
