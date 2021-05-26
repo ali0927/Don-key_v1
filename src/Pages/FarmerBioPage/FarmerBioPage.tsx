@@ -10,6 +10,13 @@ import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
 import GridImg from "./bg.png";
 import styled from "styled-components";
+import {theme} from "theme";
+
+const Section = styled.section`
+    background-color: ${theme.palette.background.yellow};
+
+`;
+
 
 export const FarmerBioPage = withWeb3(() => {
   const farmer = useSelector((state: IStoreState) => state.farmer);
@@ -41,13 +48,13 @@ export const FarmerBioPage = withWeb3(() => {
   return (
     <div style={{ background: "#F4F4F4" }}>
       <NavBar variant="loggedin" />
-      <section className="bg-buru">
+      <Section>
         {isCurrentFarmer ? (
           <FarmerBio farmer={farmer} />
         ) : (
           <FarmerBioFromApi farmerId={farmerId} />
         )}
-      </section>
+      </Section>
       <div style={{ backgroundImage: `url(${GridImg})` }}>
         <FarmerStrategies
           farmerId={farmerId || (farmer?.GUID as string)}

@@ -73,8 +73,8 @@ const OutlineVariant = styled.button`
     height: ${(props: { width?: string; height?: string;fontSize?: string }) => props.height ?  props.height :"100%" };
     border: 1px solid ${theme.palette.border.main};
     :hover {
-        background-color: ${theme.palette.common.black};
-        color:  ${theme.palette.text.white};
+        background-color: ${theme.palette.common.yellow};
+        color:  ${theme.palette.text.black};
     };
     :disabled {
         background-color: transparent;
