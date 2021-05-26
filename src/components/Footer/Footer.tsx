@@ -39,6 +39,9 @@ export const Footer = () => {
                   0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255
                 </a>
               </p>
+              <p style={{ color: "#fff" }}>
+                This project is in beta. Use at your own risk.
+              </p>
             </div>
           </Col>
           <Col sm="2" style={{ textAlign: "center" }}>

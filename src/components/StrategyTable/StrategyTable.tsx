@@ -32,23 +32,19 @@ const OutlinedButton = styled.button`
   }
 `;
 
-
-
 const formatDate = (
   date: string | null | undefined,
   defaultVal: string = ""
 ) => {
   try {
     if (date) {
-      return moment(date).format("MMMM Do YY");
+      return moment(date).format("MMMM Do YYYY");
     }
     return defaultVal;
   } catch (e) {
     return defaultVal;
   }
 };
-
-
 
 const useTVL = (poolAddress: string) => {
   const [tvl, setTvl] = useState("");
@@ -98,24 +94,38 @@ export const StrategyTableForInvestor = ({
         <colgroup></colgroup>
         <TableHead>
           <TableRow>
-            <TableHeading>Name</TableHeading>
-            <TableHeading>Profit</TableHeading>
-            <TableHeading>TVL</TableHeading>
-            <TableHeading>APY</TableHeading>
-            <TableHeading>Status</TableHeading>
-            <TableHeading>Created On</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>
+              Created On
+            </TableHeading>
           </TableRow>
         </TableHead>
         <TableBody>
           {strategies.map((item, i) => {
             return (
               <TableRow key={item.id}>
-                <TableData>{item.strategyName}</TableData>
-                <TableData>{profit ? formatNum(profit) : "0"}</TableData>
-                <TableData>{tvl ? formatNum(tvl) : "0"}</TableData>
-                <TableData>{item.apy}</TableData>
-                <TableData>{item.status || "Active"}</TableData>
-                <TableData>{formatDate(item.createdAt)}</TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {item.strategyName}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {profit ? formatNum(profit) : "0"}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {tvl ? formatNum(tvl) : "0"}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {item.apy}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {item.status || "Active"}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {formatDate(item.createdAt)}
+                </TableData>
               </TableRow>
             );
           })}
