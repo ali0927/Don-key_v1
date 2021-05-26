@@ -1,9 +1,6 @@
 import { AddStrategyModal } from "components/AddStrategyModal";
 import { RunStrategy } from "components/RunStrategy";
-import {
-  StrategyTable,
-  StrategyTableForInvestor,
-} from "components/StrategyTable";
+import { StrategyTableForInvestor } from "components/StrategyTable";
 import { StyledLink } from "components/StyledLink";
 import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
@@ -51,17 +48,20 @@ const DescriptionTitle = styled.p`
 
 export const FarmerStrategies = ({
   farmerId,
-  isInvestor
+  isInvestor,
 }: {
   farmerId: string;
   isInvestor?: boolean;
 }) => {
+  const [{ loading: loading1, data: farmerFromApi }] = useAxios(
+    `/api/v2/farmer/${farmerId}`
+  );
   const [{ loading, data: strategiesData }, refetchData] = useAxios(
     `/api/v2/farmer/${farmerId}/strategies`
   );
 
   const renderContent = () => {
-    if (loading) {
+    if (loading || loading1) {
       return (
         <div
           className="d-flex align-items-center justify-content-center"
@@ -119,13 +119,15 @@ export const FarmerStrategies = ({
               >
                 <StyledHeading>Strategies</StyledHeading>
                 {!isInvestor && strategiesData.data.length === 1 ? (
-                  <RunStrategy  strategy={strategiesData.data[0]} />
+                  <RunStrategy strategy={strategiesData.data[0]} />
                 ) : (
                   <>
-                  {!isInvestor &&
-                       <AddNewStrategy text="Add Strategy" onDone={refetchData} />
-                  }
-               
+                    {!isInvestor && (
+                      <AddNewStrategy
+                        text="Add Strategy"
+                        onDone={refetchData}
+                      />
+                    )}
                   </>
                 )}
               </Col>
@@ -134,20 +136,22 @@ export const FarmerStrategies = ({
                   <Col md={12} lg={12}>
                     <DescriptionTitle>Description</DescriptionTitle>
                     <p style={{ fontSize: 15 }}>
-                      <ShowMoreContent length={80} content={strategiesData.data[0].strategyDescription || "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"} />
+                      <ShowMoreContent
+                        length={80}
+                        content={
+                          strategiesData.data[0].strategyDescription ||
+                          "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
+                        }
+                      />
                     </p>
                   </Col>
                 </Row>
-            </Container>
+              </Container>
               <Col sm={12}>
-                {isInvestor ? (
-                  <StrategyTableForInvestor strategies={strategiesData.data} />
-                ) : (
-                  <StrategyTable
-                    onRefetch={refetchData}
-                    strategies={strategiesData.data}
-                  />
-                )}
+                <StrategyTableForInvestor
+                  poolAddress={farmerFromApi.data.farmer.poolAddress}
+                  strategies={strategiesData.data}
+                />
               </Col>
             </Row>
           </Container>
