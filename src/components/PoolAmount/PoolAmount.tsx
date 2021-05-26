@@ -4,7 +4,7 @@ import { getTotalPoolValue } from "helpers";
 import { useLayoutEffect, useState } from "react";
 
 
-export const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
+export const PoolAmount = ({ poolAddress, refresh = false }: { poolAddress: string; refresh?: boolean }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState("");
 
@@ -25,7 +25,7 @@ export const PoolAmount = ({ poolAddress }: { poolAddress: string }) => {
   useLayoutEffect(() => {
     getPoolValue()
      // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [refresh]);
   if (!isReady) {
     return <>-</>;
   }

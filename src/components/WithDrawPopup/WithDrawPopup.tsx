@@ -1,24 +1,12 @@
-import BigNumber from "bignumber.js";
 import { ContainedButton, OutlinedButton } from "components/Button";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
-import { ErrorSnackbar, ProgressSnackbar, SuccessSnackbar } from "components/Snackbars";
+import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { useWeb3 } from "don-components";
-import { calculateWithdrawAmount, checkIfUserWithDrawlWorked, getBUSDBalance, getBUSDTokenContract, getPoolContract } from "helpers";
+import { calculateWithdrawAmount, getPoolContract } from "helpers";
 import { useAxios } from "hooks/useAxios";
-import { useSnackbar } from "notistack";
 import * as React from "react";
-import Web3 from "web3";
 import { IWithDrawPopupProps } from "./interfaces";
-
-const waitFor = (input: number) => {
-  return new Promise((res) => {
-    setTimeout(res,input)
-  })
-}
-
-
-
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, onClose } = props;
@@ -44,51 +32,30 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-
+  const { showFailure, showProgress, showSuccess } =
+    useTransactionNotification();
   const handleWithDraw = async () => {
-    let key: string | undefined = undefined;
-    
     try {
       setLoading(true);
       const accounts = await web3.eth.getAccounts();
-      const initialUserBalance = await getBUSDBalance(web3,accounts[0]);
+
       const pool = await getPoolContract(web3, poolAddress);
       onClose();
-      
-      key = enqueueSnackbar("Withdrawal is in Progress", {
-        content: (key, msg) => <ProgressSnackbar message={msg as string} />,
-        persist: true,
-      }) as string;
+
+      showProgress("Withdrawal is in Progress");
       await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
-      await checkIfUserWithDrawlWorked(web3, initialUserBalance);
+
       await executeDelete({
         data: {
           poolAddress: poolAddress,
         },
       });
-      if (key) {
-        closeSnackbar(key);
-      }
-      console.log("first failure check")
-      enqueueSnackbar("Withdrawal SuccessFull", {
-        content: (key, msg) => <SuccessSnackbar message={msg as string} />,
-        persist: false,
-      }) as string;
-      
-      console.log("second failure check")
+
+      showSuccess("Withdrawal Successfull");
 
       props.onSuccess();
-
     } catch (err) {
-      console.trace(err, "error from withdrawal")
-      if (key) {
-        closeSnackbar(key);
-      }
-      enqueueSnackbar("Withdrawal Failed", {
-        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
-        persist: false,
-      }) as string;
+      showFailure("Withdrawal Failed");
       props.onError(err);
     }
   };

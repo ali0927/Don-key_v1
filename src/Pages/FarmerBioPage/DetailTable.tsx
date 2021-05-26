@@ -172,12 +172,13 @@ export const DetailTable = ({
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
 
-  const { roi, farmerRoi, initialInvestment, myShare } =
-    useROIAndInitialInvestment(web3, finalPoolAddress);
+  const { roi, farmerRoi, initialInvestment, myShare, fetchRoi } =
+    useROIAndInitialInvestment(web3, finalPoolAddress, true);
 
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
   const [refresh, setRefresh] = useState(false);
+  const { getIsInvested, isInvested } = useIsInvested(poolAddress);
   useEffect(() => {
     async function apiCall() {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
@@ -185,6 +186,8 @@ export const DetailTable = ({
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
       setCurrentHoldings(withdrawAmount);
+      getIsInvested();
+      fetchRoi();
     }
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -328,17 +331,19 @@ export const DetailTable = ({
                 >
                   Invest
                 </ButtonWidget>
-                <ButtonWidget
-                  fontSize="14px"
-                  varaint="contained"
-                  height="30px"
-                  containedVariantColor="lightYellow"
-                  width="119px"
-                  onClick={() => setShowWithdrawPopup(true)}
-                  className="ml-3"
-                >
-                  Withdraw
-                </ButtonWidget>
+                {isInvested && (
+                  <ButtonWidget
+                    fontSize="14px"
+                    varaint="contained"
+                    height="30px"
+                    containedVariantColor="lightYellow"
+                    width="119px"
+                    onClick={() => setShowWithdrawPopup(true)}
+                    className="ml-3"
+                  >
+                    Withdraw
+                  </ButtonWidget>
+                )}
               </div>
             </div>
           </CardInnerInfo>
