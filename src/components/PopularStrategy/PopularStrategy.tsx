@@ -93,19 +93,17 @@ const DescriptionContent = styled.p`
   min-height: 36px;
 `;
 
-
 const GraphWrapper = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 0;
-    height: 295px;
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 0;
+  height: 295px;
 `;
 
 const TitleRow = styled.div`
-   align-items: flex-start;
-   min-height: 94px;
+  align-items: flex-start;
+  min-height: 94px;
 `;
 
 export const PopularStrategy = ({
@@ -164,7 +162,7 @@ export const PopularStrategy = ({
         <Container>
           <TitleRow className="row">
             <Col
-              sm={9}
+              sm={12}
               onClick={handleCardClick}
               className={clsx("popularstrategy__title ", {
                 "cursor-pointer": !comingSoonProp,
@@ -181,7 +179,7 @@ export const PopularStrategy = ({
                 </small>
               </div>
             </Col>
-            <Col sm={3}>
+            {/* <Col sm={3}>
               <div
                 style={{
                   display: "flex",
@@ -206,7 +204,7 @@ export const PopularStrategy = ({
                   ></TwitterIcon>
                 )}
               </div>
-            </Col>
+            </Col> */}
           </TitleRow>
         </Container>
 
@@ -284,13 +282,13 @@ export const PopularStrategy = ({
         </DescriptionContent>
         {comingSoonProp ? (
           <div className="position-relative">
-            <ButtonWidget varaint="outlined" height="40px" disabled >
+            <ButtonWidget varaint="outlined" height="40px" disabled>
               Invest
             </ButtonWidget>
             <img className="coming-soon" src={comingsoon} alt="ImageNotFound" />
           </div>
         ) : (
-          <ButtonWidget  varaint="outlined" height="40px" onClick={ButtonClick}>
+          <ButtonWidget varaint="outlined" height="40px" onClick={ButtonClick}>
             Invest
           </ButtonWidget>
         )}
