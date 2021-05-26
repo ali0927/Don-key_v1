@@ -18,8 +18,8 @@ export const useDominance = (farmerPoolAddress: string) => {
         }
         const farmerPoolValue = await getPoolValue(web3, farmerPoolAddress);
         const dominanceValue =
-          farmersTotalPoolValue / parseFloat(farmerPoolValue);
-        setDominance(dominanceValue.toString());
+          parseFloat(farmerPoolValue) / farmersTotalPoolValue;
+        setDominance((dominanceValue * 100).toFixed(2));
       };
       apiCall();
     }
