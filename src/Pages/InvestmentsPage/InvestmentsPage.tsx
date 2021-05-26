@@ -110,6 +110,7 @@ const CustomTableHeading = styled(TableHeading)`
 
 const CustomTableData = styled(TableData)`
   text-align: center;
+  cursor: ${(props: { cursor?: string }) => props.cursor ? props.cursor : "auto" };
 `;
 
 // const InvestmentDisplay = styled.div`
@@ -276,6 +277,10 @@ export const InvestmentsPage = () => {
     history.push("/dashboard");
   };
 
+  const RedirectToFarmerProfile =(poolAddress: string)=> () => {
+    history.push("/farmer/"+poolAddress);
+  }
+
 
 
   if (!data) {
@@ -357,7 +362,7 @@ export const InvestmentsPage = () => {
                           <CustomTableData>
                             <StyledImage src={investment.picture} />
                           </CustomTableData>
-                          <CustomTableData className="bold">
+                          <CustomTableData cursor="pointer" onClick={RedirectToFarmerProfile(investment.poolAddress)} className="bold">
                             {investment.name}
                           </CustomTableData>
               
