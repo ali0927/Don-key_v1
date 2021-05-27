@@ -26,15 +26,16 @@ export const tuplify = <T extends any[]>(...args: T) => {
 
 
 export const getROI =async(web3: any, poolAddress: string) => {
-    const investedAmount = await calculateWithdrawAmount(web3, poolAddress);
-    const initialInvestment = await calculateInitialInvestment(web3, poolAddress);
-    
-    const profit =   parseFloat(investedAmount) - parseFloat(initialInvestment);
-    if(profit === 0 || initialInvestment === ""){
-        return 0;
+    const investedAmountWithReward = new BigNumber(await calculateWithdrawAmount(web3, poolAddress));
+    const initialInvestment = new BigNumber(await calculateInitialInvestment(web3, poolAddress));
+    console.log(initialInvestment.toFixed(0));
+    console.log(investedAmountWithReward.toFixed(0));
+    if(initialInvestment.isEqualTo(0)){
+      return "0";
     }
-    const roi = profit/parseFloat(initialInvestment);
-    return roi;
+    console.log(initialInvestment.toFixed(0));
+    console.log(investedAmountWithReward.toFixed(0));
+    return (investedAmountWithReward.minus(initialInvestment).multipliedBy(100)).dividedBy(initialInvestment).toFixed(2);
 }
 
 
@@ -58,30 +59,3 @@ export const getPoolValue = async (web3: any, poolAddress:string) => {
 
 
 
-export  const checkIfUserWithDrawlWorked = async(web3: any, initialUserBalance: any) => {
-    const accounts = await web3.eth.getAccounts();  
-  
-    return new Promise((res,rej) => {
-      let retries = 3;
-      async function  checkBalance() {
-        const newBalance = await getBUSDBalance(web3,accounts[0]);
-        const balanceisGreater = new BigNumber(newBalance).gt(initialUserBalance);
-        retries--;
-  
-        if(balanceisGreater){
-          res(newBalance);
-        }
-        if(retries === 0){
-          if(!balanceisGreater){
-            rej("Withdrawal failed");
-          }
-        }
-        await waitFor(10000);
-        await checkBalance();
-      }
-  
-      checkBalance();
-     
-    })
-  
-  }

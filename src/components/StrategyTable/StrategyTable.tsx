@@ -76,7 +76,10 @@ const useProfit = (poolAddress: string) => {
 };
 
 const formatNum = (val: string) => {
-  return `$${val}`;
+  return `$${Number(val).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
 };
 
 export const StrategyTableForInvestor = ({
@@ -112,13 +115,13 @@ export const StrategyTableForInvestor = ({
                   {item.strategyName}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {profit ? formatNum(profit) : "0"}
+                  {formatNum(profit ? profit : "0")}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {tvl ? formatNum(tvl) : "0"}
+                  {formatNum(tvl ? tvl : "0")}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {item.apy}
+                  {new BigNumber(item.apy).multipliedBy(100).toFixed(2)+ "%"}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {item.status || "Active"}

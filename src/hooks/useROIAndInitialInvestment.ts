@@ -12,17 +12,17 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string,disab
     const accounts = await web3.eth.getAccounts();
     const pool = await getPoolContract(web3, poolAddress);
     let poolValue = await getTotalPoolValue(web3, poolAddress);
-    poolValue = new BigNumber(poolValue);
-
-    let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-    lptokensresponse = new BigNumber(lptokensresponse);
+    const poolValueBN = new BigNumber(poolValue);
+    const totalInvestedAmount = new BigNumber(await pool.methods.getTotalInvestAmount().call());
+    let lptokensresponse = new BigNumber(await pool.methods.balanceOf(accounts[0]).call());
+   
     let totalShares = await pool.methods.totalSupply().call();
-    totalShares = new BigNumber(totalShares);
-    const myShares = lptokensresponse.dividedBy(totalShares);
-    setMyShare(myShares);
 
-    const totalRoi = poolValue.dividedBy(lptokensresponse);
-    setTotalRoi(totalRoi.toFixed(2).toString());
+    const myShares = lptokensresponse.dividedBy(totalShares).multipliedBy(100);
+    setMyShare(myShares.toFixed(2));
+
+    const totalRoi = totalInvestedAmount.isEqualTo(0) ? 0 : poolValueBN.minus(totalInvestedAmount).multipliedBy(100).dividedBy(totalInvestedAmount)
+    setTotalRoi(totalRoi.toFixed(2));
 
     const startingInvestment = await calculateInitialInvestment(web3, poolAddress);
     const roi = await getROI(web3, poolAddress);
@@ -31,7 +31,7 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string,disab
 
 
     
-    setRoi(roi.toFixed(2).toString());
+    setRoi(roi);
 
    
   }

@@ -11,6 +11,7 @@ import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { TelegramIcon } from "components/TelegramIcon";
 import { DotsIcon } from "icons";
+import BigNumber from "bignumber.js";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -36,19 +37,6 @@ const OutlinedButton = styled.button`
   }
 `;
 
-// const LastLoginText = styled.div`
-//   font-size: 12px;
-//   display: flex;
-//   align-items: center;
-// `;
-
-// const Online = styled.span`
-//   width: 10px;
-//   height: 10px;
-//   background: #448124;
-//   border-radius: 100%;
-// `;
-
 const ImageOuter = styled.div`
   background: #fff;
   border-radius: 15px;
@@ -67,6 +55,7 @@ export const FarmerBio = ({
     picture,
     poolAddress,
     telegram,
+    strategies,
     twitter,
   },
   isInvestor,
@@ -80,15 +69,15 @@ export const FarmerBio = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
 
-  const lastActive = useMemo(() => {
-    return moment.duration(moment().diff(moment(last_signin))).humanize();
-  }, [last_signin]);
+  // const lastActive = useMemo(() => {
+  //   return moment.duration(moment().diff(moment(last_signin))).humanize();
+  // }, [last_signin]);
 
-  const diff = useMemo(() => {
-    const Current = moment(new Date());
-    const LastDateTime = moment(last_signin);
-    return Current.diff(LastDateTime, "minute") >= 2 ? "offline" : "online";
-  }, [last_signin]);
+  // const diff = useMemo(() => {
+  //   const Current = moment(new Date());
+  //   const LastDateTime = moment(last_signin);
+  //   return Current.diff(LastDateTime, "minute") >= 2 ? "offline" : "online";
+  // }, [last_signin]);
 
   return (
     <>
@@ -180,6 +169,13 @@ export const FarmerBio = ({
 
         <Row className="mt-5">
           <DetailTable
+            apy={
+              strategies && strategies.length > 0
+                ? new BigNumber(strategies![0].apy)
+                    .multipliedBy(100)
+                    .toFixed(0) + "%"
+                : "100%"
+            }
             poolAddress={poolAddress}
             investorCount={investorCount !== undefined ? investorCount : 0}
           />

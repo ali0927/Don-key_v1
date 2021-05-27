@@ -4,7 +4,6 @@ import { TotalProfitLoss } from "components/TotalProfitLoss";
 import {
   calculateInitialInvestment,
   calculateWithdrawAmount,
-  checkIfUserWithDrawlWorked,
   getBUSDBalance,
   getPoolContract,
   getTotalPoolValue,
@@ -127,7 +126,6 @@ export const InvestmentBlackBox = ({
     try {
       if (myInvestments.length > 0) {
         const accounts = await web3.eth.getAccounts();
-        const initialUserBalance = await getBUSDBalance(web3, accounts[0]);
         for (let investment of myInvestments) {
           const pool = await getPoolContract(web3, investment.poolAddress);
 
@@ -137,7 +135,7 @@ export const InvestmentBlackBox = ({
           }) as string;
 
           await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
-          await checkIfUserWithDrawlWorked(web3, initialUserBalance);
+          
           await executeDelete({
             data: {
               poolAddress: investment.poolAddress,
