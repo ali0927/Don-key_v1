@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 const styles = `
 font-weight: 400;
+font-family: Open Sans, sans-serif;
   font-size: 16px;
   line-height: 19px;
   display: -webkit-flex;
@@ -17,11 +18,17 @@ font-weight: 400;
   text-decoration: none !important;
   background-color: transparent;
   cursor: pointer;
+  word-spacing: 0pt;
+  letter-spacing: 1pt;
   @media (min-width: 992px) {
     padding-left: 0.5rem;
   }
+  :hover{
+    transform: scale(1.15);
+    transform: translate(-2.2px, 2.2px);
+  }
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     padding-right: 3rem !important;
   }`;
 

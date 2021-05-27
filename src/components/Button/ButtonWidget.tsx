@@ -19,7 +19,6 @@ interface IButtonProps {
 }
 
 
-
 const CotainedVariant = styled.button`
     font-family: Roboto;
    
@@ -33,7 +32,8 @@ const CotainedVariant = styled.button`
              ${(props: IContainedButton)=> getContainedCSS(props).hover};
           };
     :disabled {
-        background-color: ${theme.palette.disabled};
+        background-color:background-color:#ffec5c;
+
         color: ${theme.palette.text.white};
         box-shadow: none;
     }

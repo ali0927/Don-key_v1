@@ -16,9 +16,9 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string,disab
     const totalInvestedAmount = new BigNumber(await pool.methods.getTotalInvestAmount().call());
     let lptokensresponse = new BigNumber(await pool.methods.balanceOf(accounts[0]).call());
    
-    let totalShares = await pool.methods.totalSupply().call();
+    let totalShares = new BigNumber(await pool.methods.totalSupply().call());
 
-    const myShares = lptokensresponse.dividedBy(totalShares).multipliedBy(100);
+    const myShares = totalShares.isEqualTo(0) ? 0: lptokensresponse.dividedBy(totalShares).multipliedBy(100);
     setMyShare(myShares.toFixed(2));
 
     const totalRoi = totalInvestedAmount.isEqualTo(0) ? 0 : poolValueBN.minus(totalInvestedAmount).multipliedBy(100).dividedBy(totalInvestedAmount)
