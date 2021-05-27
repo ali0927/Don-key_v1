@@ -218,7 +218,7 @@ export const PopularStrategy = ({
                     alt="graph"
                     width="45%"
                     style={{
-                      background: "white",
+                      background: "#F4F4F4",
                       maxWidth: "1300px",
                       padding: 20,
                       margin: "0 auto",
