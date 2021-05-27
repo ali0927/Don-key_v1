@@ -50,5 +50,6 @@ export const theme: IDonKeyTheme = {
             yellow: "#FFF037",
         }
 
-    }
+    },
+    
 }

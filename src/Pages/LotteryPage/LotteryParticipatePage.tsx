@@ -2,7 +2,6 @@ import React from "react";
 import { Footer } from "components/Footer";
 import styled from "styled-components";
 import { Container } from "react-bootstrap";
-import { DonKeyLeftToRightFace } from "icons";
 import { NavBar } from "components/Navbar";
 import { Web3Provider } from "don-components";
 import { LotteryForm } from "components/LotteryForm/LotteryForm";
@@ -10,10 +9,11 @@ import { LoadingPage } from "Pages/LoadingPage";
 import { NetworkProvider } from "components/NetworkProvider/NetworkProvider";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
 import donkeySvg from "./Donkey.svg";
+import { theme } from "theme";
 
 const Header = styled.div`
   width: 100%;
-  background: #f4e41c;
+  background: ${theme.palette.background.yellow};
   position: relative;
   overflow: hidden;
 `;
@@ -54,8 +54,7 @@ export const LotteryParticipatePage: React.FC = () => {
               <div className="row">
                 <div className="col-md-8">
                   <Heading className="my-3">
-                    Deposit DON LP token to gain $DON rewards and participate in
-                    the lottery
+                    DEPOSIT DON LP TOKEN TO GAIN $DON REWARDS
                   </Heading>
                 </div>
                 <div className="col-md-4">

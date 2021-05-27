@@ -16,9 +16,8 @@ import BigNumber from "bignumber.js";
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
   object-fit: cover;
-  width: 120px;
-  height: 120px;
-  max-width: 160px;
+  width: 100px;
+  height: 100px;
 `;
 
 const OutlinedButton = styled.button`
@@ -37,14 +36,19 @@ const OutlinedButton = styled.button`
   }
 `;
 
-const ImageOuter = styled.div`
-  background: #fff;
-  border-radius: 15px;
-`;
-
 const Title = styled.h2`
   font-family: Roboto;
   font-weight: 600;
+`;
+
+const ImageWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  @media screen and (min-width: 400px) {
+    width: initial;
+    display: inline-flex;
+  }
 `;
 
 export const FarmerBio = ({
@@ -109,59 +113,51 @@ export const FarmerBio = ({
           </Col>
         </Row>
 
-        <Row className="mt-3 mb-4">
-          <Col lg={2}>
-            <div className="d-flex align-items-center justify-content-center justify-content-lg-start flex-wrap">
-              <ImageOuter>
+        <Row className="mt-0 mt-sm-3 mb-4">
+          <div className="col-lg-6">
+            <div className="row">
+              <ImageWrapper className="pl-4">
                 <StyledFarmerImage
                   src={picture}
-                  className="img-fluid"
+                  className="img-fluid "
                   alt="farmer"
                   style={{ borderRadius: 0 }}
-                />
-              </ImageOuter>
-              <div className="w-100 ml-3 mt-2">
-                {/* {(!isInvestor || diff === "online") && (
-              <LastLoginText>
-                <Online className="mr-1" />
-                Online
-              </LastLoginText>
-            )} */}
-              </div>
+                />{" "}
+              </ImageWrapper>
+
+              <Col lg={9} className="pl-4 mt-4 mt-md-0">
+                {description.length > 0 && (
+                  <>
+                    <div className="d-flex justify-content-between">
+                      <h4 className="font-weight-bolder">Description</h4>
+                      <div className="d-flex">
+                        <div className="mr-3">
+                          <TwitterIcon
+                            fill={"#000"}
+                            handle={twitter || "#"}
+                          ></TwitterIcon>
+                        </div>
+                        <div>
+                          <TelegramIcon
+                            fill={"#000"}
+                            handle={telegram || "#"}
+                          ></TelegramIcon>
+                        </div>
+                      </div>
+                    </div>
+
+                    <p style={{ fontSize: 15 }}>
+                      <ShowMoreContent length={150} content={description} />
+                    </p>
+                  </>
+                )}
+              </Col>
             </div>
-          </Col>
-
-          <Col lg={5}>
-            {description.length > 0 && (
-              <>
-                <div className="d-flex justify-content-between">
-                  <h4 className="mr-">Description</h4>
-                  <div className="d-flex">
-                    <div className="mr-3">
-                      <TwitterIcon
-                        fill={"#000"}
-                        handle={twitter || "#"}
-                      ></TwitterIcon>
-                    </div>
-                    <div>
-                      <TelegramIcon
-                        fill={"#000"}
-                        handle={telegram || "#"}
-                      ></TelegramIcon>
-                    </div>
-                  </div>
-                </div>
-
-                <p style={{ fontSize: 15 }}>
-                  <ShowMoreContent length={100} content={description} />
-                </p>
-              </>
-            )}
-          </Col>
+          </div>
 
           <Col
-            lg={5}
-            className="d-flex justify-content-lg-end justify-content-sm-center justify-content-md-center"
+            lg={6}
+            className="d-flex justify-content-lg-end justify-content-sm-center justify-content-center justify-content-md-center"
           >
             <DotsIcon />
           </Col>

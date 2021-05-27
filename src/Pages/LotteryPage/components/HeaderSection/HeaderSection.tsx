@@ -1,23 +1,21 @@
-import { ButtonWidget, ContainedButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 
-import { SmallEllipse } from "icons/SmallEllipse";
 import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
-import { Col, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import { useHistory } from "react-router";
 import styled from "styled-components";
 import { DonkeyLeftPanel } from "../DonkeyLeftPanel/DonkeyLeftPanel";
 import { RootHeader } from "../RootHeader/RootHeader";
-import {theme} from "../../../../theme";
+import { theme } from "../../../../theme";
 import { Timer } from "./Timer";
 
 const Header = styled.div`
   width: 100%;
   min-height: 450px;
-  background:${theme.palette.background.yellow};
+  background: ${theme.palette.background.yellow};
   padding-top: 2rem;
 `;
-
 
 const MainHeading = styled.p`
   font-family: Roboto;
@@ -30,16 +28,7 @@ const MainHeading = styled.p`
   text-transform: uppercase;
 `;
 
-const TakePartButton = styled(ContainedButton)`
-  background: #000000;
-  color: #ffffff;
-  max-width: 252px;
-  font-size: 16px;
-  &:hover {
-    background: #000000;
-    color: #f3f3f3;
-  }
-`;
+
 
 export const HeaderSection: React.FC<{
   timerDate: string;
@@ -49,6 +38,10 @@ export const HeaderSection: React.FC<{
   const [update, setUpdated] = useState(false);
   const hasStarted = useMemo(() => {
     const difference = moment().utc().diff(moment(props.timerDate));
+    return difference > 0;
+  }, [update]);
+  const hasEnded = useMemo(() => {
+    const difference = moment().utc().diff(moment(props.closingTime));
     return difference > 0;
   }, [update]);
   const handleTakePart = () => {
@@ -68,31 +61,36 @@ export const HeaderSection: React.FC<{
       <Header>
         <Container>
           <div className="row">
-            <div className="col-lg-6 d-flex justify-content-center">
+            <div className="col-lg-5 d-flex justify-content-center">
               <div className="w-50 position-relative">
-              <DonkeyLeftPanel />
+                <DonkeyLeftPanel />
               </div>
             </div>
 
-            <div className="col-lg-6">
+            <div className="col-lg-7">
               {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
               <MainHeading>
-                {hasStarted
-                  ? "Whitelist lottery is now open, lottery closes in"
-                  : "Whitelist lottery for Beta DAPP opens in"}
+                {hasEnded
+                  ? "Lets get this Don-key on the road! we have made a screen shot and will announce the winners directly via email."
+                  : "Whitelist lottery is now open, lottery closes in"}
               </MainHeading>
 
               <div className="row d-flex justify-content-between align-items-center mt-4 mb-4">
-                <Timer
-                  timerDate={hasStarted ? props.closingTime : props.timerDate}
-                />
+                {!hasEnded && (
+                  <Timer
+                    timerDate={hasStarted ? props.closingTime : props.timerDate}
+                  />
+                )}
               </div>
-
-              {hasStarted && (
-                <ButtonWidget varaint="contained" height="60px" width="252px" className="mt-5 mb-5" onClick={handleTakePart}>
-                  Stake and Participate
-                </ButtonWidget>
-              )}
+              <ButtonWidget
+                varaint="contained"
+                height="50px"
+                width="200px"
+                className="mt-5 mb-5"
+                onClick={handleTakePart}
+              >
+                {hasEnded ? "Stake" : "Stake And Participate"}
+              </ButtonWidget>
             </div>
           </div>
         </Container>

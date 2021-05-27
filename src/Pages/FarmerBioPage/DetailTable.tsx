@@ -82,7 +82,9 @@ const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
-  min-height: 50px;
+  height: 66px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   :last-child {
     border-right: none;
   }
@@ -118,6 +120,7 @@ const ColumnsSubTitle = styled.p`
   font-weight: 400;
   word-break: break-word;
   letter-spacing: 0em;
+  margin-bottom: 0;
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#070602" : "#fff"};
@@ -131,6 +134,7 @@ const ColumnsSubTitleColored = styled.p`
   word-break: break-word;
   letter-spacing: 0em;
   text-align: center;
+  margin-bottom: 0;
   color: ${(props: { color: any }) => props.color};
 `;
 
@@ -147,9 +151,6 @@ const CutomButton = styled(ContainedButton)`
   }
 `;
 
-const usePoolApy = () => {
-  const [] = useState();
-};
 
 export const DetailTable = ({
   poolAddress,
@@ -203,9 +204,9 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex justify-content-center">
-        <div className="mt-3  d-flex align-items-center justify-content-center flex-wrap">
+        <div className="d-flex flex-column align-items-center justify-content-between">
           <ColumnsTitle
-            className="d-flex justify-content-center mb-2 w-100"
+            className="d-flex align-items-center justify-content-center w-100"
             color={color}
           >
             <>
@@ -228,7 +229,7 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
-        <div className="mt-3 d-flex align-items-center justify-content-center flex-wrap">
+        <div className="d-flex flex-column align-items-center justify-content-between ">
           <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
             {" "}
             {label}
@@ -268,7 +269,7 @@ export const DetailTable = ({
               </CardPoolAddress>
             </div>
           </CardInnerInfo>
-          <FirstCardRow className="row">
+          <FirstCardRow className="row mt-3">
             {getFirstCardcolumns(
               "APY",
               apy,
