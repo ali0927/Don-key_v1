@@ -29,9 +29,10 @@ import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
+import { GridBackground } from "components/GridBackground";
 
 const HeadingTitle = styled.p({
-  fontFamily: "Roboto",
+  fontFamily: "ObjectSans-Bold",
   fontSize: "45px",
   fontStyle: "normal",
   fontWeight: 800,
@@ -234,9 +235,15 @@ export const InvestmentsPage = () => {
         <Head className="navbanHead rounded-0 pt-5 pb-5">
           <Container>
             <Row>
-              <Col lg={6}>
+              <Col lg={12}>
                 <HeadingTitle>My Investments</HeadingTitle>
               </Col>
+              
+            </Row>
+            <Row>
+              <div className="col-lg-6">
+
+              </div>
               <Col lg={6}>
                 {myInvestments.length > 0 && (
                   <>
@@ -251,8 +258,8 @@ export const InvestmentsPage = () => {
           </Container>
         </Head>
       </Section>
-      <section>
-        <div className="mt-4 mb-5 tablebgHead">
+      <GridBackground className="py-5">
+        <div className="mt-5 mb-5 tablebgHead">
           <Container>
             {loading && (
               <>
@@ -264,14 +271,14 @@ export const InvestmentsPage = () => {
             {!loading && myInvestments.length > 0 && (
               <TableResponsive>
                 <Table>
-                  <TableHead>
+                  <TableHead >
                     <TableRow isHoverOnRow={false}>
-                      <CustomTableHeading>#</CustomTableHeading>
+                      <CustomTableHeading className="py-4">#</CustomTableHeading>
                       <EmptyTableHeading></EmptyTableHeading>
-                      <CustomTableHeading>NAME OF FARMER</CustomTableHeading>
+                      <CustomTableHeading>FARMER NAME</CustomTableHeading>
                       <CustomTableHeading>BUSD INVESTED</CustomTableHeading>
                       <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                      <CustomTableHeading>WITHDRAW BUSD</CustomTableHeading>
+                      <CustomTableHeading>ACTION</CustomTableHeading>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -287,18 +294,22 @@ export const InvestmentsPage = () => {
                             onClick={RedirectToFarmerProfile(
                               investment.poolAddress
                             )}
-                            className="bold"
+                            className="font-weight-bold"
                           >
                             {investment.name}
                           </CustomTableData>
 
                           <CustomTableData>
-                            {" "}
                             <MyInvestment
                               poolAddress={investment.poolAddress}
                             />
                           </CustomTableData>
-                          <CustomTableData className="bold"><TotalProfitLoss refresh={refresh} poolAddress={investment.poolAddress} /></CustomTableData>
+                          <CustomTableData className="bold">
+                            <TotalProfitLoss
+                              refresh={refresh}
+                              poolAddress={investment.poolAddress}
+                            />
+                          </CustomTableData>
                           <CustomTableData className="investment_table_btn">
                             <LightGrayButton
                               onClick={handleOpenWithDraw(
@@ -339,7 +350,7 @@ export const InvestmentsPage = () => {
             )}
           </Container>
         </div>
-      </section>
+      </GridBackground>
       <Footer />
       {withDraw.open && (
         <WithDrawPopup

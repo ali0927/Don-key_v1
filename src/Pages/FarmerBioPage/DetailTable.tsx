@@ -142,15 +142,6 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-size: 14px;
 `;
 
-const CutomButton = styled(ContainedButton)`
-  background: #f5f290;
-  width: 119px;
-  height: 30px;
-  :hover {
-    background: #f5f290;
-  }
-`;
-
 
 export const DetailTable = ({
   poolAddress,

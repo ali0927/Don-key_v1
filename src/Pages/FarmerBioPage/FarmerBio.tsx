@@ -6,7 +6,6 @@ import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import { useMemo, useState } from "react";
-import moment from "moment";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { TelegramIcon } from "components/TelegramIcon";
@@ -37,8 +36,8 @@ const OutlinedButton = styled.button`
 `;
 
 const Title = styled.h2`
-  font-family: Roboto;
-  font-weight: 600;
+  font-family: "ObjectSans-Bold";
+  font-weight: 900;
 `;
 
 const ImageWrapper = styled.div`
@@ -90,7 +89,7 @@ export const FarmerBio = ({
           <Col lg={12} className="mt-3">
             <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
               <Title className="mb-2 mb-md-0">
-                Don - {capitalize(name || "")}
+                DON - {capitalize(name || "")}
               </Title>
               {!isInvestor && (
                 <div className="d-flex align-items-center justify-content-center">

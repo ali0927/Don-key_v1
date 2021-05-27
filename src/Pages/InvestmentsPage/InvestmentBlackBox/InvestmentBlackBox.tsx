@@ -25,7 +25,6 @@ import { useSnackbar } from "notistack";
 import { useAxios } from "hooks/useAxios";
 
 const CardWrapper = styled.div`
-  min-height: 250px;
   background: ${(props: { color: "black" | "white" }) =>
     props.color === "black" ? "#171717" : "#ffffff"};
   border-radius: 10px;
@@ -38,7 +37,7 @@ const CardWrapper = styled.div`
 `;
 
 const CardInnerInfo = styled.div`
-  min-height: 160px;
+  min-height: 153px;
 `;
 
 const CardLabel = styled.p`
@@ -46,11 +45,12 @@ const CardLabel = styled.p`
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: 19px;
-  letter-spacing: 0em;
+  line-height: 1px;
   text-align: center;
-  color: #fff;
+  color: ${(props: { color: "white" | "black" }) =>
+    props.color === "black" ? "#000000" : "#fff"};
   width: 100%;
+  text-decoration: underline;
 `;
 
 const CardValue = styled.p`
@@ -61,27 +61,40 @@ const CardValue = styled.p`
   line-height: 21px;
   letter-spacing: 0em;
   text-align: center;
-  color: #fff;
+  color: ${(props: { color: "white" | "black" }) =>
+    props.color === "black" ? "#000000" : "#fff"};
 `;
 
-const CutomButton = styled(ContainedButton)`
-  background: #f5f290;
-  width: 119px;
-  height: 30px;
-  :hover {
-    background: #f5f290;
+const Columns = styled.div`
+  border-right: 1px solid #b4b4b4;
+  height: 66px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  :last-child {
+    border-right: none;
   }
 `;
 
-const ColumnsTitle = styled.p`
+const ColumnsTitle = styled.div`
   font-family: Roboto;
-  font-size: 11px;
+  font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 19px;
   letter-spacing: 0em;
   text-align: center;
-  color: #cec6c6;
+  color: rgba(255, 255, 255, 0.7);
+`;
+
+const ColumnsTitleColored = styled.div`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19px;
+  letter-spacing: 0em;
+  text-align: center;
+  color: ${(props: { color: any }) => props.color};
 `;
 
 const ColumnsSubTitle = styled.p`
@@ -89,28 +102,37 @@ const ColumnsSubTitle = styled.p`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  letter-spacing: 0em;
-  text-align: center;
-  color: #fff;
   word-break: break-word;
+  letter-spacing: 0em;
+  margin-bottom: 0;
+  text-align: center;
+  color: ${(props: { color: "white" | "black" }) =>
+    props.color === "black" ? "#070602" : "#fff"};
 `;
 
-const Columns = styled.div`
-  border-right: 1px solid #ededf2;
-  min-height: 50px;
-  :last-child {
-    border-right: none;
-  }
+const ColumnsSubTitleColored = styled.p`
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  word-break: break-word;
+  letter-spacing: 0em;
+  text-align: center;
+  margin-bottom: 0;
+  color: ${(props: { color: any }) => props.color};
+`;
+
+const ColumnsTitle1 = styled(ColumnsTitleColored)`
+  font-size: 14px;
 `;
 
 export const InvestmentBlackBox = ({
   myInvestments,
-  onRefresh
+  onRefresh,
 }: {
   myInvestments: IMyInvestments[];
   onRefresh: () => void;
 }) => {
-
   const web3 = useWeb3();
 
   const { profitloss, investedTotal, initialInvestmentTotal, roi } =
@@ -136,7 +158,7 @@ export const InvestmentBlackBox = ({
           }) as string;
 
           await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
-          
+
           await executeDelete({
             data: {
               poolAddress: investment.poolAddress,
@@ -170,25 +192,31 @@ export const InvestmentBlackBox = ({
     value: string | React.ReactNode
   ) => {
     return (
-      <Columns className="col-md-3 d-flex justify-content-center">
-        <div>
-          <ColumnsTitle> {label}</ColumnsTitle>
-          <ColumnsSubTitle>{value}</ColumnsSubTitle>
-        </div>
+      <Columns className="col-md-3 d-flex flex-column align-items-center justify-content-between">
+        <ColumnsTitle> {label}</ColumnsTitle>
+        <ColumnsSubTitle color="white">{value}</ColumnsSubTitle>
       </Columns>
     );
   };
 
   return (
     <>
-      <CardWrapper className="p-2" color="black">
-        <CardInnerInfo className="d-flex justify-content-center align-items-center">
+      <CardWrapper className="p-2 py-5" color="black">
+        <CardInnerInfo className="d-flex mb-1 justify-content-center align-items-center">
           <div>
-            <CardLabel> My Holdings </CardLabel>
-            <CardValue>{investedTotal}</CardValue>
+            <CardLabel color="white"> My Holdings </CardLabel>
+            <CardValue color="white">{investedTotal}</CardValue>
 
-            <div className="d-flex mt-2 mb-2 justify-content-center">
-              <ButtonWidget varaint="contained"  containedVariantColor="lightYellow" fontSize="14px" height="30px" width="119px"  onClick={handleWithDrawAll} className="ml-2">
+            <div className="d-flex mt-2 justify-content-center">
+              <ButtonWidget
+                varaint="contained"
+                containedVariantColor="lightYellow"
+                fontSize="14px"
+                height="30px"
+                width="119px"
+                onClick={handleWithDrawAll}
+                className="ml-2"
+              >
                 Withdraw
               </ButtonWidget>
             </div>
@@ -201,7 +229,7 @@ export const InvestmentBlackBox = ({
           )}
 
           {getSecondCardColumns("Profit/Loss", profitloss)}
-          {getSecondCardColumns("My ROI", roi)}
+          {getSecondCardColumns("My ROI", roi+ "%")}
         </div>
       </CardWrapper>
     </>
