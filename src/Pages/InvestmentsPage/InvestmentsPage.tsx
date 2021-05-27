@@ -28,6 +28,7 @@ import { getPoolContract } from "helpers";
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 
 import { theme } from "theme";
+import { TotalProfitLoss } from "components/TotalProfitLoss";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -297,7 +298,7 @@ export const InvestmentsPage = () => {
                               poolAddress={investment.poolAddress}
                             />
                           </CustomTableData>
-                          <CustomTableData className="bold">$0</CustomTableData>
+                          <CustomTableData className="bold"><TotalProfitLoss refresh={refresh} poolAddress={investment.poolAddress} /></CustomTableData>
                           <CustomTableData className="investment_table_btn">
                             <LightGrayButton
                               onClick={handleOpenWithDraw(
