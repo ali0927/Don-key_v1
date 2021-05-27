@@ -1,20 +1,11 @@
-import { ButtonWidget, ContainedButton } from "components/Button";
-import { PoolReserveAmount } from "components/PoolReserveAmount";
-import { TotalProfitLoss } from "components/TotalProfitLoss";
+import { ButtonWidget } from "components/Button";
 import {
-  calculateInitialInvestment,
-  calculateWithdrawAmount,
-  getBUSDBalance,
   getPoolContract,
-  getTotalPoolValue,
 } from "helpers";
-import React, { useState, useEffect } from "react";
+import React, {  } from "react";
 import { useWeb3 } from "don-components";
 import styled from "styled-components";
-import { BigNumber } from "bignumber.js";
-import { parse } from "graphql";
 import { IMyInvestments } from "../interfaces";
-import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useCalInvestmentsChart } from "./useCalInvestmenstChart";
 import {
   ErrorSnackbar,
@@ -79,7 +70,7 @@ const ColumnsTitle = styled.div`
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 19px;
   letter-spacing: 0em;
   text-align: center;
@@ -90,7 +81,7 @@ const ColumnsTitleColored = styled.div`
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 19px;
   letter-spacing: 0em;
   text-align: center;
@@ -99,9 +90,9 @@ const ColumnsTitleColored = styled.div`
 
 const ColumnsSubTitle = styled.p`
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   word-break: break-word;
   letter-spacing: 0em;
   margin-bottom: 0;
@@ -110,21 +101,6 @@ const ColumnsSubTitle = styled.p`
     props.color === "black" ? "#070602" : "#fff"};
 `;
 
-const ColumnsSubTitleColored = styled.p`
-  font-family: Roboto;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  word-break: break-word;
-  letter-spacing: 0em;
-  text-align: center;
-  margin-bottom: 0;
-  color: ${(props: { color: any }) => props.color};
-`;
-
-const ColumnsTitle1 = styled(ColumnsTitleColored)`
-  font-size: 14px;
-`;
 
 export const InvestmentBlackBox = ({
   myInvestments,
@@ -176,7 +152,6 @@ export const InvestmentBlackBox = ({
         }
       }
     } catch (err) {
-      console.trace(err, "error from withdrawal");
       if (key) {
         closeSnackbar(key);
       }
