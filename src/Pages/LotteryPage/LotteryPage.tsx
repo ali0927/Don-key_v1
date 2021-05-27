@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { HeaderSection } from "./components";
 import { CatchLuckSection } from "./components/CatchLuckSection";
 import { HexagonSection } from "./components/HexagonSection/HexagonSection";
