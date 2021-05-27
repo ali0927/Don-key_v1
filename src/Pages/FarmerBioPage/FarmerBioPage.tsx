@@ -8,15 +8,13 @@ import { IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
-import GridImg from "./bg.png";
 import styled from "styled-components";
-import {theme} from "theme";
+import { theme } from "theme";
+import { GridBackground } from "components/GridBackground";
 
 const Section = styled.section`
-    background-color: ${theme.palette.background.yellow};
-
+  background-color: ${theme.palette.background.yellow};
 `;
-
 
 export const FarmerBioPage = withWeb3(() => {
   const farmer = useSelector((state: IStoreState) => state.farmer);
@@ -55,12 +53,12 @@ export const FarmerBioPage = withWeb3(() => {
           <FarmerBioFromApi farmerId={farmerId} />
         )}
       </Section>
-      <div style={{ backgroundImage: `url(${GridImg})` }}>
+      <GridBackground>
         <FarmerStrategies
           farmerId={farmerId || (farmer?.GUID as string)}
           isInvestor={!isCurrentFarmer}
         />
-      </div>
+      </GridBackground>
       <Footer />
     </div>
   );

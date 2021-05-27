@@ -13,15 +13,18 @@ const Table = styled.table({
   borderRadius: 5,
 });
 
-const TableHead = styled.thead({
-  fontFamily: "Roboto",
-  fontSize: 15,
- 
-});
+const TableHead = styled.thead`
+  font-family: Roboto;
+  font-size: 15px;
+  border-bottom: 1px solid #dee2e6;
+`;
 
 const TableRow = styled.tr`
-  border-bottom: 1px solid #dee2e6;
   transition: background 0.3s;
+  &:not(:last-child){
+    border-bottom: 1px solid #dee2e6;
+  }
+
   &:hover {
     background: ${(props: { isHoverOnRow?: boolean }) =>
       props.isHoverOnRow ? "#F3F3F3" : ""};
