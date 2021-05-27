@@ -42,3 +42,6 @@ export * from "./Statistic";
 export * from "./AwardIcon";
 export * from "./Followers";
 export * from "./LinkIcon";
+export * from "./FarmerPageDonkeyIcon";
+export * from "./SmallEllipse";
+export * from "./MeadiumEllipse";

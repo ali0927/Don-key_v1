@@ -10,6 +10,7 @@ import { LoadingPage } from "Pages/LoadingPage";
 import { StyledLink } from "../../components/StyledLink";
 import { TopThreeFarmers } from "./TopThreeFarmers";
 import {theme} from "theme";
+import { FarmerPageDonkeyIcon, LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -51,7 +52,55 @@ const Heading = styled.h3`
 
 const RootWrapper = styled.div`
    background-color: ${theme.palette.background.yellow};
+   border-radius: 0px !important;
+   clip-path: polygon(0 0,225% 0%,43% 119%,0% 83%);
+
+
 `;
+
+const DonkeyIconWrapper = styled.div`
+      position: absolute;
+    right: 8%;
+    top: 28px;
+
+`;
+
+const Ellipse1 = styled.div`
+   right: 16%;
+   top: 8%;
+
+    position: absolute;
+`;
+
+const Ellipse2 = styled.div`
+    right: 23%;
+    top: 41%;
+    position: absolute;
+`;
+
+const Ellipse3 = styled.div`
+    right: 23%;
+    top: 18%;
+    position: absolute;
+`;
+
+const Ellipse4 = styled.div`
+    right: 26%;
+    top: 0%;
+    position: absolute;
+`;
+
+
+
+
+// const Paragon = styled.div`
+//     height: 78px;
+//     background-color: #FFF037;
+//     position: absolute;
+//     width: 100%;
+//     top: 218px;
+//     clip-path: polygon(0 0%,100% 2%,82% 100%,15% 100%);
+// `;
 
 export const DashboardPage = () => {
   const [{ loading, data }] = useAxios("/api/v2/farmer");
@@ -86,11 +135,14 @@ export const DashboardPage = () => {
   }
   return (
     <Layout className="bgColor dashboard-root" variant="loggedin">
-      <RootWrapper className="pt-5 borderCollapse">
-        <div></div>
-        <div></div>
+      <RootWrapper className="pt-5 borderCollapse position-relative">
+        {/* <Paragon/> */}
         <CustomizedContainer>
           <Row>
+          <Ellipse1><LargeEllipse/></Ellipse1>
+          <Ellipse2><LargeEllipse/></Ellipse2>
+          <Ellipse3><MeadiumEllipse/></Ellipse3>
+          <Ellipse4><SmallEllipse/></Ellipse4>
             <Col>
               {farmers.length === 0 ? (
                 <div className="d-flex align-items-center flex-column">
@@ -102,6 +154,8 @@ export const DashboardPage = () => {
               ) : (
                 <FarmerTitle>Explore Farmers</FarmerTitle>
               )}
+             
+              <DonkeyIconWrapper><FarmerPageDonkeyIcon/></DonkeyIconWrapper>
             </Col>
           </Row>
           {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
