@@ -31,8 +31,8 @@ export const theme: IDonKeyTheme = {
         common: {
             black: "#000000",
             yellow: "#F4E41C",
-            lightYellow: "#F5F290",
-            darkYellow: "#F4E41C",
+            lightYellow: "#ffec5c",
+            darkYellow: "#F5F290",
             white: "#ffffff",
         },
         text: {
