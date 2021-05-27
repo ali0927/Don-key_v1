@@ -35,7 +35,7 @@ export const CatchLuckSection: React.FC = () => {
     <>
       <Root>
         <Container>
-          <Heading> Be part of Don-key’s first 600 users to participate in the Beta DAPP </Heading>
+          <Heading> New lottery coming soon for the next batch of super star farmers </Heading>
           {/* <SubHeading>
           Follow our best farmers and gain passive
           </SubHeading> */}
