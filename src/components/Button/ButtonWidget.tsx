@@ -24,7 +24,7 @@ const getBgColor= (color: "black" | "yellow" | "lightYellow") => {
         return theme.palette.common.yellow; 
     }
 
-    return theme.palette.common.lightYellow; 
+    return "#ffec5c"; 
 }
 
 const getBgHoverColor= (color: "black" | "yellow" | "lightYellow") => {
@@ -35,7 +35,7 @@ const getBgHoverColor= (color: "black" | "yellow" | "lightYellow") => {
         return theme.palette.common.black; 
     }
 
-    return theme.palette.common.darkYellow; 
+    return theme.palette.common.lightYellow; 
 }
 
 const getForeColor= (color: "black" | "yellow" | "lightYellow") => {
