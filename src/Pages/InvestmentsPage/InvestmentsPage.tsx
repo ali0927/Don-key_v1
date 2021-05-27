@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { NavBar } from "components/Navbar/NavBar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
@@ -8,7 +8,6 @@ import "./InvestmentsPage.scss";
 import { useAxios } from "hooks/useAxios";
 import { IMyInvestments } from "./interfaces/IMyInvestments";
 import { useNotification } from "components/Notification";
-import { LoadingPage } from "Pages/LoadingPage";
 import styled from "styled-components";
 import {
   Table,
@@ -25,25 +24,11 @@ import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInvestment } from "components/MyInvestment";
-import { StrategyName } from "components/StrategyName";
-import { UserWalletBoard } from "components/UserWalletBoard";
-import {
-  checkIfUserWithDrawlWorked,
-  getBUSDBalance,
-  getLpTokensTotal,
-  getPoolContract,
-  getTotalPoolValue,
-} from "helpers";
+import { getPoolContract } from "helpers";
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
-import { useSelector } from "react-redux";
-import { IStoreState } from "interfaces";
-import {
-  ErrorSnackbar,
-  ProgressSnackbar,
-  SuccessSnackbar,
-} from "components/Snackbars";
-import { useSnackbar } from "notistack";
+
 import { theme } from "theme";
+import { TotalProfitLoss } from "components/TotalProfitLoss";
 
 const HeadingTitle = styled.p({
   fontFamily: "Roboto",
@@ -118,43 +103,6 @@ const CustomTableData = styled(TableData)`
     props.cursor ? props.cursor : "auto"};
 `;
 
-// const InvestmentDisplay = styled.div`
-//   background: #000;
-//   color: #fff;
-//   padding: 1.5rem;
-//   border-radius: 4px;
-// `;
-
-// const InvestCardButton = styled.button`
-//   padding: 0.5rem 2rem;
-//   width: 100%;
-//   font-size: 14px;
-//   text-align: center;
-//   border-radius: 4px;
-//   border: 0;
-//   background-color: rgba(245, 242, 144, 1);
-//   transition: all 0.3s linear;
-//   color: #000;
-//   &:hover {
-//     opacity: 0.8;
-//   }
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
-// async function fetchBalance() {
-//   //const web3 = (await getWeb3()) as Web3;
-//   //const accounts = await web3.eth.getAccounts();
-
-//   //const WBNB = new web3.eth.Contract(PoolAbi as any, poolAddress);
-//   //const balance = await WBNB.methods.gettInvested().call();
-//   // var fBalance = parseFloat(
-//   //   parseFloat(web3.utils.fromWei(balance, "ether")).toFixed(5)
-//   // );
-//   return 0;
-// }
-
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
@@ -164,21 +112,13 @@ const Head = styled.section`
 `;
 
 export const InvestmentsPage = () => {
-  const poolAddress = useSelector((state: IStoreState) => state.farmer)
-    ?.poolAddress as string;
-  //  const [balance, setBalance] = useState(0);
-
-  //const [isReady, setIsReady] = useState(false);
-
   const web3 = useWeb3();
 
   const history = useHistory();
 
-  const [{ data }] = useAxios({ method: "GET", url: "/api/v2/farmer" });
-
-  const [{ data: farmesInvestmentData }] = useAxios(
+  const [{ data: farmesInvestmentData }, refetch] = useAxios(
     { method: "GET", url: "/api/v2/investments" },
-    { useCache: false }
+    { useCache: false, manual: true }
   );
 
   const [{}] = useAxios(
@@ -196,13 +136,16 @@ export const InvestmentsPage = () => {
 
   const { showNotification } = useNotification();
 
+  const [refresh, setRefresh] = useState(false);
+
+  const handleRefresh = () => {
+    setRefresh((old) => !old);
+  };
+
   useEffect(() => {
-    (async () => {
-      //const balance = await fetchBalance();
-      //setBalance(balance);
-      //  setIsReady(true);
-    })();
-  }, []);
+    refetch();
+    setLoading(true);
+  }, [refresh]);
 
   useEffect(() => {
     if (farmesInvestmentData) {
@@ -231,15 +174,12 @@ export const InvestmentsPage = () => {
     }
   }, [farmesInvestmentData]);
 
-  const handleSuccess = (farmerName: string) => () => {
-    const updatedList = myInvestments.filter(
-      (x) => x.poolAddress !== poolAddress
-    );
-    setMyInvestments(updatedList);
+  const handleSuccess = (farmerName: string) => {
+    handleRefresh();
     showNotification({
       msg: (
         <>
-          <p className="text-center m-0">{`Money Withdraw into Farmer ${farmerName} Successfully.`}</p>
+          <p className="text-center m-0">{`Money Withdrawn from Farmer ${farmerName} Successfully.`}</p>
         </>
       ),
     });
@@ -287,10 +227,6 @@ export const InvestmentsPage = () => {
     history.push("/farmer/" + poolAddress);
   };
 
-  if (!data) {
-    return <LoadingPage />;
-  }
-
   return (
     <div className="bgColor investment_header_container">
       <NavBar variant="loggedin" />
@@ -304,34 +240,14 @@ export const InvestmentsPage = () => {
               <Col lg={6}>
                 {myInvestments.length > 0 && (
                   <>
-                    <InvestmentBlackBox myInvestments={myInvestments} />
+                    <InvestmentBlackBox
+                      onRefresh={handleRefresh}
+                      myInvestments={myInvestments}
+                    />
                   </>
                 )}
               </Col>
-              {/* <div className="firstLetter image-col mr-4">
-                 <img
-                  className="img-fluid farmer-image"
-                  src={
-                    ""
-                  }
-                  alt={"investment"}
-                />
-              </div> */}
-
-              {/* <div className="firstHeading_container col-lg-6 mr-4">
-                <div className="firstHeading investment-heading mb-3">
-                  {farmer.name}
-                </div>
-                <span className="description_title">Description</span>
-                <span className="description_content description-width">
-                  <ShowMoreContent content={farmer.description || ""} length={140} />
-                </span>
-              </div>
-
-              <TotalInvestedMoney className="col-lg-4" balance={balance} /> */}
             </Row>
-            {/* <div className="header_separator" />
-            <DetailsTable farmer={farmer} /> */}
           </Container>
         </Head>
       </Section>
@@ -382,7 +298,7 @@ export const InvestmentsPage = () => {
                               poolAddress={investment.poolAddress}
                             />
                           </CustomTableData>
-                          <CustomTableData className="bold">$0</CustomTableData>
+                          <CustomTableData className="bold"><TotalProfitLoss refresh={refresh} poolAddress={investment.poolAddress} /></CustomTableData>
                           <CustomTableData className="investment_table_btn">
                             <LightGrayButton
                               onClick={handleOpenWithDraw(
@@ -421,48 +337,6 @@ export const InvestmentsPage = () => {
                 </ZeroInvestmentBox>
               </>
             )}
-
-            {/* <div className="mt-4 pagePosition">
-                <p className="pageTable">Showing 1-10 of 120</p>
-                <div className="paginationTable">
-                  <Pagination>
-                    <Pagination.Prev />
-                    <Pagination.Item active>{1}</Pagination.Item>
-                    <Pagination.Item>{2}</Pagination.Item>
-                    <Pagination.Item>{3}</Pagination.Item>
-                    <Pagination.Item>{4}</Pagination.Item>
-                    <Pagination.Ellipsis />
-
-                    <Pagination.Item>{120}</Pagination.Item>
-
-                    <Pagination.Next />
-                  </Pagination>
-                </div>
-                <div className="dropTable">
-                  Show rows
-                  <span>
-                    <img
-                      src="/assets/images/selectdrop.png"
-                      className="d-inline-block align-top mr-3 ml-2 ml-md-0 mr-md-4"
-                      alt="Logo"
-                    />
-                  </span>
-                  <Form.Group>
-                    <Form.Control as="select">
-                      <option>100</option>
-                      <option>200</option>
-                      <option>300</option>
-                    </Form.Control>
-                  </Form.Group>
-                </div>
-              </div> */}
-            {/* {InvestmentListData.length !== 0 && (
-                <div className="investment_no_data">
-                  <Button className="btnYellow">
-                    Find some Farmers to Invest
-                  </Button>
-                </div>
-              )} */}
           </Container>
         </div>
       </section>
@@ -473,8 +347,6 @@ export const InvestmentsPage = () => {
           poolAddress={withDraw.poolAddress}
           onSuccess={() => {
             handleSuccess(withDraw.farmerName);
-            getTotalPoolValue(web3, poolAddress);
-            getLpTokensTotal(web3, poolAddress);
           }}
           onError={handleError}
           onClose={handleCloseWithDraw}

@@ -1,22 +1,32 @@
-import { useInvestedAmount } from "hooks/useInvestedAmount";
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import { calculateWithdrawAmount, calculateInitialInvestment } from "helpers";
+import BigNumber from "bignumber.js";
 
-export const TotalProfitLoss = ({ poolAddress, refresh =false }: { poolAddress: string; refresh?: boolean}) => {
-  
-  const [totalProfitLoss, setTotalProfitLoss] = useState(0);
-  const [amountWithdraw, setAmountWithdraw] = useState(0);
-  const [amountInitial, setAmountInitial] = useState(0);
+export const TotalProfitLoss = ({
+  poolAddress,
+  refresh = false,
+}: {
+  poolAddress: string;
+  refresh?: boolean;
+}) => {
+  const [totalProfitLoss, setTotalProfitLoss] = useState("-");
+
   const web3 = useWeb3();
 
   useEffect(() => {
     (async () => {
       try {
         const amountWithdraw = await calculateWithdrawAmount(web3, poolAddress);
-        setAmountWithdraw(parseFloat(amountWithdraw));
-        const amountInitial = await calculateInitialInvestment(web3, poolAddress);
-        setAmountInitial(parseFloat(amountInitial));
+
+        const amountInitial = await calculateInitialInvestment(
+          web3,
+          poolAddress
+        );
+
+        setTotalProfitLoss(
+          new BigNumber(amountWithdraw).minus(amountInitial).toFixed(2)
+        );
       } catch (err) {
         console.log(err);
       }
@@ -24,9 +34,5 @@ export const TotalProfitLoss = ({ poolAddress, refresh =false }: { poolAddress: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
-  useEffect(()=>{
-    setTotalProfitLoss(amountWithdraw - amountInitial)
-  },[amountInitial, amountWithdraw])
-
-  return <>{totalProfitLoss.toFixed(2)} BUSD</>;
+  return <>{totalProfitLoss} BUSD</>;
 };
