@@ -128,7 +128,7 @@ export const FarmerBio = ({
                 {description.length > 0 && (
                   <>
                     <div className="d-flex justify-content-between">
-                      <h4 className="font-weight-bolder">Description</h4>
+                      <h4 className="font-weight-bolder">{strategies && strategies.length > 0 ? strategies[0].strategyName : "Description"}</h4>
                       <div className="d-flex">
                         <div className="mr-3">
                           <TwitterIcon

@@ -66,7 +66,7 @@ export interface IFarmerInter {
   username?: string | null;
   telegram?: string | null;
   twitter?: string | null;
-  strategies?: {apy: string}[]
+  strategies?: IStrategy[]
 }
 export type IStrategy = {
   createdAt: string;

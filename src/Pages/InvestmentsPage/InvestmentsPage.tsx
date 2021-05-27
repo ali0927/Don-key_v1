@@ -238,12 +238,9 @@ export const InvestmentsPage = () => {
               <Col lg={12}>
                 <HeadingTitle>My Investments</HeadingTitle>
               </Col>
-              
             </Row>
             <Row>
-              <div className="col-lg-6">
-
-              </div>
+              <div className="col-lg-6"></div>
               <Col lg={6}>
                 {myInvestments.length > 0 && (
                   <>
@@ -271,9 +268,11 @@ export const InvestmentsPage = () => {
             {!loading && myInvestments.length > 0 && (
               <TableResponsive>
                 <Table>
-                  <TableHead >
+                  <TableHead>
                     <TableRow isHoverOnRow={false}>
-                      <CustomTableHeading className="py-4">#</CustomTableHeading>
+                      <CustomTableHeading className="py-4">
+                        #
+                      </CustomTableHeading>
                       <EmptyTableHeading></EmptyTableHeading>
                       <CustomTableHeading>FARMER NAME</CustomTableHeading>
                       <CustomTableHeading>BUSD INVESTED</CustomTableHeading>
@@ -333,18 +332,14 @@ export const InvestmentsPage = () => {
                 <ZeroInvestmentBox>
                   <ZeroInvestmentInnerBox>
                     <ZeroInvestmentContent>
-                      Find Some Farmers For Investment
+                      You’re not following any farmers
                     </ZeroInvestmentContent>
                     <CenteredBox className="mb-5">
                       <BlackButton onClick={handleFindFarmers}>
-                        Find Farmers
+                        Explore Farmers
                       </BlackButton>
                     </CenteredBox>
-                    <CenteredBox className="mt-5">
-                      <ZeroInvestmentIcon />
-                    </CenteredBox>
                   </ZeroInvestmentInnerBox>
-                  <CustomizeRockerIcon />
                 </ZeroInvestmentBox>
               </>
             )}
