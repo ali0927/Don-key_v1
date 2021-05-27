@@ -73,9 +73,9 @@ const FarmersPage = () => {
                         <input type="text" name="bot-field" />
                       </p>
                       <TextField
-                        label="Nick name"
+                        label="Nickname"
                         value={state.name}
-                        placeholder="Nick name"
+                        placeholder="Nickname"
                         onChange={handleChange("name")}
                         isRequired
                       />
