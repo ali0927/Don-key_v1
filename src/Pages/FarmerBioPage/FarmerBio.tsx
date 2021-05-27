@@ -136,12 +136,12 @@ export const FarmerBio = ({
                             handle={twitter || "#"}
                           ></TwitterIcon>
                         </div>
-                        <div>
+                        {/* <div>
                           <TelegramIcon
                             fill={"#000"}
                             handle={telegram || "#"}
                           ></TelegramIcon>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
 

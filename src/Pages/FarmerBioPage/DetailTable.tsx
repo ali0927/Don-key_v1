@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Col } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
@@ -20,6 +20,7 @@ import {
 } from "icons";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useDominance } from "./useDominance";
+import { InfoIcon } from "icons/InfoIcon";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -35,7 +36,7 @@ const CardWrapper = styled.div`
 `;
 
 const CardInnerInfo = styled.div`
-  min-height: 153px;
+  min-height: 109px;
 `;
 
 const CardLabel = styled.p`
@@ -187,6 +188,12 @@ export const DetailTable = ({
     setRefresh((old) => !old);
   };
 
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props}>
+      Farmer success fee: 10% additional fee
+    </Tooltip>
+  );
+
   const getFirstCardcolumns = (
     label: string,
     value: string | number | React.ReactNode,
@@ -235,8 +242,15 @@ export const DetailTable = ({
     <>
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
+          
+            <OverlayTrigger
+            placement="right"
+            delay={{ show: 250, hide: 400 }}
+            overlay={renderTooltip}
+          ><div style={{textAlign: 'right', padding: 10}}><InfoIcon /></div>
+          </OverlayTrigger>
           <CardInnerInfo className="d-flex justify-content-center mb-2">
-            <div style={{ marginTop: 40 }}>
+            <div style={{ marginTop: -4 }}>
               <div className="d-flex align-items-baseline">
                 <TotalPoolValueLabel color="black">
                   {" "}
