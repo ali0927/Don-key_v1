@@ -17,21 +17,10 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   );
 
   const web3 = useWeb3();
-  const [withdrawalValue, setWithdrawalValue] = React.useState("-");
+
   const [loading, setLoading] = React.useState(false);
 
-  React.useEffect(() => {
-    (async () => {
-      try {
-        const amount = await calculateWithdrawAmount(web3, poolAddress);
-        setWithdrawalValue(amount);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
   const handleWithDraw = async () => {
@@ -70,7 +59,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         onClose={props.onClose}
       >
         <div className="mt-3">
-          Are you sure you want to withdraw {withdrawalValue} BUSD ?
+          Are you sure you want to withdraw all your holdings ?
         </div>
         <div className="d-flex mt-5">
           <ContainedButton

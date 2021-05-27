@@ -96,7 +96,9 @@ export const getTotalReservePoolValue = async (
   web3: Web3,
   poolAddress: string
 ) => {
-  const amount = await (await getBUSDTokenContract(web3)).methods.balanceOf(poolAddress).call();
+  const amount = await (await getBUSDTokenContract(web3)).methods
+    .balanceOf(poolAddress)
+    .call();
   return amount;
 };
 
@@ -120,11 +122,17 @@ export const calculateWithdrawAmount = async (
 ) => {
   const accounts = await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress);
-  const claimableAmount = await poolContract.methods
-    .getFinalClaimableAmount(accounts[0])
-    .call();
-  const amount = new BigNumber(web3.utils.fromWei(claimableAmount)).toString();
-  return amount;
+  try {
+    const claimableAmount = await poolContract.methods
+      .getFinalClaimableAmount(accounts[0])
+      .call();
+    const amount = new BigNumber(
+      web3.utils.fromWei(claimableAmount)
+    ).toString();
+    return amount;
+  } catch (e) {
+    return "0";
+  }
 };
 
 export const calculateInitialInvestment = async (
@@ -261,7 +269,7 @@ export const calculateTVL = async (web3: Web3, isBSC = false) => {
   );
   const totalLPAmount = await gettotalSWAPLPoolValue(web3, isBSC);
   const totalLPSupply = await lpContract.methods.totalSupply().call();
-    
+
   return totalStakedTokens
     .dividedBy(totalLPSupply)
     .multipliedBy(totalLPAmount)

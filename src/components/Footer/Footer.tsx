@@ -23,6 +23,7 @@ export const Footer = () => {
                   href="https://etherscan.io/address/0x217ddead61a42369a266f1fb754eb5d3ebadc88a"
                   target="_blank"
                   rel="noreferrer"
+                  style={{wordBreak: "break-word"}}
                 >
                   {" "}
                   0x217ddead61a42369a266f1fb754eb5d3ebadc88a
@@ -33,6 +34,7 @@ export const Footer = () => {
                 <a
                   href="https://bscscan.com/address/0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255"
                   target="_blank"
+                  style={{wordBreak: "break-word"}}
                   rel="noreferrer"
                 >
                   {" "}
