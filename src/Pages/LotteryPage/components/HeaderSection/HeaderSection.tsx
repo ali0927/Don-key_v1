@@ -71,7 +71,7 @@ export const HeaderSection: React.FC<{
               {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
               <MainHeading>
                 {hasEnded
-                  ? "Lets get this Don-key on the road! we have made a screen shot and will announce the winners directly via email."
+                  ? "Lets get this Don-key on the road! we have made a snapshot and will announce the winners directly via email."
                   : "Whitelist lottery is now open, lottery closes in"}
               </MainHeading>
 
