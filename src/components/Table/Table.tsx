@@ -17,6 +17,7 @@ const TableHead = styled.thead`
   font-family: Roboto;
   font-size: 15px;
   border-bottom: 1px solid #dee2e6;
+  color:#d
 `;
 
 const TableRow = styled.tr`
