@@ -225,7 +225,7 @@ export const InvestmentsPage = () => {
   };
 
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
-    history.push("/farmer/" + poolAddress);
+    history.push("/dashboard/farmer/" + poolAddress);
   };
 
   return (
@@ -291,7 +291,7 @@ export const InvestmentsPage = () => {
                           <CustomTableData
                             cursor="pointer"
                             onClick={RedirectToFarmerProfile(
-                              investment.poolAddress
+                              investment.GUID
                             )}
                             className="font-weight-bold"
                           >

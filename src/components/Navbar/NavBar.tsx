@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
@@ -19,7 +19,9 @@ import { ErrorSnackbar } from "components/Snackbars";
 import { useSnackbar } from "notistack";
 import comingsoon from "images/comingsoon.svg";
 import styled from "styled-components";
-import {theme} from "theme";
+import { theme } from "theme";
+import moment from "moment";
+import { LotteryClosingTime } from "Pages/LotteryPage";
 
 declare global {
   interface Window {
@@ -77,7 +79,7 @@ export const NotificationComp = () => {
 };
 
 const StyledNavBar = styled(Navbar)`
-   background-color: ${theme.palette.background.yellow};
+  background-color: ${theme.palette.background.yellow};
 `;
 
 function NavBar(props: INavBarProps) {
@@ -107,6 +109,21 @@ function NavBar(props: INavBarProps) {
       setIsDisabled(false);
     }
   };
+
+  const [update, setUpdated] = useState(false);
+  const hasEnded = useMemo(() => {
+    const difference = moment().utc().diff(moment(LotteryClosingTime));
+    return difference > 0;
+  }, [update]);
+
+  useEffect(() => {
+    const inter = setInterval(() => {
+      setUpdated((val) => !val);
+    }, 1000);
+    return () => {
+      clearInterval(inter);
+    };
+  }, []);
 
   return (
     <>
@@ -189,12 +206,12 @@ function NavBar(props: INavBarProps) {
               <>
                 <div className="position-relative mr-5 mr-sm-0">
                   <ButtonComponent
-                    // disabled
+                    disabled={!hasEnded}
                     onClick={() => history.push("/dashboard")}
                     variant="colorBlack btn-outline position-relative px-4"
                     // className="mt-4"
                   >
-                    {/* <ImageCommingSoon src={comingsoon} /> */}
+                    {!hasEnded && <ImageCommingSoon src={comingsoon} />}
                     DAPP
                   </ButtonComponent>
                 </div>
