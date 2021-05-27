@@ -51,7 +51,7 @@ const PapperInner = styled.div`
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
   background-color: #fff;
-  height: 100%;
+  /* height: 100%; */
 `;
 
 const DescriptionContent = styled.p`
