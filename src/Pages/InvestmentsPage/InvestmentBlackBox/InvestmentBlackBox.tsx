@@ -105,10 +105,11 @@ const Columns = styled.div`
 
 export const InvestmentBlackBox = ({
   myInvestments,
+  onRefresh
 }: {
   myInvestments: IMyInvestments[];
+  onRefresh: () => void;
 }) => {
-  const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
   const web3 = useWeb3();
 
@@ -145,7 +146,7 @@ export const InvestmentBlackBox = ({
           if (key) {
             closeSnackbar(key);
           }
-          console.log("first failure check");
+          onRefresh();
           enqueueSnackbar("Withdrawal SuccessFull", {
             content: (key, msg) => <SuccessSnackbar message={msg as string} />,
             persist: false,
