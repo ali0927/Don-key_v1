@@ -9,7 +9,11 @@ import { getBUSDTokenContract, getPoolContract } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
-import { ButtonWidget, ContainedButton, OutlinedButton } from "components/Button";
+import {
+  ButtonWidget,
+  ContainedButton,
+  OutlinedButton,
+} from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
 import { useSnackbar } from "notistack";
 import {
@@ -17,6 +21,7 @@ import {
   ProgressSnackbar,
   SuccessSnackbar,
 } from "components/Snackbars";
+import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 
 // const CaptionContent = styled.p`
 //   font-family: Roboto;
@@ -78,7 +83,8 @@ export const InvestmentPopup = ({
   );
 
   const web3 = useWeb3();
-  const { closeSnackbar, enqueueSnackbar } = useSnackbar();
+  const { showProgress, showSuccess, showFailure } =
+    useTransactionNotification();
 
   const handleInvest = async () => {
     if (isLoading) {
@@ -98,11 +104,7 @@ export const InvestmentPopup = ({
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
       const amount = new BigNumber(value);
       onClose();
-      key1 = enqueueSnackbar("Transaction is In Progress", {
-        content: (key, msg) => <ProgressSnackbar message={msg as string} />,
-        persist: true,
-      });
-
+      showProgress("Transaction is in Progress");
       if (amount.gt(allowance)) {
         await busdtoken.methods
           .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
@@ -118,26 +120,12 @@ export const InvestmentPopup = ({
         });
 
       await executePost({ data: { poolAddress } });
-      if (key1) {
-        closeSnackbar(key1);
-      }
 
       onSuccess && onSuccess();
 
-      enqueueSnackbar("Money invested into Pool Successfully", {
-        content: (key, msg) => <SuccessSnackbar message={msg as string} />,
-        autoHideDuration: 5000,
-        persist: false,
-      });
+      showSuccess("Money invested into Pool Successfully");
     } catch (err) {
-      if (key1) {
-        closeSnackbar(key1);
-      }
-      enqueueSnackbar("Transaction failed.", {
-        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
-        autoHideDuration: 5000,
-        persist: false,
-      });
+      showFailure("Transaction failed.");
     }
   };
 
@@ -172,7 +160,11 @@ export const InvestmentPopup = ({
         <div className="d-flex justify-content-between mt-5">
           <ButtonWrapper>
             <ButtonWidget
-              varaint="contained" fontSize="14px"  containedVariantColor="lightYellow" height="30px" width="119px" 
+              varaint="contained"
+              fontSize="14px"
+              containedVariantColor="lightYellow"
+              height="30px"
+              width="119px"
               disabled={!value || isLoading}
               onClick={handleInvest}
             >
@@ -181,8 +173,15 @@ export const InvestmentPopup = ({
           </ButtonWrapper>
 
           <ButtonWrapper className="mr-0">
-             <ButtonWidget
-              varaint="outlined" fontSize="14px" height="30px" width="119px"  onClick={onClose}>Cancel</ButtonWidget>
+            <ButtonWidget
+              varaint="outlined"
+              fontSize="14px"
+              height="30px"
+              width="119px"
+              onClick={onClose}
+            >
+              Cancel
+            </ButtonWidget>
           </ButtonWrapper>
         </div>
       </div>

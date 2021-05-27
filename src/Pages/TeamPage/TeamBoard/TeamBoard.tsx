@@ -25,7 +25,7 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
       <UserBoard className="col-md-3 mb-5">
         <UserRoot className="shadow-sm py-5 p-3 d-flex flex-column justify-content-between align-items-center h-100">
           <Thumb>
-            <img className="img-fluid" src={image} alt="ImageNotFound"/>
+            <img className="img-fluid" src={image} alt="ImageNotFound" />
           </Thumb>
           <h3 className="mt-4 text-center">{name}</h3>
           <p>{designation}</p>
