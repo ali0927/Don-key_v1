@@ -132,7 +132,7 @@ export const FarmerSignupPage = () => {
     try {
       const formData = new FormData();
       const isNameError = validate(name, [
-        { rule: "required", errMessage: "Nick Name is required." },
+        { rule: "required", errMessage: "Nickname is required." },
       ]);
       const isTelegramError = validate(telegram, [
         { rule: "required", errMessage: "Telegram is required." },
@@ -250,10 +250,10 @@ export const FarmerSignupPage = () => {
 
   const handleBlur = async (value: string) => {
     const error = validate(value, [
-      { rule: "required", errMessage: "Nick Name is required." },
+      { rule: "required", errMessage: "Nickname is required." },
       {
         rule: "min:3",
-        errMessage: "Nick name should contain atleast 3 Characters.",
+        errMessage: " should contain atleast 3 Characters.",
       },
       {
         rule: "regex:^[a-zA-Z_][A-Za-z0-9 ]+$",
@@ -354,7 +354,7 @@ export const FarmerSignupPage = () => {
             </RootHeading>
 
             <DonKeyTextField
-              label="Nick Name (Required)"
+              label="Nickname (Required)"
               value={name}
               loading={loading}
               info={nameInfoState}
