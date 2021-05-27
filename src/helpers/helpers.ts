@@ -33,8 +33,6 @@ export const getROI =async(web3: any, poolAddress: string) => {
     if(initialInvestment.isEqualTo(0)){
       return "0";
     }
-    console.log(initialInvestment.toFixed(0));
-    console.log(investedAmountWithReward.toFixed(0));
     return (investedAmountWithReward.minus(initialInvestment).multipliedBy(100)).dividedBy(initialInvestment).toFixed(2);
 }
 
