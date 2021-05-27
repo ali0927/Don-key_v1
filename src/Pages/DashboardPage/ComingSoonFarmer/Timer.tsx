@@ -1,15 +1,17 @@
 import { TimerDots } from "icons";
 import * as React from "react";
 import styled from "styled-components";
+import { theme } from "theme";
 
 const TimerCard = styled.div`
   display: flex;
-  width: 69px;
+  min-width: 66px !important;
   height: 95px;
   align-items: center;
   justify-content: center;
-  background: #fff251;
+  background:#FFF251;
   border-radius: 10px;
+  box-shadow: 0px 6px 14px -6px #FFF251;
 `;
 
 const TimerNumber = styled.p`
@@ -18,6 +20,7 @@ const TimerNumber = styled.p`
   font-style: normal;
   font-weight: 400;
   text-align: center;
+  margin-bottom: 0px;
 `;
 
 const TimerLabel = styled.p`
@@ -32,10 +35,10 @@ const TimerLabel = styled.p`
 const DotsWrraper = styled.div`
   display: flex;
   justify-content: center;
-  width: 5px;
+  width: 4px;
   align-items: center;
-  margin-left: 13px;
-  margin-right: 13px;
+  margin-left: 11px;
+  margin-right: 11px;
 `;
 
 export const Timer: React.FC<{ timerDate: string }> = (props) => {
@@ -83,7 +86,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
 
   return (
     <>
-      <TimerCard className="col-md-2 d-flex align-items-center d-flex align-items-center mt-2 mb-2 w-100 ">
+      <TimerCard className="col-lg-1 d-flex align-items-center d-flex align-items-center mt-2 mb-2 w-100 ">
         <div>
           <TimerNumber id="days">0</TimerNumber>
           <TimerLabel>DAYS</TimerLabel>
@@ -94,7 +97,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
         <TimerDots />
       </DotsWrraper>
 
-      <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
+      <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
           <TimerNumber id="hours">0</TimerNumber>
           <TimerLabel>HOURS</TimerLabel>
@@ -105,7 +108,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
         <TimerDots />
       </DotsWrraper>
 
-      <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
+      <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
           <TimerNumber id="min">0</TimerNumber>
           <TimerLabel>MINUTES</TimerLabel>
@@ -116,7 +119,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
         <TimerDots />
       </DotsWrraper>
 
-      <TimerCard className="col-md-2 d-flex align-items-center mt-2 mb-2  w-100">
+      <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
           <TimerNumber id="sec">0</TimerNumber>
           <TimerLabel>SECONDS</TimerLabel>

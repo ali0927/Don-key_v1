@@ -29,7 +29,7 @@ const PapperBottom = styled.div`
 const ImageWrapper = styled.div`
   width: 51px;
   height: 51px;
-  background-color: ${theme.palette.background.yellow};
+  background-color: #FFF251;
   border-radius: 5px;
 `;
 
