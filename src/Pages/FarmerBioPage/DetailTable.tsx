@@ -5,10 +5,6 @@ import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { shortenAddress } from "don-utils";
 import { useMediaQuery } from "@material-ui/core";
-import { PoolAmount } from "components/PoolAmount";
-import { PoolReserveAmount } from "components/PoolReserveAmount";
-import { MyInvestment } from "components/MyInvestment";
-import { MyInitialInvestment } from "components/MyInitialInvestment";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
@@ -158,9 +154,11 @@ const usePoolApy = () => {
 export const DetailTable = ({
   poolAddress,
   investorCount,
+  apy
 }: {
   poolAddress: string;
   investorCount: number;
+  apy: string;
 }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
   const [totalPoolValue, setTotalPoolValue] = useState("0");
@@ -273,7 +271,7 @@ export const DetailTable = ({
           <FirstCardRow className="row">
             {getFirstCardcolumns(
               "APY",
-              "25%",
+              apy,
               "black",
               <div className="mr-2">
                 <StatisticIcon />

@@ -97,7 +97,6 @@ const MakeFarmerProfileBtn = styled(ContainedButton)`
    letter-spacing: .03em;
    color: #070602;
    font-weight: 500;
-}
 `;
 
 export const FarmerSignupPage = () => {

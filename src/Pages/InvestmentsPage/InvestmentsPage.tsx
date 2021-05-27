@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import { NavBar } from "components/Navbar/NavBar";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
@@ -8,7 +8,6 @@ import "./InvestmentsPage.scss";
 import { useAxios } from "hooks/useAxios";
 import { IMyInvestments } from "./interfaces/IMyInvestments";
 import { useNotification } from "components/Notification";
-import { LoadingPage } from "Pages/LoadingPage";
 import styled from "styled-components";
 import {
   Table,
@@ -25,11 +24,7 @@ import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInvestment } from "components/MyInvestment";
-import { StrategyName } from "components/StrategyName";
-import { UserWalletBoard } from "components/UserWalletBoard";
 import {
-  checkIfUserWithDrawlWorked,
-  getBUSDBalance,
   getLpTokensTotal,
   getPoolContract,
   getTotalPoolValue,
@@ -37,12 +32,6 @@ import {
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { useSelector } from "react-redux";
 import { IStoreState } from "interfaces";
-import {
-  ErrorSnackbar,
-  ProgressSnackbar,
-  SuccessSnackbar,
-} from "components/Snackbars";
-import { useSnackbar } from "notistack";
 import { theme } from "theme";
 
 const HeadingTitle = styled.p({
@@ -174,7 +163,6 @@ export const InvestmentsPage = () => {
 
   const history = useHistory();
 
-  const [{ data }] = useAxios({ method: "GET", url: "/api/v2/farmer" });
 
   const [{ data: farmesInvestmentData }] = useAxios(
     { method: "GET", url: "/api/v2/investments" },
@@ -287,9 +275,7 @@ export const InvestmentsPage = () => {
     history.push("/farmer/" + poolAddress);
   };
 
-  if (!data) {
-    return <LoadingPage />;
-  }
+
 
   return (
     <div className="bgColor investment_header_container">
