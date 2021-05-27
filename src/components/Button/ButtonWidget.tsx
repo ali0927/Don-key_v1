@@ -27,12 +27,34 @@ const getBgColor= (color: "black" | "yellow" | "lightYellow") => {
     return theme.palette.common.lightYellow; 
 }
 
+const getBgHoverColor= (color: "black" | "yellow" | "lightYellow") => {
+    if(color === "black"){
+        return theme.palette.common.black; 
+    }
+    else if(color === "yellow"){
+        return theme.palette.common.black; 
+    }
+
+    return theme.palette.common.darkYellow; 
+}
+
 const getForeColor= (color: "black" | "yellow" | "lightYellow") => {
     if(color === "black"){
         return theme.palette.text.white; 
     }
     else if(color === "yellow"){
         return theme.palette.text.black; 
+    }
+
+    return  theme.palette.text.black; 
+}
+
+const getForeHoverColor= (color: "black" | "yellow" | "lightYellow") => {
+    if(color === "black"){
+        return theme.palette.text.white; 
+    }
+    else if(color === "yellow"){
+        return theme.palette.text.white; 
     }
 
     return  theme.palette.text.black; 
@@ -51,11 +73,14 @@ const CotainedVariant = styled.button`
     height: ${(props: { color: "black" | "yellow" | "lightYellow", width?: string; height?: string;fontSize?: string }) => props.height ?  props.height :"100%" };
     color:${(props: { color: "black" | "yellow" | "lightYellow", width?: string; height?: string;fontSize?: string }) => getForeColor(props.color)};
     :hover {
-        background-color: ${(props: { color: "black" | "yellow" | "lightYellow", width?: string }) => props.color==="lightYellow" ? theme.palette.common.darkYellow : getBgColor(props.color)};
+        background-color: ${(props: { color: "black" | "yellow" | "lightYellow", width?: string }) => getBgHoverColor(props.color)};
+        color:${(props: { color: "black" | "yellow" | "lightYellow", width?: string }) => getForeHoverColor(props.color)};
+        box-shadow:${(props: { color: "black" | "yellow" | "lightYellow", width?: string }) => props.color==="black" ? "0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1)": "0px 0px 20px rgba(0, 0, 0, 0.15);"};
     };
     :disabled {
         background-color: ${theme.palette.disabled};
         color: ${theme.palette.text.white};
+        box-shadow: none;
     }
 
 `;
