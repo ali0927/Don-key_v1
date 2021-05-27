@@ -20,6 +20,7 @@ import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
 import comingsoon from "images/comingsoon.svg";
 import { leaderBoardData } from "./leaderboardjson";
+import { theme } from "theme";
 
 const StyledImage = styled.img`
   width: 45px;
@@ -65,32 +66,20 @@ const JoinUsWrapper = styled.div`
   left: 0;
   right: 0;
   width: 100% !important;
-  border-top: 1px solid rgba(189, 189, 189, 1);
-  border-bottom: 1px solid rgba(189, 189, 189, 1);
+  background-color: #F4F4F4;
   top: 50%;
   align-items: center;
   transform: translateY(-50%);
   justify-content: center;
-  background: #fff;
   z-index: 3;
 `;
-const JoinUsButton = styled(ContainedButton)`
-  width: fit-content;
-  font-weight: 500;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  padding-left: 40px;
-  font-size: 16px;
-  padding-right: 40px;
-  line-height: 19px;
-  letter-spacing: 0.03em;
-`;
+
 
 const Overlay = styled.div`
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 1;,
+  z-index: 1;
 `;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
@@ -154,8 +143,8 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
           <Overlay/>
           <JoinUsWrapper className="pt-4 pb-4">
             <Heading>Join our farmers team</Heading>
-            <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="141px" className="ml-5" onClick={handleJoinUseClick}>
-              Join us
+            <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="206px" className="ml-5" onClick={handleJoinUseClick}>
+              Become a farmer
             </ButtonWidget>
           </JoinUsWrapper>
           </>
