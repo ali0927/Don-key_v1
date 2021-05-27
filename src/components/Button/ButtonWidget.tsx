@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-import { IContainedButton } from "./interfaces";
+import { IContainedButton, IOutlinedButton } from "./interfaces";
 import {getContainedCSS} from "./helpers";
 
 
@@ -43,14 +43,14 @@ const CotainedVariant = styled.button`
 
 const OutlineVariant = styled.button`
     font-family: Roboto;
-    font-size:  ${(props: { width?: string; height?: string; fontSize?: string }) => props.fontSize ? props.fontSize : "16px"};
+    font-size:  ${(props:IOutlinedButton) => props.fontSize ? props.fontSize : "16px"};
     font-style: normal;
     font-weight: 400;
     text-align: center;
     background-color: transparent;
     color:  ${theme.palette.text.black};
-    width: ${(props: { width?: string; height?: string;fontSize?: string }) => props.width ?  props.width :"100%" };
-    height: ${(props: { width?: string; height?: string;fontSize?: string }) => props.height ?  props.height :"100%" };
+    width: ${(props: IOutlinedButton) => props.width ?  props.width :"100%" };
+    height: ${(props: IOutlinedButton) => props.height ?  props.height :"100%" };
     border: 1px solid ${theme.palette.border.main};
     :hover {
         background-color: ${theme.palette.common.yellow};

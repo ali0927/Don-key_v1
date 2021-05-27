@@ -6,3 +6,9 @@ export interface IContainedButton {
     height?: string;
     fontSize?: string 
 }
+
+export interface IOutlinedButton {
+    width?: string; 
+    height?: string; 
+    fontSize?: string 
+}
