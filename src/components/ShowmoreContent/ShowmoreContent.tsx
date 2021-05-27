@@ -1,14 +1,26 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const ShowMoreContent = ({
     content,
     length,
+    showAllContent=false,
+    onShowMoreClick=()=>{},
+    onShowLessClick=()=>{},
 }: {
     content: string;
     length: number;
+    showAllContent?: boolean;
+    onShowMoreClick?: () => void;
+    onShowLessClick?: () => void;
+    
 }) => {
     const [showMore, setShowMore] = useState(false);
+
+    useEffect(()=>{
+        setShowMore(showAllContent);
+    },[showAllContent])
+
 
     const hasMore = content.length > length;
 
@@ -25,6 +37,7 @@ export const ShowMoreContent = ({
                     onClick={(e) => {
                         e.preventDefault();
                         setShowMore(false);
+                        onShowLessClick();
                     }}
                 >
                     Show less
@@ -41,6 +54,7 @@ export const ShowMoreContent = ({
                     onClick={(e) => {
                         e.preventDefault();
                         setShowMore(true);
+                        onShowMoreClick();
                     }}
                 >
                     Show more

@@ -124,6 +124,9 @@ export const PopularStrategy = ({
   investers,
   onCardClick,
   onButtonClick,
+  showAllContent,
+  onShowMoreClick,
+  onShowLessClick,
 }: {
   graph?: React.ReactNode;
   title?: string;
@@ -139,6 +142,9 @@ export const PopularStrategy = ({
   icon?: React.ReactElement;
   onCardClick?: () => void;
   onButtonClick?: () => void;
+  showAllContent?: boolean;
+  onShowMoreClick?: () => void;
+  onShowLessClick?: () => void;
 }) => {
   // const goToStrategy = () => {
   //   history.push("/strategy");
@@ -282,7 +288,7 @@ export const PopularStrategy = ({
         <h5 className="mt-4 popularstrategy__content__title">{contentTitle}</h5>
        <div className="d-flex flex-column justify-content-between h-100">
         <DescriptionContent className="popularstrategy__content__text">
-          <ShowMoreContent content={content} length={100} />
+          <ShowMoreContent content={content} showAllContent={showAllContent} onShowMoreClick={onShowMoreClick} onShowLessClick={onShowLessClick} length={100} />
         </DescriptionContent>
 
         <div>

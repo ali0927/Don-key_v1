@@ -22,6 +22,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
 
   const leaders = props.leaders;
   const [openInvestment, setOpenInvestment] = React.useState(false);
+  const [openShowMoreLess, setShowMoreLess] = React.useState(false);
   const [state, setState] = React.useState({
     farmerName: "",
     poolAddress: "",
@@ -79,6 +80,9 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
               leader.name,
               leader.poolAddress
             )}
+            showAllContent={openShowMoreLess}
+            onShowMoreClick={()=> setShowMoreLess(true)}
+            onShowLessClick={()=> setShowMoreLess(false)}
           />
         </div>
         {/* <div className="col-lg-4 col-md-6 mb-3">
