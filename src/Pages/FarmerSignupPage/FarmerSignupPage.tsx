@@ -2,12 +2,7 @@
 import * as React from "react";
 import { Layout } from "components/Layout";
 import { useAxios } from "hooks/useAxios";
-import {
-  DonKeyIcon,
-  LargeCloud,
-  SignupBottomBgIcon,
-  SmallCloud,
-} from "icons";
+import { DonKeyIcon, LargeCloud, SignupBottomBgIcon, SmallCloud } from "icons";
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import styled from "styled-components";
@@ -89,29 +84,30 @@ const CustomContainer = styled(Container)`
 `;
 
 const MakeFarmerProfileBtn = styled(ContainedButton)`
-   width: fit-content;
-   border-radius: 5px;
-   padding: 12px 15px;
-   font-size: 16px;
-   line-height: 19px;
-   letter-spacing: .03em;
-   color: #070602;
-   font-weight: 500;
+  width: fit-content;
+  border-radius: 5px;
+  padding: 12px 15px;
+  font-size: 16px;
+  line-height: 19px;
+  letter-spacing: 0.03em;
+  color: #070602;
+  font-weight: 500;
 `;
 
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
+  const [telegram, setTelegram] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState<File | undefined>();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [nameInfoState, setNameInfoState] = React.useState<
-    IDonKeyFieldInfoState | undefined
-  >();
-  const [desInfoState, setDesInfoState] = React.useState<
-    IDonKeyFieldInfoState | undefined
-  >();
+  const [nameInfoState, setNameInfoState] =
+    React.useState<IDonKeyFieldInfoState | undefined>();
+  const [desInfoState, setDesInfoState] =
+    React.useState<IDonKeyFieldInfoState | undefined>();
   const [errorMsg, setErrorMsg] = useState("");
+  const [telegramInfoState, setTelegramInfoState] =
+  React.useState<IDonKeyFieldInfoState | undefined>();
 
   const farmer = useSelector((state: IStoreState) => state.farmer);
   const [{}, executePost] = useAxios(
@@ -136,7 +132,10 @@ export const FarmerSignupPage = () => {
     try {
       const formData = new FormData();
       const isNameError = validate(name, [
-        { rule: "required", errMessage: "Name is required." },
+        { rule: "required", errMessage: "Nick Name is required." },
+      ]);
+      const isTelegramError = validate(telegram, [
+        { rule: "required", errMessage: "Telegram is required." },
       ]);
       const isDesError = validate(description, [
         { rule: "required", errMessage: "Description is required." },
@@ -150,6 +149,12 @@ export const FarmerSignupPage = () => {
           msg: isNameError.msg,
         });
       }
+      if (isTelegramError) {
+        return setTelegramInfoState({
+          type: "error",
+          msg: isTelegramError.msg,
+        });
+      }
       if (isDesError) {
         return setDesInfoState({ type: "error", msg: isDesError.msg });
       }
@@ -158,6 +163,7 @@ export const FarmerSignupPage = () => {
         return setErrorMsg("Please Provide a Picture");
       }
       formData.append("name", name);
+      formData.append("telegram", telegram);
       formData.append("description", description);
       if (image) {
         formData.append("picture", image);
@@ -167,19 +173,21 @@ export const FarmerSignupPage = () => {
       const res = await executePost({ data: formData });
 
       dispatch(setFarmerDetail(res.data.data));
-    }
-    catch(error){
+    } catch (error) {
       let message = "Please try again.";
-      if(error.response && error.response.status === 400 && error.response.data){
-           message = error.response.data["data"];
-      } 
+      if (
+        error.response &&
+        error.response.status === 400 &&
+        error.response.data
+      ) {
+        message = error.response.data["data"];
+      }
       enqueueSnackbar(message, {
         content: (key, msg) => <ErrorSnackbar message={msg as string} />,
         autoHideDuration: 5000,
-        persist: false
+        persist: false,
       });
-    }
-     finally {
+    } finally {
       setPosting(false);
     }
   };
@@ -220,6 +228,11 @@ export const FarmerSignupPage = () => {
     setNameInfoState(undefined);
   };
 
+  const handleTelegramChange = (value: string) => {
+    setTelegram(value);
+    setTelegramInfoState(undefined);
+  }
+
   const isUserAvailable = async (value: string) => {
     const result = await executeVerify({ data: { name: value } });
     if (result.data.data) {
@@ -237,17 +250,17 @@ export const FarmerSignupPage = () => {
 
   const handleBlur = async (value: string) => {
     const error = validate(value, [
-      { rule: "required", errMessage: "Username is required." },
+      { rule: "required", errMessage: "Nick Name is required." },
       {
         rule: "min:3",
-        errMessage: "Username should contain atleast 3 Characters.",
+        errMessage: "Nick name should contain atleast 3 Characters.",
       },
       {
         rule: "regex:^[a-zA-Z_][A-Za-z0-9 ]+$",
         errMessage:
-          "Username must start with a letter. Allowed characters are A-z a-z and 0-9",
+          "Nickname must start with a letter. Allowed characters are A-z a-z and 0-9",
       },
-      { rule: "max:25", errMessage: "Username can be max characters long." },
+      { rule: "max:25", errMessage: "Nickname can be max characters long." },
     ]);
     if (error) {
       setNameInfoState({
@@ -258,6 +271,19 @@ export const FarmerSignupPage = () => {
       await isUserAvailable(value);
     }
   };
+
+  const handleTelegraBlur = (value: string) => {
+    const error = validate(value, [
+      { rule: "required", errMessage: "Telegram is required." },
+      { rule: "max:100", errMessage: "Telegram can be max characters long." },
+    ]);
+    if (error) {
+      setTelegramInfoState({
+        type: "error",
+        msg: error.msg,
+      });
+    } 
+  }
 
   const handleDesChange = (value: string) => {
     setDescription(value);
@@ -271,7 +297,10 @@ export const FarmerSignupPage = () => {
         rule: "min:10",
         errMessage: "Description should contain atleast 10 Characters.",
       },
-      { rule: "max:300", errMessage: "Description can be max characters long." },
+      {
+        rule: "max:300",
+        errMessage: "Description can be max characters long.",
+      },
     ]);
     if (error) {
       return setDesInfoState({ type: "error", msg: error.msg });
@@ -286,7 +315,7 @@ export const FarmerSignupPage = () => {
     if (errorMsg) {
       setErrorMsg("");
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, description, image]);
 
   const renderContent = () => {
@@ -325,17 +354,26 @@ export const FarmerSignupPage = () => {
             </RootHeading>
 
             <DonKeyTextField
-              label="Name"
+              label="Nick Name (Required)"
               value={name}
               loading={loading}
               info={nameInfoState}
-              placeholder="Don - Key Name"
+              placeholder="Don - Key Finance"
               onChange={handleChange}
               onBlur={handleBlur}
             />
 
             <DonKeyTextField
-              label="Description"
+              label="Telegram (Required)"
+              value={telegram}
+              info={telegramInfoState}
+              placeholder="Telegram User"
+              onChange={handleTelegramChange}
+              onBlur={handleTelegraBlur}
+            />
+
+            <DonKeyTextField
+              label="What kind of Don-Key Are You?"
               value={description}
               rows={3}
               multiline
@@ -358,7 +396,10 @@ export const FarmerSignupPage = () => {
                 onChange={(image) => setImage(image)}
               />
             </Form.Group>
-            <MakeFarmerProfileBtn onClick={handleCreate}>    Make Farmer Profile</MakeFarmerProfileBtn>
+            <MakeFarmerProfileBtn onClick={handleCreate}>
+              {" "}
+              Make Farmer Profile
+            </MakeFarmerProfileBtn>
 
             <StyledDonkey />
           </div>
