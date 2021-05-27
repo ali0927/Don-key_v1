@@ -78,7 +78,8 @@ const CotainedVariant = styled.button`
         box-shadow:${(props: { color: "black" | "yellow" | "lightYellow", width?: string }) => props.color==="black" ? "0px 6px 14px -6px rgba(24, 39, 75, 0.12), 0px 10px 32px -4px rgba(24, 39, 75, 0.1)": "0px 0px 20px rgba(0, 0, 0, 0.15);"};
     };
     :disabled {
-        background-color: ${theme.palette.disabled};
+        background-color:background-color:#ffec5c;
+
         color: ${theme.palette.text.white};
         box-shadow: none;
     }
