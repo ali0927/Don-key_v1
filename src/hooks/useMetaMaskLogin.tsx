@@ -48,7 +48,7 @@ export const useMetaMaskLogin = () => {
       showNotification({
         msg: (
           <>
-            <p className="text-center m-0">{errMessage}</p>
+            <p className="text-center m-0">Thank you for your interest! We are currently in beta phase and will release the full version soon. Stay tuned! </p>
           </>
         ),
         type: "error",
