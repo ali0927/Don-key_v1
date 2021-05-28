@@ -1,5 +1,6 @@
+/**eslint-disable react-hooks/exhaustive-deps*/
 import BigNumber from "bignumber.js";
-import { calculateInitialInvestment, calculateWithdrawAmount, getPoolContract, getProfitLoss, getROI, getTotalPoolValue } from "helpers";
+import { calculateInitialInvestment, getPoolContract, getROI, getTotalPoolValue } from "helpers";
 import { useEffect, useState } from "react";
 import Web3 from "web3";
 

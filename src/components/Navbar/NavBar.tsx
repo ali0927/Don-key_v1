@@ -1,3 +1,4 @@
+/**eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo } from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
@@ -14,9 +15,6 @@ import { NavbarLink } from "./NavbarLink";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { shortenAddress } from "don-utils";
 import { IStoreState } from "interfaces";
-import { useWeb3 } from "don-components";
-import { ErrorSnackbar } from "components/Snackbars";
-import { useSnackbar } from "notistack";
 import comingsoon from "images/comingsoon.svg";
 import styled from "styled-components";
 import { theme } from "theme";

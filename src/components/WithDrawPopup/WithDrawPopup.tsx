@@ -1,3 +1,4 @@
+/**eslint-disable no-empty-pattern */
 import { ContainedButton, OutlinedButton } from "components/Button";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";

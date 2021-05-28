@@ -1,6 +1,5 @@
 import { useWeb3 } from "don-components";
-import { useEffect, useMemo, useState } from "react";
-import ERC20 from "JsonData/BUSDToken.json";
+import { useEffect, useState } from "react";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { getLPTokenContract } from "helpers";
 import { useRefresh } from "./useRefresh";

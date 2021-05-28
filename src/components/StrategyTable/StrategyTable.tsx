@@ -11,25 +11,12 @@ import {
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { IStrategy } from "interfaces";
-import { Form, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { getPoolContract, toEther } from "helpers";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 
-const OutlinedButton = styled.button`
-  background-color: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.4);
-  color: rgba(34, 34, 34, 1);
-  border-radius: 5px;
-  width: 100%;
-  padding: 5px 20px;
-  font-size: 12px;
-  &:disabled {
-    border-color: #d9d9d9;
-    color: #d9d9d9;
-  }
-`;
+
 
 const formatDate = (
   date: string | null | undefined,
