@@ -20,6 +20,7 @@ const InvestmentInputElement = styled.input`
   width: 100%;
   padding: 0.5rem 0.8rem;
   text-align: right;
+  -moz-appearance:textfield;
   ::-webkit-inner-spin-button{
     -webkit-appearance: none; 
     margin: 0; 
