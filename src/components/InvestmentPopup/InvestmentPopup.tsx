@@ -49,8 +49,7 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
         balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
         isReady: true,
       });
-      onDone &&
-        onDone(new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2));
+      onDone && onDone(web3.utils.fromWei(balance, "ether"));
     } catch (err) {}
   };
   useLayoutEffect(() => {
@@ -76,7 +75,7 @@ export const InvestmentPopup = ({
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
-  const [hideFooter, setHideFooter] = useState(false);
+
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -92,9 +91,7 @@ export const InvestmentPopup = ({
     }
     enable();
 
-    let key1: string | number | null = null;
     try {
-      setHideFooter(true);
       const pool = await getPoolContract(web3, poolAddress);
       const busdtoken = await getBUSDTokenContract(web3);
       const accounts = await web3.eth.getAccounts();

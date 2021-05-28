@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import { useMemo } from "react";
 import styled from "styled-components";
-
+BigNumber.config({ROUNDING_MODE: BigNumber.ROUND_FLOOR});
 const InvestmentRoot = styled.div({
   border: "1px solid #d9d9d9",
   display: "flex",
