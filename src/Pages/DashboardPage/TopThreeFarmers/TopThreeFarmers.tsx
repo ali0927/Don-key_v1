@@ -140,7 +140,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           return StrategyCard(leader);
         })}
         <div className="col-lg-4 col-md-6 mb-3">
-          <ComingSoonFarmer timerDate={"June 8, 2021 20:00:00 UTC"} />
+          <ComingSoonFarmer timerDate={"June 2, 2021 11:00:00 UTC"} />
         </div>
         {openInvestment && (
           <InvestmentPopup

@@ -11,6 +11,8 @@ import { StyledLink } from "../../components/StyledLink";
 import { TopThreeFarmers } from "./TopThreeFarmers";
 import {theme} from "theme";
 import { FarmerPageDonkeyIcon, LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
+import { NavBar } from "components/Navbar";
+import { Footer } from "components/Footer";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -134,7 +136,10 @@ export const DashboardPage = () => {
     return <LoadingPage />;
   }
   return (
-    <Layout style={{backgroundColor: "none"}} className="dashboard-root" variant="loggedin">
+    <>
+      <NavBar variant={"loggedin"} />
+      
+      
       <RootWrapper className="pt-5 borderCollapse position-relative">
         {/* <Paragon/> */}
         <CustomizedContainer>
@@ -163,7 +168,7 @@ export const DashboardPage = () => {
       </RootWrapper>
 
       {/* Table */}
-      <div className="leaderbord-top mb-5">
+      <div style={{backgroundColor: "#F4F4F4"}} className="leaderbord-top mb-5">
         {farmers.length === 0 ? (
           <CustomizedContainer>
             <div className="container">
@@ -187,6 +192,7 @@ export const DashboardPage = () => {
       </div>
 
       {/* <GoToBuilderSection/> */}
-    </Layout>
+      <Footer/>
+    </>
   );
 };
