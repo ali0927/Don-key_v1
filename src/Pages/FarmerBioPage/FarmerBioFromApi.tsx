@@ -6,7 +6,7 @@ export const FarmerBioFromApi = ({farmerId}: {farmerId: string}) => {
   const [
     { loading, data: farmerFromApi },
     
-  ] = useAxios(`/api/v2/farmer/${farmerId}`);
+  ] = useAxios(`/api/v2/farmer/${farmerId}`, {useCache: false});
 
 
   if(loading){

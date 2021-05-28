@@ -196,7 +196,7 @@ export const InvestmentBlackBox = ({
           )}
 
           {getSecondCardColumns("Profit/Loss", profitloss)}
-          {getSecondCardColumns("My ROI", roi+ "%")}
+          {getSecondCardColumns("My ROI", '---')}
         </div>
       </CardWrapper>
     </>

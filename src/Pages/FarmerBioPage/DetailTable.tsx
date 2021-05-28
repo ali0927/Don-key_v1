@@ -191,7 +191,7 @@ export const DetailTable = ({
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
       <strong>Farmer performance fee: 10%</strong><br /> <strong>Don-key Performance fee: 5%<br /></strong> Some protocols
-      may have additional fees.
+      may have additional deposit fees.
     </Tooltip>
   );
 
@@ -286,7 +286,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "ROI",
-              roi + " %",
+              '---',
               "black",
               <div className="mr-2">
                 <StatisticRoi />
@@ -364,7 +364,7 @@ export const DetailTable = ({
               <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
               "white"
             )}
-            {getSecondCardColumns("My ROI", farmerRoi + " %", "white")}
+            {getSecondCardColumns("My ROI", '---', "white")}
             {getSecondCardColumns(
               "My share",
               Number(myShare).toFixed(2) + " %",
