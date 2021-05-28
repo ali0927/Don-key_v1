@@ -285,7 +285,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "ROI",
-              '---' + " %",
+              '---',
               "black",
               <div className="mr-2">
                 <StatisticRoi />
@@ -363,7 +363,7 @@ export const DetailTable = ({
               <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
               "white"
             )}
-            {getSecondCardColumns("My ROI", farmerRoi + " %", "white")}
+            {getSecondCardColumns("My ROI", '---', "white")}
             {getSecondCardColumns(
               "My share",
               Number(myShare).toFixed(2) + " %",
