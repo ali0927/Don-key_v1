@@ -23,6 +23,7 @@ import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useDominance } from "./useDominance";
 import { InfoIcon } from "icons/InfoIcon";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
+import BigNumber from "bignumber.js";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -144,6 +145,12 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-size: 14px;
   font-weight: 400;
 `;
+
+
+
+const formatNum = (num: string) => {
+  return Number(new BigNumber(num).toFixed(2)).toLocaleString("en-US")
+}
 
 export const DetailTable = ({
   poolAddress,
@@ -272,11 +279,8 @@ export const DetailTable = ({
                 </a>
               </div>
               <CardPoolAddress>
-                {Number(totalPoolValue).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
-                BUSD{" "}
+                {formatNum(totalPoolValue)}{" "}
+                BUSD
                 {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
               </CardPoolAddress>
             </div>
@@ -323,10 +327,7 @@ export const DetailTable = ({
             <div style={{ marginTop: 53 }}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
-                {Number(currentHoldings).toLocaleString("en-US", {
-                  minimumFractionDigits: 2,
-                  maximumFractionDigits: 2,
-                })}{" "}
+                {formatNum(currentHoldings)}{" "}
                 BUSD
               </CardValue>
 
@@ -361,7 +362,7 @@ export const DetailTable = ({
           <div className="row mt-4">
             {getSecondCardColumns(
               "Initial Investment",
-              Number(initialInvestment).toFixed(2).toString(),
+              formatNum(initialInvestment),
               "white"
             )}
 
