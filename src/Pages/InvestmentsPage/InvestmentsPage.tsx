@@ -22,7 +22,7 @@ import { ButtonWidget, LightGrayButton } from "components/Button";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
-import { MyInvestment } from "components/MyInvestment";
+import { MyInitialInvestment, MyInvestment } from "components/MyInvestment";
 import { getPoolContract } from "helpers";
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 
@@ -288,7 +288,7 @@ export const InvestmentsPage = () => {
                           </CustomTableData>
 
                           <CustomTableData>
-                            <MyInvestment
+                            <MyInitialInvestment
                               poolAddress={investment.poolAddress}
                             />
                           </CustomTableData>

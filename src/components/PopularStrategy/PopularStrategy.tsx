@@ -1,12 +1,11 @@
+/* eslint-disable  @typescript-eslint/no-unused-vars */
 import "./popularstrategy.scss";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import clsx from "clsx";
 import styled from "styled-components";
-import { OverlayTrigger, Container, Row, Col } from "react-bootstrap";
+import { OverlayTrigger, Container, Col } from "react-bootstrap";
 import { useMemo, useState } from "react";
-import { TwitterIcon } from "components/TwitterIcon";
-import { TelegramIcon } from "components/TelegramIcon";
 import { ButtonWidget } from "components/Button";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
