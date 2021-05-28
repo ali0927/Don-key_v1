@@ -83,7 +83,7 @@ const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
-  height: 66px;
+  height: 71px;
   padding-top: 5px;
   padding-bottom: 5px;
   :last-child {
@@ -191,7 +191,7 @@ export const DetailTable = ({
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props}>
-      Farmer success fee: 10% additional fee
+      Farmer performance fee: 10% Don-key Performance fee: 5%. Some protocols may have additional fees.
     </Tooltip>
   );
 
@@ -228,7 +228,7 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
-        <div className="d-flex flex-column align-items-center justify-content-between" style={{width: 90}}>
+        <div className="d-flex flex-column align-items-center justify-content-between" style={{width: 90, height: 61}}>
           <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
             {" "}
             {label}
