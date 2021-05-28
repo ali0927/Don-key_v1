@@ -134,7 +134,7 @@ export const DashboardPage = () => {
     return <LoadingPage />;
   }
   return (
-    <Layout className="bgColor dashboard-root" variant="loggedin">
+    <Layout style={{backgroundColor: "none"}} className="dashboard-root" variant="loggedin">
       <RootWrapper className="pt-5 borderCollapse position-relative">
         {/* <Paragon/> */}
         <CustomizedContainer>
