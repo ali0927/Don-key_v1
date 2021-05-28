@@ -189,15 +189,9 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                         <MyInvestment poolAddress={item.poolAddress} />
                       </TableData>
                       <TableData>
-                        <LightGrayButton
-                          type="submit"
-                          onClick={openInvestmentDialog(
-                            item.name,
-                            item.poolAddress
-                          )}
-                        >
-                          Invest
-                        </LightGrayButton>
+                        <ButtonWidget varaint="outlined" disabled>
+                           Invest
+                        </ButtonWidget>
                       </TableData>
                     </TableRow>
                   );

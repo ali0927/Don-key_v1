@@ -43,7 +43,9 @@ const StyledHeading = styled.p`
 const DescriptionTitle = styled.p`
   font-family: "Roboto";
   font-size: 20px;
-  margin-bottom: 0px;
+  font-weight: 400;
+  margin-bottom: 0;
+  line-height: 35.44px
 `;
 
 export const FarmerStrategies = ({
@@ -59,6 +61,8 @@ export const FarmerStrategies = ({
   const [{ loading, data: strategiesData }, refetchData] = useAxios(
     `/api/v2/farmer/${farmerId}/strategies`
   );
+
+
 
   const renderContent = () => {
     if (loading || loading1) {
@@ -134,7 +138,7 @@ export const FarmerStrategies = ({
               <Container className="mt-2 mb-4">
                 <Row>
                   <Col md={12} lg={12}>
-                    <DescriptionTitle>Description</DescriptionTitle>
+                    <DescriptionTitle>{strategiesData.data[0].strategyName || "Description"}</DescriptionTitle>
                     <p style={{ fontSize: 15 }}>
                       <ShowMoreContent
                         length={80}

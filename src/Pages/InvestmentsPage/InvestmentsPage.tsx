@@ -18,7 +18,7 @@ import {
   TableResponsive,
   TableRow,
 } from "components/Table";
-import { LightGrayButton } from "components/Button";
+import { ButtonWidget, LightGrayButton } from "components/Button";
 import { RocketIcon, ZeroInvestmentIcon } from "icons";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
@@ -60,14 +60,10 @@ const ZeroInvestmentContent = styled.div({
   fontSize: "50px",
 });
 
-const BlackButton = styled(LightGrayButton)({
-  fontSize: "16px !important",
-  width: "192px !important",
-  background: "#222222 !important",
-  color: "#fff !important",
-  height: "50px !important",
-  marginTop: "2rem",
-});
+
+const WithDrawButton = styled(LightGrayButton)`
+    border: 0px !important;
+`;
 
 const CenteredBox = styled.div({
   display: "flex",
@@ -310,14 +306,14 @@ export const InvestmentsPage = () => {
                             />
                           </CustomTableData>
                           <CustomTableData className="investment_table_btn">
-                            <LightGrayButton
+                            <WithDrawButton
                               onClick={handleOpenWithDraw(
                                 investment.name,
                                 investment.poolAddress
                               )}
                             >
                               Withdraw
-                            </LightGrayButton>
+                            </WithDrawButton>
                           </CustomTableData>
                         </TableRow>
                       );
@@ -335,9 +331,10 @@ export const InvestmentsPage = () => {
                       You’re not following any farmers
                     </ZeroInvestmentContent>
                     <CenteredBox className="mb-5">
-                      <BlackButton onClick={handleFindFarmers}>
-                        Explore Farmers
-                      </BlackButton>
+                      <ButtonWidget className="mt-4" varaint="contained" containedVariantColor="black" height="50px" width="210px" onClick={handleFindFarmers}>
+                      Explore Farmers
+                      </ButtonWidget>
+                     
                     </CenteredBox>
                   </ZeroInvestmentInnerBox>
                 </ZeroInvestmentBox>

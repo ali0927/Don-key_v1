@@ -28,7 +28,7 @@ const CardWrapper = styled.div`
 `;
 
 const CardInnerInfo = styled.div`
-  min-height: 153px;
+  min-height: 135px;
 `;
 
 const CardLabel = styled.p`
@@ -58,7 +58,7 @@ const CardValue = styled.p`
 
 const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
-  height: 66px;
+  height: 75px;
   padding-top: 5px;
   padding-bottom: 5px;
   :last-child {
@@ -73,6 +73,7 @@ const ColumnsTitle = styled.div`
   font-weight: 400;
   line-height: 19px;
   letter-spacing: 0em;
+  width:91px;
   text-align: center;
   color: rgba(255, 255, 255, 0.7);
 `;
@@ -168,7 +169,7 @@ export const InvestmentBlackBox = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex flex-column align-items-center justify-content-between">
-        <ColumnsTitle> {label}</ColumnsTitle>
+        <ColumnsTitle > {label}</ColumnsTitle>
         <ColumnsSubTitle color="white">{value}</ColumnsSubTitle>
       </Columns>
     );
@@ -180,9 +181,9 @@ export const InvestmentBlackBox = ({
         <CardInnerInfo className="d-flex mb-1 justify-content-center align-items-center">
           <div>
             <CardLabel color="white"> My Holdings </CardLabel>
-            <CardValue color="white">{investedTotal}</CardValue>
+            <CardValue color="white">{investedTotal} BUSD</CardValue>
 
-            <div className="d-flex mt-2 justify-content-center">
+            <div className="d-flex mt-4 mb-3 justify-content-center">
               <ButtonWidget
                 varaint="contained"
                 containedVariantColor="lightYellow"

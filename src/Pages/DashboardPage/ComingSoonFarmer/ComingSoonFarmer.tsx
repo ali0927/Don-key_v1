@@ -113,7 +113,7 @@ export const ComingSoonFarmer = (props: { timerDate: string }) => {
                 />
               </DescriptionContent>
 
-              <ComingSoonButton className="mt-4">COMING SOON</ComingSoonButton>
+              <ComingSoonButton className="mt-4" disabled>COMING SOON</ComingSoonButton>
             </Col>
           </Row>
         </PapperBottom>

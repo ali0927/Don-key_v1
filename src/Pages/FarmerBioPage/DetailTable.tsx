@@ -93,7 +93,7 @@ const Columns = styled.div`
 
 const ColumnsTitle = styled.div`
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: 19px;
@@ -116,9 +116,9 @@ const ColumnsTitleColored = styled.div`
 
 const ColumnsSubTitle = styled.p`
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   word-break: break-word;
   letter-spacing: 0em;
   margin-bottom: 0;
@@ -129,9 +129,9 @@ const ColumnsSubTitle = styled.p`
 
 const ColumnsSubTitleColored = styled.p`
   font-family: Roboto;
-  font-size: 14px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 700;
   word-break: break-word;
   letter-spacing: 0em;
   text-align: center;
@@ -141,6 +141,7 @@ const ColumnsSubTitleColored = styled.p`
 
 const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-size: 14px;
+  font-weight: 400;
 `;
 
 
@@ -227,7 +228,7 @@ export const DetailTable = ({
   ) => {
     return (
       <Columns className="col-md-3 d-flex  justify-content-center">
-        <div className="d-flex flex-column align-items-center justify-content-between ">
+        <div className="d-flex flex-column align-items-center justify-content-between" style={{width: 90}}>
           <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
             {" "}
             {label}
@@ -265,11 +266,11 @@ export const DetailTable = ({
                 </a>
               </div>
               <CardPoolAddress>
-                ${" "}
+                
                 {Number(totalPoolValue).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                })}
+                })} BUSD{" "}
                 {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
               </CardPoolAddress>
             </div>
@@ -316,11 +317,11 @@ export const DetailTable = ({
             <div style={{ marginTop: 53 }}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
-                ${" "}
+              
                 {Number(currentHoldings).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                })}
+                })} BUSD
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
@@ -351,7 +352,7 @@ export const DetailTable = ({
               </div>
             </div>
           </CardInnerInfo>
-          <div className="row">
+          <div className="row mt-4">
             {getSecondCardColumns(
               "Initial Investment",
               Number(initialInvestment).toFixed(2).toString(),
