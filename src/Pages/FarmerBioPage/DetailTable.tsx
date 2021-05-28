@@ -285,7 +285,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "ROI",
-              roi + " %",
+              '---' + " %",
               "black",
               <div className="mr-2">
                 <StatisticRoi />
