@@ -188,8 +188,8 @@ export const DetailTable = ({
   };
 
   const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Farmer performance fee: 10% Don-key Performance fee: 5%. Some protocols
+    <Tooltip id="button-tooltip" {...props} className="mytooltip">
+      <strong>Farmer performance fee: 10%</strong><br /> <strong>Don-key Performance fee: 5%<br /></strong> Some protocols
       may have additional fees.
     </Tooltip>
   );
