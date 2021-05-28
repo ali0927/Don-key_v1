@@ -11,13 +11,15 @@ export const Layout = ({
   children,
   variant,
   className = "",
+  style={},
 }: {
   children: React.ReactNode;
   variant?: "landing" | "loggedin" ;
   className?: string;
+  style?: React.CSSProperties;
 }) => {
   return (
-    <Root className={className}>
+    <Root  className={className} style={style}>
       <NavBar variant={variant} />
       {children}
       <Footer />
