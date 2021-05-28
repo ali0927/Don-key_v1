@@ -11,6 +11,8 @@ import { StyledLink } from "../../components/StyledLink";
 import { TopThreeFarmers } from "./TopThreeFarmers";
 import {theme} from "theme";
 import { FarmerPageDonkeyIcon, LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
+import { NavBar } from "components/Navbar";
+import { Footer } from "components/Footer";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -56,6 +58,10 @@ const RootWrapper = styled.div`
    clip-path: polygon(0 0,225% 0%,43% 119%,0% 83%);
 
 
+`;
+
+const Body = styled.div` 
+    background-color: #F4F4F4;
 `;
 
 const DonkeyIconWrapper = styled.div`
@@ -134,7 +140,10 @@ export const DashboardPage = () => {
     return <LoadingPage />;
   }
   return (
-    <Layout style={{backgroundColor: "none"}} className="dashboard-root" variant="loggedin">
+    <>
+      <NavBar variant={"loggedin"} />
+      
+      
       <RootWrapper className="pt-5 borderCollapse position-relative">
         {/* <Paragon/> */}
         <CustomizedContainer>
@@ -163,7 +172,7 @@ export const DashboardPage = () => {
       </RootWrapper>
 
       {/* Table */}
-      <div className="leaderbord-top mb-5">
+      <Body className="leaderbord-top mb-5">
         {farmers.length === 0 ? (
           <CustomizedContainer>
             <div className="container">
@@ -184,9 +193,10 @@ export const DashboardPage = () => {
             <LeaderBoardTable isReady={!loading} leaders={farmers} isDisable />
           </CustomizedContainer>
         )}
-      </div>
+      </Body>
 
       {/* <GoToBuilderSection/> */}
-    </Layout>
+      <Footer/>
+    </>
   );
 };
