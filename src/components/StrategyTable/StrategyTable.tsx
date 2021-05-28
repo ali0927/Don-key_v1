@@ -62,10 +62,10 @@ const useProfit = (poolAddress: string) => {
 };
 
 const formatNum = (val: string) => {
-  return `$${Number(val).toLocaleString("en-US", {
+  return `${Number(val).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  })}`;
+  })} BUSD`;
 };
 
 export const StrategyTableForInvestor = ({
