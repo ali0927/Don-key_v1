@@ -85,7 +85,6 @@ const StyledNavBar = styled(Navbar)`
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
   const isAuth = useSelector((state: IStoreState) => state.auth);
-  const farmerDetails = useSelector((state: IStoreState) => state.farmer);
   const { isLoggedIn } = isAuth;
   const address = useWalletAddress({ short: true });
   const history = useHistory();
@@ -183,21 +182,7 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
-                    {farmerDetails?.poolAddress ? (
-                      <NavbarLink
-                        to="/dashboard/farmer/me"
-                        linkColor={variant === "builder" ? "white" : "black"}
-                      >
-                        My Farmer Bio
-                      </NavbarLink>
-                    ) : (
-                      <NavbarLink
-                        to="/dashboard/farmer/signup"
-                        linkColor={variant === "builder" ? "white" : "black"}
-                      >
-                        Become a Farmer
-                      </NavbarLink>
-                    )}
+                  
                   </>
                 )}
               </Nav>

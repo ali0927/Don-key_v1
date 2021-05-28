@@ -4,10 +4,10 @@ import { ProtectedRoute } from "components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
 import TeamPage from "Pages/TeamPage";
-import FarmersPage from "Pages/FarmersPage";
-import { LotteryPage } from "Pages/LotteryPage";
 import { LotteryParticipatePage } from "Pages/LotteryPage/LotteryParticipatePage";
 import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations";
+import FarmerSignupPage from "Pages/FarmerSignupPage";
+
 
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
@@ -16,14 +16,14 @@ const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
 const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
 const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
 const SelectTemplate = lazy(() => import("Pages/SelectTemplate"));
-const FarmerSignupPage = lazy(() => import("Pages/FarmerSignupPage"));
+
 
 export default function Routes() {
   return (
     <Router>
       <Switch>
         <Route exact path="/" children={<LandingPage />} />
-        <Route path="/farmers" children={<FarmersPage />} />
+        <Route path="/farmers" children={<FarmerSignupPage />} />
         <Route path="/team" children={<TeamPage />} />
         <Route
           exact
@@ -41,15 +41,6 @@ export default function Routes() {
           children={
             <Suspense fallback={<LoadingPage />}>
               <DashboardPage />
-            </Suspense>
-          }
-        />
-        <ProtectedRoute
-          exact
-          path="/dashboard/farmer/signup"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <FarmerSignupPage />
             </Suspense>
           }
         />

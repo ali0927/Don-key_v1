@@ -6,9 +6,6 @@ import { DonKeyIcon, LargeCloud, SignupBottomBgIcon, SmallCloud } from "icons";
 import { useEffect, useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import { IStoreState } from "interfaces";
-import { setFarmerDetail } from "actions/farmerActions";
 import { DonKeyTextField } from "components/DonKeyTextField";
 import { FileUploadButton } from "components/FileUploadButton";
 import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
@@ -21,7 +18,7 @@ const Root = styled.div`
   z-index: 1;
 `;
 
-const SignUpForm = styled.form`
+const SignUpForm = styled.div`
   background-color: #fff;
   padding: 50px;
   min-height: 500px;
@@ -109,7 +106,6 @@ export const FarmerSignupPage = () => {
   const [telegramInfoState, setTelegramInfoState] =
   React.useState<IDonKeyFieldInfoState | undefined>();
 
-  const farmer = useSelector((state: IStoreState) => state.farmer);
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
@@ -122,8 +118,8 @@ export const FarmerSignupPage = () => {
 
   //const web3 = useWeb3();
   const [spinnermsg, setSpinnerMsg] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const dispatch = useDispatch();
   const isFormError =
     (nameInfoState && nameInfoState.type === "error") ||
     (desInfoState && desInfoState.type === "error");
@@ -141,6 +137,7 @@ export const FarmerSignupPage = () => {
         { rule: "required", errMessage: "Description is required." },
       ]);
       if (isFormError) {
+        
         return;
       }
       if (isNameError) {
@@ -169,10 +166,9 @@ export const FarmerSignupPage = () => {
         formData.append("picture", image);
       }
 
-      setSpinnerMsg("Creating Farmer Account");
-      const res = await executePost({ data: formData });
-
-      dispatch(setFarmerDetail(res.data.data));
+      setSpinnerMsg("Submitting Form");
+      await executePost({ data: formData });
+      setIsSubmitted(true)
     } catch (error) {
       let message = "Please try again.";
       if (
@@ -192,36 +188,6 @@ export const FarmerSignupPage = () => {
     }
   };
 
-  // const deployContract = async () => {
-  //   const POOLJson = await import("../../JsonData/Pool.json");
-  //   const contract = new web3.eth.Contract(POOLJson.abi as any);
-  //   const accounts = await web3.eth.getAccounts();
-
-  //   let payload = {
-  //     data: POOLJson.bytecode,
-  //   };
-  //   const gasPrice = await web3.eth.getGasPrice();
-  //   let parameter: any = {
-  //     from: accounts[0],
-  //     gas: web3.utils.toHex(8000000),
-  //     gasPrice: gasPrice,
-  //   };
-
-  //   return new Promise<string>((res, rej) => {
-  //     contract
-  //       .deploy(payload)
-  //       .send(parameter, (err, transactionHash) => {
-  //       })
-  //       .on("error", rej)
-  //       .then((newContractInstance) => {
-  //         res(newContractInstance.options.address);
-  //       });
-  //   });
-  // };
-
-  // const handlePoolCreation = () => {
-  //   setPosting(true);
-  // }
 
   const handleChange = async (value: string) => {
     setName(value);
@@ -238,12 +204,12 @@ export const FarmerSignupPage = () => {
     if (result.data.data) {
       return setNameInfoState({
         type: "success",
-        msg: "name is available",
+        msg: "Nick name is available.",
       });
     } else {
       return setNameInfoState({
         type: "error",
-        msg: "This username is already in use.",
+        msg: "Nick name is already in use.",
       });
     }
   };
@@ -258,7 +224,7 @@ export const FarmerSignupPage = () => {
       {
         rule: "regex:^[a-zA-Z_][A-Za-z0-9 ]+$",
         errMessage:
-          "Nickname must start with a letter. Allowed characters are A-z a-z and 0-9",
+          "Nickname must start with a letter. Allowed characters are A-z a-z and 0-9.",
       },
       { rule: "max:25", errMessage: "Nickname can be max characters long." },
     ]);
@@ -330,21 +296,10 @@ export const FarmerSignupPage = () => {
         </div>
       );
     }
-    if (farmer?.status === "under_review") {
-      return <div className="text-center">Your Account is under review</div>;
+    if (isSubmitted) {
+      return <div className="text-center">Thank you for your submission. We will be in touch soon.</div>;
     }
 
-    if (farmer?.status === "active" && !farmer?.poolAddress) {
-      return (
-        <div className="d-flex align-items-center justify-content-center">
-          You can start Farming once your pool is Deployed
-        </div>
-      );
-    }
-
-    if (farmer?.poolAddress) {
-      return <div className="text-center">You Have Already Signed Up</div>;
-    }
     return (
       <div className="container">
         <div className="row justify-content-center">
@@ -398,7 +353,7 @@ export const FarmerSignupPage = () => {
             </Form.Group>
             <MakeFarmerProfileBtn onClick={handleCreate}>
               {" "}
-              Make Farmer Profile
+              Submit
             </MakeFarmerProfileBtn>
 
             <StyledDonkey />
@@ -410,7 +365,7 @@ export const FarmerSignupPage = () => {
 
   return (
     <>
-      <Layout variant="loggedin">
+      <Layout variant="landing">
         <div className="position-relative overflow-hidden">
           <Root className=" pt-5 pb-5 position-relative mb-5">
             <LargeLeftCloud className="position-absolute" />
