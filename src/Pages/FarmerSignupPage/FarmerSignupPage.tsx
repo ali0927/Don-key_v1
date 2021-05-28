@@ -297,10 +297,9 @@ export const FarmerSignupPage = () => {
       );
     }
     if (isSubmitted) {
-      return <div className="text-center">Your Account is under review</div>;
+      return <div className="text-center">Thank you for your submission. We will be in touch soon.</div>;
     }
 
-   
     return (
       <div className="container">
         <div className="row justify-content-center">
