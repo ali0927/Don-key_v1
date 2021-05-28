@@ -22,6 +22,7 @@ import {
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useDominance } from "./useDominance";
 import { InfoIcon } from "icons/InfoIcon";
+import { InvestorCount } from "components/InvestorCount/InvestorCount";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -146,12 +147,12 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
 
 export const DetailTable = ({
   poolAddress,
-  investorCount,
   apy,
+  farmerId,
 }: {
   poolAddress: string;
-  investorCount: number;
   apy: string;
+  farmerId: string;
 }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
   const [totalPoolValue, setTotalPoolValue] = useState("0");
@@ -190,8 +191,13 @@ export const DetailTable = ({
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
-      <strong>Farmer performance fee: 10%</strong><br /> <strong>Don-key Performance fee: 5%<br /></strong> Some protocols
-      may have additional deposit fees.
+      <strong>Farmer performance fee: 10%</strong>
+      <br />{" "}
+      <strong>
+        Don-key Performance fee: 5%
+        <br />
+      </strong>{" "}
+      Some protocols may have additional deposit fees.
     </Tooltip>
   );
 
@@ -286,7 +292,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "ROI",
-              '---',
+              "---",
               "black",
               <div className="mr-2">
                 <StatisticRoi />
@@ -294,7 +300,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Followers",
-              investorCount,
+              <InvestorCount refresh={refresh} farmerId={farmerId} />,
               "black",
               <div className="mr-2">
                 <FollowersIcon />
@@ -364,7 +370,7 @@ export const DetailTable = ({
               <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
               "white"
             )}
-            {getSecondCardColumns("My ROI", '---', "white")}
+            {getSecondCardColumns("My ROI", "---", "white")}
             {getSecondCardColumns(
               "My share",
               Number(myShare).toFixed(2) + " %",

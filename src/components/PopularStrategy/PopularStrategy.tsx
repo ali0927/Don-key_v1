@@ -96,7 +96,7 @@ export const PopularStrategy = ({
   telegram?: string | null;
   twitter?: string | null;
   comingsoon?: boolean;
-  investers?: number | null;
+  investers?: React.ReactElement | number | null;
   icon?: React.ReactElement;
   onCardClick?: () => void;
   onButtonClick?: () => void;

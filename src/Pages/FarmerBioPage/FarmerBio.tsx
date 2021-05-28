@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
-import {  useState } from "react";
+import { useState } from "react";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { DotsIcon } from "icons";
@@ -59,6 +59,7 @@ export const FarmerBio = ({
     telegram,
     strategies,
     twitter,
+    GUID,
   },
   isInvestor,
   investorCount,
@@ -127,7 +128,11 @@ export const FarmerBio = ({
                 {description.length > 0 && (
                   <>
                     <div className="d-flex justify-content-between">
-                      <h4 className="font-weight-bolder">{strategies && strategies.length > 0 ? strategies[0].strategyName : "Description"}</h4>
+                      <h4 className="font-weight-bolder">
+                        {strategies && strategies.length > 0
+                          ? strategies[0].strategyName
+                          : "Description"}
+                      </h4>
                       <div className="d-flex">
                         <div className="mr-3">
                           <TwitterIcon
@@ -171,7 +176,7 @@ export const FarmerBio = ({
                 : "100%"
             }
             poolAddress={poolAddress}
-            investorCount={investorCount !== undefined ? investorCount : 0}
+            farmerId={GUID}
           />
         </Row>
       </Container>

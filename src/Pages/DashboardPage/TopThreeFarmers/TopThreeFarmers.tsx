@@ -9,6 +9,7 @@ import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
 import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
+import { InvestorCount } from "components/InvestorCount/InvestorCount";
 
 const Image = styled.img`
   width: 45px;
@@ -69,7 +70,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
               leader.descriptionTitle ? leader.descriptionTitle : ""
             }
             title={leader.name}
-            investers={leader.investors}
+            investers={<InvestorCount farmerId={leader.GUID} refresh={refresh} />}
             comingsoon={leader.status === "comingsoon"}
             twitter={leader.twitter ? leader.twitter : null}
             telegram={leader.telegram}
