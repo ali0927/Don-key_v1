@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ContainedButton } from "components/Button";
 import { useWeb3 } from "don-components";
 import { useEffect, useMemo, useState } from "react";

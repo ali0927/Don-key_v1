@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useWeb3 } from "don-components";
 import { getPoolValue } from "helpers";
 import { useAxios } from "hooks/useAxios";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect,  useState } from "react";
 
 export const useDominance = (farmerPoolAddress: string) => {
   const [{ data }] = useAxios("/api/v2/farmer");

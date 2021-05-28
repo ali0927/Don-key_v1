@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useInvestedAmount } from "hooks/useInvestedAmount";
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";

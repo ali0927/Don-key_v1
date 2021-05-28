@@ -1,8 +1,7 @@
 import { ContainedButton } from "components/Button";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { DonKeyLeftToRightFace } from "icons";
-import React from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { Timer } from "./Timer";
 import { theme } from "theme";

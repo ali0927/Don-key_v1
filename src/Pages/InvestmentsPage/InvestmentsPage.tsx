@@ -1,4 +1,4 @@
-/* eslint-disable no-empty-pattern */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { NavBar } from "components/Navbar/NavBar";
 import { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
@@ -19,7 +19,6 @@ import {
   TableRow,
 } from "components/Table";
 import { ButtonWidget, LightGrayButton } from "components/Button";
-import { RocketIcon, ZeroInvestmentIcon } from "icons";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
@@ -69,12 +68,6 @@ const CenteredBox = styled.div({
   display: "flex",
   justifyContent: "center",
   flexWrap: "wrap",
-});
-
-const CustomizeRockerIcon = styled(RocketIcon)({
-  position: "absolute",
-  left: 0,
-  bottom: "-10%",
 });
 
 const AnimationDiv = styled.div({

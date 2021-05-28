@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { useWeb3 } from "don-components";
 import { getStakingContract } from "helpers";

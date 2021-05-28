@@ -57,7 +57,7 @@ export const RoundedCompletedSection: React.FC = () => {
                     <div className="col-md-3" key={i}>
                       {item.map((src, key) => {
                         return (
-                          <ImageWrapper className="py-3">
+                          <ImageWrapper key={key} className="py-3">
                             <img className="img-fluid" alt="ImageNotFound" key={key} src={src} />
                           </ImageWrapper>
                         );

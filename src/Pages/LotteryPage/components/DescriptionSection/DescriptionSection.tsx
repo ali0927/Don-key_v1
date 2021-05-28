@@ -1,5 +1,4 @@
-import { ContainedButton } from "components/Button";
-import { InfoOvalIcon } from "icons";
+
 import * as React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
@@ -46,15 +45,15 @@ const Content = styled.p`
   text-align: center;
 `;
 
-const CallToAction = styled(ContainedButton)`
-  background: #000000;
-  color: #f3f3f3;
-  width: 207px;
-  &:hover {
-    background: #000000;
-    color: #f3f3f3;
-  }
-`;
+// const CallToAction = styled(ContainedButton)`
+//   background: #000000;
+//   color: #f3f3f3;
+//   width: 207px;
+//   &:hover {
+//     background: #000000;
+//     color: #f3f3f3;
+//   }
+// `;
 
 const ImageIconWrraper = styled.div`
   height: 72px;

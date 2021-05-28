@@ -1,5 +1,4 @@
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
-import { GraphIcon } from "icons";
 import * as React from "react";
 import { ITopThreeFarmerProps } from "./interfaces";
 import styled from "styled-components";
@@ -62,8 +61,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
     return (
-      <>
-        <div className="col-lg-4 col-md-6 mb-3">
+    
+        <div key={leader.GUID} className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} style={{ borderRadius: 0 }} />}
             contentTitle={
@@ -91,7 +90,12 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onShowLessClick={()=> setShowMoreLess(false)}
           />
         </div>
-        {/* <div className="col-lg-4 col-md-6 mb-3">
+ 
+   
+    );
+  };
+
+         {/* <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
             contentTitle={"New Strategy"}
@@ -121,9 +125,6 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
         </div> */}
-      </>
-    );
-  };
 
   if (!isReady) {
     return (

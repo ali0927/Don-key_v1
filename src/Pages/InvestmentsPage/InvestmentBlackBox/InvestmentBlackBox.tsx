@@ -1,3 +1,4 @@
+/* eslint-disable no-empty-pattern */
 import { ButtonWidget } from "components/Button";
 import {
   getPoolContract,
@@ -78,16 +79,6 @@ const ColumnsTitle = styled.div`
   color: rgba(255, 255, 255, 0.7);
 `;
 
-const ColumnsTitleColored = styled.div`
-  font-family: Roboto;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 19px;
-  letter-spacing: 0em;
-  text-align: center;
-  color: ${(props: { color: any }) => props.color};
-`;
 
 const ColumnsSubTitle = styled.p`
   font-family: Roboto;

@@ -1,7 +1,6 @@
 import {
   calculateInitialInvestment,
   calculateWithdrawAmount,
-  getROI,
   getProfitLoss,
 } from "helpers";
 import { useEffect, useState } from "react";

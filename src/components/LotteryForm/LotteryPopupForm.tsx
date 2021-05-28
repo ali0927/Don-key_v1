@@ -4,14 +4,12 @@ import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { useWeb3 } from "don-components";
 import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
 import { useState } from "react";
-import { Label, InputSmall, Input, Caption } from "./LotteryForm";
+import { Label, InputSmall, Caption } from "./LotteryForm";
 import {
   getLPTokenContract,
   getStakingContract,
-  StakingEthAddress,
-  toEther,
 } from "helpers";
-import { Form, InputGroup, Col, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";

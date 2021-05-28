@@ -1,7 +1,5 @@
 import {
   ContainedButton,
-  LightGrayButton,
-  OutlinedButton,
 } from "components/Button";
 import { Footer } from "components/Footer";
 import { DonKeyLabel, LaptopRocketIcon } from "icons";

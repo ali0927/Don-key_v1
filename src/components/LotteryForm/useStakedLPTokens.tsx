@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";

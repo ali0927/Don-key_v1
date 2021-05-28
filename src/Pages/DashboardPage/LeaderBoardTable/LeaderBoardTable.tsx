@@ -13,14 +13,13 @@ import {
   TableRow,
   TableResponsive,
 } from "../../../components/Table";
-import { ButtonWidget, ContainedButton, LightGrayButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import styled from "styled-components";
 import { PoolAmount } from "components/PoolAmount";
 import { MyInvestment } from "components/MyInvestment";
 import comingsoon from "images/comingsoon.svg";
 import { leaderBoardData } from "./leaderboardjson";
-import { theme } from "theme";
 
 const StyledImage = styled.img`
   width: 45px;
@@ -102,18 +101,18 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     }
   };
 
-  const openInvestmentDialog = (farmerName: string, poolAddress: string) => (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.stopPropagation();
-    if (!isDisable) {
-      setState({
-        farmerName: farmerName,
-        poolAddress: poolAddress,
-      });
-      setOpenInvestment(true);
-    }
-  };
+  // const openInvestmentDialog = (farmerName: string, poolAddress: string) => (
+  //   e: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   e.stopPropagation();
+  //   if (!isDisable) {
+  //     setState({
+  //       farmerName: farmerName,
+  //       poolAddress: poolAddress,
+  //     });
+  //     setOpenInvestment(true);
+  //   }
+  // };
 
   const closeInvestmentDialog = () => {
     setState({

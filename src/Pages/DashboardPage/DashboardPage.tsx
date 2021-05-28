@@ -1,6 +1,5 @@
 import { Row, Col } from "react-bootstrap";
 import "./DashboardPage.scss";
-import { Layout } from "components/Layout";
 import { useAxios } from "hooks/useAxios";
 import { IFarmer } from "interfaces";
 import { useMemo } from "react";

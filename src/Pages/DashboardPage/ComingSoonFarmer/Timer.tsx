@@ -1,7 +1,6 @@
 import { TimerDots } from "icons";
 import * as React from "react";
 import styled from "styled-components";
-import { theme } from "theme";
 
 const TimerCard = styled.div`
   display: flex;

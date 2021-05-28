@@ -1,4 +1,4 @@
-import { StrategyName } from "components/StrategyName";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Table,
   TableBody,
@@ -8,7 +8,6 @@ import {
   TableResponsive,
   TableRow,
 } from "components/Table";
-import { useAxios } from "hooks/useAxios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { IStrategy } from "interfaces";

@@ -5,10 +5,9 @@ import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
-import { useMemo, useState } from "react";
+import {  useState } from "react";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
-import { TelegramIcon } from "components/TelegramIcon";
 import { DotsIcon } from "icons";
 import BigNumber from "bignumber.js";
 

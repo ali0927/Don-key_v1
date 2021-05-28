@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useQuery } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import gql from "graphql-tag";

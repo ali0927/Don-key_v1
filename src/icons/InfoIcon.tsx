@@ -5,7 +5,7 @@ export const InfoIcon = (props: IIconProps) => {
     return (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="18" height="18" fill="#F4F4F4"/>
-      <g clip-path="url(#clip0)">
+      <g clipPath="url(#clip0)">
       <rect width="1440" height="1713" transform="translate(-662 -427)" fill="#F5F5F5"/>
       <rect width="1440" height="813" transform="translate(-662 -427)" fill="#FFF037"/>
       <g filter="url(#filter0_dddddd)">
@@ -19,8 +19,8 @@ export const InfoIcon = (props: IIconProps) => {
       <path d="M8.9999 6.94755C9.46246 6.94755 9.83745 6.57257 9.83745 6.11001C9.83745 5.64744 9.46246 5.27246 8.9999 5.27246C8.53734 5.27246 8.16235 5.64744 8.16235 6.11001C8.16235 6.57257 8.53734 6.94755 8.9999 6.94755Z" fill="#808080"/>
       </g>
       <defs>
-      <filter id="filter0_dddddd" x="-653.984" y="-129.946" width="814" height="542" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <filter id="filter0_dddddd" x="-653.984" y="-129.946" width="814" height="542" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
       <feOffset dx="0.0743661" dy="0.149156"/>
       <feGaussianBlur stdDeviation="2.32176"/>
@@ -53,8 +53,8 @@ export const InfoIcon = (props: IIconProps) => {
       <feBlend mode="normal" in2="effect5_dropShadow" result="effect6_dropShadow"/>
       <feBlend mode="normal" in="SourceGraphic" in2="effect6_dropShadow" result="shape"/>
       </filter>
-      <filter id="filter1_dddddd" x="-653.984" y="-129.946" width="814" height="542" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <filter id="filter1_dddddd" x="-653.984" y="-129.946" width="814" height="542" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+      <feFlood floodOpacity="0" result="BackgroundImageFix"/>
       <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
       <feOffset dx="0.0743661" dy="0.149156"/>
       <feGaussianBlur stdDeviation="2.32176"/>

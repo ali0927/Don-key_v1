@@ -1,4 +1,4 @@
-import { DonKeyLeftToRightFace, LargeEllipse, MeadiumEllipse } from "icons";
+import {  LargeEllipse, MeadiumEllipse } from "icons";
 import { SmallEllipse } from "icons/SmallEllipse";
 import React from "react";
 import styled from "styled-components";

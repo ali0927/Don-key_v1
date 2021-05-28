@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { ButtonWidget } from "components/Button";
 
 import moment from "moment";

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import clsx from "clsx";
 import { LeftArrowMediumSIze, ShareIcon } from "icons";
 import React, { useState, useEffect } from "react";

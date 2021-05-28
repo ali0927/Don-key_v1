@@ -1,3 +1,4 @@
+//eslint-disable
 import { useEffect } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled from "styled-components";
@@ -10,7 +11,7 @@ import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { calculateWithdrawAmount, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
-import { ButtonWidget, ContainedButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 import {
   AwardIcon,
   FollowersIcon,
