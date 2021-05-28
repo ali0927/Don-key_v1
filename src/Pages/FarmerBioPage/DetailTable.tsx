@@ -83,9 +83,8 @@ const FirstCardRow = styled.div``;
 
 const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
-  height: 71px;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  height: 70px;
+  padding: 5px 20px;
   :last-child {
     border-right: none;
   }
@@ -144,11 +143,10 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-weight: 400;
 `;
 
-
 export const DetailTable = ({
   poolAddress,
   investorCount,
-  apy
+  apy,
 }: {
   poolAddress: string;
   investorCount: number;
@@ -191,7 +189,8 @@ export const DetailTable = ({
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props}>
-      Farmer performance fee: 10% Don-key Performance fee: 5%. Some protocols may have additional fees.
+      Farmer performance fee: 10% Don-key Performance fee: 5%. Some protocols
+      may have additional fees.
     </Tooltip>
   );
 
@@ -227,14 +226,12 @@ export const DetailTable = ({
     color: "black" | "white"
   ) => {
     return (
-      <Columns className="col-md-3 d-flex  justify-content-center">
-        <div className="d-flex flex-column align-items-center justify-content-between" style={{width: 90, height: 61}}>
-          <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
-            {" "}
-            {label}
-          </ColumnsTitle1>
-          <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
-        </div>
+      <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
+        <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
+          {" "}
+          {label}
+        </ColumnsTitle1>
+        <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
     );
   };
@@ -243,12 +240,14 @@ export const DetailTable = ({
     <>
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
-          
-            <OverlayTrigger
+          <OverlayTrigger
             placement="right"
             delay={{ show: 250, hide: 400 }}
             overlay={renderTooltip}
-          ><div style={{textAlign: 'right', padding: 10}}><InfoIcon /></div>
+          >
+            <div style={{ textAlign: "right", padding: 10 }}>
+              <InfoIcon />
+            </div>
           </OverlayTrigger>
           <CardInnerInfo className="d-flex justify-content-center mb-2">
             <div style={{ marginTop: -4 }}>
@@ -266,11 +265,11 @@ export const DetailTable = ({
                 </a>
               </div>
               <CardPoolAddress>
-                
                 {Number(totalPoolValue).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                })} BUSD{" "}
+                })}{" "}
+                BUSD{" "}
                 {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
               </CardPoolAddress>
             </div>
@@ -317,11 +316,11 @@ export const DetailTable = ({
             <div style={{ marginTop: 53 }}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
-              
                 {Number(currentHoldings).toLocaleString("en-US", {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
-                })} BUSD
+                })}{" "}
+                BUSD
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
