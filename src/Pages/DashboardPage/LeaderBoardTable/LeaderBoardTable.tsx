@@ -97,7 +97,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   };
   const handleJoinUseClick = () => {
     if (isDisable) {
-      history.push("/dashboard/farmer/signup");
+      history.push("/farmers");
     }
   };
 

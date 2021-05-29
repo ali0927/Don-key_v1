@@ -155,7 +155,7 @@ export const DashboardPage = () => {
               {farmers.length === 0 ? (
                 <div className="d-flex align-items-center flex-column">
                   <Heading>No Farmers Yet</Heading>
-                  <StyledLink className="mt-4" to="dashboard/farmer/signup">
+                  <StyledLink className="mt-4" to="/farmers">
                     Become the First Farmer
                   </StyledLink>
                 </div>
