@@ -182,6 +182,9 @@ export const InvestmentPopup = ({
           </ButtonWrapper>
         </div>
       </div>
+      <p className="mt-4">
+        <small>If you receive: "Transaction error. Exception thrown in contract code", this is due to high slippage. Please try a different amount.</small>
+      </p>
     </DonCommonmodal>
   );
 };
