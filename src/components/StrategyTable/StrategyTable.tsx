@@ -12,7 +12,7 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 import { IStrategy } from "interfaces";
 import styled from "styled-components";
-import { getPoolContract, toEther } from "helpers";
+import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 
@@ -37,9 +37,8 @@ const useTVL = (poolAddress: string) => {
   const web3 = useWeb3();
   useEffect(() => {
     (async () => {
-      const pool = await getPoolContract(web3, poolAddress);
-      const amount = toEther(await pool.methods.getTotalInvestAmount().call());
-      setTvl(amount);
+      let poolValue = await getTotalPoolValue(web3, poolAddress);
+      setTvl(web3.utils.fromWei(poolValue, "ether"))
     })();
   }, [poolAddress]);
   return { tvl };
