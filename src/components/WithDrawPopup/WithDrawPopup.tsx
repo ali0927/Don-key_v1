@@ -33,7 +33,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       onClose();
 
       showProgress("Withdrawal is in Progress");
-      await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
+      await pool.methods.withdrawLiquidity(0).send({ from: accounts[0] });
 
       await executeDelete({
         data: {

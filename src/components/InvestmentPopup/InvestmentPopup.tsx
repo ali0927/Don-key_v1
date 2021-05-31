@@ -111,7 +111,7 @@ export const InvestmentPopup = ({
       }
 
       await pool.methods
-        .depositLiquidity(web3.utils.toWei(value, "ether"))
+        .depositLiquidity(web3.utils.toWei(value, "ether"),0)
         .send({
           from: accounts[0],
         });

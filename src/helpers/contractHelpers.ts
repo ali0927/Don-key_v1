@@ -37,7 +37,7 @@ export const getBUSDTokenContract = async (web3: Web3) => {
 };
 
 export const getPoolContract = async (web3: Web3, poolAddress: string) => {
-  const POOLJson = await import("JsonData/pool2.json");
+  const POOLJson = await import("JsonData/pool-abi.json");
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
 };
 
@@ -66,7 +66,7 @@ export const getStrategyContract = async (
   web3: Web3,
   strategyAddress: string
 ) => {
-  const StrategyJsn = await import("JsonData/strategy2.json");
+  const StrategyJsn = await import("JsonData/strategy-abi.json");
 
   return new web3.eth.Contract(StrategyJsn.abi as any, strategyAddress);
 };
