@@ -11,7 +11,6 @@ export const Web3NetworkDetector = () => {
   const web3 = useWeb3();
   useEffect(() => {
     if (network) {
-      console.log(window.ethereum);
       window.ethereum.on("chainChanged", () => window.location.reload());
     }
   }, [network]);
