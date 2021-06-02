@@ -16,8 +16,6 @@ import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 
-
-
 const formatDate = (
   date: string | null | undefined,
   defaultVal: string = ""
@@ -38,7 +36,7 @@ const useTVL = (poolAddress: string) => {
   useEffect(() => {
     (async () => {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
-      setTvl(web3.utils.fromWei(poolValue, "ether"))
+      setTvl(web3.utils.fromWei(poolValue, "ether"));
     })();
   }, [poolAddress]);
   return { tvl };
@@ -106,7 +104,7 @@ export const StrategyTableForInvestor = ({
                   {formatNum(tvl ? tvl : "0")}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {new BigNumber(item.apy).multipliedBy(100).toFixed(2)+ "%"}
+                  {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {item.status || "Active"}

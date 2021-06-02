@@ -28,7 +28,7 @@ const PapperBottom = styled.div`
 const ImageWrapper = styled.div`
   width: 51px;
   height: 51px;
-  background-color: #FFF251;
+  background-color: #fff251;
   border-radius: 5px;
 `;
 
@@ -86,6 +86,14 @@ export const ComingSoonFarmer = (props: { timerDate: string }) => {
   return (
     <>
       <Papper>
+        <div className="overlay">
+          <div className="text">
+            Our new farmer is waiting for you as soon as we are done with
+            testing our update
+            <br /> <br />
+            expectation: 48 hours
+          </div>
+        </div>
         <PapperTop className="p-3">
           <Row>
             <Col lg={12} className="d-flex align-items-center">
@@ -112,7 +120,9 @@ export const ComingSoonFarmer = (props: { timerDate: string }) => {
                 />
               </DescriptionContent>
 
-              <ComingSoonButton className="mt-4" disabled>COMING SOON</ComingSoonButton>
+              <ComingSoonButton className="mt-4" disabled>
+                COMING SOON
+              </ComingSoonButton>
             </Col>
           </Row>
         </PapperBottom>

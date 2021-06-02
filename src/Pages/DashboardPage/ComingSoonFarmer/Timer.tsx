@@ -8,9 +8,9 @@ const TimerCard = styled.div`
   height: 95px;
   align-items: center;
   justify-content: center;
-  background:#FFF251;
+  background: #fff251;
   border-radius: 10px;
-  box-shadow: 0px 6px 14px -6px #FFF251;
+  box-shadow: 0px 6px 14px -6px #fff251;
 `;
 
 const TimerNumber = styled.p`
@@ -41,47 +41,47 @@ const DotsWrraper = styled.div`
 `;
 
 export const Timer: React.FC<{ timerDate: string }> = (props) => {
-  const countDownDate = new Date(props.timerDate).getTime();
+  // const countDownDate = new Date(props.timerDate).getTime();
 
-  React.useEffect(() => {
-    const interval = setInterval(function () {
-      // Get today's date and time
-      const now = new Date().getTime();
+  // React.useEffect(() => {
+  //   const interval = setInterval(function () {
+  //     // Get today's date and time
+  //     const now = new Date().getTime();
 
-      // Find the distance between now and the count down date
-      const distance = countDownDate - now;
+  //     // Find the distance between now and the count down date
+  //     const distance = countDownDate - now;
 
-      // Time calculations for days, hours, minutes and seconds
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      const dayElement = document.getElementById("days");
-      const hoursElement = document.getElementById("hours");
-      const minElement = document.getElementById("min");
-      const secElement = document.getElementById("sec");
+  //     // Time calculations for days, hours, minutes and seconds
+  //     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  //     const hours = Math.floor(
+  //       (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+  //     );
+  //     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  //     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+  //     const dayElement = document.getElementById("days");
+  //     const hoursElement = document.getElementById("hours");
+  //     const minElement = document.getElementById("min");
+  //     const secElement = document.getElementById("sec");
 
-      if (dayElement && hoursElement && minElement && secElement) {
-        dayElement.innerHTML = days.toString();
-        hoursElement.innerHTML = hours.toString();
-        minElement.innerHTML = minutes.toString();
-        secElement.innerHTML = seconds.toString();
-        if (distance < 0) {
-          clearInterval(interval);
-          dayElement.innerHTML = "0";
-          hoursElement.innerHTML = "0";
-          minElement.innerHTML = "0";
-          secElement.innerHTML = "0";
-        }
-      }
-    }, 1000);
+  //     if (dayElement && hoursElement && minElement && secElement) {
+  //       dayElement.innerHTML = days.toString();
+  //       hoursElement.innerHTML = hours.toString();
+  //       minElement.innerHTML = minutes.toString();
+  //       secElement.innerHTML = seconds.toString();
+  //       if (distance < 0) {
+  //         clearInterval(interval);
+  //         dayElement.innerHTML = "0";
+  //         hoursElement.innerHTML = "0";
+  //         minElement.innerHTML = "0";
+  //         secElement.innerHTML = "0";
+  //       }
+  //     }
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [countDownDate]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [countDownDate]);
 
   return (
     <>
@@ -98,18 +98,18 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
 
       <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
-          <TimerNumber id="hours">0</TimerNumber>
+          <TimerNumber id="hours">3</TimerNumber>
           <TimerLabel>HOURS</TimerLabel>
         </div>
       </TimerCard>
 
-      <DotsWrraper >
+      <DotsWrraper>
         <TimerDots />
       </DotsWrraper>
 
       <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
-          <TimerNumber id="min">0</TimerNumber>
+          <TimerNumber id="min">35</TimerNumber>
           <TimerLabel>MINUTES</TimerLabel>
         </div>
       </TimerCard>
@@ -120,7 +120,7 @@ export const Timer: React.FC<{ timerDate: string }> = (props) => {
 
       <TimerCard className="col-lg-1 d-flex align-items-center mt-2 mb-2  w-100">
         <div>
-          <TimerNumber id="sec">0</TimerNumber>
+          <TimerNumber id="sec">37</TimerNumber>
           <TimerLabel>SECONDS</TimerLabel>
         </div>
       </TimerCard>
