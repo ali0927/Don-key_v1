@@ -81,7 +81,7 @@ export const StrategyTableForInvestor = ({
         <TableHead>
           <TableRow>
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading>
+            {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
@@ -97,9 +97,9 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   {item.strategyName}
                 </TableData>
-                <TableData style={{ textAlign: "center" }}>
+                {/* <TableData style={{ textAlign: "center" }}>
                   {formatNum(profit ? profit : "0")}
-                </TableData>
+                </TableData> */}
                 <TableData style={{ textAlign: "center" }}>
                   {formatNum(tvl ? tvl : "0")}
                 </TableData>
