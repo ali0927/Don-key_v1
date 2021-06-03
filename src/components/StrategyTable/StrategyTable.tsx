@@ -47,7 +47,7 @@ const useProfit = (poolAddress: string) => {
   const web3 = useWeb3();
   useEffect(() => {
     (async () => {
-      const pool = await getPoolContract(web3, poolAddress);
+      const pool = await getPoolContract(web3, poolAddress, 2);
       const amount = toEther(await pool.methods.getTotalInvestAmount().call());
       const totalPoolValue = toEther(
         await pool.methods.getinvestedAmountWithReward().call()

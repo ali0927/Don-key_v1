@@ -10,7 +10,7 @@ export const useIsInvested = (poolAddress: string) => {
 
   const getIsInvested = async () => {
     try {
-      const contract = await getPoolContract(web3, poolAddress);
+      const contract = await getPoolContract(web3, poolAddress,2);
       const accounts = await web3.eth.getAccounts();
       const isInvested = await contract.methods.isInvestor(accounts[0]).call();
       setisInvested(isInvested);

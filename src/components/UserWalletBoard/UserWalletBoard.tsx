@@ -41,7 +41,7 @@ const InvestCardButton = styled.button`
 `;
 
 export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
-  const { poolAddress } = props;
+  const { poolAddress, poolVersion } = props;
 
   const { isInvested } = useIsInvested(poolAddress);
   const [showInvestmentPopup, setShowInvestmentPopup] = React.useState(false);
@@ -52,10 +52,10 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
   const web3 = useWeb3()
 
   const onSuccess = async () => {
-    let d = await getTotalPoolValue(web3, poolAddress);
-    setTotalPoolValue(web3.utils.fromWei(d, "ether"));
-    const accounts = await web3.eth.getAccounts();
-    const pool = await getPoolContract(web3, poolAddress);
+    // let d = await getTotalPoolValue(web3, poolAddress);
+    // setTotalPoolValue(web3.utils.fromWei(d, "ether"));
+    // const accounts = await web3.eth.getAccounts();
+    // const pool = await getPoolContract(web3, poolAddress);
     // let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
     // setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
     // let total = await pool.methods.totalSupply().call();
@@ -91,6 +91,7 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
             {showInvestmentPopup && (
               <InvestmentPopup
                 poolAddress={poolAddress}
+                poolVersion={poolVersion}
                 onSuccess={onSuccess}
                 onClose={() => setShowInvestmentPopup(false)}
               />
@@ -108,6 +109,7 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
             )}
             {showWithdrawPopup && (
               <WithDrawPopup
+                poolVersion={poolVersion}
                 open
                 onClose={() => setShowWithdrawPopup(false)}
                 onError={() => {}}

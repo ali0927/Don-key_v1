@@ -145,7 +145,7 @@ export const InvestmentsPage = () => {
         const finalInvestments: IMyInvestments[] = [];
         for (let invest of investments) {
           try {
-            const contract = await getPoolContract(web3, invest.poolAddress);
+            const contract = await getPoolContract(web3, invest.poolAddress,2);
             const accounts = await web3.eth.getAccounts();
             const isInvested = await contract.methods
               .isInvestor(accounts[0])
@@ -338,9 +338,10 @@ export const InvestmentsPage = () => {
         </div>
       </GridBackground>
       <Footer />
-      {withDraw.open && (
+      {/* {withDraw.open && (
         <WithDrawPopup
           open={withDraw.open}
+          poolVersion={}
           poolAddress={withDraw.poolAddress}
           onSuccess={() => {
             handleSuccess(withDraw.farmerName);
@@ -348,7 +349,7 @@ export const InvestmentsPage = () => {
           onError={handleError}
           onClose={handleCloseWithDraw}
         />
-      )}
+      )} */}
     </div>
   );
 };

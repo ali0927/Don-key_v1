@@ -5,6 +5,7 @@ export type IFarmer = {
   picture: string;
   name: string;
   description: string;
+  pool_version: number;
   profit24hours: string | null;
   twitter?: string | null;
   telegram?: string | null;
@@ -55,6 +56,7 @@ export interface IUser {
 export interface IFarmerInter {
   poolAddress: string;
   picture: string;
+  pool_version: number;
   GUID: string;
   investors?: null | number;
   status: "not_signed_up" | "under_review" | "active" | "inactive";

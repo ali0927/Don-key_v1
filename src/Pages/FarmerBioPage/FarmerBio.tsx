@@ -58,6 +58,7 @@ export const FarmerBio = ({
     poolAddress,
     telegram,
     strategies,
+    pool_version,
     twitter,
     GUID,
   },
@@ -175,6 +176,7 @@ export const FarmerBio = ({
                     .toFixed(0) + "%"
                 : "100%"
             }
+            poolVersion={pool_version}
             poolAddress={poolAddress}
             farmerId={GUID}
           />

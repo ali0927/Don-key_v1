@@ -2,52 +2,27 @@
 import { ContainedButton, OutlinedButton } from "components/Button";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
-import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-import { useWeb3 } from "don-components";
-import { calculateWithdrawAmount, getPoolContract } from "helpers";
-import { useAxios } from "hooks/useAxios";
+import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
 
+
+
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
-  const { open, poolAddress, onClose } = props;
-
-  const [{}, executeDelete] = useAxios(
-    { method: "DELETE", url: "/api/v2/investments" },
-    { manual: true }
-  );
-
-  const web3 = useWeb3();
+  const { open, poolAddress, onClose, poolVersion } = props;
 
   const [loading, setLoading] = React.useState(false);
 
-  
-  const { showFailure, showProgress, showSuccess } =
-    useTransactionNotification();
+  const { doWithdraw } = useWithdraw();
+
   const handleWithDraw = async () => {
-    try {
-      setLoading(true);
-      const accounts = await web3.eth.getAccounts();
-
-      const pool = await getPoolContract(web3, poolAddress);
-      onClose();
-
-      showProgress("Withdrawal is in Progress");
-      await pool.methods.withdrawLiquidity(0).send({ from: accounts[0] });
-
-      await executeDelete({
-        data: {
-          poolAddress: poolAddress,
-        },
-      });
-
-      showSuccess("Withdrawal Successfull");
-
-      props.onSuccess();
-    } catch (err) {
-      showFailure("Withdrawal Failed");
-      props.onError(err);
-    }
+    doWithdraw(
+      poolAddress,
+      poolVersion,
+      () => setLoading(true),
+      props.onSuccess,
+      props.onError
+    );
   };
 
   return (

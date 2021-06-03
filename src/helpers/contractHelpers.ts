@@ -31,13 +31,23 @@ export const getBUSDTokenContract = async (web3: Web3) => {
   if (busdtoken) {
     return busdtoken;
   }
-  const BUSDJson = await import("JsonData/BUSDToken.json");
-  busdtoken = new web3.eth.Contract(BUSDJson.default as any, BUSDAddress);
+  busdtoken = await getErcToken(web3,BUSDAddress);
   return busdtoken;
 };
+export const getErcToken = async (web3: Web3, tokenAddress: string) => {
 
-export const getPoolContract = async (web3: Web3, poolAddress: string) => {
-  const POOLJson = await import("JsonData/pool-abi.json");
+  const BUSDJson = await import("JsonData/BUSDToken.json");
+  busdtoken = new web3.eth.Contract(BUSDJson.default as any, tokenAddress);
+  return busdtoken;
+};
+export const getPoolToken = async (web3: Web3, poolAddress: string) => {
+  const tokenAddress = await (await getPoolContract(web3, poolAddress, 2)).methods.getTokenAddress().call();
+  return getERCContract(web3,tokenAddress);
+};
+
+
+export const getPoolContract = async (web3: Web3, poolAddress: string, version: number) => {
+  const POOLJson = version === 1 ? await import("JsonData/pool2.json") : await import("JsonData/advanced-pool.json");
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
 };
 
@@ -72,7 +82,7 @@ export const getStrategyContract = async (
 };
 
 export const getInvestedAmount = async (web3: Web3, poolAddress: string) => {
-  const contract = await getPoolContract(web3, poolAddress);
+  const contract = await getPoolContract(web3, poolAddress, 1);
   const accounts = await web3.eth.getAccounts();
   const investment = await contract.methods
     .getInvestorClaimableAmount(accounts[0])
@@ -87,7 +97,7 @@ export const getPancakeContract = async (web3: Web3) => {
 };
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
-  const contract = await getPoolContract(web3, poolAddress);
+  const contract = await getPoolContract(web3, poolAddress, 2);
   const amount = await contract.methods.getinvestedAmountWithReward().call();
   return amount;
 };
@@ -104,7 +114,7 @@ export const getTotalReservePoolValue = async (
 
 export const getLpTokensTotal = async (web3: Web3, poolAddress: string) => {
   const accounts = await web3.eth.getAccounts();
-  const pool = await getPoolContract(web3, poolAddress);
+  const pool = await getPoolContract(web3, poolAddress,2);
   const lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
   const total = await pool.methods.totalSupply().call();
   return { user: lptokensresponse, total };
@@ -121,7 +131,7 @@ export const calculateWithdrawAmount = async (
   poolAddress: string
 ) => {
   const accounts = await web3.eth.getAccounts();
-  const poolContract = await getPoolContract(web3, poolAddress);
+  const poolContract = await getPoolContract(web3, poolAddress, 2);
   try {
     const claimableAmount = await poolContract.methods
       .getFinalClaimableAmount(accounts[0])
@@ -140,7 +150,7 @@ export const calculateInitialInvestment = async (
   poolAddress: string
 ) => {
   const accounts = await web3.eth.getAccounts();
-  const poolContract = await getPoolContract(web3, poolAddress);
+  const poolContract = await getPoolContract(web3, poolAddress, 2);
   const initialAmount = await poolContract.methods
     .getUserInvestedAmount(accounts[0])
     .call();

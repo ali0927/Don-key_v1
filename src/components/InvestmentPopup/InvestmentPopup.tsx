@@ -5,7 +5,7 @@ import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
-import { getBUSDTokenContract, getPoolContract } from "helpers";
+import { getBUSDTokenContract, getErcToken, getPoolContract, getPoolToken } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -35,7 +35,7 @@ const ButtonWrapper = styled.div({
   width: "40%",
 });
 
-const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
+const MyBalanceInBUSD = ({ onDone, poolAddress, poolVersion }: { onDone?: (val: string) => void; poolAddress: string; poolVersion: number }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const web3 = useWeb3();
 
@@ -43,8 +43,8 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
     try {
       const accounts = await web3.eth.getAccounts();
       //@ts-ignore
-      const busdtoken = await getBUSDTokenContract(web3);
-      const balance = await busdtoken.methods.balanceOf(accounts[0]).call();
+      const acceptedToken = poolVersion === 1 ? await getBUSDTokenContract(web3): await getPoolToken(web3, poolAddress);
+      const balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
       setState({
         balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
         isReady: true,
@@ -60,15 +60,17 @@ const MyBalanceInBUSD = ({ onDone }: { onDone?: (val: string) => void }) => {
   if (!state.isReady) {
     return <>-</>;
   }
-  return <>{state.balance}</>;
+  return <>{state.balance} </>;
 };
 
 export const InvestmentPopup = ({
   poolAddress,
+  poolVersion,
   onClose,
   onSuccess,
 }: {
   poolAddress: string;
+  poolVersion: number;
   onSuccess?: () => void;
   onClose: () => void;
 }) => {
@@ -84,6 +86,8 @@ export const InvestmentPopup = ({
   const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
+  
+
 
   const handleInvest = async () => {
     if (isLoading) {
@@ -92,10 +96,10 @@ export const InvestmentPopup = ({
     enable();
 
     try {
-      const pool = await getPoolContract(web3, poolAddress);
-      const busdtoken = await getBUSDTokenContract(web3);
+      const pool = await getPoolContract(web3, poolAddress, poolVersion);
+      const acceptedToken = poolVersion === 1 ? await getBUSDTokenContract(web3): await getPoolToken(web3, poolAddress);
       const accounts = await web3.eth.getAccounts();
-      let allowance = await busdtoken.methods
+      let allowance = await acceptedToken.methods
         .allowance(accounts[0], poolAddress)
         .call();
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
@@ -103,18 +107,27 @@ export const InvestmentPopup = ({
       onClose();
       showProgress("Transaction is in Progress");
       if (amount.gt(allowance)) {
-        await busdtoken.methods
+        await acceptedToken.methods
           .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
           .send({
             from: accounts[0],
           });
       }
-
-      await pool.methods
+      if(poolVersion === 1){
+        await pool.methods
+        .depositLiquidity(web3.utils.toWei(value, "ether"))
+        .send({
+          from: accounts[0],
+        });
+      }
+      if(poolVersion === 2){
+        await pool.methods
         .depositLiquidity(web3.utils.toWei(value, "ether"),0)
         .send({
           from: accounts[0],
         });
+      }
+     
 
       await executePost({ data: { poolAddress } });
 
@@ -141,7 +154,7 @@ export const InvestmentPopup = ({
       isOpen={true}
       size="xs"
       titleRightContent={
-        <>Balance: {<MyBalanceInBUSD onDone={setBalance} />} BUSD</>
+        <>Balance: {<MyBalanceInBUSD onDone={setBalance} poolAddress={poolAddress} poolVersion={poolVersion} />} BUSD</>
       }
       onClose={onClose}
     >

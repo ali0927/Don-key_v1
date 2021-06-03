@@ -87,6 +87,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
   const [state, setState] = useState({
     farmerName: "",
     poolAddress: "",
+    poolVersion: 1
   });
   const history = useHistory();
 
@@ -118,6 +119,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     setState({
       farmerName: "",
       poolAddress: "",
+      poolVersion: 1,
     });
     setOpenInvestment(false);
   };
@@ -202,6 +204,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
       </div>
       {openInvestment && (
         <InvestmentPopup
+          poolVersion={state.poolVersion}
           poolAddress={state.poolAddress}
           onClose={closeInvestmentDialog}
         />

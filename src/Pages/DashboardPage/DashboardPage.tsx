@@ -113,11 +113,12 @@ export const DashboardPage = () => {
   const farmers: IFarmer[] = useMemo(() => {
     if (data) {
       return data.data.map((item: any) => {
-        return {
+        const farmer: IFarmer = {
           GUID: item.GUID,
           name: `Don - ${item.name}`,
           description: item.description,
           picture: item.picture,
+          pool_version: item.pool_version,
           poolAddress: item.poolAddress,
           profit24hours: item.profit24hours || "-",
           profit7days: item.profit7days || "-",
@@ -129,7 +130,8 @@ export const DashboardPage = () => {
           apy: item.strategy.apy,
           strategyImage: item.strategy.strategyImage,
           investors: item.investors,
-        } as IFarmer;
+        };
+        return  farmer
       });
     }
     return [];

@@ -26,6 +26,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const [state, setState] = React.useState({
     farmerName: "",
     poolAddress: "",
+    poolVersion: 0
   });
 
   const history = useHistory();
@@ -35,11 +36,12 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   };
 
   const openInvestmentDialog =
-    (farmerName: string, poolAddress: string) => () => {
+    (farmerName: string, poolAddress: string, poolVersion: number) => () => {
       // e.stopPropagation();
       setState({
         farmerName: farmerName,
         poolAddress: poolAddress,
+        poolVersion
       });
       setOpenInvestment(true);
     };
@@ -48,6 +50,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setState({
       farmerName: "",
       poolAddress: "",
+      poolVersion: 0
     });
 
     setOpenInvestment(false);
@@ -84,7 +87,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(
               leader.name,
-              leader.poolAddress
+              leader.poolAddress,
+              leader.pool_version
             )}
             showAllContent={openShowMoreLess}
             onShowMoreClick={()=> setShowMoreLess(true)}
@@ -146,6 +150,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         </div>
         {openInvestment && (
           <InvestmentPopup
+            poolVersion={state.poolVersion}
             onSuccess={refreshData}
             poolAddress={state.poolAddress}
             onClose={closeInvestmentDialog}

@@ -118,29 +118,29 @@ export const InvestmentBlackBox = ({
       if (myInvestments.length > 0) {
         const accounts = await web3.eth.getAccounts();
         for (let investment of myInvestments) {
-          const pool = await getPoolContract(web3, investment.poolAddress);
+          // const pool = await getPoolContract(web3, investment.poolAddress);
 
-          key = enqueueSnackbar("Withdrawal is in Progress", {
-            content: (key, msg) => <ProgressSnackbar message={msg as string} />,
-            persist: true,
-          }) as string;
+          // key = enqueueSnackbar("Withdrawal is in Progress", {
+          //   content: (key, msg) => <ProgressSnackbar message={msg as string} />,
+          //   persist: true,
+          // }) as string;
 
-          await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
+          // await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
 
-          await executeDelete({
-            data: {
-              poolAddress: investment.poolAddress,
-            },
-          });
+          // await executeDelete({
+          //   data: {
+          //     poolAddress: investment.poolAddress,
+          //   },
+          // });
 
-          if (key) {
-            closeSnackbar(key);
-          }
-          onRefresh();
-          enqueueSnackbar("Withdrawal SuccessFull", {
-            content: (key, msg) => <SuccessSnackbar message={msg as string} />,
-            persist: false,
-          }) as string;
+          // if (key) {
+          //   closeSnackbar(key);
+          // }
+          // onRefresh();
+          // enqueueSnackbar("Withdrawal SuccessFull", {
+          //   content: (key, msg) => <SuccessSnackbar message={msg as string} />,
+          //   persist: false,
+          // }) as string;
         }
       }
     } catch (err) {

@@ -14,6 +14,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Sally",
@@ -26,6 +27,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Don",
@@ -38,6 +40,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Alex",
@@ -50,6 +53,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Djony112",
@@ -62,6 +66,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Sally112",
@@ -74,6 +79,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Don112",
@@ -86,6 +92,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Alexgroup",
@@ -98,6 +105,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Djony-don",
@@ -110,6 +118,7 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
   {
     name: "Sallygroup12",
@@ -122,5 +131,6 @@ export const leaderBoardData: IFarmer[] = [
     profit24hours: "-",
     profit7days: "-",
     profit: "-",
+    pool_version: 1
   },
 ];

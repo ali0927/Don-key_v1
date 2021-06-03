@@ -11,7 +11,7 @@ export const useROIAndInitialInvestment = (web3: Web3, poolAddress: string,disab
   const [initialInvestment, setInitialInvestment] = useState("0");
   const fetchRoi = async() => {
     const accounts = await web3.eth.getAccounts();
-    const pool = await getPoolContract(web3, poolAddress);
+    const pool = await getPoolContract(web3, poolAddress,2);
     let poolValue = await getTotalPoolValue(web3, poolAddress);
     const poolValueBN = new BigNumber(poolValue);
     const totalInvestedAmount = new BigNumber(await pool.methods.getTotalInvestAmount().call());

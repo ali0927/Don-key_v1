@@ -156,9 +156,11 @@ export const DetailTable = ({
   poolAddress,
   apy,
   farmerId,
+  poolVersion
 }: {
   poolAddress: string;
   apy: string;
+  poolVersion: number;
   farmerId: string;
 }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
@@ -382,6 +384,7 @@ export const DetailTable = ({
       </div>
       {showInvestmentPopup && (
         <InvestmentPopup
+          poolVersion={poolVersion}
           poolAddress={poolAddress}
           onClose={() => setShowInvestmentPopup(false)}
           onSuccess={onSuccess}
@@ -391,6 +394,7 @@ export const DetailTable = ({
       {showWithdrawPopup && (
         <WithDrawPopup
           open
+          poolVersion={poolVersion}
           onClose={() => setShowWithdrawPopup(false)}
           onError={() => {}}
           onSuccess={onSuccess}
