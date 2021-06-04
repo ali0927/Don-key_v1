@@ -7,6 +7,7 @@ import { useIsomorphicEffect } from "./useIsomorphicEffect";
 
 export const usePoolSymbol = (poolAddress: string) => {
   const [symbol, setSymbol] = useState("-");
+  const [tokenAddress, setTokenAddress] = useState("-");
   const [loading, setLoading] = useState(true);
   const web3 = useWeb3();
   useIsomorphicEffect(() => {
@@ -20,15 +21,17 @@ export const usePoolSymbol = (poolAddress: string) => {
         // }
 
         setSymbol(symbol);
+        setTokenAddress(token.options.address);
       } catch (e) {
         symbol = "BUSD";
         // symbolCache.set(poolAddress, symbol);
         setSymbol(symbol);
+        setTokenAddress("0xe9e7cea3dedca5984780bafc599bd69add087d56")
       } finally {
         setLoading(false);
       }
     })();
   }, []);
 
-  return { symbol, loading };
+  return { symbol, loading, tokenAddress };
 };

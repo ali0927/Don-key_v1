@@ -40,11 +40,25 @@ export const getErcToken = async (web3: Web3, tokenAddress: string) => {
   busdtoken = new web3.eth.Contract(BUSDJson.default as any, tokenAddress);
   return busdtoken;
 };
+export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
+  try {
+    const tokenAddress = await (await getPoolContract(web3, poolAddress, 2)).methods.getTokenAddress().call();
+    return tokenAddress;
+  }catch(e){
+    return "0xe9e7cea3dedca5984780bafc599bd69add087d56"
+  }
+  
+}
 export const getPoolToken = async (web3: Web3, poolAddress: string) => {
-  const tokenAddress = await (await getPoolContract(web3, poolAddress, 2)).methods.getTokenAddress().call();
+  const tokenAddress = await getTokenAddress(web3, poolAddress);
   return getERCContract(web3,tokenAddress);
 };
 
+
+export const getTokenImage = async (web3: Web3, poolAddress: string) => {
+  const tokenAddress = await getTokenAddress(web3, poolAddress); 
+  return `/assets/coins/${tokenAddress}.png`;
+}
 
 export const getPoolContract = async (web3: Web3, poolAddress: string, version: number) => {
   const POOLJson = version === 1 ? await import("JsonData/pool2.json") : await import("JsonData/advanced-pool.json");
@@ -136,10 +150,8 @@ export const calculateWithdrawAmount = async (
     const claimableAmount = await poolContract.methods
       .getFinalClaimableAmount(accounts[0])
       .call();
-    const amount = new BigNumber(
-      web3.utils.fromWei(claimableAmount)
-    ).toString();
-    return amount;
+
+    return web3.utils.fromWei(claimableAmount);
   } catch (e) {
     return "0";
   }

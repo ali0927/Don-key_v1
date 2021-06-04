@@ -60,7 +60,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setRefresh((old) => !old);
   };
 
-  const StrategyCard = (leader: IFarmer) => {
+
+  const StrategyCard = (leader: IFarmer, index: number) => {
     const APY = leader.apy
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
@@ -78,10 +79,10 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             comingsoon={leader.status === "comingsoon"}
             twitter={leader.twitter ? leader.twitter : null}
             telegram={leader.telegram}
-            // graph={<GraphIcon />}
             strategyImage={leader.strategyImage}
             content={leader.description}
             apy={APY}
+            
             totalValue={
               <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
             }
@@ -144,7 +145,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     <>
       <div className="row col-lg-12">
         {leaders.map((leader, index) => {
-          return StrategyCard(leader);
+          return StrategyCard(leader, index);
         })}
         <div className="col-lg-4 col-md-6 mb-3">
           <ComingSoonFarmer timerDate={"June 2, 2021 11:00:00 UTC"} />

@@ -6,8 +6,9 @@ import updatedversion from "images/updatedversion.svg";
 import clsx from "clsx";
 import styled from "styled-components";
 import { OverlayTrigger, Container, Col } from "react-bootstrap";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
+import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -93,6 +94,7 @@ export const PopularStrategy = ({
   onShowMoreClick,
   version,
   onShowLessClick,
+  getTokenImage,
 }: {
   graph?: React.ReactNode;
   title?: string;
@@ -105,6 +107,7 @@ export const PopularStrategy = ({
   telegram?: string | null;
   twitter?: string | null;
   comingsoon?: boolean;
+  getTokenImage?: () => Promise<string>;
   investers?: React.ReactElement | number | null;
   icon?: React.ReactElement;
   onCardClick?: () => void;
@@ -137,6 +140,16 @@ export const PopularStrategy = ({
       {title}
     </h5>
   );
+
+  const [tokenImage, setTokenImage] = useState<string | null>(null);
+  useIsomorphicEffect(() => {
+    if (getTokenImage) {
+      (async () => {
+        const tokenimg = await getTokenImage();
+        setTokenImage(tokenimg);
+      })();
+    }
+  }, [getTokenImage]);
   return (
     <Papper>
       <PapperInner>
@@ -160,7 +173,7 @@ export const PopularStrategy = ({
                   investors
                 </small>
               </div>
-            </Col>    
+            </Col>
           </TitleRow>
         </Container>
         <GraphWrapper>
@@ -213,14 +226,20 @@ export const PopularStrategy = ({
             <h5 className="primary-text">{apy}</h5>
           </div>
         </div>
+        {tokenImage && <div>Deposit in <img src={tokenImage} /></div>}
         <h5 className="mt-4 popularstrategy__content__title">{contentTitle}</h5>
-       <div className="d-flex flex-column justify-content-between h-100">
-        <DescriptionContent className="popularstrategy__content__text">
-          <ShowMoreContent content={content} showAllContent={showAllContent} onShowMoreClick={onShowMoreClick} onShowLessClick={onShowLessClick} length={100} />
-        </DescriptionContent>
+        <div className="d-flex flex-column justify-content-between h-100">
+          <DescriptionContent className="popularstrategy__content__text">
+            <ShowMoreContent
+              content={content}
+              showAllContent={showAllContent}
+              onShowMoreClick={onShowMoreClick}
+              onShowLessClick={onShowLessClick}
+              length={100}
+            />
+          </DescriptionContent>
 
           <div>
-            
             {comingSoonProp ? (
               <div className="position-relative">
                 <ButtonWidget varaint="outlined" height="40px" disabled>

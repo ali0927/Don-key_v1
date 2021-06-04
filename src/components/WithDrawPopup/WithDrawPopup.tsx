@@ -9,7 +9,7 @@ import { IWithDrawPopupProps } from "./interfaces";
 
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
-  const { open, poolAddress, onClose, poolVersion } = props;
+  const { open, poolAddress, poolVersion } = props;
 
   const [loading, setLoading] = React.useState(false);
 
