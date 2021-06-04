@@ -150,7 +150,12 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
 
 
 const formatNum = (num: string) => {
-  return Number(new BigNumber(num).toFixed(2)).toLocaleString("en-US")
+  const wrappedNum = new BigNumber(num);
+
+  const formatted =  wrappedNum.toFixed(wrappedNum.gt(1)  ?2: 6) ;
+
+
+  return Number(formatted).toLocaleString("en-us", {minimumSignificantDigits: wrappedNum.gt(1) ? 2: 6 });
 }
 
 export const DetailTable = ({
@@ -169,7 +174,7 @@ export const DetailTable = ({
   const [currentHoldings, setCurrentHoldings] = useState("0");
   const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
-
+  console.log(currentHoldings, "Current Holdings");
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;

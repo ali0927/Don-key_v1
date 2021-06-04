@@ -2,10 +2,11 @@
 import "./popularstrategy.scss";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
+import updatedversion from "images/updatedversion.svg";
 import clsx from "clsx";
 import styled from "styled-components";
 import { OverlayTrigger, Container, Col } from "react-bootstrap";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { ButtonWidget } from "components/Button";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
@@ -34,6 +35,7 @@ const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
 const Papper = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   background-color: rgb(251, 251, 251);
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
   border-radius: 10px;
@@ -45,7 +47,7 @@ const Papper = styled.div`
 `;
 
 const PapperInner = styled.div`
-  padding: 1rem;
+  padding: 1.5rem;
   border-radius: 10px;
   border-bottom-left-radius: 0px;
   border-bottom-right-radius: 0px;
@@ -61,12 +63,17 @@ const GraphWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 2rem;
 `;
 
 const TitleRow = styled.div`
   align-items: flex-start;
   min-height: 74px;
+`;
+
+const UpdatedVersion = styled.img`
+  top: -10px;
+  right: 10px;
+  position: absolute;
 `;
 
 export const PopularStrategy = ({
@@ -84,6 +91,7 @@ export const PopularStrategy = ({
   onButtonClick,
   showAllContent,
   onShowMoreClick,
+  version,
   onShowLessClick,
 }: {
   graph?: React.ReactNode;
@@ -91,6 +99,7 @@ export const PopularStrategy = ({
   totalValue?: string | React.ReactElement;
   contentTitle?: string;
   content?: string;
+  version?: number;
   strategyImage?: string;
   apy?: string;
   telegram?: string | null;
@@ -131,7 +140,8 @@ export const PopularStrategy = ({
   return (
     <Papper>
       <PapperInner>
-        <Container>
+        {version === 2 && <UpdatedVersion src={updatedversion} />}
+        <Container className="p-0">
           <TitleRow className="row">
             <Col
               sm={12}
@@ -150,54 +160,9 @@ export const PopularStrategy = ({
                   investors
                 </small>
               </div>
-            </Col>
-            {/* <Col sm={3}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-around",
-                  marginTop: 5,
-                }}
-              >
-                {telegram && (
-                  <TelegramIcon
-                    fill={"#000"}
-                    handle={telegram}
-                    height={20}
-                    width={20}
-                  ></TelegramIcon>
-                )}
-                {twitter && (
-                  <TwitterIcon
-                    fill={"#000"}
-                    handle={twitter}
-                    height={20}
-                    width={20}
-                  ></TwitterIcon>
-                )}
-              </div>
-            </Col> */}
+            </Col>    
           </TitleRow>
         </Container>
-
-        {/* <div
-          onClick={handleCardClick}
-          className={clsx("popularstrategy__title ", {
-            "cursor-pointer": !comingSoonProp,
-          })}
-        >
-          {icon}
-          {investers ? (
-            <div>
-              {heading}
-              <small style={{ fontSize: 14 }} className="ml-3">
-                <span className="font-weight-bold">{investers}</span> investors
-              </small>
-            </div>
-          ) : (
-            heading
-          )}
-        </div> */}
         <GraphWrapper>
           {graph ? (
             graph
@@ -255,6 +220,7 @@ export const PopularStrategy = ({
         </DescriptionContent>
 
           <div>
+            
             {comingSoonProp ? (
               <div className="position-relative">
                 <ButtonWidget varaint="outlined" height="40px" disabled>

@@ -22,6 +22,7 @@ import {
   SuccessSnackbar,
 } from "components/Snackbars";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
 
 // const CaptionContent = styled.p`
 //   font-family: Roboto;
@@ -138,7 +139,9 @@ export const InvestmentPopup = ({
       showFailure("Transaction failed.");
     }
   };
+  const {symbol} = usePoolSymbol(poolAddress);
 
+  
   const renderButtonText = () => {
     if (isLoading) {
       return <DonKeySpinner />;
@@ -154,7 +157,7 @@ export const InvestmentPopup = ({
       isOpen={true}
       size="xs"
       titleRightContent={
-        <>Balance: {<MyBalanceInBUSD onDone={setBalance} poolAddress={poolAddress} poolVersion={poolVersion} />} BUSD</>
+        <>Balance: {<MyBalanceInBUSD onDone={setBalance} poolAddress={poolAddress} poolVersion={poolVersion} />} {symbol}</>
       }
       onClose={onClose}
     >
