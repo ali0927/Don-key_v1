@@ -77,6 +77,13 @@ const UpdatedVersion = styled.img`
   position: absolute;
 `;
 
+const TokenImage = styled.img`
+  width: 14px;
+  height: 14px;
+  margin-left: 6px;
+  margin-right: 6px;
+`;
+
 export const PopularStrategy = ({
   graph,
   totalValue = "$200 000.32",
@@ -95,6 +102,7 @@ export const PopularStrategy = ({
   version,
   onShowLessClick,
   getTokenImage,
+  getTokenSymbol,
 }: {
   graph?: React.ReactNode;
   title?: string;
@@ -108,6 +116,7 @@ export const PopularStrategy = ({
   twitter?: string | null;
   comingsoon?: boolean;
   getTokenImage?: () => Promise<string>;
+  getTokenSymbol?: () => Promise<string>;
   investers?: React.ReactElement | number | null;
   icon?: React.ReactElement;
   onCardClick?: () => void;
@@ -142,6 +151,7 @@ export const PopularStrategy = ({
   );
 
   const [tokenImage, setTokenImage] = useState<string | null>(null);
+  const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
   useIsomorphicEffect(() => {
     if (getTokenImage) {
       (async () => {
@@ -149,7 +159,13 @@ export const PopularStrategy = ({
         setTokenImage(tokenimg);
       })();
     }
-  }, [getTokenImage]);
+    if (getTokenSymbol) {
+      (async () => {
+        const tokenSymbol = await getTokenSymbol();
+        settokenSymbol(tokenSymbol);
+      })();
+    }
+  }, [getTokenImage, getTokenSymbol]);
   return (
     <Papper>
       <PapperInner>
@@ -226,8 +242,13 @@ export const PopularStrategy = ({
             <h5 className="primary-text">{apy}</h5>
           </div>
         </div>
-        {tokenImage && <div>Deposit in <img src={tokenImage} /></div>}
-        <h5 className="mt-4 popularstrategy__content__title">{contentTitle}</h5>
+        {tokenImage && (
+          <div className="mb-3 mt-2 d-flex align-items-center">
+            Deposit in <TokenImage src={tokenImage} />{" "}
+            {tokenSymbol && <p className="font-weight-bold mb-0">{tokenSymbol}</p>}
+          </div>
+        )}
+        <h5 className="popularstrategy__content__title">{contentTitle}</h5>
         <div className="d-flex flex-column justify-content-between h-100">
           <DescriptionContent className="popularstrategy__content__text">
             <ShowMoreContent

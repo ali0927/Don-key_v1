@@ -3,13 +3,14 @@ import * as React from "react";
 import { ITopThreeFarmerProps } from "./interfaces";
 import styled from "styled-components";
 import { IFarmer } from "interfaces";
-import { Loader } from "don-components";
+import { Loader, useWeb3 } from "don-components";
 import { useHistory } from "react-router";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
 import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
+import { getTokenImage, getTokenSymbol } from "helpers";
 
 const Image = styled.img`
   width: 45px;
@@ -61,10 +62,19 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   };
 
 
+  const web3 = useWeb3();
+
   const StrategyCard = (leader: IFarmer, index: number) => {
     const APY = leader.apy
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
+    const getTokenImageAsync = async () => {
+      return await getTokenImage(web3,leader.poolAddress);
+    }
+    const getTokenSymbolAsync= async () => {
+      return await getTokenSymbol(web3,leader.poolAddress);
+    }
+
     return (
     
         <div key={leader.GUID} className="col-lg-4 col-md-6 mb-3">
@@ -82,7 +92,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             strategyImage={leader.strategyImage}
             content={leader.description}
             apy={APY}
-            
+            getTokenImage={getTokenImageAsync}
+            getTokenSymbol={getTokenSymbolAsync}
             totalValue={
               <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
             }
