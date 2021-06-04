@@ -15,6 +15,8 @@ import styled from "styled-components";
 import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
+import { formatNum } from "Pages/FarmerBioPage/DetailTable";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
 
 const formatDate = (
   date: string | null | undefined,
@@ -58,12 +60,7 @@ const useProfit = (poolAddress: string) => {
   return { profit };
 };
 
-const formatNum = (val: string) => {
-  return `${Number(val).toLocaleString("en-US", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })} BUSD`;
-};
+
 
 export const StrategyTableForInvestor = ({
   strategies,
@@ -74,6 +71,7 @@ export const StrategyTableForInvestor = ({
 }) => {
   const { tvl } = useTVL(poolAddress);
   const { profit } = useProfit(poolAddress);
+  const {symbol} = usePoolSymbol(poolAddress);
   return (
     <TableResponsive>
       <Table>
@@ -97,11 +95,8 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   {item.strategyName}
                 </TableData>
-                {/* <TableData style={{ textAlign: "center" }}>
-                  {formatNum(profit ? profit : "0")}
-                </TableData> */}
                 <TableData style={{ textAlign: "center" }}>
-                  {formatNum(tvl ? tvl : "0")}
+                  {formatNum(tvl ? tvl : "0") } {symbol}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}

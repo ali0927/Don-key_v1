@@ -149,7 +149,7 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
 
 
 
-const formatNum = (num: string) => {
+export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
 
   const formatted =  wrappedNum.toFixed(wrappedNum.gt(1)  ?2: 6) ;
