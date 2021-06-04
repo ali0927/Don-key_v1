@@ -196,6 +196,7 @@ export const DetailTable = ({
   }, [refresh]);
   const {symbol} = usePoolSymbol(poolAddress);
   const onSuccess = () => {
+    setShowWithdrawPopup(false)
     setRefresh((old) => !old);
   };
 
