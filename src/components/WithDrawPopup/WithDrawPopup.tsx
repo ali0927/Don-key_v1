@@ -6,8 +6,6 @@ import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
 
-
-
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, poolVersion } = props;
 
@@ -19,7 +17,10 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     doWithdraw(
       poolAddress,
       poolVersion,
-      () => setLoading(true),
+      () => {
+        setLoading(true);
+        setTimeout(() => props.onClose(), 1000);
+      },
       props.onSuccess,
       props.onError
     );
