@@ -98,15 +98,6 @@ const Ellipse4 = styled.div`
 
 
 
-// const Paragon = styled.div`
-//     height: 78px;
-//     background-color: #FFF037;
-//     position: absolute;
-//     width: 100%;
-//     top: 218px;
-//     clip-path: polygon(0 0%,100% 2%,82% 100%,15% 100%);
-// `;
-
 export const DashboardPage = () => {
   const [{ loading, data }] = useAxios("/api/v2/farmer");
 
