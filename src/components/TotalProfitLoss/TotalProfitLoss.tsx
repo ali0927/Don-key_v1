@@ -2,6 +2,7 @@ import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import { calculateWithdrawAmount, calculateInitialInvestment } from "helpers";
 import BigNumber from "bignumber.js";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
 
 export const TotalProfitLoss = ({
   poolAddress,
@@ -11,7 +12,7 @@ export const TotalProfitLoss = ({
   refresh?: boolean;
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
-
+  const {symbol} = usePoolSymbol(poolAddress);
   const web3 = useWeb3();
 
   useEffect(() => {
@@ -34,5 +35,5 @@ export const TotalProfitLoss = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
 
-  return <>{totalProfitLoss} BUSD</>;
+  return <>{totalProfitLoss} {symbol}</>;
 };

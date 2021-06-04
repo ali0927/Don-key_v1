@@ -1,15 +1,17 @@
 import BigNumber from "bignumber.js";
 import { useWeb3 } from "don-components";
-import { getTotalPoolValue } from "helpers";
-import { useLayoutEffect, useState } from "react";
+import {  getPoolToken, getTotalPoolValue } from "helpers";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 
-export const PoolAmount = ({ poolAddress, refresh = false }: { poolAddress: string; refresh?: boolean }) => {
+
+
+export const PoolAmount = ({ poolAddress, refresh = false }: { poolAddress: string; refresh?: boolean; }) => {
   const [isReady, setIsReady] = useState(false);
   const [poolAmount, setPoolAmount] = useState("");
-
   const web3 = useWeb3();
-
+  const {symbol} = usePoolSymbol(poolAddress);
   const getPoolValue = async () => {
     try {
       const amount = await getTotalPoolValue(web3, poolAddress);
@@ -30,7 +32,5 @@ export const PoolAmount = ({ poolAddress, refresh = false }: { poolAddress: stri
     return <>-</>;
   }
 
-
-
-  return <>{poolAmount} BUSD</>;
+  return <>{poolAmount} {symbol}</>;
 };

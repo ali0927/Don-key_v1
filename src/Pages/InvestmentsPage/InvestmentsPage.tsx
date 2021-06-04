@@ -60,9 +60,8 @@ const ZeroInvestmentContent = styled.div({
   fontSize: "50px",
 });
 
-
 const WithDrawButton = styled(LightGrayButton)`
-    border: 0px !important;
+  border: 0px !important;
 `;
 
 const CenteredBox = styled.div({
@@ -145,7 +144,7 @@ export const InvestmentsPage = () => {
         const finalInvestments: IMyInvestments[] = [];
         for (let invest of investments) {
           try {
-            const contract = await getPoolContract(web3, invest.poolAddress,2);
+            const contract = await getPoolContract(web3, invest.poolAddress, 2);
             const accounts = await web3.eth.getAccounts();
             const isInvested = await contract.methods
               .isInvestor(accounts[0])
@@ -229,19 +228,6 @@ export const InvestmentsPage = () => {
                 <HeadingTitle>My Investments</HeadingTitle>
               </Col>
             </Row>
-            <Row>
-              <div className="col-lg-6"></div>
-              <Col lg={6}>
-                {myInvestments.length > 0 && (
-                  <>
-                    <InvestmentBlackBox
-                      onRefresh={handleRefresh}
-                      myInvestments={myInvestments}
-                    />
-                  </>
-                )}
-              </Col>
-            </Row>
           </Container>
         </Head>
       </Section>
@@ -265,7 +251,7 @@ export const InvestmentsPage = () => {
                       </CustomTableHeading>
                       <EmptyTableHeading></EmptyTableHeading>
                       <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                      <CustomTableHeading>BUSD INVESTED</CustomTableHeading>
+                      <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                       <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
                       <CustomTableHeading>ACTION</CustomTableHeading>
                     </TableRow>
@@ -280,9 +266,7 @@ export const InvestmentsPage = () => {
                           </CustomTableData>
                           <CustomTableData
                             cursor="pointer"
-                            onClick={RedirectToFarmerProfile(
-                              investment.GUID
-                            )}
+                            onClick={RedirectToFarmerProfile(investment.GUID)}
                             className="font-weight-bold"
                           >
                             {investment.name}
@@ -325,10 +309,16 @@ export const InvestmentsPage = () => {
                       You’re not following any farmers
                     </ZeroInvestmentContent>
                     <CenteredBox className="mb-5">
-                      <ButtonWidget className="mt-4" varaint="contained" containedVariantColor="black" height="50px" width="210px" onClick={handleFindFarmers}>
-                      Explore Farmers
+                      <ButtonWidget
+                        className="mt-4"
+                        varaint="contained"
+                        containedVariantColor="black"
+                        height="50px"
+                        width="210px"
+                        onClick={handleFindFarmers}
+                      >
+                        Explore Farmers
                       </ButtonWidget>
-                     
                     </CenteredBox>
                   </ZeroInvestmentInnerBox>
                 </ZeroInvestmentBox>
@@ -338,18 +328,6 @@ export const InvestmentsPage = () => {
         </div>
       </GridBackground>
       <Footer />
-      {/* {withDraw.open && (
-        <WithDrawPopup
-          open={withDraw.open}
-          poolVersion={}
-          poolAddress={withDraw.poolAddress}
-          onSuccess={() => {
-            handleSuccess(withDraw.farmerName);
-          }}
-          onError={handleError}
-          onClose={handleCloseWithDraw}
-        />
-      )} */}
     </div>
   );
 };

@@ -24,6 +24,7 @@ import { useDominance } from "./useDominance";
 import { InfoIcon } from "icons/InfoIcon";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import BigNumber from "bignumber.js";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -193,7 +194,7 @@ export const DetailTable = ({
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);
-
+  const {symbol} = usePoolSymbol(poolAddress);
   const onSuccess = () => {
     setRefresh((old) => !old);
   };
@@ -282,8 +283,7 @@ export const DetailTable = ({
               </div>
               <CardPoolAddress>
                 {formatNum(totalPoolValue)}{" "}
-                BUSD
-                {/* {isSmall ? shortenAddress(poolAddress) : poolAddress} */}
+                {symbol}
               </CardPoolAddress>
             </div>
           </CardInnerInfo>
@@ -330,7 +330,7 @@ export const DetailTable = ({
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
                 {formatNum(currentHoldings)}{" "}
-                BUSD
+                {symbol}
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
