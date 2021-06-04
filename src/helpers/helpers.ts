@@ -1,6 +1,5 @@
 import BigNumber from "bignumber.js";
-import { waitFor } from "don-utils";
-import { calculateInitialInvestment, calculateWithdrawAmount, getBUSDBalance, getTotalPoolValue } from "./contractHelpers";
+import { calculateInitialInvestment, calculateWithdrawAmount, getTotalPoolValue } from "./contractHelpers";
 
 export const getQueryParam = (name: string) => {
     if (typeof window === "undefined") {

@@ -124,7 +124,7 @@ export const InvestmentPopup = ({
       if(poolVersion === 2){
         const amount = new BigNumber(web3.utils.toWei(value, "ether"));
         await pool.methods
-        .depositLiquidity(amount.toString(),amount.multipliedBy(95).dividedBy(100))
+        .depositLiquidity(amount.toString(),amount.multipliedBy(95).dividedBy(100).toFixed(0))
         .send({
           from: accounts[0],
         });
