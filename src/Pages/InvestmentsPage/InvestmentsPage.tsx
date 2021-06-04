@@ -123,6 +123,7 @@ export const InvestmentsPage = () => {
     open: false,
     farmerName: "",
     poolAddress: "",
+    pool_version: 0,
   });
 
   const { showNotification } = useNotification();
@@ -150,7 +151,6 @@ export const InvestmentsPage = () => {
             const isInvested = await contract.methods
               .isInvestor(accounts[0])
               .call();
-            console.log(isInvested, "IsInvested");
             if (isInvested) {
               finalInvestments.push(invest);
             }
@@ -174,6 +174,7 @@ export const InvestmentsPage = () => {
         </>
       ),
     });
+    handleCloseWithDraw()
   };
 
   const handleError = (response?: AxiosResponse<any>) => {
@@ -194,11 +195,12 @@ export const InvestmentsPage = () => {
   };
 
   const handleOpenWithDraw =
-    (farmerName: string, poolAddress: string) => () => {
+    (farmerName: string, poolAddress: string, pool_version: number) => () => {
       setWidthDraw({
         open: true,
         farmerName: farmerName,
         poolAddress: poolAddress,
+        pool_version: pool_version
       });
     };
 
@@ -207,6 +209,7 @@ export const InvestmentsPage = () => {
       open: false,
       farmerName: "",
       poolAddress: "",
+      pool_version: 0,
     });
   };
 
@@ -303,7 +306,8 @@ export const InvestmentsPage = () => {
                             <WithDrawButton
                               onClick={handleOpenWithDraw(
                                 investment.name,
-                                investment.poolAddress
+                                investment.poolAddress,
+                                investment.pool_version ? investment.pool_version : 0
                               )}
                             >
                               Withdraw
@@ -338,10 +342,10 @@ export const InvestmentsPage = () => {
         </div>
       </GridBackground>
       <Footer />
-      {/* {withDraw.open && (
+      {withDraw.open && (
         <WithDrawPopup
           open={withDraw.open}
-          poolVersion={}
+          poolVersion={withDraw.pool_version}
           poolAddress={withDraw.poolAddress}
           onSuccess={() => {
             handleSuccess(withDraw.farmerName);
@@ -349,7 +353,7 @@ export const InvestmentsPage = () => {
           onError={handleError}
           onClose={handleCloseWithDraw}
         />
-      )} */}
+      )}
     </div>
   );
 };
