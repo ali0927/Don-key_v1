@@ -56,10 +56,21 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
+export const getTokenPrice = async (tokenAddress: string) => {
+  try {
+    const resp = await axios.get(
+      `https://api.dex.guru/v1/tokens/${tokenAddress}-bsc`
+    );
+    return new BigNumber(resp.data.priceUSD).toString() as string;
+  } catch (e) {
+    return "-";
+  }
+};
+
 export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
 
-  return await token.methods.symbol().call() as string;
+  return (await token.methods.symbol().call()) as string;
 };
 
 export const getTokenImage = async (web3: Web3, poolAddress: string) => {
