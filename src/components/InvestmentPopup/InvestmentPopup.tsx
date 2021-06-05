@@ -167,6 +167,7 @@ export const InvestmentPopup = ({
           <InvestmentInput
             value={value}
             disabled={isLoading}
+            currencySymbol={symbol}
             setValue={setValue}
             max={balance}
           />

@@ -50,11 +50,13 @@ export const InvestmentInput = ({
   value,
   setValue,
   max,
+  currencySymbol,
   disabled
 }: {
   value: string;
   setValue: (val: string) => void;
   max: string;
+  currencySymbol: string;
   disabled?:boolean;
 }) => {
   const maxNum = useMemo(() => {
@@ -63,7 +65,7 @@ export const InvestmentInput = ({
   return (
     <div className="w-100">
       <InvestmentRoot>
-        <InvestmentCurrency>BUSD</InvestmentCurrency>
+        <InvestmentCurrency>{currencySymbol}</InvestmentCurrency>
         <div className="w-100">
           <InvestmentInputElement
             type="number"
