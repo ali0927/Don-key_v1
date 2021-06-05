@@ -46,6 +46,7 @@
     "graphql": "^15.5.0",
     "immer": "^8.0.1",
     "lodash": "^4.17.20",
+    "logrocket": "^1.2.3",
     "memoize-one": "^5.1.1",
     "moment": "^2.29.1",
     "notistack": "^1.0.6",
