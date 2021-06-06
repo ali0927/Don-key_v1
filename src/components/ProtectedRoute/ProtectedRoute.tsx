@@ -16,7 +16,7 @@ export const ProtectedRoute = (props: RouteProps) => {
       children: (
         <Web3Provider loader={<LoadingPage />}>
           <AccountChangeListener />
-          <LastSignInSubscriber/>
+          {/* <LastSignInSubscriber/> */}
           <Web3NetworkDetector />
           {comp}
         </Web3Provider>
