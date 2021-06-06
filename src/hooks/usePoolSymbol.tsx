@@ -1,5 +1,6 @@
+import { useUSDViewBool } from "contexts/USDViewContext";
 import { useWeb3 } from "don-components";
-import {  getTokenSymbol } from "helpers";
+import { getTokenSymbol } from "helpers";
 import { useState } from "react";
 import { useIsomorphicEffect } from "./useIsomorphicEffect";
 

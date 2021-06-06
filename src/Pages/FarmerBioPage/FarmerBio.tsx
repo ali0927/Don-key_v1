@@ -10,6 +10,10 @@ import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { DotsIcon } from "icons";
 import BigNumber from "bignumber.js";
+import { FarmerStrategies } from "./FarmerStrategies";
+import { GridBackground } from "components/GridBackground";
+import { theme } from "theme";
+import { RefreshProvider } from "components/LotteryForm/useRefresh";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -48,11 +52,13 @@ const ImageWrapper = styled.div`
     display: inline-flex;
   }
 `;
+const Section = styled.section`
+  background-color: ${theme.palette.background.yellow};
+`;
 
 export const FarmerBio = ({
   farmer: {
     description,
-    last_signin,
     name,
     picture,
     poolAddress,
@@ -73,18 +79,8 @@ export const FarmerBio = ({
 }) => {
   const [modalShow, setModalShow] = useState(false);
 
-  // const lastActive = useMemo(() => {
-  //   return moment.duration(moment().diff(moment(last_signin))).humanize();
-  // }, [last_signin]);
-
-  // const diff = useMemo(() => {
-  //   const Current = moment(new Date());
-  //   const LastDateTime = moment(last_signin);
-  //   return Current.diff(LastDateTime, "minute") >= 2 ? "offline" : "online";
-  // }, [last_signin]);
-
   return (
-    <>
+    <Section>
       <Container>
         <Row>
           <Col lg={12} className="mt-3">
@@ -182,6 +178,6 @@ export const FarmerBio = ({
           />
         </Row>
       </Container>
-    </>
+    </Section>
   );
 };

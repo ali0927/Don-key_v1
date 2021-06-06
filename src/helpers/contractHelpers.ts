@@ -59,21 +59,32 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
 
 const tokenPriceCache = createCache();
 
+let isInProgress = false;
+const observers: any = [];
 export const getTokenPrice = async (tokenAddress: string) => {
-  let price = tokenPriceCache.get(tokenAddress);
-  if(price){
+  let price = tokenPriceCache.get(tokenAddress.toLowerCase());
+  if (price) {
     return price;
   }
-  try {
-    const resp = await axios.get(
-      `https://api.dex.guru/v1/tokens/${tokenAddress}-bsc`
-    );
-    price = new BigNumber(resp.data.priceUSD).toString();
-    tokenPriceCache.set(tokenAddress, price);
-    return price  as string;
-  } catch (e) {
-    return "-";
-  }
+  return new Promise(async (res, rej) => {
+    if(isInProgress){
+      observers.push(res);
+      return;
+    }
+    try {
+      isInProgress = true;
+      const resp = await axios.get(
+        `https://api.dex.guru/v1/tokens/${tokenAddress}-bsc`
+      );
+      price = new BigNumber(resp.data.priceUSD).toString();
+      tokenPriceCache.set(tokenAddress, price);
+      observers.forEach((res: any) => res(price));
+      isInProgress = false;
+      res(price);
+    } catch (e) {
+      res("-")
+    }
+  });
 };
 
 export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
@@ -214,11 +225,9 @@ export const calculateInitialInvestmentInUSD = async (
     const initialAmount = await poolContract.methods
       .getUserInvestedAmountInUSD(accounts[0])
       .call();
-      console.log(initialAmount);
     const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
     return amount;
   } catch (e) {
-    console.log(e, "Error")
     return "0";
   }
 };

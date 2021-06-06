@@ -5,11 +5,11 @@ import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { shortenAddress } from "don-utils";
-import { useMediaQuery } from "@material-ui/core";
+import { Switch, useMediaQuery, withStyles } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { calculateWithdrawAmount, getTokenPrice, getTotalPoolValue } from "helpers";
+import { calculateWithdrawAmount, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import { ButtonWidget } from "components/Button";
 import {
@@ -24,8 +24,12 @@ import { useDominance } from "./useDominance";
 import { InfoIcon } from "icons/InfoIcon";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import BigNumber from "bignumber.js";
+
+import { useUSDViewBool } from "contexts/USDViewContext";
+import { DollarView } from "./DollarView";
+import { useRefresh } from "components/LotteryForm/useRefresh";
+import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import { useInitialInvestment } from "hooks/useInitialInvestment";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -148,22 +152,36 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-weight: 400;
 `;
 
-
-
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
 
-  const formatted =  wrappedNum.toFixed(wrappedNum.gt(1)  ?2: 6) ;
+  const formatted = wrappedNum.toFixed(wrappedNum.gt(1) ? 2 : 6);
 
+  return Number(formatted).toLocaleString("en-us", {
+    minimumSignificantDigits: wrappedNum.gt(1) ? 2 : 6,
+  });
+};
 
-  return Number(formatted).toLocaleString("en-us", {minimumSignificantDigits: wrappedNum.gt(1) ? 2: 6 });
-}
-
+const YellowSwitch = withStyles({
+  switchBase: {
+    color: yellow[300],
+    "&$checked": {
+      color: yellow[500],
+    },
+    "&$checked + $track": {
+      backgroundColor: yellow[500],
+    },
+  },
+  checked: {},
+  track: {
+    backgroundColor: "#d9d9d9",
+  },
+})(Switch);
 export const DetailTable = ({
   poolAddress,
   apy,
   farmerId,
-  poolVersion
+  poolVersion,
 }: {
   poolAddress: string;
   apy: string;
@@ -175,20 +193,26 @@ export const DetailTable = ({
   const [currentHoldings, setCurrentHoldings] = useState("0");
   const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
-  console.log(currentHoldings, "Current Holdings");
+
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
-  
-  const [refresh, setRefresh] = useState(false);
+
+  const { refresh, dependsOn } = useRefresh();
   const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
-    useROIAndInitialInvestment(web3, finalPoolAddress,refresh, true);
-
- 
-
+    useROIAndInitialInvestment(
+      web3,
+      finalPoolAddress,
+      dependsOn % 2 == 0,
+      true
+    );
+  const { symbol } = usePoolSymbol(poolAddress);
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
+
+  const { isUSD, toggle } = useUSDViewBool();
+
   useEffect(() => {
     async function apiCall() {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
@@ -201,11 +225,11 @@ export const DetailTable = ({
     }
     apiCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh]);
-  const {symbol} = usePoolSymbol(poolAddress);
+  }, [dependsOn]);
+
   const onSuccess = () => {
-    setShowWithdrawPopup(false)
-    setRefresh((old) => !old);
+    setShowWithdrawPopup(false);
+    refresh();
   };
 
   const renderTooltip = (props: any) => (
@@ -276,7 +300,7 @@ export const DetailTable = ({
             </div>
           </OverlayTrigger>
           <CardInnerInfo className="d-flex justify-content-center mb-2">
-            <div style={{ marginTop: -4 }}>
+            <div className="d-flex flex-column align-items-center">
               <div className="d-flex align-items-baseline">
                 <TotalPoolValueLabel color="black">
                   {" "}
@@ -291,9 +315,15 @@ export const DetailTable = ({
                 </a>
               </div>
               <CardPoolAddress>
-                {formatNum(totalPoolValue)}{" "}
-                {symbol}
+                <DollarView
+                  poolAddress={poolAddress}
+                  tokenAmount={totalPoolValue}
+                />
               </CardPoolAddress>
+              <div className="d-flex align-items-center">
+                {symbol}
+                <YellowSwitch value={isUSD} onChange={toggle} /> USD
+              </div>
             </div>
           </CardInnerInfo>
           <FirstCardRow className="row mt-3">
@@ -315,7 +345,10 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Followers",
-              <InvestorCount refresh={refresh} farmerId={farmerId} />,
+              <InvestorCount
+                refresh={dependsOn % 2 == 0}
+                farmerId={farmerId}
+              />,
               "black",
               <div className="mr-2">
                 <FollowersIcon />
@@ -338,8 +371,10 @@ export const DetailTable = ({
             <div style={{ marginTop: 53 }}>
               <CardLabel color="white"> My current holdings </CardLabel>
               <CardValue color="white">
-                {formatNum(currentHoldings)}{" "}
-                {symbol}
+                <DollarView
+                  poolAddress={poolAddress}
+                  tokenAmount={currentHoldings}
+                />
               </CardValue>
 
               <div className="d-flex mt-2 mb-2">
@@ -373,13 +408,23 @@ export const DetailTable = ({
           <div className="row mt-4">
             {getSecondCardColumns(
               "Initial Investment",
-              `${formatNum(initialInvestment)} ($${formatNum(initialInvestmentInUSD)})`,
+              isUSD ? (
+                `$${formatNum(initialInvestmentInUSD)}`
+              ) : (
+                <DollarView
+                  poolAddress={poolAddress}
+                  tokenAmount={initialInvestment}
+                />
+              ),
               "white"
             )}
 
             {getSecondCardColumns(
               "Profit/Loss",
-              <TotalProfitLoss refresh={refresh} poolAddress={poolAddress} />,
+              <TotalProfitLoss
+                refresh={dependsOn % 2 == 0}
+                poolAddress={poolAddress}
+              />,
               "white"
             )}
             {getSecondCardColumns("My ROI", "---", "white")}
@@ -413,4 +458,3 @@ export const DetailTable = ({
     </>
   );
 };
-

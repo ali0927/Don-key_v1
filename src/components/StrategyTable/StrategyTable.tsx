@@ -17,6 +17,8 @@ import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { DollarView } from "Pages/FarmerBioPage/DollarView";
+import { useRefresh } from "components/LotteryForm/useRefresh";
 
 const formatDate = (
   date: string | null | undefined,
@@ -35,32 +37,31 @@ const formatDate = (
 const useTVL = (poolAddress: string) => {
   const [tvl, setTvl] = useState("");
   const web3 = useWeb3();
+  const {dependsOn} = useRefresh();
   useEffect(() => {
     (async () => {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
       setTvl(web3.utils.fromWei(poolValue, "ether"));
     })();
-  }, [poolAddress]);
+  }, [poolAddress, dependsOn]);
   return { tvl };
 };
 
-const useProfit = (poolAddress: string) => {
-  const [profit, setprofit] = useState("");
-  const web3 = useWeb3();
-  useEffect(() => {
-    (async () => {
-      const pool = await getPoolContract(web3, poolAddress, 2);
-      const amount = toEther(await pool.methods.getTotalInvestAmount().call());
-      const totalPoolValue = toEther(
-        await pool.methods.getinvestedAmountWithReward().call()
-      );
-      setprofit(new BigNumber(totalPoolValue).minus(amount).toFixed(2));
-    })();
-  }, [poolAddress]);
-  return { profit };
-};
-
-
+// const useProfit = (poolAddress: string) => {
+//   const [profit, setprofit] = useState("");
+//   const web3 = useWeb3();
+//   useEffect(() => {
+//     (async () => {
+//       const pool = await getPoolContract(web3, poolAddress, 2);
+//       const amount = toEther(await pool.methods.getTotalInvestAmount().call());
+//       const totalPoolValue = toEther(
+//         await pool.methods.getinvestedAmountWithReward().call()
+//       );
+//       setprofit(new BigNumber(totalPoolValue).minus(amount).toFixed(2));
+//     })();
+//   }, [poolAddress]);
+//   return { profit };
+// };
 
 export const StrategyTableForInvestor = ({
   strategies,
@@ -70,7 +71,7 @@ export const StrategyTableForInvestor = ({
   poolAddress: string;
 }) => {
   const { tvl } = useTVL(poolAddress);
-  const {symbol} = usePoolSymbol(poolAddress);
+
   return (
     <TableResponsive>
       <Table>
@@ -95,7 +96,7 @@ export const StrategyTableForInvestor = ({
                   {item.strategyName}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {formatNum(tvl ? tvl : "0") } {symbol}
+                  <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}

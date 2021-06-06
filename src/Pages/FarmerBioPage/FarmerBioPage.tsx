@@ -1,5 +1,11 @@
 import { NavBar } from "components/Navbar/NavBar";
-import { useEffect } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Footer } from "components/Footer/Footer";
 import { withWeb3 } from "hoc";
 import { useSelector } from "react-redux";
@@ -11,6 +17,8 @@ import { FarmerBioFromApi } from "./FarmerBioFromApi";
 import styled from "styled-components";
 import { theme } from "theme";
 import { GridBackground } from "components/GridBackground";
+import { USDViewProvider } from "contexts/USDViewContext";
+import { RefreshProvider } from "components/LotteryForm/useRefresh";
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -20,12 +28,16 @@ export const FarmerBioPage = withWeb3(() => {
   const farmer = useSelector((state: IStoreState) => state.farmer);
 
   const { id: farmerId } = useParams<{ id: string }>();
-
+  const [isInUsd, setIsInUsd] = useState(false);
   const isCurrentFarmer = farmerId
     ? farmer?.GUID === farmerId
       ? true
       : false
     : true;
+
+  const toggleCurrency = useCallback(() => {
+    setIsInUsd((val) => !val);
+  }, []);
   useEffect(() => {
     (async () => {
       // const balance = await fetchBalance();
@@ -44,22 +56,26 @@ export const FarmerBioPage = withWeb3(() => {
   }
 
   return (
-    <div style={{ background: "#F4F4F4" }}>
-      <NavBar variant="loggedin" />
-      <Section>
-        {isCurrentFarmer ? (
-          <FarmerBio farmer={farmer} />
-        ) : (
-          <FarmerBioFromApi farmerId={farmerId} />
-        )}
-      </Section>
-      <GridBackground>
-        <FarmerStrategies
-          farmerId={farmerId || (farmer?.GUID as string)}
-          isInvestor={!isCurrentFarmer}
-        />
-      </GridBackground>
-      <Footer />
-    </div>
+    <USDViewProvider value={{ isUSD: isInUsd, toggle: toggleCurrency }}>
+      <RefreshProvider>
+        <div style={{ background: "#F4F4F4" }}>
+          <NavBar variant="loggedin" />
+
+          {isCurrentFarmer ? (
+            <FarmerBio farmer={farmer} />
+          ) : (
+            <FarmerBioFromApi farmerId={farmerId} />
+          )}
+          <GridBackground>
+            <FarmerStrategies
+              farmerId={farmerId || (farmer?.GUID as string)}
+              isInvestor={!isCurrentFarmer}
+            />
+          </GridBackground>
+
+          <Footer />
+        </div>
+      </RefreshProvider>
+    </USDViewProvider>
   );
 });

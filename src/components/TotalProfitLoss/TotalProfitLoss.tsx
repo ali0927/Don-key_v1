@@ -1,8 +1,15 @@
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
-import { calculateWithdrawAmount, calculateInitialInvestment } from "helpers";
+import {
+  calculateWithdrawAmount,
+  calculateInitialInvestment,
+  calculateInitialInvestmentInUSD,
+  getTokenPrice,
+  getTokenAddress,
+} from "helpers";
 import BigNumber from "bignumber.js";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { useUSDViewBool } from "contexts/USDViewContext";
 
 export const TotalProfitLoss = ({
   poolAddress,
@@ -12,9 +19,9 @@ export const TotalProfitLoss = ({
   refresh?: boolean;
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
-  const {symbol} = usePoolSymbol(poolAddress);
+  const { symbol } = usePoolSymbol(poolAddress);
   const web3 = useWeb3();
-
+  const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
       try {
@@ -24,16 +31,37 @@ export const TotalProfitLoss = ({
           web3,
           poolAddress
         );
-
-        setTotalProfitLoss(
-          new BigNumber(amountWithdraw).minus(amountInitial).toFixed(2)
+        const amountInitialInUsd = await calculateInitialInvestmentInUSD(
+          web3,
+          poolAddress
         );
+        if (!isUSD) {
+          setTotalProfitLoss(
+            new BigNumber(amountWithdraw).minus(amountInitial).toFixed(2)
+          );
+        } else {
+          const tokenPrice = await getTokenPrice(
+            await getTokenAddress(web3, poolAddress)
+          );
+          setTotalProfitLoss(
+            new BigNumber(amountWithdraw)
+              .multipliedBy(tokenPrice)
+              .minus(amountInitialInUsd)
+              .toFixed(2)
+          );
+        }
       } catch (err) {
         console.log(err);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh]);
-
-  return <>{totalProfitLoss} {symbol}</>;
+  }, [refresh, isUSD]);
+  if(isUSD){
+    return <>${totalProfitLoss}</>
+  }
+  return (
+    <>
+      {totalProfitLoss} {symbol}
+    </>
+  );
 };

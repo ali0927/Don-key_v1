@@ -1,7 +1,10 @@
 
 
-export const createCache = () => {
-  const obj: any = {};
+export const createCache = (ttl = 10000) => {
+  let obj: any = {};
+  setTimeout(() => {
+    obj = {};
+  }, ttl);
   return {
     set: (key: string, val: string) => {
       obj[key] = val;
