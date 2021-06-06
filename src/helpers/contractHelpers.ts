@@ -104,7 +104,7 @@ export const getPoolContract = async (
   version: number
 ) => {
   const POOLJson =
-    version === 1
+    (version === 1 || !version)
       ? await import("JsonData/pool2.json")
       : await import("JsonData/advanced-pool.json");
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);

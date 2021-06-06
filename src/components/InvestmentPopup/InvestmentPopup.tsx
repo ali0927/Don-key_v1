@@ -114,7 +114,7 @@ export const InvestmentPopup = ({
     try {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
-        poolVersion === 1
+        (poolVersion === 1 || !poolVersion)
           ? await getBUSDTokenContract(web3)
           : await getPoolToken(web3, poolAddress);
       const accounts = await web3.eth.getAccounts();
@@ -133,7 +133,7 @@ export const InvestmentPopup = ({
             from: accounts[0],
           });
       }
-      if (poolVersion === 1) {
+      if (!poolVersion || poolVersion === 1) {
         await pool.methods
           .depositLiquidity(web3.utils.toWei(value, "ether"))
           .send({
@@ -159,6 +159,7 @@ export const InvestmentPopup = ({
 
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
+      console.log(err, "Err");
       showFailure("Transaction failed.");
     }
   };
