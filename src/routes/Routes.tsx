@@ -16,7 +16,6 @@ const DashboardPage = lazy(() => import("Pages/DashboardPage"));
 const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
 const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
 const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
-const SelectTemplate = lazy(() => import("Pages/SelectTemplate"));
 
 
 export default function Routes() {
@@ -100,14 +99,6 @@ export default function Routes() {
           children={
             <Suspense fallback={<LoadingPage />}>
               <DecodedStrategyPage />
-            </Suspense>
-          }
-        />
-        <ProtectedRoute
-          path="/strategy/new"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <SelectTemplate />
             </Suspense>
           }
         />

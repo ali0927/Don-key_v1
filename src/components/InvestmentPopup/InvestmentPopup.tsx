@@ -5,7 +5,13 @@ import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
-import { getBUSDTokenContract, getErcToken, getPoolContract, getPoolToken } from "helpers";
+import {
+  getBUSDTokenContract,
+  getErcToken,
+  getPoolContract,
+  getPoolToken,
+  getTokenPrice,
+} from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -36,7 +42,15 @@ const ButtonWrapper = styled.div({
   width: "40%",
 });
 
-const MyBalanceInBUSD = ({ onDone, poolAddress, poolVersion }: { onDone?: (val: string) => void; poolAddress: string; poolVersion: number }) => {
+const MyBalanceInBUSD = ({
+  onDone,
+  poolAddress,
+  poolVersion,
+}: {
+  onDone?: (val: string) => void;
+  poolAddress: string;
+  poolVersion: number;
+}) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const web3 = useWeb3();
 
@@ -44,7 +58,10 @@ const MyBalanceInBUSD = ({ onDone, poolAddress, poolVersion }: { onDone?: (val: 
     try {
       const accounts = await web3.eth.getAccounts();
       //@ts-ignore
-      const acceptedToken = poolVersion === 1 ? await getBUSDTokenContract(web3): await getPoolToken(web3, poolAddress);
+      const acceptedToken =
+        poolVersion === 1
+          ? await getBUSDTokenContract(web3)
+          : await getPoolToken(web3, poolAddress);
       const balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
       setState({
         balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
@@ -87,8 +104,6 @@ export const InvestmentPopup = ({
   const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
-  
-
 
   const handleInvest = async () => {
     if (isLoading) {
@@ -98,11 +113,15 @@ export const InvestmentPopup = ({
 
     try {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
-      const acceptedToken = poolVersion === 1 ? await getBUSDTokenContract(web3): await getPoolToken(web3, poolAddress);
+      const acceptedToken =
+        poolVersion === 1
+          ? await getBUSDTokenContract(web3)
+          : await getPoolToken(web3, poolAddress);
       const accounts = await web3.eth.getAccounts();
       let allowance = await acceptedToken.methods
         .allowance(accounts[0], poolAddress)
         .call();
+      const tokenPrice = await getTokenPrice(acceptedToken.options.address);
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
       const amount = new BigNumber(value);
       onClose();
@@ -114,22 +133,25 @@ export const InvestmentPopup = ({
             from: accounts[0],
           });
       }
-      if(poolVersion === 1){
+      if (poolVersion === 1) {
         await pool.methods
-        .depositLiquidity(web3.utils.toWei(value, "ether"))
-        .send({
-          from: accounts[0],
-        });
+          .depositLiquidity(web3.utils.toWei(value, "ether"))
+          .send({
+            from: accounts[0],
+          });
       }
-      if(poolVersion === 2){
+      if (poolVersion === 2) {
         const amount = new BigNumber(web3.utils.toWei(value, "ether"));
         await pool.methods
-        .depositLiquidity(amount.toString(),amount.multipliedBy(95).dividedBy(100).toFixed(0))
-        .send({
-          from: accounts[0],
-        });
+          .depositLiquidity(
+            amount.toString(),
+            amount.multipliedBy(tokenPrice).toFixed(0),
+            amount.multipliedBy(95).dividedBy(100).toFixed(0)
+          )
+          .send({
+            from: accounts[0],
+          });
       }
-     
 
       await executePost({ data: { poolAddress } });
 
@@ -140,9 +162,8 @@ export const InvestmentPopup = ({
       showFailure("Transaction failed.");
     }
   };
-  const {symbol} = usePoolSymbol(poolAddress);
+  const { symbol } = usePoolSymbol(poolAddress);
 
-  
   const renderButtonText = () => {
     if (isLoading) {
       return <DonKeySpinner />;
@@ -158,7 +179,17 @@ export const InvestmentPopup = ({
       isOpen={true}
       size="xs"
       titleRightContent={
-        <>Balance: {<MyBalanceInBUSD onDone={setBalance} poolAddress={poolAddress} poolVersion={poolVersion} />} {symbol}</>
+        <>
+          Balance:{" "}
+          {
+            <MyBalanceInBUSD
+              onDone={setBalance}
+              poolAddress={poolAddress}
+              poolVersion={poolVersion}
+            />
+          }{" "}
+          {symbol}
+        </>
       }
       onClose={onClose}
     >
@@ -201,7 +232,10 @@ export const InvestmentPopup = ({
         </div>
       </div>
       <p className="mt-4">
-        <small>If you receive: "Transaction error. Exception thrown in contract code", this is due to high slippage. Please try a different amount.</small>
+        <small>
+          If you receive: "Transaction error. Exception thrown in contract
+          code", this is due to high slippage. Please try a different amount.
+        </small>
       </p>
     </DonCommonmodal>
   );

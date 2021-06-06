@@ -45,7 +45,7 @@ const DescriptionTitle = styled.p`
   font-size: 20px;
   font-weight: 400;
   margin-bottom: 0;
-  line-height: 35.44px
+  line-height: 35.44px;
 `;
 
 export const FarmerStrategies = ({

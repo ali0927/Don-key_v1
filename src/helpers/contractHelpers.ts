@@ -3,6 +3,7 @@ import axios from "axios";
 import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
+import { createCache } from "./createCache";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F";
@@ -56,12 +57,20 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
+const tokenPriceCache = createCache();
+
 export const getTokenPrice = async (tokenAddress: string) => {
+  let price = tokenPriceCache.get(tokenAddress);
+  if(price){
+    return price;
+  }
   try {
     const resp = await axios.get(
       `https://api.dex.guru/v1/tokens/${tokenAddress}-bsc`
     );
-    return new BigNumber(resp.data.priceUSD).toString() as string;
+    price = new BigNumber(resp.data.priceUSD).toString();
+    tokenPriceCache.set(tokenAddress, price);
+    return price  as string;
   } catch (e) {
     return "-";
   }
@@ -193,6 +202,25 @@ export const calculateInitialInvestment = async (
     .call();
   const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
   return amount;
+};
+
+export const calculateInitialInvestmentInUSD = async (
+  web3: Web3,
+  poolAddress: string
+) => {
+  try {
+    const accounts = await web3.eth.getAccounts();
+    const poolContract = await getPoolContract(web3, poolAddress, 2);
+    const initialAmount = await poolContract.methods
+      .getUserInvestedAmountInUSD(accounts[0])
+      .call();
+      console.log(initialAmount);
+    const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
+    return amount;
+  } catch (e) {
+    console.log(e, "Error")
+    return "0";
+  }
 };
 
 export const getStakingContract = async (web3: Web3, isBSC = false) => {

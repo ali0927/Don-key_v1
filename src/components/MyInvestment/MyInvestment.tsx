@@ -4,6 +4,7 @@ import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import { calculateInitialInvestment, calculateWithdrawAmount } from "helpers";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { useInitialInvestment } from "hooks/useInitialInvestment";
 
 export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   const { isReady, investedAmmount } = useInvestedAmount(poolAddress);
@@ -29,32 +30,20 @@ export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   return <>{parseFloat(withdrawalValue).toFixed(2)} BUSD</>;
 };
 
-
-
-
-export const MyInitialInvestment = ({ poolAddress }: { poolAddress: string }) => {
- 
-  const [initialInvestment, setinitialInvestment] = useState("-");
-  const [isReady, setIsReady] = useState(false);
-  const {symbol} = usePoolSymbol(poolAddress);
-  const web3 = useWeb3();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const amount = await calculateInitialInvestment(web3, poolAddress);
-        setinitialInvestment(amount);
-      } catch (err) {
-        // console.log(err);
-      }finally {
-        setIsReady(true);
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+export const MyInitialInvestment = ({
+  poolAddress,
+}: {
+  poolAddress: string;
+}) => {
+  const { initialInvestment, isReady } = useInitialInvestment(poolAddress);
+  const { symbol } = usePoolSymbol(poolAddress);
 
   if (!isReady) {
     return <>-</>;
   }
-  return <>{parseFloat(initialInvestment).toFixed(2)} {symbol}</>;
+  return (
+    <>
+      {parseFloat(initialInvestment).toFixed(2)} {symbol}{" "}
+    </>
+  );
 };

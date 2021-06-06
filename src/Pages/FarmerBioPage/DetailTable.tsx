@@ -9,7 +9,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { calculateWithdrawAmount, getTotalPoolValue } from "helpers";
+import { calculateWithdrawAmount, getTokenPrice, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import { ButtonWidget } from "components/Button";
 import {
@@ -25,6 +25,7 @@ import { InfoIcon } from "icons/InfoIcon";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import BigNumber from "bignumber.js";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { useInitialInvestment } from "hooks/useInitialInvestment";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -178,13 +179,15 @@ export const DetailTable = ({
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
+  
+  const [refresh, setRefresh] = useState(false);
+  const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
+    useROIAndInitialInvestment(web3, finalPoolAddress,refresh, true);
 
-  const { roi, farmerRoi, initialInvestment, myShare, fetchRoi } =
-    useROIAndInitialInvestment(web3, finalPoolAddress, true);
+ 
 
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
 
-  const [refresh, setRefresh] = useState(false);
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
   useEffect(() => {
     async function apiCall() {
@@ -370,7 +373,7 @@ export const DetailTable = ({
           <div className="row mt-4">
             {getSecondCardColumns(
               "Initial Investment",
-              formatNum(initialInvestment),
+              `${formatNum(initialInvestment)} ($${formatNum(initialInvestmentInUSD)})`,
               "white"
             )}
 
@@ -411,80 +414,3 @@ export const DetailTable = ({
   );
 };
 
-{
-  /* <Poolinfo className="bg-white h-100">
-<div className="list-box">
-  <h5 className="heading-title">Pool address</h5>
-  <div>{isSmall ? shortenAddress(poolAddress) : poolAddress}</div>
-  <br />
-  <h5 className="heading-title">APY: 25%</h5>
-</div>
-</Poolinfo> */
-}
-
-{
-  /* <Col lg={6}>
-<InvestmentDisplay className="h-100">
-  <div className="row">
-    <div className="col-md-6">
-      <div>Total Pool Value</div>{" "}
-      <h5 className="heading-title">
-        {Number(totalPoolValue).toFixed(2)}
-      </h5>
-      <div>Total Reserve Value</div>{" "}
-      <h5 className="heading-title">
-        <PoolReserveAmount poolAddress={poolAddress} />
-      </h5>
-      {isInvested && (
-        <>
-          <div>My Initial Investment</div>{" "}
-          <h5 className="heading-title">
-            {Number(initialInvestment).toFixed(2)}
-          </h5>
-          <div>My Current Holdings</div>{" "}
-          <h5 className="heading-title">
-            {Number(currentHoldings).toFixed(8)}
-          </h5>
-          <div>Total Profit/Loss</div>{" "}
-          <h5 className="heading-title">
-            <TotalProfitLoss poolAddress={poolAddress} />
-          </h5>
-          <p style={{ fontSize: 10 }}>
-            LP Tokens: {userLPTokens} out of {totalLPTokens} total
-          </p>
-        </>
-      )}
-    </div>
-    <div className="col-md-6">
-      {showInvestmentPopup && (
-        <InvestmentPopup
-          poolAddress={poolAddress}
-          onClose={() => setShowInvestmentPopup(false)}
-          onSuccess={onSuccess}
-        />
-      )}
-      <InvestCardButton
-        className="mb-3"
-        onClick={() => setShowInvestmentPopup(true)}
-      >
-        Invest
-      </InvestCardButton>
-      {isInvested && (
-        <InvestCardButton onClick={() => setShowWithdrawPopup(true)}>
-          Withdraw
-        </InvestCardButton>
-      )}
-      {showWithdrawPopup && (
-        <WithDrawPopup
-          open
-          onClose={() => setShowWithdrawPopup(false)}
-          onError={() => {}}
-          onSuccess={onSuccess}
-          poolAddress={poolAddress}
-        />
-      )}
-    </div>
-  </div>
-</InvestmentDisplay>
-</Col> */
-}

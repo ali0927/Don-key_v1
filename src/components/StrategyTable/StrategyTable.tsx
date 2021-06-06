@@ -70,7 +70,6 @@ export const StrategyTableForInvestor = ({
   poolAddress: string;
 }) => {
   const { tvl } = useTVL(poolAddress);
-  const { profit } = useProfit(poolAddress);
   const {symbol} = usePoolSymbol(poolAddress);
   return (
     <TableResponsive>
