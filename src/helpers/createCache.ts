@@ -1,6 +1,6 @@
 
 
-export const createCache = (ttl = 10000) => {
+export const createCache = (ttl = 5000) => {
   let obj: any = {};
   setTimeout(() => {
     obj = {};

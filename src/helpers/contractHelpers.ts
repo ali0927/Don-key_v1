@@ -60,7 +60,7 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
 const tokenPriceCache = createCache();
 
 let isInProgress = false;
-const observers: any = [];
+let observers: any = [];
 export const getTokenPrice = async (tokenAddress: string) => {
   let price = tokenPriceCache.get(tokenAddress.toLowerCase());
   if (price) {
@@ -79,6 +79,7 @@ export const getTokenPrice = async (tokenAddress: string) => {
       price = new BigNumber(resp.data.priceUSD).toString();
       tokenPriceCache.set(tokenAddress, price);
       observers.forEach((res: any) => res(price));
+      observers = [];
       isInProgress = false;
       res(price);
     } catch (e) {

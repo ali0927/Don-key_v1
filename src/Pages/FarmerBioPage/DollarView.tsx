@@ -30,7 +30,7 @@ export const DollarView = ({
       } finally {
       }
     })();
-  }, [tokenAmount, poolAddress]);
+  }, [tokenAmount, poolAddress, isUSD]);
 
   if (!isReady) {
     return <>-</>;
