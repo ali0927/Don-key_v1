@@ -154,11 +154,14 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
 
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
-
-  const formatted = wrappedNum.toFixed(wrappedNum.gt(1) ? 2 : 6);
+  let digits = wrappedNum.gt(1) ? 2 : 6;
+  if(process.env.REACT_APP_ENV === "development"){
+    digits = 5;
+  }
+  const formatted = wrappedNum.toFixed(digits);
 
   return Number(formatted).toLocaleString("en-us", {
-    minimumSignificantDigits: wrappedNum.gt(1) ? 2 : 6,
+    minimumSignificantDigits: digits,
   });
 };
 
