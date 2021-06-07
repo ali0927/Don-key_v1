@@ -144,7 +144,7 @@ export const InvestmentPopup = ({
         const amount = new BigNumber(web3.utils.toWei(value, "ether"));
         await pool.methods
           .depositLiquidity(
-            amount.toString(),
+            amount.toFixed(0),
             amount.multipliedBy(tokenPrice).toFixed(0),
             amount.multipliedBy(95).dividedBy(100).toFixed(0)
           )
