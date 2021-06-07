@@ -124,7 +124,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
-        </div>
+        </div> 
         <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
