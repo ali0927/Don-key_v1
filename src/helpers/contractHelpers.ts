@@ -67,7 +67,7 @@ export const getTokenPrice = async (tokenAddress: string) => {
     return price;
   }
   return new Promise(async (res, rej) => {
-    if(isInProgress){
+    if (isInProgress) {
       observers.push(res);
       return;
     }
@@ -82,7 +82,7 @@ export const getTokenPrice = async (tokenAddress: string) => {
       isInProgress = false;
       res(price);
     } catch (e) {
-      res("-")
+      res("-");
     }
   });
 };
@@ -104,7 +104,7 @@ export const getPoolContract = async (
   version: number
 ) => {
   const POOLJson =
-    (version === 1 || !version)
+    version === 1 || !version
       ? await import("JsonData/pool2.json")
       : await import("JsonData/advanced-pool.json");
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
@@ -161,13 +161,17 @@ export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   return amount;
 };
 
-export const getIsPoolPaused = async (web3: Web3, poolAddress: string, poolVersion: number) => {
+export const getIsPoolPaused = async (
+  web3: Web3,
+  poolAddress: string,
+  poolVersion: number
+) => {
   const contract = await getPoolContract(web3, poolAddress, poolVersion);
   if (contract.methods.paused) {
     const paused = await contract.methods.paused().call();
     return paused;
   } else {
-    return true
+    return true;
   }
 };
 

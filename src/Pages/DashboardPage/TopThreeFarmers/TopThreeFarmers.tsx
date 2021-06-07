@@ -78,12 +78,12 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     React.useEffect(() => {
       async function apiCall() {
         if (leader) {
-          let disabled = await getIsPoolPaused(
+          let pausedContract = await getIsPoolPaused(
             web3,
             leader.poolAddress,
             leader.pool_version
           );
-          setDisabled(disabled);
+          setDisabled(pausedContract);
         }
       }
       apiCall();
