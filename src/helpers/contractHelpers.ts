@@ -228,7 +228,9 @@ export const calculateInitialInvestmentInUSD = async (
     const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
     return amount;
   } catch (e) {
-    return "0";
+    const initialInvestment = await calculateInitialInvestment(web3, poolAddress);
+    const tokenPrice = await getTokenPrice((await getPoolToken(web3, poolAddress)).options.address);
+    return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }
 };
 
