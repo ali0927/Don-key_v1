@@ -156,7 +156,7 @@ export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
   let digits = wrappedNum.gt(1) ? 2 : 6;
   if(process.env.REACT_APP_ENV === "development"){
-    digits = 5;
+    digits = 6;
   }
   const formatted = wrappedNum.toFixed(digits);
 
