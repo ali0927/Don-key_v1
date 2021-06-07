@@ -35,9 +35,10 @@ export const TotalProfitLoss = ({
           web3,
           poolAddress
         );
+        const digits = process.env.REACT_APP_ENV === "development" ? 6: 2
         if (!isUSD) {
           setTotalProfitLoss(
-            new BigNumber(amountWithdraw).minus(amountInitial).toFixed(2)
+            new BigNumber(amountWithdraw).minus(amountInitial).toFixed(digits)
           );
         } else {
           const tokenPrice = await getTokenPrice(
@@ -47,7 +48,7 @@ export const TotalProfitLoss = ({
             new BigNumber(amountWithdraw)
               .multipliedBy(tokenPrice)
               .minus(amountInitialInUsd)
-              .toFixed(process.env.REACT_APP_ENV === "development" ? 6: 2)
+              .toFixed(digits)
           );
         }
       } catch (err) {
