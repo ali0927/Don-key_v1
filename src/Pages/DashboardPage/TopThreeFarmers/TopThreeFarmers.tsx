@@ -10,7 +10,7 @@ import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
 import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
-import { getTokenImage, getTokenSymbol, getIsPoolPaused } from "helpers";
+import { getTokenImage, getTokenSymbol } from "helpers";
 
 const Image = styled.img`
   width: 45px;
@@ -75,20 +75,6 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
       return await getTokenSymbol(web3, leader.poolAddress);
     };
 
-    React.useEffect(() => {
-      async function apiCall() {
-        if (leader) {
-          let pausedContract = await getIsPoolPaused(
-            web3,
-            leader.poolAddress,
-            leader.pool_version
-          );
-          setDisabled(pausedContract);
-        }
-      }
-      apiCall();
-    }, [leader]);
-
     return (
       <div key={leader.GUID} className="col-lg-4 col-md-6 mb-3">
         <PopularStrategy
@@ -101,7 +87,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           twitter={leader.twitter ? leader.twitter : null}
           telegram={leader.telegram}
           strategyImage={leader.strategyImage}
-          disabled={disabled}
+          disabled={leader.name === "getIsPoolPaused" ? true : false}
           content={leader.description}
           apy={APY}
           getTokenImage={getTokenImageAsync}

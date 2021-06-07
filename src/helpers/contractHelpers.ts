@@ -161,20 +161,6 @@ export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   return amount;
 };
 
-export const getIsPoolPaused = async (
-  web3: Web3,
-  poolAddress: string,
-  poolVersion: number
-) => {
-  const contract = await getPoolContract(web3, poolAddress, poolVersion);
-  if (contract.methods.paused) {
-    const paused = await contract.methods.paused().call();
-    return paused;
-  } else {
-    return true;
-  }
-};
-
 export const getTotalReservePoolValue = async (
   web3: Web3,
   poolAddress: string
