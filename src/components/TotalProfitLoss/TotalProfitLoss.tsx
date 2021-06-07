@@ -47,7 +47,7 @@ export const TotalProfitLoss = ({
             new BigNumber(amountWithdraw)
               .multipliedBy(tokenPrice)
               .minus(amountInitialInUsd)
-              .toFixed(2)
+              .toFixed(process.env.REACT_APP_ENV === "development" ? 6: 2)
           );
         }
       } catch (err) {
