@@ -2,6 +2,7 @@
 import "./popularstrategy.scss";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
+import disabledImage from "images/disabledImage.svg";
 import updatedversion from "images/updatedversion.svg";
 import clsx from "clsx";
 import styled from "styled-components";
@@ -77,6 +78,12 @@ const UpdatedVersion = styled.img`
   position: absolute;
 `;
 
+const Disabled = styled.img`
+  top: -10px;
+  right: 10px;
+  position: absolute;
+`;
+
 const TokenImage = styled.img`
   width: 14px;
   height: 14px;
@@ -95,6 +102,7 @@ export const PopularStrategy = ({
   content = `I expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the levelI expect the price to bounce off the support line and move up towards the level`,
   icon = <StratIcon text="SA" showDot />,
   investers,
+  disabled,
   onCardClick,
   onButtonClick,
   showAllContent,
@@ -106,6 +114,7 @@ export const PopularStrategy = ({
 }: {
   graph?: React.ReactNode;
   title?: string;
+  disabled?: boolean;
   totalValue?: string | React.ReactElement;
   contentTitle?: string;
   content?: string;
@@ -170,6 +179,7 @@ export const PopularStrategy = ({
     <Papper>
       <PapperInner>
         {version === 2 && <UpdatedVersion src={updatedversion} />}
+        {disabled && <Disabled src={disabledImage} />}
         <Container className="p-0">
           <TitleRow className="row">
             <Col

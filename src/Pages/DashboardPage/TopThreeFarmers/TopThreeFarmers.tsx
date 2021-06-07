@@ -10,7 +10,7 @@ import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
 import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
-import { getTokenImage, getTokenSymbol } from "helpers";
+import { getTokenImage, getTokenSymbol, getIsPoolPaused } from "helpers";
 
 const Image = styled.img`
   width: 45px;
@@ -27,7 +27,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const [state, setState] = React.useState({
     farmerName: "",
     poolAddress: "",
-    poolVersion: 0
+    poolVersion: 0,
   });
 
   const history = useHistory();
@@ -42,7 +42,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
       setState({
         farmerName: farmerName,
         poolAddress: poolAddress,
-        poolVersion
+        poolVersion,
       });
       setOpenInvestment(true);
     };
@@ -51,7 +51,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setState({
       farmerName: "",
       poolAddress: "",
-      poolVersion: 0
+      poolVersion: 0,
     });
 
     setOpenInvestment(false);
@@ -61,59 +61,70 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setRefresh((old) => !old);
   };
 
-
   const web3 = useWeb3();
 
   const StrategyCard = (leader: IFarmer, index: number) => {
+    const [disabled, setDisabled] = React.useState(false);
     const APY = leader.apy
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
     const getTokenImageAsync = async () => {
-      return await getTokenImage(web3,leader.poolAddress);
-    }
-    const getTokenSymbolAsync= async () => {
-      return await getTokenSymbol(web3,leader.poolAddress);
-    }
+      return await getTokenImage(web3, leader.poolAddress);
+    };
+    const getTokenSymbolAsync = async () => {
+      return await getTokenSymbol(web3, leader.poolAddress);
+    };
+
+    React.useEffect(() => {
+      async function apiCall() {
+        if (leader) {
+          let disabled = await getIsPoolPaused(
+            web3,
+            leader.poolAddress,
+            leader.pool_version
+          );
+          setDisabled(disabled);
+        }
+      }
+      apiCall();
+    }, [leader]);
 
     return (
-    
-        <div key={leader.GUID} className="col-lg-4 col-md-6 mb-3">
-          <PopularStrategy
-            version={leader.pool_version}
-            icon={<Image src={leader.picture} style={{ borderRadius: 0 }} />}
-            contentTitle={
-              leader.descriptionTitle ? leader.descriptionTitle : ""
-            }
-            title={leader.name}
-            investers={<InvestorCount farmerId={leader.GUID} refresh={refresh} />}
-            comingsoon={leader.status === "comingsoon"}
-            twitter={leader.twitter ? leader.twitter : null}
-            telegram={leader.telegram}
-            strategyImage={leader.strategyImage}
-            content={leader.description}
-            apy={APY}
-            getTokenImage={getTokenImageAsync}
-            getTokenSymbol={getTokenSymbolAsync}
-            totalValue={
-              <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
-            }
-            onCardClick={handleLeaderClick(leader.GUID)}
-            onButtonClick={openInvestmentDialog(
-              leader.name,
-              leader.poolAddress,
-              leader.pool_version
-            )}
-            showAllContent={openShowMoreLess}
-            onShowMoreClick={()=> setShowMoreLess(true)}
-            onShowLessClick={()=> setShowMoreLess(false)}
-          />
-        </div>
- 
-   
+      <div key={leader.GUID} className="col-lg-4 col-md-6 mb-3">
+        <PopularStrategy
+          version={leader.pool_version}
+          icon={<Image src={leader.picture} style={{ borderRadius: 0 }} />}
+          contentTitle={leader.descriptionTitle ? leader.descriptionTitle : ""}
+          title={leader.name}
+          investers={<InvestorCount farmerId={leader.GUID} refresh={refresh} />}
+          comingsoon={leader.status === "comingsoon"}
+          twitter={leader.twitter ? leader.twitter : null}
+          telegram={leader.telegram}
+          strategyImage={leader.strategyImage}
+          disabled={disabled}
+          content={leader.description}
+          apy={APY}
+          getTokenImage={getTokenImageAsync}
+          getTokenSymbol={getTokenSymbolAsync}
+          totalValue={
+            <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
+          }
+          onCardClick={handleLeaderClick(leader.GUID)}
+          onButtonClick={openInvestmentDialog(
+            leader.name,
+            leader.poolAddress,
+            leader.pool_version
+          )}
+          showAllContent={openShowMoreLess}
+          onShowMoreClick={() => setShowMoreLess(true)}
+          onShowLessClick={() => setShowMoreLess(false)}
+        />
+      </div>
     );
   };
 
-         {/* <div className="col-lg-4 col-md-6 mb-3">
+  {
+    /* <div className="col-lg-4 col-md-6 mb-3">
           <PopularStrategy
             icon={<Image src={leader.picture} />}
             contentTitle={"New Strategy"}
@@ -142,7 +153,8 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
             onCardClick={handleLeaderClick(leader.GUID)}
             onButtonClick={openInvestmentDialog(leader.name, leader.poolAddress)}
           />
-        </div> */}
+        </div> */
+  }
 
   if (!isReady) {
     return (
