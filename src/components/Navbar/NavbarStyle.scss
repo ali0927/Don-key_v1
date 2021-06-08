@@ -191,10 +191,8 @@ button:disabled.btn-outline{
   background-color: $secondary-color;
 }
 
-.btn.btnusername,
-.btn.btnusername:hover {
-  font-weight: 500;
-  font-size: 13px;
+.btn.btnusername {
+  font-size: 15px;
   line-height: 15px;
   display: flex;
   align-items: center;
