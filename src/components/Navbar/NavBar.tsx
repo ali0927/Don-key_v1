@@ -204,7 +204,7 @@ function NavBar(props: INavBarProps) {
             {variant === "loggedin" && (
               <>
                 {isLoggedIn && !hideWallet ? (
-                  <ButtonComponent variant="colorBlack btn-outline btnusername">
+                  <ButtonComponent variant="colorBlack btnusername">
                     <img
                       src="/assets/images/usericon.png"
                       className="d-inline-block align-top mr-md-2"
