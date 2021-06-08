@@ -155,7 +155,7 @@ const ColumnsTitle1 = styled(ColumnsTitleColored)`
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
   let digits = wrappedNum.gt(1) ? 2 : 6;
-  if(process.env.REACT_APP_ENV === "development"){
+  if (process.env.REACT_APP_ENV === "development") {
     digits = 6;
   }
   const formatted = wrappedNum.toFixed(digits);
@@ -243,7 +243,8 @@ export const DetailTable = ({
         Don-key Performance fee: 5%
         <br />
       </strong>{" "}
-      Some protocols may have additional deposit fees.
+      Some protocols may have additional deposit fees, for more information see
+      fees in the strategy table below
     </Tooltip>
   );
 

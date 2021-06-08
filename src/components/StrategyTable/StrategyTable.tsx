@@ -11,14 +11,12 @@ import {
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { IStrategy } from "interfaces";
-import styled from "styled-components";
 import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
-import { formatNum } from "Pages/FarmerBioPage/DetailTable";
-import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { DollarView } from "Pages/FarmerBioPage/DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const formatDate = (
   date: string | null | undefined,
@@ -37,7 +35,7 @@ const formatDate = (
 const useTVL = (poolAddress: string) => {
   const [tvl, setTvl] = useState("");
   const web3 = useWeb3();
-  const {dependsOn} = useRefresh();
+  const { dependsOn } = useRefresh();
   useEffect(() => {
     (async () => {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
@@ -66,11 +64,28 @@ const useTVL = (poolAddress: string) => {
 export const StrategyTableForInvestor = ({
   strategies,
   poolAddress,
+  showFees,
 }: {
   strategies: IStrategy[];
   poolAddress: string;
+  showFees?: boolean;
 }) => {
   const { tvl } = useTVL(poolAddress);
+
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props} className="mytooltip">
+      <p>This strategy requires swaps and protocol fees as the following:</p>
+      <ul
+        style={{
+          textAlign: "left",
+        }}
+      >
+        <li>Swaps in: 0.185%</li>
+        <li>Swaps out: 0.185%</li>
+        <li>Entrance fees: 0.08%</li>
+      </ul>
+    </Tooltip>
+  );
 
   return (
     <TableResponsive>
@@ -81,6 +96,7 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>
@@ -97,6 +113,15 @@ export const StrategyTableForInvestor = ({
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltip}
+                  >
+                    <div>0.45%</div>
+                  </OverlayTrigger>
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}

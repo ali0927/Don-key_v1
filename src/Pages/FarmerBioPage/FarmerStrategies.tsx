@@ -62,8 +62,6 @@ export const FarmerStrategies = ({
     `/api/v2/farmer/${farmerId}/strategies`
   );
 
-
-
   const renderContent = () => {
     if (loading || loading1) {
       return (
@@ -138,7 +136,9 @@ export const FarmerStrategies = ({
               <Container className="mt-2 mb-4">
                 <Row>
                   <Col md={12} lg={12}>
-                    <DescriptionTitle>{strategiesData.data[0].strategyName || "Description"}</DescriptionTitle>
+                    <DescriptionTitle>
+                      {strategiesData.data[0].strategyName || "Description"}
+                    </DescriptionTitle>
                     <p style={{ fontSize: 15 }}>
                       <ShowMoreContent
                         length={80}
@@ -155,6 +155,11 @@ export const FarmerStrategies = ({
                 <StrategyTableForInvestor
                   poolAddress={farmerFromApi.data.farmer.poolAddress}
                   strategies={strategiesData.data}
+                  showFees={
+                    farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911"
+                      ? true
+                      : false
+                  }
                 />
               </Col>
             </Row>
