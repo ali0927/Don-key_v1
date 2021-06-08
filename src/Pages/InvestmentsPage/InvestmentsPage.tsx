@@ -177,7 +177,7 @@ export const InvestmentsPage = () => {
       };
       CalInvestments();
     }
-  }, [farmers]);
+  }, [farmers,refresh]);
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();
