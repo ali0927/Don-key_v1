@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { NavBar } from "components/Navbar/NavBar";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
@@ -30,6 +30,7 @@ import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
+import { IFarmer } from "interfaces";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -106,17 +107,37 @@ export const InvestmentsPage = () => {
 
   const history = useHistory();
 
-  const [{ data: farmesInvestmentData }, refetch] = useAxios(
-    { method: "GET", url: "/api/v2/investments" },
-    { useCache: false, manual: true }
-  );
-
-  const [{}] = useAxios(
-    { method: "DELETE", url: "/api/v2/investments" },
-    { manual: true }
-  );
   const [loading, setLoading] = useState(true);
-  const [myInvestments, setMyInvestments] = useState<IMyInvestments[]>([]);
+
+  const [{ data }] = useAxios("/api/v2/farmer");
+
+  const farmers: IFarmer[] = useMemo(() => {
+    if (data) {
+      return data.data.map((item: any) => {
+        const farmer: IFarmer = {
+          GUID: item.GUID,
+          name: `Don - ${item.name}`,
+          description: item.description,
+          picture: item.picture,
+          pool_version: item.pool_version,
+          poolAddress: item.poolAddress,
+          profit24hours: item.profit24hours || "-",
+          profit7days: item.profit7days || "-",
+          telegram: item.telegram,
+          twitter: item.twitter,
+          profit: item.profit || "-",
+          descriptionTitle: item.descriptionTitle,
+          status: item.status,
+          apy: item.strategy.apy,
+          strategyImage: item.strategy.strategyImage,
+          investors: item.investors,
+        };
+        return farmer;
+      });
+    }
+    return [];
+  }, [data]);
+  const [myInvestments, setMyInvestments] = useState<IFarmer[]>([]);
 
   const [withDraw, setWidthDraw] = useState({
     open: false,
@@ -134,16 +155,10 @@ export const InvestmentsPage = () => {
   };
 
   useEffect(() => {
-    refetch();
-    setLoading(true);
-  }, [refresh]);
-
-  useEffect(() => {
-    if (farmesInvestmentData) {
+    if (farmers.length > 0) {
       const CalInvestments = async () => {
-        const investments: IMyInvestments[] = farmesInvestmentData.data;
-        const finalInvestments: IMyInvestments[] = [];
-        for (let invest of investments) {
+        const finalInvestments: IFarmer[] = [];
+        for (let invest of farmers) {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 2);
             const accounts = await web3.eth.getAccounts();
@@ -162,7 +177,7 @@ export const InvestmentsPage = () => {
       };
       CalInvestments();
     }
-  }, [farmesInvestmentData]);
+  }, [farmers]);
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();

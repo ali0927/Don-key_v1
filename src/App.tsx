@@ -7,6 +7,9 @@ function App() {
   useEffect(() => {
     if(process.env.NODE_ENV === "production"){
       LogRocket.init('uisfg9/donkey');
+      console.error = () => {
+        
+      }
     }
   }, [])
   return <Routes />;

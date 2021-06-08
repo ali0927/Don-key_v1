@@ -159,7 +159,7 @@ export const InvestmentPopup = ({
 
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
-      console.log(err, "Err");
+  
       showFailure("Transaction failed.");
     }
   };
