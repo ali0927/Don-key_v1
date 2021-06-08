@@ -146,7 +146,7 @@ export const InvestmentPopup = ({
           .depositLiquidity(
             amount.toFixed(0),
             amount.multipliedBy(tokenPrice).toFixed(0),
-            amount.multipliedBy(95).dividedBy(100).toFixed(0)
+            amount.multipliedBy(995).dividedBy(1000).toFixed(0)
           )
           .send({
             from: accounts[0],
