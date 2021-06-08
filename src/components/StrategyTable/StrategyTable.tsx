@@ -74,14 +74,14 @@ export const StrategyTableForInvestor = ({
 
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
-      <p>This strategy requires swaps and protocol fees as the following:</p>
+      <p>This strategy requires swap and protocol fees as the following:</p>
       <ul
         style={{
           textAlign: "left",
         }}
       >
-        <li>Swaps in: 0.185%</li>
-        <li>Swaps out: 0.185%</li>
+        <li>Swap in: 0.185%</li>
+        <li>Swap out: 0.185%</li>
         <li>Entrance fees: 0.08%</li>
       </ul>
     </Tooltip>
