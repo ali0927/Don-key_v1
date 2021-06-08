@@ -96,7 +96,9 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
+            {showFees && (
+              <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
+            )}
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>
@@ -114,15 +116,17 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  <OverlayTrigger
-                    placement="right"
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={renderTooltip}
-                  >
-                    <div>0.45%</div>
-                  </OverlayTrigger>
-                </TableData>
+                {showFees && (
+                  <TableData style={{ textAlign: "center" }}>
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={renderTooltip}
+                    >
+                      <div>0.45%</div>
+                    </OverlayTrigger>
+                  </TableData>
+                )}
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
                 </TableData>
