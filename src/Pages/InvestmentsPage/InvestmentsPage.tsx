@@ -122,7 +122,7 @@ export const InvestmentsPage = () => {
     open: false,
     farmerName: "",
     poolAddress: "",
-    pool_version: 0,
+    pool_version: 1,
   });
 
   const { showNotification } = useNotification();
@@ -173,7 +173,7 @@ export const InvestmentsPage = () => {
         </>
       ),
     });
-    handleCloseWithDraw()
+    handleCloseWithDraw();
   };
 
   const handleError = (response?: AxiosResponse<any>) => {
@@ -199,7 +199,7 @@ export const InvestmentsPage = () => {
         open: true,
         farmerName: farmerName,
         poolAddress: poolAddress,
-        pool_version: pool_version
+        pool_version: pool_version,
       });
     };
 
@@ -208,7 +208,7 @@ export const InvestmentsPage = () => {
       open: false,
       farmerName: "",
       poolAddress: "",
-      pool_version: 0,
+      pool_version: 1,
     });
   };
 
@@ -291,7 +291,9 @@ export const InvestmentsPage = () => {
                               onClick={handleOpenWithDraw(
                                 investment.name,
                                 investment.poolAddress,
-                                investment.pool_version ? investment.pool_version : 0
+                                investment.pool_version
+                                  ? investment.pool_version
+                                  : 1
                               )}
                             >
                               Withdraw
