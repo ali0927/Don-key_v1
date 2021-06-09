@@ -74,10 +74,10 @@ export const getTokenPrice = async (tokenAddress: string) => {
     try {
       isInProgress = true;
       const resp = await axios.get(
-        `https://api.dex.guru/v1/tokens/${tokenAddress}-bsc`
+        `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
       );
-      price = new BigNumber(resp.data.priceUSD).toString();
-      tokenPriceCache.set(tokenAddress, price);
+      price = new BigNumber(resp.data[tokenAddress.toLowerCase()].usd).toString();
+      tokenPriceCache.set(tokenAddress.toLowerCase(), price);
       observers.forEach((res: any) => res(price));
       observers = [];
       isInProgress = false;
@@ -196,7 +196,7 @@ export const calculateWithdrawAmount = async (
     const claimableAmount = await poolContract.methods
       .getFinalClaimableAmount(accounts[0])
       .call();
-
+    
     return web3.utils.fromWei(claimableAmount);
   } catch (e) {
     return "0";
