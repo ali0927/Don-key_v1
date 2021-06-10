@@ -6,7 +6,7 @@ import { Contract } from "web3-eth-contract";
 import { createCache } from "./createCache";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
-const PancakeRouterAddress = "0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F";
+const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
 const IBUSDAddress = "0x7C9e73d4C71dae564d41F78d56439bB4ba87592f";
 const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
 export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
@@ -57,27 +57,30 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
-const tokenPriceCache = createCache();
 
 let isInProgress = false;
 let observers: any = [];
-export const getTokenPrice = async (tokenAddress: string) => {
-  let price = tokenPriceCache.get(tokenAddress.toLowerCase());
-  if (price) {
-    return price;
+export const getTokenPrice = async (web3: Web3, tokenAddress: string) => {
+ 
+  if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
+    return "1";
   }
-  return new Promise(async (res, rej) => {
+
+  return new Promise<string>(async (res, rej) => {
     if (isInProgress) {
       observers.push(res);
       return;
     }
     try {
       isInProgress = true;
-      const resp = await axios.get(
-        `https://api.coingecko.com/api/v3/simple/token_price/binance-smart-chain?contract_addresses=${tokenAddress}&vs_currencies=usd`
-      );
-      price = new BigNumber(resp.data[tokenAddress.toLowerCase()].usd).toString();
-      tokenPriceCache.set(tokenAddress.toLowerCase(), price);
+      const bnbPrice = await (await getPancakeContract(web3)).methods
+        .getAmountsOut(web3.utils.toWei("0.1"), [tokenAddress, BUSDAddress])
+        .call();
+
+      let price = new BigNumber(web3.utils.fromWei(bnbPrice[1]))
+        .dividedBy(0.1)
+        .toString();
+
       observers.forEach((res: any) => res(price));
       observers = [];
       isInProgress = false;
@@ -196,7 +199,7 @@ export const calculateWithdrawAmount = async (
     const claimableAmount = await poolContract.methods
       .getFinalClaimableAmount(accounts[0])
       .call();
-    
+
     return web3.utils.fromWei(claimableAmount);
   } catch (e) {
     return "0";
@@ -229,8 +232,16 @@ export const calculateInitialInvestmentInUSD = async (
     const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
     return amount;
   } catch (e) {
-    const initialInvestment = await calculateInitialInvestment(web3, poolAddress);
-    const tokenPrice = await getTokenPrice((await getPoolToken(web3, poolAddress)).options.address);
+    const initialInvestment = await calculateInitialInvestment(
+      web3,
+      poolAddress
+    );
+    const tokenPrice = await getTokenPrice(
+      web3,
+      (
+        await getPoolToken(web3, poolAddress)
+      ).options.address
+    );
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }
 };

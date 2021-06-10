@@ -25,7 +25,7 @@ export const DollarView = ({
   useEffect(() => {
     (async () => {
       try {
-        setPrice(await getTokenPrice(await getTokenAddress(web3, poolAddress)));
+        setPrice(await getTokenPrice(web3,await getTokenAddress(web3, poolAddress)));
         setIsReady(true);
       } finally {
       }
