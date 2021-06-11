@@ -140,6 +140,7 @@ export const StrategyTableForInvestor = ({
                               parseFloat(item.swapInFees) > 0
                                 ? item.swapInFees
                                 : 0}
+                              {"%"}
                             </li>
                             <li>
                               Swap out:{" "}
@@ -147,6 +148,7 @@ export const StrategyTableForInvestor = ({
                               parseFloat(item.swapOutFees) > 0
                                 ? item.swapOutFees
                                 : 0}
+                              {"%"}
                             </li>
                             <li>
                               Entrance fees:{" "}
@@ -154,6 +156,7 @@ export const StrategyTableForInvestor = ({
                               parseFloat(item.entranceFees) > 0
                                 ? item.entranceFees
                                 : 0}
+                              {"%"}
                             </li>
                             <li>
                               Exit fees:{" "}
@@ -161,6 +164,7 @@ export const StrategyTableForInvestor = ({
                               parseFloat(item.exitFees) > 0
                                 ? item.exitFees
                                 : 0}
+                              {"%"}
                             </li>
                           </ul>
                         </Tooltip>
