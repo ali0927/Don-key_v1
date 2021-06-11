@@ -64,28 +64,11 @@ const useTVL = (poolAddress: string) => {
 export const StrategyTableForInvestor = ({
   strategies,
   poolAddress,
-  showFees,
 }: {
   strategies: IStrategy[];
   poolAddress: string;
-  showFees?: boolean;
 }) => {
   const { tvl } = useTVL(poolAddress);
-
-  const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props} className="mytooltip">
-      <p>This strategy requires swap and protocol fees as the following:</p>
-      <ul
-        style={{
-          textAlign: "left",
-        }}
-      >
-        <li>Swap in: 0.185%</li>
-        <li>Swap out: 0.185%</li>
-        <li>Entrance fees: 0.08%</li>
-      </ul>
-    </Tooltip>
-  );
 
   return (
     <TableResponsive>
@@ -96,9 +79,7 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            {showFees && (
-              <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
-            )}
+            <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>
@@ -108,6 +89,27 @@ export const StrategyTableForInvestor = ({
         </TableHead>
         <TableBody>
           {strategies.map((item, i) => {
+            let entranceFees =
+              item.entranceFees !== undefined &&
+              item.entranceFees &&
+              parseFloat(item.entranceFees);
+            let swapInFees =
+              item.swapInFees !== undefined &&
+              item.swapInFees &&
+              parseFloat(item.swapInFees);
+            let swapOutFees =
+              item.swapOutFees !== undefined &&
+              item.swapOutFees &&
+              parseFloat(item.swapOutFees);
+            let totalFees =
+              typeof entranceFees === "number"
+                ? entranceFees
+                : 0 + typeof swapInFees === "number"
+                ? swapInFees
+                : 0 + typeof swapOutFees === "number"
+                ? swapOutFees
+                : 0;
+            console.log(totalFees);
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>
@@ -116,16 +118,59 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                {showFees && (
+                {totalFees > 0 ? (
                   <TableData style={{ textAlign: "center" }}>
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip}
+                      overlay={
+                        <Tooltip id="button-tooltip" className="mytooltip">
+                          <p>
+                            This strategy requires swap and protocol fees as the
+                            following:
+                          </p>
+                          <ul
+                            style={{
+                              textAlign: "left",
+                            }}
+                          >
+                            <li>
+                              Swap in:{" "}
+                              {item.swapInFees !== undefined &&
+                              parseFloat(item.swapInFees) > 0
+                                ? item.swapInFees
+                                : 0}
+                            </li>
+                            <li>
+                              Swap out:{" "}
+                              {item.swapOutFees !== undefined &&
+                              parseFloat(item.swapOutFees) > 0
+                                ? item.swapOutFees
+                                : 0}
+                            </li>
+                            <li>
+                              Entrance fees:{" "}
+                              {item.entranceFees !== undefined &&
+                              parseFloat(item.entranceFees) > 0
+                                ? item.entranceFees
+                                : 0}
+                            </li>
+                            <li>
+                              Exit fees:{" "}
+                              {item.exitFees !== undefined &&
+                              parseFloat(item.exitFees) > 0
+                                ? item.exitFees
+                                : 0}
+                            </li>
+                          </ul>
+                        </Tooltip>
+                      }
                     >
-                      <div>0.45%</div>
+                      <div>{totalFees}</div>
                     </OverlayTrigger>
                   </TableData>
+                ) : (
+                  <TableData style={{ textAlign: "center" }}>-</TableData>
                 )}
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}

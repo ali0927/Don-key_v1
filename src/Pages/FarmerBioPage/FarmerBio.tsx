@@ -132,10 +132,12 @@ export const FarmerBio = ({
                       </h4>
                       <div className="d-flex">
                         <div className="mr-3">
-                          <TwitterIcon
-                            fill={"#000"}
-                            handle={twitter || "#"}
-                          ></TwitterIcon>
+                          {twitter && (
+                            <TwitterIcon
+                              fill={"#000"}
+                              handle={twitter || "#"}
+                            ></TwitterIcon>
+                          )}
                         </div>
                         {/* <div>
                           <TelegramIcon

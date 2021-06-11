@@ -155,11 +155,6 @@ export const FarmerStrategies = ({
                 <StrategyTableForInvestor
                   poolAddress={farmerFromApi.data.farmer.poolAddress}
                   strategies={strategiesData.data}
-                  showFees={
-                    farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911"
-                      ? true
-                      : false
-                  }
                 />
               </Col>
             </Row>
