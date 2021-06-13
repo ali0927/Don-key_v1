@@ -64,11 +64,9 @@ const useTVL = (poolAddress: string) => {
 export const StrategyTableForInvestor = ({
   strategies,
   poolAddress,
-  showFees,
 }: {
   strategies: IStrategy[];
   poolAddress: string;
-  showFees?: boolean;
 }) => {
   const { tvl } = useTVL(poolAddress);
 
@@ -114,7 +112,7 @@ export const StrategyTableForInvestor = ({
       </ul>
     </Tooltip>
   );
-  const hasFees = showFees && new BigNumber(totalFee).gt(0);
+  const hasFees = new BigNumber(totalFee).gt(0);
 
   return (
     <TableResponsive>
@@ -137,6 +135,7 @@ export const StrategyTableForInvestor = ({
         </TableHead>
         <TableBody>
           {strategies.map((item, i) => {
+          
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>
@@ -150,7 +149,9 @@ export const StrategyTableForInvestor = ({
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip}
+                      overlay={
+                        renderTooltip
+                      }
                     >
                       <div>{totalFee}%</div>
                     </OverlayTrigger>
