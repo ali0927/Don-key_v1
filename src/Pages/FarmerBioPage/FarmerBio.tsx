@@ -6,7 +6,7 @@ import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import { useState } from "react";
-import { IFarmerInter } from "interfaces";
+import { IFarmerInter, IStrategy } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import { DotsIcon } from "icons";
 import BigNumber from "bignumber.js";
@@ -56,18 +56,19 @@ const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
+const getStrategyField = <T extends keyof IStrategy>(farmer: IFarmerInter, key: T): NonNullable<IStrategy[T]> | undefined => {
+  if (!farmer.strategies || farmer.strategies.length === 0) {
+    return undefined;
+  }
+  const result = farmer.strategies[0][key];
+  if(result){
+    return result as any;
+  }
+  return undefined ;
+};
+
 export const FarmerBio = ({
-  farmer: {
-    description,
-    name,
-    picture,
-    poolAddress,
-    telegram,
-    strategies,
-    pool_version,
-    twitter,
-    GUID,
-  },
+  farmer,
   isInvestor,
   investorCount,
 }: {
@@ -78,7 +79,17 @@ export const FarmerBio = ({
   twitter?: string;
 }) => {
   const [modalShow, setModalShow] = useState(false);
-
+  const {
+    description,
+    name,
+    picture,
+    poolAddress,
+    strategies,
+    pool_version,
+    twitter,
+    GUID,
+  } = farmer;
+  const gasLimit = getStrategyField(farmer, "gasLimit");
   return (
     <Section>
       <Container>
@@ -165,6 +176,7 @@ export const FarmerBio = ({
 
         <Row className="mt-5">
           <DetailTable
+            gasLimit={gasLimit}
             apy={
               strategies && strategies.length > 0
                 ? new BigNumber(strategies![0].apy)

@@ -68,7 +68,7 @@ export interface IFarmerInter {
   username?: string | null;
   telegram?: string | null;
   twitter?: string | null;
-  strategies?: IStrategy[]
+  strategies?: IStrategy[];
 }
 export type IStrategy = {
   createdAt: string;
@@ -79,6 +79,12 @@ export type IStrategy = {
   strategyDescription?: string | null;
   status: string | null;
   profit: string | null;
+  entranceFees?: string | null;
+  exitFees?: string | null;
+  gasLimit?: string | null;
+  swapInFees?: string | null;
+  swapOutFees?: string | null;
+  withdrawGasLimit?: string | null;
   strategyName: string;
   apy: string;
   id: number;

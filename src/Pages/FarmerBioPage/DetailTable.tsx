@@ -184,12 +184,14 @@ export const DetailTable = ({
   poolAddress,
   apy,
   farmerId,
+  gasLimit,
   poolVersion,
 }: {
   poolAddress: string;
   apy: string;
   poolVersion: number;
   farmerId: string;
+  gasLimit?: string;
 }) => {
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
   const [totalPoolValue, setTotalPoolValue] = useState("0");
@@ -211,7 +213,6 @@ export const DetailTable = ({
     );
   const { symbol } = usePoolSymbol(poolAddress);
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
-
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
 
   const { isUSD, toggle } = useUSDViewBool();
@@ -443,6 +444,7 @@ export const DetailTable = ({
       </div>
       {showInvestmentPopup && (
         <InvestmentPopup
+          gasLimit={gasLimit}
           poolVersion={poolVersion}
           poolAddress={poolAddress}
           onClose={() => setShowInvestmentPopup(false)}

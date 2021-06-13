@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "components/Table";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IStrategy } from "interfaces";
 import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
@@ -72,6 +72,31 @@ export const StrategyTableForInvestor = ({
 }) => {
   const { tvl } = useTVL(poolAddress);
 
+  const getFee = (key: keyof IStrategy) => {
+    const item = strategies[0];
+    if (item) {
+      return item[key];
+    }
+    return null;
+  };
+  const totalFee = useMemo(() => {
+    const item = strategies[0];
+    const swapIn = item.swapInFees;
+    const swapOut = item.swapOutFees;
+    const entranceFee = item.entranceFees;
+    const exitFee = item.exitFees;
+    const sum = [swapIn, swapOut, entranceFee, exitFee]
+      .filter((item) => !!item)
+      .map((item) => {
+        return item?.replace("~", "").replace("%", "");
+      })
+      .reduce(
+        (prev, next) => new BigNumber(prev || 0).plus(next || 0).toString(),
+        "0"
+      );
+    return sum || 0;
+  }, [strategies]);
+
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
       <p>This strategy requires swap and protocol fees as the following:</p>
@@ -80,12 +105,16 @@ export const StrategyTableForInvestor = ({
           textAlign: "left",
         }}
       >
-        <li>Swap in: 0.185%</li>
-        <li>Swap out: 0.185%</li>
-        <li>Entrance fees: 0.08%</li>
+        {getFee("swapInFees") && <li>Swap in: {getFee("swapInFees")}</li>}
+        {getFee("swapOutFees") && <li>Swap out: {getFee("swapOutFees")}</li>}
+        {getFee("entranceFees") && (
+          <li>Entrance fees: {getFee("entranceFees")}</li>
+        )}
+        {getFee("exitFees") && <li>Exit fees: {getFee("exitFees")}</li>}
       </ul>
     </Tooltip>
   );
+  const hasFees = showFees && new BigNumber(totalFee).gt(0);
 
   return (
     <TableResponsive>
@@ -96,7 +125,7 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            {showFees && (
+            {hasFees && (
               <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
             )}
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
@@ -116,14 +145,14 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                {showFees && (
+                {hasFees && (
                   <TableData style={{ textAlign: "center" }}>
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
                       overlay={renderTooltip}
                     >
-                      <div>0.45%</div>
+                      <div>{totalFee}%</div>
                     </OverlayTrigger>
                   </TableData>
                 )}
