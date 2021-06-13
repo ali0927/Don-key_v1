@@ -79,6 +79,8 @@ export type IStrategy = {
   strategyDescription?: string | null;
   status: string | null;
   profit: string | null;
+  gasLimit?: string | null;
+  withdrawGasLimit?: string | null;
   strategyName: string;
   apy: string;
   id: number;

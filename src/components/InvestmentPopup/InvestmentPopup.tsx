@@ -7,7 +7,6 @@ import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
   getBUSDTokenContract,
-  getErcToken,
   getPoolContract,
   getPoolToken,
   getTokenPrice,
@@ -15,31 +14,23 @@ import {
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
-import {
-  ButtonWidget,
-  ContainedButton,
-  OutlinedButton,
-} from "components/Button";
+import { ButtonWidget } from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
-import { useSnackbar } from "notistack";
-import {
-  ErrorSnackbar,
-  ProgressSnackbar,
-  SuccessSnackbar,
-} from "components/Snackbars";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-
-// const CaptionContent = styled.p`
-//   font-family: Roboto;
-//   font-style: normal;
-//   font-weight: 400;
-//   color: #6c757d !important;
-// `;
-
+import { Chip, createMuiTheme, ThemeProvider } from "@material-ui/core";
+import { theme } from "theme";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { InfoIcon } from "icons/InfoIcon";
 const ButtonWrapper = styled.div({
   marginRight: "10%",
   width: "40%",
+});
+
+const themeM = createMuiTheme({
+  palette: {
+    primary: { main: theme.palette.background.yellow },
+  },
 });
 
 const MyBalanceInBUSD = ({
@@ -84,18 +75,20 @@ const MyBalanceInBUSD = ({
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
+  gasLimit,
   onClose,
   onSuccess,
 }: {
   poolAddress: string;
   poolVersion: number;
+  gasLimit?: string;
   onSuccess?: () => void;
   onClose: () => void;
 }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
-
+  const [slippage, setSlippage] = useState("5");
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -114,14 +107,17 @@ export const InvestmentPopup = ({
     try {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
-        (poolVersion === 1 || !poolVersion)
+        poolVersion === 1 || !poolVersion
           ? await getBUSDTokenContract(web3)
           : await getPoolToken(web3, poolAddress);
       const accounts = await web3.eth.getAccounts();
       let allowance = await acceptedToken.methods
         .allowance(accounts[0], poolAddress)
         .call();
-      const tokenPrice = await getTokenPrice(web3,acceptedToken.options.address);
+      const tokenPrice = await getTokenPrice(
+        web3,
+        acceptedToken.options.address
+      );
       allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
       const amount = new BigNumber(value);
       onClose();
@@ -146,10 +142,14 @@ export const InvestmentPopup = ({
           .depositLiquidity(
             amount.toFixed(0),
             amount.multipliedBy(tokenPrice).toFixed(0),
-            amount.multipliedBy(995).dividedBy(1000).toFixed(0)
+            amount
+              .multipliedBy(new BigNumber(1000).minus(slippage))
+              .dividedBy(1000)
+              .toFixed(0)
           )
           .send({
             from: accounts[0],
+            gas: gasLimit,
           });
       }
 
@@ -159,7 +159,6 @@ export const InvestmentPopup = ({
 
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
-  
       showFailure("Transaction failed.");
     }
   };
@@ -203,8 +202,25 @@ export const InvestmentPopup = ({
             setValue={setValue}
             max={balance}
           />
+          <ThemeProvider theme={themeM}>
+            <p className="mb-1 mt-3">Slippage Tolerance</p>
+            <div className="d-flex align-items-center">
+              {["5", "10", "15"].map((item) => {
+                return (
+                  <Chip
+                    size="medium"
+                    className="mr-2"
+                    label={new BigNumber(item).dividedBy(10).toFixed(2)}
+                    onClick={() => setSlippage(item)}
+                    variant={slippage === item ? "default" : "outlined"}
+                    color="primary"
+                  />
+                );
+              })}
+            </div>
+          </ThemeProvider>
         </div>
-        <div className="d-flex justify-content-between mt-5">
+        <div className="d-flex justify-content-between mt-3">
           <ButtonWrapper>
             <ButtonWidget
               varaint="contained"
@@ -236,6 +252,7 @@ export const InvestmentPopup = ({
         <small>
           If you receive: "Transaction error. Exception thrown in contract
           code", this is due to high slippage. Please try a different amount.
+          Or Change Min Slippage
         </small>
       </p>
     </DonCommonmodal>

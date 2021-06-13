@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "components/Table";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { IStrategy } from "interfaces";
 import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
@@ -70,6 +70,50 @@ export const StrategyTableForInvestor = ({
 }) => {
   const { tvl } = useTVL(poolAddress);
 
+  const getFee = (key: keyof IStrategy) => {
+    const item = strategies[0];
+    if (item) {
+      return item[key];
+    }
+    return null;
+  };
+  const totalFee = useMemo(() => {
+    const item = strategies[0];
+    const swapIn = item.swapInFees;
+    const swapOut = item.swapOutFees;
+    const entranceFee = item.entranceFees;
+    const exitFee = item.exitFees;
+    const sum = [swapIn, swapOut, entranceFee, exitFee]
+      .filter((item) => !!item)
+      .map((item) => {
+        return item?.replace("~", "").replace("%", "");
+      })
+      .reduce(
+        (prev, next) => new BigNumber(prev || 0).plus(next || 0).toString(),
+        "0"
+      );
+    return sum || 0;
+  }, [strategies]);
+
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props} className="mytooltip">
+      <p>This strategy requires swap and protocol fees as the following:</p>
+      <ul
+        style={{
+          textAlign: "left",
+        }}
+      >
+        {getFee("swapInFees") && <li>Swap in: {getFee("swapInFees")}</li>}
+        {getFee("swapOutFees") && <li>Swap out: {getFee("swapOutFees")}</li>}
+        {getFee("entranceFees") && (
+          <li>Entrance fees: {getFee("entranceFees")}</li>
+        )}
+        {getFee("exitFees") && <li>Exit fees: {getFee("exitFees")}</li>}
+      </ul>
+    </Tooltip>
+  );
+  const hasFees = new BigNumber(totalFee).gt(0);
+
   return (
     <TableResponsive>
       <Table>
@@ -79,7 +123,9 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
+            {hasFees && (
+              <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
+            )}
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>
@@ -89,27 +135,7 @@ export const StrategyTableForInvestor = ({
         </TableHead>
         <TableBody>
           {strategies.map((item, i) => {
-            let entranceFees =
-              item.entranceFees !== undefined &&
-              item.entranceFees &&
-              parseFloat(item.entranceFees);
-            let swapInFees =
-              item.swapInFees !== undefined &&
-              item.swapInFees &&
-              parseFloat(item.swapInFees);
-            let swapOutFees =
-              item.swapOutFees !== undefined &&
-              item.swapOutFees &&
-              parseFloat(item.swapOutFees);
-            let totalFees =
-              typeof entranceFees === "number"
-                ? entranceFees
-                : 0 + typeof swapInFees === "number"
-                ? swapInFees
-                : 0 + typeof swapOutFees === "number"
-                ? swapOutFees
-                : 0;
-            console.log(totalFees);
+          
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>
@@ -118,63 +144,18 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                {totalFees > 0 ? (
+                {hasFees && (
                   <TableData style={{ textAlign: "center" }}>
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
                       overlay={
-                        <Tooltip id="button-tooltip" className="mytooltip">
-                          <p>
-                            This strategy requires swap and protocol fees as the
-                            following:
-                          </p>
-                          <ul
-                            style={{
-                              textAlign: "left",
-                            }}
-                          >
-                            <li>
-                              Swap in:{" "}
-                              {item.swapInFees !== undefined &&
-                              parseFloat(item.swapInFees) > 0
-                                ? item.swapInFees
-                                : 0}
-                              {"%"}
-                            </li>
-                            <li>
-                              Swap out:{" "}
-                              {item.swapOutFees !== undefined &&
-                              parseFloat(item.swapOutFees) > 0
-                                ? item.swapOutFees
-                                : 0}
-                              {"%"}
-                            </li>
-                            <li>
-                              Entrance fees:{" "}
-                              {item.entranceFees !== undefined &&
-                              parseFloat(item.entranceFees) > 0
-                                ? item.entranceFees
-                                : 0}
-                              {"%"}
-                            </li>
-                            <li>
-                              Exit fees:{" "}
-                              {item.exitFees !== undefined &&
-                              parseFloat(item.exitFees) > 0
-                                ? item.exitFees
-                                : 0}
-                              {"%"}
-                            </li>
-                          </ul>
-                        </Tooltip>
+                        renderTooltip
                       }
                     >
-                      <div>{totalFees}</div>
+                      <div>{totalFee}%</div>
                     </OverlayTrigger>
                   </TableData>
-                ) : (
-                  <TableData style={{ textAlign: "center" }}>-</TableData>
                 )}
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
