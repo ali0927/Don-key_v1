@@ -210,7 +210,7 @@ export const InvestmentPopup = ({
                   <Chip
                     size="medium"
                     className="mr-2"
-                    label={new BigNumber(item).dividedBy(10).toFixed(2)}
+                    label={`${new BigNumber(item).dividedBy(10).toFixed(2)}%`}
                     onClick={() => setSlippage(item)}
                     variant={slippage === item ? "default" : "outlined"}
                     color="primary"

@@ -156,9 +156,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
         {leaders.map((leader, index) => {
           return StrategyCard(leader, index);
         })}
-        <div className="col-lg-4 col-md-6 mb-3">
-          <ComingSoonFarmer timerDate={"June 2, 2021 11:00:00 UTC"} />
-        </div>
+
         {openInvestment && (
           <InvestmentPopup
             poolVersion={state.poolVersion}
