@@ -8,6 +8,7 @@ export const AccountChangeListener = () => {
     if (typeof window !== "undefined" && window.ethereum) {
       const handleLogin = async (accounts: any) => {
         // Time to reload your interface with accounts[0]!
+        localStorage.removeItem("tokenLogo");
         localStorage.removeItem(AuthToken);
         window.location.reload();
       };

@@ -1,4 +1,3 @@
-
 import { ErrorSnackbar } from "components/Snackbars";
 import { useWeb3 } from "don-components";
 import { useSnackbar } from "notistack";

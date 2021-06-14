@@ -135,7 +135,6 @@ export const StrategyTableForInvestor = ({
         </TableHead>
         <TableBody>
           {strategies.map((item, i) => {
-          
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>
@@ -149,9 +148,7 @@ export const StrategyTableForInvestor = ({
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
-                      overlay={
-                        renderTooltip
-                      }
+                      overlay={renderTooltip}
                     >
                       <div>{totalFee}%</div>
                     </OverlayTrigger>
