@@ -198,6 +198,13 @@ export const DetailTable = ({
   const [currentHoldings, setCurrentHoldings] = useState("0");
   const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
+  const [initialCheck, setInitialCheck] = useState(false);
+
+  useEffect(() => {
+    if (farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911") {
+      setInitialCheck(true);
+    }
+  }, [farmerId]);
 
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
@@ -216,6 +223,8 @@ export const DetailTable = ({
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
 
   const { isUSD, toggle } = useUSDViewBool();
+  console.log("here");
+  console.log(isUSD);
 
   useEffect(() => {
     async function apiCall() {
@@ -235,6 +244,11 @@ export const DetailTable = ({
   const onSuccess = () => {
     setShowWithdrawPopup(false);
     refresh();
+  };
+
+  const handleToggle = () => {
+    toggle();
+    setInitialCheck(!initialCheck);
   };
 
   const renderTooltip = (props: any) => (
@@ -328,7 +342,12 @@ export const DetailTable = ({
               </CardPoolAddress>
               <div className="d-flex align-items-center">
                 {symbol}
-                <YellowSwitch value={isUSD} onChange={toggle} /> USD
+                <YellowSwitch
+                  value={true}
+                  onChange={handleToggle}
+                  checked={initialCheck}
+                />{" "}
+                USD
               </div>
             </div>
           </CardInnerInfo>

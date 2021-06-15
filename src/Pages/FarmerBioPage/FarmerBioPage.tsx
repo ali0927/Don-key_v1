@@ -56,7 +56,15 @@ export const FarmerBioPage = withWeb3(() => {
   }
 
   return (
-    <USDViewProvider value={{ isUSD: isInUsd, toggle: toggleCurrency }}>
+    <USDViewProvider
+      value={{
+        isUSD:
+          farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911"
+            ? !isInUsd
+            : isInUsd,
+        toggle: toggleCurrency,
+      }}
+    >
       <RefreshProvider>
         <div style={{ background: "#F4F4F4" }}>
           <NavBar variant="loggedin" />
