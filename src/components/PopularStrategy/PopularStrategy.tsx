@@ -4,6 +4,7 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
 import disabledImage from "images/disabledImage.svg";
 import updatedversion from "images/updatedversion.svg";
+import newStrategy from "images/newStrategy.svg";
 import clsx from "clsx";
 import styled from "styled-components";
 import { OverlayTrigger, Container, Col } from "react-bootstrap";
@@ -78,6 +79,12 @@ const UpdatedVersion = styled.img`
   position: absolute;
 `;
 
+const NewStrategy = styled.img`
+  top: -10px;
+  right: 10px;
+  position: absolute;
+`;
+
 const Disabled = styled.img`
   top: -10px;
   right: 10px;
@@ -106,6 +113,7 @@ export const PopularStrategy = ({
   onCardClick,
   onButtonClick,
   showAllContent,
+  farmerId,
   onShowMoreClick,
   version,
   onShowLessClick,
@@ -118,6 +126,7 @@ export const PopularStrategy = ({
   totalValue?: string | React.ReactElement;
   contentTitle?: string;
   content?: string;
+  farmerId?: string;
   version?: number;
   strategyImage?: string;
   apy?: string;
@@ -178,7 +187,13 @@ export const PopularStrategy = ({
   return (
     <Papper>
       <PapperInner>
-        {version === 2 && <UpdatedVersion src={updatedversion} />}
+        {version === 2 ? (
+          farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911" ? (
+            <UpdatedVersion src={updatedversion} />
+          ) : (
+            <NewStrategy src={newStrategy} />
+          )
+        ) : null}
         {disabled && <Disabled src={disabledImage} />}
         <Container className="p-0">
           <TitleRow className="row">
@@ -255,7 +270,9 @@ export const PopularStrategy = ({
         {tokenImage && (
           <div className="mb-3 mt-2 d-flex align-items-center">
             Deposit in <TokenImage src={tokenImage} />{" "}
-            {tokenSymbol && <p className="font-weight-bold mb-0">{tokenSymbol}</p>}
+            {tokenSymbol && (
+              <p className="font-weight-bold mb-0">{tokenSymbol}</p>
+            )}
           </div>
         )}
         <h5 className="popularstrategy__content__title">{contentTitle}</h5>
