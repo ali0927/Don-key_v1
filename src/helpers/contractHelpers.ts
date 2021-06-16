@@ -206,6 +206,22 @@ export const calculateWithdrawAmount = async (
   }
 };
 
+export const calculateUserClaimableAmount = async (web3: Web3,
+  poolAddress: string
+) => {
+  const accounts = await web3.eth.getAccounts();
+  const poolContract = await getPoolContract(web3, poolAddress, 2);
+  try {
+    const claimableAmount = await poolContract.methods
+      .getInvestorClaimableAmount(accounts[0])
+      .call();
+
+    return web3.utils.fromWei(claimableAmount);
+  } catch (e) {
+    return "0";
+  }
+}; 
+
 export const calculateInitialInvestment = async (
   web3: Web3,
   poolAddress: string
