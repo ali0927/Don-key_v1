@@ -295,38 +295,40 @@ export const DetailTable = ({
     <>
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
-          <CardInnerInfo className="d-flex justify-content-center mb-2">
-            <div className="d-flex flex-column align-items-center">
-              <div className="d-flex align-items-baseline">
-                <TotalPoolValueLabel color="black">
-                  {" "}
-                  Total Pool Value
-                </TotalPoolValueLabel>
-                <a
-                  href={"https://bscscan.com/address/" + poolAddress}
-                  target="_blank"
-                  className="ml-2"
-                >
-                  <LinkIcon />
-                </a>
+          <div style={{ marginTop: 53 }}>
+            <CardInnerInfo className="d-flex justify-content-center mb-2">
+              <div className="d-flex flex-column align-items-center">
+                <div className="d-flex align-items-baseline">
+                  <TotalPoolValueLabel color="black">
+                    {" "}
+                    Total Pool Value
+                  </TotalPoolValueLabel>
+                  <a
+                    href={"https://bscscan.com/address/" + poolAddress}
+                    target="_blank"
+                    className="ml-2"
+                  >
+                    <LinkIcon />
+                  </a>
+                </div>
+                <CardPoolAddress>
+                  <DollarView
+                    poolAddress={poolAddress}
+                    tokenAmount={totalPoolValue}
+                  />
+                </CardPoolAddress>
+                <div className="d-flex align-items-center">
+                  {symbol}
+                  <YellowSwitch
+                    value={true}
+                    onChange={handleToggle}
+                    checked={initialCheck}
+                  />{" "}
+                  USD
+                </div>
               </div>
-              <CardPoolAddress>
-                <DollarView
-                  poolAddress={poolAddress}
-                  tokenAmount={totalPoolValue}
-                />
-              </CardPoolAddress>
-              <div className="d-flex align-items-center">
-                {symbol}
-                <YellowSwitch
-                  value={true}
-                  onChange={handleToggle}
-                  checked={initialCheck}
-                />{" "}
-                USD
-              </div>
-            </div>
-          </CardInnerInfo>
+            </CardInnerInfo>
+          </div>
           <FirstCardRow className="row mt-3">
             {getFirstCardcolumns(
               "APY",
