@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { useWeb3 } from "don-components";
-import { calculateWithdrawAmount, getPoolContract } from "helpers";
+import { calculateUserClaimableAmount, calculateWithdrawAmount, getPoolContract } from "helpers";
 import { useState } from "react";
 import { useAxios } from "./useAxios";
 import { useIsomorphicEffect } from "./useIsomorphicEffect";
@@ -27,7 +27,7 @@ export const useWithdraw = () => {
       const accounts = await web3.eth.getAccounts();
 
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
-      const minAmountOut = await calculateWithdrawAmount(web3, poolAddress);
+      const minAmountOut = await calculateUserClaimableAmount(web3, poolAddress);
       showProgress("Withdrawal is in Progress");
       if (poolVersion === 1) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
