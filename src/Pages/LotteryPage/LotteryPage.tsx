@@ -13,7 +13,8 @@ export const LotteryPage: React.FC = () => {
         timerDate={LotteryStartTime}
         closingTime={LotteryClosingTime}
       />
-      <CatchLuckSection />
+      {/* <CatchLuckSection /> */}
+      <div style={{ minHeight: 100, backgroundColor: "#FFEF37" }}></div>
       <HexagonSection />
 
       <DescriptionSection />

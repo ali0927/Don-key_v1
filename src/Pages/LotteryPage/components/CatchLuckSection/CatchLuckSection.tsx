@@ -5,7 +5,7 @@ import { theme } from "theme";
 
 const Root = styled.div`
   min-height: 250px;
-  background:${theme.palette.background.yellow};
+  background: ${theme.palette.background.yellow};
 `;
 
 const Heading = styled.p`
@@ -28,19 +28,18 @@ const Heading = styled.p`
 //   text-align: left;
 // `;
 
-
-
 export const CatchLuckSection: React.FC = () => {
   return (
     <>
       <Root>
         <Container>
-          <Heading> New lottery coming soon for the next batch of super star farmers </Heading>
+          <Heading>
+            {" "}
+            New lottery coming soon for the next batch of super star farmers{" "}
+          </Heading>
           {/* <SubHeading>
           Follow our best farmers and gain passive
           </SubHeading> */}
-
-        
         </Container>
       </Root>
     </>

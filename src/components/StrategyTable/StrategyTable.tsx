@@ -17,6 +17,7 @@ import BigNumber from "bignumber.js";
 import { DollarView } from "Pages/FarmerBioPage/DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { InfoIcon } from "icons/InfoIcon";
 
 const formatDate = (
   date: string | null | undefined,
@@ -95,6 +96,19 @@ export const StrategyTableForInvestor = ({
     return sum || 0;
   }, [strategies]);
 
+  const renderTooltipGeneralFees = (props: any) => (
+    <Tooltip id="button-tooltip" {...props} className="mytooltip">
+      <strong>Farmer performance fee: 10%</strong>
+      <br />{" "}
+      <strong>
+        Don-key Performance fee: 5%
+        <br />
+      </strong>{" "}
+      Some protocols may have additional deposit fees, for more information see
+      fees in the strategy table below
+    </Tooltip>
+  );
+
   const renderTooltip = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
       <p>This strategy requires swap and protocol fees as the following:</p>
@@ -143,16 +157,43 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                {hasFees && (
+                {hasFees ? (
                   <TableData style={{ textAlign: "center" }}>
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={renderTooltip}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        justifyContent: "center",
+                      }}
                     >
-                      <div>{totalFee}%</div>
-                    </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltip}
+                      >
+                        <div>{totalFee}%</div>
+                      </OverlayTrigger>
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={renderTooltipGeneralFees}
+                      >
+                        <div style={{ textAlign: "right", padding: 10 }}>
+                          <InfoIcon />
+                        </div>
+                      </OverlayTrigger>
+                    </div>
                   </TableData>
+                ) : (
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipGeneralFees}
+                  >
+                    <div style={{ textAlign: "right", padding: 10 }}>
+                      <InfoIcon />
+                    </div>
+                  </OverlayTrigger>
                 )}
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}

@@ -1,6 +1,5 @@
 //eslint-disable
 import { useEffect } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled from "styled-components";
 import { useState } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
@@ -21,7 +20,6 @@ import {
 } from "icons";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useDominance } from "./useDominance";
-import { InfoIcon } from "icons/InfoIcon";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import BigNumber from "bignumber.js";
 
@@ -251,19 +249,6 @@ export const DetailTable = ({
     setInitialCheck(!initialCheck);
   };
 
-  const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props} className="mytooltip">
-      <strong>Farmer performance fee: 10%</strong>
-      <br />{" "}
-      <strong>
-        Don-key Performance fee: 5%
-        <br />
-      </strong>{" "}
-      Some protocols may have additional deposit fees, for more information see
-      fees in the strategy table below
-    </Tooltip>
-  );
-
   const getFirstCardcolumns = (
     label: string,
     value: string | number | React.ReactNode,
@@ -310,15 +295,6 @@ export const DetailTable = ({
     <>
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
-          <OverlayTrigger
-            placement="right"
-            delay={{ show: 250, hide: 400 }}
-            overlay={renderTooltip}
-          >
-            <div style={{ textAlign: "right", padding: 10 }}>
-              <InfoIcon />
-            </div>
-          </OverlayTrigger>
           <CardInnerInfo className="d-flex justify-content-center mb-2">
             <div className="d-flex flex-column align-items-center">
               <div className="d-flex align-items-baseline">
