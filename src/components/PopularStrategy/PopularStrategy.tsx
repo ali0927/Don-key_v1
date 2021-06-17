@@ -2,6 +2,11 @@
 import "./popularstrategy.scss";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import comingsoon from "images/comingsoon.svg";
+import low from "images/low.svg";
+import lowmedium from "images/lowmedium.svg";
+import medium from "images/medium.svg";
+import mediumhigh from "images/mediumhigh.svg";
+import high from "images/high.svg";
 import disabledImage from "images/disabledImage.svg";
 import updatedversion from "images/updatedversion.svg";
 import newStrategy from "images/newStrategy.svg";
@@ -110,6 +115,7 @@ export const PopularStrategy = ({
   icon = <StratIcon text="SA" showDot />,
   investers,
   disabled,
+  risk,
   onCardClick,
   onButtonClick,
   showAllContent,
@@ -132,6 +138,7 @@ export const PopularStrategy = ({
   apy?: string;
   telegram?: string | null;
   twitter?: string | null;
+  risk?: string | null;
   comingsoon?: boolean;
   getTokenImage?: () => Promise<string>;
   getTokenSymbol?: () => Promise<string>;
@@ -262,10 +269,16 @@ export const PopularStrategy = ({
             <p className="mb-0">Total Value</p>
             <h5>{totalValue}</h5>
           </div>
-          <div className="text-right">
-            <p className="mb-0">APY</p>
-            <h5 className="primary-text">{apy}</h5>
+
+          <div className="text-right" style={{ minHeight: 80 }}>
+            {risk && (
+              <img src={low} alt="ImageNotFound" style={{ fill: "green" }} />
+            )}
           </div>
+        </div>
+        <div style={{ marginTop: -22 }}>
+          <p className="mb-0">APY</p>
+          <h5 className="primary-text">{apy}</h5>
         </div>
         {tokenImage && (
           <div className="mb-3 mt-2 d-flex align-items-center">

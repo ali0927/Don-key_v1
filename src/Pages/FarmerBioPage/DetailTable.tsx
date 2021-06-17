@@ -28,6 +28,7 @@ import { DollarView } from "./DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -221,8 +222,6 @@ export const DetailTable = ({
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
 
   const { isUSD, toggle } = useUSDViewBool();
-  console.log("here");
-  console.log(isUSD);
 
   useEffect(() => {
     async function apiCall() {
@@ -256,7 +255,7 @@ export const DetailTable = ({
     icon: React.ReactNode
   ) => {
     return (
-      <Columns className="col-md-3 d-flex justify-content-center">
+      <Columns className="col-md-4 d-flex justify-content-center">
         <div className="d-flex flex-column align-items-center justify-content-between">
           <ColumnsTitle
             className="d-flex align-items-center justify-content-center w-100"
@@ -280,7 +279,32 @@ export const DetailTable = ({
     value: string | React.ReactNode,
     color: "black" | "white"
   ) => {
-    return (
+    return label === "Profit/Loss" ? (
+      <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
+        <OverlayTrigger
+          placement="right"
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip id="button-tooltip" className="mytooltip">
+              {value}
+            </Tooltip>
+          }
+        >
+          <div
+            style={{
+              textAlign: "right",
+              paddingLeft: 10,
+            }}
+          >
+            <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
+              {" "}
+              {label}
+            </ColumnsTitle1>
+            <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
+          </div>
+        </OverlayTrigger>
+      </Columns>
+    ) : (
       <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
         <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
           {" "}
@@ -338,14 +362,14 @@ export const DetailTable = ({
                 <StatisticIcon />
               </div>
             )}
-            {getFirstCardcolumns(
+            {/* {getFirstCardcolumns(
               "ROI",
               "---",
               "black",
               <div className="mr-2">
                 <StatisticRoi />
               </div>
-            )}
+            )} */}
             {getFirstCardcolumns(
               "Followers",
               <InvestorCount

@@ -87,6 +87,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           comingsoon={leader.status === "comingsoon"}
           twitter={leader.twitter ? leader.twitter : null}
           telegram={leader.telegram}
+          risk={leader.risk}
           strategyImage={leader.strategyImage}
           disabled={leader.name === "Don - vfat" ? true : false}
           content={leader.description}

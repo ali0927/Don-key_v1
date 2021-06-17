@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "components/Table";
 import moment from "moment";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { IStrategy } from "interfaces";
 import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
 import { useWeb3 } from "don-components";
@@ -96,37 +96,39 @@ export const StrategyTableForInvestor = ({
     return sum || 0;
   }, [strategies]);
 
-  const renderTooltipGeneralFees = (props: any) => (
+  const hasFees = new BigNumber(totalFee).gt(0);
+
+  const renderTooltipFees = (props: any) => (
     <Tooltip id="button-tooltip" {...props} className="mytooltip">
+      {hasFees && (
+        <React.Fragment>
+          <p>This strategy requires swap and protocol fees as the following:</p>
+          <ul
+            style={{
+              textAlign: "left",
+            }}
+          >
+            {getFee("swapInFees") && <li>Swap in: {getFee("swapInFees")}</li>}
+            {getFee("swapOutFees") && (
+              <li>Swap out: {getFee("swapOutFees")}</li>
+            )}
+            {getFee("entranceFees") && (
+              <li>Entrance fees: {getFee("entranceFees")}</li>
+            )}
+            {getFee("exitFees") && <li>Exit fees: {getFee("exitFees")}</li>}
+          </ul>
+          In addition:
+          <br />
+        </React.Fragment>
+      )}
       <strong>Farmer performance fee: 10%</strong>
       <br />{" "}
       <strong>
         Don-key Performance fee: 5%
         <br />
       </strong>{" "}
-      Some protocols may have additional deposit fees, for more information see
-      fees in the strategy table below
     </Tooltip>
   );
-
-  const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props} className="mytooltip">
-      <p>This strategy requires swap and protocol fees as the following:</p>
-      <ul
-        style={{
-          textAlign: "left",
-        }}
-      >
-        {getFee("swapInFees") && <li>Swap in: {getFee("swapInFees")}</li>}
-        {getFee("swapOutFees") && <li>Swap out: {getFee("swapOutFees")}</li>}
-        {getFee("entranceFees") && (
-          <li>Entrance fees: {getFee("entranceFees")}</li>
-        )}
-        {getFee("exitFees") && <li>Exit fees: {getFee("exitFees")}</li>}
-      </ul>
-    </Tooltip>
-  );
-  const hasFees = new BigNumber(totalFee).gt(0);
 
   return (
     <TableResponsive>
@@ -137,9 +139,31 @@ export const StrategyTableForInvestor = ({
             <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
             {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
             <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            {hasFees && (
-              <TableHeading style={{ textAlign: "center" }}>Fees</TableHeading>
-            )}
+            <TableHeading style={{ textAlign: "center" }}>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "baseline",
+                  justifyContent: "center",
+                }}
+              >
+                Fees
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltipFees}
+                >
+                  <div
+                    style={{
+                      textAlign: "right",
+                      paddingLeft: 10,
+                    }}
+                  >
+                    <InfoIcon />
+                  </div>
+                </OverlayTrigger>
+              </div>
+            </TableHeading>
             <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
             <TableHeading style={{ textAlign: "center" }}>
@@ -157,44 +181,9 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
-                {hasFees ? (
-                  <TableData style={{ textAlign: "center" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "baseline",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltip}
-                      >
-                        <div>{totalFee}%</div>
-                      </OverlayTrigger>
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={renderTooltipGeneralFees}
-                      >
-                        <div style={{ textAlign: "right", padding: 10 }}>
-                          <InfoIcon />
-                        </div>
-                      </OverlayTrigger>
-                    </div>
-                  </TableData>
-                ) : (
-                  <OverlayTrigger
-                    placement="right"
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={renderTooltipGeneralFees}
-                  >
-                    <div style={{ textAlign: "right", padding: 10 }}>
-                      <InfoIcon />
-                    </div>
-                  </OverlayTrigger>
-                )}
+                <TableData style={{ textAlign: "center" }}>
+                  {totalFee}%
+                </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
                 </TableData>

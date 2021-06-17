@@ -8,6 +8,7 @@ export type IFarmer = {
   pool_version: number;
   profit24hours: string | null;
   twitter?: string | null;
+  risk?: string | null;
   telegram?: string | null;
   profit7days: string | null;
   profit: string | null;
