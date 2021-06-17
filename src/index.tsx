@@ -8,7 +8,7 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { Providers } from "Providers";
 
-if (process.env.NODE_ENV === "production") {
+if (process.env.REACT_APP_ENV === "production") {
   Sentry.init({
     dsn: "https://a02e8e703bab44d39b5cb4323ebce3ed@o571223.ingest.sentry.io/5719005",
     integrations: [new Integrations.BrowserTracing()],
