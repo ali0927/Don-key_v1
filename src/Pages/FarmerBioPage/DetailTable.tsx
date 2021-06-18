@@ -288,7 +288,11 @@ export const DetailTable = ({
           delay={{ show: 250, hide: 400 }}
           overlay={
             <Tooltip id="button-tooltip" className="mytooltip">
-              {formatted} {symbol}
+              <TotalProfitLoss
+                refresh={dependsOn % 2 == 0}
+                poolAddress={poolAddress}
+                fromOverlay={true}
+              />
             </Tooltip>
           }
         >

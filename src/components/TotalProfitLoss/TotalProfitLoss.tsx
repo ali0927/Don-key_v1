@@ -14,9 +14,11 @@ import { useUSDViewBool } from "contexts/USDViewContext";
 export const TotalProfitLoss = ({
   poolAddress,
   refresh = false,
+  fromOverlay,
 }: {
   poolAddress: string;
   refresh?: boolean;
+  fromOverlay?: boolean;
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
   const { symbol } = usePoolSymbol(poolAddress);
@@ -35,13 +37,15 @@ export const TotalProfitLoss = ({
           web3,
           poolAddress
         );
-        const digits = process.env.REACT_APP_ENV === "development" ? 6: 2
+        const digits =
+          process.env.REACT_APP_ENV === "development" || fromOverlay ? 6 : 2;
         if (!isUSD) {
           setTotalProfitLoss(
             new BigNumber(amountWithdraw).minus(amountInitial).toFixed(digits)
           );
         } else {
-          const tokenPrice = await getTokenPrice(web3,
+          const tokenPrice = await getTokenPrice(
+            web3,
             await getTokenAddress(web3, poolAddress)
           );
           setTotalProfitLoss(
@@ -57,8 +61,8 @@ export const TotalProfitLoss = ({
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh, isUSD]);
-  if(isUSD){
-    return <>${totalProfitLoss}</>
+  if (isUSD) {
+    return <>${totalProfitLoss}</>;
   }
   return (
     <>
