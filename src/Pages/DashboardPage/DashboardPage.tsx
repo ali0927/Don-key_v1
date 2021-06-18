@@ -192,6 +192,7 @@ export const DashboardPage = () => {
           profit: item.profit || "-",
           descriptionTitle: item.descriptionTitle,
           risk: item.risk,
+          riskDescription: item.riskDescription,
           status: item.status,
           apy: item.strategy.apy,
           strategyImage: item.strategy.strategyImage,

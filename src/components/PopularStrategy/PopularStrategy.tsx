@@ -12,7 +12,7 @@ import updatedversion from "images/updatedversion.svg";
 import newStrategy from "images/newStrategy.svg";
 import clsx from "clsx";
 import styled from "styled-components";
-import { OverlayTrigger, Container, Col } from "react-bootstrap";
+import { OverlayTrigger, Container, Col, Tooltip } from "react-bootstrap";
 import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
@@ -116,6 +116,7 @@ export const PopularStrategy = ({
   investers,
   disabled,
   risk,
+  riskDescription,
   onCardClick,
   onButtonClick,
   showAllContent,
@@ -139,6 +140,7 @@ export const PopularStrategy = ({
   telegram?: string | null;
   twitter?: string | null;
   risk?: string | null;
+  riskDescription?: string | null;
   comingsoon?: boolean;
   getTokenImage?: () => Promise<string>;
   getTokenSymbol?: () => Promise<string>;
@@ -178,6 +180,8 @@ export const PopularStrategy = ({
   const [riskImage, setRiskImage] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
   const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
+  const [riskDescriptionFinal, setRiskDescriptionFinal] =
+    useState<string[] | null>(null);
   useIsomorphicEffect(() => {
     if (getTokenImage) {
       (async () => {
@@ -192,6 +196,12 @@ export const PopularStrategy = ({
       })();
     }
   }, [getTokenImage, getTokenSymbol]);
+
+  useEffect(() => {
+    if (riskDescription) {
+      setRiskDescriptionFinal(riskDescription.split("*"));
+    }
+  }, [riskDescription]);
 
   useEffect(() => {
     if (risk) {
@@ -298,11 +308,29 @@ export const PopularStrategy = ({
 
           <div className="text-right" style={{ minHeight: 80 }}>
             {riskImage && (
-              <img
-                src={riskImage}
-                alt="ImageNotFound"
-                style={{ fill: "green" }}
-              />
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 400 }}
+                overlay={
+                  <Tooltip id="button-tooltip" className="mytooltip">
+                    {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
+                    <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
+                  </Tooltip>
+                }
+              >
+                <div
+                  style={{
+                    textAlign: "right",
+                    paddingLeft: 10,
+                  }}
+                >
+                  <img
+                    src={riskImage}
+                    alt="ImageNotFound"
+                    style={{ fill: "green" }}
+                  />
+                </div>
+              </OverlayTrigger>
             )}
           </div>
         </div>

@@ -279,6 +279,8 @@ export const DetailTable = ({
     value: string | React.ReactNode,
     color: "black" | "white"
   ) => {
+    const wrappedNum = new BigNumber(initialInvestmentInUSD);
+    const formatted = wrappedNum.toFixed(6);
     return label === "Profit/Loss" ? (
       <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
         <OverlayTrigger
@@ -286,7 +288,7 @@ export const DetailTable = ({
           delay={{ show: 250, hide: 400 }}
           overlay={
             <Tooltip id="button-tooltip" className="mytooltip">
-              {value}
+              {formatted} {symbol}
             </Tooltip>
           }
         >

@@ -9,6 +9,7 @@ export type IFarmer = {
   profit24hours: string | null;
   twitter?: string | null;
   risk?: string | null;
+  riskDescription?: string | null;
   telegram?: string | null;
   profit7days: string | null;
   profit: string | null;
