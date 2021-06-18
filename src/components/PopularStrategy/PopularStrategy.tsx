@@ -175,6 +175,7 @@ export const PopularStrategy = ({
     </h5>
   );
 
+  const [riskImage, setRiskImage] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
   const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
   useIsomorphicEffect(() => {
@@ -191,11 +192,36 @@ export const PopularStrategy = ({
       })();
     }
   }, [getTokenImage, getTokenSymbol]);
+
+  useEffect(() => {
+    if (risk) {
+      switch (risk) {
+        case "low":
+          setRiskImage(low);
+          break;
+        case "lowmedium":
+          setRiskImage(lowmedium);
+          break;
+        case "medium":
+          setRiskImage(medium);
+          break;
+        case "mediumhigh":
+          setRiskImage(mediumhigh);
+          break;
+        case "high":
+          setRiskImage(high);
+          break;
+        default:
+      }
+    }
+  }, [risk]);
+
   return (
     <Papper>
       <PapperInner>
         {version === 2 ? (
-          farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911" ? (
+          farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911" ||
+          farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f904" ? (
             <UpdatedVersion src={updatedversion} />
           ) : (
             <NewStrategy src={newStrategy} />
@@ -271,8 +297,12 @@ export const PopularStrategy = ({
           </div>
 
           <div className="text-right" style={{ minHeight: 80 }}>
-            {risk && (
-              <img src={low} alt="ImageNotFound" style={{ fill: "green" }} />
+            {riskImage && (
+              <img
+                src={riskImage}
+                alt="ImageNotFound"
+                style={{ fill: "green" }}
+              />
             )}
           </div>
         </div>
