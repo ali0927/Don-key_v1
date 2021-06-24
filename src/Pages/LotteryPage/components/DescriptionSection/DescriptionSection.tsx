@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
@@ -12,7 +11,7 @@ const Root = styled.div`
 const DescriptionBlock = styled.div`
   width: 100%;
   min-height: 380px;
-  background:${theme.palette.background.yellow};
+  background: ${theme.palette.background.yellow};
   border-radius: 5px;
 `;
 
@@ -85,19 +84,25 @@ export const DescriptionSection: React.FC = () => {
                 </ImageIconWrraper>
               </OvalWrapper>
               <ContentWrapper>
-                <DescriptionTitle>How it works</DescriptionTitle>
+                <DescriptionTitle>
+                  Beta DAPP Is Now Live For Whitelisted Users
+                </DescriptionTitle>
                 <Content
                   className="p-5"
                   style={{ lineHeight: "132%", fontSize: 20 }}
                 >
-                  Don-key will open its DAPP with a group of some of the best
-                  yield farmers and their strategies. 600 happy Don-key holders,
-                  will be able to enter, explore and follow the farmers and
-                  their strategies gaining access to passive yield and
-                  accelerated $DON token airdrops. Participating in the lottery
-                  requires staking $DON tokens in the upcoming lottery pool. The
-                  more $DON tokens you stake, the more lottery tickets you get,
-                  and higher chance of following Don-key's farmers.
+                  Don-key has officially opened its DAPP to 600 happy Don-key
+                  holders. Through our intuitive user interface, they are now
+                  able to copy-farm some of DeFi’s most talented yield farmers,
+                  gaining access to their strategies, as well as substantive APY
+                  in the token of their choice.
+                  <br />
+                  <br />
+                  While users explore and test the DAPP, our developers are
+                  iterating towards Don-key’s public launch in the beginning of
+                  Q3. Behind the scenes, the team is working tirelessly to
+                  construct an innovative new platform that will bring the
+                  utility of DeFi yield farming to the masses.
                 </Content>
                 {/* <div className="d-flex justify-content-center">
                 <CallToAction>Call To Action</CallToAction>

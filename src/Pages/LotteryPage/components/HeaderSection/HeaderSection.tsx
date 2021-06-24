@@ -29,8 +29,6 @@ const MainHeading = styled.p`
   text-transform: uppercase;
 `;
 
-
-
 export const HeaderSection: React.FC<{
   timerDate: string;
   closingTime: string;
@@ -72,7 +70,7 @@ export const HeaderSection: React.FC<{
               {/* <LaunchingSoon>LAUNCHED SOON</LaunchingSoon> */}
               <MainHeading>
                 {hasEnded
-                  ? "Lets get this Don-key on the road! we have made a snapshot and will announce the winners directly via email."
+                  ? "Don-key’s intuitive interface and one-click copy farming makes yield farming so easy, even a Donkey can do it."
                   : "Whitelist lottery is now open, lottery closes in"}
               </MainHeading>
 
