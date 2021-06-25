@@ -1,13 +1,16 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { NavBar } from "components/Navbar/NavBar";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
 import "./InvestmentsPage.scss";
 import { useAxios } from "hooks/useAxios";
 import { IMyInvestments } from "./interfaces/IMyInvestments";
+import { USDViewProvider } from "contexts/USDViewContext";
+import { Switch, withStyles } from "@material-ui/core";
+import { yellow } from "@material-ui/core/colors";
 import { useNotification } from "components/Notification";
 import styled from "styled-components";
 import {
@@ -24,13 +27,19 @@ import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInitialInvestment, MyInvestment } from "components/MyInvestment";
-import { getPoolContract } from "helpers";
+import {
+  getPoolContract,
+  calculateInitialInvestment,
+  calculateInitialInvestmentInUSD,
+} from "helpers";
 import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
-
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
 import { IFarmer } from "interfaces";
+import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
+import { useRefresh } from "components/LotteryForm/useRefresh";
+import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -102,13 +111,30 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
+const YellowSwitch = withStyles({
+  switchBase: {
+    color: yellow[300],
+    "&$checked": {
+      color: yellow[500],
+    },
+    "&$checked + $track": {
+      backgroundColor: yellow[500],
+    },
+  },
+  checked: {},
+  track: {
+    backgroundColor: "#d9d9d9",
+  },
+})(Switch);
+
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
-
+  const [poolAddresses, setPoolAddresses] = useState<any>([]);
+  const [myInvestments, setMyInvestments] = useState<IFarmer[]>([]);
+  const [initialCheck, setInitialCheck] = useState(true);
+  const [isInUsd, setIsInUsd] = useState(true);
   const history = useHistory();
-
   const [loading, setLoading] = useState(true);
-
   const [{ data }] = useAxios("/api/v2/farmer");
 
   const farmers: IFarmer[] = useMemo(() => {
@@ -137,7 +163,6 @@ export const InvestmentsPage = () => {
     }
     return [];
   }, [data]);
-  const [myInvestments, setMyInvestments] = useState<IFarmer[]>([]);
 
   const [withDraw, setWidthDraw] = useState({
     open: false,
@@ -154,8 +179,14 @@ export const InvestmentsPage = () => {
     setRefresh((old) => !old);
   };
 
+  const handleToggle = () => {
+    toggleCurrency();
+    setInitialCheck(!initialCheck);
+  };
+
   useEffect(() => {
     if (farmers.length > 0) {
+      let arr: any = [];
       const CalInvestments = async () => {
         const finalInvestments: IFarmer[] = [];
         for (let invest of farmers) {
@@ -166,18 +197,49 @@ export const InvestmentsPage = () => {
               .isInvestor(accounts[0])
               .call();
             if (isInvested) {
+              const amounts = [
+                calculateInitialInvestmentInUSD(web3, invest.poolAddress),
+              ];
+              const results = await Promise.all(amounts);
+
+              arr.push({
+                name: invest.name,
+                poolAddress: invest.poolAddress,
+                initialInvestmentinUSD: results[0],
+              });
               finalInvestments.push(invest);
             }
           } catch (e) {
             console.error(e);
           }
         }
+        setPoolAddresses(arr);
         setLoading(false);
         setMyInvestments(finalInvestments);
       };
       CalInvestments();
     }
-  }, [farmers,refresh]);
+  }, [farmers, refresh]);
+
+  // useEffect(() => {
+  //   if (myInvestments.length > 0) {
+  //     let arr: any = [];
+  //     myInvestments.map(async (investment) => {
+  //       const amounts = [
+  //         calculateInitialInvestment(web3, investment.poolAddress),
+  //         calculateInitialInvestmentInUSD(web3, investment.poolAddress),
+  //       ];
+  //       const results = await Promise.all(amounts);
+
+  //       arr.push({
+  //         name: investment.name,
+  //         poolAddress: investment.poolAddress,
+  //         initialInvestmentinUSD: results[1],
+  //       });
+  //     });
+  //     setPoolAddresses(arr);
+  //   }
+  // }, [myInvestments]);
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();
@@ -235,132 +297,170 @@ export const InvestmentsPage = () => {
     history.push("/dashboard/farmer/" + poolAddress);
   };
 
+  const toggleCurrency = useCallback(() => {
+    setIsInUsd((val) => !val);
+  }, []);
+
   return (
-    <div className="bgColor investment_header_container">
-      <NavBar variant="loggedin" />
-      <Section>
-        <Head className="navbanHead rounded-0 pt-5 pb-5">
-          <Container>
-            <Row>
-              <Col lg={12}>
-                <HeadingTitle>My Investments</HeadingTitle>
-              </Col>
-            </Row>
-          </Container>
-        </Head>
-      </Section>
-      <GridBackground className="py-5">
-        <div className="mt-5 mb-5 tablebgHead">
-          <Container>
-            {loading && (
-              <>
-                <AnimationDiv className="d-flex align-items-center justify-content-center">
-                  <Spinner animation="border" />
-                </AnimationDiv>
-              </>
-            )}
-            {!loading && myInvestments.length > 0 && (
-              <TableResponsive>
-                <Table>
-                  <TableHead>
-                    <TableRow isHoverOnRow={false}>
-                      <CustomTableHeading className="py-4">
-                        #
-                      </CustomTableHeading>
-                      <EmptyTableHeading></EmptyTableHeading>
-                      <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                      <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
-                      <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                      <CustomTableHeading>ACTION</CustomTableHeading>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {myInvestments.map((investment, index) => {
-                      return (
-                        <TableRow key={index}>
-                          <CustomTableData>{index + 1}</CustomTableData>
-                          <CustomTableData>
-                            <StyledImage src={investment.picture} />
-                          </CustomTableData>
-                          <CustomTableData
-                            cursor="pointer"
-                            onClick={RedirectToFarmerProfile(investment.GUID)}
-                            className="font-weight-bold"
-                          >
-                            {investment.name}
-                          </CustomTableData>
-
-                          <CustomTableData>
-                            <MyInitialInvestment
-                              poolAddress={investment.poolAddress}
-                            />
-                          </CustomTableData>
-                          <CustomTableData className="bold">
-                            <TotalProfitLoss
-                              refresh={refresh}
-                              poolAddress={investment.poolAddress}
-                            />
-                          </CustomTableData>
-                          <CustomTableData className="investment_table_btn">
-                            <WithDrawButton
-                              onClick={handleOpenWithDraw(
-                                investment.name,
-                                investment.poolAddress,
-                                investment.pool_version
-                                  ? investment.pool_version
-                                  : 1
-                              )}
-                            >
-                              Withdraw
-                            </WithDrawButton>
-                          </CustomTableData>
+    <USDViewProvider
+      value={{
+        isUSD: isInUsd,
+        toggle: toggleCurrency,
+      }}
+    >
+      <div className="bgColor investment_header_container">
+        <NavBar variant="loggedin" />
+        <Section>
+          <Head className="navbanHead rounded-0 pt-5 pb-5">
+            <Container>
+              <Row>
+                <Col lg={12}>
+                  <HeadingTitle>My Investments</HeadingTitle>
+                </Col>
+              </Row>
+            </Container>
+          </Head>
+        </Section>
+        <GridBackground className="py-5">
+          <div className="mt-5 mb-5 tablebgHead">
+            <Container>
+              {loading && (
+                <>
+                  <AnimationDiv className="d-flex align-items-center justify-content-center">
+                    <Spinner animation="border" />
+                  </AnimationDiv>
+                </>
+              )}
+              {!loading && myInvestments.length > 0 && (
+                <>
+                  <div className="d-flex align-items-center">
+                    {"Base Token"}
+                    <YellowSwitch
+                      value={true}
+                      onChange={handleToggle}
+                      checked={initialCheck}
+                    />{" "}
+                    USD
+                  </div>
+                  <TableResponsive>
+                    <Table>
+                      <TableHead>
+                        <TableRow isHoverOnRow={false}>
+                          <CustomTableHeading className="py-4">
+                            #
+                          </CustomTableHeading>
+                          <EmptyTableHeading></EmptyTableHeading>
+                          <CustomTableHeading>FARMER NAME</CustomTableHeading>
+                          <CustomTableHeading>
+                            INVESTED AMOUNT
+                          </CustomTableHeading>
+                          <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                          <CustomTableHeading>ACTION</CustomTableHeading>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableResponsive>
-            )}
+                      </TableHead>
+                      <TableBody>
+                        {myInvestments.map((investment, index) => {
+                          let poolAddressFinal = poolAddresses.find(
+                            (item: any) => {
+                              return investment.name === item.name;
+                            }
+                          );
+                          let initialInvestmentinUSD =
+                            poolAddressFinal.initialInvestmentinUSD;
 
-            {!loading && myInvestments.length === 0 && (
-              <>
-                <ZeroInvestmentBox>
-                  <ZeroInvestmentInnerBox>
-                    <ZeroInvestmentContent>
-                      You’re not following any farmers
-                    </ZeroInvestmentContent>
-                    <CenteredBox className="mb-5">
-                      <ButtonWidget
-                        className="mt-4"
-                        varaint="contained"
-                        containedVariantColor="black"
-                        height="50px"
-                        width="210px"
-                        onClick={handleFindFarmers}
-                      >
-                        Explore Farmers
-                      </ButtonWidget>
-                    </CenteredBox>
-                  </ZeroInvestmentInnerBox>
-                </ZeroInvestmentBox>
-              </>
-            )}
-          </Container>
-        </div>
-      </GridBackground>
-      <Footer />
-      {withDraw.open && (
-        <WithDrawPopup
-          open={withDraw.open}
-          poolVersion={withDraw.pool_version}
-          poolAddress={withDraw.poolAddress}
-          onSuccess={() => {
-            handleSuccess(withDraw.farmerName);
-          }}
-          onError={handleError}
-          onClose={handleCloseWithDraw}
-        />
-      )}
-    </div>
+                          return (
+                            <TableRow key={index}>
+                              <CustomTableData>{index + 1}</CustomTableData>
+                              <CustomTableData>
+                                <StyledImage src={investment.picture} />
+                              </CustomTableData>
+                              <CustomTableData
+                                cursor="pointer"
+                                onClick={RedirectToFarmerProfile(
+                                  investment.GUID
+                                )}
+                                className="font-weight-bold"
+                              >
+                                {investment.name}
+                              </CustomTableData>
+
+                              <CustomTableData>
+                                {isInUsd && !!poolAddressFinal ? (
+                                  `$${formatNum(initialInvestmentinUSD)}`
+                                ) : (
+                                  <MyInitialInvestment
+                                    poolAddress={investment.poolAddress}
+                                  />
+                                )}
+                              </CustomTableData>
+                              <CustomTableData className="bold">
+                                <TotalProfitLoss
+                                  refresh={refresh}
+                                  poolAddress={investment.poolAddress}
+                                />
+                              </CustomTableData>
+                              <CustomTableData className="investment_table_btn">
+                                <WithDrawButton
+                                  onClick={handleOpenWithDraw(
+                                    investment.name,
+                                    investment.poolAddress,
+                                    investment.pool_version
+                                      ? investment.pool_version
+                                      : 1
+                                  )}
+                                >
+                                  Withdraw
+                                </WithDrawButton>
+                              </CustomTableData>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableResponsive>
+                </>
+              )}
+
+              {!loading && myInvestments.length === 0 && (
+                <>
+                  <ZeroInvestmentBox>
+                    <ZeroInvestmentInnerBox>
+                      <ZeroInvestmentContent>
+                        You’re not following any farmers
+                      </ZeroInvestmentContent>
+                      <CenteredBox className="mb-5">
+                        <ButtonWidget
+                          className="mt-4"
+                          varaint="contained"
+                          containedVariantColor="black"
+                          height="50px"
+                          width="210px"
+                          onClick={handleFindFarmers}
+                        >
+                          Explore Farmers
+                        </ButtonWidget>
+                      </CenteredBox>
+                    </ZeroInvestmentInnerBox>
+                  </ZeroInvestmentBox>
+                </>
+              )}
+            </Container>
+          </div>
+        </GridBackground>
+        <Footer />
+        {withDraw.open && (
+          <WithDrawPopup
+            open={withDraw.open}
+            poolVersion={withDraw.pool_version}
+            poolAddress={withDraw.poolAddress}
+            onSuccess={() => {
+              handleSuccess(withDraw.farmerName);
+            }}
+            onError={handleError}
+            onClose={handleCloseWithDraw}
+          />
+        )}
+      </div>
+    </USDViewProvider>
   );
 };

@@ -9,14 +9,13 @@ import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations
 import FarmerSignupPage from "Pages/FarmerSignupPage";
 import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
 
-
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
 const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
-const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
+// const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
+const InvestmentsPageParent = lazy(() => import("Pages/InvestmentsPageParent"));
 const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
-
 
 export default function Routes() {
   return (
@@ -35,11 +34,7 @@ export default function Routes() {
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
         />
-        <ProtectedRoute 
-          exact
-          path="/withdraw"
-          children={<WithdrawPage />}
-        />
+        <ProtectedRoute exact path="/withdraw" children={<WithdrawPage />} />
         <ProtectedRoute
           exact
           path="/dashboard"
@@ -81,7 +76,7 @@ export default function Routes() {
           path="/dashboard/investment"
           children={
             <Suspense fallback={<LoadingPage />}>
-              <InvestmentsPage />
+              <InvestmentsPageParent />
             </Suspense>
           }
         />

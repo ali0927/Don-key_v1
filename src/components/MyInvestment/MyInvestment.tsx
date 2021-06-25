@@ -9,7 +9,6 @@ import { useInitialInvestment } from "hooks/useInitialInvestment";
 export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   const { isReady, investedAmmount } = useInvestedAmount(poolAddress);
   const [withdrawalValue, setWithdrawalValue] = useState("-");
-
   const web3 = useWeb3();
 
   useEffect(() => {
