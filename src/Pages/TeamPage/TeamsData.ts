@@ -7,6 +7,7 @@ import daniel from "./images/daniell.jpeg";
 import charis from "./images/charis.jpeg";
 import adarsh from "./images/adarsh.png";
 import vijay from "./images/vijay.jpg";
+import jason from "./images/jason.png";
 
 export const TeamJSON: ITeamBoardProps[] = [
   {
@@ -54,5 +55,10 @@ export const TeamJSON: ITeamBoardProps[] = [
     image: vijay,
     name: "Vijay Bhayani",
     designation: "Senior Solidity Developer",
+  },
+  {
+    image: jason,
+    name: "Jason Kelman",
+    designation: "Content Manager",
   },
 ];
