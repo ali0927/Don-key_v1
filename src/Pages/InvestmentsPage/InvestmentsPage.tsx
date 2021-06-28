@@ -315,7 +315,7 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
-                  <div className="d-flex px-2">
+                  {/* <div className="d-flex px-2">
                     <NetworkButton
                       active={strategyNetworkFilter === BSCChainId}
                       onClick={() => setStrategyNetworkFilter(BSCChainId)}
@@ -328,7 +328,7 @@ export const InvestmentsPage = () => {
                     >
                       Polygon
                     </NetworkButton>
-                  </div>
+                  </div> */}
                 </Col>
               </Row>
             </Container>
