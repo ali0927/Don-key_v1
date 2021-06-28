@@ -8,69 +8,40 @@ import {
   TableBody,
   TableData,
 } from "components/Table";
-import { getAmount, getPoolContract } from "helpers";
-import { useIsomorphicEffect } from "hooks";
+import {
+  calculateInitialInvestment,
+  calculateInitialInvestmentInUSD,
+  getAmount,
+  getPoolContract,
+  getTokenAddress,
+  getTokenPrice,
+} from "helpers";
 import { useAxios } from "hooks/useAxios";
-import { DollarView } from "Pages/FarmerBioPage/DollarView";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useWeb3 } from "don-components";
-import { useInitialInvestment } from "hooks/useInitialInvestment";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
-import { USDViewProvider, useUSDViewBool } from "contexts/USDViewContext";
+import {  useUSDViewBool } from "contexts/USDViewContext";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
+import { usePoolSymbol } from "hooks/usePoolSymbol";
+import { sortBy } from "lodash";
 
-const ShowUserClaimableAmount = ({
+const ShowAmount = ({
+  amount,
+  amountInUSD,
   poolAddress,
-  address,
 }: {
   poolAddress: string;
-  address: string;
+  amount: string;
+  amountInUSD: string;
 }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [amount, setAmount] = useState("0");
-  const web3 = useWeb3();
-  useIsomorphicEffect(() => {
-    (async () => {
-      try {
-        const claimedAmount = await getAmount(web3, poolAddress, address);
-        console.log(claimedAmount, "claimedAmount");
-        setAmount(claimedAmount);
-      } finally {
-        setIsReady(true);
-      }
-    })();
-  }, [poolAddress, address]);
-
-  if (!isReady) {
-    return <>-</>;
-  }
-  return <DollarView poolAddress={poolAddress} tokenAmount={amount} />;
-};
-
-const InitialInvestment = ({
-  poolAddress,
-  address,
-}: {
-  poolAddress: string;
-  address: string;
-}) => {
-  const { isReady, initialInvestment, initialInvestmentInUSD } =
-    useInitialInvestment(poolAddress, false, address);
   const { isUSD } = useUSDViewBool();
-
-  if (!isReady) {
+  const { symbol, loading } = usePoolSymbol(poolAddress);
+  if (loading) {
     return <>-</>;
   }
-  return (
-    <>
-      {isUSD ? (
-        `$${formatNum(initialInvestmentInUSD)}`
-      ) : (
-        <DollarView poolAddress={poolAddress} tokenAmount={initialInvestment} />
-      )}
-    </>
-  );
+
+  return <>{isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}</>;
 };
 
 const hideAddress = (item: string) => {
@@ -81,26 +52,60 @@ const hideAddress = (item: string) => {
   );
 };
 
+type InvestorList = {
+  address: string;
+  initialInvestment: string;
+  initialInvestmentInUSD: string;
+  claimableAmount: string;
+  claimableAmountInUSD: string;
+  profitLoss: string;
+  profitLossInUSD: string;
+}[];
+
 export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
   const [loading, setLoading] = useState(true);
-  const [investments, setInvestments] = useState<string[]>([]);
+  const [investments, setInvestments] = useState<InvestorList>([]);
   const [{ data }] = useAxios(`/api/v2/investments/${poolAddress}`);
   const web3 = useWeb3();
   useEffect(() => {
     (async () => {
       if (data) {
         setLoading(true);
-        const investmentList: string[] = [];
+        const investmentList: InvestorList = [];
         try {
           const investors = data.data;
-
+          const tokenPrice = await getTokenPrice(
+            web3,
+            await getTokenAddress(web3, poolAddress)
+          );
           const pool = await getPoolContract(web3, poolAddress, 2);
           await Promise.all(
             investors.map(async (investor: any) => {
               const address = investor.from_walletaddress;
               const isInvested = await pool.methods.isInvestor(address).call();
               if (isInvested) {
-                investmentList.push(address);
+                const [initialInvestment, initialInvestmentInUSD, claimableAmount] = await Promise.all([
+                  calculateInitialInvestment(web3, poolAddress, address),
+                  calculateInitialInvestmentInUSD(web3, poolAddress, address),
+                  getAmount(web3, poolAddress, address),
+                ]);
+                const initiailInvestmentBN = new BigNumber(initialInvestment);
+                const claimableAmountBN = new BigNumber(claimableAmount);
+                const investmentInUSD = new BigNumber(initialInvestmentInUSD);
+                const claimableAmountInUSD =
+                  claimableAmountBN.multipliedBy(tokenPrice);
+                const profit = claimableAmountBN.minus(initiailInvestmentBN);
+                const profitInUSD = claimableAmountInUSD.minus(investmentInUSD);
+
+                investmentList.push({
+                  address,
+                  claimableAmount: claimableAmount,
+                  claimableAmountInUSD: claimableAmountInUSD.toFixed(),
+                  initialInvestment: initialInvestment,
+                  initialInvestmentInUSD: investmentInUSD.toFixed(),
+                  profitLoss: profit.toFixed(),
+                  profitLossInUSD: profitInUSD.toFixed(),
+                });
               }
             })
           );
@@ -112,6 +117,12 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
       }
     })();
   }, [data]);
+  const {isUSD} = useUSDViewBool();
+
+  const sortedInvestments = useMemo(() => {
+    return sortBy(investments, o => new BigNumber(isUSD ? o.profitLossInUSD: o.profitLoss).toNumber()).reverse()
+  }, [investments, isUSD])
+
 
   if (loading) {
     return (
@@ -146,24 +157,22 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {investments.map((item, i) => {
+          {sortedInvestments.map((item) => {
             return (
-              <TableRow key={item}>
+              <TableRow key={item.address}>
                 <TableData style={{ textAlign: "center" }}>
-                  {hideAddress(item)}
+                  {hideAddress(item.address)}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  <InitialInvestment poolAddress={poolAddress} address={item} />
+                  <ShowAmount amount={item.initialInvestment} amountInUSD={item.initialInvestmentInUSD} poolAddress={poolAddress} />
                 </TableData>
 
                 <TableData style={{ textAlign: "center" }}>
-                  <ShowUserClaimableAmount
-                    poolAddress={poolAddress}
-                    address={item}
-                  />
+                <ShowAmount amount={item.claimableAmount} amountInUSD={item.claimableAmountInUSD} poolAddress={poolAddress} />
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  <TotalProfitLoss poolAddress={poolAddress} address={item} />
+                <ShowAmount amount={item.profitLoss} amountInUSD={item.profitLossInUSD} poolAddress={poolAddress} />
+                  {/* <TotalProfitLoss poolAddress={poolAddress} address={item} /> */}
                 </TableData>
               </TableRow>
             );
