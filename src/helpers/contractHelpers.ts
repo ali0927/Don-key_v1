@@ -189,21 +189,26 @@ export const getBUSDBalance = async (web3: Web3, address: string) => {
   return balance;
 };
 
-export const calculateWithdrawAmount = async (
-  web3: Web3,
-  poolAddress: string
-) => {
-  const accounts = await web3.eth.getAccounts();
+
+export const getAmount = async (web3: Web3,poolAddress: string,address: string) => {
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   try {
     const claimableAmount = await poolContract.methods
-      .getFinalClaimableAmount(accounts[0])
+      .getFinalClaimableAmount(address)
       .call();
 
     return web3.utils.fromWei(claimableAmount);
   } catch (e) {
     return "0";
   }
+};
+
+export const calculateWithdrawAmount = async (
+  web3: Web3,
+  poolAddress: string
+) => {
+  const accounts = await web3.eth.getAccounts();
+  return await getAmount(web3, poolAddress, accounts[0])
 };
 
 export const calculateUserClaimableAmount = async (web3: Web3,
@@ -224,12 +229,13 @@ export const calculateUserClaimableAmount = async (web3: Web3,
 
 export const calculateInitialInvestment = async (
   web3: Web3,
-  poolAddress: string
+  poolAddress: string,
+  address: string
 ) => {
-  const accounts = await web3.eth.getAccounts();
+
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   const initialAmount = await poolContract.methods
-    .getUserInvestedAmount(accounts[0])
+    .getUserInvestedAmount(address)
     .call();
   const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
   return amount;
@@ -237,20 +243,22 @@ export const calculateInitialInvestment = async (
 
 export const calculateInitialInvestmentInUSD = async (
   web3: Web3,
-  poolAddress: string
+  poolAddress: string,
+  address: string
 ) => {
   try {
-    const accounts = await web3.eth.getAccounts();
+  
     const poolContract = await getPoolContract(web3, poolAddress, 2);
     const initialAmount = await poolContract.methods
-      .getUserInvestedAmountInUSD(accounts[0])
+      .getUserInvestedAmountInUSD(address)
       .call();
     const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
     return amount;
   } catch (e) {
     const initialInvestment = await calculateInitialInvestment(
       web3,
-      poolAddress
+      poolAddress,
+      address
     );
     const tokenPrice = await getTokenPrice(
       web3,

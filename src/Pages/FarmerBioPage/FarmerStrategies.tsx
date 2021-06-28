@@ -7,6 +7,7 @@ import { useAxios } from "hooks/useAxios";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { InvestorListTable } from "components/InvestorListTable/InvestorListTable";
 
 const AddNewStrategy = ({
   text,
@@ -155,6 +156,9 @@ export const FarmerStrategies = ({
                 <StrategyTableForInvestor
                   poolAddress={farmerFromApi.data.farmer.poolAddress}
                   strategies={strategiesData.data}
+                />
+                <InvestorListTable
+                  poolAddress={farmerFromApi.data.farmer.poolAddress}
                 />
               </Col>
             </Row>

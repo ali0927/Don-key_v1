@@ -235,7 +235,7 @@ export const DetailTable = ({
       setTotalPoolValue(web3.utils.fromWei(poolValue, "ether"));
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
-      console.log(withdrawAmount);
+ 
       setCurrentHoldings(withdrawAmount);
       getIsInvested();
       fetchRoi();

@@ -31,8 +31,9 @@ export const getROI = async (web3: any, poolAddress: string) => {
   const investedAmountWithReward = new BigNumber(
     await calculateWithdrawAmount(web3, poolAddress)
   );
+  const accounts = await web3.eth.getAccounts();
   const initialInvestment = new BigNumber(
-    await calculateInitialInvestment(web3, poolAddress)
+    await calculateInitialInvestment(web3, poolAddress, accounts[0])
   );
   console.log(initialInvestment.toFixed(0));
   console.log(investedAmountWithReward.toFixed(0));
@@ -46,15 +47,16 @@ export const getROI = async (web3: any, poolAddress: string) => {
     .toFixed(2);
 };
 
-export const getProfitLoss = async (web3: any, poolAddress: string) => {
+export const getProfitLoss = async (web3: Web3, poolAddress: string) => {
   const investedAmount = await calculateWithdrawAmount(web3, poolAddress);
-  const initialInvestment = await calculateInitialInvestment(web3, poolAddress);
+  const accounts = await web3.eth.getAccounts();
+  const initialInvestment = await calculateInitialInvestment(web3, poolAddress, accounts[0]);
 
   const value = parseFloat(investedAmount) - parseFloat(initialInvestment);
   return value;
 };
 
-export const getPoolValue = async (web3: any, poolAddress: string) => {
+export const getPoolValue = async (web3: Web3, poolAddress: string) => {
   try {
     const amount = await getTotalPoolValue(web3, poolAddress);
     const bn = new BigNumber(web3.utils.fromWei(amount, "ether")).toFixed(2);

@@ -6,6 +6,7 @@ import {
   calculateInitialInvestmentInUSD,
   getTokenPrice,
   getTokenAddress,
+  getAmount,
 } from "helpers";
 import BigNumber from "bignumber.js";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
@@ -15,10 +16,12 @@ export const TotalProfitLoss = ({
   poolAddress,
   refresh = false,
   fromOverlay,
+  address,
 }: {
   poolAddress: string;
   refresh?: boolean;
   fromOverlay?: boolean;
+  address?: string;
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
   const { symbol } = usePoolSymbol(poolAddress);
@@ -27,15 +30,18 @@ export const TotalProfitLoss = ({
   useEffect(() => {
     (async () => {
       try {
-        const amountWithdraw = await calculateWithdrawAmount(web3, poolAddress);
-
+        
+        const accounts = address ? [address] : await web3.eth.getAccounts();
+        const amountWithdraw = await getAmount(web3, poolAddress,accounts[0]);
         const amountInitial = await calculateInitialInvestment(
           web3,
-          poolAddress
+          poolAddress,
+          accounts[0]
         );
         const amountInitialInUsd = await calculateInitialInvestmentInUSD(
           web3,
-          poolAddress
+          poolAddress,
+          accounts[0]
         );
         const digits =
           process.env.REACT_APP_ENV === "development" || fromOverlay ? 6 : 2;

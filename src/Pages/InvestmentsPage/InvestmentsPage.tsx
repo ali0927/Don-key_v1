@@ -25,19 +25,15 @@ import { ButtonWidget, LightGrayButton } from "components/Button";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
-import { MyInitialInvestment, MyInvestment } from "components/MyInvestment";
+import { MyInitialInvestment } from "components/MyInvestment";
 import {
   getPoolContract,
-  calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
 } from "helpers";
-import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
 import { IFarmer, IFarmerInter } from "interfaces";
-import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
-import { useRefresh } from "components/LotteryForm/useRefresh";
 import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
 import {
   BSCChainId,
@@ -210,7 +206,7 @@ export const InvestmentsPage = () => {
               .call();
             if (isInvested) {
               const amounts = [
-                calculateInitialInvestmentInUSD(web3, invest.poolAddress),
+                calculateInitialInvestmentInUSD(web3, invest.poolAddress, accounts[0]),
               ];
               const results = await Promise.all(amounts);
 

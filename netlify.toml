@@ -2,7 +2,7 @@
   environment = { REACT_APP_API_URL = "https://api.don-key.finance", REACT_APP_ENV = "production"}
 [context.staging]
   environment = { REACT_APP_API_URL = "https://api.don-key.finance", REACT_APP_ENV = "production"}
-[context.staging-new]
+[context."feature/*"]
   environment = { REACT_APP_API_URL = "https://api.don-key.finance", REACT_APP_ENV = "production"}
 [context.dev]
   environment = { REACT_APP_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", REACT_APP_ENV = "development" }

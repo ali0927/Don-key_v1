@@ -1,11 +1,5 @@
 import { NavBar } from "components/Navbar/NavBar";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useState } from "react";
 import { Footer } from "components/Footer/Footer";
 import { withWeb3 } from "hoc";
 import { useSelector } from "react-redux";
@@ -14,15 +8,9 @@ import { IStoreState } from "interfaces";
 import { FarmerStrategies } from "./FarmerStrategies";
 import { FarmerBio } from "./FarmerBio";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
-import styled from "styled-components";
-import { theme } from "theme";
 import { GridBackground } from "components/GridBackground";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
-
-const Section = styled.section`
-  background-color: ${theme.palette.background.yellow};
-`;
 
 export const FarmerBioPage = withWeb3(() => {
   const farmer = useSelector((state: IStoreState) => state.farmer);
@@ -37,15 +25,6 @@ export const FarmerBioPage = withWeb3(() => {
 
   const toggleCurrency = useCallback(() => {
     setIsInUsd((val) => !val);
-  }, []);
-  useEffect(() => {
-    (async () => {
-      // const balance = await fetchBalance();
-      // NOTE: When working wit Ether and Weis it is not correct to operate with `int` and `float` as it have known issues
-      // with precision. To work with flat numbers correctly it is better to represent it as strings and use
-      // Bignumber.js or Big.js to avoid losing precision (it is extremely important when working with money!)
-      // setBalance(parseFloat(balance));
-    })();
   }, []);
 
   if (!farmer) {
