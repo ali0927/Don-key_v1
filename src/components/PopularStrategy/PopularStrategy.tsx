@@ -16,6 +16,8 @@ import { OverlayTrigger, Container, Col, Tooltip } from "react-bootstrap";
 import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
+import { IFarmer } from "interfaces";
+import { useWeb3Network } from "components/Web3NetworkDetector";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -122,6 +124,8 @@ export const PopularStrategy = ({
   showAllContent,
   farmerId,
   onShowMoreClick,
+  onChangeChain,
+  network,
   version,
   onShowLessClick,
   getTokenImage,
@@ -146,6 +150,8 @@ export const PopularStrategy = ({
   getTokenSymbol?: () => Promise<string>;
   investers?: React.ReactElement | number | null;
   icon?: React.ReactElement;
+  network?: IFarmer["network"];
+  onChangeChain?: (chainId: number) => void;
   onCardClick?: () => void;
   onButtonClick?: () => void;
   showAllContent?: boolean;
@@ -176,7 +182,7 @@ export const PopularStrategy = ({
       {title}
     </h5>
   );
-
+  const { chainId: currentNetwork } = useWeb3Network();
   const [riskImage, setRiskImage] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
   const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
@@ -225,6 +231,105 @@ export const PopularStrategy = ({
       }
     }
   }, [risk]);
+
+  const renderContent = () => {
+    const isActiveNetwork =
+      !currentNetwork || currentNetwork === network?.chainId;
+
+    return (
+      <div className="popularstrategy__content">
+        <div className="popularstrategy__content__info">
+          <div>
+            <p className="mb-0">Total Value</p>
+            <h5>{isActiveNetwork ? totalValue : "-"}</h5>
+          </div>
+
+          {riskImage && (
+            <div className="text-right" style={{ minHeight: 80 }}>
+              {riskImage && (
+                <OverlayTrigger
+                  placement="top"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={
+                    <Tooltip id="button-tooltip" className="mytooltip">
+                      {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
+                      <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
+                    </Tooltip>
+                  }
+                >
+                  <div
+                    style={{
+                      textAlign: "right",
+                      paddingLeft: 10,
+                    }}
+                  >
+                    <img
+                      src={riskImage}
+                      alt="ImageNotFound"
+                      style={{ fill: "green" }}
+                    />
+                  </div>
+                </OverlayTrigger>
+              )}
+            </div>
+          )}
+        </div>
+        <div style={riskImage ? { marginTop: -22 } : {}}>
+          <p className="mb-0">APY</p>
+          <h5 className="primary-text">{apy}</h5>
+        </div>
+        {isActiveNetwork && tokenImage && (
+          <div className="mb-3 mt-2 d-flex align-items-center">
+            Deposit in <TokenImage src={tokenImage} />{" "}
+            {tokenSymbol && (
+              <p className="font-weight-bold mb-0">{tokenSymbol}</p>
+            )}
+          </div>
+        )}
+        <h5 className="popularstrategy__content__title">{contentTitle}</h5>
+        <div className="d-flex flex-column justify-content-between h-100">
+          <DescriptionContent className="popularstrategy__content__text">
+            <ShowMoreContent
+              content={content}
+              showAllContent={showAllContent}
+              onShowMoreClick={onShowMoreClick}
+              onShowLessClick={onShowLessClick}
+              length={100}
+            />
+          </DescriptionContent>
+
+          <div>
+            {comingSoonProp ? (
+              <div className="position-relative">
+                <ButtonWidget varaint="outlined" height="40px" disabled>
+                  Invest
+                </ButtonWidget>
+                <img
+                  className="coming-soon"
+                  src={comingsoon}
+                  alt="ImageNotFound"
+                />
+              </div>
+            ) : (
+              <ButtonWidget
+                varaint="outlined"
+                height="40px"
+                onClick={
+                  isActiveNetwork
+                    ? ButtonClick
+                    : () =>
+                        onChangeChain &&
+                        onChangeChain(network?.chainId as number)
+                }
+              >
+                {isActiveNetwork ? "Invest" : "Switch Network"}
+              </ButtonWidget>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <Papper>
@@ -299,89 +404,7 @@ export const PopularStrategy = ({
         </GraphWrapper>
       </PapperInner>
 
-      <div className="popularstrategy__content">
-        <div className="popularstrategy__content__info">
-          <div>
-            <p className="mb-0">Total Value</p>
-            <h5>{totalValue}</h5>
-          </div>
-
-          <div className="text-right" style={{ minHeight: 80 }}>
-            {riskImage && (
-              <OverlayTrigger
-                placement="top"
-                delay={{ show: 250, hide: 400 }}
-                overlay={
-                  <Tooltip id="button-tooltip" className="mytooltip">
-                    {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
-                    <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
-                  </Tooltip>
-                }
-              >
-                <div
-                  style={{
-                    textAlign: "right",
-                    paddingLeft: 10,
-                  }}
-                >
-                  <img
-                    src={riskImage}
-                    alt="ImageNotFound"
-                    style={{ fill: "green" }}
-                  />
-                </div>
-              </OverlayTrigger>
-            )}
-          </div>
-        </div>
-        <div style={{ marginTop: -22 }}>
-          <p className="mb-0">APY</p>
-          <h5 className="primary-text">{apy}</h5>
-        </div>
-        {tokenImage && (
-          <div className="mb-3 mt-2 d-flex align-items-center">
-            Deposit in <TokenImage src={tokenImage} />{" "}
-            {tokenSymbol && (
-              <p className="font-weight-bold mb-0">{tokenSymbol}</p>
-            )}
-          </div>
-        )}
-        <h5 className="popularstrategy__content__title">{contentTitle}</h5>
-        <div className="d-flex flex-column justify-content-between h-100">
-          <DescriptionContent className="popularstrategy__content__text">
-            <ShowMoreContent
-              content={content}
-              showAllContent={showAllContent}
-              onShowMoreClick={onShowMoreClick}
-              onShowLessClick={onShowLessClick}
-              length={100}
-            />
-          </DescriptionContent>
-
-          <div>
-            {comingSoonProp ? (
-              <div className="position-relative">
-                <ButtonWidget varaint="outlined" height="40px" disabled>
-                  Invest
-                </ButtonWidget>
-                <img
-                  className="coming-soon"
-                  src={comingsoon}
-                  alt="ImageNotFound"
-                />
-              </div>
-            ) : (
-              <ButtonWidget
-                varaint="outlined"
-                height="40px"
-                onClick={ButtonClick}
-              >
-                Invest
-              </ButtonWidget>
-            )}
-          </div>
-        </div>
-      </div>
+      {renderContent()}
     </Papper>
   );
 };

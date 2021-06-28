@@ -16,6 +16,11 @@ export type IFarmer = {
   GUID: string;
   descriptionTitle: string | null;
   apy?: string;
+  network?: {
+    chainId: number;
+    networkName: string;
+    networkSymbol: string;
+  }
   strategyImage?: string;
   investors?: null | number;
   status:
@@ -65,6 +70,22 @@ export interface IFarmerInter {
   name: string;
   last_signin: string;
   description: string;
+  descriptionTitle: string | null
+  risk?:string;
+  riskDescription?: string;
+  profit24hours?: string;
+  profit7days?: string;
+  profit?: string;
+  strategy?: {
+    apy: string;
+    network?: {
+      chainId: number;
+      networkName: string;
+      networkSymbol: string;
+    }
+    description: string;
+    strategyImage: string;
+  }
   is_active: boolean;
   walletAddress: string;
   username?: string | null;
@@ -86,6 +107,11 @@ export type IStrategy = {
   gasLimit?: string | null;
   swapInFees?: string | null;
   swapOutFees?: string | null;
+  network?: {
+    chainId: number;
+    networkName: string;
+    networkSymbol: string;
+  }
   withdrawGasLimit?: string | null;
   strategyName: string;
   apy: string;

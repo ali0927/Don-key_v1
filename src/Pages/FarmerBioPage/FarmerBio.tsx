@@ -56,15 +56,18 @@ const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-const getStrategyField = <T extends keyof IStrategy>(farmer: IFarmerInter, key: T): NonNullable<IStrategy[T]> | undefined => {
+const getStrategyField = <T extends keyof IStrategy>(
+  farmer: IFarmerInter,
+  key: T
+): NonNullable<IStrategy[T]> | undefined => {
   if (!farmer.strategies || farmer.strategies.length === 0) {
     return undefined;
   }
   const result = farmer.strategies[0][key];
-  if(result){
+  if (result) {
     return result as any;
   }
-  return undefined ;
+  return undefined;
 };
 
 export const FarmerBio = ({
@@ -88,6 +91,7 @@ export const FarmerBio = ({
     pool_version,
     twitter,
     GUID,
+    strategy,
   } = farmer;
   const gasLimit = getStrategyField(farmer, "gasLimit");
   return (
@@ -185,6 +189,11 @@ export const FarmerBio = ({
                     .multipliedBy(100)
                     .toFixed(0) + "%"
                 : "100%"
+            }
+            network={
+              strategies && strategies.length > 0
+                ? strategies[0].network
+                : undefined
             }
             poolVersion={pool_version}
             poolAddress={poolAddress}

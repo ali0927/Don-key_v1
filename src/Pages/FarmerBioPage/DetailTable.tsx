@@ -29,6 +29,10 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useWeb3Network } from "components/Web3NetworkDetector";
+import { IFarmer } from "interfaces";
+import { useSwitchNetwork } from "hooks/useSwitchNetwork";
+import clsx from "clsx";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -185,9 +189,11 @@ export const DetailTable = ({
   farmerId,
   gasLimit,
   poolVersion,
+  network,
 }: {
   poolAddress: string;
   apy: string;
+  network?: IFarmer["network"];
   poolVersion: number;
   farmerId: string;
   gasLimit?: string;
@@ -198,7 +204,7 @@ export const DetailTable = ({
   const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
   const [initialCheck, setInitialCheck] = useState(false);
-
+  const { chainId: currentNetwork } = useWeb3Network();
   useEffect(() => {
     if (farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911") {
       setInitialCheck(true);
@@ -222,7 +228,7 @@ export const DetailTable = ({
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
 
   const { isUSD, toggle } = useUSDViewBool();
-
+  const isActiveNetwork = network?.chainId === currentNetwork;
   useEffect(() => {
     async function apiCall() {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
@@ -279,8 +285,6 @@ export const DetailTable = ({
     value: string | React.ReactNode,
     color: "black" | "white"
   ) => {
-    const wrappedNum = new BigNumber(initialInvestmentInUSD);
-    const formatted = wrappedNum.toFixed(6);
     return label === "Profit/Loss" ? (
       <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
         <OverlayTrigger
@@ -321,6 +325,8 @@ export const DetailTable = ({
     );
   };
 
+  const { switchNetwork } = useSwitchNetwork();
+
   return (
     <>
       <div className="col-lg-6 mb-5">
@@ -342,20 +348,28 @@ export const DetailTable = ({
                   </a>
                 </div>
                 <CardPoolAddress>
-                  <DollarView
-                    poolAddress={poolAddress}
-                    tokenAmount={totalPoolValue}
-                  />
+                  {isActiveNetwork ? (
+                    <DollarView
+                      poolAddress={poolAddress}
+                      tokenAmount={totalPoolValue}
+                    />
+                  ) : (
+                    "-"
+                  )}
                 </CardPoolAddress>
-                <div className="d-flex align-items-center">
-                  {symbol}
-                  <YellowSwitch
-                    value={true}
-                    onChange={handleToggle}
-                    checked={initialCheck}
-                  />{" "}
-                  USD
-                </div>
+                {isActiveNetwork ? (
+                  <div className="d-flex align-items-center">
+                    {symbol}
+                    <YellowSwitch
+                      value={true}
+                      onChange={handleToggle}
+                      checked={initialCheck}
+                    />{" "}
+                    USD
+                  </div>
+                ) : (
+                  <div>You are connected To Wrong Network</div>
+                )}
               </div>
             </CardInnerInfo>
           </div>
@@ -368,14 +382,6 @@ export const DetailTable = ({
                 <StatisticIcon />
               </div>
             )}
-            {/* {getFirstCardcolumns(
-              "ROI",
-              "---",
-              "black",
-              <div className="mr-2">
-                <StatisticRoi />
-              </div>
-            )} */}
             {getFirstCardcolumns(
               "Followers",
               <InvestorCount
@@ -399,29 +405,57 @@ export const DetailTable = ({
         </CardWrapper>
       </div>
       <div className="col-lg-6 mb-5 p">
-        <CardWrapper className="p-2" color="black">
+        <CardWrapper
+          className={clsx("p-2 ", {
+            "d-flex align-items-center justify-content-center": !isActiveNetwork,
+          })}
+          color="black"
+        >
           <CardInnerInfo className="d-flex justify-content-center mb-3">
             <div style={{ marginTop: 53 }}>
-              <CardLabel color="white"> My current holdings </CardLabel>
-              <CardValue color="white">
-                <DollarView
-                  poolAddress={poolAddress}
-                  tokenAmount={currentHoldings}
-                />
-              </CardValue>
+              {isActiveNetwork ? (
+                <>
+                  <CardLabel color="white"> My current holdings </CardLabel>
+                  <CardValue color="white">
+                    <DollarView
+                      poolAddress={poolAddress}
+                      tokenAmount={currentHoldings}
+                    />
+                  </CardValue>
+                </>
+              ) : (
+                <>
+                  <CardLabel color="white"> Switch Network To </CardLabel>
+                  <CardValue color="white">{network?.networkName}</CardValue>
+                </>
+              )}
 
-              <div className="d-flex mt-2 mb-2">
-                <ButtonWidget
-                  varaint="contained"
-                  fontSize="14px"
-                  className="mr-3"
-                  containedVariantColor="lightYellow"
-                  height="30px"
-                  width="119px"
-                  onClick={() => setShowInvestmentPopup(true)}
-                >
-                  Invest
-                </ButtonWidget>
+              <div className="d-flex mt-2 mb-2 justify-content-center">
+                {isActiveNetwork ? (
+                  <ButtonWidget
+                    varaint="contained"
+                    fontSize="14px"
+                    className={isInvested ? "mr-3" : ""}
+                    containedVariantColor="lightYellow"
+                    height="30px"
+                    width="119px"
+                    onClick={() => setShowInvestmentPopup(true)}
+                  >
+                    Invest
+                  </ButtonWidget>
+                ) : (
+                  <ButtonWidget
+                    varaint="contained"
+                    fontSize="14px"
+                    className={isInvested ? "mr-3" : ""}
+                    containedVariantColor="lightYellow"
+                    height="30px"
+                    width="119px"
+                    onClick={() => switchNetwork(network?.chainId as number)}
+                  >
+                    Switch
+                  </ButtonWidget>
+                )}
                 {isInvested && (
                   <ButtonWidget
                     fontSize="14px"
@@ -438,35 +472,37 @@ export const DetailTable = ({
               </div>
             </div>
           </CardInnerInfo>
-          <div className="row mt-4">
-            {getSecondCardColumns(
-              "Initial Investment",
-              isUSD ? (
-                `$${formatNum(initialInvestmentInUSD)}`
-              ) : (
-                <DollarView
-                  poolAddress={poolAddress}
-                  tokenAmount={initialInvestment}
-                />
-              ),
-              "white"
-            )}
+          {isActiveNetwork && (
+            <div className="row mt-4">
+              {getSecondCardColumns(
+                "Initial Investment",
+                isUSD ? (
+                  `$${formatNum(initialInvestmentInUSD)}`
+                ) : (
+                  <DollarView
+                    poolAddress={poolAddress}
+                    tokenAmount={initialInvestment}
+                  />
+                ),
+                "white"
+              )}
 
-            {getSecondCardColumns(
-              "Profit/Loss",
-              <TotalProfitLoss
-                refresh={dependsOn % 2 == 0}
-                poolAddress={poolAddress}
-              />,
-              "white"
-            )}
-            {getSecondCardColumns("My ROI", "---", "white")}
-            {getSecondCardColumns(
-              "My share",
-              Number(myShare).toFixed(2) + " %",
-              "white"
-            )}
-          </div>
+              {getSecondCardColumns(
+                "Profit/Loss",
+                <TotalProfitLoss
+                  refresh={dependsOn % 2 == 0}
+                  poolAddress={poolAddress}
+                />,
+                "white"
+              )}
+              {getSecondCardColumns("My ROI", "---", "white")}
+              {getSecondCardColumns(
+                "My share",
+                Number(myShare).toFixed(2) + " %",
+                "white"
+              )}
+            </div>
+          )}
         </CardWrapper>
       </div>
       {showInvestmentPopup && (

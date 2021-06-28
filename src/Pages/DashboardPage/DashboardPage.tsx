@@ -1,7 +1,7 @@
 import { Row, Col } from "react-bootstrap";
 import "./DashboardPage.scss";
 import { useAxios } from "hooks/useAxios";
-import { IFarmer } from "interfaces";
+import { IFarmer, IFarmerInter } from "interfaces";
 import { useMemo, useEffect, useState } from "react";
 import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
@@ -17,7 +17,11 @@ import {
 } from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
-import { useWeb3 } from "don-components";
+import {
+  BSCChainId,
+  PolygonChainId,
+  useWeb3Network,
+} from "components/Web3NetworkDetector";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -98,24 +102,28 @@ const Ellipse4 = styled.div`
   position: absolute;
 `;
 
+export const NetworkButton = styled.button`
+  color: #333333;
+  background: transparent;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-right: 20px;
+  padding: 0.4rem 1rem;
+  border: none;
+  ${(props: { active?: boolean }) =>
+    props.active &&
+    `
+  border: 2px solid #333;
+  border-radius: 3px;
+  `}
+`;
+
 export const DashboardPage = () => {
   const [{ loading, data }] = useAxios("/api/v2/farmer");
-  const [network, setNetwork] = useState<number | null>(null);
-  const web3 = useWeb3();
+  const { chainId: network } = useWeb3Network();
+  const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
-  useEffect(() => {
-    if (network) {
-      window.ethereum.on("chainChanged", () => window.location.reload());
-    }
-  }, [network]);
-
-  useEffect(() => {
-    async function apiCall() {
-      let network = await web3.eth.net.getId();
-      setNetwork(network);
-    }
-    apiCall();
-  }, []);
+ 
 
   useEffect(() => {
     // Add DON token with icon on Metamask
@@ -177,32 +185,37 @@ export const DashboardPage = () => {
 
   const farmers: IFarmer[] = useMemo(() => {
     if (data) {
-      return data.data.map((item: any) => {
-        const farmer: IFarmer = {
-          GUID: item.GUID,
-          name: `Don - ${item.name}`,
-          description: item.description,
-          picture: item.picture,
-          pool_version: item.pool_version,
-          poolAddress: item.poolAddress,
-          profit24hours: item.profit24hours || "-",
-          profit7days: item.profit7days || "-",
-          telegram: item.telegram,
-          twitter: item.twitter,
-          profit: item.profit || "-",
-          descriptionTitle: item.descriptionTitle,
-          risk: item.risk,
-          riskDescription: item.riskDescription,
-          status: item.status,
-          apy: item.strategy.apy,
-          strategyImage: item.strategy.strategyImage,
-          investors: item.investors,
-        };
-        return farmer;
-      });
+      return data.data
+        .filter((item: IFarmerInter) => {
+          return item.strategy?.network?.chainId === strategyNetworkFilter;
+        })
+        .map((item: IFarmerInter) => {
+          const farmer: IFarmer = {
+            GUID: item.GUID,
+            name: `Don - ${item.name}`,
+            description: item.description,
+            picture: item.picture,
+            pool_version: item.pool_version,
+            poolAddress: item.poolAddress,
+            profit24hours: item.profit24hours || "-",
+            profit7days: item.profit7days || "-",
+            telegram: item.telegram,
+            twitter: item.twitter,
+            profit: item.profit || "-",
+            descriptionTitle: item.descriptionTitle,
+            risk: item.risk,
+            network: item.strategy?.network,
+            riskDescription: item.riskDescription,
+            status: item.status,
+            apy: item?.strategy?.apy,
+            strategyImage: item?.strategy?.strategyImage,
+            investors: item.investors,
+          };
+          return farmer;
+        });
     }
     return [];
-  }, [data]);
+  }, [data, strategyNetworkFilter]);
 
   if (loading) {
     return <LoadingPage />;
@@ -236,7 +249,23 @@ export const DashboardPage = () => {
                   </StyledLink>
                 </div>
               ) : (
-                <FarmerTitle>Explore Farmers</FarmerTitle>
+                <>
+                  <FarmerTitle>Explore Farmers</FarmerTitle>
+                  <div className="d-flex px-2">
+                    <NetworkButton
+                      active={strategyNetworkFilter === BSCChainId}
+                      onClick={() => setStrategyNetworkFilter(BSCChainId)}
+                    >
+                      BSC
+                    </NetworkButton>
+                    <NetworkButton
+                      active={strategyNetworkFilter === PolygonChainId}
+                      onClick={() => setStrategyNetworkFilter(PolygonChainId)}
+                    >
+                      Polygon
+                    </NetworkButton>
+                  </div>
+                </>
               )}
 
               <DonkeyIconWrapper>

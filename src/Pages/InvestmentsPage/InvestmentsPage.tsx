@@ -7,7 +7,6 @@ import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
 import "./InvestmentsPage.scss";
 import { useAxios } from "hooks/useAxios";
-import { IMyInvestments } from "./interfaces/IMyInvestments";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, withStyles } from "@material-ui/core";
 import { yellow } from "@material-ui/core/colors";
@@ -36,10 +35,16 @@ import { InvestmentBlackBox } from "./InvestmentBlackBox/InvestmentBlackBox";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
-import { IFarmer } from "interfaces";
+import { IFarmer, IFarmerInter } from "interfaces";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
+import {
+  BSCChainId,
+  PolygonChainId,
+  useWeb3Network,
+} from "components/Web3NetworkDetector";
+import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -136,10 +141,11 @@ export const InvestmentsPage = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [{ data }] = useAxios("/api/v2/farmer");
-
+  const { chainId: network } = useWeb3Network();
+  const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
   const farmers: IFarmer[] = useMemo(() => {
     if (data) {
-      return data.data.map((item: any) => {
+      return data.data.map((item: IFarmerInter) => {
         const farmer: IFarmer = {
           GUID: item.GUID,
           name: `Don - ${item.name}`,
@@ -153,9 +159,12 @@ export const InvestmentsPage = () => {
           twitter: item.twitter,
           profit: item.profit || "-",
           descriptionTitle: item.descriptionTitle,
+          risk: item.risk,
+          network: item.strategy?.network,
+          riskDescription: item.riskDescription,
           status: item.status,
-          apy: item.strategy.apy,
-          strategyImage: item.strategy.strategyImage,
+          apy: item?.strategy?.apy,
+          strategyImage: item?.strategy?.strategyImage,
           investors: item.investors,
         };
         return farmer;
@@ -163,6 +172,8 @@ export const InvestmentsPage = () => {
     }
     return [];
   }, [data]);
+
+ 
 
   const [withDraw, setWidthDraw] = useState({
     open: false,
@@ -189,6 +200,7 @@ export const InvestmentsPage = () => {
       let arr: any = [];
       const CalInvestments = async () => {
         const finalInvestments: IFarmer[] = [];
+        setLoading(true);
         for (let invest of farmers) {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 2);
@@ -221,25 +233,12 @@ export const InvestmentsPage = () => {
     }
   }, [farmers, refresh]);
 
-  // useEffect(() => {
-  //   if (myInvestments.length > 0) {
-  //     let arr: any = [];
-  //     myInvestments.map(async (investment) => {
-  //       const amounts = [
-  //         calculateInitialInvestment(web3, investment.poolAddress),
-  //         calculateInitialInvestmentInUSD(web3, investment.poolAddress),
-  //       ];
-  //       const results = await Promise.all(amounts);
 
-  //       arr.push({
-  //         name: investment.name,
-  //         poolAddress: investment.poolAddress,
-  //         initialInvestmentinUSD: results[1],
-  //       });
-  //     });
-  //     setPoolAddresses(arr);
-  //   }
-  // }, [myInvestments]);
+  const filteredInvestMents = useMemo(() => {
+    return myInvestments.filter((item) => {
+      return item.network?.chainId === strategyNetworkFilter;
+    })
+  },[myInvestments,strategyNetworkFilter])
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();
@@ -316,6 +315,20 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
+                  <div className="d-flex px-2">
+                    <NetworkButton
+                      active={strategyNetworkFilter === BSCChainId}
+                      onClick={() => setStrategyNetworkFilter(BSCChainId)}
+                    >
+                      BSC
+                    </NetworkButton>
+                    <NetworkButton
+                      active={strategyNetworkFilter === PolygonChainId}
+                      onClick={() => setStrategyNetworkFilter(PolygonChainId)}
+                    >
+                      Polygon
+                    </NetworkButton>
+                  </div>
                 </Col>
               </Row>
             </Container>
@@ -331,7 +344,7 @@ export const InvestmentsPage = () => {
                   </AnimationDiv>
                 </>
               )}
-              {!loading && myInvestments.length > 0 && (
+              {!loading && filteredInvestMents.length > 0 && (
                 <>
                   <div className="d-flex align-items-center">
                     {"Base Token"}
@@ -359,7 +372,7 @@ export const InvestmentsPage = () => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
-                        {myInvestments.map((investment, index) => {
+                        {filteredInvestMents.map((investment, index) => {
                           let poolAddressFinal = poolAddresses.find(
                             (item: any) => {
                               return investment.name === item.name;
@@ -421,7 +434,7 @@ export const InvestmentsPage = () => {
                 </>
               )}
 
-              {!loading && myInvestments.length === 0 && (
+              {!loading && filteredInvestMents.length === 0 && (
                 <>
                   <ZeroInvestmentBox>
                     <ZeroInvestmentInnerBox>

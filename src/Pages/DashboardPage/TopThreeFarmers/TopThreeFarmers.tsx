@@ -11,6 +11,10 @@ import BigNumber from "bignumber.js";
 import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import { getTokenImage, getTokenSymbol } from "helpers";
+import { BSCChainId, PolygonChainId } from "components/Web3NetworkDetector";
+import { useSwitchNetwork } from "hooks/useSwitchNetwork";
+
+
 
 const Image = styled.img`
   width: 45px;
@@ -31,11 +35,10 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   });
 
   const history = useHistory();
-
   const handleLeaderClick = (id: string) => () => {
     history.push(`/dashboard/farmer/${id}`);
   };
-
+  const {switchNetwork} = useSwitchNetwork();
   const openInvestmentDialog =
     (farmerName: string, poolAddress: string, poolVersion: number) => () => {
       // e.stopPropagation();
@@ -64,7 +67,6 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const web3 = useWeb3();
 
   const StrategyCard = (leader: IFarmer, index: number) => {
-    const [disabled, setDisabled] = React.useState(false);
     const APY = leader.apy
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
@@ -87,7 +89,9 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           comingsoon={leader.status === "comingsoon"}
           twitter={leader.twitter ? leader.twitter : null}
           telegram={leader.telegram}
+          network={leader.network}
           risk={leader.risk}
+          onChangeChain={switchNetwork}
           riskDescription={leader.riskDescription}
           strategyImage={leader.strategyImage}
           disabled={leader.name === "Don - vfat" ? true : false}
