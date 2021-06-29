@@ -21,10 +21,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useWeb3 } from "don-components";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
-import {  useUSDViewBool } from "contexts/USDViewContext";
+import { useUSDViewBool } from "contexts/USDViewContext";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { sortBy } from "lodash";
+import moment from "moment";
 
 const ShowAmount = ({
   amount,
@@ -41,7 +42,11 @@ const ShowAmount = ({
     return <>-</>;
   }
 
-  return <>{isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}</>;
+  return (
+    <>
+      {isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}
+    </>
+  );
 };
 
 const hideAddress = (item: string) => {
@@ -60,6 +65,7 @@ type InvestorList = {
   claimableAmountInUSD: string;
   profitLoss: string;
   profitLossInUSD: string;
+  duration: string;
 }[];
 
 export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
@@ -84,7 +90,11 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
               const address = investor.from_walletaddress;
               const isInvested = await pool.methods.isInvestor(address).call();
               if (isInvested) {
-                const [initialInvestment, initialInvestmentInUSD, claimableAmount] = await Promise.all([
+                const [
+                  initialInvestment,
+                  initialInvestmentInUSD,
+                  claimableAmount,
+                ] = await Promise.all([
                   calculateInitialInvestment(web3, poolAddress, address),
                   calculateInitialInvestmentInUSD(web3, poolAddress, address),
                   getAmount(web3, poolAddress, address),
@@ -105,6 +115,9 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
                   initialInvestmentInUSD: investmentInUSD.toFixed(),
                   profitLoss: profit.toFixed(),
                   profitLossInUSD: profitInUSD.toFixed(),
+                  duration: moment
+                    .duration(moment().diff(moment(investor.date_created)))
+                    .humanize(),
                 });
               }
             })
@@ -117,13 +130,17 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
       }
     })();
   }, [data]);
-  const {isUSD} = useUSDViewBool();
+  const { isUSD } = useUSDViewBool();
 
   const sortedInvestments = useMemo(() => {
-    return sortBy(investments, o => new BigNumber(isUSD ? o.profitLossInUSD: o.profitLoss).toNumber()).reverse()
-  }, [investments, isUSD])
-
-
+    return sortBy(investments, (o) =>
+      new BigNumber(isUSD ? o.profitLossInUSD : o.profitLoss).toNumber()
+    ).reverse();
+  }, [investments, isUSD]);
+  if(poolAddress === "0x072a5DBa5A29ACD666C4B36ab453A5ed015589d2"){
+    // disabled vfat old pool
+    return null;
+  }
   if (loading) {
     return (
       <div
@@ -154,6 +171,9 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
             <TableHeading style={{ textAlign: "center" }}>
               Profit/Loss
             </TableHeading>
+            <TableHeading style={{ textAlign: "center" }}>
+              Duration
+            </TableHeading>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -164,15 +184,30 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
                   {hideAddress(item.address)}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  <ShowAmount amount={item.initialInvestment} amountInUSD={item.initialInvestmentInUSD} poolAddress={poolAddress} />
+                  <ShowAmount
+                    amount={item.initialInvestment}
+                    amountInUSD={item.initialInvestmentInUSD}
+                    poolAddress={poolAddress}
+                  />
                 </TableData>
 
                 <TableData style={{ textAlign: "center" }}>
-                <ShowAmount amount={item.claimableAmount} amountInUSD={item.claimableAmountInUSD} poolAddress={poolAddress} />
+                  <ShowAmount
+                    amount={item.claimableAmount}
+                    amountInUSD={item.claimableAmountInUSD}
+                    poolAddress={poolAddress}
+                  />
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                <ShowAmount amount={item.profitLoss} amountInUSD={item.profitLossInUSD} poolAddress={poolAddress} />
+                  <ShowAmount
+                    amount={item.profitLoss}
+                    amountInUSD={item.profitLossInUSD}
+                    poolAddress={poolAddress}
+                  />
                   {/* <TotalProfitLoss poolAddress={poolAddress} address={item} /> */}
+                </TableData>
+                <TableData style={{ textAlign: "center" }}>
+                  {item.duration} ago
                 </TableData>
               </TableRow>
             );
