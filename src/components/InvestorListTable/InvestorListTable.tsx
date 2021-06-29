@@ -73,6 +73,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
   const [investments, setInvestments] = useState<InvestorList>([]);
   const [{ data }] = useAxios(`/api/v2/investments/${poolAddress}`);
   const web3 = useWeb3();
+  const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
       if (data) {
@@ -129,8 +130,8 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
         }
       }
     })();
-  }, [data]);
-  const { isUSD } = useUSDViewBool();
+  }, [data, isUSD]);
+
 
   const sortedInvestments = useMemo(() => {
     return sortBy(investments, (o) =>
