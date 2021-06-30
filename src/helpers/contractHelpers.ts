@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import BigNumber from "bignumber.js";
+import { Function } from "lodash";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { createCache } from "./createCache";
@@ -57,39 +58,145 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
-
 let isInProgress = false;
 let observers: any = [];
-export const getTokenPrice = async (web3: Web3, tokenAddress: string) => {
- 
-  if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
-    return "1";
-  }
+const aggregatorV3InterfaceABI = [
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [{ internalType: "uint8", name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "description",
+    outputs: [{ internalType: "string", name: "", type: "string" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint80", name: "_roundId", type: "uint80" }],
+    name: "getRoundData",
+    outputs: [
+      { internalType: "uint80", name: "roundId", type: "uint80" },
+      { internalType: "int256", name: "answer", type: "int256" },
+      { internalType: "uint256", name: "startedAt", type: "uint256" },
+      { internalType: "uint256", name: "updatedAt", type: "uint256" },
+      { internalType: "uint80", name: "answeredInRound", type: "uint80" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "latestRoundData",
+    outputs: [
+      { internalType: "uint80", name: "roundId", type: "uint80" },
+      { internalType: "int256", name: "answer", type: "int256" },
+      { internalType: "uint256", name: "startedAt", type: "uint256" },
+      { internalType: "uint256", name: "updatedAt", type: "uint256" },
+      { internalType: "uint80", name: "answeredInRound", type: "uint80" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "version",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+];
 
-  return new Promise<string>(async (res, rej) => {
-    if (isInProgress) {
-      observers.push(res);
-      return;
-    }
-    try {
-      isInProgress = true;
-      const bnbPrice = await (await getPancakeContract(web3)).methods
-        .getAmountsOut(web3.utils.toWei("0.1"), [tokenAddress, BUSDAddress])
-        .call();
+const getPriceFromChainLink = async (
+  web3: Web3,
+  chainLinkContractAddress: string
+) => {
+  const priceFeed = new web3.eth.Contract(
+    aggregatorV3InterfaceABI as any,
+    chainLinkContractAddress
+  );
+  const data = await priceFeed.methods.latestRoundData().call();
 
-      let price = new BigNumber(web3.utils.fromWei(bnbPrice[1]))
-        .dividedBy(0.1)
-        .toString();
-
-      observers.forEach((res: any) => res(price));
-      observers = [];
-      isInProgress = false;
-      res(price);
-    } catch (e) {
-      res("-");
-    }
-  });
+  return new BigNumber(data.answer).dividedBy(10 ** 8).toFixed();
 };
+
+const WmaticAddress = "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270";
+const cakeTokenAddress = "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82";
+const tokenPriceGetter = [
+  {
+    token: WBNBAddress,
+    priceFeedAddress: "0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE",
+  },
+  {
+    token: WmaticAddress,
+    priceFeedAddress: "0xAB594600376Ec9fD91F8e885dADF0CE036862dE0",
+  },
+  {
+    token: cakeTokenAddress,
+    priceFeedAddress: "0xB6064eD41d4f67e353768aA239cA86f4F73665a1",
+  },
+];
+
+const makeAsyncMultiCalled = <T extends any[], V>(func: ((...args: T) => Promise<V>)): ((...args: T) => Promise<V>) => {
+  const callers: { res: any; rej: any }[] = [];
+  let isInProgress = false;
+  return async (...args: T) => {
+    return new Promise(async (res, rej) => {
+      callers.push({ res, rej });
+      if (isInProgress) {
+        return;
+      }
+      if (!isInProgress) {
+        isInProgress = true;
+        
+        try {
+          const result = await func(...args);
+          callers.forEach((caller) => {
+            caller.res(result);
+          });
+        } catch (e) {
+          callers.forEach((caller) => {
+            caller.rej(e);
+          });
+        } finally {
+          isInProgress = false;
+        }
+      }
+    });
+  };
+};
+
+export const getTokenPrice = makeAsyncMultiCalled(
+  async (web3: Web3, tokenAddress: string) => {
+    if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
+      return "1";
+    }
+
+    const index = tokenPriceGetter.findIndex(
+      (item) => item.token.toLowerCase() === tokenAddress.toLowerCase()
+    );
+    if (index > -1) {
+      const price = await getPriceFromChainLink(
+        web3,
+        tokenPriceGetter[index].priceFeedAddress
+      );
+  
+      return price;
+    }
+    const bnbPrice = await (await getPancakeContract(web3)).methods
+      .getAmountsOut(web3.utils.toWei("0.1"), [tokenAddress, BUSDAddress])
+      .call();
+
+    let price = new BigNumber(web3.utils.fromWei(bnbPrice[1]))
+      .dividedBy(0.1)
+      .toString();
+
+    return price;
+  }
+);
 
 export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
@@ -189,8 +296,11 @@ export const getBUSDBalance = async (web3: Web3, address: string) => {
   return balance;
 };
 
-
-export const getAmount = async (web3: Web3,poolAddress: string,address: string) => {
+export const getAmount = async (
+  web3: Web3,
+  poolAddress: string,
+  address: string
+) => {
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   try {
     const claimableAmount = await poolContract.methods
@@ -208,10 +318,11 @@ export const calculateWithdrawAmount = async (
   poolAddress: string
 ) => {
   const accounts = await web3.eth.getAccounts();
-  return await getAmount(web3, poolAddress, accounts[0])
+  return await getAmount(web3, poolAddress, accounts[0]);
 };
 
-export const calculateUserClaimableAmount = async (web3: Web3,
+export const calculateUserClaimableAmount = async (
+  web3: Web3,
   poolAddress: string
 ) => {
   const accounts = await web3.eth.getAccounts();
@@ -225,14 +336,13 @@ export const calculateUserClaimableAmount = async (web3: Web3,
   } catch (e) {
     return "0";
   }
-}; 
+};
 
 export const calculateInitialInvestment = async (
   web3: Web3,
   poolAddress: string,
   address: string
 ) => {
-
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   const initialAmount = await poolContract.methods
     .getUserInvestedAmount(address)
@@ -247,7 +357,6 @@ export const calculateInitialInvestmentInUSD = async (
   address: string
 ) => {
   try {
-  
     const poolContract = await getPoolContract(web3, poolAddress, 2);
     const initialAmount = await poolContract.methods
       .getUserInvestedAmountInUSD(address)
