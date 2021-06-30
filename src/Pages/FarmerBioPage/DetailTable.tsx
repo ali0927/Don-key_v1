@@ -29,7 +29,7 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { useWeb3Network } from "components/Web3NetworkDetector";
+import { BSCChainId, PolygonChainId, useWeb3Network } from "components/Web3NetworkDetector";
 import { IFarmer } from "interfaces";
 import { useSwitchNetwork } from "hooks/useSwitchNetwork";
 import clsx from "clsx";
@@ -183,6 +183,12 @@ const YellowSwitch = withStyles({
     backgroundColor: "#d9d9d9",
   },
 })(Switch);
+
+const URLMap = {
+  [BSCChainId]: "https://bscscan.com",
+  [PolygonChainId]: "https://polygonscan.com"
+}
+
 export const DetailTable = ({
   poolAddress,
   apy,
@@ -340,7 +346,7 @@ export const DetailTable = ({
                     Total Pool Value
                   </TotalPoolValueLabel>
                   <a
-                    href={"https://bscscan.com/address/" + poolAddress}
+                    href={`${URLMap[network?.chainId as 56 || 56]}/address/` + poolAddress}
                     target="_blank"
                     className="ml-2"
                   >
