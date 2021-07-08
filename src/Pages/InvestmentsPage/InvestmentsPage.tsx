@@ -378,7 +378,7 @@ export const InvestmentsPage = () => {
                             poolAddressFinal.initialInvestmentinUSD;
 
                           return (
-                            <TableRow key={index}>
+                            <TableRow key={investment.GUID}>
                               <CustomTableData>{index + 1}</CustomTableData>
                               <CustomTableData>
                                 <StyledImage src={investment.picture} />

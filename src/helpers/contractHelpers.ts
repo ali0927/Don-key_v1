@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import { Function } from "lodash";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
-import { createCache } from "./createCache";
+import { isEqual } from "lodash";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
@@ -140,7 +140,9 @@ const tokenPriceGetter = [
   },
 ];
 
-const makeAsyncMultiCalled = <T extends any[], V>(func: ((...args: T) => Promise<V>)): ((...args: T) => Promise<V>) => {
+const makeAsyncMultiCalled = <T extends any[], V>(
+  func: (...args: T) => Promise<V>
+): ((...args: T) => Promise<V>) => {
   const callers: { res: any; rej: any }[] = [];
   let isInProgress = false;
   return async (...args: T) => {
@@ -151,7 +153,7 @@ const makeAsyncMultiCalled = <T extends any[], V>(func: ((...args: T) => Promise
       }
       if (!isInProgress) {
         isInProgress = true;
-        
+
         try {
           const result = await func(...args);
           callers.forEach((caller) => {
@@ -169,7 +171,46 @@ const makeAsyncMultiCalled = <T extends any[], V>(func: ((...args: T) => Promise
   };
 };
 
-export const getTokenPrice = makeAsyncMultiCalled(
+const checkArgsAndCreateNewOne = <T extends any[], V>(
+  func: (...args: T) => Promise<V>
+): ((...args: T) => Promise<V>) => {
+  const argsMap: {
+    [x: string]: { calledFunc: any; args: T;  result: any };
+  } = {};
+  let count = 0;
+  const findIndex = (args: T) => {
+    let index = -1;
+    if (count === 0) {
+      return index;
+    }
+    for (let i = 1; i <= count; i++) {
+      if (isEqual(argsMap[i].args, args)) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  };
+  return async (...args: T) => {
+    let funcToCall = makeAsyncMultiCalled(func);
+    let index = -1;
+
+    index = findIndex(args);
+    if (index === -1) {
+      ++count;
+      argsMap[count] = { calledFunc: funcToCall, args,  result: null };
+    } else {
+      funcToCall = argsMap[index].calledFunc;
+      if (argsMap[count].result) {
+        return argsMap[count].result;
+      }
+    }
+    const result = await funcToCall(...args);
+    return result;
+  };
+};
+
+export const getTokenPrice = checkArgsAndCreateNewOne(
   async (web3: Web3, tokenAddress: string) => {
     if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
       return "1";
@@ -183,7 +224,7 @@ export const getTokenPrice = makeAsyncMultiCalled(
         web3,
         tokenPriceGetter[index].priceFeedAddress
       );
-  
+
       return price;
     }
     const bnbPrice = await (await getPancakeContract(web3)).methods

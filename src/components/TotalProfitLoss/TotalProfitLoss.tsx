@@ -30,9 +30,8 @@ export const TotalProfitLoss = ({
   useEffect(() => {
     (async () => {
       try {
-        
         const accounts = address ? [address] : await web3.eth.getAccounts();
-        const amountWithdraw = await getAmount(web3, poolAddress,accounts[0]);
+        const amountWithdraw = await getAmount(web3, poolAddress, accounts[0]);
         const amountInitial = await calculateInitialInvestment(
           web3,
           poolAddress,
@@ -49,11 +48,15 @@ export const TotalProfitLoss = ({
           setTotalProfitLoss(
             new BigNumber(amountWithdraw).minus(amountInitial).toFixed(digits)
           );
+          
         } else {
+          const tokenAddress =  await getTokenAddress(web3, poolAddress);
           const tokenPrice = await getTokenPrice(
             web3,
-            await getTokenAddress(web3, poolAddress)
+           tokenAddress
           );
+          console.log(poolAddress,tokenAddress,tokenPrice);
+
           setTotalProfitLoss(
             new BigNumber(amountWithdraw)
               .multipliedBy(tokenPrice)
@@ -67,6 +70,7 @@ export const TotalProfitLoss = ({
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh, isUSD]);
+  console.log(totalProfitLoss);
   if (isUSD) {
     return <>${totalProfitLoss}</>;
   }
