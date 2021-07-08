@@ -9,12 +9,11 @@ const Header = styled.div`
   width: 100%;
   background: ${theme.palette.background.yellow};
   padding-top: 2rem;
-  padding-bottom: 10rem;
   position: relative;
 `;
 
-const HeaderInner = styled.div`
-  width: 70%;
+const BGYellow = styled.div`
+  background-color: ${theme.palette.background.yellow};
 `;
 
 const HeadingTitle = styled.div`
@@ -40,14 +39,13 @@ const HeaderContent = styled.p`
 `;
 
 const Body = styled.div`
-  background-color: #f4f4f4;
+   background-color: ${theme.palette.background.yellow};
   position: relative;
 `;
 
 const FrequentRoot = styled.div`
   background: ${theme.palette.common.white};
   border-radius: 10px;
-  margin-top: -130px;
   box-shadow: rgb(0 18 80 / 10%) 0px 5px 20px;
   position: relative;
 `;
@@ -75,7 +73,6 @@ const DonKeyIconWrapper = styled.div`
 const Ellipse1 = styled.div`
   left: 16%;
   top: 8%;
-
   position: absolute;
 `;
 
@@ -91,116 +88,115 @@ const Ellipse3 = styled.div`
   position: absolute;
 `;
 
-const Faq = () => {
+export const FAQSection = () => {
   return (
-    <>
-      <NavBar />
-      <Header>
-        <Ellipse1>
-          <LargeEllipse />
-        </Ellipse1>
-        <Ellipse2>
-          <LargeEllipse />
-        </Ellipse2>
-        <Ellipse3>
-          <MeadiumEllipse />
-        </Ellipse3>
-        <div className="d-flex justify-content-center flex-wrap">
-          <HeaderInner className="d-flex justify-content-center flex-wrap">
-            <HeadingTitle className="mt-5">
-              Frequently Asked Questions
-            </HeadingTitle>
-            <HeaderContent className="mt-3">
-              Thanks to the invaluable feedback of the telegram community, the
-              team is now making available a resource meant to clarify important
-              questions surrounding the Don-key protocol, and the service that
-              it provides to the community. By the end of this week, Don-key’s
-              FAQ will also be uploaded to the home page for the community’s
-              easy access.
-            </HeaderContent>
-          </HeaderInner>
-        </div>
-      </Header>
+    <Body className="d-flex justify-content-center py-5">
+      <div className="container">
+        <HeadingTitle className="mt-5">Frequently Asked Questions</HeadingTitle>
+        <HeaderContent className="my-3 pb-3">
+          Thanks to the invaluable feedback of the telegram community, the team
+          is now making available a resource meant to clarify important
+          questions surrounding the Don-key protocol, and the service that it
+          provides to the community.
+        </HeaderContent>
+        <FrequentRoot className="p-5">
+          <DonKeyIconWrapper>
+            <DonKeyIcon />
+          </DonKeyIconWrapper>
 
-      <Body className="d-flex justify-content-center pb-5">
-        <div className="container">
-          <FrequentRoot className="p-5">
-            <DonKeyIconWrapper>
-              <DonKeyIcon />
-            </DonKeyIconWrapper>
-
-            <div className="">
-              <div className="mb-4">
-                <Question>How does the Don-key protocol work?</Question>
-                <Content>
-                  Users invest their funds into farmer designed, developer
-                  created yield farming strategies that are hard coded via smart
-                  contracts. Liquidity within each investment pool moves exactly
-                  as the smart contracts dictate.
-                </Content>
-              </div>
-
-              <div className="mb-4">
-                <Question>What does 1-click copy farming mean?</Question>
-                <Content>
-                  Most yield farming strategies have 10 or more simultaneous and
-                  recurring processes (deposit swap, harvest, claim, and so
-                  forth - all on multiple protocols.) With Don-key users get to
-                  enjoy the same rewards, with the unmatched ease of just a
-                  single click.
-                </Content>
-              </div>
-
-              <div className="mb-4">
-                <Question>Who has access to my funds?</Question>
-                <Content>
-                  Absolutely no one. Your funds can’t be touched or accessed by
-                  anyone but yourself. Our farmers design the strategy, and
-                  smart contracts execute them.
-                </Content>
-              </div>
-
-              <div className="mb-4">
-                <Question>
-                  What protections are in place to secure deposited funds?
-                </Question>
-                <Content>
-                  Decentralized and autonomous smart contracts keep your funds
-                  secured, and completely in your control.
-                </Content>
-              </div>
-
-              <div className="mb-4">
-                <Question>Are rewards Compounded?</Question>
-                <Content>Yes</Content>
-              </div>
-
-              <div className="mb-4">
-                <Question>How is APY per strategy calculated?</Question>
-                <Content>
-                  APY stands for Annual Percentage Yield and is the projected
-                  rate of annual return after taking compounding interest into
-                  account - it's calculated by averaging estimated returns
-                  across a strategy’s included liquidity pools.
-                </Content>
-              </div>
-
-              <div>
-                <Question>
-                  How are Don-key fees implemented? Are they percentages taken
-                  on profit or on total deposited funds?
-                </Question>
-                <Content>
-                  We only charge a fee on profits, not your initial investment.
-                </Content>
-              </div>
+          <div className="">
+            <div className="mb-4">
+              <Question>How does the Don-key protocol work?</Question>
+              <Content>
+                Users invest their funds into farmer designed, developer created
+                yield farming strategies that are hard coded via smart
+                contracts. Liquidity within each investment pool moves exactly
+                as the smart contracts dictate.
+              </Content>
             </div>
-          </FrequentRoot>
-        </div>
-      </Body>
-      <Footer />
-    </>
+
+            <div className="mb-4">
+              <Question>What does 1-click copy farming mean?</Question>
+              <Content>
+                Most yield farming strategies have 10 or more simultaneous and
+                recurring processes (deposit swap, harvest, claim, and so forth
+                - all on multiple protocols.) With Don-key users get to enjoy
+                the same rewards, with the unmatched ease of just a single
+                click.
+              </Content>
+            </div>
+
+            <div className="mb-4">
+              <Question>Who has access to my funds?</Question>
+              <Content>
+                Absolutely no one. Your funds can’t be touched or accessed by
+                anyone but yourself. Our farmers design the strategy, and smart
+                contracts execute them.
+              </Content>
+            </div>
+
+            <div className="mb-4">
+              <Question>
+                What protections are in place to secure deposited funds?
+              </Question>
+              <Content>
+                Decentralized and autonomous smart contracts keep your funds
+                secured, and completely in your control.
+              </Content>
+            </div>
+
+            <div className="mb-4">
+              <Question>Are rewards Compounded?</Question>
+              <Content>Yes</Content>
+            </div>
+
+            <div className="mb-4">
+              <Question>How is APY per strategy calculated?</Question>
+              <Content>
+                APY stands for Annual Percentage Yield and is the projected rate
+                of annual return after taking compounding interest into account
+                - it's calculated by averaging estimated returns across a
+                strategy’s included liquidity pools.
+              </Content>
+            </div>
+
+            <div>
+              <Question>
+                How are Don-key fees implemented? Are they percentages taken on
+                profit or on total deposited funds?
+              </Question>
+              <Content>
+                We only charge a fee on profits, not your initial investment.
+              </Content>
+            </div>
+          </div>
+        </FrequentRoot>
+      </div>
+    </Body>
   );
 };
 
-export default Faq;
+// const Faq = () => {
+//   return (
+//     <>
+//       <NavBar />
+//       <Header>
+//         <Ellipse1>
+//           <LargeEllipse />
+//         </Ellipse1>
+//         <Ellipse2>
+//           <LargeEllipse />
+//         </Ellipse2>
+//         <Ellipse3>
+//           <MeadiumEllipse />
+//         </Ellipse3>
+//       </Header>
+//       <BGYellow>
+//         <FAQSection />
+//       </BGYellow>
+//       <Footer />
+//     </>
+//   );
+// };
+
+// export default Faq;

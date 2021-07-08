@@ -8,6 +8,7 @@ import { DonTokenSection } from "./DonTokensSection";
 import { JoinCommunity } from "./JoinCommunity";
 import { RoundedCompletedSection } from "./RoundedCompletedSection";
 import { LotteryPage } from "Pages/LotteryPage";
+import { FAQSection } from "Pages/Faq";
 
 
 
@@ -36,6 +37,7 @@ const LandingPage = () => {
       {/* DON Tokens */}
       <DonTokenSection />
 
+      <FAQSection />
       {/** RoundedCompleted Section */}
 
       <RoundedCompletedSection />

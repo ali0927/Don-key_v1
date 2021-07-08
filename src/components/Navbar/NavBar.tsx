@@ -163,11 +163,6 @@ function NavBar(props: INavBarProps) {
                     >
                       $DON ERC20
                     </NavbarLink>
-                    <NavbarLink
-                       to="/faq" linkColor="black"
-                    >
-                      FAQ
-                    </NavbarLink>
                   </>
                 )}
 
@@ -185,12 +180,6 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
-                    <NavbarLink
-                       to="/faq" linkColor="black"
-                    >
-                      FAQ
-                    </NavbarLink>
-                  
                   </>
                 )}
               </Nav>
