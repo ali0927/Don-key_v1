@@ -7,9 +7,6 @@ import { USDViewProvider } from "contexts/USDViewContext";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
 import { InvestmentsPage } from "Pages/InvestmentsPage/InvestmentsPage";
 
-const Section = styled.section`
-  background-color: ${theme.palette.background.yellow};
-`;
 
 export const InvestmentsPageParent = withWeb3(() => {
   const [isInUsd, setIsInUsd] = useState(false);
@@ -28,8 +25,6 @@ export const InvestmentsPageParent = withWeb3(() => {
       <RefreshProvider>
         <div style={{ background: "#F4F4F4" }}>
           <InvestmentsPage />
-
-          <Footer />
         </div>
       </RefreshProvider>
     </USDViewProvider>
