@@ -92,13 +92,8 @@ export const FAQSection = () => {
   return (
     <Body className="d-flex justify-content-center py-5">
       <div className="container">
-        <HeadingTitle className="mt-5">Frequently Asked Questions</HeadingTitle>
-        <HeaderContent className="my-3 pb-3">
-          Thanks to the invaluable feedback of the telegram community, the team
-          is now making available a resource meant to clarify important
-          questions surrounding the Don-key protocol, and the service that it
-          provides to the community.
-        </HeaderContent>
+        <HeadingTitle className="my-5">Frequently Asked Questions</HeadingTitle>
+    
         <FrequentRoot className="p-5">
           <DonKeyIconWrapper>
             <DonKeyIcon />
