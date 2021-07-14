@@ -5,9 +5,9 @@
 [context."feature/*"]
   environment = { REACT_APP_API_URL = "https://api.don-key.finance", REACT_APP_ENV = "production", REACT_APP_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context.dev]
-  environment = { REACT_APP_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", REACT_APP_ENV = "development", REACT_APP_SHARE_LINK = "https://don-next-dev.vercel.app//share/" }
+  environment = { REACT_APP_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", REACT_APP_ENV = "development", REACT_APP_SHARE_LINK = "https://don-next-dev.vercel.app/share/" }
 [context.deploy-preview]
-  environment = { REACT_APP_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", REACT_APP_ENV = "development", REACT_APP_SHARE_LINK = "https://don-next-dev.vercel.app//share/"}
+  environment = { REACT_APP_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", REACT_APP_ENV = "development", REACT_APP_SHARE_LINK = "https://don-next-dev.vercel.app/share/"}
   
 [[redirects]]
   from = "/*"
