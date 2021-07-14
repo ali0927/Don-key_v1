@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
@@ -9,7 +9,12 @@ import {
   getBUSDTokenContract,
   getPoolContract,
   getPoolToken,
+  getReferralCode,
+  getReferralSystemContract,
   getTokenPrice,
+  getUserAddressFromCode,
+  getUserReferralCode,
+  isValidReferralCode,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -20,8 +25,7 @@ import { useTransactionNotification } from "components/LotteryForm/useTransactio
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { Chip, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { theme } from "theme";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { InfoIcon } from "icons/InfoIcon";
+import { api } from "don-utils";
 const ButtonWrapper = styled.div({
   marginRight: "10%",
   width: "40%",
@@ -72,6 +76,24 @@ const MyBalanceInBUSD = ({
   return <>{state.balance} </>;
 };
 
+const ReferralInput = styled.input`
+  box-shadow: none !important;
+  width: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 3px;
+  outline: 0px !important;
+  /* padding-left: 10px; */
+  padding: 5px 10px;
+  margin-right: 20px;
+  :focus-visible {
+    outline: 0px !important;
+  }
+`;
+
+const initialState: { msg: string; type: "success" | "error" } = {
+  msg: "",
+  type: "success",
+};
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
@@ -93,11 +115,66 @@ export const InvestmentPopup = ({
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
-
   const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
 
+  const [referralCode, setReferralCode] = useState("");
+  const [checking, setChecking] = useState(false);
+  const [msg, setMsg] =
+    useState<{ msg: string; type: "success" | "error" }>(initialState);
+  const [applied, setApplied] = useState(false);
+  const checkIfCodeisApplicable = async (code: string, showMsg = false) => {
+    const userCode = await getUserReferralCode(web3);
+
+    if (userCode === code.toLowerCase()) {
+      if (showMsg) {
+        setMsg({ type: "error", msg: "You cannot use your own referral code" });
+      }
+      return false;
+    }
+    const referralSystem = await getReferralSystemContract(web3);
+    const accounts = await web3.eth.getAccounts();
+    const hasReferred = await referralSystem.methods
+      .hasReferred(accounts[0])
+      .call();
+    if (hasReferred) {
+      if (showMsg) {
+        setMsg({ type: "error", msg: "Referral Code can only be used once." });
+      }
+      return false;
+    }
+    const isValidCode = await isValidReferralCode(web3, code.toLowerCase());
+    if (!isValidCode) {
+      if (showMsg) {
+        setMsg({ type: "error", msg: "Enter a Valid Referral Code" });
+      }
+      return false;
+    }
+
+    return true;
+  };
+
+  const applyCode = async (code: string, showMsg = false) => {
+    try {
+      setChecking(true);
+      const isApplicable = await checkIfCodeisApplicable(code, showMsg);
+      if (isApplicable) {
+        setReferralCode(code.toUpperCase());
+        setApplied(true);
+        setMsg(initialState);
+      }
+    } finally {
+      setChecking(false);
+    }
+  };
+  useEffect(() => {
+    const code = getReferralCode();
+    console.log(code);
+    if (code) {
+      applyCode(code);
+    }
+  }, []);
   const handleInvest = async () => {
     if (isLoading) {
       return;
@@ -151,6 +228,29 @@ export const InvestmentPopup = ({
             from: accounts[0],
             gas: gasLimit,
           });
+       
+      }
+      if (poolVersion === 3) {
+        const amount = new BigNumber(web3.utils.toWei(value, "ether"));
+        const inputAmount = amount.toFixed(0);
+        const minAmount = amount
+          .multipliedBy(new BigNumber(1000).minus(slippage))
+          .dividedBy(1000)
+          .toFixed(0);
+        if(referralCode && applied){
+          const tx = await pool.methods.depositLiquidityWithCode(inputAmount, minAmount, referralCode.toLowerCase()).send({
+            from: accounts[0],
+            gas: gasLimit,
+          })
+      
+          const referred_address = await getUserAddressFromCode(web3,referralCode.toLowerCase());
+          await api.post('/api/v2/referrer', {code: referralCode.toLowerCase(),txHash: tx.transactionHash,pool_address: poolAddress,referred_address})
+        }else {
+          await pool.methods.depositLiquidity(inputAmount, minAmount).send({
+            from: accounts[0],
+            gas: gasLimit,
+          });
+        }      
       }
 
       await executePost({ data: { poolAddress } });
@@ -172,6 +272,23 @@ export const InvestmentPopup = ({
     return "Invest";
   };
 
+  const renderApplyButton = () => {
+    if (applied) {
+      return "Remove";
+    }
+    if (checking) {
+      return <DonKeySpinner />;
+    }
+    return "Apply";
+  };
+  const handleApplyClick = () => {
+    if (applied) {
+      setApplied(false);
+      setReferralCode("");
+    } else {
+      applyCode(referralCode, true);
+    }
+  };
   return (
     <DonCommonmodal
       title="Invest"
@@ -202,6 +319,26 @@ export const InvestmentPopup = ({
             setValue={setValue}
             max={balance}
           />
+
+          <div className="d-flex mt-3 align-items-center justify-content-between">
+            <ReferralInput
+              value={referralCode}
+              placeholder="Enter Referral Code"
+              disabled={applied || checking}
+              onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+            />
+            <ButtonWidget
+              varaint="outlined"
+              fontSize="14px"
+              height="30px"
+              width="119px"
+              onClick={handleApplyClick}
+            >
+              {renderApplyButton()}
+            </ButtonWidget>
+          </div>
+          {msg.msg && <p className="mb-1 mt-3 text-danger">{msg.msg}</p>}
+          {applied && <p className="mb-1 mt-3 text-success">Applied</p>}
           <ThemeProvider theme={themeM}>
             <p className="mb-1 mt-3">Slippage Tolerance</p>
             <div className="d-flex align-items-center">
@@ -251,8 +388,8 @@ export const InvestmentPopup = ({
       <p className="mt-4">
         <small>
           If you receive: "Transaction error. Exception thrown in contract
-          code", this is due to high slippage. Please try a different amount.
-          Or Change Min Slippage
+          code", this is due to high slippage. Please try a different amount. Or
+          Change Min Slippage
         </small>
       </p>
     </DonCommonmodal>

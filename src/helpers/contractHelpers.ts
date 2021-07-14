@@ -18,7 +18,8 @@ export const StakingBSCAddress = "0xe2451a1F50Dc718eF2b37D2C29539121B18b9d24";
 export const StakingEthAddress = "0x21A05270dCeCB199C8E41E8297c15e6e1328aE48";
 export const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 export const USDTAddressEth = "0xdac17f958d2ee523a2206206994597c13d831ec7";
-
+const ReferralSystemAddress = "0x7e9Aa7Ecb1C2c2C3d0Ed455cE9b86B86a811BBd8";
+const DonkeyPriceFeedAddress = "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6";
 let busdtoken: Contract | null = null;
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
@@ -58,8 +59,52 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
-let isInProgress = false;
-let observers: any = [];
+export const getDonkeyPriceFeedContract = async (web3: Web3) => {
+  const json = await import("JsonData/DonKeyPriceFeeds.json");
+  return new web3.eth.Contract(json.abi as any, DonkeyPriceFeedAddress);
+};
+export const getReferralSystemContract = async (web3: Web3) => {
+  const json = await import("JsonData/ReferralSystem.json");
+  return new web3.eth.Contract(json.abi as any, ReferralSystemAddress);
+};
+
+export const getRewardSystemContract = async (web3: Web3) => {
+  const referralContract = await getReferralSystemContract(web3);
+  const rewardSystemAddress = await referralContract.methods
+    .getRewardSystem()
+    .call();
+  const json = await import("JsonData/RewardSystem.json");
+  return new web3.eth.Contract(json.abi as any, rewardSystemAddress);
+};
+
+export const getUserReferralCode = async (web3: Web3) => {
+  const referralContract = await getReferralSystemContract(web3);
+  const accounts = await web3.eth.getAccounts();
+  const userInfo = await referralContract.methods.userInfo(accounts[0]).call();
+  if (userInfo.exists) {
+    return userInfo.referralCode as string;
+  }
+  return null;
+};
+
+export const isValidReferralCode = async (web3: Web3, code: string) => {
+  const referralContract = await getReferralSystemContract(web3);
+  const userInfo = await referralContract.methods.userInfoFromCode(code).call();
+  return userInfo.referral.exists;
+};
+
+export const getUserAddressFromCode = async (web3: Web3, code: string) => {
+  const referralContract = await getReferralSystemContract(web3);
+  const userInfo = await referralContract.methods.userInfoFromCode(code).call();
+  return userInfo.user;
+};
+
+export const signUpAsReferral = async (web3: Web3, code: string) => {
+  const referralContract = await getReferralSystemContract(web3);
+  const accounts = await web3.eth.getAccounts();
+  await referralContract.methods.signUp(code).send({ from: accounts[0] });
+};
+
 const aggregatorV3InterfaceABI = [
   {
     inputs: [],
@@ -171,11 +216,11 @@ const makeAsyncMultiCalled = <T extends any[], V>(
   };
 };
 
-const checkArgsAndCreateNewOne = <T extends any[], V>(
+const memoizeAsync = <T extends any[], V>(
   func: (...args: T) => Promise<V>
 ): ((...args: T) => Promise<V>) => {
   const argsMap: {
-    [x: string]: { calledFunc: any; args: T;  result: any };
+    [x: string]: { calledFunc: any; args: T; result: any };
   } = {};
   let count = 0;
   const findIndex = (args: T) => {
@@ -198,7 +243,7 @@ const checkArgsAndCreateNewOne = <T extends any[], V>(
     index = findIndex(args);
     if (index === -1) {
       ++count;
-      argsMap[count] = { calledFunc: funcToCall, args,  result: null };
+      argsMap[count] = { calledFunc: funcToCall, args, result: null };
     } else {
       funcToCall = argsMap[index].calledFunc;
       if (argsMap[count].result) {
@@ -210,7 +255,7 @@ const checkArgsAndCreateNewOne = <T extends any[], V>(
   };
 };
 
-export const getTokenPrice = checkArgsAndCreateNewOne(
+export const getTokenPrice = memoizeAsync(
   async (web3: Web3, tokenAddress: string) => {
     if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
       return "1";
@@ -250,15 +295,25 @@ export const getTokenImage = async (web3: Web3, poolAddress: string) => {
   return `/assets/images/coins/${tokenAddress}.png`;
 };
 
+const getPoolJSON = async (version: number) => {
+  if (version == 1 || !version) {
+    return await import("JsonData/pool2.json");
+  }
+  if (version === 2) {
+    return await import("JsonData/advanced-pool.json");
+  }
+  if (version === 3) {
+    return await import("JsonData/poolv3.json");
+  }
+  return await import("JsonData/pool2.json");
+};
+
 export const getPoolContract = async (
   web3: Web3,
   poolAddress: string,
   version: number
 ) => {
-  const POOLJson =
-    version === 1 || !version
-      ? await import("JsonData/pool2.json")
-      : await import("JsonData/advanced-pool.json");
+  const POOLJson = await getPoolJSON(version);
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
 };
 
@@ -364,9 +419,10 @@ export const calculateWithdrawAmount = async (
 
 export const calculateUserClaimableAmount = async (
   web3: Web3,
-  poolAddress: string
+  poolAddress: string,
+  account?: string
 ) => {
-  const accounts = await web3.eth.getAccounts();
+  const accounts = account ? [account]:  await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   try {
     const claimableAmount = await poolContract.methods
@@ -441,6 +497,12 @@ export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
 
   return contract;
 };
+
+export const getDonPriceWeb3 = async (web3: Web3) => {
+  const priceFeedContract = await getDonkeyPriceFeedContract(web3);
+  const priceofToken = await priceFeedContract.methods.getPriceinUSD(DONTokenAddressBSC).call();
+  return toEther(priceofToken);
+}
 
 export const getDonPrice = async (isBSC = false) => {
   if (isBSC) {

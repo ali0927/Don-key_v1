@@ -49,7 +49,7 @@ const ShowAmount = ({
   );
 };
 
-const hideAddress = (item: string) => {
+export const hideAddress = (item: string) => {
   return (
     item.slice(0, 10) +
     "xxxxxxxxxxxxxxxxxxxxx" +

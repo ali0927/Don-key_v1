@@ -44,6 +44,7 @@
     "framer-motion": "^4.1.9",
     "fuse.js": "^6.4.6",
     "graphql": "^15.5.0",
+    "html2canvas": "^1.0.0",
     "immer": "^8.0.1",
     "lodash": "^4.17.20",
     "logrocket": "^1.2.3",

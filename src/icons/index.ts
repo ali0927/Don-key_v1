@@ -45,3 +45,7 @@ export * from "./LinkIcon";
 export * from "./FarmerPageDonkeyIcon";
 export * from "./SmallEllipse";
 export * from "./MeadiumEllipse";
+export * from "./DollarIcon";
+export * from "./TwitterIcon";
+export * from "./TelegramIcon";
+export * from "./HypeLinkIcon";

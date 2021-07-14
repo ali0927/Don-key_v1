@@ -20,6 +20,7 @@ import styled from "styled-components";
 import { theme } from "theme";
 import moment from "moment";
 import { LotteryClosingTime } from "Pages/LotteryPage";
+import { useReferralContext } from "contexts/ReferralContext";
 
 declare global {
   interface Window {
@@ -80,6 +81,46 @@ const StyledNavBar = styled(Navbar)`
   background-color: ${theme.palette.background.yellow};
 `;
 
+const ConnectWalletButton = () => {
+  const { doMetaMaskLogin } = useMetaMaskLogin();
+
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const handleConnection = async () => {
+    setIsDisabled(true);
+    try {
+      await doMetaMaskLogin();
+    } finally {
+      setIsDisabled(false);
+    }
+  };
+  return (
+    <ButtonComponent
+      disabled={isDisabled}
+      onClick={handleConnection}
+      variant="colorBlack btn-outline btnusername"
+    >
+      Connect wallet
+    </ButtonComponent>
+  );
+};
+
+const MyReferralNavLink = ({ variant }: { variant: string }) => {
+  const { hasSignedUp: isShown } = useReferralContext();
+
+  if (isShown) {
+    return (
+      <NavbarLink
+        to="/dashboard/referrals"
+        linkColor={variant === "builder" ? "white" : "black"}
+      >
+        My Referrals
+      </NavbarLink>
+    );
+  }
+  return <></>;
+};
+
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
   const isAuth = useSelector((state: IStoreState) => state.auth);
@@ -93,19 +134,6 @@ function NavBar(props: INavBarProps) {
     }
     return <Logo />;
   }, [variant]);
-
-  const { doMetaMaskLogin } = useMetaMaskLogin();
-
-  const [isDisabled, setIsDisabled] = useState(false);
-
-  const handleConnection = async () => {
-    setIsDisabled(true);
-    try {
-      await doMetaMaskLogin();
-    } finally {
-      setIsDisabled(false);
-    }
-  };
 
   const [update, setUpdated] = useState(false);
   const hasEnded = useMemo(() => {
@@ -180,6 +208,7 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
+                    <MyReferralNavLink variant={variant} />
                   </>
                 )}
               </Nav>
@@ -212,13 +241,7 @@ function NavBar(props: INavBarProps) {
                     <span> {address}</span>
                   </ButtonComponent>
                 ) : (
-                  <ButtonComponent
-                    disabled={isDisabled}
-                    onClick={handleConnection}
-                    variant="colorBlack btn-outline btnusername"
-                  >
-                    Connect wallet
-                  </ButtonComponent>
+                  <ConnectWalletButton />
                 )}
               </>
             )}

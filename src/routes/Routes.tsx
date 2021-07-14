@@ -9,6 +9,7 @@ import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations
 import FarmerSignupPage from "Pages/FarmerSignupPage";
 import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
 
+
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
@@ -16,6 +17,7 @@ const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
 // const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
 const InvestmentsPageParent = lazy(() => import("Pages/InvestmentsPageParent"));
 const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
+const MyReferrals = lazy(() => import("Pages/MyReferrrals"));
 
 export default function Routes() {
   return (
@@ -77,6 +79,15 @@ export default function Routes() {
           children={
             <Suspense fallback={<LoadingPage />}>
               <InvestmentsPageParent />
+            </Suspense>
+          }
+        />
+         <ProtectedRoute
+          exact
+          path="/dashboard/referrals"
+          children={
+            <Suspense fallback={<LoadingPage />}>
+             <MyReferrals />
             </Suspense>
           }
         />

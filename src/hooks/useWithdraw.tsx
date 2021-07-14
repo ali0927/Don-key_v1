@@ -32,12 +32,13 @@ export const useWithdraw = () => {
       if (poolVersion === 1) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
-      if (poolVersion === 2) {
+      if (poolVersion === 2 || poolVersion === 3) {
         const userLPTokens = await pool.methods.balanceOf(accounts[0]).call();
         await pool.methods
           .withdrawLiquidity(userLPTokens, new BigNumber(web3.utils.toWei(minAmountOut)).multipliedBy(995).dividedBy(1000).toFixed(0))
           .send({ from: accounts[0] });
       }
+
 
       await executeDelete({
         data: {

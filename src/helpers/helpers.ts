@@ -73,3 +73,12 @@ export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
 
   return new BigNumber(totalPoolValue).multipliedBy(tokenPrice).toString();
 }
+const REFERRAL_CODE = "REFERRAL_CODE"
+
+export const setReferralCode = (code: string) => {
+  localStorage.setItem(REFERRAL_CODE, code);
+}
+
+export const getReferralCode = () => {
+  return localStorage.getItem(REFERRAL_CODE) ;
+}

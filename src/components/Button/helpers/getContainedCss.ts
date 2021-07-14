@@ -8,6 +8,7 @@ export const getContainedCSS = (data: IContainedButton) => {
   const defaultCss = {
     backgroundColor: "",
     color: "",
+    border: "none",
   };
 
   const hoverCss = {
@@ -20,12 +21,12 @@ export const getContainedCSS = (data: IContainedButton) => {
     fontSize = data.fontSize;
   }
 
-  if(data.width){
-      width = data.width;
+  if (data.width) {
+    width = data.width;
   }
 
-  if(data.height){
-      height=data.height;
+  if (data.height) {
+    height = data.height;
   }
 
   if (data.color === "black") {
@@ -40,6 +41,14 @@ export const getContainedCSS = (data: IContainedButton) => {
     defaultCss.color = theme.palette.text.black;
     hoverCss.backgroundColor = theme.palette.common.black;
     hoverCss.color = theme.palette.text.white;
+  } else if (data.color === "gradient") {
+    defaultCss.backgroundColor =
+      "linear-gradient(0deg, #FFFFFF, #FFFFFF), #B4B4B4;";
+    defaultCss.color = theme.palette.text.black;
+    defaultCss.border = "1px solid " + theme.palette.common.black;
+    hoverCss.backgroundColor =
+      "linear-gradient(0deg, #FFFFFF, #FFFFFF), #B4B4B4;";
+    hoverCss.color = theme.palette.text.black;
   } else {
     defaultCss.backgroundColor = theme.palette.common.lightYellow;
     defaultCss.color = theme.palette.text.black;
@@ -48,19 +57,18 @@ export const getContainedCSS = (data: IContainedButton) => {
   }
 
   return {
-      default: `
+    default: `
           font-size: ${fontSize};
           width: ${width};
           height: ${height};
           background-color: ${defaultCss.backgroundColor};
           color: ${defaultCss.color};
+          border: ${defaultCss.border};
       `,
-      hover: `
+    hover: `
         background-color: ${hoverCss.backgroundColor};
         color: ${hoverCss.color};
         box-shadow: ${hoverCss.shadow};
-      `
-  }
+      `,
+  };
 };
-
-

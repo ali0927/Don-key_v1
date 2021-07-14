@@ -52,18 +52,19 @@ const HeadingTitle = styled.p({
   color: "#070602",
 });
 
-const ZeroInvestmentBox = styled.div({
-  minHeight: 600,
+export const ZeroInvestmentBox = styled.div({
+  // minHeight: 00,
+  minHeight: 200,
   display: "flex",
   justifyContent: "center",
   position: "relative",
 });
 
-const ZeroInvestmentInnerBox = styled.div({
+export const ZeroInvestmentInnerBox = styled.div({
   maxWidth: 599,
 });
 
-const ZeroInvestmentContent = styled.div({
+export const ZeroInvestmentContent = styled.div({
   fontFamily: "Roboto",
   fontStyle: "normal",
   fontWeight: 800,
@@ -75,7 +76,7 @@ const WithDrawButton = styled(LightGrayButton)`
   border: 0px !important;
 `;
 
-const CenteredBox = styled.div({
+export const CenteredBox = styled.div({
   display: "flex",
   justifyContent: "center",
   flexWrap: "wrap",

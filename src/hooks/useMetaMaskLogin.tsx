@@ -4,7 +4,7 @@ import { useWeb3 } from "don-components";
 import { AuthToken } from "don-utils";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { getAuthTokenForPublicAddress } from "services/api";
+import { getAuthTokenForPublicAddress } from "services/services";
 
 export const useMetaMaskLogin = () => {
   const dispatch = useDispatch();

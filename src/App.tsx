@@ -2,6 +2,7 @@ import Routes from "./routes/Routes";
 import "./scss/styles.scss";
 import LogRocket from "logrocket";
 import { useEffect } from "react";
+import { setReferralCode } from "helpers";
 
 function App() {
   useEffect(() => {
@@ -9,6 +10,12 @@ function App() {
       LogRocket.init("uisfg9/donkey");
       console.error = () => {};
     }
+    const url = new URL(window.location.href);
+    const referrralCode = url.searchParams.get('referral');
+    if(referrralCode){
+      setReferralCode(referrralCode);
+    }
+    
   }, []);
   return <Routes />;
 }

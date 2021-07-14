@@ -1,7 +1,7 @@
 
 
 export interface IContainedButton {
-    color: "black" | "yellow" | "lightYellow"; 
+    color: "black" | "yellow" | "lightYellow" | "gradient"; 
     width?: string;
     height?: string;
     fontSize?: string 
