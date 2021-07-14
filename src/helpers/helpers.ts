@@ -50,7 +50,11 @@ export const getROI = async (web3: any, poolAddress: string) => {
 export const getProfitLoss = async (web3: Web3, poolAddress: string) => {
   const investedAmount = await calculateWithdrawAmount(web3, poolAddress);
   const accounts = await web3.eth.getAccounts();
-  const initialInvestment = await calculateInitialInvestment(web3, poolAddress, accounts[0]);
+  const initialInvestment = await calculateInitialInvestment(
+    web3,
+    poolAddress,
+    accounts[0]
+  );
 
   const value = parseFloat(investedAmount) - parseFloat(initialInvestment);
   return value;
@@ -69,16 +73,24 @@ export const getPoolValue = async (web3: Web3, poolAddress: string) => {
 export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
   const totalPoolValue = await getPoolValue(web3, poolAddress);
   const tokenAddress = await getTokenAddress(web3, poolAddress);
-  const tokenPrice = await getTokenPrice(web3,tokenAddress);
+  const tokenPrice = await getTokenPrice(web3, tokenAddress);
 
   return new BigNumber(totalPoolValue).multipliedBy(tokenPrice).toString();
-}
-const REFERRAL_CODE = "REFERRAL_CODE"
+};
+const REFERRAL_CODE = "REFERRAL_CODE";
 
 export const setReferralCode = (code: string) => {
   localStorage.setItem(REFERRAL_CODE, code);
-}
+};
+
+export const getShareUrl = (code: string) => {
+  return (
+    (process.env.REACT_APP_SHARE_LINK?.endsWith("/")
+      ? process.env.REACT_APP_SHARE_LINK
+      : process.env.REACT_APP_SHARE_LINK + "/") + code
+  );
+};
 
 export const getReferralCode = () => {
-  return localStorage.getItem(REFERRAL_CODE) ;
-}
+  return localStorage.getItem(REFERRAL_CODE);
+};

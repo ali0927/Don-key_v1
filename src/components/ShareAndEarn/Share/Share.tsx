@@ -11,6 +11,7 @@ import html2canvas from "html2canvas";
 import { api, uuidv4 } from "don-utils";
 import { Spinner } from "react-bootstrap";
 import {
+  getShareUrl,
   getTokenAddress,
   getTokenPrice,
   getTotalPoolValue,
@@ -100,7 +101,7 @@ export const Share: React.FC<IShareProps> = (props) => {
       formData.append("image", file);
       formData.append("pool_address", props.pool_address);
       const result = await api.post("/api/v2/shortener", formData);
-      const shortUrl = "https://next.don-key.finance/share/" + result.data.code;
+      const shortUrl = getShareUrl(result.data.code);
       setShareUrl(props.pool_address, {
         shortUrl,
         imageUrl: result.data.image,

@@ -15,6 +15,7 @@ import { ButtonWidget } from "components/Button/ButtonWidget";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { api } from "don-utils";
 import { useWeb3 } from "don-components";
+import { getShareUrl } from "helpers";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -119,7 +120,7 @@ export const FarmerBio = ({
       wallet_address: accounts[0]
     }).toString())
     if (response.data) {
-      setShortLink(`https://next.don-key.finance/share/`+ response.data.code);
+      setShortLink(getShareUrl(response.data.code));
       setImageUrl(response.data.image);
     }
   }
