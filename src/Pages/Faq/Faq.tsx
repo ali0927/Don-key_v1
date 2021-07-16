@@ -10,6 +10,7 @@ const Header = styled.div`
   background: ${theme.palette.background.yellow};
   padding-top: 2rem;
   position: relative;
+  z-index: 10;
 `;
 
 const BGYellow = styled.div`
