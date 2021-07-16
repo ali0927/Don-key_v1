@@ -169,10 +169,12 @@ export const InvestmentPopup = ({
     }
   };
   useEffect(() => {
-    const code = getReferralCode();
-    console.log(code);
-    if (code) {
-      applyCode(code);
+    if (poolVersion === 3) {
+      const code = getReferralCode();
+
+      if (code) {
+        applyCode(code);
+      }
     }
   }, []);
   const handleInvest = async () => {
@@ -228,7 +230,6 @@ export const InvestmentPopup = ({
             from: accounts[0],
             gas: gasLimit,
           });
-       
       }
       if (poolVersion === 3) {
         const amount = new BigNumber(web3.utils.toWei(value, "ether"));
@@ -237,20 +238,34 @@ export const InvestmentPopup = ({
           .multipliedBy(new BigNumber(1000).minus(slippage))
           .dividedBy(1000)
           .toFixed(0);
-        if(referralCode && applied){
-          const tx = await pool.methods.depositLiquidityWithCode(inputAmount, minAmount, referralCode.toLowerCase()).send({
-            from: accounts[0],
-            gas: gasLimit,
-          })
-      
-          const referred_address = await getUserAddressFromCode(web3,referralCode.toLowerCase());
-          await api.post('/api/v2/referrer', {code: referralCode.toLowerCase(),txHash: tx.transactionHash,pool_address: poolAddress,referred_address})
-        }else {
+        if (referralCode && applied) {
+          const tx = await pool.methods
+            .depositLiquidityWithCode(
+              inputAmount,
+              minAmount,
+              referralCode.toLowerCase()
+            )
+            .send({
+              from: accounts[0],
+              gas: gasLimit,
+            });
+
+          const referred_address = await getUserAddressFromCode(
+            web3,
+            referralCode.toLowerCase()
+          );
+          await api.post("/api/v2/referrer", {
+            code: referralCode.toLowerCase(),
+            txHash: tx.transactionHash,
+            pool_address: poolAddress,
+            referred_address,
+          });
+        } else {
           await pool.methods.depositLiquidity(inputAmount, minAmount).send({
             from: accounts[0],
             gas: gasLimit,
           });
-        }      
+        }
       }
 
       await executePost({ data: { poolAddress } });
@@ -320,23 +335,25 @@ export const InvestmentPopup = ({
             max={balance}
           />
 
-          <div className="d-flex mt-3 align-items-center justify-content-between">
-            <ReferralInput
-              value={referralCode}
-              placeholder="Enter Referral Code"
-              disabled={applied || checking}
-              onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-            />
-            <ButtonWidget
-              varaint="outlined"
-              fontSize="14px"
-              height="30px"
-              width="119px"
-              onClick={handleApplyClick}
-            >
-              {renderApplyButton()}
-            </ButtonWidget>
-          </div>
+          {poolVersion === 3 && (
+            <div className="d-flex mt-3 align-items-center justify-content-between">
+              <ReferralInput
+                value={referralCode}
+                placeholder="Enter Referral Code"
+                disabled={applied || checking}
+                onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
+              />
+              <ButtonWidget
+                varaint="outlined"
+                fontSize="14px"
+                height="30px"
+                width="119px"
+                onClick={handleApplyClick}
+              >
+                {renderApplyButton()}
+              </ButtonWidget>
+            </div>
+          )}
           {msg.msg && <p className="mb-1 mt-3 text-danger">{msg.msg}</p>}
           {applied && <p className="mb-1 mt-3 text-success">Applied</p>}
           <ThemeProvider theme={themeM}>

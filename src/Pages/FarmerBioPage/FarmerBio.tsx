@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { EditIcon } from "icons/EditIcon";
-import { DollarIcon } from "icons";
+import { DollarIcon, DotsIcon } from "icons";
 import { DetailTable } from "./DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
@@ -112,18 +112,21 @@ export const FarmerBio = ({
     setShareLink(true);
     setShortLink(short);
   };
-  const web3 = useWeb3()
+  const web3 = useWeb3();
   const fetchInfoFromApi = async () => {
     const accounts = await web3.eth.getAccounts();
-    const response = await api.get('/api/v2/shortener?'+ new URLSearchParams({
-      pool_address: poolAddress,
-      wallet_address: accounts[0]
-    }).toString())
+    const response = await api.get(
+      "/api/v2/shortener?" +
+        new URLSearchParams({
+          pool_address: poolAddress,
+          wallet_address: accounts[0],
+        }).toString()
+    );
     if (response.data) {
       setShortLink(getShareUrl(response.data.code));
       setImageUrl(response.data.image);
     }
-  }
+  };
 
   useEffect(() => {
     fetchInfoFromApi();
@@ -227,19 +230,20 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {/* <DotsIcon /> */}
-              <ButtonWidget
-                varaint="contained"
-                onClick={handleShareClick}
-                containedVariantColor="gradient"
-                width="193px"
-                height="50px"
-              >
-                <div className="d-flex justify-content-center align-items-center">
-                  <DollarIcon className="mr-3" />
-                  <TypographyShare> Share and Earn</TypographyShare>
-                </div>
-              </ButtonWidget>
+              {pool_version === 3 ? (
+                <ButtonWidget
+                  varaint="contained"
+                  onClick={handleShareClick}
+                  containedVariantColor="gradient"
+                  width="193px"
+                  height="50px"
+                >
+                  <div className="d-flex justify-content-center align-items-center">
+                    <DollarIcon className="mr-3" />
+                    <TypographyShare> Share and Earn</TypographyShare>
+                  </div>
+                </ButtonWidget>
+              ): <DotsIcon />}
             </Col>
           </Row>
 
