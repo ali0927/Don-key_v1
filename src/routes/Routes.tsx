@@ -8,6 +8,7 @@ import { LotteryParticipatePage } from "Pages/LotteryPage/LotteryParticipatePage
 import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations";
 import FarmerSignupPage from "Pages/FarmerSignupPage";
 import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
+import Faq from "Pages/Faq/Faq";
 
 const Builder = lazy(() => import("Pages/Builder"));
 const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
@@ -24,6 +25,7 @@ export default function Routes() {
         <Route exact path="/" children={<LandingPage />} />
         <Route path="/farmers" children={<FarmerSignupPage />} />
         <Route path="/team" children={<TeamPage />} />
+        <Route exact path="/faq" children={<Faq />} />
         <Route
           exact
           path="/lottery/participate"

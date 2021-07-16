@@ -171,27 +171,27 @@ export const FAQSection = () => {
   );
 };
 
-// const Faq = () => {
-//   return (
-//     <>
-//       <NavBar />
-//       <Header>
-//         <Ellipse1>
-//           <LargeEllipse />
-//         </Ellipse1>
-//         <Ellipse2>
-//           <LargeEllipse />
-//         </Ellipse2>
-//         <Ellipse3>
-//           <MeadiumEllipse />
-//         </Ellipse3>
-//       </Header>
-//       <BGYellow>
-//         <FAQSection />
-//       </BGYellow>
-//       <Footer />
-//     </>
-//   );
-// };
+const Faq = () => {
+  return (
+    <>
+      <NavBar />
+      <Header>
+        <Ellipse1>
+          <LargeEllipse />
+        </Ellipse1>
+        <Ellipse2>
+          <LargeEllipse />
+        </Ellipse2>
+        <Ellipse3>
+          <MeadiumEllipse />
+        </Ellipse3>
+      </Header>
+      <BGYellow>
+        <FAQSection />
+      </BGYellow>
+      <Footer />
+    </>
+  );
+};
 
-// export default Faq;
+export default Faq;
