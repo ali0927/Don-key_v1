@@ -87,13 +87,7 @@ const Builder = () => {
     <>
       <div className={clsx(`page-wrapper`)}>
         <NavBar variant="builder" />
-        { !loading && isGetData!== undefined && !isGetData?.data ?
-           <div className="msg">This strategy was created by another farmer</div>  :
-          isGetData?.data && !loading &&
-          (typeof strategyData?.json === 'string' ?
-            strategyData?.json?.length && JSON.parse(strategyData?.json)?.length === strategy?.length
-            : strategyData?.json !== null ? strategyData?.json?.length === strategy?.length : true)
-          ? <div>
+         <div>
               <DonBuilder
                 protocols={protocols}
                 strategy={strategy}
@@ -103,7 +97,7 @@ const Builder = () => {
               <BuilderButton style={{position: "absolute", top: 180, right: 20}}>Add Cubes</BuilderButton>
               <BuilderButton style={{position: "absolute", top: 260, right: 20}}>Lock Strategy</BuilderButton>
            </div>
-          : <LoadingPage />}
+         
       </div>
     </>
   );
