@@ -138,7 +138,7 @@ const calcDonRewards = async (
   );
   const profit = new BigNumber(amountWithdraw).minus(amountInitial);
   if (profit.lte("0")) {
-    return { profit: "0", don: "0", investedAmount: amountInitial };
+    return { profit: profit.toFixed(2), don: "0", investedAmount: amountInitial };
   }
   const tokenPrice = await getTokenPrice(
     web3,
