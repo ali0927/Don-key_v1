@@ -10,6 +10,7 @@ import { ButtonWidget } from "components/Button";
 const Root = styled.div`
   background:${theme.palette.background.yellow};
   overflow: hidden;
+  padding: 200px 0;
 `;
 
 const Title = styled.h3`
@@ -41,6 +42,7 @@ const ImageCommingSoon = styled.img`
 `;
 
 const TradingImageRoot = styled.div`
+  position: relative;
   @media screen and (max-width: 500px) {
     overflow: hidden;
     margin-top: 50px;
@@ -52,17 +54,29 @@ const TradingImageRoot = styled.div`
 `;
 
 const TradingImage = styled.img`
-  height: 50%;
-  width: 700px;
-  margin-right: 300px;
+  top: -100px;
+  min-width: 700px;
+  position: absolute;
+  @media screen and (max-width: 800px) {
+    position: relative;
+    top: 0;
+    margin-top: 50px;
+    min-width: initial;
+  }
 `;
+
+const StyledButtonWidget = styled(ButtonWidget)`
+border: 1px solid rgba(7, 6, 2, 0.56) !important;
+color: rgba(7, 6, 2, 0.56) !important;
+border-radius: 4px;
+`
 
 export const StrategyBuilderSection: React.FC = () => {
   return (
     <>
-      <Root className="pt-5 pb-5">
-        <Container>
-          <Row className="mt-md-5 mb-5 mt-1">
+      <Root >
+        <Container >
+          <Row className="my-5">
             <Col md={7}>
               <div>
                 <Title className="mb-3 mt-3">Farming strategy builder</Title>
@@ -71,7 +85,7 @@ export const StrategyBuilderSection: React.FC = () => {
                   allowing you to adapt fast to the dynamic world of DeFi and
                   secure your yield
                 </Paragraph>
-                <ButtonWidget
+                <StyledButtonWidget
                   varaint="outlined"
                   height="50px"
                   width="152px"
@@ -80,7 +94,7 @@ export const StrategyBuilderSection: React.FC = () => {
                 >
                   <ImageCommingSoon src={comingsoon} />
                   Build strategy
-                </ButtonWidget>
+                </StyledButtonWidget>
               </div>
             </Col>
             <Col md={4}>

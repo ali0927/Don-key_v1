@@ -37,7 +37,7 @@ const LandingPage = () => {
       {/* DON Tokens */}
       <DonTokenSection />
 
-      <FAQSection />
+      {/* <FAQSection /> */}
       {/** RoundedCompleted Section */}
 
       <RoundedCompletedSection />
