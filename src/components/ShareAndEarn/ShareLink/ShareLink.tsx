@@ -133,7 +133,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         <div className="row justify-content-center mt-5">
           <div className="col-lg-2" />
           <div className="col-lg-4 mb-2">
-            <TwitterShareButton tex className="w-100" url={props.link} title={"Check out my investment on Don-key"}>
+            <TwitterShareButton className="w-100" url={props.link} title={"Check out my investment on Don-key"}>
               <TwitterButton
                 varaint="contained"
                 height={"50px"}
