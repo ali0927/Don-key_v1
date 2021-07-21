@@ -22,6 +22,7 @@ import {
 import { useWeb3 } from "don-components";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import BigNumber from "bignumber.js";
+import { useReferralContext } from "contexts/ReferralContext";
 
 const ReadMore = styled.div`
   font-family: Roboto;
@@ -70,13 +71,14 @@ export const Share: React.FC<IShareProps> = (props) => {
   useEffect(() => {
     fetchTvl();
   }, []);
-
+  const {checkSignUp} = useReferralContext();
   const handleCreateLink = async () => {
     setLoading(true);
     let code = await getUserReferralCode(web3);
     if (!code) {
       code = uuidv4().slice(0, 7);
       await signUpAsReferral(web3, code.toLowerCase());
+      checkSignUp();
     }
     const element = document.querySelector("#shareEarnImage") as HTMLElement;
     if (element) {

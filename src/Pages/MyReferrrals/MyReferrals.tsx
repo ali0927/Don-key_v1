@@ -138,7 +138,11 @@ const calcDonRewards = async (
   );
   const profit = new BigNumber(amountWithdraw).minus(amountInitial);
   if (profit.lte("0")) {
-    return { profit: profit.toFixed(2), don: "0", investedAmount: amountInitial };
+    return {
+      profit: profit.toFixed(2),
+      don: "0",
+      investedAmount: amountInitial,
+    };
   }
   const tokenPrice = await getTokenPrice(
     web3,
@@ -146,10 +150,9 @@ const calcDonRewards = async (
   );
 
   const tokenValueInUsd = profit.multipliedBy(tokenPrice).multipliedBy(0.02);
-
   return {
-    profit: profit.toFixed(2),
-    don: tokenValueInUsd.dividedBy(donPrice).toFixed(2),
+    profit: profit.toFixed(6),
+    don: tokenValueInUsd.dividedBy(donPrice).toFixed(6),
     investedAmount: amountInitial,
   };
 };
@@ -219,6 +222,7 @@ const useTransformedData = () => {
     return [];
   }, [farmerData, network]);
   const transformData = async () => {
+    setIsReady(false);
     const donPrice = await getDonPriceWeb3(web3);
 
     const promises = data.map(async ({ wallet_address }: any) => {
@@ -263,9 +267,7 @@ const useTransformedData = () => {
   };
 
   useEffect(() => {
-    console.log(farmers.length, data, "Data");
     if (farmers.length > 0 && data) {
-      console.log("called");
       transformData();
     }
   }, [farmers.length, data ? data.length : 0]);
@@ -284,22 +286,11 @@ const EmptyTableHeading = styled(TableHeading)`
 `;
 
 export const MyReferrals = () => {
-  const { referralCount, code } = useReferralContext();
-  const [isCopied, setCopied] = useState(false);
-  const { enqueueSnackbar } = useSnackbar();
-  const handleCopy = () => {
-    navigator.clipboard.writeText(code);
-    setCopied(true);
-    enqueueSnackbar("Referral Code Copied to Clipboard", {
-      variant: "success",
-      onClose: () => {
-        setCopied(false);
-      },
-    });
-  };
+  const { referralCount } = useReferralContext();
+
   const web3 = useWeb3();
 
-  const { isReady, transformedData } = useTransformedData();
+  const { isReady, transformedData, transformData } = useTransformedData();
 
   const totalDon = useMemo(() => {
     if (isReady) {
@@ -323,8 +314,10 @@ export const MyReferrals = () => {
     setAvailable(toEther(user.rewardsDebt));
   };
   useEffect(() => {
-    fetchAvailableDon();
-  }, [transformedData]);
+    if (isReady) {
+      fetchAvailableDon();
+    }
+  }, [transformedData, isReady]);
 
   const hasAvailable =
     availableDon !== "-" ? new BigNumber(availableDon).gt(0) : false;
@@ -332,12 +325,13 @@ export const MyReferrals = () => {
     const rewardContract = await getRewardSystemContract(web3);
     const accounts = await web3.eth.getAccounts();
     await rewardContract.methods.harvestRewards().send({ from: accounts[0] });
+    transformData();
   };
   const history = useHistory();
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
     history.push("/dashboard/farmer/" + poolAddress);
   };
-  console.log(transformedData);
+
   return (
     <div className="bgColor investment_header_container">
       <NavBar variant="loggedin" />
@@ -347,28 +341,13 @@ export const MyReferrals = () => {
             <Row>
               <Col lg={12}>
                 <HeadingTitle>My Referrals</HeadingTitle>
-                <div className="row">
+                <div className="row ">
                   <div className="col-md-6">
                     <WhiteCard>
-                      <div className="row h-100 align-items-center">
+                      <div className="row h-100 align-items-center justify-content-center">
                         <div className="col-md-4">
-                          <Title>Total Referrals</Title>
+                          <Title>Total Referrers</Title>
                           <Subtitle>{referralCount}</Subtitle>
-                        </div>
-                        <div className="col-md-4">
-                          <Title>Referral Code</Title>
-                          <Subtitle>{code.toUpperCase()}</Subtitle>
-                        </div>
-                        <div className="col-md-4">
-                          <ButtonWidget
-                            varaint="contained"
-                            fontSize="14px"
-                            containedVariantColor="lightYellow"
-                            height="30px"
-                            onClick={() => handleCopy()}
-                          >
-                            {isCopied ? "Copied" : "Copy"}
-                          </ButtonWidget>
                         </div>
                       </div>
                     </WhiteCard>
@@ -382,7 +361,9 @@ export const MyReferrals = () => {
                         </div>
                         <div className="col-md">
                           <Title variant="light">Rewards Available</Title>
-                          <Subtitle variant="light">{formatNum(availableDon)}</Subtitle>
+                          <Subtitle variant="light">
+                            {formatNum(availableDon)}
+                          </Subtitle>
                         </div>
                         {hasAvailable && (
                           <div className="col-md-4">
@@ -436,7 +417,9 @@ export const MyReferrals = () => {
                         </CustomTableHeading>
                         <EmptyTableHeading></EmptyTableHeading>
                         <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                        <CustomTableHeading>Referral Address</CustomTableHeading>
+                        <CustomTableHeading>
+                          Referral Address
+                        </CustomTableHeading>
                         <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                         <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
                         <CustomTableHeading>Rewards</CustomTableHeading>
@@ -459,13 +442,15 @@ export const MyReferrals = () => {
                               {investment.farmerName}
                             </CustomTableData>
                             <CustomTableData>
-                              {hideAddress(investment.wallet_address)}  
+                              {hideAddress(investment.wallet_address)}
                             </CustomTableData>
                             <CustomTableData>
-                              {investment.referralInvestment}  {investment.poolSymbol}
+                              {investment.referralInvestment}{" "}
+                              {investment.poolSymbol}
                             </CustomTableData>
                             <CustomTableData className="bold">
-                              {investment.referralProfit} {investment.poolSymbol}
+                              {investment.referralProfit}{" "}
+                              {investment.poolSymbol}
                             </CustomTableData>
                             <CustomTableData>
                               {formatNum(investment.rewards)} DON
