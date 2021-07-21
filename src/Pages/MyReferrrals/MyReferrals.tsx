@@ -294,14 +294,14 @@ export const MyReferrals = () => {
 
   const totalDon = useMemo(() => {
     if (isReady) {
-      return transformedData
+      return `${transformedData
         .reduce((prev, next) => {
           if (next.expired) {
             return prev;
           }
           return prev.plus(next.rewards);
         }, new BigNumber(0))
-        .toFixed(2);
+        .toFixed(2)} DON`;
     }
     return "-";
   }, [transformedData, isReady]);
@@ -362,7 +362,7 @@ export const MyReferrals = () => {
                         <div className="col-md">
                           <Title variant="light">Rewards Available</Title>
                           <Subtitle variant="light">
-                            {availableDon === "-" || !isReady ? "-": formatNum(availableDon)}
+                            {availableDon === "-" || !isReady ? "-": `${formatNum(availableDon)} DON`}
                           </Subtitle>
                         </div>
                         {hasAvailable && (
