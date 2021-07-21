@@ -307,17 +307,17 @@ export const MyReferrals = () => {
   }, [transformedData, isReady]);
 
   const [availableDon, setAvailable] = useState("-");
+
   const fetchAvailableDon = async () => {
+    setAvailable("-");
     const rewardSystem = await getRewardSystemContract(web3);
     const accounts = await web3.eth.getAccounts();
     const user = await rewardSystem.methods.userInfo(accounts[0]).call();
     setAvailable(toEther(user.rewardsDebt));
   };
   useEffect(() => {
-    if (isReady) {
-      fetchAvailableDon();
-    }
-  }, [transformedData, isReady]);
+    fetchAvailableDon();
+  }, [transformedData]);
 
   const hasAvailable =
     availableDon !== "-" ? new BigNumber(availableDon).gt(0) : false;
@@ -362,7 +362,7 @@ export const MyReferrals = () => {
                         <div className="col-md">
                           <Title variant="light">Rewards Available</Title>
                           <Subtitle variant="light">
-                            {formatNum(availableDon)}
+                            {availableDon === "-" || !isReady ? "-": formatNum(availableDon)}
                           </Subtitle>
                         </div>
                         {hasAvailable && (
