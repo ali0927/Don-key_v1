@@ -121,10 +121,10 @@ export const StrategyTableForInvestor = ({
           <br />
         </React.Fragment>
       )}
-      <strong>Farmer performance fee: 10%</strong>
+      <strong>Farmer performance fee:  {poolAddress.toLowerCase() === "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase() ? "0": "10"}%</strong>
       <br />{" "}
       <strong>
-        Don-key Performance fee: 5%
+        Don-key Performance fee: {poolAddress.toLowerCase() === "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase() ? "0": "5"}%
         <br />
       </strong>{" "}
     </Tooltip>
