@@ -9,6 +9,7 @@ import { JoinCommunity } from "./JoinCommunity";
 import { RoundedCompletedSection } from "./RoundedCompletedSection";
 import { LotteryPage } from "Pages/LotteryPage";
 import { FAQSection } from "Pages/Faq";
+import { RoadMap } from "./RoadMap/RoadMap";
 
 
 
@@ -39,7 +40,7 @@ const LandingPage = () => {
 
       {/* <FAQSection /> */}
       {/** RoundedCompleted Section */}
-
+      <RoadMap />
       <RoundedCompletedSection />
 
       {/*  Join the Don-key Community */}

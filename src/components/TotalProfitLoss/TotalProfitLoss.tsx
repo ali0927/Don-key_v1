@@ -70,7 +70,7 @@ export const TotalProfitLoss = ({
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh, isUSD]);
-  console.log(totalProfitLoss);
+
   if (isUSD) {
     return <>${totalProfitLoss}</>;
   }
