@@ -305,6 +305,9 @@ const getPoolJSON = async (version: number) => {
   if (version === 3) {
     return await import("JsonData/poolv3.json");
   }
+  if(version === 4){
+    return  (await import("JsonData/pool-manual.json"));
+  }
   return await import("JsonData/pool2.json");
 };
 
