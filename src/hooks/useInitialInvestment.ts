@@ -23,7 +23,7 @@ export const useInitialInvestment = (
           calculateInitialInvestmentInUSD(web3, poolAddress, accounts[0]),
         ];
         const results = await Promise.all(amounts);
-
+        console.log(results, "result")
         setinitialInvestment(results[0]);
         setinitialInvestmentinUSD(results[1]);
       } catch (err) {

@@ -8,7 +8,13 @@ import { Switch, useMediaQuery, withStyles } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { calculateWithdrawAmount, getTotalPoolValue } from "helpers";
+import {
+  calculateWithdrawAmount,
+  getPoolContract,
+  getPoolToken,
+  getTotalPoolValue,
+  toEther,
+} from "helpers";
 import { useWeb3 } from "don-components";
 import { ButtonWidget } from "components/Button";
 import {
@@ -29,10 +35,15 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
-import { BSCChainId, PolygonChainId, useWeb3Network } from "components/Web3NetworkDetector";
+import {
+  BSCChainId,
+  PolygonChainId,
+  useWeb3Network,
+} from "components/Web3NetworkDetector";
 import { IFarmer } from "interfaces";
 import { useSwitchNetwork } from "hooks/useSwitchNetwork";
 import clsx from "clsx";
+import { UpdatePoolDialog } from "./UpdatePoolDialog";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -186,8 +197,8 @@ const YellowSwitch = withStyles({
 
 const URLMap = {
   [BSCChainId]: "https://bscscan.com",
-  [PolygonChainId]: "https://polygonscan.com"
-}
+  [PolygonChainId]: "https://polygonscan.com",
+};
 
 export const DetailTable = ({
   poolAddress,
@@ -211,6 +222,8 @@ export const DetailTable = ({
   const web3 = useWeb3();
   const [initialCheck, setInitialCheck] = useState(false);
   const { chainId: currentNetwork } = useWeb3Network();
+  const [isFarmer, setIsFarmer] = useState(false);
+  const [tokenInPool, setTokeninPool] = useState("0");
   useEffect(() => {
     if (farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911") {
       setInitialCheck(true);
@@ -234,19 +247,46 @@ export const DetailTable = ({
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
 
   const { isUSD, toggle } = useUSDViewBool();
+
+  const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
+
   const isActiveNetwork = network?.chainId === currentNetwork;
+
+  const checkIsFarmer = async () => {
+    if (poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const farmerAddress = await poolContract.methods
+        .getFarmerAddress()
+        .call();
+      const accounts = await web3.eth.getAccounts();
+      if (farmerAddress === accounts[0]) {
+        setIsFarmer(true);
+      }
+      const poolToken = await getPoolToken(web3, poolAddress);
+      const poolTokenAmount = await poolToken.methods
+        .balanceOf(poolAddress)
+        .call();
+      setTokeninPool(toEther(poolTokenAmount));
+    }
+  };
+
   useEffect(() => {
     async function apiCall() {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
-      setTotalPoolValue(web3.utils.fromWei(poolValue, "ether"));
+      setTotalPoolValue(toEther(poolValue));
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
- 
+
       setCurrentHoldings(withdrawAmount);
       getIsInvested();
       fetchRoi();
     }
     apiCall();
+    checkIsFarmer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dependsOn]);
 
@@ -331,13 +371,75 @@ export const DetailTable = ({
     );
   };
 
+  const takeMoney = async () => {
+    if (poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const accounts = await web3.eth.getAccounts();
+      await poolContract.methods
+        .getInvestedAmount()
+        .send({ from: accounts[0] });
+    }
+  };
   const { switchNetwork } = useSwitchNetwork();
+
+  const renderFarmerUI = () => {
+    if (isFarmer && poolVersion === 4) {
+      return (
+        <>
+          <CardLabel color="white" className="mt-5">
+            {" "}
+            Tokens in Pool{" "}
+          </CardLabel>
+          <CardValue color="white">
+            <DollarView poolAddress={poolAddress} tokenAmount={tokenInPool} />
+          </CardValue>
+          <div className="d-flex mt-2 mb-2 justify-content-center">
+            <ButtonWidget
+              varaint="contained"
+              fontSize="14px"
+              className={isInvested ? "mr-3" : ""}
+              containedVariantColor="lightYellow"
+              height="30px"
+              width="119px"
+              onClick={() => takeMoney()}
+            >
+              Take Money
+            </ButtonWidget>
+
+            <ButtonWidget
+              fontSize="14px"
+              varaint="contained"
+              height="30px"
+              containedVariantColor="lightYellow"
+              width="150px"
+              onClick={() => setIsUpdateOpen(true)}
+              className="ml-3"
+            >
+              Update Pool Value
+            </ButtonWidget>
+          </div>
+        </>
+      );
+    }
+  };
 
   return (
     <>
       <div className="col-lg-6 mb-5">
         <CardWrapper className="p-2" color="white">
           <div style={{ marginTop: 53 }}>
+            {isUpdatePoolOpen && (
+              <UpdatePoolDialog
+                open={isUpdatePoolOpen}
+                onClose={() => setIsUpdateOpen(false)}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
             <CardInnerInfo className="d-flex justify-content-center mb-2">
               <div className="d-flex flex-column align-items-center">
                 <div className="d-flex align-items-baseline">
@@ -346,7 +448,10 @@ export const DetailTable = ({
                     Total Pool Value
                   </TotalPoolValueLabel>
                   <a
-                    href={`${URLMap[network?.chainId as 56 || 56]}/address/` + poolAddress}
+                    href={
+                      `${URLMap[(network?.chainId as 56) || 56]}/address/` +
+                      poolAddress
+                    }
                     target="_blank"
                     className="ml-2"
                   >
@@ -413,7 +518,8 @@ export const DetailTable = ({
       <div className="col-lg-6 mb-5 p">
         <CardWrapper
           className={clsx("p-2 ", {
-            "d-flex align-items-center justify-content-center": !isActiveNetwork,
+            "d-flex align-items-center justify-content-center":
+              !isActiveNetwork,
           })}
           color="black"
         >
@@ -476,6 +582,7 @@ export const DetailTable = ({
                   </ButtonWidget>
                 )}
               </div>
+              {renderFarmerUI()}
             </div>
           </CardInnerInfo>
           {isActiveNetwork && (

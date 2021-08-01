@@ -43,6 +43,7 @@ export const getErcToken = async (web3: Web3, tokenAddress: string) => {
   return busdtoken;
 };
 export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
+
   try {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
@@ -365,8 +366,26 @@ export const getPancakeContract = async (web3: Web3) => {
   return new web3.eth.Contract(pancake.default as any, PancakeRouterAddress);
 };
 
+const poolVersion: {[x: string]: number} = {
+  "0xcfe673727914cDce6B3a814f92170cdF6De04deF": 4
+}
+
+const findPoolVersion = (pool: string) => {
+  const pools = Object.keys(poolVersion);
+  const poolf = pools.find(item => item.toLowerCase() === pool.toLowerCase());
+  if(poolf){
+    return poolVersion[poolf];
+  }
+  return 2;
+}
+
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
-  const contract = await getPoolContract(web3, poolAddress, 2);
+  const poolVersion =  findPoolVersion(poolAddress);
+  const contract = await getPoolContract(web3, poolAddress, poolVersion);
+  if(poolVersion === 4){
+    const amount = new BigNumber( await contract.methods.getTotalPoolValue().call()).plus( await contract.methods.getGreyInvestedAmount().call()).toFixed(0);
+    return  amount;
+  }
   const amount = await contract.methods.getinvestedAmountWithReward().call();
   return amount;
 };
@@ -471,9 +490,7 @@ export const calculateInitialInvestmentInUSD = async (
     );
     const tokenPrice = await getTokenPrice(
       web3,
-      (
-        await getPoolToken(web3, poolAddress)
-      ).options.address
+     await getTokenAddress(web3, poolAddress)
     );
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }

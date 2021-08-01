@@ -197,29 +197,32 @@ export const InvestmentPopup = ({
         web3,
         acceptedToken.options.address
       );
-      allowance = new BigNumber(web3.utils.fromWei(allowance, "ether"));
-      const amount = new BigNumber(value);
+      allowance = new BigNumber(allowance);
+      const amount = new BigNumber(web3.utils.toWei(value, "ether"));
+      const inputAmount = amount.toFixed(0);
       onClose();
       showProgress("Transaction is in Progress");
+     
       if (amount.gt(allowance)) {
         await acceptedToken.methods
-          .approve(poolAddress, web3.utils.toWei(amount.toString(), "ether"))
+          .approve(poolAddress,inputAmount)
           .send({
             from: accounts[0],
           });
       }
+     
       if (!poolVersion || poolVersion === 1) {
         await pool.methods
-          .depositLiquidity(web3.utils.toWei(value, "ether"))
+          .depositLiquidity(inputAmount)
           .send({
             from: accounts[0],
           });
       }
       if (poolVersion === 2) {
-        const amount = new BigNumber(web3.utils.toWei(value, "ether"));
+  
         await pool.methods
           .depositLiquidity(
-            amount.toFixed(0),
+            inputAmount,
             amount.multipliedBy(tokenPrice).toFixed(0),
             amount
               .multipliedBy(new BigNumber(1000).minus(slippage))
@@ -232,8 +235,7 @@ export const InvestmentPopup = ({
           });
       }
       if (poolVersion === 3) {
-        const amount = new BigNumber(web3.utils.toWei(value, "ether"));
-        const inputAmount = amount.toFixed(0);
+      
         const minAmount = amount
           .multipliedBy(new BigNumber(1000).minus(slippage))
           .dividedBy(1000)
@@ -266,6 +268,12 @@ export const InvestmentPopup = ({
             gas: gasLimit,
           });
         }
+      }
+      if(poolVersion === 4){
+        await pool.methods.depositLiquidity(inputAmount).send({
+          from: accounts[0],
+          gas: gasLimit,
+        });
       }
 
       await executePost({ data: { poolAddress } });

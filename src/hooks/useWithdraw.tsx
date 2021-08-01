@@ -29,7 +29,7 @@ export const useWithdraw = () => {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const minAmountOut = await calculateUserClaimableAmount(web3, poolAddress);
       showProgress("Withdrawal is in Progress");
-      if (poolVersion === 1) {
+      if (poolVersion === 1 || poolVersion === 4) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
       if (poolVersion === 2 || poolVersion === 3) {

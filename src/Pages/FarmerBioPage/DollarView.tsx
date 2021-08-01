@@ -27,6 +27,8 @@ export const DollarView = ({
       try {
         setPrice(await getTokenPrice(web3,await getTokenAddress(web3, poolAddress)));
         setIsReady(true);
+      }catch(e){
+        console.log("error", e);
       } finally {
       }
     })();
