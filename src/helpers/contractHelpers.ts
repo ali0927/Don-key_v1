@@ -367,7 +367,7 @@ export const getPancakeContract = async (web3: Web3) => {
 };
 
 const poolVersion: {[x: string]: number} = {
-  "0xcfe673727914cDce6B3a814f92170cdF6De04deF": 4
+  "0x381b4e5E279BC6ed153A6af8B2997069a0f78fE1": 4
 }
 
 const findPoolVersion = (pool: string) => {
@@ -379,8 +379,8 @@ const findPoolVersion = (pool: string) => {
   return 2;
 }
 
-export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
-  const poolVersion =  findPoolVersion(poolAddress);
+export const getTotalPoolValue = async (web3: Web3, poolAddress: string, poolVersion?: number) => {
+  poolVersion = poolVersion ? poolVersion: findPoolVersion(poolAddress);
   const contract = await getPoolContract(web3, poolAddress, poolVersion);
   if(poolVersion === 4){
     const amount = new BigNumber( await contract.methods.getTotalPoolValue().call()).plus( await contract.methods.getGreyInvestedAmount().call()).toFixed(0);

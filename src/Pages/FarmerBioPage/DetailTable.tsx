@@ -276,7 +276,7 @@ export const DetailTable = ({
 
   useEffect(() => {
     async function apiCall() {
-      let poolValue = await getTotalPoolValue(web3, poolAddress);
+      let poolValue = await getTotalPoolValue(web3, poolAddress, poolVersion);
       setTotalPoolValue(toEther(poolValue));
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
