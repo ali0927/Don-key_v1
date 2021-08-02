@@ -233,7 +233,7 @@ export const DetailTable = ({
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
-
+  const [isWithdrawEnable, setisWithdrawEnabled] = useState(false);
   const { refresh, dependsOn } = useRefresh();
   const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
     useROIAndInitialInvestment(
@@ -273,6 +273,17 @@ export const DetailTable = ({
       setTokeninPool(toEther(poolTokenAmount));
     }
   };
+  const fetchWithdraw = async () => {
+    if (poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const isEnabled = await poolContract.methods.getWithdrawGateState().call();
+      setisWithdrawEnabled(isEnabled);
+    }
+  };
 
   useEffect(() => {
     async function apiCall() {
@@ -287,6 +298,7 @@ export const DetailTable = ({
     }
     apiCall();
     checkIsFarmer();
+    fetchWithdraw();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dependsOn]);
 
@@ -384,12 +396,53 @@ export const DetailTable = ({
         .send({ from: accounts[0] });
     }
   };
+  const setWithdraw = async (val: boolean) => {
+    if (poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const accounts = await web3.eth.getAccounts();
+      await poolContract.methods
+        .updateWithdrawFlag(val)
+        .send({ from: accounts[0] });
+      fetchWithdraw();
+    }
+  };
   const { switchNetwork } = useSwitchNetwork();
 
   const renderFarmerUI = () => {
     if (isFarmer && poolVersion === 4) {
       return (
         <>
+          <div className="d-flex mt-2 mb-2 justify-content-center">
+            {isWithdrawEnable ? (
+              <ButtonWidget
+                fontSize="14px"
+                varaint="contained"
+                height="30px"
+                containedVariantColor="lightYellow"
+                width="150px"
+                onClick={() => setWithdraw(false)}
+                className="ml-3"
+              >
+                Disable Withdraw
+              </ButtonWidget>
+            ) : (
+              <ButtonWidget
+                varaint="contained"
+                fontSize="14px"
+                className={isInvested ? "mr-3" : ""}
+                containedVariantColor="lightYellow"
+                height="30px"
+                width="150px"
+                onClick={() => setWithdraw(true)}
+              >
+                Enable Withdraw
+              </ButtonWidget>
+            )}
+          </div>
           <CardLabel color="white" className="mt-5">
             {" "}
             Tokens in Pool{" "}
