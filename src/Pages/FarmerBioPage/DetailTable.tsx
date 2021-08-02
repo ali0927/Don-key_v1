@@ -287,7 +287,7 @@ export const DetailTable = ({
 
   useEffect(() => {
     async function apiCall() {
-      let poolValue = await getTotalPoolValue(web3, poolAddress, poolVersion);
+      let poolValue = await getTotalPoolValue(web3, poolAddress);
       setTotalPoolValue(toEther(poolValue));
 
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
@@ -392,8 +392,9 @@ export const DetailTable = ({
       );
       const accounts = await web3.eth.getAccounts();
       await poolContract.methods
-        .getInvestedAmount()
+        .getGreyAmount()
         .send({ from: accounts[0] });
+      refresh();
     }
   };
   const setWithdraw = async (val: boolean) => {
@@ -407,7 +408,7 @@ export const DetailTable = ({
       await poolContract.methods
         .updateWithdrawFlag(val)
         .send({ from: accounts[0] });
-      fetchWithdraw();
+        refresh();
     }
   };
   const { switchNetwork } = useSwitchNetwork();

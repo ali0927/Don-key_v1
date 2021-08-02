@@ -581,29 +581,10 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "_curTotalValue",
-					"type": "uint256"
-				}
-			],
+			"inputs": [],
 			"name": "getGreyAmount",
 			"outputs": [],
 			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "getGreyInvestedAmount",
-			"outputs": [
-				{
-					"internalType": "uint256",
-					"name": "",
-					"type": "uint256"
-				}
-			],
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -725,11 +706,42 @@
 		},
 		{
 			"inputs": [],
+			"name": "getTotalGreyInvestAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "amountInToken",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amountInUSD",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "getTotalInvestAmount",
 			"outputs": [
 				{
 					"internalType": "uint256",
 					"name": "amountInToken",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getTotalInvestAmountInUSD",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "amountInUSD",
 					"type": "uint256"
 				}
 			],
@@ -757,11 +769,54 @@
 					"type": "address"
 				}
 			],
+			"name": "getUserGreyInvestedAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "amountInToken",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amountInUsd",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_investor",
+					"type": "address"
+				}
+			],
 			"name": "getUserInvestedAmount",
 			"outputs": [
 				{
 					"internalType": "uint256",
 					"name": "amountInToken",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_investor",
+					"type": "address"
+				}
+			],
+			"name": "getUserInvestedAmountInUSD",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "amountInUSD",
 					"type": "uint256"
 				}
 			],
@@ -782,10 +837,28 @@
 			"type": "function"
 		},
 		{
+			"inputs": [],
+			"name": "getinvestedAmountWithReward",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "reward",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [
 				{
 					"internalType": "uint256",
-					"name": "totalValue",
+					"name": "_totalValue",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_newPoolValue",
 					"type": "uint256"
 				}
 			],

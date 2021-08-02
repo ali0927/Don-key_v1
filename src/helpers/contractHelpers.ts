@@ -366,26 +366,10 @@ export const getPancakeContract = async (web3: Web3) => {
   return new web3.eth.Contract(pancake.default as any, PancakeRouterAddress);
 };
 
-const poolVersion: {[x: string]: number} = {
-  "0x381b4e5E279BC6ed153A6af8B2997069a0f78fE1": 4
-}
 
-const findPoolVersion = (pool: string) => {
-  const pools = Object.keys(poolVersion);
-  const poolf = pools.find(item => item.toLowerCase() === pool.toLowerCase());
-  if(poolf){
-    return poolVersion[poolf];
-  }
-  return 2;
-}
+export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
+  const contract = await getPoolContract(web3, poolAddress, 2);
 
-export const getTotalPoolValue = async (web3: Web3, poolAddress: string, poolVersion?: number) => {
-  poolVersion = poolVersion ? poolVersion: findPoolVersion(poolAddress);
-  const contract = await getPoolContract(web3, poolAddress, poolVersion);
-  if(poolVersion === 4){
-    const amount = new BigNumber( await contract.methods.getTotalPoolValue().call()).plus( await contract.methods.getGreyInvestedAmount().call()).toFixed(0);
-    return  amount;
-  }
   const amount = await contract.methods.getinvestedAmountWithReward().call();
   return amount;
 };

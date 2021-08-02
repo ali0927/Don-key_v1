@@ -58,13 +58,17 @@ export const UpdatePoolDialog: React.FC<{
   const [loading, setLoading] = React.useState(false);
 
   const [pool_value, setPoolvalue] = useState("");
+
+  const [new_pool, setnewPoolvalue] = useState("");
   const web3 = useWeb3();
   const handleUpdate = async () => {
     setLoading(true);
     try {
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
-      await pool.methods.invested(Web3.utils.toWei(pool_value)).send({ from: accounts[0] });
+      await pool.methods
+        .invested(Web3.utils.toWei(pool_value), Web3.utils.toWei(new_pool))
+        .send({ from: accounts[0] });
     } finally {
       setLoading(false);
     }
@@ -79,12 +83,25 @@ export const UpdatePoolDialog: React.FC<{
         onClose={props.onClose}
         size="sm"
       >
-        <input
-          type="text"
-          value={pool_value}
-          placeholder="Enter Pool Value"
-          onChange={(e) => setPoolvalue(e.target.value)}
-        />
+        <div>
+          <p>Previous Pool Value</p>
+          <input
+            type="text"
+            value={pool_value}
+            placeholder="Enter Pool Value"
+            onChange={(e) => setPoolvalue(e.target.value)}
+          />
+        </div>
+        <div>
+          <p>New Pool Value</p>
+          <input
+            type="text"
+            value={new_pool}
+            placeholder="Enter Pool Value"
+            onChange={(e) => setnewPoolvalue(e.target.value)}
+          />
+        </div>
+
         <div className="row  mt-4 justify-content-center">
           <div className="col-lg-3" />
           <div className="col-lg-3 mb-2">
