@@ -54,7 +54,8 @@ export const BannerSection: React.FC = () => {
               <BannerWrapper className="mt-md-5 pt-md-4">
                 <Title className="colorBlack">Outsmart DeFi</Title>
                 <LandingParagraph className="mt-4">
-                  Find your favorite farmers, follow their strategies through hard-coded smart contracts, and boost your yield
+                  Find your favorite farmers, follow their strategies, and boost
+                  your yield
                 </LandingParagraph>
                 <div className="mt-5"></div>
               </BannerWrapper>
