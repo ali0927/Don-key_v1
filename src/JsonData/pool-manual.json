@@ -152,6 +152,25 @@
 					"type": "uint256"
 				}
 			],
+			"name": "GreyWithdraw",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "value",
+					"type": "uint256"
+				}
+			],
 			"name": "Invest",
 			"type": "event"
 		},
@@ -329,6 +348,25 @@
 				}
 			],
 			"name": "WithdrawInfo",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "sender",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "value",
+					"type": "uint256"
+				}
+			],
+			"name": "WithdrawRequested",
 			"type": "event"
 		},
 		{
@@ -589,6 +627,58 @@
 		},
 		{
 			"inputs": [],
+			"name": "getGreyInvestorCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getGreyInvestorList",
+			"outputs": [
+				{
+					"internalType": "address[]",
+					"name": "",
+					"type": "address[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getGreyWithdrawalCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getGreyWithdrawalList",
+			"outputs": [
+				{
+					"internalType": "address[]",
+					"name": "",
+					"type": "address[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "getHarvestFeeAmount",
 			"outputs": [
 				{
@@ -724,6 +814,24 @@
 		},
 		{
 			"inputs": [],
+			"name": "getTotalGreyWithdrawalAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "amountInToken",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "LPAmount",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "getTotalInvestAmount",
 			"outputs": [
 				{
@@ -825,19 +933,6 @@
 		},
 		{
 			"inputs": [],
-			"name": "getWithdrawGateState",
-			"outputs": [
-				{
-					"internalType": "bool",
-					"name": "",
-					"type": "bool"
-				}
-			],
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "getinvestedAmountWithReward",
 			"outputs": [
 				{
@@ -876,6 +971,25 @@
 				}
 			],
 			"name": "isInvestor",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_investor",
+					"type": "address"
+				}
+			],
+			"name": "isWithdrawalRequested",
 			"outputs": [
 				{
 					"internalType": "bool",
@@ -1157,27 +1271,14 @@
 		{
 			"inputs": [
 				{
-					"internalType": "bool",
-					"name": "_withdrawFlag",
-					"type": "bool"
+					"internalType": "uint256",
+					"name": "_totalValue",
+					"type": "uint256"
 				}
 			],
-			"name": "updateWithdrawFlag",
+			"name": "withdraw",
 			"outputs": [],
 			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "withdrawGateFlag",
-			"outputs": [
-				{
-					"internalType": "bool",
-					"name": "",
-					"type": "bool"
-				}
-			],
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -1194,5 +1295,4 @@
 			"type": "function"
 		}
 	]
-	
 }

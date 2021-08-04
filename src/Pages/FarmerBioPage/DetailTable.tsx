@@ -43,7 +43,9 @@ import {
 import { IFarmer } from "interfaces";
 import { useSwitchNetwork } from "hooks/useSwitchNetwork";
 import clsx from "clsx";
+import { AssignLpTokens } from "./AssignLpTokens";
 import { UpdatePoolDialog } from "./UpdatePoolDialog";
+import { SendWithdrawalsDialog } from "./SendWithdrawals";
 
 const CardWrapper = styled.div`
   min-height: 280px;
@@ -233,7 +235,7 @@ export const DetailTable = ({
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
 
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
-  const [isWithdrawEnable, setisWithdrawEnabled] = useState(false);
+
   const { refresh, dependsOn } = useRefresh();
   const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
     useROIAndInitialInvestment(
@@ -249,7 +251,8 @@ export const DetailTable = ({
   const { isUSD, toggle } = useUSDViewBool();
 
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
-
+  const [isAssignOpen, setIsAssignOpen] = useState(false);
+  const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
   const isActiveNetwork = network?.chainId === currentNetwork;
 
   const checkIsFarmer = async () => {
@@ -273,17 +276,25 @@ export const DetailTable = ({
       setTokeninPool(toEther(poolTokenAmount));
     }
   };
-  const fetchWithdraw = async () => {
+
+  const [withdrawLp, setWithdrawLp]  = useState(new BigNumber("0"));
+
+  const [totalLp, setTotalLp]  = useState(new BigNumber("0"));
+
+  const fetchWithdrawShare = async () => {
     if (poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
         poolAddress,
         poolVersion
       );
-      const isEnabled = await poolContract.methods.getWithdrawGateState().call();
-      setisWithdrawEnabled(isEnabled);
+      const lpTokens = await poolContract.methods.totalSupply().call();
+      const withdrawLp = await poolContract.methods.getTotalGreyWithdrawalAmount().call();
+      setTotalLp(new BigNumber(toEther(lpTokens)));
+      setWithdrawLp(new BigNumber(toEther(withdrawLp.LPAmount)));
     }
-  };
+  }
+  
 
   useEffect(() => {
     async function apiCall() {
@@ -298,7 +309,7 @@ export const DetailTable = ({
     }
     apiCall();
     checkIsFarmer();
-    fetchWithdraw();
+    fetchWithdrawShare();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dependsOn]);
 
@@ -397,7 +408,7 @@ export const DetailTable = ({
       refresh();
     }
   };
-  const setWithdraw = async (val: boolean) => {
+  const takeExtraMoney = async () => {
     if (poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
@@ -406,44 +417,21 @@ export const DetailTable = ({
       );
       const accounts = await web3.eth.getAccounts();
       await poolContract.methods
-        .updateWithdrawFlag(val)
+        .getInvestedAmount()
         .send({ from: accounts[0] });
-        refresh();
+      refresh();
     }
   };
+
   const { switchNetwork } = useSwitchNetwork();
+
+
+ 
 
   const renderFarmerUI = () => {
     if (isFarmer && poolVersion === 4) {
       return (
         <>
-          <div className="d-flex mt-2 mb-2 justify-content-center">
-            {isWithdrawEnable ? (
-              <ButtonWidget
-                fontSize="14px"
-                varaint="contained"
-                height="30px"
-                containedVariantColor="lightYellow"
-                width="150px"
-                onClick={() => setWithdraw(false)}
-                className="ml-3"
-              >
-                Disable Withdraw
-              </ButtonWidget>
-            ) : (
-              <ButtonWidget
-                varaint="contained"
-                fontSize="14px"
-                className={isInvested ? "mr-3" : ""}
-                containedVariantColor="lightYellow"
-                height="30px"
-                width="150px"
-                onClick={() => setWithdraw(true)}
-              >
-                Enable Withdraw
-              </ButtonWidget>
-            )}
-          </div>
           <CardLabel color="white" className="mt-5">
             {" "}
             Tokens in Pool{" "}
@@ -451,19 +439,62 @@ export const DetailTable = ({
           <CardValue color="white">
             <DollarView poolAddress={poolAddress} tokenAmount={tokenInPool} />
           </CardValue>
+          <CardLabel color="white" className="mt-5">
+            {" "}
+            Withdraw Requested
+          </CardLabel>
+          <CardValue color="white">
+            {totalLp.isEqualTo(0) ? 0 : (withdrawLp.dividedBy(totalLp)).multipliedBy(100).toFixed(0)} %
+          </CardValue>
           <div className="d-flex mt-2 mb-2 justify-content-center">
+          <ButtonWidget
+              varaint="contained"
+              fontSize="14px"
+              className={"mr-3"}
+              containedVariantColor="lightYellow"
+              height="30px"
+              width="150px"
+              onClick={() => takeMoney()}
+            >
+              Take Tokens
+            </ButtonWidget>
             <ButtonWidget
               varaint="contained"
               fontSize="14px"
-              className={isInvested ? "mr-3" : ""}
+             
               containedVariantColor="lightYellow"
               height="30px"
-              width="119px"
-              onClick={() => takeMoney()}
+              width="160px"
+              onClick={() => takeExtraMoney()}
             >
-              Take Money
+              Withdraw Extra Tokens
             </ButtonWidget>
-
+          </div>
+          <div className="d-flex mt-2 mb-2 justify-content-center">
+            <ButtonWidget
+              fontSize="14px"
+              varaint="contained"
+              height="30px"
+              containedVariantColor="lightYellow"
+              width="150px"
+              onClick={() => setIsAssignOpen(true)}
+              className="ml-3"
+            >
+              Assign Lp Tokens
+            </ButtonWidget>
+            <ButtonWidget
+              fontSize="14px"
+              varaint="contained"
+              height="30px"
+              containedVariantColor="lightYellow"
+              width="150px"
+              onClick={() => setIsSendWithdraw(true)}
+              className="ml-3"
+            >
+              Send Withdrawals
+            </ButtonWidget>
+          </div>
+          <div className="d-flex mt-2 mb-2 justify-content-center">
             <ButtonWidget
               fontSize="14px"
               varaint="contained"
@@ -489,7 +520,23 @@ export const DetailTable = ({
             {isUpdatePoolOpen && (
               <UpdatePoolDialog
                 open={isUpdatePoolOpen}
-                onClose={() => setIsUpdateOpen(false)}
+                onClose={() => {setIsUpdateOpen(false); refresh()}}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
+             {isAssignOpen && (
+              <AssignLpTokens
+                open={isAssignOpen}
+                onClose={() => {setIsAssignOpen(false); refresh()}}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
+             {isSendWithdrawOpen && (
+              <SendWithdrawalsDialog
+                open={isSendWithdrawOpen}
+                onClose={() => {setIsSendWithdraw(false); refresh()}}
                 pool_address={poolAddress}
                 poolVersion={poolVersion}
               />

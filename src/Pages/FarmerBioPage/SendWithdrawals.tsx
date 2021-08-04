@@ -19,7 +19,7 @@ const CancelButton = styled(ButtonWidget)`
 `;
 
 
-export const UpdatePoolDialog: React.FC<{
+export const SendWithdrawalsDialog: React.FC<{
   open: boolean;
   pool_address: string;
   poolVersion: number;
@@ -35,29 +35,34 @@ export const UpdatePoolDialog: React.FC<{
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      const pool = await getPoolContract(web3, pool_address, poolVersion);
-      const accounts = await web3.eth.getAccounts();
-      await pool.methods
-        .updateTotalPoolValue( Web3.utils.toWei(new_pool))
-        .send({ from: accounts[0] });
+      if (poolVersion === 4) {
+        const poolContract = await getPoolContract(
+          web3,
+          pool_address,
+          poolVersion
+        );
+        const accounts = await web3.eth.getAccounts();
+         await poolContract.methods.withdraw(Web3.utils.toWei(new_pool)).send({from : accounts[0]});
+      }
     } finally {
       setLoading(false);
       onClose()
     }
+    
   };
 
   return (
     <>
       <DonCommonmodal
         isOpen={open}
-        title="Update Pool Value"
+        title="Send Withdrawals"
         variant="common"
         onClose={props.onClose}
         size="sm"
       >
         
         <div>
-          <p>New Pool Value</p>
+          <p>Latest Pool Value</p>
           <input
             type="text"
             value={new_pool}

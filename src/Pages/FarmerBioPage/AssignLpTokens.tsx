@@ -19,7 +19,7 @@ const CancelButton = styled(ButtonWidget)`
 `;
 
 
-export const UpdatePoolDialog: React.FC<{
+export const AssignLpTokens: React.FC<{
   open: boolean;
   pool_address: string;
   poolVersion: number;
@@ -29,7 +29,8 @@ export const UpdatePoolDialog: React.FC<{
 
   const [loading, setLoading] = React.useState(false);
 
-  
+  const [pool_value, setPoolvalue] = useState("");
+
   const [new_pool, setnewPoolvalue] = useState("");
   const web3 = useWeb3();
   const handleUpdate = async () => {
@@ -38,7 +39,7 @@ export const UpdatePoolDialog: React.FC<{
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
       await pool.methods
-        .updateTotalPoolValue( Web3.utils.toWei(new_pool))
+        .invested(Web3.utils.toWei(pool_value), Web3.utils.toWei(new_pool))
         .send({ from: accounts[0] });
     } finally {
       setLoading(false);
@@ -50,12 +51,20 @@ export const UpdatePoolDialog: React.FC<{
     <>
       <DonCommonmodal
         isOpen={open}
-        title="Update Pool Value"
+        title="Assign Lp Tokens"
         variant="common"
         onClose={props.onClose}
         size="sm"
       >
-        
+        <div>
+          <p>Previous Pool Value</p>
+          <input
+            type="text"
+            value={pool_value}
+            placeholder="Enter Pool Value"
+            onChange={(e) => setPoolvalue(e.target.value)}
+          />
+        </div>
         <div>
           <p>New Pool Value</p>
           <input
@@ -76,7 +85,7 @@ export const UpdatePoolDialog: React.FC<{
               containedVariantColor="lightYellow"
               onClick={handleUpdate}
             >
-              {loading ? <Spinner animation="border" size="sm" /> : "Update"}
+              {loading ? <Spinner animation="border" size="sm" /> : "Assign"}
             </ButtonWidget>
           </div>
 
