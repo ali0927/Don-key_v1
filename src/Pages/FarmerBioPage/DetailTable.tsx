@@ -467,7 +467,7 @@ export const DetailTable = ({
               width="160px"
               onClick={() => takeExtraMoney()}
             >
-              Withdraw Extra Tokens
+              Take Extra Tokens
             </ButtonWidget>
           </div>
           <div className="d-flex mt-2 mb-2 justify-content-center">
