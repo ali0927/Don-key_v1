@@ -59,6 +59,6 @@ export const TeamJSON: ITeamBoardProps[] = [
   {
     image: jason,
     name: "Jason Kelman",
-    designation: "Content Manager",
+    designation: "Chief Marketing Officer",
   },
 ];
