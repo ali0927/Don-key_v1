@@ -1,8 +1,12 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
 import { InvestmentInput } from "components/InvestmentInput";
-import React from "react";
+import { getBSCDon, getERCContract, toEther } from "helpers";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { useWeb3 } from "don-components";
+import BigNumber from "bignumber.js";
+import { useStakingContract } from "hooks";
 
 const StyledH2 = styled.h2`
   font-family: Roboto;
@@ -14,10 +18,8 @@ const StyledH2 = styled.h2`
 
 const Info = styled.p`
   font-family: Roboto;
-
   font-size: 12px;
   line-height: 20px;
-  /* or 125% */
   padding: 0 50px;
   display: flex;
   align-items: center;
@@ -26,45 +28,83 @@ const Info = styled.p`
 
   color: #656565;
 `;
-
-
+const MaxButton = styled.span`
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  bottom: -20px;
+  font-size: 12px;
+  color: #0d6efd;
+  &:hover,
+  &:focus {
+    color: #0a58ca;
+  }
+`;
 const DonInputWrapper = styled.div`
-border: 1px solid #3E3E3E;
-position: relative;
-`
+  border: 1px solid #3e3e3e;
+  position: relative;
+  margin-bottom: 40px;
+`;
 const DonInputLabel = styled.label`
-position: absolute;
-top: 0;
-left: 0;
-transform: translate(15px, -50%);
-font-size: 15px;
-color: #C6C6C6;
-margin-bottom: 0%;
-`
+  position: absolute;
+  top: 0;
+  background-color: #fff;
+  padding-left: 5px;
+  padding-right: 5px;
+  left: 0;
+  transform: translate(15px, -60%);
+  font-size: 12px;
+  color: #c6c6c6;
+  margin-bottom: 0%;
+`;
 const DonHTMLInput = styled.input`
-text-align: right;
-font-size: 18px;
-border: none;
-&:focus {
-  outline: none;
-}
-`
+  text-align: right;
+  font-size: 15px;
+  border: none;
+  width: 100%;
+  height: 100%;
+  padding: 14px 1rem;
+  &:focus {
+    outline: none;
+  }
+`;
 
-const DonInput = ({label, placeholder, value, max, showMaxButton, onChange}: {
+const DonInput = ({
+  label,
+  placeholder,
+  value,
+  max,
+  showMaxButton,
+  onChange,
+}: {
   label: string;
   placeholder?: string;
   value: string;
   max?: string;
   showMaxButton?: boolean;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: string) => void;
 }) => {
-  return <DonInputWrapper>
-    <DonInputLabel>
-      {label}
-    </DonInputLabel>
-    <DonHTMLInput placeholder={placeholder} type="text" value={value} onChange={onChange} />
-  </DonInputWrapper>
+  return (
+    <DonInputWrapper>
+      <DonInputLabel>{label}</DonInputLabel>
+      <DonHTMLInput
+        placeholder={placeholder}
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {max && (
+        <MaxButton className="link-primary" onClick={() => onChange(max)}>
+          Max
+        </MaxButton>
+      )}
+    </DonInputWrapper>
+  );
 };
+
+const ApyForm = styled.div`
+  margin-top: 4rem;
+`;
 
 export const AcceleratedAPYModal = ({
   open,
@@ -73,6 +113,25 @@ export const AcceleratedAPYModal = ({
   open: boolean;
   onClose: () => void;
 }) => {
+  const [availableDon, setAvailableDon] = useState("");
+  const [donAmount, setDonAmount] = useState("");
+  const {stakedDon} = useStakingContract();
+  const web3 = useWeb3();
+  const fetchAvailableDon = async () => {
+    const accounts = await web3.eth.getAccounts();
+    const donContract = await getBSCDon(web3);
+
+    const userBalance = await donContract.methods.balanceOf(accounts[0]).call();
+    setAvailableDon(toEther(userBalance));
+  };
+
+  useEffect(() => {
+    fetchAvailableDon();
+  }, []);
+
+  
+
+
   return (
     <DonCommonmodal
       isOpen={open}
@@ -93,31 +152,45 @@ export const AcceleratedAPYModal = ({
           </div>
           <StyledH2 className="mb-0">Don-key APY program</StyledH2>
         </div>
-        <DonInput
-          label="Available DON"
-          max={"1000"}
-          value=""
-          placeholder="Amount"
-          onChange={() => {}}
-        />
-     
+        <ApyForm>
+          <DonInput
+            label="Available DON"
+            value={new BigNumber(availableDon).toFixed(2)}
+            placeholder="Amount"
+            onChange={() => {}}
+          />
+          <DonInput
+            label="Locked DON"
+            value={stakedDon}
+            placeholder="Amount"
+            onChange={() => {}}
+          />
+          <DonInput
+            label="Amount Of DON To Lock"
+            max={availableDon}
+            value={donAmount}
+            placeholder="Amount"
+            onChange={setDonAmount}
+          />
 
-        <InvestmentInput
-          currencySymbol="DON"
-          max={"1000"}
-          setValue={() => {}}
-          value=""
-        />
-        <Info>The DON tokens will be locked for 2 weeks after unstaking</Info>
-        <div className="d-flex align-items-center">
-          <ButtonWidget
-            varaint="contained"
-            className="py-2 rounded-0 font-weight-bold"
-            containedVariantColor="lightYellow"
-          >
-            Lock DON
-          </ButtonWidget>
-        </div>
+          <DonInput
+            label="Predicted Extra APY"
+            value=""
+            placeholder="Amount"
+            onChange={() => {}}
+          />
+
+          <Info>The DON tokens will be locked for 2 weeks after unstaking</Info>
+          <div className="d-flex align-items-center">
+            <ButtonWidget
+              varaint="contained"
+              className="py-2 rounded-0 font-weight-bold"
+              containedVariantColor="lightYellow"
+            >
+              Lock DON
+            </ButtonWidget>
+          </div>
+        </ApyForm>
       </div>
     </DonCommonmodal>
   );
