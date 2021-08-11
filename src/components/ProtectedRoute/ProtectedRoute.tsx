@@ -1,5 +1,6 @@
 import { AccountChangeListener } from "components/AccountChangeListener";
 import { LastSignInSubscriber } from "components/LastSignInSubscriber";
+import { StakingContractProvider } from "components/StakingContractProvider";
 import { Web3NetworkDetector } from "components/Web3NetworkDetector";
 import { withAuth } from "components/withAuth";
 import { ReferralStateProvider } from "contexts/ReferralContext";
@@ -19,7 +20,7 @@ export const ProtectedRoute = (props: RouteProps) => {
             <AccountChangeListener />
             {/* <LastSignInSubscriber/> */}
             <Web3NetworkDetector />
-            {comp}
+            <StakingContractProvider>{comp}</StakingContractProvider>
           </ReferralStateProvider>
         </Web3Provider>
       ),

@@ -22,6 +22,9 @@ import {
   PolygonChainId,
   useWeb3Network,
 } from "components/Web3NetworkDetector";
+import { ButtonWidget } from "components/Button";
+import { useToggle } from "don-hooks";
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -123,8 +126,6 @@ export const DashboardPage = () => {
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
- 
-
   useEffect(() => {
     // Add DON token with icon on Metamask
     const tokenSymbol = "DON";
@@ -217,6 +218,10 @@ export const DashboardPage = () => {
     return [];
   }, [data, strategyNetworkFilter]);
 
+
+  const [isOpen, onOpen, onClose] = useToggle();
+
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -251,26 +256,36 @@ export const DashboardPage = () => {
               ) : (
                 <>
                   <FarmerTitle>Explore Farmers</FarmerTitle>
-                  <div className="d-flex px-2">
-                    <NetworkButton
-                      active={strategyNetworkFilter === BSCChainId}
-                      onClick={() => setStrategyNetworkFilter(BSCChainId)}
-                    >
-                      BSC
-                    </NetworkButton>
-                    <NetworkButton
-                      active={strategyNetworkFilter === PolygonChainId}
-                      onClick={() => setStrategyNetworkFilter(PolygonChainId)}
-                    >
-                      Polygon
-                    </NetworkButton>
+                  <div className="row justify-content-between px-2">
+                    <div className="col-md-5">
+                      <NetworkButton
+                        active={strategyNetworkFilter === BSCChainId}
+                        onClick={() => setStrategyNetworkFilter(BSCChainId)}
+                      >
+                        BSC
+                      </NetworkButton>
+                      <NetworkButton
+                        active={strategyNetworkFilter === PolygonChainId}
+                        onClick={() => setStrategyNetworkFilter(PolygonChainId)}
+                      >
+                        Polygon
+                      </NetworkButton>
+                    </div>
+                    <div className="col-sm-3  mr-5 ">
+                      <ButtonWidget
+                        varaint="contained"
+                        className="py-2"
+                        onClick={onOpen}
+                        containedVariantColor="gradient"
+                      >
+                        Get Accelerated APY
+                      </ButtonWidget>
+                      {isOpen &&  <AcceleratedAPYModal open={isOpen} onClose={onClose} />}
+                    </div>
                   </div>
                 </>
               )}
 
-              <DonkeyIconWrapper>
-                <FarmerPageDonkeyIcon />
-              </DonkeyIconWrapper>
             </Col>
           </Row>
           {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
@@ -301,7 +316,6 @@ export const DashboardPage = () => {
         )}
       </Body>
 
-      {/* <GoToBuilderSection/> */}
       <Footer />
     </>
   );

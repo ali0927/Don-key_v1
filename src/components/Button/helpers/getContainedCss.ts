@@ -8,7 +8,7 @@ export const getContainedCSS = (data: IContainedButton) => {
   const defaultCss = {
     backgroundColor: "",
     color: "",
-    border: "none",
+    border: "1px solid "+ theme.palette.common.yellow,
   };
 
   const hoverCss = {

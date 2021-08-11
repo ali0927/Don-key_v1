@@ -1,6 +1,9 @@
 import { apiRequest } from "actions/apiActions";
 import { doLogin } from "actions/authActions";
 import { setFarmerDetail } from "actions/farmerActions";
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
+import { DonStakingModal } from "components/DonStakingModal/DonStakingModal";
+import { useStakingContract } from "hooks";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { IStoreState } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
@@ -17,6 +20,9 @@ export const withAuth = (element?: RouteProps["children"]) => {
     const isLoggedIn = useSelector(
       (state: IStoreState) => state.auth.isLoggedIn
     );
+    
+    const { isStaked} = useStakingContract();
+
     const dispatch = useDispatch();
 
     const { doMetaMaskLogin } = useMetaMaskLogin();
@@ -52,7 +58,8 @@ export const withAuth = (element?: RouteProps["children"]) => {
 
     return (
       <>
-        {!isLoggedIn ? createPortal(<LoadingPage />, document.body) : element}
+        {isStaked === false && <DonStakingModal onClose={() => {}} open />}
+        {(!isLoggedIn || !isStaked) ? createPortal(<LoadingPage />, document.body) : element}
       </>
     );
   };

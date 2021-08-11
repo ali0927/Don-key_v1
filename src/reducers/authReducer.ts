@@ -6,6 +6,7 @@ import { Reducer } from "redux";
 
 const INITIAL_STATE = {
   isLoggedIn: false,
+  hasStaked: false,
   user: null,
   userDetails: null,
 };

@@ -143,6 +143,7 @@ export interface IStoreState {
   auth: {
     user: IUser | null;
     isLoggedIn: boolean;
+    hasStaked: null | true | false;
   };
   api: API_STATE;
   farmer: IFarmerInter | null;

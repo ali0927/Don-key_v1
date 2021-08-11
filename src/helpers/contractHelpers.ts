@@ -20,28 +20,25 @@ export const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 export const USDTAddressEth = "0xdac17f958d2ee523a2206206994597c13d831ec7";
 const ReferralSystemAddress = "0x7e9Aa7Ecb1C2c2C3d0Ed455cE9b86B86a811BBd8";
 const DonkeyPriceFeedAddress = "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6";
-let busdtoken: Contract | null = null;
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
 
 export const getERCContract = async (web3: Web3, address: string) => {
   const BUSDJson = await import("JsonData/BUSDToken.json");
-  busdtoken = new web3.eth.Contract(BUSDJson.default as any, address);
+  const busdtoken = new web3.eth.Contract(BUSDJson.default as any, address);
   return busdtoken;
 };
 
 export const getBUSDTokenContract = async (web3: Web3) => {
-  if (busdtoken) {
-    return busdtoken;
-  }
-  busdtoken = await getErcToken(web3, BUSDAddress);
+
+  const busdtoken = await getERCContract(web3, BUSDAddress);
   return busdtoken;
 };
-export const getErcToken = async (web3: Web3, tokenAddress: string) => {
-  const BUSDJson = await import("JsonData/BUSDToken.json");
-  busdtoken = new web3.eth.Contract(BUSDJson.default as any, tokenAddress);
-  return busdtoken;
-};
+
+export const getBSCDon = async (web3: Web3) => {
+  return await getERCContract(web3,DONTokenAddressBSC);
+}
+
 export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
 
   try {
