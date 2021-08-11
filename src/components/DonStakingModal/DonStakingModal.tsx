@@ -71,7 +71,7 @@ export const DonStakingModal = ({
             className="py-2 mr-3"
             containedVariantColor="lightYellow"
           >
-           {loading ? <Spinner animation="border" />: "Stake 100 DON"}
+           {loading ? <Spinner animation="border" size="sm" />: "Stake 100 DON"}
           </ButtonWidget>
           <ButtonWidget
             onClick={onClose}

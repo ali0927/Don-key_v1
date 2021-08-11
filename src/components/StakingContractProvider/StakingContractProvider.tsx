@@ -7,7 +7,7 @@ import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
-const DonStakingAddress =  "0x9305A9e52076d8107c6851Ca4670Db6Bdd3c6a89";
+const DonStakingAddress =  "0x67C5EADbBd54e40Ef24a23517a9dB61d4ac4110e";
 export const StakingContractProvider: React.FC = memo(({ children }) => {
   const web3 = useWeb3();
 

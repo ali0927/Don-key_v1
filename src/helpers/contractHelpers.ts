@@ -543,6 +543,9 @@ export const getDonPrice = async (isBSC = false) => {
 export const toEther = (val: string) => {
   return Web3.utils.fromWei(val, "ether");
 };
+export const toWei = (val: string) => {
+  return Web3.utils.toWei(val, 'ether');
+}
 
 export const getWBNBPrice = async () => {
   const res = await axios.get(

@@ -41,6 +41,7 @@ import {
   useWeb3Network,
 } from "components/Web3NetworkDetector";
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
+import { StakingInfo } from "./StakingInfo/StakingInfo";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -128,6 +129,9 @@ const YellowSwitch = withStyles({
     backgroundColor: "#d9d9d9",
   },
 })(Switch);
+
+
+
 
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
@@ -312,6 +316,7 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
+                  <StakingInfo />
                   <div className="d-flex px-2">
                     <NetworkButton
                       active={strategyNetworkFilter === BSCChainId}

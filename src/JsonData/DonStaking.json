@@ -1,4 +1,4 @@
-{	"abi": [
+{		"abi": [
   {
     "inputs": [],
     "stateMutability": "nonpayable",
@@ -217,6 +217,35 @@
   {
     "inputs": [
       {
+        "internalType": "enum DonStaking.Tier",
+        "name": "_tier",
+        "type": "uint8"
+      }
+    ],
+    "name": "getTierDetail",
+    "outputs": [
+      {
+        "internalType": "enum DonStaking.Tier",
+        "name": "tier",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "cap",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardPer",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "address",
         "name": "_user",
         "type": "address"
@@ -404,6 +433,29 @@
       }
     ],
     "name": "updatePricefeed",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "enum DonStaking.Tier",
+        "name": "_tier",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenAmount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_per",
+        "type": "uint256"
+      }
+    ],
+    "name": "updateTier",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

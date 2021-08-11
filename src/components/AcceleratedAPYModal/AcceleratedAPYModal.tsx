@@ -1,12 +1,13 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
 import { InvestmentInput } from "components/InvestmentInput";
-import { getBSCDon, getERCContract, toEther } from "helpers";
+import { getBSCDon, getERCContract, toEther, toWei } from "helpers";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import { useStakingContract } from "hooks";
+import { Spinner } from "react-bootstrap";
 
 const StyledH2 = styled.h2`
   font-family: Roboto;
@@ -102,6 +103,40 @@ const DonInput = ({
   );
 };
 
+const tiersList = [0, 1, 2, 3, 4, 5];
+const tierInfo: {
+  isReady: boolean;
+  data: { [x: string]: { apy: number; donRequired: string } };
+} = { isReady: false, data: {} };
+const predictApy = async (amount: string, stakingContract: any) => {
+  if (!tierInfo.isReady) {
+    for (const tierNum of tiersList) {
+      const detail = await stakingContract.methods
+        .getTierDetail(tierNum)
+        .call();
+      tierInfo.data[tierNum] = {
+        apy: parseInt(detail.rewardPer) / 100,
+        donRequired: toEther(detail.cap),
+      };
+    }
+    tierInfo.isReady = true;
+  }
+  for (const tierNum of tiersList) {
+    const tier = tierInfo.data[tierNum];
+    const amountBN = new BigNumber(amount);
+    if (tierNum === 5) {
+      if (amountBN.gte(tier.donRequired)) {
+        return tier;
+      }
+    }
+    const nextTier = tierInfo.data[tierNum + 1];
+    if (amountBN.gte(tier.donRequired) && amountBN.lt(nextTier.donRequired)) {
+      return tier;
+    }
+  }
+  return null;
+};
+
 const ApyForm = styled.div`
   margin-top: 4rem;
 `;
@@ -115,8 +150,11 @@ export const AcceleratedAPYModal = ({
 }) => {
   const [availableDon, setAvailableDon] = useState("");
   const [donAmount, setDonAmount] = useState("");
-  const {stakedDon} = useStakingContract();
+  const { stakedDon, stakingContract, stake } = useStakingContract();
+  const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
+  const [loading, setLoading] = useState(false);
+  const [btnLoading, setBtnLoading] = useState(false);
   const fetchAvailableDon = async () => {
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
@@ -129,8 +167,34 @@ export const AcceleratedAPYModal = ({
     fetchAvailableDon();
   }, []);
 
-  
+  const updatePredictedApy = async () => {
+    setLoading(true);
+    try {
+      const apyObj = await predictApy(
+        new BigNumber(donAmount).plus(stakedDon).toFixed(2),
+        stakingContract
+      );
+      if (apyObj) {
+        setPredictedApy(apyObj.apy.toFixed());
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  const stakeDon = async () => {
+    setBtnLoading(true);
+    try {
+      await stake(toWei(donAmount));
+    } finally {
+      setBtnLoading(false);
+      onClose()
+    }
+  }
+  
+  useEffect(() => {
+    updatePredictedApy();
+  }, [donAmount]);
 
   return (
     <DonCommonmodal
@@ -173,21 +237,25 @@ export const AcceleratedAPYModal = ({
             onChange={setDonAmount}
           />
 
-          <DonInput
-            label="Predicted Extra APY"
-            value=""
-            placeholder="Amount"
-            onChange={() => {}}
-          />
+          <p className="text-center font-weight-bold px-5">
+            {loading ? (
+              <Spinner animation="border" size="sm" />
+            ) : predictedApy !== "0" && predictedApy !== "" ? (
+              <>Extra APY Will Be: {predictedApy}%</>
+            ) : (
+              <>Minimum 1000 DON's Required To Get Extra APY</>
+            )}
+          </p>
 
           <Info>The DON tokens will be locked for 2 weeks after unstaking</Info>
           <div className="d-flex align-items-center">
             <ButtonWidget
               varaint="contained"
+              onClick={stakeDon}
               className="py-2 rounded-0 font-weight-bold"
               containedVariantColor="lightYellow"
             >
-              Lock DON
+              {btnLoading ? <Spinner animation="border" size="sm" /> : "Lock DON"}
             </ButtonWidget>
           </div>
         </ApyForm>
