@@ -103,39 +103,7 @@ const DonInput = ({
   );
 };
 
-const tiersList = [0, 1, 2, 3, 4, 5];
-const tierInfo: {
-  isReady: boolean;
-  data: { [x: string]: { apy: number; donRequired: string } };
-} = { isReady: false, data: {} };
-const predictApy = async (amount: string, stakingContract: any) => {
-  if (!tierInfo.isReady) {
-    for (const tierNum of tiersList) {
-      const detail = await stakingContract.methods
-        .getTierDetail(tierNum)
-        .call();
-      tierInfo.data[tierNum] = {
-        apy: parseInt(detail.rewardPer) / 100,
-        donRequired: toEther(detail.cap),
-      };
-    }
-    tierInfo.isReady = true;
-  }
-  for (const tierNum of tiersList) {
-    const tier = tierInfo.data[tierNum];
-    const amountBN = new BigNumber(amount);
-    if (tierNum === 5) {
-      if (amountBN.gte(tier.donRequired)) {
-        return tier;
-      }
-    }
-    const nextTier = tierInfo.data[tierNum + 1];
-    if (amountBN.gte(tier.donRequired) && amountBN.lt(nextTier.donRequired)) {
-      return tier;
-    }
-  }
-  return null;
-};
+
 
 const ApyForm = styled.div`
   margin-top: 4rem;
@@ -150,7 +118,7 @@ export const AcceleratedAPYModal = ({
 }) => {
   const [availableDon, setAvailableDon] = useState("");
   const [donAmount, setDonAmount] = useState("");
-  const { stakedDon, stakingContract, stake } = useStakingContract();
+  const { stakedDon, stakingContract, stake, getTierInfo } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
   const [loading, setLoading] = useState(false);
@@ -170,9 +138,8 @@ export const AcceleratedAPYModal = ({
   const updatePredictedApy = async () => {
     setLoading(true);
     try {
-      const apyObj = await predictApy(
-        new BigNumber(donAmount).plus(stakedDon).toFixed(2),
-        stakingContract
+      const apyObj = await getTierInfo(
+        new BigNumber(donAmount).plus(stakedDon).toFixed(2)
       );
       if (apyObj) {
         setPredictedApy(apyObj.apy.toFixed());

@@ -1,17 +1,183 @@
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
+import { ButtonWidget } from "components/Button";
+import { useStakingContract } from "hooks";
+import { useState } from "react";
 import styled from "styled-components";
+import { useToggle } from "don-hooks";
+import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
+import BigNumber from "bignumber.js";
 
 const TotalInvestedAmount = styled.span`
   font-size: 50px;
   font-weight: 700;
 `;
 
+const StakingCard = styled.div`
+  background-color: #fff;
+  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
+    0px 10px 32px -4px rgba(24, 39, 75, 0.1);
+  border-radius: 10px;
+  padding-top: 55px;
+  padding-bottom: 10px;
+`;
+
+const StakingCol = styled.div`
+  /* &:not(:last:child) { */
+  /* position: relative; */
+  &:after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 42px;
+    background-color: #000d09;
+    opacity: 0.3;
+    position: absolute;
+    right: 0;
+    top: 3px;
+  }
+  &.hide:after {
+    display: none;
+  }
+`;
+
+const StakingTitle = styled.h3`
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+  color: #000d09;
+`;
+
+const StakingSubtitle = styled.p`
+  font-weight: 400;
+  font-size: 16px;
+  margin-bottom: 0;
+  text-align: center;
+  color: #000d09;
+`;
+
+const StyledButton = styled(ButtonWidget)`
+  width: initial !important;
+  font-size: 14px;
+`;
+
 export const StakingInfo = () => {
+  const { stakedDon, tier, pendingReward, investedAmount, isStaked } =
+    useStakingContract();
 
-
+  const [isStakeModalOpen, setisModalOpen] = useState(false);
+  const [unstake, openUnstake, closeUnstake] = useToggle();
+  const [unstakeAndLeave, openUnstakeAndLeave, closeUnstakeAndLeave] =
+    useToggle();
   return (
     <>
       <p className="mb-0">Total Investment</p>
-      <TotalInvestedAmount>$920.2</TotalInvestedAmount>
+      <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
+      {isStakeModalOpen && (
+        <AcceleratedAPYModal
+          open={isStakeModalOpen}
+          onClose={() => setisModalOpen(false)}
+        />
+      )}
+      <StakingCard className="row mt-3 mb-4">
+        <div className="col-12">
+          <div className="row">
+            <div className="col-md-6 d-flex flex-column align-items-center justify-content-between position-relative">
+              <div className="row w-100">
+                <StakingCol className="col-md-4">
+                  <StakingTitle>DON Staked</StakingTitle>
+                  <StakingSubtitle>{stakedDon} DON</StakingSubtitle>
+                </StakingCol>
+                <StakingCol className="col-md-4">
+                  <StakingTitle>Tier</StakingTitle>
+                  <StakingSubtitle>{tier.donRequired} DON</StakingSubtitle>
+                </StakingCol>
+                <StakingCol className="col-md-4">
+                  <StakingTitle>Extra APY</StakingTitle>
+                  <StakingSubtitle>{tier.apy} %</StakingSubtitle>
+                </StakingCol>
+              </div>
+              <div className="d-flex">
+                <StyledButton
+                  onClick={() => setisModalOpen(true)}
+                  varaint="contained"
+                  className="py-1 px-3 mr-3"
+                >
+                  Stake
+                </StyledButton>
+                {isStaked && (
+                  <StyledButton
+                    varaint="outlined"
+                    onClick={openUnstake}
+                    className="py-1 px-3 rounded"
+                  >
+                    Unstake
+                  </StyledButton>
+                )}
+              </div>
+            </div>
+            <div
+              className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative"
+              style={{ minHeight: 140 }}
+            >
+              <StakingCol>
+                <StakingTitle>Don Rewards</StakingTitle>
+                <StakingSubtitle>{pendingReward} DON</StakingSubtitle>
+              </StakingCol>
+              <StyledButton
+                varaint="contained"
+                disabled={new BigNumber(pendingReward).isEqualTo(0)}
+                containedVariantColor="lightYellow"
+                className="py-1 px-3"
+              >
+                Harvest
+              </StyledButton>
+            </div>
+            <div className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative">
+              <StakingCol>
+                <StakingSubtitle style={{ fontSize: 14 }} className="px-3">
+                  Unstake extra DON all investments and stay
+                </StakingSubtitle>
+              </StakingCol>
+              <StyledButton
+                varaint="contained"
+                containedVariantColor="lightYellow"
+                className="py-1 px-3"
+                onClick={openUnstake}
+              >
+                Unstake and Stay
+              </StyledButton>
+              {unstake && (
+                <UnstakeDonModal open={unstake} onClose={closeUnstake} />
+              )}
+            </div>
+            <div className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative">
+              <StakingCol className="hide">
+                <StakingSubtitle style={{ fontSize: 14 }} className="px-3">
+                  Unstake extra DON all investments and leave
+                </StakingSubtitle>
+              </StakingCol>
+              <StyledButton
+                onClick={openUnstakeAndLeave}
+                varaint="contained"
+                containedVariantColor="lightYellow"
+                className="py-1 px-3"
+              >
+                Unstake and Leave
+              </StyledButton>
+              {unstakeAndLeave && (
+                <UnstakeDonModal
+                  open={unstakeAndLeave}
+                  leave
+                  onClose={closeUnstakeAndLeave}
+                />
+              )}
+            </div>
+          </div>
+        </div>
+        <div className="col-12">
+          <div className="row pt-4"></div>
+        </div>
+      </StakingCard>
     </>
   );
 };
