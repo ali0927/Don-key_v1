@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { useToggle } from "don-hooks";
 import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
 import BigNumber from "bignumber.js";
+import { Spinner } from "react-bootstrap";
 
 const TotalInvestedAmount = styled.span`
   font-size: 50px;
@@ -61,13 +62,25 @@ const StyledButton = styled(ButtonWidget)`
 `;
 
 export const StakingInfo = () => {
-  const { stakedDon, tier, pendingReward, investedAmount, isStaked } =
+  const { stakedDon, tier, pendingReward, investedAmount, isStaked, harvest } =
     useStakingContract();
 
   const [isStakeModalOpen, setisModalOpen] = useState(false);
   const [unstake, openUnstake, closeUnstake] = useToggle();
   const [unstakeAndLeave, openUnstakeAndLeave, closeUnstakeAndLeave] =
     useToggle();
+
+  const [loading,enableLoading,disableLoading] = useToggle();
+
+  const harvestDon = async () => {
+    enableLoading()
+    try {
+      await harvest();
+    }finally {
+      disableLoading();
+    }
+  }
+
   return (
     <>
       <p className="mb-0">Total Investment</p>
@@ -128,8 +141,9 @@ export const StakingInfo = () => {
                 disabled={new BigNumber(pendingReward).isEqualTo(0)}
                 containedVariantColor="lightYellow"
                 className="py-1 px-3"
+                onClick={harvestDon}
               >
-                Harvest
+                {loading ? <Spinner animation="border" size="sm" />: "Harvest"}
               </StyledButton>
             </div>
             <div className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative">
