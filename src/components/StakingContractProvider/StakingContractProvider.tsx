@@ -7,12 +7,12 @@ import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
-const DonStakingAddress =  "0x67C5EADbBd54e40Ef24a23517a9dB61d4ac4110e";
+const DonStakingAddress = "0x67C5EADbBd54e40Ef24a23517a9dB61d4ac4110e";
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
   isReady: boolean;
-  data: { [x: string]: ITier  };
+  data: { [x: string]: ITier };
 } = { isReady: false, data: {} };
 export const getTierInfo = async (amount: string, stakingContract: any) => {
   if (!tierInfo.isReady) {
@@ -47,32 +47,40 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const web3 = useWeb3();
 
   const stakingContract = useMemo(() => {
-    return new web3.eth.Contract(
-      DonStaking.abi as any,
-      DonStakingAddress
-    );
+    return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, []);
 
   const [isStaked, setIsStaked] = useState<boolean | null>(null);
   const [stakedDon, setStakedDon] = useState<string>("0");
-  const [currentTier, setCurrentTier] = useState<ITier>({donRequired: "0",apy: 0,tier: 0});
-  const [pendingReward, setPendingReward] = useState("0"); 
+  const [currentTier, setCurrentTier] = useState<ITier>({
+    donRequired: "0",
+    apy: 0,
+    tier: 0,
+  });
+  const [pendingReward, setPendingReward] = useState("0");
   const [investedAmount, setInvestedAmount] = useState("0");
   const fetchState = async () => {
     const accounts = await web3.eth.getAccounts();
     const userInfo = await stakingContract.methods.userInfo(accounts[0]).call();
-    const pendingRewards = await stakingContract.methods.pendingReward(accounts[0]).call();
+    let pendingRewards = "0";
+    try {
+      pendingRewards = await stakingContract.methods
+        .pendingReward(accounts[0])
+        .call();
+    } finally {
+      pendingRewards = "0";
+    }
+
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
-    
+
     setIsStaked(userInfo.isStaked);
     setStakedDon(donAmount);
     setInvestedAmount(toEther(userInfo.totalInvestedAmount));
-    if(tierInfo){
-      setCurrentTier(tierInfo)
+    if (tierInfo) {
+      setCurrentTier(tierInfo);
     }
-    setPendingReward(toEther(pendingRewards))
-  
+    setPendingReward(toEther(pendingRewards));
   };
 
   useEffect(() => {
@@ -80,33 +88,33 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   }, []);
   const checkAndApproveDon = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();
-    const donContract =await  getBSCDon(web3)
-    const allowance =  await donContract.methods.allowance(accounts[0], DonStakingAddress )
-        .call();
-    
-    if(new BigNumber(allowance).lt(amount)){
-      await donContract.methods.approve(DonStakingAddress,amount )
-      .send({from: accounts[0]});
+    const donContract = await getBSCDon(web3);
+    const allowance = await donContract.methods
+      .allowance(accounts[0], DonStakingAddress)
+      .call();
+
+    if (new BigNumber(allowance).lt(amount)) {
+      await donContract.methods
+        .approve(DonStakingAddress, amount)
+        .send({ from: accounts[0] });
     }
-  }
+  };
   const stake = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();
     await checkAndApproveDon(amount);
-    await stakingContract.methods.stake(amount).send({from: accounts[0]});
+    await stakingContract.methods.stake(amount).send({ from: accounts[0] });
     await fetchState();
-  }
+  };
   const unstake = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.unstake(amount).send({from: accounts[0]});
+    await stakingContract.methods.unstake(amount).send({ from: accounts[0] });
     await fetchState();
-  }
+  };
 
   const harvest = async () => {
     const accounts = await web3.eth.getAccounts();
-      await stakingContract.methods.claimReward().send({from: accounts[0]});
-
-  }
-
+    await stakingContract.methods.claimReward().send({ from: accounts[0] });
+  };
 
   const stakingObj: IStakingContractContext = useMemo(() => {
     return {
@@ -121,10 +129,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       stake,
       unstake,
       harvest,
-      pendingReward
+      pendingReward,
     };
   }, [isStaked, stakedDon, pendingReward, currentTier, investedAmount]);
-  
 
   return (
     <StakingContractContext.Provider value={stakingObj}>
