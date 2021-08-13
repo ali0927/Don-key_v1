@@ -7,7 +7,7 @@ import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
-const DonStakingAddress = "0x67C5EADbBd54e40Ef24a23517a9dB61d4ac4110e";
+const DonStakingAddress = "0xF5F00D3F69645672D985AF6c2E8b0D2176b675a8";
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
