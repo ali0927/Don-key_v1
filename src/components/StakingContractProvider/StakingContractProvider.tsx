@@ -107,9 +107,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     await stakingContract.methods.stake(amount).send({ from: accounts[0] });
     await fetchState();
   };
-  const unstake = async (amount: string) => {
+  const unstake = async (isForced: boolean = false) => {
     const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.unstake(amount).send({ from: accounts[0] });
+    await stakingContract.methods.unstake(!isForced).send({ from: accounts[0] });
     await fetchState();
   };
 

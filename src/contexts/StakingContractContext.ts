@@ -12,7 +12,7 @@ export type IStakingContractContext = {
   pendingReward: string;
   getTierInfo: (amount: string) => Promise<ITier | null>
   stake: (amount: string) => Promise<any>;
-  unstake: (amount: string) => Promise<any>;
+  unstake: (isForced: boolean) => Promise<any>;
   harvest: () => Promise<any>
 }
 

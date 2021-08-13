@@ -41,12 +41,7 @@ export const UnstakeDonModal = ({
     setBtnLoading(true);
     try {
       await refetch();
-      let donsToUnstake = new BigNumber(stakedDon).minus(100);
-      if (leave) {
-        donsToUnstake = new BigNumber(stakedDon);
-      }
-
-      await unstake(toWei(donsToUnstake.toString()));
+      await unstake(leave || false);
     } finally {
       setBtnLoading(false);
       onClose();
