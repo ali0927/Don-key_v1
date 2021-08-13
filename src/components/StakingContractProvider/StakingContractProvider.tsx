@@ -67,6 +67,8 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       pendingRewards = await stakingContract.methods
         .pendingReward(accounts[0])
         .call();
+    } catch(e){
+      console.log("Error");
     } finally {
       pendingRewards = "0";
     }
