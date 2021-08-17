@@ -28,22 +28,6 @@ export const DonStakingModal = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  const { stakingContract, stakingAddress, stake } = useStakingContract();
-
-  const [loading, setLoading] = useState(false);
-
-  const web3 = useWeb3();
-
-  const stakeDon = async () => {
-    const amount = web3.utils.toWei("100");
-    setLoading(true);
-    try {
-      await stake(amount);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <DonCommonmodal
       isOpen={open}
@@ -63,22 +47,35 @@ export const DonStakingModal = ({
             />
           </div>
         </div>
-        <StyledP>In order to acess Dapp you have to stake 100 DON</StyledP>
+        <StyledP>
+          In order to access Dapp you need to hold 100 DON in ERC or BEP
+        </StyledP>
         <div className="d-flex align-items-center">
           <ButtonWidget
-            onClick={stakeDon}
+            onClick={() => {
+              window.open(
+                "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2",
+                "_blank"
+              );
+            }}
             varaint="contained"
             className="py-2 mr-3"
             containedVariantColor="lightYellow"
           >
-           {loading ? <Spinner animation="border" size="sm" />: "Stake 100 DON"}
+            Buy ERC20 Don
           </ButtonWidget>
           <ButtonWidget
-            onClick={onClose}
-            varaint="outlined"
-            className="py-2 ml-3 rounded"
+          onClick={() => {
+            window.open(
+              "https://pancakeswap.finance/swap#/add/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255",
+              "_blank"
+            );
+          }}
+            varaint="contained"
+            className="py-2 mr-3"
+            containedVariantColor="lightYellow"
           >
-            Cancel
+            Buy BEP 20 Don
           </ButtonWidget>
         </div>
       </div>

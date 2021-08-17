@@ -7,6 +7,7 @@ import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
+import { api } from "don-utils";
 
 const DonStakingAddress = "0x05Aa8673d8Bb5D3CB7D5ad6ba2bC8A536a7C99B7";
 export type ITier = { apy: number; donRequired: string; tier: number };
@@ -51,6 +52,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, []);
 
+  const [holdedDons, setHoldedDons] = useState<BigNumber | null>(null);
   const [isStaked, setIsStaked] = useState<boolean | null>(null);
   const [stakedDon, setStakedDon] = useState<string>("0");
   const [currentTier, setCurrentTier] = useState<ITier>({
@@ -63,12 +65,25 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const fetchState = async () => {
     const accounts = await web3.eth.getAccounts();
     const userInfo = await stakingContract.methods.userInfo(accounts[0]).call();
+    let totalDons = new BigNumber(0);
+    try {
+      const resp = await api.post("/api/v2/walletdetails", {
+        walletAddress: accounts[0],
+      });
+      const bep = resp.data.bep;
+      const erc = resp.data.erc;
+
+      totalDons = totalDons.plus(bep).plus(erc);
+    } catch (e) {
+      console.error(e);
+    }
+
     let pendingRewards = "0";
     try {
       pendingRewards = await stakingContract.methods
         .pendingReward(accounts[0])
         .call();
-    } catch(e){
+    } catch (e) {
       console.log("Error");
     } finally {
       pendingRewards = "0";
@@ -76,7 +91,8 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
-
+    totalDons = totalDons.plus(donAmount);
+    setHoldedDons(totalDons);
     setIsStaked(userInfo.isStaked);
     setStakedDon(donAmount);
     setInvestedAmount(toEther(userInfo.totalInvestedAmount));
@@ -110,7 +126,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   };
   const unstake = async (isForced: boolean = false) => {
     const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.unstake(!isForced).send({ from: accounts[0] });
+    await stakingContract.methods
+      .unstake(!isForced)
+      .send({ from: accounts[0] });
     await fetchState();
   };
 
@@ -125,6 +143,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       stakedDon,
       stakingContract,
       tier: currentTier,
+      holdingDons: holdedDons,
       refetch: fetchState,
       investedAmount,
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
@@ -134,7 +153,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       harvest,
       pendingReward,
     };
-  }, [isStaked, stakedDon, pendingReward, currentTier, investedAmount]);
+  }, [isStaked, stakedDon, pendingReward, currentTier,holdedDons, investedAmount]);
 
   return (
     <StakingContractContext.Provider value={stakingObj}>

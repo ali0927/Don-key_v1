@@ -21,7 +21,7 @@ export const withAuth = (element?: RouteProps["children"]) => {
       (state: IStoreState) => state.auth.isLoggedIn
     );
     
-    const { isStaked} = useStakingContract();
+    const { holdingDons } = useStakingContract();
 
     const dispatch = useDispatch();
 
@@ -56,10 +56,12 @@ export const withAuth = (element?: RouteProps["children"]) => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const showModal = holdingDons !== null && holdingDons.lt(100);
+    const showLoader = holdingDons === null || holdingDons.lt(100) || !isLoggedIn;
     return (
       <>
-        {isStaked === false && <DonStakingModal onClose={() => {}} open />}
-        {(!isLoggedIn || !isStaked) ? createPortal(<LoadingPage />, document.body) : element}
+        {showModal && <DonStakingModal onClose={() => {}} open />}
+        {(showLoader) ? createPortal(<LoadingPage />, document.body) : element}
       </>
     );
   };

@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { ITier } from "components/StakingContractProvider";
 import { createContext } from "react";
 
@@ -8,6 +9,7 @@ export type IStakingContractContext = {
   stakingContract: any;
   stakingAddress: string;
   investedAmount: string;
+  holdingDons: BigNumber | null;
   tier: ITier;
   pendingReward: string;
   getTierInfo: (amount: string) => Promise<ITier | null>
