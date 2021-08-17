@@ -1,7 +1,6 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { InvestmentInput } from "components/InvestmentInput";
-import { getBSCDon, getERCContract, toEther, toWei } from "helpers";
+import { getBSCDon, toEther, toWei } from "helpers";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWeb3 } from "don-components";

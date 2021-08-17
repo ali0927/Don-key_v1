@@ -1,12 +1,6 @@
-import BigNumber from "bignumber.js";
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { getBSCDon } from "helpers";
-import { useStakingContract } from "hooks";
-import { useState } from "react";
-import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
-import { useWeb3 } from "don-components";
 
 const StyledP = styled.p`
   font-family: Roboto;

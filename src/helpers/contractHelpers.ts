@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import axios from "axios";
 import BigNumber from "bignumber.js";
-import { Function } from "lodash";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
@@ -294,7 +293,7 @@ export const getTokenImage = async (web3: Web3, poolAddress: string) => {
 };
 
 const getPoolJSON = async (version: number) => {
-  if (version == 1 || !version) {
+  if (version === 1 || !version) {
     return await import("JsonData/pool2.json");
   }
   if (version === 2) {
