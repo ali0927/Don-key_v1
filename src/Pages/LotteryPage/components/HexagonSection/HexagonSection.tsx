@@ -127,6 +127,7 @@ export const HexagonSection: React.FC = () => {
         new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
       ).toString()
     : 0;
+    
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
@@ -140,7 +141,7 @@ export const HexagonSection: React.FC = () => {
   const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
     new BigNumber(tadeVolumeUSD).toNumber()
   ).toString();
-
+  console.log(circulatingSupply)
   const marketCap = convertToInternationalCurrencySystem(
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
