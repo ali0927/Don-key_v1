@@ -31,6 +31,7 @@ export const SendWithdrawalsDialog: React.FC<{
 
   
   const [new_pool, setnewPoolvalue] = useState("");
+  const [withdrawValue, setwithDrawvalue] = useState("");
   const web3 = useWeb3();
   const handleUpdate = async () => {
     setLoading(true);
@@ -42,7 +43,7 @@ export const SendWithdrawalsDialog: React.FC<{
           poolVersion
         );
         const accounts = await web3.eth.getAccounts();
-         await poolContract.methods.withdraw(Web3.utils.toWei(new_pool)).send({from : accounts[0]});
+         await poolContract.methods.withdraw(Web3.utils.toWei(withdrawValue),Web3.utils.toWei(new_pool)).send({from : accounts[0]});
       }
     } finally {
       setLoading(false);
@@ -69,6 +70,17 @@ export const SendWithdrawalsDialog: React.FC<{
             placeholder="Enter Pool Value"
             onChange={(e) => setnewPoolvalue(e.target.value)}
           />
+          
+        </div>
+        <div>
+          <p>Withdraw Value</p>
+          <input
+            type="text"
+            value={withdrawValue}
+            placeholder="Enter Pool Value"
+            onChange={(e) => setwithDrawvalue(e.target.value)}
+          />
+          
         </div>
 
         <div className="row  mt-4 justify-content-center">

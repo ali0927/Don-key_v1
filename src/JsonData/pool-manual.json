@@ -575,6 +575,19 @@
 		},
 		{
 			"inputs": [],
+			"name": "getDonStakingAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "getFarmerAddress",
 			"outputs": [
 				{
@@ -948,6 +961,19 @@
 			"inputs": [
 				{
 					"internalType": "uint256",
+					"name": "count",
+					"type": "uint256"
+				}
+			],
+			"name": "investInSeq",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
 					"name": "_totalValue",
 					"type": "uint256"
 				},
@@ -1063,11 +1089,37 @@
 			"inputs": [
 				{
 					"internalType": "address payable",
+					"name": "_donStakingAddress",
+					"type": "address"
+				}
+			],
+			"name": "setDonStakingAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address payable",
 					"name": "_farmerAddress",
 					"type": "address"
 				}
 			],
 			"name": "setFarmerAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_totalValue",
+					"type": "uint256"
+				}
+			],
+			"name": "setGreyWithdarwalTotalValue",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -1245,6 +1297,24 @@
 		{
 			"inputs": [
 				{
+					"internalType": "uint256",
+					"name": "_totalValue",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_newPoolValue",
+					"type": "uint256"
+				}
+			],
+			"name": "updatePoolValues",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "uint16",
 					"name": "_reward",
 					"type": "uint16"
@@ -1272,11 +1342,29 @@
 			"inputs": [
 				{
 					"internalType": "uint256",
+					"name": "_totalWithdrawValue",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
 					"name": "_totalValue",
 					"type": "uint256"
 				}
 			],
 			"name": "withdraw",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "count",
+					"type": "uint256"
+				}
+			],
+			"name": "withdrawInSeq",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
