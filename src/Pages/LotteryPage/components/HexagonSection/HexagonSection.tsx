@@ -118,6 +118,9 @@ export const HexagonSection: React.FC = () => {
       tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
+    const circulatingSupply = coingecko
+    ?coingecko.market_data.circulating_supply
+    : 0;
 
   const volume24hrs = coingecko
     ? convertToInternationalCurrencySystem(
@@ -137,7 +140,7 @@ export const HexagonSection: React.FC = () => {
   const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
     new BigNumber(tadeVolumeUSD).toNumber()
   ).toString();
-  const circulatingSupply = 6378433;
+
   const marketCap = convertToInternationalCurrencySystem(
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
