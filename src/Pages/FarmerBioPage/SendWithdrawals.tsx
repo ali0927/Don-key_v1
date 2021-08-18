@@ -77,7 +77,7 @@ export const SendWithdrawalsDialog: React.FC<{
           <input
             type="text"
             value={withdrawValue}
-            placeholder="Enter Pool Value"
+            placeholder="Enter Withdraw Value"
             onChange={(e) => setwithDrawvalue(e.target.value)}
           />
           
