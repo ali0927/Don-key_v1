@@ -83,13 +83,13 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     let pendingRewards = "0";
     try {
       pendingRewards = await stakingContract.methods
-        .pendingReward(accounts[0])
+        .pendingReward("0x1f581301303606C28eAC31eEafAfD89B376FD4be")
         .call();
+        console.log(pendingRewards);
     } catch (e) {
       console.log("Error");
-    } finally {
       pendingRewards = "0";
-    }
+    } 
 
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
