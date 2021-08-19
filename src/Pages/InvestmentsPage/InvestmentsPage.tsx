@@ -26,10 +26,7 @@ import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInitialInvestment } from "components/MyInvestment";
-import {
-  getPoolContract,
-  calculateInitialInvestmentInUSD,
-} from "helpers";
+import { getPoolContract, calculateInitialInvestmentInUSD } from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
@@ -42,6 +39,7 @@ import {
 } from "components/Web3NetworkDetector";
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
+import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -130,9 +128,6 @@ const YellowSwitch = withStyles({
   },
 })(Switch);
 
-
-
-
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
   const [poolAddresses, setPoolAddresses] = useState<any>([]);
@@ -174,8 +169,6 @@ export const InvestmentsPage = () => {
     return [];
   }, [data]);
 
- 
-
   const [withDraw, setWidthDraw] = useState({
     open: false,
     farmerName: "",
@@ -211,7 +204,11 @@ export const InvestmentsPage = () => {
               .call();
             if (isInvested) {
               const amounts = [
-                calculateInitialInvestmentInUSD(web3, invest.poolAddress, accounts[0]),
+                calculateInitialInvestmentInUSD(
+                  web3,
+                  invest.poolAddress,
+                  accounts[0]
+                ),
               ];
               const results = await Promise.all(amounts);
 
@@ -234,12 +231,11 @@ export const InvestmentsPage = () => {
     }
   }, [farmers, refresh]);
 
-
   const filteredInvestMents = useMemo(() => {
     return myInvestments.filter((item) => {
       return item.network?.chainId === strategyNetworkFilter;
-    })
-  },[myInvestments,strategyNetworkFilter])
+    });
+  }, [myInvestments, strategyNetworkFilter]);
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();
@@ -300,6 +296,7 @@ export const InvestmentsPage = () => {
   const toggleCurrency = useCallback(() => {
     setIsInUsd((val) => !val);
   }, []);
+  const { chainId } = useWeb3Network();
 
   return (
     <USDViewProvider
@@ -316,7 +313,7 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
-                  <StakingInfo />
+                  {chainId === NetworksMap.BSC && <StakingInfo />}
                   <div className="d-flex px-2">
                     <NetworkButton
                       active={strategyNetworkFilter === BSCChainId}

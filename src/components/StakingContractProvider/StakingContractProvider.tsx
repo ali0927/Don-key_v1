@@ -8,6 +8,8 @@ import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
 import { api } from "don-utils";
+import { useWeb3Network } from "components/Web3NetworkDetector";
+import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 
 const DonStakingAddress = "0x05Aa8673d8Bb5D3CB7D5ad6ba2bC8A536a7C99B7";
 export type ITier = { apy: number; donRequired: string; tier: number };
@@ -47,7 +49,7 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
 };
 export const StakingContractProvider: React.FC = memo(({ children }) => {
   const web3 = useWeb3();
-
+  const { chainId } = useWeb3Network();
   const stakingContract = useMemo(() => {
     return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, []);
@@ -103,8 +105,10 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   };
 
   useEffect(() => {
-    fetchState();
-  }, []);
+    if (chainId === NetworksMap.BSC) {
+      fetchState();
+    }
+  }, [chainId]);
   const checkAndApproveDon = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
@@ -153,7 +157,14 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       harvest,
       pendingReward,
     };
-  }, [isStaked, stakedDon, pendingReward, currentTier,holdedDons, investedAmount]);
+  }, [
+    isStaked,
+    stakedDon,
+    pendingReward,
+    currentTier,
+    holdedDons,
+    investedAmount,
+  ]);
 
   return (
     <StakingContractContext.Provider value={stakingObj}>
