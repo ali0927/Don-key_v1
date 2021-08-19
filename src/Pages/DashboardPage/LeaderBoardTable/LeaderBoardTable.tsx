@@ -1,4 +1,3 @@
-import { Loader } from "don-components";
 import { useState } from "react";
 
 import { useHistory } from "react-router-dom";
@@ -82,7 +81,7 @@ const Overlay = styled.div`
 `;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
-  const { isReady, isDisable = false } = props;
+  const {  isDisable = false } = props;
   const [openInvestment, setOpenInvestment] = useState(false);
   const [state, setState] = useState({
     farmerName: "",
@@ -124,13 +123,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     setOpenInvestment(false);
   };
 
-  if (!isReady) {
-    return (
-      <div style={{ minHeight: 400, background: "#fff" }}>
-        <Loader />
-      </div>
-    );
-  }
+
 
   return (
     <>

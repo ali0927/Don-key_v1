@@ -3,3 +3,7 @@ export * from "./useIsomorphicEffect";
 export * from "./useInvestedAmount";
 export * from "./useInvestorCount";
 export * from "./useStakingContract";
+export * from "./useAddDonTokenonLoad";
+export * from "./useAxios";
+export * from "./useStrapi";
+export * from "./useSwitchNetwork";

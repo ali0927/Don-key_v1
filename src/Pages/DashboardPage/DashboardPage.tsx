@@ -1,20 +1,11 @@
 import { Row, Col } from "react-bootstrap";
 import "./DashboardPage.scss";
-import { useAxios } from "hooks/useAxios";
-import { IFarmer, IFarmerInter } from "interfaces";
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
-import { StyledLink } from "../../components/StyledLink";
-import { TopThreeFarmers } from "./TopThreeFarmers";
 import { theme } from "theme";
-import {
-  FarmerPageDonkeyIcon,
-  LargeEllipse,
-  MeadiumEllipse,
-  SmallEllipse,
-} from "icons";
+import { LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import {
@@ -25,6 +16,10 @@ import {
 import { ButtonWidget } from "components/Button";
 import { useToggle } from "don-hooks";
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
+import { useStrapi } from "hooks/useStrapi";
+import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
+import { IStrapiToken } from "interfaces";
+import { TokenInfo } from "components/TokenInfo";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -74,12 +69,6 @@ const Body = styled.div`
   background-color: #f4f4f4;
 `;
 
-const DonkeyIconWrapper = styled.div`
-  position: absolute;
-  right: 8%;
-  top: 28px;
-`;
-
 const Ellipse1 = styled.div`
   right: 16%;
   top: 8%;
@@ -122,105 +111,23 @@ export const NetworkButton = styled.button`
 `;
 
 export const DashboardPage = () => {
-  const [{ loading, data }] = useAxios("/api/v2/farmer");
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
-  useEffect(() => {
-    // Add DON token with icon on Metamask
-    const tokenSymbol = "DON";
-    const tokenDecimals = 18;
-    const tokenImage =
-      "https://don-key.fra1.digitaloceanspaces.com/farmer-icons/logo.gold.png";
-    let tokenAdded = localStorage.getItem("tokenLogo");
-    if (network === 56 && !tokenAdded) {
-      // Binance Smart Chain
-      const tokenAddress = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
-      window.ethereum
-        .request({
-          method: "wallet_watchAsset",
-          params: {
-            type: "ERC20",
-            options: {
-              address: tokenAddress,
-              symbol: tokenSymbol,
-              decimals: tokenDecimals,
-              image: tokenImage,
-            },
-          },
-        })
-        .then((success: any) => {
-          if (success) {
-            localStorage.setItem("tokenLogo", "added");
-          } else {
-            throw new Error("Something went wrong.");
-          }
-        })
-        .catch(console.error);
-    } else if (network === 1 && !tokenAdded) {
-      // Ethereum Mainnet
-      const tokenAddress = "0x217ddead61a42369a266f1fb754eb5d3ebadc88a";
-      window.ethereum
-        .request({
-          method: "wallet_watchAsset",
-          params: {
-            type: "ERC20",
-            options: {
-              address: tokenAddress,
-              symbol: tokenSymbol,
-              decimals: tokenDecimals,
-              image: tokenImage,
-            },
-          },
-        })
-        .then((success: any) => {
-          if (success) {
-            localStorage.setItem("tokenLogo", "added");
-          } else {
-            throw new Error("Something went wrong.");
-          }
-        })
-        .catch(console.error);
-    }
-  }, [network]);
+  const [{ loading, data }] = useStrapi("/tokens");
 
-  const farmers: IFarmer[] = useMemo(() => {
+  useAddDonTokenonLoad();
+
+  const tokens: IStrapiToken[] = useMemo(() => {
     if (data) {
-      return data.data
-        .filter((item: IFarmerInter) => {
-          return item.strategy?.network?.chainId === strategyNetworkFilter;
-        })
-        .map((item: IFarmerInter) => {
-          const farmer: IFarmer = {
-            GUID: item.GUID,
-            name: `Don - ${item.name}`,
-            description: item.description,
-            picture: item.picture,
-            pool_version: item.pool_version,
-            poolAddress: item.poolAddress,
-            profit24hours: item.profit24hours || "-",
-            profit7days: item.profit7days || "-",
-            telegram: item.telegram,
-            twitter: item.twitter,
-            profit: item.profit || "-",
-            descriptionTitle: item.descriptionTitle,
-            risk: item.risk,
-            network: item.strategy?.network,
-            riskDescription: item.riskDescription,
-            status: item.status,
-            apy: item?.strategy?.apy,
-            strategyImage: item?.strategy?.strategyImage,
-            investors: item.investors,
-          };
-          return farmer;
-        });
+      return data.filter((item: IStrapiToken) => {
+        return item.network.chainId === strategyNetworkFilter;
+      });
     }
     return [];
   }, [data, strategyNetworkFilter]);
 
-
   const [isOpen, onOpen, onClose] = useToggle();
-
 
   if (loading) {
     return <LoadingPage />;
@@ -246,12 +153,9 @@ export const DashboardPage = () => {
               <SmallEllipse />
             </Ellipse4>
             <Col>
-              {farmers.length === 0 ? (
+              {tokens.length === 0 ? (
                 <div className="d-flex align-items-center flex-column">
-                  <Heading>No Farmers Yet</Heading>
-                  <StyledLink className="mt-4" to="/farmers">
-                    Become the First Farmer
-                  </StyledLink>
+                  <Heading>No Farmers </Heading>
                 </div>
               ) : (
                 <>
@@ -280,12 +184,13 @@ export const DashboardPage = () => {
                       >
                         Get Accelerated APY
                       </ButtonWidget>
-                      {isOpen &&  <AcceleratedAPYModal open={isOpen} onClose={onClose} />}
+                      {isOpen && (
+                        <AcceleratedAPYModal open={isOpen} onClose={onClose} />
+                      )}
                     </div>
                   </div>
                 </>
               )}
-
             </Col>
           </Row>
           {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
@@ -294,7 +199,7 @@ export const DashboardPage = () => {
 
       {/* Table */}
       <Body className="leaderbord-top mb-5">
-        {farmers.length === 0 ? (
+        {tokens.length === 0 ? (
           <CustomizedContainer>
             <div className="container">
               <div className="row justify-content-center">
@@ -310,8 +215,17 @@ export const DashboardPage = () => {
           </CustomizedContainer>
         ) : (
           <CustomizedContainer>
-            <TopThreeFarmers isReady={!loading} leaders={farmers} />
-            <LeaderBoardTable isReady={!loading} leaders={farmers} isDisable />
+            <div className="row">
+              {tokens.map((item) => {
+                return (
+                  <div className="col-md-4">
+                    <TokenInfo key={item.id} token={item} />
+                  </div>
+                );
+              })}
+            </div>
+
+            <LeaderBoardTable isDisable />
           </CustomizedContainer>
         )}
       </Body>

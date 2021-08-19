@@ -166,3 +166,52 @@ export type BuruRequest = {
   endpoint: string;
   data?: any;
 };
+
+export type IStrapiImage = {
+  id: number;
+  name: string;
+
+  size: number;
+  url: string;
+};
+export type IStrapiRisk = {
+  id: number;
+  Title: string;
+  Description: string;
+  image: IStrapiImage;
+};
+
+export type IStrapiStrategy = {
+  id: 3;
+  name: string;
+  description: string;
+  strategyAddress: null;
+  apy: string;
+  created_at:string;
+  risk: number;
+  token: number;
+  farmer: number;
+  network: number;
+  active: boolean;
+  swapInFees: string | null;
+  swapOutFees: string | null;
+  entranceFees: string | null;
+  exitFees: string | null;
+  strategyImage: IStrapiImage;
+};
+export type IStrapiToken = {
+  id: number;
+  name: string;
+  symbol: string;
+
+  tokenAddress: string;
+  network: {
+    id: number;
+    name: string;
+    symbol: string;
+    chainId: number;
+  };
+  image: IStrapiImage;
+  risks: IStrapiRisk[];
+  strategies: IStrapiStrategy[];
+};
