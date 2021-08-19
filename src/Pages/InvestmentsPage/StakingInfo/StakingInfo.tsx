@@ -146,46 +146,8 @@ export const StakingInfo = () => {
                 {loading ? <Spinner animation="border" size="sm" />: "Harvest"}
               </StyledButton>
             </div>
-            <div className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative">
-              <StakingCol>
-                <StakingSubtitle style={{ fontSize: 14 }} className="px-3">
-                  Unstake extra DON all investments and stay
-                </StakingSubtitle>
-              </StakingCol>
-              <StyledButton
-                varaint="contained"
-                containedVariantColor="lightYellow"
-                className="py-1 px-3"
-                onClick={openUnstake}
-              >
-                Unstake and Stay
-              </StyledButton>
-              {unstake && (
-                <UnstakeDonModal open={unstake} onClose={closeUnstake} />
-              )}
-            </div>
-            <div className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative">
-              <StakingCol className="hide">
-                <StakingSubtitle style={{ fontSize: 14 }} className="px-3">
-                  Unstake extra DON all investments and leave
-                </StakingSubtitle>
-              </StakingCol>
-              <StyledButton
-                onClick={openUnstakeAndLeave}
-                varaint="contained"
-                containedVariantColor="lightYellow"
-                className="py-1 px-3"
-              >
-                Unstake and Leave
-              </StyledButton>
-              {unstakeAndLeave && (
-                <UnstakeDonModal
-                  open={unstakeAndLeave}
-                  leave
-                  onClose={closeUnstakeAndLeave}
-                />
-              )}
-            </div>
+          
+           
           </div>
         </div>
         <div className="col-12">
