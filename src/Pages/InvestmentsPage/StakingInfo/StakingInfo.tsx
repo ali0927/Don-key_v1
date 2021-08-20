@@ -67,8 +67,6 @@ export const StakingInfo = () => {
 
   const [isStakeModalOpen, setisModalOpen] = useState(false);
   const [unstake, openUnstake, closeUnstake] = useToggle();
-  const [unstakeAndLeave, openUnstakeAndLeave, closeUnstakeAndLeave] =
-    useToggle();
 
   const [loading,enableLoading,disableLoading] = useToggle();
 
@@ -91,10 +89,11 @@ export const StakingInfo = () => {
           onClose={() => setisModalOpen(false)}
         />
       )}
+      {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake}  />}
       <StakingCard className="row mt-3 mb-4">
         <div className="col-12">
           <div className="row">
-            <div className="col-md-6 d-flex flex-column align-items-center justify-content-between position-relative">
+            <div className="col-md-8 d-flex flex-column align-items-center justify-content-between position-relative">
               <div className="row w-100">
                 <StakingCol className="col-md-4">
                   <StakingTitle>DON Staked</StakingTitle>
@@ -150,9 +149,7 @@ export const StakingInfo = () => {
            
           </div>
         </div>
-        <div className="col-12">
-          <div className="row pt-4"></div>
-        </div>
+          {}
       </StakingCard>
     </>
   );
