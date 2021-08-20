@@ -1,8 +1,11 @@
 import { IStrapiToken } from "interfaces";
-import React from "react";
+import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
+import BigNumber from "bignumber.js";
+import { InvestorCount } from "components/InvestorCount/InvestorCount";
+import { InvestorCountGraphql } from "components/InvestorCountGraphql";
 const InfoWrapper = styled.div`
   background: #ffffff;
   border-radius: 10px;
@@ -32,13 +35,19 @@ const GreyText = styled.p`
   margin-bottom: 0.5rem;
 `;
 
+
+
+
 export const TokenInfo = ({
-  token: { image, symbol, status },
+  token: { image, symbol, status, maxApy, RiskStrategy },
 }: {
   token: IStrapiToken;
 }) => {
   const history = useHistory();
   const disabled = status === "commingsoon";
+  const poolAddresses = useMemo(() => {
+    return RiskStrategy.map(item => item.strategy.farmer.poolAddress);
+  }, [RiskStrategy])
   return (
     <InfoWrapper
       disabled={disabled}
@@ -59,13 +68,13 @@ export const TokenInfo = ({
         </div>
       </div>
       <div className="row mt-3">
-        <div className="col-6">
-          <h6>Up to 120% APY</h6>
-          <GreenText>For Don Stakers 240% APY</GreenText>
+        <div className="col-7">
+          <h6>Up to {maxApy}% APY</h6>
+          <GreenText>For Don Stakers {new BigNumber(maxApy).plus(100).toFixed(1)}% APY</GreenText>
         </div>
-        <div className="col-6 d-flex flex-column align-items-end">
+        <div className="col-5 d-flex flex-column align-items-end">
           <GreyText>Total investors</GreyText>
-          <h6>11</h6>
+          <h6><InvestorCountGraphql poolAddresses={poolAddresses} /></h6>
         </div>
       </div>
     </InfoWrapper>

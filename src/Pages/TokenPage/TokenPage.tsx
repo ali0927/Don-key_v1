@@ -4,7 +4,9 @@ import { GridBackground } from "components/GridBackground";
 import { NavBar } from "components/Navbar";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useStrapi } from "hooks";
-import React from "react";
+import { sortBy } from "lodash";
+import { LoadingPage } from "Pages/LoadingPage";
+import React, { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
@@ -82,9 +84,20 @@ const TokenInfoQuery = gql`
   }
 `;
 
-const findStrategyByRisk = (list: any[], risk: "low" | "high" | "medium") => {
-  return list.find((item) => item.strategy.risk.Title.toLowerCase() === risk);
+const sortStrategies = (list: any[]) => {
+  return sortBy(list, (item) => {
+    const risk = item.strategy.risk.Title.toLowerCase();
+    if (risk === "low") {
+      return -1;
+    }
+    if (risk === "high") {
+      return 1;
+    }
+    return 0;
+  });
 };
+
+const emptryArr: any[] = [];
 
 export const TokenPage = () => {
   const { token } = useParams<{ token: string }>();
@@ -95,14 +108,14 @@ export const TokenPage = () => {
     },
   });
 
-  const strategies = data ? data.tokens[0].RiskStrategy : [];
+  const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
+  const sortedStrategies = useMemo(() => {
+    return sortStrategies(strategies);
+  }, [strategies]);
 
   if (loading) {
-    return null;
+    return <LoadingPage />;
   }
-  const highRisk = findStrategyByRisk(strategies, "high");
-  const lowRisk = findStrategyByRisk(strategies, "low");
-  const mediumRisk = findStrategyByRisk(strategies, "medium");
 
   return (
     <>
@@ -111,7 +124,7 @@ export const TokenPage = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-8">
-              <StyledLink  to="/dashboard">
+              <StyledLink to="/dashboard">
                 <BackArrow /> <span className="ml-2">Back</span>
               </StyledLink>
               <Title className="mb-5">Strategy Risk Level</Title>
@@ -130,24 +143,13 @@ export const TokenPage = () => {
       <GridBackground className="py-5">
         <div className="container py-5">
           <div className="row">
-            {lowRisk && (
-              <div className="col-md-4">
-                {" "}
-                <StrategyInfo strategy={lowRisk.strategy} />{" "}
-              </div>
-            )}
-            {mediumRisk && (
-              <div className="col-md-4">
-                {" "}
-                <StrategyInfo strategy={mediumRisk.strategy} />{" "}
-              </div>
-            )}
-            {highRisk && (
-              <div className="col-md-4">
-                {" "}
-                <StrategyInfo strategy={highRisk.strategy} />{" "}
-              </div>
-            )}
+            {sortedStrategies.map((item) => {
+              return (
+                <div className="col-md-4">
+                  <StrategyInfo strategy={item.strategy} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </GridBackground>

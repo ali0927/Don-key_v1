@@ -119,6 +119,7 @@ const LIST_OF_TOKENS = gql`
       image {
         url
       }
+      maxApy
       symbol
       network {
         chainId

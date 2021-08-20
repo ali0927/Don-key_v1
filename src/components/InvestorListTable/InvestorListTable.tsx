@@ -68,6 +68,11 @@ type InvestorList = {
   duration: string;
 }[];
 
+
+
+
+
+
 export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
   const [loading, setLoading] = useState(true);
   const [investments, setInvestments] = useState<InvestorList>([]);

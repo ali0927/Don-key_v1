@@ -40,7 +40,7 @@ import {
   PolygonChainId,
   useWeb3Network,
 } from "components/Web3NetworkDetector";
-import { IFarmer } from "interfaces";
+import { IFarmer, IFarmerInter } from "interfaces";
 import { useSwitchNetwork } from "hooks/useSwitchNetwork";
 import clsx from "clsx";
 import { AssignLpTokens } from "./AssignLpTokens";
@@ -212,7 +212,7 @@ export const DetailTable = ({
 }: {
   poolAddress: string;
   apy: string;
-  network?: IFarmer["network"];
+  network?: IFarmerInter["network"];
   poolVersion: number;
   farmerId: string;
   gasLimit?: string;
@@ -597,7 +597,7 @@ export const DetailTable = ({
             {getFirstCardcolumns(
               "Followers",
               <InvestorCount
-                refresh={dependsOn % 2 == 0}
+                refresh={dependsOn % 2 === 0}
                 farmerId={farmerId}
               />,
               "black",
@@ -639,7 +639,7 @@ export const DetailTable = ({
               ) : (
                 <>
                   <CardLabel color="white"> Switch Network To </CardLabel>
-                  <CardValue color="white">{network?.networkName}</CardValue>
+                  <CardValue color="white">{network?.name}</CardValue>
                 </>
               )}
 

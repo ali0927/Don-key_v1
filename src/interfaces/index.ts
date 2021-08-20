@@ -24,11 +24,11 @@ export type IFarmer = {
   strategyImage?: string;
   investors?: null | number;
   status:
-    | "not_signed_up"
-    | "under_review"
-    | "active"
-    | "inactive"
-    | "comingsoon";
+  | "not_signed_up"
+  | "under_review"
+  | "active"
+  | "inactive"
+  | "comingsoon";
 };
 
 export interface IUser {
@@ -61,61 +61,38 @@ export interface IUser {
 }
 
 export interface IFarmerInter {
-  poolAddress: string;
-  picture: string;
-  pool_version: number;
-  GUID: string;
-  investors?: null | number;
-  status: "not_signed_up" | "under_review" | "active" | "inactive";
-  name: string;
-  last_signin: string;
+  name: string
   description: string;
-  descriptionTitle: string | null
-  risk?:string;
-  riskDescription?: string;
-  profit24hours?: string;
-  profit7days?: string;
-  profit?: string;
-  strategy?: {
-    apy: string;
-    network?: {
-      chainId: number;
-      networkName: string;
-      networkSymbol: string;
-    }
-    description: string;
-    strategyImage: string;
+  farmerImage: {
+    url: string;
   }
-  is_active: boolean;
-  walletAddress: string;
-  username?: string | null;
-  telegram?: string | null;
-  twitter?: string | null;
-  strategies?: IStrategy[];
+  guid: string;
+  active: boolean;
+  twitter: string;
+  telegram: string;
+  poolAddress: string;
+  poolVersion: number;
+  network: {
+    name: string;
+    chainId: number;
+    symbol: string;
+  }
+  strategies:IStrategy[]
 }
+
 export type IStrategy = {
-  createdAt: string;
-  is_active: boolean;
-  lastRan: string | null;
-  updatedAt: string;
-  strategyAddress: string | null;
-  strategyDescription?: string | null;
-  status: string | null;
-  profit: string | null;
+  created_at: string;
+  id: string;
   entranceFees?: string | null;
   exitFees?: string | null;
-  gasLimit?: string | null;
   swapInFees?: string | null;
   swapOutFees?: string | null;
-  network?: {
-    chainId: number;
-    networkName: string;
-    networkSymbol: string;
-  }
-  withdrawGasLimit?: string | null;
-  strategyName: string;
+  name: string;
   apy: string;
-  id: number;
+  description: string;
+  strategyImage: {
+    url: string;
+  }
 };
 
 export type CallBackorVal<T> = T | ((val: T) => T);
@@ -182,15 +159,15 @@ export type IStrapiRisk = {
 };
 
 export type IStrapiStrategy = {
-  id: 3;
+  id: number;
   name: string;
   description: string;
   strategyAddress: null;
   apy: string;
-  created_at:string;
+  created_at: string;
   risk: number;
   token: number;
-  farmer: number;
+  farmer: { poolAddress: string };
   network: number;
   active: boolean;
   swapInFees: string | null;
@@ -205,6 +182,8 @@ export type IStrapiToken = {
   symbol: string;
   status: "commingsoon" | "active" | "disabled" | "hidden"
   tokenAddress: string;
+  maxApy: string;
+
   network: {
     id: number;
     name: string;
@@ -212,6 +191,5 @@ export type IStrapiToken = {
     chainId: number;
   };
   image: IStrapiImage;
-  risks: IStrapiRisk[];
-  strategies: IStrapiStrategy[];
+  RiskStrategy: { strategy: IStrapiStrategy }[];
 };

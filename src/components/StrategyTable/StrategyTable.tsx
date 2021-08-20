@@ -121,10 +121,22 @@ export const StrategyTableForInvestor = ({
           <br />
         </React.Fragment>
       )}
-      <strong>Farmer performance fee:  {poolAddress.toLowerCase() === "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase() ? "0": "10"}%</strong>
+      <strong>
+        Farmer performance fee:{" "}
+        {poolAddress.toLowerCase() ===
+        "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase()
+          ? "0"
+          : "10"}
+        %
+      </strong>
       <br />{" "}
       <strong>
-        Don-key Performance fee: {poolAddress.toLowerCase() === "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase() ? "0": "5"}%
+        Don-key Performance fee:{" "}
+        {poolAddress.toLowerCase() ===
+        "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase()
+          ? "0"
+          : "5"}
+        %
         <br />
       </strong>{" "}
     </Tooltip>
@@ -176,7 +188,7 @@ export const StrategyTableForInvestor = ({
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>
-                  {item.strategyName}
+                  {item.name}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
@@ -187,11 +199,9 @@ export const StrategyTableForInvestor = ({
                 <TableData style={{ textAlign: "center" }}>
                   {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
                 </TableData>
+                <TableData style={{ textAlign: "center" }}>Active</TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {item.status || "Active"}
-                </TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  {formatDate(item.createdAt)}
+                  {formatDate(item.created_at)}
                 </TableData>
               </TableRow>
             );

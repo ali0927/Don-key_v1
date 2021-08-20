@@ -6,7 +6,6 @@ import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { useWeb3 } from "don-components";
 import "./InvestmentsPage.scss";
-import { useAxios } from "hooks/useAxios";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, withStyles } from "@material-ui/core";
 import { yellow } from "@material-ui/core/colors";
@@ -30,7 +29,7 @@ import { getPoolContract, calculateInitialInvestmentInUSD } from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
-import { IFarmer, IFarmerInter } from "interfaces";
+import { IFarmerInter } from "interfaces";
 import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
 import {
   BSCChainId,
@@ -40,6 +39,7 @@ import {
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
+import { gql, useQuery } from "@apollo/client";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -128,46 +128,42 @@ const YellowSwitch = withStyles({
   },
 })(Switch);
 
+const ALL_FARMER_QUERY = gql`
+  query allFarmerQuery {
+    d(where: { active_eq: true, status_in: ["active"] }) {
+      name
+      description
+      farmerImage {
+        url
+      }
+      active
+      twitter
+      telegram
+      poolAddress
+      poolVersion
+      network {
+        name
+        chainId
+        symbol
+      }
+    }
+  }
+`;
+
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
-  const [poolAddresses, setPoolAddresses] = useState<any>([]);
-  const [myInvestments, setMyInvestments] = useState<IFarmer[]>([]);
+  const [poolAddresses, setPoolAddresses] = useState<
+    { name: string; poolAddress: string; initialInvestmentinUSD: string }[]
+  >([]);
+  const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
+  const { data } = useQuery(ALL_FARMER_QUERY);
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
   const history = useHistory();
   const [loading, setLoading] = useState(true);
-  const [{ data }] = useAxios("/api/v2/farmer");
+
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
-  const farmers: IFarmer[] = useMemo(() => {
-    if (data) {
-      return data.data.map((item: IFarmerInter) => {
-        const farmer: IFarmer = {
-          GUID: item.GUID,
-          name: `Don - ${item.name}`,
-          description: item.description,
-          picture: item.picture,
-          pool_version: item.pool_version,
-          poolAddress: item.poolAddress,
-          profit24hours: item.profit24hours || "-",
-          profit7days: item.profit7days || "-",
-          telegram: item.telegram,
-          twitter: item.twitter,
-          profit: item.profit || "-",
-          descriptionTitle: item.descriptionTitle,
-          risk: item.risk,
-          network: item.strategy?.network,
-          riskDescription: item.riskDescription,
-          status: item.status,
-          apy: item?.strategy?.apy,
-          strategyImage: item?.strategy?.strategyImage,
-          investors: item.investors,
-        };
-        return farmer;
-      });
-    }
-    return [];
-  }, [data]);
 
   const [withDraw, setWidthDraw] = useState({
     open: false,
@@ -190,12 +186,12 @@ export const InvestmentsPage = () => {
   };
 
   useEffect(() => {
-    if (farmers.length > 0) {
+    if (data && data.farmers.length > 0) {
       let arr: any = [];
       const CalInvestments = async () => {
-        const finalInvestments: IFarmer[] = [];
+        const finalInvestments: IFarmerInter[] = [];
         setLoading(true);
-        for (let invest of farmers) {
+        for (let invest of data.farmers as IFarmerInter[]) {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 2);
             const accounts = await web3.eth.getAccounts();
@@ -229,7 +225,7 @@ export const InvestmentsPage = () => {
       };
       CalInvestments();
     }
-  }, [farmers, refresh]);
+  }, [data, refresh]);
 
   const filteredInvestMents = useMemo(() => {
     return myInvestments.filter((item) => {
@@ -285,7 +281,7 @@ export const InvestmentsPage = () => {
     });
   };
 
-  const handleFindFarmers = () => {
+  const handleFindd = () => {
     history.push("/dashboard");
   };
 
@@ -378,18 +374,18 @@ export const InvestmentsPage = () => {
                             }
                           );
                           let initialInvestmentinUSD =
-                            poolAddressFinal.initialInvestmentinUSD;
+                            poolAddressFinal?.initialInvestmentinUSD || "0";
 
                           return (
-                            <TableRow key={investment.GUID}>
+                            <TableRow key={investment.guid}>
                               <CustomTableData>{index + 1}</CustomTableData>
                               <CustomTableData>
-                                <StyledImage src={investment.picture} />
+                                <StyledImage src={investment.farmerImage.url} />
                               </CustomTableData>
                               <CustomTableData
                                 cursor="pointer"
                                 onClick={RedirectToFarmerProfile(
-                                  investment.GUID
+                                  investment.guid
                                 )}
                                 className="font-weight-bold"
                               >
@@ -416,8 +412,8 @@ export const InvestmentsPage = () => {
                                   onClick={handleOpenWithDraw(
                                     investment.name,
                                     investment.poolAddress,
-                                    investment.pool_version
-                                      ? investment.pool_version
+                                    investment.poolVersion
+                                      ? investment.poolVersion
                                       : 1
                                   )}
                                 >
@@ -438,7 +434,7 @@ export const InvestmentsPage = () => {
                   <ZeroInvestmentBox>
                     <ZeroInvestmentInnerBox>
                       <ZeroInvestmentContent>
-                        You’re not following any farmers
+                        You’re not following any d
                       </ZeroInvestmentContent>
                       <CenteredBox className="mb-5">
                         <ButtonWidget
@@ -447,9 +443,9 @@ export const InvestmentsPage = () => {
                           containedVariantColor="black"
                           height="50px"
                           width="210px"
-                          onClick={handleFindFarmers}
+                          onClick={handleFindd}
                         >
-                          Explore Farmers
+                          Explore d
                         </ButtonWidget>
                       </CenteredBox>
                     </ZeroInvestmentInnerBox>

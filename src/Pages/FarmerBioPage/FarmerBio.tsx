@@ -5,7 +5,6 @@ import { DetailTable } from "./DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { FarmerModal } from "components/FarmerModal/FarmerModal";
 import { useEffect, useState } from "react";
 import { IFarmerInter, IStrategy } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
@@ -94,14 +93,15 @@ export const FarmerBio = ({
   const {
     description,
     name,
-    picture,
+    network,
     poolAddress,
     strategies,
-    pool_version,
+    poolVersion: pool_version,
     twitter,
-    GUID,
+    guid: GUID,
+    farmerImage: { url: picture },
   } = farmer;
-  const gasLimit = getStrategyField(farmer, "gasLimit");
+ 
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -143,10 +143,9 @@ export const FarmerBio = ({
     strategies && strategies.length > 0
       ? new BigNumber(strategies![0].apy).multipliedBy(100).toFixed(0) + "%"
       : "100%";
-  const network =
-    strategies && strategies.length > 0 ? strategies[0].network : undefined;
+
   const strategyName =
-    strategies && strategies.length > 0 ? strategies[0].strategyName : "";
+    strategies && strategies.length > 0 ? strategies[0].name : "";
   return (
     <>
       <Section>
@@ -157,23 +156,7 @@ export const FarmerBio = ({
                 <Title className="mb-2 mb-md-0">
                   DON - {capitalize(name || "")}
                 </Title>
-                {!isInvestor && (
-                  <div className="d-flex align-items-center justify-content-center">
-                    <OutlinedButton
-                      className="ml-3"
-                      onClick={() => setModalShow(true)}
-                    >
-                      <EditIcon className="mr-2" />
-                      Edit bio page
-                    </OutlinedButton>
-                    {modalShow && (
-                      <FarmerModal
-                        isOpen={modalShow}
-                        onClose={() => setModalShow(false)}
-                      />
-                    )}
-                  </div>
-                )}
+               
               </div>
             </Col>
           </Row>
@@ -196,7 +179,7 @@ export const FarmerBio = ({
                       <div className="d-flex justify-content-between">
                         <h4 className="font-weight-bolder">
                           {strategies && strategies.length > 0
-                            ? strategies[0].strategyName
+                            ? strategies[0].name
                             : "Description"}
                         </h4>
                         <div className="d-flex">
@@ -243,13 +226,15 @@ export const FarmerBio = ({
                     <TypographyShare> Share and Earn</TypographyShare>
                   </div>
                 </ButtonWidget>
-              ): <DotsIcon />}
+              ) : (
+                <DotsIcon />
+              )}
             </Col>
           </Row>
 
           <Row className="mt-5">
             <DetailTable
-              gasLimit={gasLimit}
+             
               apy={apy}
               network={network}
               poolVersion={pool_version}

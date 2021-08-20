@@ -5,8 +5,6 @@ import { useReferralContext } from "contexts/ReferralContext";
 import {
   calculateInitialInvestment,
   calculateUserClaimableAmount,
-  getAmount,
-  getDonPrice,
   getDonPriceWeb3,
   getReferralSystemContract,
   getRewardSystemContract,
@@ -16,15 +14,14 @@ import {
   toEther,
 } from "helpers";
 import { useAxios } from "hooks/useAxios";
-import { useSnackbar } from "notistack";
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { theme } from "theme";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
-import { IFarmer, IFarmerInter } from "interfaces";
+import {  IFarmerInter } from "interfaces";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { GridBackground } from "components/GridBackground";
 import {
@@ -37,7 +34,6 @@ import {
   TableRow,
 } from "components/Table";
 import {
-  CenteredBox,
   ZeroInvestmentBox,
   ZeroInvestmentContent,
   ZeroInvestmentInnerBox,
@@ -45,6 +41,7 @@ import {
 import { useHistory } from "react-router-dom";
 import { hideAddress } from "components/InvestorListTable/InvestorListTable";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
+import { gql, useQuery } from "@apollo/client";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -179,6 +176,29 @@ const CustomTableData = styled(TableData)`
   cursor: ${(props: { cursor?: string }) =>
     props.cursor ? props.cursor : "auto"};
 `;
+
+const ALL_FARMER_QUERY = gql`
+  query allFarmerQuery {
+    d(where: { active_eq: true, status_in: ["active"] }) {
+      name
+      description
+      farmerImage {
+        url
+      }
+      active
+      twitter
+      telegram
+      poolAddress
+      poolVersion
+      network {
+        name
+        chainId
+        symbol
+      }
+    }
+  }
+`;
+
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
   const [{ data }] = useAxios("/api/v2/referrer");
@@ -186,41 +206,22 @@ const useTransformedData = () => {
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
     []
   );
-  const [{ data: farmerData }] = useAxios("/api/v2/farmer");
+  const { data:farmersData } = useQuery(ALL_FARMER_QUERY);
+  
   const { chainId: network } = useWeb3Network();
-  const farmers: IFarmer[] = useMemo(() => {
-    if (farmerData) {
-      return farmerData.data
+  const farmers: IFarmerInter[] = useMemo(() => {
+    if (farmersData) {
+      return farmersData.farmers
         .filter((item: IFarmerInter) => {
-          return item.strategy?.network?.chainId === network;
+          return item?.network?.chainId === network;
         })
         .map((item: IFarmerInter) => {
-          const farmer: IFarmer = {
-            GUID: item.GUID,
-            name: `Don - ${item.name}`,
-            description: item.description,
-            picture: item.picture,
-            pool_version: item.pool_version,
-            poolAddress: item.poolAddress,
-            profit24hours: item.profit24hours || "-",
-            profit7days: item.profit7days || "-",
-            telegram: item.telegram,
-            twitter: item.twitter,
-            profit: item.profit || "-",
-            descriptionTitle: item.descriptionTitle,
-            risk: item.risk,
-            network: item.strategy?.network,
-            riskDescription: item.riskDescription,
-            status: item.status,
-            apy: item?.strategy?.apy,
-            strategyImage: item?.strategy?.strategyImage,
-            investors: item.investors,
-          };
-          return farmer;
+        
+          return item;
         });
     }
     return [];
-  }, [farmerData, network]);
+  }, [farmersData, network]);
   const transformData = async () => {
     setIsReady(false);
     const donPrice = await getDonPriceWeb3(web3);
@@ -244,7 +245,7 @@ const useTransformedData = () => {
         if (farmer) {
           const referralState: ReferralTableState = {
             expired: referrerInfo.expired,
-            farmerImage: farmer.picture,
+            farmerImage: farmer.farmerImage.url,
             poolSymbol: symbol,
             pool_address: referrerInfo.poolAddress,
             farmerName: farmer.name,
@@ -252,7 +253,7 @@ const useTransformedData = () => {
             referralProfit: profit,
             rewards: don,
             wallet_address,
-            GUID: farmer.GUID,
+            GUID: farmer.guid,
           };
           return referralState;
         }
