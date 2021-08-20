@@ -203,7 +203,7 @@ export type IStrapiToken = {
   id: number;
   name: string;
   symbol: string;
-
+  status: "commingsoon" | "active" | "disabled" | "hidden"
   tokenAddress: string;
   network: {
     id: number;

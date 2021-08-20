@@ -10,15 +10,11 @@ import FarmerSignupPage from "Pages/FarmerSignupPage";
 import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
 import Faq from "Pages/Faq/Faq";
 
-
-const Builder = lazy(() => import("Pages/Builder"));
-const DecodedStrategyPage = lazy(() => import("Pages/DecodedStrategyPage"));
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
 const FarmerBioPage = lazy(() => import("Pages/FarmerBioPage"));
-// const InvestmentsPage = lazy(() => import("Pages/InvestmentsPage"));
 const InvestmentsPageParent = lazy(() => import("Pages/InvestmentsPageParent"));
-const DevelopersPage = lazy(() => import("Pages/DevelopersPage"));
 const MyReferrals = lazy(() => import("Pages/MyReferrrals"));
+const TokenPage = lazy(() => import("Pages/TokenPage"));
 
 export default function Routes() {
   return (
@@ -66,15 +62,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
-          exact
-          path="/dashboard/developers"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <DevelopersPage />
-            </Suspense>
-          }
-        />
+
         <ProtectedRoute
           exact
           path="/dashboard/investment"
@@ -84,29 +72,21 @@ export default function Routes() {
             </Suspense>
           }
         />
-         <ProtectedRoute
+        <ProtectedRoute
           exact
           path="/dashboard/referrals"
           children={
             <Suspense fallback={<LoadingPage />}>
-             <MyReferrals />
-            </Suspense>
-          }
-        />
-        <ProtectedRoute
-          path="/strategy/build"
-          children={
-            <Suspense fallback={<LoadingPage />}>
-              <Builder />
+              <MyReferrals />
             </Suspense>
           }
         />
         <ProtectedRoute
           exact
-          path="/dashboard/decoded-strategy/:strategyaddress"
+          path="/dashboard/:token"
           children={
             <Suspense fallback={<LoadingPage />}>
-              <DecodedStrategyPage />
+              <TokenPage />
             </Suspense>
           }
         />

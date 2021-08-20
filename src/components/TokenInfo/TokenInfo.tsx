@@ -1,7 +1,8 @@
 import { IStrapiToken } from "interfaces";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-
+import comingsoon from "images/comingsoon.svg";
 const InfoWrapper = styled.div`
   background: #ffffff;
   border-radius: 10px;
@@ -12,7 +13,9 @@ const InfoWrapper = styled.div`
   padding-top: 35px;
   padding-bottom: 25px;
   margin-bottom: 20px;
-  cursor: pointer;
+
+  ${(props: { disabled?: boolean }) =>
+    props.disabled ? `cursor: default;` : `cursor: pointer;`}
 `;
 
 const GreenText = styled.p`
@@ -30,12 +33,22 @@ const GreyText = styled.p`
 `;
 
 export const TokenInfo = ({
-  token: { image, symbol },
+  token: { image, symbol, status },
 }: {
   token: IStrapiToken;
 }) => {
+  const history = useHistory();
+  const disabled = status === "commingsoon";
   return (
-    <InfoWrapper>
+    <InfoWrapper
+      disabled={disabled}
+      onClick={() => {
+        if (!disabled) {
+          history.push("/dashboard/" + symbol.toLowerCase());
+        }
+      }}
+    >
+      {disabled && <img className="coming-soon" alt="coming" src={comingsoon} />}
       <div className="row">
         <div className="col-6">
           <h5>Deposit in</h5>

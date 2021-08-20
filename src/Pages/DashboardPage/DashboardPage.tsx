@@ -20,6 +20,7 @@ import { useStrapi } from "hooks/useStrapi";
 import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
+import { gql, useQuery } from "@apollo/client";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -110,17 +111,41 @@ export const NetworkButton = styled.button`
   `}
 `;
 
+const LIST_OF_TOKENS = gql`
+  query tokensList {
+    tokens {
+      id
+      symbol
+      image {
+        url
+      }
+      symbol
+      network {
+        chainId
+      }
+      status
+      RiskStrategy {
+        strategy {
+          farmer {
+            poolAddress
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const DashboardPage = () => {
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
-  const [{ loading, data }] = useStrapi("/tokens");
+  const {data,loading }= useQuery(LIST_OF_TOKENS);
 
   useAddDonTokenonLoad();
 
   const tokens: IStrapiToken[] = useMemo(() => {
     if (data) {
-      return data.filter((item: IStrapiToken) => {
+      return data.tokens.filter((item: IStrapiToken) => {
         return item.network.chainId === strategyNetworkFilter;
       });
     }
