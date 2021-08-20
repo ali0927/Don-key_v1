@@ -1,10 +1,8 @@
 import BigNumber from "bignumber.js";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { useWeb3 } from "don-components";
-import { calculateUserClaimableAmount, calculateWithdrawAmount, getPoolContract } from "helpers";
-import { useState } from "react";
+import { calculateUserClaimableAmount, getPoolContract } from "helpers";
 import { useAxios } from "./useAxios";
-import { useIsomorphicEffect } from "./useIsomorphicEffect";
 
 export const useWithdraw = () => {
   const [{}, executeDelete] = useAxios(
@@ -35,7 +33,7 @@ export const useWithdraw = () => {
       if (poolVersion === 2) {
         const userLPTokens = await pool.methods.balanceOf(accounts[0]).call();
         await pool.methods
-          .withdrawLiquidity(userLPTokens, new BigNumber(web3.utils.toWei(minAmountOut)).multipliedBy(995).dividedBy(1000).toFixed(0))
+          .withdrawLiquidity(userLPTokens, new BigNumber(web3.utils.toWei(minAmountOut)).multipliedBy(98).dividedBy(100).toFixed(0))
           .send({ from: accounts[0] });
       }
 
