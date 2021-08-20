@@ -119,12 +119,16 @@ export const HexagonSection: React.FC = () => {
       tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
+    const circulatingSupply = coingecko
+    ?coingecko.market_data.circulating_supply
+    : 0;
 
   const volume24hrs = coingecko
     ? convertToInternationalCurrencySystem(
         new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
       ).toString()
     : 0;
+    
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
@@ -138,7 +142,7 @@ export const HexagonSection: React.FC = () => {
   const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
     new BigNumber(tadeVolumeUSD).toNumber()
   ).toString();
-  const circulatingSupply = 6378433;
+  console.log(circulatingSupply)
   const marketCap = convertToInternationalCurrencySystem(
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
