@@ -18,6 +18,7 @@ import { DollarView } from "Pages/FarmerBioPage/DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon } from "icons/InfoIcon";
+import { useTVL } from "hooks";
 
 const formatDate = (
   date: string | null | undefined,
@@ -33,18 +34,7 @@ const formatDate = (
   }
 };
 
-const useTVL = (poolAddress: string) => {
-  const [tvl, setTvl] = useState("");
-  const web3 = useWeb3();
-  const { dependsOn } = useRefresh();
-  useEffect(() => {
-    (async () => {
-      let poolValue = await getTotalPoolValue(web3, poolAddress);
-      setTvl(web3.utils.fromWei(poolValue, "ether"));
-    })();
-  }, [poolAddress, dependsOn]);
-  return { tvl };
-};
+
 
 // const useProfit = (poolAddress: string) => {
 //   const [profit, setprofit] = useState("");

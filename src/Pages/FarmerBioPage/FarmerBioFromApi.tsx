@@ -65,7 +65,10 @@ export const FarmerBioFromApi = ({ farmerId }: { farmerId: string }) => {
         <FarmerBio farmer={data.farmers[0]} investorCount={0} />
       )}
       <GridBackground>
-        <FarmerStrategies isLoaded={!loading} farmer={data.farmers[0]} />
+        <FarmerStrategies
+          isLoaded={!loading}
+          farmer={loading ? [] : data.farmers[0]}
+        />
       </GridBackground>
     </>
   );

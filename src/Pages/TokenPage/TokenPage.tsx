@@ -6,7 +6,7 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { useStrapi } from "hooks";
 import { sortBy } from "lodash";
 import { LoadingPage } from "Pages/LoadingPage";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
@@ -112,7 +112,7 @@ export const TokenPage = () => {
   const sortedStrategies = useMemo(() => {
     return sortStrategies(strategies);
   }, [strategies]);
-
+  const [isOpen, setIsOpen] = useState(false);
   if (loading) {
     return <LoadingPage />;
   }
@@ -141,12 +141,12 @@ export const TokenPage = () => {
         </div>
       </Section>
       <GridBackground className="py-5">
-        <div className="container py-5">
+        <div className="container">
           <div className="row">
             {sortedStrategies.map((item) => {
               return (
-                <div className="col-md-4">
-                  <StrategyInfo strategy={item.strategy} />
+                <div className="col-md-4 py-3">
+                  <StrategyInfo isOpen={isOpen} setIsOpen={setIsOpen} strategy={item.strategy} />
                 </div>
               );
             })}

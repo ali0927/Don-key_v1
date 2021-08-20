@@ -7,3 +7,4 @@ export * from "./useAddDonTokenonLoad";
 export * from "./useAxios";
 export * from "./useStrapi";
 export * from "./useSwitchNetwork";
+export * from "./useTVL";

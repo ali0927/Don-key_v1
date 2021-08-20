@@ -5,7 +5,7 @@ import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
 import BigNumber from "bignumber.js";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
-import { InvestorCountGraphql } from "components/InvestorCountGraphql";
+import { InvestorCountContract, InvestorCountGraphql } from "components/InvestorCountGraphql";
 const InfoWrapper = styled.div`
   background: #ffffff;
   border-radius: 10px;
@@ -74,7 +74,7 @@ export const TokenInfo = ({
         </div>
         <div className="col-5 d-flex flex-column align-items-end">
           <GreyText>Total investors</GreyText>
-          <h6><InvestorCountGraphql poolAddresses={poolAddresses} /></h6>
+          <h6><InvestorCountContract poolAddresses={poolAddresses} /></h6>
         </div>
       </div>
     </InfoWrapper>
