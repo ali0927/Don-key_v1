@@ -108,19 +108,21 @@ const TOKEN_DATA = gql`
 `;
 
 export const HexagonSection: React.FC = () => {
-  const { data: ethPriceInfo } = useQuery(ETH_PRICE, {client: uniswapClient});
+  const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
+
   const [{ data: coingecko }] = useAxios({
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
 
   const { data } = useQuery(TOKEN_DATA, {
+    client: uniswapClient,
     variables: {
       tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
     },
   });
-    const circulatingSupply = coingecko
-    ?coingecko.market_data.circulating_supply
+  const circulatingSupply = coingecko
+    ? coingecko.market_data.circulating_supply
     : 0;
 
   const volume24hrs = coingecko
@@ -128,21 +130,14 @@ export const HexagonSection: React.FC = () => {
         new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
       ).toString()
     : 0;
-    
+
   const derivedETH = data && data.token.derivedETH;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
     parseFloat(derivedETH) * parseFloat(ethPriceInUSD)
   ).toFixed(2);
   const totalLiquidity = data && data.token.totalLiquidity;
-  const totalLiquidityMillion = convertToInternationalCurrencySystem(
-    new BigNumber(totalLiquidity).toNumber()
-  ).toString();
-  const tadeVolumeUSD = data && data.token.tradeVolumeUSD;
-  const tadeVolumeUSDMillion = convertToInternationalCurrencySystem(
-    new BigNumber(tadeVolumeUSD).toNumber()
-  ).toString();
-  console.log(circulatingSupply)
+
   const marketCap = convertToInternationalCurrencySystem(
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();

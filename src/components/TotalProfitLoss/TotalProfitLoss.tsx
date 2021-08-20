@@ -1,7 +1,6 @@
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import {
-  calculateWithdrawAmount,
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
   getTokenPrice,
