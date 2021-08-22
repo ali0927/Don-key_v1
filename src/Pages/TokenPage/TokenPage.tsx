@@ -4,6 +4,7 @@ import { GridBackground } from "components/GridBackground";
 import { NavBar } from "components/Navbar";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useStrapi } from "hooks";
+import { IFarmer, IFarmerInter } from "interfaces";
 import { sortBy } from "lodash";
 import { LoadingPage } from "Pages/LoadingPage";
 import React, { useMemo, useState } from "react";
@@ -56,7 +57,7 @@ const StyledLink = styled(Link)`
 
 const TokenInfoQuery = gql`
   query tokenInfo($symbol: String!) {
-    tokens(where: { symbol_eq: $symbol, active_eq: true, status_in: ["active"] }) {
+    tokens(where: { symbol_eq: $symbol }) {
       RiskStrategy {
         strategy {
           risk {
@@ -69,6 +70,7 @@ const TokenInfoQuery = gql`
           apy
           active
           farmer {
+            status
             name
             farmerImage {
               url
@@ -110,7 +112,14 @@ export const TokenPage = () => {
 
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
   const sortedStrategies = useMemo(() => {
-    return sortStrategies(strategies);
+    return sortStrategies(strategies).filter(item => {
+      const farmer = item.strategy.farmer as IFarmerInter;
+      if(farmer.active && farmer.status === "active"){
+        return true;
+      }else {
+        return false;
+      }
+    });
   }, [strategies]);
   const [isOpen, setIsOpen] = useState(false);
   if (loading) {

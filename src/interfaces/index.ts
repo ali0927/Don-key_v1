@@ -66,6 +66,7 @@ export interface IFarmerInter {
   farmerImage: {
     url: string;
   }
+  status: "active" | "hidden";
   guid: string;
   active: boolean;
   twitter: string;
