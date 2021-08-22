@@ -96,7 +96,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     }
     try {
       const minDuration = await stakingContract.methods.getMinDuration().call()
-      const duration = moment.duration(minDuration);
+      const duration = moment.duration(minDuration * 1000);
       setCoolOffDuration(duration.humanize());
     } catch(e){
       setCoolOffDuration("2 weeks");
