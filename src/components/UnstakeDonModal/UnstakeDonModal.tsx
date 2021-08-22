@@ -25,23 +25,18 @@ const Info = styled.p`
 export const UnstakeDonModal = ({
   open,
   onClose,
-  leave,
 }: {
   open: boolean;
-  leave?: boolean;
   onClose: () => void;
 }) => {
-  const { unstake, stakedDon, refetch } = useStakingContract();
-
-  const web3 = useWeb3();
+  const { unstake, coolOffDuration } = useStakingContract();
 
   const [btnLoading, setBtnLoading] = useState(false);
 
   const unstakeDon = async () => {
     setBtnLoading(true);
     try {
-      await refetch();
-      await unstake(leave || false);
+      await unstake();
     } finally {
       setBtnLoading(false);
       onClose();
@@ -70,10 +65,9 @@ export const UnstakeDonModal = ({
         </div>
 
         <p className="font-weight-bold mt-4">Notification</p>
-        <Info> The DON tokens will be locked for 2 weeks after unstaking.</Info>
+        <Info> The DON tokens will be locked for {coolOffDuration} after unstaking.</Info>
         <Info className="mb-5">
-          Are you sure uou want to unstake your DON{" "}
-          {leave && "and leave the platform"}?
+          Are you sure uou want to unstake your DON{" "} ?
         </Info>
 
         <div className="d-flex align-items-center">
@@ -86,7 +80,7 @@ export const UnstakeDonModal = ({
             {btnLoading ? (
               <Spinner animation="border" size="sm" />
             ) : (
-              "Unstake DON " + (leave ? "and Leave": "")
+              "Unstake DON "
             )}
           </ButtonWidget>
         </div>

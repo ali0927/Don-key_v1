@@ -81,7 +81,6 @@ const getStrategyField = <T extends keyof IStrategy>(
 
 export const FarmerBio = ({
   farmer,
-  isInvestor,
 }: {
   farmer: IFarmerInter;
   isInvestor?: boolean;

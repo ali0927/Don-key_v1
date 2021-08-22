@@ -56,7 +56,7 @@ const StyledLink = styled(Link)`
 
 const TokenInfoQuery = gql`
   query tokenInfo($symbol: String!) {
-    tokens(where: { symbol_eq: $symbol }) {
+    tokens(where: { symbol_eq: $symbol, active_eq: true, status_in: ["active"] }) {
       RiskStrategy {
         strategy {
           risk {

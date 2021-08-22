@@ -1,12 +1,13 @@
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
 import { ButtonWidget } from "components/Button";
 import { useStakingContract } from "hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useToggle } from "don-hooks";
 import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
 import BigNumber from "bignumber.js";
 import { Spinner } from "react-bootstrap";
+import moment from "moment";
 
 const TotalInvestedAmount = styled.span`
   font-size: 50px;
@@ -15,26 +16,26 @@ const TotalInvestedAmount = styled.span`
 
 const StakingCard = styled.div`
   background-color: #fff;
-  box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
-    0px 10px 32px -4px rgba(24, 39, 75, 0.1);
-  border-radius: 10px;
-  padding-top: 55px;
-  padding-bottom: 10px;
+  border-radius: 4px;
+  padding: 40px 0;
 `;
 
 const StakingCol = styled.div`
-  /* &:not(:last:child) { */
-  /* position: relative; */
-  &:after {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &:not(:last-child):after {
     content: "";
     display: block;
     width: 1px;
-    height: 42px;
+    height: calc(100% - 10px);
     background-color: #000d09;
     opacity: 0.3;
     position: absolute;
     right: 0;
-    top: 3px;
+    top: 50%;
+    color: #000d09;
+    transform: translateY(-50%);
   }
   &.hide:after {
     display: none;
@@ -45,7 +46,6 @@ const StakingTitle = styled.h3`
   font-weight: 500;
   font-size: 14px;
   text-align: center;
-  color: #000d09;
 `;
 
 const StakingSubtitle = styled.p`
@@ -53,31 +53,182 @@ const StakingSubtitle = styled.p`
   font-size: 16px;
   margin-bottom: 0;
   text-align: center;
-  color: #000d09;
 `;
 
 const StyledButton = styled(ButtonWidget)`
   width: initial !important;
   font-size: 14px;
+  &:disabled {
+    ${(props) => {
+      if (
+        props.varaint === "contained" &&
+        props.containedVariantColor === "lightYellow"
+      ) {
+        return `background-color: rgba(255, 236, 92, 0.5);`;
+      }
+    }}
+  }
 `;
 
+const HarvestCard = styled.div`
+  background-color: #222;
+  border-radius: 4px;
+  padding: 40px 0;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 100%;
+`;
+
+const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
+  const [days, setDays] = useState(0);
+  const [hrs, setHrs] = useState(0);
+  const [mins, setMins] = useState(0);
+  const [secs, setSecs] = useState(0);
+  const [hasEnded, setHasEnded] = useState(false);
+
+  const update = () => {
+    const endTime = moment.unix(timerEnd);
+    const duration = moment.duration(endTime.diff(moment()));
+    const isEnded = endTime.isBefore(moment());
+    setHasEnded(isEnded);
+    if (!isEnded) {
+      setHrs(duration.hours());
+      setMins(duration.minutes());
+      setSecs(duration.seconds());
+      setDays(duration.days());
+    }
+  };
+  useEffect(() => {
+    const interval = setInterval(update, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  if (hasEnded) {
+    return (
+      <div className="text-center">Cool off period is over. Claim Tokens</div>
+    );
+  }
+  return (
+    <div>
+      Cool off period ends in {days}d:{hrs}h:{mins}m:{secs}s{" "}
+    </div>
+  );
+};
+
 export const StakingInfo = () => {
-  const { stakedDon, tier, pendingReward, investedAmount, isStaked, harvest } =
-    useStakingContract();
+  const {
+    stakedDon,
+    tier,
+    pendingReward,
+    investedAmount,
+    isStaked,
+    harvest,
+    coolOffAmount,
+    isInCoolOffPeriod,
+    canClaimTokens,
+    coolOffTime,
+    claimTokens,
+  } = useStakingContract();
 
   const [isStakeModalOpen, setisModalOpen] = useState(false);
   const [unstake, openUnstake, closeUnstake] = useToggle();
 
-  const [loading,enableLoading,disableLoading] = useToggle();
+  const [loading, enableLoading, disableLoading] = useToggle();
 
   const harvestDon = async () => {
-    enableLoading()
+    enableLoading();
     try {
       await harvest();
-    }finally {
+    } finally {
       disableLoading();
     }
-  }
+  };
+  const claimDons = async () => {
+    enableLoading();
+    try {
+      await claimTokens();
+    } finally {
+      disableLoading();
+    }
+  };
+
+  const renderHarvestCard = () => {
+    if (!isInCoolOffPeriod) {
+      return (
+        <>
+          {" "}
+          <div>
+            <StakingTitle>Don Rewards</StakingTitle>
+            <StakingSubtitle>{pendingReward} DON</StakingSubtitle>
+          </div>
+          <StyledButton
+            varaint="contained"
+            disabled={new BigNumber(pendingReward).isEqualTo(0)}
+            containedVariantColor="lightYellow"
+            className="py-1 px-3"
+            onClick={harvestDon}
+          >
+            {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
+          </StyledButton>
+        </>
+      );
+    } else {
+      return (
+        <>
+          {" "}
+          <div>
+            <StakingTitle>Don Tokens</StakingTitle>
+            <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
+          </div>
+          <StyledButton
+            varaint="contained"
+            disabled={!canClaimTokens}
+            containedVariantColor="lightYellow"
+            className="py-1 px-3"
+            onClick={claimDons}
+          >
+            {loading ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              "Claim Tokens"
+            )}
+          </StyledButton>
+        </>
+      );
+    }
+  };
+
+  const showButtonsOrTimer = () => {
+    if (isInCoolOffPeriod) {
+      return <StakingTimer timerEnd={parseInt(coolOffTime)} />;
+    } else {
+      return (
+        <div className="d-flex flex-column align-items-center">
+          <StyledButton
+            onClick={() => setisModalOpen(true)}
+            varaint="contained"
+            disabled={isInCoolOffPeriod}
+            className="py-1 px-3 mb-2"
+          >
+            Stake
+          </StyledButton>
+
+          <StyledButton
+            varaint="outlined"
+            disabled={!isStaked || isInCoolOffPeriod}
+            onClick={openUnstake}
+            className="py-1 px-3 rounded"
+          >
+            Unstake
+          </StyledButton>
+        </div>
+      );
+    }
+  };
 
   return (
     <>
@@ -89,68 +240,29 @@ export const StakingInfo = () => {
           onClose={() => setisModalOpen(false)}
         />
       )}
-      {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake}  />}
-      <StakingCard className="row mt-3 mb-4">
-        <div className="col-12">
-          <div className="row">
-            <div className="col-md-8 d-flex flex-column align-items-center justify-content-between position-relative">
-              <div className="row w-100">
-                <StakingCol className="col-md-4">
-                  <StakingTitle>DON Staked</StakingTitle>
-                  <StakingSubtitle>{stakedDon} DON</StakingSubtitle>
-                </StakingCol>
-                <StakingCol className="col-md-4">
-                  <StakingTitle>Tier</StakingTitle>
-                  <StakingSubtitle>{tier.donRequired} DON</StakingSubtitle>
-                </StakingCol>
-                <StakingCol className="col-md-4">
-                  <StakingTitle>Extra APY</StakingTitle>
-                  <StakingSubtitle>{tier.apy} %</StakingSubtitle>
-                </StakingCol>
-              </div>
-              <div className="d-flex">
-                <StyledButton
-                  onClick={() => setisModalOpen(true)}
-                  varaint="contained"
-                  className="py-1 px-3 mr-3"
-                >
-                  Stake
-                </StyledButton>
-                {isStaked && (
-                  <StyledButton
-                    varaint="outlined"
-                    onClick={openUnstake}
-                    className="py-1 px-3 rounded"
-                  >
-                    Unstake
-                  </StyledButton>
-                )}
-              </div>
-            </div>
-            <div
-              className="col-md-2 d-flex flex-column align-items-center justify-content-between position-relative"
-              style={{ minHeight: 140 }}
-            >
-              <StakingCol>
-                <StakingTitle>Don Rewards</StakingTitle>
-                <StakingSubtitle>{pendingReward} DON</StakingSubtitle>
-              </StakingCol>
-              <StyledButton
-                varaint="contained"
-                disabled={new BigNumber(pendingReward).isEqualTo(0)}
-                containedVariantColor="lightYellow"
-                className="py-1 px-3"
-                onClick={harvestDon}
-              >
-                {loading ? <Spinner animation="border" size="sm" />: "Harvest"}
-              </StyledButton>
-            </div>
-          
-           
-          </div>
+      {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
+      <div className="row mt-3 mb-4">
+        <div className="col-md-8">
+          <StakingCard className="row">
+            <StakingCol className="col-md-3">
+              <StakingTitle>DON Staked</StakingTitle>
+              <StakingSubtitle>{stakedDon} DON</StakingSubtitle>
+            </StakingCol>
+            <StakingCol className="col-md-3">
+              <StakingTitle>Tier</StakingTitle>
+              <StakingSubtitle>{tier.donRequired} DON</StakingSubtitle>
+            </StakingCol>
+            <StakingCol className="col-md-3">
+              <StakingTitle>Extra APY</StakingTitle>
+              <StakingSubtitle>{tier.apy} %</StakingSubtitle>
+            </StakingCol>
+            <StakingCol className="col-md-3">{showButtonsOrTimer()}</StakingCol>
+          </StakingCard>
         </div>
-          {}
-      </StakingCard>
+        <div className="col-md-4">
+          <HarvestCard>{renderHarvestCard()}</HarvestCard>
+        </div>
+      </div>
     </>
   );
 };

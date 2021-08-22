@@ -7,6 +7,7 @@ import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import { useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
+import { duration } from "@material-ui/core";
 
 const StyledH2 = styled.h2`
   font-family: Roboto;
@@ -117,7 +118,7 @@ export const AcceleratedAPYModal = ({
 }) => {
   const [availableDon, setAvailableDon] = useState("");
   const [donAmount, setDonAmount] = useState("");
-  const { stakedDon, stakingContract, stake, getTierInfo } = useStakingContract();
+  const { stakedDon,  stake, getTierInfo, coolOffDuration } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
   const [loading, setLoading] = useState(false);
@@ -213,7 +214,7 @@ export const AcceleratedAPYModal = ({
             )}
           </p>
 
-          <Info>The DON tokens will be locked for 2 weeks after unstaking</Info>
+          <Info>The DON tokens will be locked for {coolOffDuration} after unstaking</Info>
           <div className="d-flex align-items-center">
             <ButtonWidget
               varaint="contained"

@@ -2,7 +2,7 @@ import {
   IStakingContractContext,
   StakingContractContext,
 } from "contexts/StakingContractContext";
-import { memo, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { getBSCDon, toEther } from "helpers";
@@ -10,6 +10,7 @@ import BigNumber from "bignumber.js";
 import { api } from "don-utils";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
+import moment from "moment";
 
 const DonStakingAddress = "0x05Aa8673d8Bb5D3CB7D5ad6ba2bC8A536a7C99B7";
 export type ITier = { apy: number; donRequired: string; tier: number };
@@ -53,7 +54,11 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const stakingContract = useMemo(() => {
     return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, []);
-
+  const [coolOffTime, setCoolOffTime] = useState("0");
+  const [isInCoolOffPeriod, setIsInCoolOffPeriod] = useState(false);
+  const [canClaimTokens, setCanClaimTokens] = useState(false);
+  const [coolOffAmount, setCoolOffAmount] = useState("0");
+  const [coolOffDuration, setCoolOffDuration] = useState("2 weeks");
   const [holdedDons, setHoldedDons] = useState<BigNumber | null>(null);
   const [isStaked, setIsStaked] = useState<boolean | null>(null);
   const [stakedDon, setStakedDon] = useState<string>("0");
@@ -89,6 +94,13 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       console.log("Error");
       pendingRewards = "0";
     }
+    try {
+      const minDuration = await stakingContract.methods.getMinDuration().call()
+      const duration = moment.duration(minDuration);
+      setCoolOffDuration(duration.humanize());
+    } catch(e){
+      setCoolOffDuration("2 weeks");
+    }
 
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
@@ -100,8 +112,31 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     if (tierInfo) {
       setCurrentTier(tierInfo);
     }
+
     setPendingReward(toEther(pendingRewards));
+    setCoolOffTime(userInfo.coolOffPeriod);
+    console.log(userInfo)
+    setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
+    setCoolOffAmount(toEther(userInfo.coolOffAmount));
   };
+
+  const checkCanClaimTokens = useCallback(() => {
+    if (coolOffTime === "0") {
+      setCanClaimTokens(false);
+    } else {
+      const endTime = moment.unix(parseInt(coolOffTime));
+
+      const isEnded = endTime.isBefore(moment());
+      setCanClaimTokens(isEnded);
+    }
+  }, [coolOffTime, coolOffAmount]);
+
+  useEffect(() => {
+    const interval = setInterval(checkCanClaimTokens, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [checkCanClaimTokens]);
 
   useEffect(() => {
     if (chainId === NetworksMap.BSC) {
@@ -127,10 +162,10 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     await stakingContract.methods.stake(amount).send({ from: accounts[0] });
     await fetchState();
   };
-  const unstake = async (isForced: boolean = false) => {
+  const unstake = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods
-      .unstake(!isForced)
+      .unstake(false)
       .send({ from: accounts[0] });
     await fetchState();
   };
@@ -138,6 +173,13 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const harvest = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.claimReward().send({ from: accounts[0] });
+    await fetchState();
+  };
+
+  const claimTokens = async () => {
+    const accounts = await web3.eth.getAccounts();
+    await stakingContract.methods.claimStaked().send({ from: accounts[0] });
+    await fetchState();
   };
 
   const stakingObj: IStakingContractContext = useMemo(() => {
@@ -145,6 +187,12 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       isStaked: isStaked,
       stakedDon,
       stakingContract,
+      coolOffAmount,
+      isInCoolOffPeriod: isInCoolOffPeriod,
+      coolOffTime,
+      canClaimTokens,
+      coolOffDuration,
+      claimTokens,
       tier: currentTier,
       holdingDons: holdedDons,
       refetch: fetchState,
@@ -160,6 +208,10 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     isStaked,
     stakedDon,
     pendingReward,
+    coolOffTime,
+    canClaimTokens,
+    isInCoolOffPeriod,
+    coolOffAmount,
     currentTier,
     holdedDons,
     investedAmount,

@@ -130,7 +130,7 @@ const YellowSwitch = withStyles({
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery {
-    d(where: { active_eq: true, status_in: ["active"] }) {
+    farmers(where: { active_eq: true, status_in: ["active"] }) {
       name
       description
       farmerImage {
