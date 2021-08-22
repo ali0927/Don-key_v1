@@ -12,7 +12,7 @@ import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
 
-const DonStakingAddress = "0x05Aa8673d8Bb5D3CB7D5ad6ba2bC8A536a7C99B7";
+const DonStakingAddress = "0xC0f98D72B1b6E00232E3fb0030565677FE295259";
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
@@ -165,7 +165,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const unstake = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods
-      .unstake(false)
+      .unstake()
       .send({ from: accounts[0] });
     await fetchState();
   };

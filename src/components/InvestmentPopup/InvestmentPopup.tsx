@@ -235,16 +235,10 @@ export const InvestmentPopup = ({
           });
       }
       if (poolVersion === 3) {
-      
-        const minAmount = amount
-          .multipliedBy(new BigNumber(1000).minus(slippage))
-          .dividedBy(1000)
-          .toFixed(0);
         if (referralCode && applied) {
           const tx = await pool.methods
             .depositLiquidityWithCode(
               inputAmount,
-              minAmount,
               referralCode.toLowerCase()
             )
             .send({
@@ -263,7 +257,7 @@ export const InvestmentPopup = ({
             referred_address,
           });
         } else {
-          await pool.methods.depositLiquidity(inputAmount, minAmount).send({
+          await pool.methods.depositLiquidity(inputAmount).send({
             from: accounts[0],
             gas: gasLimit,
           });

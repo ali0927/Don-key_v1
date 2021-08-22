@@ -558,13 +558,7 @@
 			"type": "function"
 		},
 		{
-			"inputs": [
-				{
-					"internalType": "bool",
-					"name": "minAllowance",
-					"type": "bool"
-				}
-			],
+			"inputs": [],
 			"name": "unstake",
 			"outputs": [],
 			"stateMutability": "nonpayable",
