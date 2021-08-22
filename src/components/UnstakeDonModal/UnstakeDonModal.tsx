@@ -67,7 +67,7 @@ export const UnstakeDonModal = ({
         <p className="font-weight-bold mt-4">Notification</p>
         <Info> The DON tokens will be locked for {coolOffDuration} after unstaking.</Info>
         <Info className="mb-5">
-          Are you sure uou want to unstake your DON{" "} ?
+          Are you sure you want to unstake your DON{" "} ?
         </Info>
 
         <div className="d-flex align-items-center">

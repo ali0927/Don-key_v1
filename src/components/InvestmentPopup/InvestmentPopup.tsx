@@ -26,6 +26,7 @@ import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { Chip, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { theme } from "theme";
 import { api } from "don-utils";
+import { useStakingContract } from "hooks";
 const ButtonWrapper = styled.div({
   marginRight: "10%",
   width: "40%",
@@ -118,7 +119,7 @@ export const InvestmentPopup = ({
   const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
-
+  const { refetch } = useStakingContract();
   const [referralCode, setReferralCode] = useState("");
   const [checking, setChecking] = useState(false);
   const [msg, setMsg] =
@@ -277,6 +278,8 @@ export const InvestmentPopup = ({
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
       showFailure("Transaction failed.");
+    } finally {
+      refetch();
     }
   };
   const { symbol } = usePoolSymbol(poolAddress);

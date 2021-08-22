@@ -115,7 +115,6 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
     setPendingReward(toEther(pendingRewards));
     setCoolOffTime(userInfo.coolOffPeriod);
-    console.log(userInfo)
     setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
     setCoolOffAmount(toEther(userInfo.coolOffAmount));
   };
