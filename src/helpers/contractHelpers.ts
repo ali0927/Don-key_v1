@@ -29,17 +29,15 @@ export const getERCContract = async (web3: Web3, address: string) => {
 };
 
 export const getBUSDTokenContract = async (web3: Web3) => {
-
   const busdtoken = await getERCContract(web3, BUSDAddress);
   return busdtoken;
 };
 
 export const getBSCDon = async (web3: Web3) => {
-  return await getERCContract(web3,DONTokenAddressBSC);
-}
+  return await getERCContract(web3, DONTokenAddressBSC);
+};
 
 export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
-
   try {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
@@ -299,11 +297,9 @@ const getPoolJSON = async (version: number) => {
   if (version === 2) {
     return await import("JsonData/advanced-pool.json");
   }
-  if (version === 3) {
-    return await import("JsonData/poolv3.json");
-  }
-  if(version === 4){
-    return  (await import("JsonData/pool-manual.json"));
+
+  if (version === 3 || version === 4) {
+    return await import("JsonData/pool-manual.json");
   }
   return await import("JsonData/pool2.json");
 };
@@ -361,7 +357,6 @@ export const getPancakeContract = async (web3: Web3) => {
   const pancake = await import("JsonData/pancakeswap.json");
   return new web3.eth.Contract(pancake.default as any, PancakeRouterAddress);
 };
-
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress, 2);
@@ -424,7 +419,7 @@ export const calculateUserClaimableAmount = async (
   poolAddress: string,
   account?: string
 ) => {
-  const accounts = account ? [account]:  await web3.eth.getAccounts();
+  const accounts = account ? [account] : await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress, 2);
   try {
     const claimableAmount = await poolContract.methods
@@ -470,7 +465,7 @@ export const calculateInitialInvestmentInUSD = async (
     );
     const tokenPrice = await getTokenPrice(
       web3,
-     await getTokenAddress(web3, poolAddress)
+      await getTokenAddress(web3, poolAddress)
     );
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }
@@ -500,9 +495,11 @@ export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
 
 export const getDonPriceWeb3 = async (web3: Web3) => {
   const priceFeedContract = await getDonkeyPriceFeedContract(web3);
-  const priceofToken = await priceFeedContract.methods.getPriceinUSD(DONTokenAddressBSC).call();
+  const priceofToken = await priceFeedContract.methods
+    .getPriceinUSD(DONTokenAddressBSC)
+    .call();
   return toEther(priceofToken);
-}
+};
 
 export const getDonPrice = async (isBSC = false) => {
   if (isBSC) {
@@ -543,8 +540,8 @@ export const toEther = (val: string) => {
   return Web3.utils.fromWei(val, "ether");
 };
 export const toWei = (val: string) => {
-  return Web3.utils.toWei(val, 'ether');
-}
+  return Web3.utils.toWei(val, "ether");
+};
 
 export const getWBNBPrice = async () => {
   const res = await axios.get(
