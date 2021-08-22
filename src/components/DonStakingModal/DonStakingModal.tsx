@@ -61,7 +61,7 @@ export const DonStakingModal = ({
           <ButtonWidget
           onClick={() => {
             window.open(
-              "https://pancakeswap.finance/swap#/add/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255",
+              "https://pancakeswap.finance/swap?inputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&outputCurrency=0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255",
               "_blank"
             );
           }}
