@@ -5,8 +5,6 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { InvestorListTable } from "components/InvestorListTable/InvestorListTable";
 import { IFarmerInter } from "interfaces";
 
-
-
 const StyledHeading = styled.p`
   font-family: "Roboto";
   font-size: 40px;
@@ -52,6 +50,14 @@ export const FarmerStrategies = ({
             <Container className="mt-2 mb-4">
               <Row>
                 <Col md={12} lg={12}>
+                  <div className="d-flex justify-content-center">
+                    <img
+                      src={farmer.strategies[0].strategyImage.url}
+                      className="img-fluid"
+                      style={{ maxWidth: 800, minWidth: 400 }}
+                      alt="strategy image"
+                    />
+                  </div>
                   <DescriptionTitle>
                     {farmer.strategies[0].name || "Description"}
                   </DescriptionTitle>

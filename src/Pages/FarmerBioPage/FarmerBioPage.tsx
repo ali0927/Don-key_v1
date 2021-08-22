@@ -33,10 +33,7 @@ export const FarmerBioPage = withWeb3(() => {
       <RefreshProvider>
         <div style={{ background: "#F4F4F4" }}>
           <NavBar variant="loggedin" />
-
           <FarmerBioFromApi farmerId={farmerId} />
-
-
           <Footer />
         </div>
       </RefreshProvider>
