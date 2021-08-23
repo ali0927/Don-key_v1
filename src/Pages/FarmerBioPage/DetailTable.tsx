@@ -256,7 +256,7 @@ export const DetailTable = ({
   const isActiveNetwork = network?.chainId === currentNetwork;
 
   const checkIsFarmer = async () => {
-    if (poolVersion === 4) {
+    if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
         poolAddress,
@@ -282,7 +282,7 @@ export const DetailTable = ({
   const [totalLp, setTotalLp]  = useState(new BigNumber("0"));
 
   const fetchWithdrawShare = async () => {
-    if (poolVersion === 4) {
+    if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
         poolAddress,
@@ -395,7 +395,7 @@ export const DetailTable = ({
   };
 
   const takeMoney = async () => {
-    if (poolVersion === 4) {
+    if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
         poolAddress,
@@ -409,7 +409,7 @@ export const DetailTable = ({
     }
   };
   const takeExtraMoney = async () => {
-    if (poolVersion === 4) {
+    if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
         web3,
         poolAddress,
@@ -429,7 +429,7 @@ export const DetailTable = ({
  
 
   const renderFarmerUI = () => {
-    if (isFarmer && poolVersion === 4) {
+    if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
       return (
         <>
           <CardLabel color="white" className="mt-5">
