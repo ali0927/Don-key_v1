@@ -101,13 +101,13 @@ export const BlackBoxCard: React.FC = () => {
         <FooterLinkSection className="pt-2 pb-2">
           <AnchorElement
             className="mr-3"
-            href="https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc8[…]utCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2"
+            href="https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2"
             target="_blank"
           >
             Uniswap pool
           </AnchorElement>
           <AnchorElement
-            href=" https://exchange.pancakeswap.finance/#/swap?inputCurrency=0x86b3f23b6e90f5bbfac59b5b2661134[…]putCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+            href="https://pancakeswap.finance/swap?inputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&outputCurrency=0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255"
             target="_blank"
           >
             pancakeswap pool
