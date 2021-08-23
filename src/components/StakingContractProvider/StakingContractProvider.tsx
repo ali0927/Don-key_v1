@@ -12,7 +12,7 @@ import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
 
-const DonStakingAddress = "0xC0f98D72B1b6E00232E3fb0030565677FE295259";
+const DonStakingAddress = "0x8aA59d4Cec5D5d623565cE89936DD0baEc11DF70";
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
