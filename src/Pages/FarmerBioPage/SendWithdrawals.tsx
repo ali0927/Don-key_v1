@@ -36,7 +36,7 @@ export const SendWithdrawalsDialog: React.FC<{
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      if (poolVersion === 4) {
+      if (poolVersion === 3) {
         const poolContract = await getPoolContract(
           web3,
           pool_address,
