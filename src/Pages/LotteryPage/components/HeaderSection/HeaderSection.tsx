@@ -71,7 +71,7 @@ export const HeaderSection: React.FC<{
               <MainHeading>
                 {hasEnded
                   ? "Don-key’s intuitive interface and one-click copy farming makes yield farming so easy, even a Donkey can do it."
-                  : "Whitelist lottery is now open, lottery closes in"}
+                  : "Launching the public DAPP in"}
               </MainHeading>
 
               <div className="row d-flex justify-content-between align-items-center mt-4 mb-4">
@@ -81,6 +81,9 @@ export const HeaderSection: React.FC<{
                   />
                 )}
               </div>
+              <MainHeading className="mb-0">
+                Staking to get Don Rewards
+              </MainHeading>
               <ButtonWidget
                 varaint="contained"
                 height="50px"
@@ -88,7 +91,7 @@ export const HeaderSection: React.FC<{
                 className="mt-5 mb-5"
                 onClick={handleTakePart}
               >
-                {hasEnded ? "Stake" : "Stake And Participate"}
+                Stake
               </ButtonWidget>
             </div>
           </div>
