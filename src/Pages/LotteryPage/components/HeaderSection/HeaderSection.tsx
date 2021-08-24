@@ -82,7 +82,7 @@ export const HeaderSection: React.FC<{
                 )}
               </div>
               <MainHeading className="mb-0">
-                Staking to get Don Rewards
+                Stake to earn Don Rewards
               </MainHeading>
               <ButtonWidget
                 varaint="contained"
