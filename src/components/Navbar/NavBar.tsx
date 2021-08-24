@@ -107,20 +107,6 @@ function NavBar(props: INavBarProps) {
     }
   };
 
-  const [update, setUpdated] = useState(false);
-  const hasEnded = useMemo(() => {
-    const difference = moment().utc().diff(moment(LotteryClosingTime));
-    return difference > 0;
-  }, [update]);
-
-  useEffect(() => {
-    const inter = setInterval(() => {
-      setUpdated((val) => !val);
-    }, 1000);
-    return () => {
-      clearInterval(inter);
-    };
-  }, []);
 
   return (
     <>
@@ -163,7 +149,6 @@ function NavBar(props: INavBarProps) {
                     >
                       $DON ERC20
                     </NavbarLink>
-
                   </>
                 )}
 
@@ -189,12 +174,10 @@ function NavBar(props: INavBarProps) {
               <>
                 <div className="position-relative mr-5 mr-sm-0">
                   <ButtonComponent
-                    disabled={!hasEnded}
                     onClick={() => history.push("/dashboard")}
                     variant="colorBlack btn-outline position-relative px-4"
                     // className="mt-4"
                   >
-                    {!hasEnded && <ImageCommingSoon src={comingsoon} />}
                     DAPP
                   </ButtonComponent>
                 </div>
