@@ -5,15 +5,18 @@ import styled from "styled-components";
 import comingsoon from "images/comingsoonupdated.svg";
 import BigNumber from "bignumber.js";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
-import { InvestorCountContract, InvestorCountGraphql } from "components/InvestorCountGraphql";
+import {
+  InvestorCountContract,
+  InvestorCountGraphql,
+} from "components/InvestorCountGraphql";
 const InfoWrapper = styled.div`
   background: #ffffff;
   border-radius: 10px;
   position: relative;
   z-index: 10;
-  padding-left: 30px;
-  padding-right: 30px;
-  padding-top: 35px;
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 27px;
   padding-bottom: 25px;
   margin-bottom: 20px;
 
@@ -35,8 +38,14 @@ const GreyText = styled.p`
   margin-bottom: 0.5rem;
 `;
 
+const DONApy = styled.h6`
+  color: #ffc406;
+  font-size: 32px;
+  font-weight: 900;
+  margin-bottom: 0;
+`;
 
-
+const SubText = styled.span({ fontSize: 12, fontWeight: "bold" });
 
 export const TokenInfo = ({
   token: { image, symbol, status, maxApy, RiskStrategy },
@@ -45,9 +54,7 @@ export const TokenInfo = ({
 }) => {
   const history = useHistory();
   const disabled = status === "commingsoon";
-  const poolAddresses = useMemo(() => {
-    return RiskStrategy.map(item => item.strategy.farmer.poolAddress);
-  }, [RiskStrategy])
+
   return (
     <InfoWrapper
       disabled={disabled}
@@ -57,24 +64,29 @@ export const TokenInfo = ({
         }
       }}
     >
-      {disabled && <img className="coming-soon" alt="coming" src={comingsoon} />}
+      {disabled && (
+        <img className="coming-soon" alt="coming" src={comingsoon} />
+      )}
       <div className="row">
-        <div className="col-6">
-          <h5>Deposit in</h5>
+        <div className="col-6 d-flex align-items-center">
+          <div className="mr-2">
+            <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
+          </div>
+          <div>
+            <SubText>Deposit with</SubText>
+            <h5 style={{ fontSize: 18, fontWeight: 900 }}>{symbol}</h5>
+          </div>
         </div>
-        <div className="col-6 d-flex align-items-center justify-content-end">
-          <img style={{ width: 24 }} src={image.url} alt="token" />{" "}
-          <h5 className="ml-2 mb-0">{symbol}</h5>
-        </div>
+        <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
-      <div className="row mt-3">
+      <div className="row mt-5">
         <div className="col-7">
-          <h6>Up to {maxApy}% APY</h6>
-          <GreenText>For Don Stakers {new BigNumber(maxApy).plus(100).toFixed(1)}% APY</GreenText>
+          <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
+          <SubText>APY for DON stakers</SubText>
         </div>
-        <div className="col-5 d-flex flex-column align-items-end">
-          <GreyText>Total investors</GreyText>
-          <h6><InvestorCountContract poolAddresses={poolAddresses} /></h6>
+        <div className="col-5 d-flex flex-column align-items-end justify-content-end">
+          <h5 style={{ fontSize: 18, fontWeight: 900 }}>{maxApy}%</h5>
+          <SubText>Upto APY</SubText>
         </div>
       </div>
     </InfoWrapper>

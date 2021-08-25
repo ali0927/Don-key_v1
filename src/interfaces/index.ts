@@ -82,6 +82,12 @@ export interface IFarmerInter {
 }
 
 export type IStrategy = {
+  risk: {
+    Title: string;
+    image:  {
+      url: string;
+    }
+  }
   created_at: string;
   id: string;
   entranceFees?: string | null;

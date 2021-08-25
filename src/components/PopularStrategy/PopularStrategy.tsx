@@ -130,6 +130,8 @@ export const PopularStrategy = ({
   onShowLessClick,
   getTokenImage,
   getTokenSymbol,
+  extraApy,
+  imageRisk,
 }: {
   graph?: React.ReactNode;
   title?: string;
@@ -140,6 +142,7 @@ export const PopularStrategy = ({
   farmerId?: string;
   version?: number;
   strategyImage?: string;
+  imageRisk?: string;
   apy?: string;
   telegram?: string | null;
   twitter?: string | null;
@@ -157,6 +160,7 @@ export const PopularStrategy = ({
   showAllContent?: boolean;
   onShowMoreClick?: () => void;
   onShowLessClick?: () => void;
+  extraApy?: string;
 }) => {
   const handleCardClick = () => {
     if (!comingSoonProp && onCardClick) {
@@ -186,8 +190,9 @@ export const PopularStrategy = ({
   const [riskImage, setRiskImage] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
   const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
-  const [riskDescriptionFinal, setRiskDescriptionFinal] =
-    useState<string[] | null>(null);
+  const [riskDescriptionFinal, setRiskDescriptionFinal] = useState<
+    string[] | null
+  >(null);
   useIsomorphicEffect(() => {
     if (getTokenImage) {
       (async () => {
@@ -246,37 +251,68 @@ export const PopularStrategy = ({
 
           {riskImage && (
             <div className="text-right" style={{ minHeight: 80 }}>
-              {riskImage && (
-                <OverlayTrigger
-                  placement="top"
-                  delay={{ show: 250, hide: 400 }}
-                  overlay={
-                    <Tooltip id="button-tooltip" className="mytooltip">
-                      {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
-                      <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
-                    </Tooltip>
-                  }
+              {imageRisk ? (
+                <div
+                  style={{
+                    textAlign: "right",
+                    paddingLeft: 10,
+                  }}
                 >
-                  <div
-                    style={{
-                      textAlign: "right",
-                      paddingLeft: 10,
-                    }}
+                  <img
+                    src={imageRisk}
+                    alt="ImageNotFound"
+                    style={{ fill: "green", width: 80 }}
+                  />
+                </div>
+              ) : (
+                riskImage && (
+                  <OverlayTrigger
+                    placement="top"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={
+                      <Tooltip id="button-tooltip" className="mytooltip">
+                        {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
+                        <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
+                      </Tooltip>
+                    }
                   >
-                    <img
-                      src={riskImage}
-                      alt="ImageNotFound"
-                      style={{ fill: "green" }}
-                    />
-                  </div>
-                </OverlayTrigger>
+                    <div
+                      style={{
+                        textAlign: "right",
+                        paddingLeft: 10,
+                      }}
+                    >
+                      <img
+                        src={riskImage}
+                        alt="ImageNotFound"
+                        style={{ fill: "green", width: 80 }}
+                      />
+                    </div>
+                  </OverlayTrigger>
+                )
               )}
             </div>
           )}
         </div>
-        <div style={riskImage ? { marginTop: -22 } : {}}>
-          <p className="mb-0">APY</p>
-          <h5 className="primary-text">{apy}</h5>
+        <div
+          className="d-flex justify-content-between"
+          // style={riskImage ? { marginTop: -22 } : {}}
+        >
+          <div>
+            <p className="mb-0">APY</p>
+            <h5 className="primary-text">{apy}</h5>
+          </div>
+          {extraApy && (
+            <div>
+              <p className="mb-0 font-weight-bold">APY with DON</p>
+              <h5
+                style={{ color: "#31c77f" }}
+                className="primary-text text-right"
+              >
+                +{extraApy}
+              </h5>
+            </div>
+          )}
         </div>
         {isActiveNetwork && tokenImage && (
           <div className="mb-3 mt-2 d-flex align-items-center">

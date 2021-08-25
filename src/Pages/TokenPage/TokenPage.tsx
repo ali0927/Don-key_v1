@@ -1,14 +1,18 @@
 import { gql, useQuery } from "@apollo/client";
+import BigNumber from "bignumber.js";
 import { Footer } from "components/Footer";
 import { GridBackground } from "components/GridBackground";
+import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { NavBar } from "components/Navbar";
+import { PoolAmount } from "components/PoolAmount";
+import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { useStrapi } from "hooks";
-import { IFarmer, IFarmerInter } from "interfaces";
+import { useStrapi, useSwitchNetwork } from "hooks";
+import { IFarmer, IFarmerInter, IStrategy } from "interfaces";
 import { sortBy } from "lodash";
 import { LoadingPage } from "Pages/LoadingPage";
 import React, { useMemo, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
 import { StrategyInfo } from "./StrategyInfo";
@@ -66,6 +70,9 @@ const TokenInfoQuery = gql`
               url
             }
           }
+          strategyImage {
+            url
+          }
           name
           apy
           active
@@ -74,6 +81,11 @@ const TokenInfoQuery = gql`
             name
             farmerImage {
               url
+            }
+            network {
+              chainId
+              name
+              symbol
             }
             active
             guid
@@ -101,6 +113,12 @@ const sortStrategies = (list: any[]) => {
 
 const emptryArr: any[] = [];
 
+const Image = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+`;
+
 export const TokenPage = () => {
   const { token } = useParams<{ token: string }>();
 
@@ -109,18 +127,24 @@ export const TokenPage = () => {
       symbol: token,
     },
   });
+  const history = useHistory();
+  const handleLeaderClick = (id: string) => () => {
+    history.push(`/dashboard/farmer/${id}`);
+  };
+  const {switchNetwork} = useSwitchNetwork();
 
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
-  const sortedStrategies = useMemo(() => {
-    return sortStrategies(strategies).filter(item => {
-      const farmer = item.strategy.farmer as IFarmerInter;
-      if(farmer.active && farmer.status === "active"){
-        return true;
-      }else {
-        return false;
-      }
-    });
-  }, [strategies]);
+  const sortedStrategies: { strategy: IStrategy & { farmer: IFarmerInter } }[] =
+    useMemo(() => {
+      return sortStrategies(strategies).filter((item) => {
+        const farmer = item.strategy.farmer as IFarmerInter;
+        if (farmer.active && farmer.status === "active") {
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }, [strategies]);
   const [isOpen, setIsOpen] = useState(false);
   if (loading) {
     return <LoadingPage />;
@@ -155,7 +179,38 @@ export const TokenPage = () => {
             {sortedStrategies.map((item) => {
               return (
                 <div className="col-md-4 py-3">
-                  <StrategyInfo isOpen={isOpen} setIsOpen={setIsOpen} strategy={item.strategy} />
+                  <PopularStrategy
+                    apy={item.strategy.apy + "%"}
+                    icon={<Image src={item.strategy.farmer.farmerImage.url} />}
+                    contentTitle={item.strategy.name}
+                    title={item.strategy.farmer.name}
+                    content={item.strategy.description}
+                    risk={item.strategy.risk.Title.toLowerCase()}
+                    imageRisk={item.strategy.risk.image.url}
+                    onChangeChain={switchNetwork}
+                    onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
+                    onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
+                    extraApy={new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"}
+                    totalValue={
+                      <PoolAmount
+                        poolAddress={item.strategy.farmer.poolAddress}
+                      />
+                    }
+                    onShowLessClick={() => setIsOpen(false)}
+                    onShowMoreClick={() => setIsOpen(true)}
+                    showAllContent={isOpen}
+                    investers={
+                      <InvestorCountContract
+                        poolAddresses={[item.strategy.farmer.poolAddress]}
+                      />
+                    }
+                    strategyImage={item.strategy.strategyImage.url}
+                    network={{
+                      chainId: item.strategy.farmer.network.chainId,
+                      networkName: item.strategy.farmer.network.name,
+                      networkSymbol: item.strategy.farmer.network.symbol,
+                    }}
+                  />
                 </div>
               );
             })}
