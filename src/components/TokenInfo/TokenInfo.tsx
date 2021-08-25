@@ -2,7 +2,7 @@ import { IStrapiToken } from "interfaces";
 import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import comingsoon from "images/comingsoon.svg";
+import comingsoon from "images/comingsoonupdated.svg";
 import BigNumber from "bignumber.js";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import { InvestorCountContract, InvestorCountGraphql } from "components/InvestorCountGraphql";
