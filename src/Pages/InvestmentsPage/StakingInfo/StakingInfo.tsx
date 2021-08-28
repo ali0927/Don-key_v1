@@ -232,7 +232,6 @@ export const StakingInfo = () => {
 
   return (
     <>
-      <p className="mb-0">Total Investment</p>
       <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
       {isStakeModalOpen && (
         <AcceleratedAPYModal

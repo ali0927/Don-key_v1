@@ -41,43 +41,31 @@ export const FarmerStrategies = ({
       <div className="my-5">
         <Container>
           <Row>
-            <Col
-              className="d-flex align-items-center justify-content-between mb-1"
-              sm={12}
-            >
-              <StyledHeading>Strategies</StyledHeading>
-            </Col>
-            <Container className="mt-2 mb-4">
-              <Row>
-                <Col md={12} lg={12}>
-                  <div className="d-flex justify-content-center">
-                    <img
-                      src={farmer.strategies[0].strategyImage.url}
-                      className="img-fluid"
-                      style={{ maxWidth: 800, minWidth: 400 }}
-                      alt="strategy image"
-                    />
-                  </div>
-                  <DescriptionTitle>
-                    {farmer.strategies[0].name || "Description"}
-                  </DescriptionTitle>
-                  <p style={{ fontSize: 15 }}>
-                    <ShowMoreContent
-                      length={80}
-                      content={
-                        farmer.strategies[0].description ||
-                        "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
-                      }
-                    />
-                  </p>
-                </Col>
-              </Row>
-            </Container>
             <Col sm={12}>
               <StrategyTableForInvestor
                 poolAddress={farmer.poolAddress}
                 strategies={farmer.strategies}
               />
+              <DescriptionTitle>
+                {farmer.strategies[0].name || "Description"}
+              </DescriptionTitle>
+              <p style={{ fontSize: 15 }}>
+                <ShowMoreContent
+                  length={80}
+                  content={
+                    farmer.strategies[0].description ||
+                    "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
+                  }
+                />
+              </p>
+              <div className="d-flex justify-content-center">
+                <img
+                  src={farmer.strategies[0].strategyImage.url}
+                  className="img-fluid"
+                  style={{ maxWidth: 800, minWidth: 400 }}
+                  alt="strategy image"
+                />
+              </div>
               <InvestorListTable poolAddress={farmer.poolAddress} />
             </Col>
           </Row>

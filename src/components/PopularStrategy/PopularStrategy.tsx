@@ -405,37 +405,9 @@ export const PopularStrategy = ({
           {graph ? (
             graph
           ) : (
-            <OverlayTrigger
-              placement="top"
-              key="top"
-              overlay={
-                <div
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  <img
-                    src={strategyImage}
-                    className="imageToShow"
-                    alt="graph"
-                    width="45%"
-                    style={{
-                      background: "#F4F4F4",
-                      maxWidth: "1300px",
-                      padding: 20,
-                      margin: "0 auto",
-                      borderRadius: 10,
-                      boxShadow:
-                        "4.01577px 8.05442px 118px rgba(0, 0, 0, 0.05), 2.60281px 5.22045px 69.1065px rgba(0, 0, 0, 0.037963), 1.54681px 3.10244px 37.5852px rgba(0, 0, 0, 0.0303704), 0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025), 0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296), 0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037)",
-                    }}
-                  />
-                </div>
-              }
-            >
-              <div>
-                <img src={strategyImage} className="imageToShow" alt="graph" />
-              </div>
-            </OverlayTrigger>
+            <div>
+              <img src={strategyImage} className="imageToShow" alt="graph" />
+            </div>
           )}
         </GraphWrapper>
       </PapperInner>
