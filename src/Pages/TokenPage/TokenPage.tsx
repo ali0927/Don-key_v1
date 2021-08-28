@@ -7,9 +7,11 @@ import { NavBar } from "components/Navbar";
 import { PoolAmount } from "components/PoolAmount";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useStrapi, useSwitchNetwork } from "hooks";
 import { IFarmer, IFarmerInter, IStrategy } from "interfaces";
 import { sortBy } from "lodash";
+import { InactiveNetworkCard } from "Pages/FarmerBioPage/InactiveNetworkCard";
 import { LoadingPage } from "Pages/LoadingPage";
 import React, { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -62,6 +64,11 @@ const StyledLink = styled(Link)`
 const TokenInfoQuery = gql`
   query tokenInfo($symbol: String!) {
     tokens(where: { symbol_eq: $symbol }) {
+      network {
+        chainId
+        symbol
+        name
+      }
       RiskStrategy {
         strategy {
           risk {
@@ -131,9 +138,11 @@ export const TokenPage = () => {
   const handleLeaderClick = (id: string) => () => {
     history.push(`/dashboard/farmer/${id}`);
   };
-  const {switchNetwork} = useSwitchNetwork();
-
+  const { switchNetwork } = useSwitchNetwork();
+  const { chainId } = useWeb3Network();
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
+  const network = data ? data.tokens[0].network: {chainId: null};
+  const isActiveNetwork = network.chainId === chainId;
   const sortedStrategies: { strategy: IStrategy & { farmer: IFarmerInter } }[] =
     useMemo(() => {
       return sortStrategies(strategies).filter((item) => {
@@ -146,6 +155,7 @@ export const TokenPage = () => {
       });
     }, [strategies]);
   const [isOpen, setIsOpen] = useState(false);
+
   if (loading) {
     return <LoadingPage />;
   }
@@ -175,6 +185,13 @@ export const TokenPage = () => {
       </Section>
       <GridBackground className="py-5">
         <div className="container">
+          {!isActiveNetwork && (
+            <div className="row mb-5">
+              <div className="col-12">
+                <InactiveNetworkCard variant="white" correctNetwork={network} />
+              </div>
+            </div>
+          )}
           <div className="row">
             {sortedStrategies.map((item) => {
               return (
@@ -190,7 +207,9 @@ export const TokenPage = () => {
                     onChangeChain={switchNetwork}
                     onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
                     onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
-                    extraApy={new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"}
+                    extraApy={
+                      new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
+                    }
                     totalValue={
                       <PoolAmount
                         poolAddress={item.strategy.farmer.poolAddress}

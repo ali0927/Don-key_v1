@@ -1,7 +1,6 @@
 import { apiRequest } from "actions/apiActions";
 import { doLogin } from "actions/authActions";
 import { setFarmerDetail } from "actions/farmerActions";
-import { useStakingContract } from "hooks";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { IStoreState } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
