@@ -1,14 +1,9 @@
 import { IStrapiToken } from "interfaces";
-import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import comingsoon from "images/comingsoonupdated.svg";
 import BigNumber from "bignumber.js";
-import { InvestorCount } from "components/InvestorCount/InvestorCount";
-import {
-  InvestorCountContract,
-  InvestorCountGraphql,
-} from "components/InvestorCountGraphql";
+
 const InfoWrapper = styled.div`
   background: #ffffff;
   border-radius: 10px;
@@ -19,9 +14,13 @@ const InfoWrapper = styled.div`
   padding-top: 27px;
   padding-bottom: 25px;
   margin-bottom: 20px;
-
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
   ${(props: { disabled?: boolean }) =>
-    props.disabled ? `cursor: default;` : `cursor: pointer;`}
+    props.disabled ? `cursor: default;` : `cursor: pointer; &:hover {
+    transform: translateY(-2px);
+  }`}
+  transition: transform 0.3s linear;
+  
 `;
 
 const GreenText = styled.p`
@@ -74,7 +73,7 @@ export const TokenInfo = ({
           </div>
           <div>
             <SubText>Deposit with</SubText>
-            <h5 style={{ fontSize: 18, fontWeight: 900 }}>{symbol}</h5>
+            <h5 style={{ fontSize: 18, fontWeight: 900 }}>{symbol.toUpperCase()}</h5>
           </div>
         </div>
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
