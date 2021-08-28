@@ -60,6 +60,12 @@ export interface IUser {
   };
 }
 
+export interface INetwork {
+  name: string;
+  chainId: number;
+  symbol: string;
+}
+
 export interface IFarmerInter {
   name: string
   description: string;
@@ -73,12 +79,8 @@ export interface IFarmerInter {
   telegram: string;
   poolAddress: string;
   poolVersion: number;
-  network: {
-    name: string;
-    chainId: number;
-    symbol: string;
-  }
-  strategies:IStrategy[]
+  network: INetwork;
+  strategies:IStrategy[];
 }
 
 export type IStrategy = {
