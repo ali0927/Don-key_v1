@@ -5,7 +5,12 @@ import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { theme } from "theme";
-import { LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
+import {
+  BoostApyIcon,
+  LargeEllipse,
+  MeadiumEllipse,
+  SmallEllipse,
+} from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import {
@@ -136,11 +141,31 @@ const LIST_OF_TOKENS = gql`
   }
 `;
 
+const BoostButton = styled.button`
+  background-color: transparent;
+  border: 2px solid #000;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  text-transform: uppercase;
+  padding: 16px 50px;
+  position: relative;
+  background-color: #FFF037;
+`;
+
+const StyledApyIcon = styled(BoostApyIcon)`
+  position: absolute;
+  top: -22px;
+  right: 35px;
+  background-color: #FFF037;
+  padding: 4px;
+  transform: scale(1.2);
+`;
+
 export const DashboardPage = () => {
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
-  const {data,loading }= useQuery(LIST_OF_TOKENS);
+  const { data, loading } = useQuery(LIST_OF_TOKENS);
 
   useAddDonTokenonLoad();
 
@@ -202,14 +227,10 @@ export const DashboardPage = () => {
                       </NetworkButton>
                     </div>
                     <div className="col-sm-3  mr-5 ">
-                      <ButtonWidget
-                        varaint="contained"
-                        className="py-2"
-                        onClick={onOpen}
-                        containedVariantColor="gradient"
-                      >
-                        Get Accelerated APY
-                      </ButtonWidget>
+                      <BoostButton onClick={onOpen}>
+                        <StyledApyIcon />
+                        Boost APY
+                      </BoostButton>
                       {isOpen && (
                         <AcceleratedAPYModal open={isOpen} onClose={onClose} />
                       )}

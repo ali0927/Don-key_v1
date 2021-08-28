@@ -50,3 +50,4 @@ export * from "./TwitterIcon";
 export * from "./TelegramIcon";
 export * from "./HypeLinkIcon";
 export * from "./WalletIcon";
+export * from "./BoostApyIcon";
