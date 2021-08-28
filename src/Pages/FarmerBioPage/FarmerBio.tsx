@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { EditIcon } from "icons/EditIcon";
-import { DollarIcon, DotsIcon } from "icons";
+import { DollarIcon, DotsIcon,ShareArrowIcon,ShareandEarnIcon } from "icons";
 import { DetailTable } from "./DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
@@ -61,6 +61,34 @@ const TypographyShare = styled.div`
   font-size: 16px;
 `;
 
+const ShareButton = styled.button`
+  background-color: transparent;
+  border: 2px solid #000;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 15px;
+  text-transform: uppercase;
+  padding: 16px 50px;
+  position: relative;
+  background-color: #fff037;
+`;
+
+const StyledArrowShare = styled(ShareArrowIcon)`
+position: absolute;
+top: -22px;
+right: 40px;
+background-color: transparent;
+padding: 4px;
+transform: scale(1.2)
+`;
+
+const StyledShareIcon = styled(ShareandEarnIcon)`
+  position: absolute;
+  top: -22px;
+  right: 35px;
+  background-color: #fff037;
+  padding: 4px;
+  transform: scale(1.2);
+`;
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
@@ -213,18 +241,14 @@ export const FarmerBio = ({
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
               {pool_version === 3 ? (
-                <ButtonWidget
-                  varaint="contained"
-                  onClick={handleShareClick}
-                  containedVariantColor="gradient"
-                  width="193px"
-                  height="50px"
-                >
-                  <div className="d-flex justify-content-center align-items-center">
-                    <DollarIcon className="mr-3" />
-                    <TypographyShare> Share and Earn</TypographyShare>
-                  </div>
-                </ButtonWidget>
+                <ShareButton onClick={handleShareClick}>
+                
+                <StyledShareIcon/>
+                <StyledArrowShare/>
+                Share and Earn
+              </ShareButton>
+
+               
               ) : (
                 <DotsIcon />
               )}
