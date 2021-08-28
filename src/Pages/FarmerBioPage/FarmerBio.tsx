@@ -88,7 +88,7 @@ export const FarmerBio = ({
   telegram?: string;
   twitter?: string;
 }) => {
-  const [modalShow, setModalShow] = useState(false);
+ 
   const {
     description,
     name,

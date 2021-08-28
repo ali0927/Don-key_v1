@@ -6,8 +6,9 @@ interface IWeb3NetworkContext {
   chainId: number | null;
   setChainId: (val: number) => void;
 }
-export const Web3NetworkContext =
-  createContext<IWeb3NetworkContext | null>(null);
+export const Web3NetworkContext = createContext<IWeb3NetworkContext | null>(
+  null
+);
 
 export const useWeb3Network = () =>
   useContext(Web3NetworkContext) as IWeb3NetworkContext;
@@ -26,34 +27,23 @@ export const Web3NetworkProvider: React.FC = ({ children }) => {
 
 export const BSCChainId = 56;
 export const PolygonChainId = 137;
-const AllowedNetworks = [BSCChainId, PolygonChainId];
 
 export const Web3NetworkDetector = () => {
   const { setChainId } = useWeb3Network();
 
-  const { enqueueSnackbar } = useSnackbar();
   const web3 = useWeb3();
+  async function apiCall() {
+    let network = await web3.eth.net.getId();
+
+    setChainId(network);
+  }
   useEffect(() => {
     if (window.ethereum) {
-      window.ethereum.on("chainChanged", () => window.location.reload());
+      window.ethereum.on("chainChanged", apiCall);
     }
   }, []);
 
   useEffect(() => {
-    async function apiCall() {
-      let network = await web3.eth.net.getId();
-      setChainId(network);
-      if (AllowedNetworks.indexOf(network) === -1) {
-        enqueueSnackbar(
-          "Wrong Network. You must be on Binance Smart Chain to continue. Please select the appropriate network via Metamask",
-          {
-            content: (key, msg) => <ErrorSnackbar message={msg as string} />,
-            autoHideDuration: 10000,
-            persist: false,
-          }
-        );
-      }
-    }
     apiCall();
   }, []);
   return <></>;

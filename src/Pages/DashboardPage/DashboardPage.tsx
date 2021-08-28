@@ -26,6 +26,7 @@ import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { gql, useQuery } from "@apollo/client";
+import { sortBy } from "lodash";
 
 const FarmerTitle = styled.p({
   fontFamily: "Roboto",
@@ -149,21 +150,19 @@ const BoostButton = styled.button`
   text-transform: uppercase;
   padding: 16px 50px;
   position: relative;
-  background-color: #FFF037;
+  background-color: #fff037;
 `;
 
 const StyledApyIcon = styled(BoostApyIcon)`
   position: absolute;
   top: -22px;
   right: 35px;
-  background-color: #FFF037;
+  background-color: #fff037;
   padding: 4px;
   transform: scale(1.2);
 `;
 
 export const DashboardPage = () => {
-  const { chainId: network } = useWeb3Network();
-  const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
   const { data, loading } = useQuery(LIST_OF_TOKENS);
 
@@ -171,12 +170,10 @@ export const DashboardPage = () => {
 
   const tokens: IStrapiToken[] = useMemo(() => {
     if (data) {
-      return data.tokens.filter((item: IStrapiToken) => {
-        return item.network.chainId === strategyNetworkFilter;
-      });
+      return sortBy(data.tokens as IStrapiToken[], item => item.status !== "active");
     }
     return [];
-  }, [data, strategyNetworkFilter]);
+  }, [data]);
 
   const [isOpen, onOpen, onClose] = useToggle();
 
@@ -188,7 +185,6 @@ export const DashboardPage = () => {
       <NavBar variant={"loggedin"} />
 
       <RootWrapper className="pt-5 borderCollapse position-relative">
-        {/* <Paragon/> */}
         <CustomizedContainer>
           <Row>
             <Ellipse1>
@@ -204,43 +200,23 @@ export const DashboardPage = () => {
               <SmallEllipse />
             </Ellipse4>
             <Col>
-              {tokens.length === 0 ? (
-                <div className="d-flex align-items-center flex-column">
-                  <Heading>No Farmers </Heading>
+              <FarmerTitle>Explore Farmers</FarmerTitle>
+              <div className="row justify-content-between px-2">
+                <div className="col-sm-8">
+                 {/* <h5>Follow Farmers and Increase your yield</h5> */}
                 </div>
-              ) : (
-                <>
-                  <FarmerTitle>Explore Farmers</FarmerTitle>
-                  <div className="row justify-content-between px-2">
-                    <div className="col-md-5">
-                      <NetworkButton
-                        active={strategyNetworkFilter === BSCChainId}
-                        onClick={() => setStrategyNetworkFilter(BSCChainId)}
-                      >
-                        BSC
-                      </NetworkButton>
-                      <NetworkButton
-                        active={strategyNetworkFilter === PolygonChainId}
-                        onClick={() => setStrategyNetworkFilter(PolygonChainId)}
-                      >
-                        Polygon
-                      </NetworkButton>
-                    </div>
-                    <div className="col-sm-3  mr-5 ">
-                      <BoostButton onClick={onOpen}>
-                        <StyledApyIcon />
-                        Boost APY
-                      </BoostButton>
-                      {isOpen && (
-                        <AcceleratedAPYModal open={isOpen} onClose={onClose} />
-                      )}
-                    </div>
-                  </div>
-                </>
-              )}
+                <div className="col-sm-3 d-flex justify-content-end ">
+                  <BoostButton onClick={onOpen}>
+                    <StyledApyIcon />
+                    Boost APY
+                  </BoostButton>
+                  {isOpen && (
+                    <AcceleratedAPYModal open={isOpen} onClose={onClose} />
+                  )}
+                </div>
+              </div>
             </Col>
           </Row>
-          {/* {farmers.length !== 0 && <LeaderBoardSearch suggestions={farmers} lastSearch={farmers}/>} */}
         </CustomizedContainer>
       </RootWrapper>
 

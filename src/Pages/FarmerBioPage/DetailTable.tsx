@@ -230,7 +230,7 @@ export const DetailTable = ({
       let poolValue = await getTotalPoolValue(web3, poolAddress);
       setTotalPoolValue(toEther(poolValue));
     })();
-  }, [dependsOn]);
+  }, [dependsOn, currentNetwork]);
 
   const getFirstCardcolumns = (
     label: string,
