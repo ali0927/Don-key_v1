@@ -26,7 +26,6 @@ const ContentBox = styled.div({
 });
 
 const Content = styled.p({
-    fontFamily: "Roboto",
     fontSize: 32,
     fontStyle: "normal",
     fontWeight: 800,
@@ -47,7 +46,6 @@ const GrayButton = styled.button({
     borderRadius: "5px",
     width: 208,
     height: 50,
-    fontFamily: "Roboto",
     fontStyle: "normal",
     fontWeight: "normal",
     fontSize: "16px",

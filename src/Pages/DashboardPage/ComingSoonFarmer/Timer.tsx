@@ -14,7 +14,6 @@ const TimerCard = styled.div`
 `;
 
 const TimerNumber = styled.p`
-  font-family: Roboto;
   font-size: 40px;
   font-style: normal;
   font-weight: 400;
@@ -23,7 +22,6 @@ const TimerNumber = styled.p`
 `;
 
 const TimerLabel = styled.p`
-  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

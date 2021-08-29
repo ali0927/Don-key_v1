@@ -1,17 +1,22 @@
-import { ButtonWidget } from "components/Button";
+import { ButtonWidget as Button } from "components/Button";
 import styled from "styled-components";
 
 const StyledP = styled.p`
-  font-family: Roboto;
-  font-weight: bold;
-  font-size: 24px;
+  font-weight: 600;
+  font-size: 20px;
   text-align: center;
   color: #070602;
 `;
 
+const ButtonWidget = styled(Button)`
+border-radius: 10px;
+font-size: 14px;
+font-weight: 500;
+`;
+
 export const BuyDonContent = () => {
   return (
-    <div style={{ marginTop: -30 }}>
+    <div style={{ marginTop: -30, padding: "30px 0 10px" }}>
       <div className="d-flex justify-content-center">
         <div style={{ width: 100 }}>
           <img
@@ -24,7 +29,7 @@ export const BuyDonContent = () => {
       <StyledP>
         In order to access Dapp you need to hold 100 DON in ERC or BEP
       </StyledP>
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center mt-5">
         <ButtonWidget
           onClick={() => {
             window.open(

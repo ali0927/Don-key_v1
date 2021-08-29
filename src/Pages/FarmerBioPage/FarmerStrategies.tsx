@@ -5,13 +5,9 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { InvestorListTable } from "components/InvestorListTable/InvestorListTable";
 import { IFarmerInter } from "interfaces";
 
-const StyledHeading = styled.p`
-  font-family: "Roboto";
-  font-size: 40px;
-`;
+
 
 const DescriptionTitle = styled.p`
-  font-family: "Roboto";
   font-size: 20px;
   font-weight: 400;
   margin-bottom: 0;

@@ -7,10 +7,8 @@ import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import { useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
-import { duration } from "@material-ui/core";
 
 const StyledH2 = styled.h2`
-  font-family: Roboto;
   font-weight: bold;
   font-size: 24px;
   text-align: center;
@@ -18,7 +16,6 @@ const StyledH2 = styled.h2`
 `;
 
 const Info = styled.p`
-  font-family: Roboto;
   font-size: 12px;
   line-height: 20px;
   padding: 0 50px;

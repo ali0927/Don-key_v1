@@ -11,7 +11,6 @@ color: #070602;
 `;
 
 export const LandingParagraph = styled.p`
-  font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;

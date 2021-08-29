@@ -29,7 +29,6 @@ import { gql, useQuery } from "@apollo/client";
 import { sortBy } from "lodash";
 
 const FarmerTitle = styled.p({
-  fontFamily: "Roboto",
   fontSize: "45px",
   fontStyle: "normal",
   fontWeight: 800,

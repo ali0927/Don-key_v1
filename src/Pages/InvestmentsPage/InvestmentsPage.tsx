@@ -64,7 +64,6 @@ export const ZeroInvestmentInnerBox = styled.div({
 });
 
 export const ZeroInvestmentContent = styled.div({
-  fontFamily: "Roboto",
   fontStyle: "normal",
   fontWeight: 800,
   textAlign: "center",

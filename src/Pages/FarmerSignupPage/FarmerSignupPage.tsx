@@ -34,7 +34,6 @@ const StyledDonkey = styled(DonKeyIcon)`
 
 const RootHeading = styled.p`
   max-width: 253px;
-  font-family: Roboto;
   font-style: normal;
   font-size: 20px;
   color: #222222;

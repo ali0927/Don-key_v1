@@ -65,7 +65,6 @@ const HexaginWrapper = styled.div`
 `;
 
 const Heading = styled.p`
-  font-family: Roboto;
   font-size: 40px;
   font-style: normal;
   font-weight: 800;
@@ -77,7 +76,6 @@ const Heading = styled.p`
 `;
 
 const SubHeading = styled.p`
-  font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 400;

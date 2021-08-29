@@ -7,7 +7,6 @@ import { IPaginationProps } from "./interfaces";
 import { getVisiblePages } from "don-utils";
 
 const PaginationItem = styled.li<{ active?: boolean }>`
-    font-family: Roboto;
     font-size: 15;
     font-style: normal;
     font-weight: 400;
@@ -24,7 +23,6 @@ const PaginationItem = styled.li<{ active?: boolean }>`
 
 
 const ShowingMore = styled.p({
-    fontFamily: "Roboto",
     fontSize: 14,
     fontStyle: "normal",
     fontWeight: 400,

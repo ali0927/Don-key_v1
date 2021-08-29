@@ -25,7 +25,6 @@ const Title = styled.h3`
 
 const Paragraph = styled.p`
   width: 71%;
-  font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;

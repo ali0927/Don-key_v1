@@ -17,7 +17,6 @@ interface IButtonProps {
 }
 
 const CotainedVariant = styled.button`
-  font-family: Roboto;
 
   font-style: normal;
   font-weight: 400;
@@ -35,7 +34,6 @@ const CotainedVariant = styled.button`
 `;
 
 const OutlineVariant = styled.button`
-  font-family: Roboto;
   font-size: ${(props: IOutlinedButton) =>
     props.fontSize ? props.fontSize : "16px"};
   font-style: normal;

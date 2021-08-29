@@ -33,7 +33,6 @@ const ImageWrapper = styled.div`
 `;
 
 const Title = styled.p`
-  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 500;
@@ -48,7 +47,6 @@ const CustomRow = styled.div`
 `;
 
 const Heading = styled.p`
-  font-family: Roboto;
   font-size: 17px;
   font-style: normal;
   font-weight: 700;
@@ -56,7 +54,6 @@ const Heading = styled.p`
 `;
 
 const DescriptionContent = styled.div`
-  font-family: Roboto;
   font-size: 13px;
   font-style: normal;
   font-weight: 300;
@@ -66,7 +63,6 @@ const DescriptionContent = styled.div`
 const ComingSoonButton = styled(ContainedButton)`
   background: #000000;
   color: ${theme.palette.background.yellow};
-  font-family: Roboto;
   font-size: 16px;
   font-style: italic;
   font-weight: 700;

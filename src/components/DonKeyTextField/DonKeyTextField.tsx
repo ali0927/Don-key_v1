@@ -31,7 +31,6 @@ const FormGroup = styled(Form.Group)`
 `;
 
 const Label = styled(Form.Label)`
-  font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -56,7 +55,6 @@ const FormControl = styled(Form.Control)`
       ? "#198754"
       : "#848484"};
   border-radius: 5px !important;
-  font-family: Roboto;
   height: 50px;
   &:focus {
     box-shadow: 0 0 0 0.2rem rgb(0 123 255 / 25%);
@@ -81,7 +79,6 @@ const SpinnerRoot = styled.div`
 `;
 
 const Caption = styled.p`
-  font-family: Roboto;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;

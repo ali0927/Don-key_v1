@@ -25,7 +25,6 @@ const OvalWrapper = styled.div`
 const ContentWrapper = styled.div``;
 
 const DescriptionTitle = styled.div`
-  font-family: Roboto;
   font-size: 36px;
   font-style: normal;
   font-weight: 800;
@@ -35,7 +34,6 @@ const DescriptionTitle = styled.div`
 `;
 
 const Content = styled.p`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

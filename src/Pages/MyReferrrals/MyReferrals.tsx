@@ -76,7 +76,6 @@ const BlackCard = styled.div`
 `;
 
 const Title = styled.p`
-  font-family: Roboto;
   font-size: 14px;
   font-weight: 400;
   line-height: 16px;
@@ -87,7 +86,6 @@ const Title = styled.p`
 `;
 
 const Subtitle = styled.p`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

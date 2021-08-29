@@ -15,7 +15,6 @@ const CardInnerInfo = styled.div`
 `;
 
 const CardLabel = styled.p`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -26,7 +25,6 @@ const CardLabel = styled.p`
 `;
 
 const CardValue = styled.p`
-  font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;

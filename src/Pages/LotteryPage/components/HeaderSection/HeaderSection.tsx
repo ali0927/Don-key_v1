@@ -19,7 +19,6 @@ const Header = styled.div`
 `;
 
 const MainHeading = styled.p`
-  font-family: Roboto;
   font-size: 40px;
   font-style: normal;
   font-weight: 800;

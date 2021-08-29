@@ -42,7 +42,6 @@ const RocketIconWrapper = styled.div`
 `;
 
 const CongratulationsLabel = styled.p`
-  font-family: Roboto;
   font-size: 30px;
   font-style: normal;
   font-weight: 500;
@@ -52,7 +51,6 @@ const CongratulationsLabel = styled.p`
   color: #ffffff;
 `;
 const Content = styled.p`
-  font-family: Roboto;
   font-size: 17px;
   font-style: normal;
   font-weight: 400;

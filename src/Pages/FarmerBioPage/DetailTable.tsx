@@ -51,7 +51,6 @@ export const CardInnerInfo = styled.div`
 `;
 
 export const CardLabel = styled.p`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -68,7 +67,6 @@ const TotalPoolValueLabel = styled(CardLabel)`
 `;
 
 const CardPoolAddress = styled.p`
-  font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
@@ -79,7 +77,6 @@ const CardPoolAddress = styled.p`
 `;
 
 export const CardValue = styled.p`
-  font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;
@@ -102,7 +99,6 @@ export const Columns = styled.div`
 `;
 
 const ColumnsTitle = styled.div`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -114,7 +110,6 @@ const ColumnsTitle = styled.div`
 `;
 
 const ColumnsTitleColored = styled.div`
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -125,7 +120,6 @@ const ColumnsTitleColored = styled.div`
 `;
 
 export const ColumnsSubTitle = styled.p`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -138,7 +132,6 @@ export const ColumnsSubTitle = styled.p`
 `;
 
 const ColumnsSubTitleColored = styled.p`
-  font-family: Roboto;
   font-size: 18px;
   font-style: normal;
   font-weight: 700;

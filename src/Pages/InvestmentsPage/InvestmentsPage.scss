@@ -23,12 +23,7 @@
   }
 }
 
-.investment-heading {
-  font-family: Roboto !important;
-}
-
 .firstHeading {
-  font-family: Roboto;
   font-weight: 800;
   font-size: 42px;
   line-height: 44px;
@@ -42,7 +37,7 @@
 
 .description {
   &_title {
-    font-family: Roboto;
+
     font-weight: 900;
     font-size: 20px;
     line-height: 23px;
@@ -50,7 +45,7 @@
   }
 
   &_content {
-    font-family: Roboto;
+
     font-size: 15px;
     line-height: 135%;
     opacity: 0.8;
@@ -67,7 +62,7 @@
 
 .detail {
   &_box {
-    font-family: Roboto;
+
     font-weight: bold;
     color: #222222;
     padding: 20px;
@@ -99,7 +94,6 @@
   border: 1px solid #222222;
   border-radius: 5px;
   color: #222222;
-  font-family: Roboto;
   background: transparent;
 }
 

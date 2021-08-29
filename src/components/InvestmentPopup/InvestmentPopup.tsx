@@ -362,6 +362,7 @@ export const InvestmentPopup = ({
       variant="common"
       isOpen={true}
       size="xs"
+      rounded
       titleRightContent={
         hasDons ? (
           <>

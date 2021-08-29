@@ -1,22 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 @import "../public/assets/scss/variables.scss";
 
-@font-face {
-  font-family: "CodecPro-Bold";
-  src: local("CodecPro-Bold"),
-    url(./fonts/CodecPro/CodecPro-News.ttf) format("truetype");
-}
-
-@font-face {
-  font-family: "Avenir-Regular";
-  src: local("Avenir-Regular"),
-    url(./fonts/avenir-font/AvenirNextCyr-Regular.ttf) format("truetype");
-}
-@font-face {
-  font-family: "Avenir-Bold";
-  src: local("Avenir-Bold"),
-    url(./fonts/avenir-font/AvenirNextCyr-Bold.ttf) format("truetype");
-}
 
 @font-face {
   font-family: "ObjectSans-Bold";
@@ -29,7 +13,7 @@
 
 body {
   margin: 0;
-  font-family: "Roboto" !important;
+  font-family: 'Poppins', sans-serif;
   background: $primary-color;
 }
 
@@ -98,7 +82,6 @@ img {
   }
 }
 .parasame {
-  font-family: "Roboto";
   font-style: normal;
   font-weight: normal;
   font-size: 20px;

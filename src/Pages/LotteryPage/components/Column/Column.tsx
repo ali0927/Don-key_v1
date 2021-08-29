@@ -11,7 +11,6 @@ const Columns = styled.div`
 `;
 
 const ColumnsTitle = styled.p`
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -23,7 +22,6 @@ const ColumnsTitle = styled.p`
 `;
 
 const ColumnsSubTitle = styled.p`
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;

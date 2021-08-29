@@ -55,7 +55,6 @@ const ImageWrapper = styled.div`
 `;
 
 const TypographyShare = styled.div`
-  font-family: roboto;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;

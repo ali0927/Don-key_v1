@@ -10,7 +10,6 @@ import { useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
 
 const StyledH2 = styled.h2`
-  font-family: Roboto;
   font-weight: bold;
   font-size: 24px;
   text-align: center;

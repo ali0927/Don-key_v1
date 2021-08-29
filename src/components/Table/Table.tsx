@@ -14,7 +14,6 @@ const Table = styled.table({
 });
 
 const TableHead = styled.thead`
-  font-family: Roboto;
   font-size: 15px;
   border-bottom: 1px solid #dee2e6;
 `;
@@ -34,7 +33,6 @@ const TableRow = styled.tr`
 `;
 
 const TableBody = styled.tbody({
-  fontFamily: "Roboto",
   fontSize: 16,
   fontWeight: 400,
 });

@@ -7,6 +7,8 @@ import {
   StyledCloseIcon,
 } from "./Components";
 import styled from "styled-components";
+import produce from "immer";
+import { set } from "lodash";
 
 const CutomizeModalHeading = styled.h4`
   font-size: 25px;
@@ -16,11 +18,12 @@ const CutomizeModalHeading = styled.h4`
   align-items: center;
 `;
 
-const StyledDialog = withStyles({
+
+const StyledDialog = (withStyles({
   paperWidthMd: {
     maxWidth: "761px",
   },
-})(Dialog);
+})(Dialog));
 
 export const DonCommonmodal = ({
   isOpen,
@@ -33,6 +36,7 @@ export const DonCommonmodal = ({
   style,
   PaperProps,
   titleRightContent,
+  rounded
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -44,6 +48,7 @@ export const DonCommonmodal = ({
   size?: DialogProps["maxWidth"];
   titleRightContent?: React.ReactElement;
   children: React.ReactNode;
+  rounded?: boolean;
 }) => {
   const modalInnerContent = () => {
     if (variant === "common") {
@@ -72,14 +77,23 @@ export const DonCommonmodal = ({
     );
   };
 
+   const getPaperProps = () => {
+     return produce(PaperProps || {}, draft=> {
+       if(rounded){
+         return set(draft, "style.borderRadius", 20);
+       }
+     })
+   }
+
   return (
     <StyledDialog
       open={isOpen}
       style={style}
       onClose={onClose}
-      PaperProps={PaperProps}
+      PaperProps={getPaperProps()}
       fullWidth={true}
       maxWidth={size}
+      
     >
       <>
         <ModalContent>

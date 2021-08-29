@@ -25,7 +25,6 @@ import BigNumber from "bignumber.js";
 import { useReferralContext } from "contexts/ReferralContext";
 
 const ReadMore = styled.div`
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

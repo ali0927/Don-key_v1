@@ -15,7 +15,6 @@ import { useApy } from "./useApy";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
 export const Label = styled.p`
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -76,7 +75,6 @@ const UnstakeButton = styled(ContainedButton)`
   }
 `;
 export const Caption = styled.p`
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -98,7 +96,6 @@ const WhiteCard = styled.div`
 const RewardsAmount = styled.div`
   font-weight: 500;
   font-size: 50px;
-  font-family: Roboto;
   ${(props: { disabled: boolean }) => props.disabled && `color: #d9d9d9;`}
 `;
 
@@ -119,14 +116,13 @@ const CardItem = styled.div`
   }
 `;
 const ItemHeading = styled.h5`
-  font-family: Roboto;
+
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
 `;
 
 const ItemInfo = styled.p`
-  font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;

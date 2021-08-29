@@ -33,7 +33,6 @@ const StyledFileUploadButton = styled.div`
 `;
 
 const ChooseFieldLabel = styled.div`
-  font-family: Roboto;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;

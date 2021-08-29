@@ -2,7 +2,6 @@ import { Popper } from "@material-ui/core";
 import styled from "styled-components";
 
 const BestFarmerTitle = styled.p({
-    fontFamily: "Roboto",
     fontStyle: "normal",
     fontWeight: 800,
     fontSize: 30,
@@ -33,10 +32,9 @@ const SearchInput = styled.input`
     background: transparent;
     margin-left: 20px;
     height: 100%;
-    font-family: Roboto;
-    fontSize: 14px;
+    font-size: 14px;
     font-style: normal;
-    fontWeight: 400;
+    font-weight: 400;
 `;
 
 const PopperPaper = styled.div({
@@ -48,7 +46,6 @@ const PopperPaper = styled.div({
 });
 
 const SuggestionLabel = styled.p({
-    fontFamily: "Roboto",
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: 400,
@@ -86,7 +83,6 @@ const LeaderContent = styled.div({
 });
 
 const FarmerTypography = styled.p({
-    fontFamily: "Roboto",
     fontSize: 16,
     fontStyle: "normal",
     fontWeight: 400,
@@ -95,7 +91,6 @@ const FarmerTypography = styled.p({
 });
 
 const Caption = styled.p({
-    fontFamily: "Roboto",
     fontSize: 13,
     fontStyle: "normal",
     fontWeight: 400,

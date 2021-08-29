@@ -19,7 +19,6 @@ const Header = styled.div`
 `;
 
 const Heading = styled.p`
-  font-family: "Roboto";
   font-size: 40px;
   font-style: normal;
   text-transform: uppercase;

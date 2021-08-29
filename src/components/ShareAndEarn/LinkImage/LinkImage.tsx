@@ -29,13 +29,11 @@ const Board = styled.div`
 
 const Heading = styled.h2`
   color: #fff;
-  font-family: Roboto;
   font-weight: 800;
 `;
 
 const Content = styled.p`
   color: #fff;
-  font-family: Roboto;
   font-weight: 400;
   font-size: 22px;
 `;
@@ -58,7 +56,6 @@ const Donkey = styled.img`
   width: 99px;
 `;
 const CardHeading = styled.div`
-  font-family: Roboto;
   font-size: 12px;
   font-weight: 700;
 `;
@@ -84,7 +81,6 @@ const Columns = styled.div`
 `;
 
 const ColumnTitle = styled.div`
-  font-family: Roboto;
   font-size: 12px;
   color: #b4b4b4;
 `;
