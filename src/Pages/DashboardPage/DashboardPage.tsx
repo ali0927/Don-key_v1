@@ -103,16 +103,18 @@ const Ellipse4 = styled.div`
 export const NetworkButton = styled.button`
   color: #333333;
   background: transparent;
-  font-weight: bold;
-  font-size: 1.2rem;
+  font-weight: 500;
+  font-size: 16px;
   margin-right: 20px;
-  padding: 0.4rem 1rem;
+  padding: 0.5rem 1.5rem;
+  border-radius: 10px;
   border: none;
   ${(props: { active?: boolean }) =>
     props.active &&
     `
-  border: 2px solid #333;
-  border-radius: 3px;
+  border: 1px solid #222;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
+
   `}
 `;
 

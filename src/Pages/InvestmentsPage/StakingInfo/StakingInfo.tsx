@@ -55,8 +55,8 @@ const StakingSubtitle = styled.p`
   text-align: center;
 `;
 
-const StyledButton = styled(ButtonWidget)`
-  width: initial !important;
+export const StyledButton = styled(ButtonWidget)`
+  width: initial;
   font-size: 14px;
   &:disabled {
     ${(props) => {

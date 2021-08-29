@@ -21,7 +21,7 @@ import styled from "styled-components";
 import { theme } from "theme";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
-import {  IFarmerInter } from "interfaces";
+import { IFarmerInter } from "interfaces";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { GridBackground } from "components/GridBackground";
 import {
@@ -43,14 +43,11 @@ import { hideAddress } from "components/InvestorListTable/InvestorListTable";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { gql, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
+import { StyledButton } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
-  fontSize: "45px",
-  fontStyle: "normal",
-  fontWeight: 800,
-  letterSpacing: "0em",
-  textAlign: "left",
+  fontSize: 42,
   color: "#070602",
 });
 
@@ -62,24 +59,22 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-const WhiteCard = styled.div`
+const Card = styled.div`
   background-color: #fff;
-  border-radius: 5px;
-  padding: 30px;
+  border-radius: 15px;
+  padding: 30px 20px;
   height: 100%;
-`;
-
-const BlackCard = styled.div`
-  background-color: #171717;
-  border-radius: 5px;
-  padding: 30px;
-  height: 100%;
+  ${({ color = "white" }: { color?: "black" | "white" }) => {
+    if (color === "black") {
+      return ` background-color: #171717;`;
+    }
+    return "";
+  }}
 `;
 
 const Title = styled.p`
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 16px;
+  font-size: 12px;
+  font-weight: 500;
   text-align: center;
   ${(props: { variant?: "light" }) => {
     return props.variant && `color: rgba(255,255,255,0.7)`;
@@ -87,11 +82,9 @@ const Title = styled.p`
 `;
 
 const Subtitle = styled.p`
-  font-size: 16px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 19px;
-  letter-spacing: 0em;
+  font-weight: 700;
   text-align: center;
   margin-bottom: 0;
   ${(props: { variant?: "light" }) => {
@@ -205,8 +198,8 @@ const useTransformedData = () => {
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
     []
   );
-  const { data:farmersData } = useQuery(ALL_FARMER_QUERY);
-  
+  const { data: farmersData } = useQuery(ALL_FARMER_QUERY);
+
   const { chainId: network } = useWeb3Network();
   const farmers: IFarmerInter[] = useMemo(() => {
     if (farmersData) {
@@ -215,7 +208,6 @@ const useTransformedData = () => {
           return item?.network?.chainId === network;
         })
         .map((item: IFarmerInter) => {
-        
           return item;
         });
     }
@@ -285,6 +277,10 @@ const EmptyTableHeading = styled(TableHeading)`
   min-width: 75px;
 `;
 
+const ReferralCol = styled.div`
+  border-right: 1px solid #dedee0;
+`;
+
 export const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
@@ -307,12 +303,13 @@ export const MyReferrals = () => {
   }, [transformedData, isReady]);
 
   const [availableDon, setAvailable] = useState("-");
-
+  const [rewardsEarned, setEarned] = useState("-");
   const fetchAvailableDon = async () => {
     setAvailable("-");
     const rewardSystem = await getRewardSystemContract(web3);
     const accounts = await web3.eth.getAccounts();
     const user = await rewardSystem.methods.userInfo(accounts[0]).call();
+    setEarned(toEther(user.totalRewards));
     setAvailable(toEther(user.rewardsDebt));
   };
   useEffect(() => {
@@ -340,56 +337,68 @@ export const MyReferrals = () => {
           <Container>
             <Row>
               <Col lg={12}>
-                <HeadingTitle>My Referrals</HeadingTitle>
-                <div className="row ">
-                  <div className="col-md-6">
-                    <WhiteCard>
-                      <div className="row h-100 align-items-center justify-content-center">
-                        <div className="col-md-4">
-                          <Title>Total Referrers</Title>
-                          <Subtitle>{referralCount}</Subtitle>
-                        </div>
-                      </div>
-                    </WhiteCard>
+                <div className="row align-items-center">
+                  <div className="col-md-9">
+                    {" "}
+                    <HeadingTitle>My Referrals</HeadingTitle>
                   </div>
-                  <div className="col-md-6">
-                    <BlackCard>
-                      <div className="row h-100 align-items-center">
-                        <div className="col-md">
-                          <Title variant="light">Rewards Accumulated</Title>
-                          <Subtitle variant="light">{totalDon}</Subtitle>
-                        </div>
-                        <div className="col-md">
-                          <Title variant="light">Rewards Available</Title>
-                          <Subtitle variant="light">
-                            {availableDon === "-" || !isReady ? "-": `${formatNum(availableDon)} DON`}
-                          </Subtitle>
-                        </div>
-                        {hasAvailable && (
-                          <div className="col-md-4">
-                            <ButtonWidget
-                              varaint="contained"
-                              fontSize="14px"
-                              containedVariantColor="lightYellow"
-                              height="30px"
-                              onClick={handleWithdraw}
-                            >
-                              Withdraw
-                            </ButtonWidget>
-                          </div>
-                        )}
-                      </div>
-                    </BlackCard>
+                  <div className="col-md">
+                    <div className="d-flex justify-content-end">
+                      <NetworkButton active>BSC</NetworkButton>
+                    </div>
                   </div>
                 </div>
 
-                <div className="d-flex px-2 mt-3">
-                  <NetworkButton
-                    active
-                    // onClick={() => setStrategyNetworkFilter(BSCChainId)}
-                  >
-                    BSC
-                  </NetworkButton>
+                <div className="row mt-5">
+                  <div className="col-md-9">
+                    <Card>
+                      <div className="row h-100 align-items-center justify-content-center">
+                        <ReferralCol className="col-md">
+                          <Title>Rewards Accumulated</Title>
+                          <Subtitle>{totalDon}</Subtitle>
+                        </ReferralCol>
+                        <ReferralCol className="col-md">
+                          <Title>DON Rewards Available</Title>
+                          <Subtitle>
+                            {" "}
+                            {availableDon === "-" || !isReady
+                              ? "-"
+                              : `${formatNum(availableDon)} DON`}
+                          </Subtitle>
+                        </ReferralCol>
+                        <div className="col-md">
+                          <Title>Rewards Earned</Title>
+                          <Subtitle>
+                            {rewardsEarned === "-" || !isReady
+                              ? "-"
+                              : `${formatNum(rewardsEarned)} DON`}
+                          </Subtitle>
+                        </div>
+                        <div className="col-md">
+                          <StyledButton
+                            varaint="contained"
+                            className="py-2 px-5"
+                            style={{ borderRadius: 10 }}
+                            disabled={!hasAvailable}
+                            containedVariantColor="lightYellow"
+                            onClick={handleWithdraw}
+                          >
+                            Claim
+                          </StyledButton>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                  <div className="col-md-3">
+                    <Card color="black">
+                      <div className="row h-100 align-items-center">
+                        <div className="col-md">
+                          <Title variant="light">Total Referrals</Title>
+                          <Subtitle variant="light">{referralCount}</Subtitle>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
                 </div>
               </Col>
             </Row>
@@ -481,7 +490,7 @@ export const MyReferrals = () => {
           </Container>
         </div>
       </GridBackground>
-      <Footer  />
+      <Footer />
     </div>
   );
 };

@@ -8,6 +8,7 @@ interface IButtonProps {
   varaint: "outlined" | "contained";
   children: React.ReactNode;
   fontSize?: string;
+  style?: React.CSSProperties;
   height?: string;
   disabled?: boolean;
   width?: string;
@@ -63,6 +64,7 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
     disabled = false,
     containedVariantColor = "black",
     fontSize,
+    style
   } = props;
 
   return (
@@ -74,6 +76,7 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
           fontSize={fontSize}
           width={width}
           height={height}
+          style={style}
           color={containedVariantColor}
           onClick={props.onClick}
         >
@@ -87,6 +90,7 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
           fontSize={fontSize}
           width={width}
           height={height}
+          style={style}
           onClick={props.onClick}
         >
           {props.children}

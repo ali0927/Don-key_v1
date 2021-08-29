@@ -433,7 +433,7 @@ export const InvestmentsPage = () => {
                   <ZeroInvestmentBox>
                     <ZeroInvestmentInnerBox>
                       <ZeroInvestmentContent>
-                        You’re not following any d
+                        You’re not following any Farmers
                       </ZeroInvestmentContent>
                       <CenteredBox className="mb-5">
                         <ButtonWidget
@@ -444,7 +444,7 @@ export const InvestmentsPage = () => {
                           width="210px"
                           onClick={handleFindd}
                         >
-                          Explore d
+                          Explore Farmers
                         </ButtonWidget>
                       </CenteredBox>
                     </ZeroInvestmentInnerBox>
