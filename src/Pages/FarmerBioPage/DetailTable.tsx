@@ -26,16 +26,22 @@ import {
   PolygonChainId,
   useWeb3Network,
 } from "components/Web3NetworkDetector";
-import { IFarmer, IFarmerInter } from "interfaces";
-import { useSwitchNetwork } from "hooks/useSwitchNetwork";
+import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "./InvestBlackCard";
 import { InactiveNetworkCard } from "./InactiveNetworkCard";
+import { InvestorCountContract } from "components/InvestorCountGraphql";
 
 export const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
     props.color === "black" ? "#171717" : "#ffffff"};
-  border-radius: 10px;
+  border-radius: 20px;
+  padding: 1rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 40px;
   color: ${(props: { color: "black" | "white" }) =>
     props.color !== "black" ? "#171717" : "#ffffff"};
   box-shadow: 4.01577px 8.05442px 118px rgba(0, 0, 0, 0.05),
@@ -53,35 +59,32 @@ export const CardInnerInfo = styled.div`
 export const CardLabel = styled.p`
   font-size: 16px;
   font-style: normal;
-  font-weight: 400;
-  line-height: 1px;
+  font-weight: 700;
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
   width: 100%;
   text-decoration: underline;
+  margin-bottom: 0;
 `;
 
 const TotalPoolValueLabel = styled(CardLabel)`
-  font-weight: 500;
+  font-weight: 600;
+ 
 `;
 
 const CardPoolAddress = styled.p`
-  font-size: 18px;
+  font-size: 30px;
   font-style: normal;
-  font-weight: 700;
-  line-height: 21px;
-  letter-spacing: 0em;
+  font-weight: bold;
   text-align: center;
   color: #000000;
 `;
 
 export const CardValue = styled.p`
-  font-size: 18px;
+  font-size: 30px;
   font-style: normal;
-  font-weight: 700;
-  line-height: 21px;
-  letter-spacing: 0em;
+  font-weight: bold;
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
@@ -99,11 +102,8 @@ export const Columns = styled.div`
 `;
 
 const ColumnsTitle = styled.div`
-  font-size: 16px;
-  font-style: normal;
+  font-size: 14px;
   font-weight: 500;
-  line-height: 19px;
-  letter-spacing: 0em;
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
@@ -124,7 +124,6 @@ export const ColumnsSubTitle = styled.p`
   font-style: normal;
   font-weight: 500;
   word-break: break-word;
-  letter-spacing: 0em;
   margin-bottom: 0;
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
@@ -132,19 +131,17 @@ export const ColumnsSubTitle = styled.p`
 `;
 
 const ColumnsSubTitleColored = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
-  font-weight: 700;
-  word-break: break-word;
-  letter-spacing: 0em;
+  font-weight: 600;
   text-align: center;
   margin-bottom: 0;
-  color: ${(props: { color: any }) => props.color};
+  color: ${(props: { color: string }) => props.color};
 `;
 
 export const ColumnsTitle1 = styled(ColumnsTitleColored)`
-  font-size: 14px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 500;
 `;
 
 export const formatNum = (num: string) => {
@@ -160,26 +157,55 @@ export const formatNum = (num: string) => {
   });
 };
 
-const YellowSwitch = withStyles({
+const YellowSwitch =  withStyles((theme) => ({
+  root: {
+    width: 28,
+    height: 16,
+    padding: 0,
+    display: 'flex',
+  },
   switchBase: {
-    color: yellow[300],
-    "&$checked": {
-      color: yellow[500],
+    padding: 2,
+    color: "#fff",
+    '&$checked': {
+      transform: 'translateX(12px)',
+      color: theme.palette.common.white,
+      '& + $track': {
+        opacity: 1,
+        backgroundColor: yellow[300],
+        borderColor: yellow[500],
+      },
     },
-    "&$checked + $track": {
-      backgroundColor: yellow[500],
-    },
+  },
+  thumb: {
+    width: 12,
+    height: 12,
+    boxShadow: 'none',
+  },
+  track: {
+    border: `1px solid #fff`,
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: yellow[500],
   },
   checked: {},
-  track: {
-    backgroundColor: "#d9d9d9",
-  },
-})(Switch);
+}))(Switch);;
 
 const URLMap = {
   [BSCChainId]: "https://bscscan.com",
   [PolygonChainId]: "https://polygonscan.com",
 };
+
+const TokenSwitchLabels = styled.div`
+font-weight: 500;
+font-size: 14px;
+color: #808080;
+`;
+
+
+const IconWrapper = styled.div`
+transform: scale(0.7);
+`;
 
 export const DetailTable = ({
   poolAddress,
@@ -254,13 +280,12 @@ export const DetailTable = ({
   return (
     <>
       <div className="col-lg-6 mb-5">
-        <CardWrapper className="p-2" color="white">
-          <div style={{ marginTop: 53 }}>
+        <CardWrapper color="white">
+          <div style={{marginTop: 30}}>
             <CardInnerInfo className="d-flex justify-content-center mb-2">
               <div className="d-flex flex-column align-items-center">
-                <div className="d-flex align-items-baseline">
+                <div className="d-flex align-items-baseline mb-2">
                   <TotalPoolValueLabel color="black">
-                    {" "}
                     Total Pool Value
                   </TotalPoolValueLabel>
                   <a
@@ -274,7 +299,7 @@ export const DetailTable = ({
                     <LinkIcon />
                   </a>
                 </div>
-                <CardPoolAddress>
+                <CardPoolAddress >
                   {isActiveNetwork ? (
                     <DollarView
                       poolAddress={poolAddress}
@@ -285,17 +310,18 @@ export const DetailTable = ({
                   )}
                 </CardPoolAddress>
                 {isActiveNetwork ? (
-                  <div className="d-flex align-items-center">
+                  <TokenSwitchLabels className="d-flex align-items-center">
                     {symbol}
                     <YellowSwitch
+                    className="mx-2"
                       value={true}
                       onChange={handleToggle}
                       checked={initialCheck}
                     />{" "}
                     USD
-                  </div>
+                  </TokenSwitchLabels>
                 ) : (
-                  <div>You are connected To Wrong Network</div>
+                  <TokenSwitchLabels>You are connected To Wrong Network</TokenSwitchLabels>
                 )}
               </div>
             </CardInnerInfo>
@@ -305,34 +331,34 @@ export const DetailTable = ({
               "APY",
               apy,
               "black",
-              <div className="mr-2">
+              <IconWrapper className="mr-2">
                 <StatisticIcon />
-              </div>
+              </IconWrapper>
             )}
             {getFirstCardcolumns(
               "Followers",
-              <InvestorCount
+              <InvestorCountContract
                 refresh={dependsOn % 2 === 0}
-                farmerId={farmerId}
+                poolAddresses={[poolAddress]}
               />,
               "black",
-              <div className="mr-2">
+              <IconWrapper className="mr-2">
                 <FollowersIcon />
-              </div>
+              </IconWrapper>
             )}
             {getFirstCardcolumns(
               "Dominance",
               dominance + " %",
               "black",
-              <div className="mr-2">
+              <IconWrapper className="mr-2" >
                 <AwardIcon />
-              </div>
+              </IconWrapper>
             )}
           </FirstCardRow>
         </CardWrapper>
       </div>
-      <div className="col-lg-6 mb-5 p">
-        <CardWrapper color="black">
+      <div className="col-lg-6 mb-5">
+        <CardWrapper  color="black">
           {isActiveNetwork ?(
             <InvestBlackCard
               poolAddress={poolAddress}

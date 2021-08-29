@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import { EditIcon } from "icons/EditIcon";
-import { DollarIcon, DotsIcon,ShareArrowIcon,ShareandEarnIcon } from "icons";
+import { DollarIcon, DotsIcon, ShareArrowIcon, ShareandEarnIcon } from "icons";
 import { DetailTable } from "./DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
@@ -10,7 +10,6 @@ import { IFarmerInter, IStrategy } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
-import { ButtonWidget } from "components/Button/ButtonWidget";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { api } from "don-utils";
 import { useWeb3 } from "don-components";
@@ -65,24 +64,17 @@ const ShareButton = styled.button`
   border: 2px solid #000;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
-  text-transform: uppercase;
-  padding: 16px 50px;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 14px 30px;
   position: relative;
   background-color: #fff037;
 `;
 
-const StyledArrowShare = styled(ShareArrowIcon)`
-position: absolute;
-top: -22px;
-right: 40px;
-background-color: transparent;
-padding: 4px;
-transform: scale(1.2)
-`;
 
 const StyledShareIcon = styled(ShareandEarnIcon)`
   position: absolute;
-  top: -22px;
+  top: -16px;
   right: 35px;
   background-color: #fff037;
   padding: 4px;
@@ -92,19 +84,12 @@ const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-const getStrategyField = <T extends keyof IStrategy>(
-  farmer: IFarmerInter,
-  key: T
-): NonNullable<IStrategy[T]> | undefined => {
-  if (!farmer.strategies || farmer.strategies.length === 0) {
-    return undefined;
-  }
-  const result = farmer.strategies[0][key];
-  if (result) {
-    return result as any;
-  }
-  return undefined;
-};
+const StrategyName = styled.h4`
+  font-family: "ObjectSans-Bold";
+  font-style: normal;
+  font-weight: 800;
+  font-size: 20px;
+`;
 
 export const FarmerBio = ({
   farmer,
@@ -115,7 +100,6 @@ export const FarmerBio = ({
   telegram?: string;
   twitter?: string;
 }) => {
- 
   const {
     description,
     name,
@@ -127,7 +111,7 @@ export const FarmerBio = ({
     guid: GUID,
     farmerImage: { url: picture },
   } = farmer;
- 
+
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -167,7 +151,7 @@ export const FarmerBio = ({
   };
   const apy =
     strategies && strategies.length > 0
-      ? new BigNumber(strategies![0].apy).multipliedBy(100).toFixed(0) + "%"
+      ? new BigNumber(strategies![0].apy).toFixed(0) + "%"
       : "100%";
 
   const strategyName =
@@ -182,7 +166,6 @@ export const FarmerBio = ({
                 <Title className="mb-2 mb-md-0">
                   DON - {capitalize(name || "")}
                 </Title>
-               
               </div>
             </Col>
           </Row>
@@ -203,11 +186,11 @@ export const FarmerBio = ({
                   {description.length > 0 && (
                     <>
                       <div className="d-flex justify-content-between">
-                        <h4 className="font-weight-bolder">
+                        <StrategyName>
                           {strategies && strategies.length > 0
                             ? strategies[0].name
                             : "Description"}
-                        </h4>
+                        </StrategyName>
                         <div className="d-flex">
                           <div className="mr-3">
                             {twitter && (
@@ -227,7 +210,7 @@ export const FarmerBio = ({
                       </div>
 
                       <p style={{ fontSize: 15 }}>
-                        <ShowMoreContent length={150} content={description} />
+                        <ShowMoreContent length={120} content={description} />
                       </p>
                     </>
                   )}
@@ -241,13 +224,9 @@ export const FarmerBio = ({
             >
               {pool_version === 3 ? (
                 <ShareButton onClick={handleShareClick}>
-                
-                <StyledShareIcon/>
-                <StyledArrowShare/>
-                Share and Earn
-              </ShareButton>
-
-               
+                  <StyledShareIcon />
+                  Share and Earn
+                </ShareButton>
               ) : (
                 <DotsIcon />
               )}
@@ -256,7 +235,6 @@ export const FarmerBio = ({
 
           <Row className="mt-5">
             <DetailTable
-             
               apy={apy}
               network={network}
               poolVersion={pool_version}

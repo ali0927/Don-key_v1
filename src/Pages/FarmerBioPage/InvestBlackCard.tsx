@@ -33,7 +33,7 @@ import {
   CardInnerInfo,
   formatNum,
 } from "./DetailTable";
-
+import { InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -129,10 +129,11 @@ export const InvestBlackCard = ({
   const getSecondCardColumns = (
     label: string,
     value: string | React.ReactNode,
+    icon: React.ReactNode,
     color: "black" | "white"
   ) => {
     return label === "Profit/Loss" ? (
-      <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
+      <Columns className="col d-flex   flex-column align-items-center justify-content-between">
         <OverlayTrigger
           placement="right"
           delay={{ show: 250, hide: 400 }}
@@ -146,25 +147,16 @@ export const InvestBlackCard = ({
             </Tooltip>
           }
         >
-          <div
-            style={{
-              textAlign: "right",
-              paddingLeft: 10,
-            }}
-          >
-            <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
-              {" "}
-              {label}
-            </ColumnsTitle1>
-            <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
-          </div>
+          <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
+           {icon} {label}
+          </ColumnsTitle1>
         </OverlayTrigger>
+        <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
     ) : (
-      <Columns className="col-md-3 d-flex   flex-column align-items-center justify-content-between">
-        <ColumnsTitle1 className="w-100" color={"#CEC6C6"}>
-          {" "}
-          {label}
+      <Columns className="col d-flex   flex-column align-items-center justify-content-between">
+        <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
+         {icon} {label}
         </ColumnsTitle1>
         <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
@@ -197,8 +189,6 @@ export const InvestBlackCard = ({
       refresh();
     }
   };
-
-  useEffect(() => {}, []);
 
   const renderFarmerUI = () => {
     if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
@@ -288,9 +278,12 @@ export const InvestBlackCard = ({
   return (
     <>
       <CardInnerInfo className="d-flex justify-content-center mb-3">
-        <div style={{ marginTop: 53 }}>
+        <div style={{ marginTop: 30 }}>
           <>
-            <CardLabel color="white"> My current holdings </CardLabel>
+            <CardLabel className="mb-2" color="white">
+              {" "}
+              My current holdings{" "}
+            </CardLabel>
             <CardValue color="white">
               <DollarView
                 poolAddress={poolAddress}
@@ -298,10 +291,10 @@ export const InvestBlackCard = ({
               />
             </CardValue>
           </>
-          <div className="d-flex mt-2 mb-2 justify-content-center">
+          <div className="d-flex mt-2 mb-1 justify-content-center">
             <ButtonWidget
               varaint="contained"
-              fontSize="14px"
+              fontSize="12px"
               className={isInvested ? "mr-3" : ""}
               containedVariantColor="lightYellow"
               height="30px"
@@ -329,7 +322,7 @@ export const InvestBlackCard = ({
         </div>
       </CardInnerInfo>
 
-      <div className="row mt-4">
+      <div className="row mt-2">
         {getSecondCardColumns(
           "Initial Investment",
           isUSD ? (
@@ -340,6 +333,7 @@ export const InvestBlackCard = ({
               tokenAmount={initialInvestment}
             />
           ),
+          <InvestmentIcon className="mr-1" />,
           "white"
         )}
 
@@ -349,12 +343,13 @@ export const InvestBlackCard = ({
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
           />,
+          <ProfitIcon className="mr-1" />,
           "white"
         )}
-        {getSecondCardColumns("My ROI", "---", "white")}
         {getSecondCardColumns(
           "My share",
           Number(myShare).toFixed(2) + " %",
+          <LPShareIcon className="mr-1" />,
           "white"
         )}
       </div>

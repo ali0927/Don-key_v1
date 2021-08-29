@@ -36,21 +36,6 @@ const formatDate = (
 
 
 
-// const useProfit = (poolAddress: string) => {
-//   const [profit, setprofit] = useState("");
-//   const web3 = useWeb3();
-//   useEffect(() => {
-//     (async () => {
-//       const pool = await getPoolContract(web3, poolAddress, 2);
-//       const amount = toEther(await pool.methods.getTotalInvestAmount().call());
-//       const totalPoolValue = toEther(
-//         await pool.methods.getinvestedAmountWithReward().call()
-//       );
-//       setprofit(new BigNumber(totalPoolValue).minus(amount).toFixed(2));
-//     })();
-//   }, [poolAddress]);
-//   return { profit };
-// };
 
 export const StrategyTableForInvestor = ({
   strategies,
@@ -187,7 +172,7 @@ export const StrategyTableForInvestor = ({
                   {totalFee}%
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  {new BigNumber(item.apy).multipliedBy(100).toFixed(2) + "%"}
+                  {new BigNumber(item.apy).toFixed(2) + "%"}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>Active</TableData>
                 <TableData style={{ textAlign: "center" }}>

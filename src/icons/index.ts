@@ -53,4 +53,6 @@ export * from "./WalletIcon";
 export * from "./BoostApyIcon";
 export * from "./ShareandEarnIcon";
 export * from "./ShareArrowIcon";
-
+export * from "./InvestmentIcon";
+export * from "./ProfitIcon";
+export * from "./LPShareIcon";
