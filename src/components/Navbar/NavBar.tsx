@@ -191,6 +191,14 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
+                    <NavbarLink
+                      link
+                      target="openInNewTab"
+                      to="https://multichain.xyz/swap?pairID=donv4&src=1&dest=56"
+                      linkColor={variant === "builder" ? "white" : "black"}
+                    >
+                      Bridge
+                    </NavbarLink>
                     <MyReferralNavLink variant={variant} />
                 
                   </>
