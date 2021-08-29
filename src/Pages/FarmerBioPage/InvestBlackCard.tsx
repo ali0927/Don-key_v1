@@ -33,42 +33,7 @@ import {
   CardInnerInfo,
   formatNum,
 } from "./DetailTable";
-import { useStakingContract } from "hooks";
 
-const useEffectOnTabFocus: typeof useEffect = (fn, deps) => {
-  useEffect(() => {
-    let hidden: string = "hidden",
-      visibilityChange: string = "visibilitychange";
-    //@ts-ignore
-    if (typeof document.msHidden !== "undefined") {
-      hidden = "msHidden";
-      visibilityChange = "msvisibilitychange";
-      //@ts-ignore
-    } else if (typeof document.webkitHidden !== "undefined") {
-      hidden = "webkitHidden";
-      visibilityChange = "webkitvisibilitychange";
-    }
-
-    const handleVisibilityChange = (data?: any) => {
-      console.log(data, "adata");
-    };
-
-    // Warn if the browser doesn't support addEventListener or the Page Visibility API
-
-    // Handle page visibility change
-    document.addEventListener(
-      visibilityChange as "visibilityChange",
-      handleVisibilityChange,
-      false
-    );
-    return () => {
-      document.removeEventListener(
-        visibilityChange as "visibilityChange",
-        handleVisibilityChange
-      );
-    };
-  }, deps);
-};
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -92,10 +57,7 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
-  const { holdingDons, refetch } = useStakingContract();
-  useEffectOnTabFocus(() => {
 
-  }, [])
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(

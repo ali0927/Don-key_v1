@@ -23,10 +23,16 @@ import { ButtonWidget } from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import { Chip, createMuiTheme, ThemeProvider } from "@material-ui/core";
+import {
+  Chip,
+  createMuiTheme,
+  ThemeProvider,
+  CircularProgress,
+} from "@material-ui/core";
 import { theme } from "theme";
 import { api } from "don-utils";
-import { useStakingContract } from "hooks";
+import { useEffectOnTabFocus, useStakingContract } from "hooks";
+import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 const ButtonWrapper = styled.div({
   marginRight: "10%",
   width: "40%",
@@ -77,24 +83,6 @@ const MyBalanceInBUSD = ({
   return <>{state.balance} </>;
 };
 
-const ReferralInput = styled.input`
-  box-shadow: none !important;
-  width: 100%;
-  border: 1px solid #d9d9d9;
-  border-radius: 3px;
-  outline: 0px !important;
-  /* padding-left: 10px; */
-  padding: 5px 10px;
-  margin-right: 20px;
-  :focus-visible {
-    outline: 0px !important;
-  }
-`;
-
-const initialState: { msg: string; type: "success" | "error" } = {
-  msg: "",
-  type: "success",
-};
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
@@ -119,19 +107,15 @@ export const InvestmentPopup = ({
   const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
-  const { refetch } = useStakingContract();
+  const { refetch, holdingDons } = useStakingContract();
   const [referralCode, setReferralCode] = useState("");
   const [checking, setChecking] = useState(false);
-  const [msg, setMsg] =
-    useState<{ msg: string; type: "success" | "error" }>(initialState);
+
   const [applied, setApplied] = useState(false);
   const checkIfCodeisApplicable = async (code: string, showMsg = false) => {
     const userCode = await getUserReferralCode(web3);
 
     if (userCode === code.toLowerCase()) {
-      if (showMsg) {
-        setMsg({ type: "error", msg: "You cannot use your own referral code" });
-      }
       return false;
     }
     const referralSystem = await getReferralSystemContract(web3);
@@ -140,16 +124,10 @@ export const InvestmentPopup = ({
       .hasReferred(accounts[0])
       .call();
     if (hasReferred) {
-      if (showMsg) {
-        setMsg({ type: "error", msg: "Referral Code can only be used once." });
-      }
       return false;
     }
     const isValidCode = await isValidReferralCode(web3, code.toLowerCase());
     if (!isValidCode) {
-      if (showMsg) {
-        setMsg({ type: "error", msg: "Enter a Valid Referral Code" });
-      }
       return false;
     }
 
@@ -163,7 +141,6 @@ export const InvestmentPopup = ({
       if (isApplicable) {
         setReferralCode(code.toUpperCase());
         setApplied(true);
-        setMsg(initialState);
       }
     } finally {
       setChecking(false);
@@ -178,6 +155,7 @@ export const InvestmentPopup = ({
       }
     }
   }, []);
+
   const handleInvest = async () => {
     if (isLoading) {
       return;
@@ -203,24 +181,19 @@ export const InvestmentPopup = ({
       const inputAmount = amount.toFixed(0);
       onClose();
       showProgress("Transaction is in Progress");
-     
+
       if (amount.gt(allowance)) {
-        await acceptedToken.methods
-          .approve(poolAddress,inputAmount)
-          .send({
-            from: accounts[0],
-          });
+        await acceptedToken.methods.approve(poolAddress, inputAmount).send({
+          from: accounts[0],
+        });
       }
-     
+
       if (!poolVersion || poolVersion === 1) {
-        await pool.methods
-          .depositLiquidity(inputAmount)
-          .send({
-            from: accounts[0],
-          });
+        await pool.methods.depositLiquidity(inputAmount).send({
+          from: accounts[0],
+        });
       }
       if (poolVersion === 2) {
-  
         await pool.methods
           .depositLiquidity(
             inputAmount,
@@ -238,10 +211,7 @@ export const InvestmentPopup = ({
       if (poolVersion === 3) {
         if (referralCode && applied) {
           const tx = await pool.methods
-            .depositLiquidityWithCode(
-              inputAmount,
-              referralCode.toLowerCase()
-            )
+            .depositLiquidityWithCode(inputAmount, referralCode.toLowerCase())
             .send({
               from: accounts[0],
               gas: gasLimit,
@@ -264,7 +234,7 @@ export const InvestmentPopup = ({
           });
         }
       }
-      if(poolVersion === 4){
+      if (poolVersion === 4) {
         await pool.methods.depositLiquidity(inputAmount).send({
           from: accounts[0],
           gas: gasLimit,
@@ -292,128 +262,124 @@ export const InvestmentPopup = ({
     return "Invest";
   };
 
-  const renderApplyButton = () => {
-    if (applied) {
-      return "Remove";
-    }
-    if (checking) {
-      return <DonKeySpinner />;
-    }
-    return "Apply";
-  };
-  const handleApplyClick = () => {
-    if (applied) {
-      setApplied(false);
-      setReferralCode("");
+  const [hasCheckedDons, setHasChecked] = useState(false);
+
+  useEffectOnTabFocus(() => {
+    (async () => {
+      setHasChecked(false);
+      try {
+        await refetch();
+      } catch (e) {
+      } finally {
+        setHasChecked(true);
+      }
+    })();
+  }, []);
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+
+  const renderContent = () => {
+    if (hasCheckedDons) {
+      if (hasDons) {
+        return (
+          <>
+            <div>
+              <div className="mt-4">
+                <InvestmentInput
+                  value={value}
+                  disabled={isLoading}
+                  currencySymbol={symbol}
+                  setValue={setValue}
+                  max={balance}
+                />
+                {poolVersion < 3 && (
+                  <ThemeProvider theme={themeM}>
+                    <p className="mb-1 mt-3">Slippage Tolerance</p>
+                    <div className="d-flex align-items-center">
+                      {["5", "10", "15"].map((item) => {
+                        return (
+                          <Chip
+                            size="medium"
+                            className="mr-2"
+                            label={`${new BigNumber(item)
+                              .dividedBy(10)
+                              .toFixed(2)}%`}
+                            onClick={() => setSlippage(item)}
+                            variant={slippage === item ? "default" : "outlined"}
+                            color="primary"
+                          />
+                        );
+                      })}
+                    </div>
+                  </ThemeProvider>
+                )}
+              </div>
+              <div className="d-flex justify-content-between mt-3">
+                <ButtonWrapper>
+                  <ButtonWidget
+                    varaint="contained"
+                    fontSize="14px"
+                    containedVariantColor="lightYellow"
+                    height="30px"
+                    width="119px"
+                    disabled={!value || isLoading}
+                    onClick={handleInvest}
+                  >
+                    {renderButtonText()}
+                  </ButtonWidget>
+                </ButtonWrapper>
+
+                <ButtonWrapper className="mr-0">
+                  <ButtonWidget
+                    varaint="outlined"
+                    fontSize="14px"
+                    height="30px"
+                    width="119px"
+                    onClick={onClose}
+                  >
+                    Cancel
+                  </ButtonWidget>
+                </ButtonWrapper>
+              </div>
+            </div>
+            <p className="mt-4">
+              <small>Withdrawals are completed every 12 hrs*</small>
+            </p>
+          </>
+        );
+      } else {
+        return <BuyDonContent />;
+      }
     } else {
-      applyCode(referralCode, true);
+      return <div style={{minHeight: 200}} className="d-flex justify-content-center align-items-center">
+        <CircularProgress color="inherit" />
+      </div>
     }
   };
+
   return (
     <DonCommonmodal
-      title="Invest"
+      title={hasDons ? "Invest" : ""}
       variant="common"
       isOpen={true}
       size="xs"
       titleRightContent={
-        <>
-          Balance:{" "}
-          {
-            <MyBalanceInBUSD
-              onDone={setBalance}
-              poolAddress={poolAddress}
-              poolVersion={poolVersion}
-            />
-          }{" "}
-          {symbol}
-        </>
+        hasDons ? (
+          <>
+            Balance:{" "}
+            {
+              <MyBalanceInBUSD
+                onDone={setBalance}
+                poolAddress={poolAddress}
+                poolVersion={poolVersion}
+              />
+            }{" "}
+            {symbol}
+          </>
+        ) : undefined
       }
       onClose={onClose}
     >
-      <div>
-        <div className="mt-4">
-          <InvestmentInput
-            value={value}
-            disabled={isLoading}
-            currencySymbol={symbol}
-            setValue={setValue}
-            max={balance}
-          />
-
-          {poolVersion === 3 && (
-            <div className="d-flex mt-3 align-items-center justify-content-between">
-              <ReferralInput
-                value={referralCode}
-                placeholder="Enter Referral Code"
-                disabled={applied || checking}
-                onChange={(e) => setReferralCode(e.target.value.toUpperCase())}
-              />
-              <ButtonWidget
-                varaint="outlined"
-                fontSize="14px"
-                height="30px"
-                width="119px"
-                onClick={handleApplyClick}
-              >
-                {renderApplyButton()}
-              </ButtonWidget>
-            </div>
-          )}
-          {msg.msg && <p className="mb-1 mt-3 text-danger">{msg.msg}</p>}
-          {applied && <p className="mb-1 mt-3 text-success">Applied</p>}
-          <ThemeProvider theme={themeM}>
-            <p className="mb-1 mt-3">Slippage Tolerance</p>
-            <div className="d-flex align-items-center">
-              {["5", "10", "15"].map((item) => {
-                return (
-                  <Chip
-                    size="medium"
-                    className="mr-2"
-                    label={`${new BigNumber(item).dividedBy(10).toFixed(2)}%`}
-                    onClick={() => setSlippage(item)}
-                    variant={slippage === item ? "default" : "outlined"}
-                    color="primary"
-                  />
-                );
-              })}
-            </div>
-          </ThemeProvider>
-        </div>
-        <div className="d-flex justify-content-between mt-3">
-          <ButtonWrapper>
-            <ButtonWidget
-              varaint="contained"
-              fontSize="14px"
-              containedVariantColor="lightYellow"
-              height="30px"
-              width="119px"
-              disabled={!value || isLoading}
-              onClick={handleInvest}
-            >
-              {renderButtonText()}
-            </ButtonWidget>
-          </ButtonWrapper>
-
-          <ButtonWrapper className="mr-0">
-            <ButtonWidget
-              varaint="outlined"
-              fontSize="14px"
-              height="30px"
-              width="119px"
-              onClick={onClose}
-            >
-              Cancel
-            </ButtonWidget>
-          </ButtonWrapper>
-        </div>
-      </div>
-      <p className="mt-4">
-        <small>
-          If you receive: "Transaction error. Exception thrown in contract
-          code", this is due to high slippage. Please try a different amount. Or
-          Change Min Slippage
-        </small>
-      </p>
+      {renderContent()}
     </DonCommonmodal>
   );
 };

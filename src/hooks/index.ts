@@ -8,3 +8,4 @@ export * from "./useAxios";
 export * from "./useStrapi";
 export * from "./useSwitchNetwork";
 export * from "./useTVL";
+export * from "./useEffectOnTabFocus";

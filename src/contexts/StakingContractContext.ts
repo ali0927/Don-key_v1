@@ -16,6 +16,7 @@ export type IStakingContractContext = {
   pendingReward: string;
   claimTokens: () => Promise<any>;
   canClaimTokens: boolean;
+  loading: boolean;
   coolOffDuration: string;
   coolOffAmount: string;
   getTierInfo: (amount: string) => Promise<ITier | null>

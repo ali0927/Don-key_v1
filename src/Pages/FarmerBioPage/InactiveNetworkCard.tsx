@@ -1,5 +1,3 @@
-import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
-import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useSwitchNetwork } from "hooks";
 import { LinkIcon, WalletIcon } from "icons";
 import { INetwork } from "interfaces";

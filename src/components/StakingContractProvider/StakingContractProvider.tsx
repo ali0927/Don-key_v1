@@ -67,9 +67,11 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     apy: 0,
     tier: 0,
   });
+  const [loading, setLoading] = useState(false);
   const [pendingReward, setPendingReward] = useState("0");
   const [investedAmount, setInvestedAmount] = useState("0");
   const fetchState = async () => {
+    setLoading(true);
     const accounts = await web3.eth.getAccounts();
     const userInfo = await stakingContract.methods.userInfo(accounts[0]).call();
     let totalDons = new BigNumber(0);
@@ -117,6 +119,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     setCoolOffTime(userInfo.coolOffPeriod);
     setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
     setCoolOffAmount(toEther(userInfo.coolOffAmount));
+    setLoading(false);
   };
 
   const checkCanClaimTokens = useCallback(() => {
@@ -196,6 +199,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       holdingDons: holdedDons,
       refetch: fetchState,
       investedAmount,
+      loading,
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
       stakingAddress: DonStakingAddress,
       stake,
@@ -207,6 +211,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     isStaked,
     stakedDon,
     pendingReward,
+    loading,
     coolOffTime,
     canClaimTokens,
     isInCoolOffPeriod,
