@@ -42,6 +42,7 @@ import { useHistory } from "react-router-dom";
 import { hideAddress } from "components/InvestorListTable/InvestorListTable";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { gql, useQuery } from "@apollo/client";
+import { Footer } from "components/Footer";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -480,6 +481,7 @@ export const MyReferrals = () => {
           </Container>
         </div>
       </GridBackground>
+      <Footer  />
     </div>
   );
 };

@@ -129,9 +129,7 @@ function NavBar(props: INavBarProps) {
   const history = useHistory();
 
   const getLogo = React.useCallback(() => {
-    if (variant === "builder") {
-      return <LogoWhite />;
-    }
+   
     return <Logo />;
   }, [variant]);
 
