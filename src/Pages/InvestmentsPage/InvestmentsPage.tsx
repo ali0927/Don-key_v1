@@ -40,15 +40,21 @@ import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import { gql, useQuery } from "@apollo/client";
+import { useStakingContract } from "hooks";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
   fontSize: "45px",
-  fontStyle: "normal",
   fontWeight: 800,
-  letterSpacing: "0em",
-  textAlign: "left",
   color: "#070602",
+  marginBottom: 50,
+});
+
+const TotalInvestmentTitle = styled.p({
+  fontFamily: "Poppins",
+  fontSize: "18px",
+  fontWeight: 600,
+  marginBottom: 0,
 });
 
 export const ZeroInvestmentBox = styled.div({
@@ -149,12 +155,20 @@ const ALL_FARMER_QUERY = gql`
   }
 `;
 
+
+
+const TotalInvestedAmount = styled.span`
+  font-size: 50px;
+  font-weight: 700;
+`;
+
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
   const [poolAddresses, setPoolAddresses] = useState<
     { name: string; poolAddress: string; initialInvestmentinUSD: string }[]
   >([]);
   const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
+  const {investedAmount} = useStakingContract();
   const { data } = useQuery(ALL_FARMER_QUERY);
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
@@ -308,8 +322,10 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
-                  {chainId === NetworksMap.BSC && <StakingInfo />}
-                  <div className="d-flex px-2">
+                  <TotalInvestmentTitle>Total investment</TotalInvestmentTitle>
+                  <div className="d-flex align-items-center justify-content-between mb-5 flex-wrap">
+                    <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
+                    <div className="d-flex px-2 flex-wrap">
                     <NetworkButton
                       active={strategyNetworkFilter === BSCChainId}
                       onClick={() => setStrategyNetworkFilter(BSCChainId)}
@@ -323,6 +339,9 @@ export const InvestmentsPage = () => {
                       Polygon
                     </NetworkButton>
                   </div>
+                 </div>
+                  {chainId === NetworksMap.BSC && <StakingInfo />}
+               
                 </Col>
               </Row>
             </Container>

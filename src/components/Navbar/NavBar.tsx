@@ -211,7 +211,6 @@ function NavBar(props: INavBarProps) {
                   <ButtonComponent
                     onClick={() => history.push("/dashboard")}
                     variant="colorBlack btn-outline position-relative px-4"
-                    // className="mt-4"
                   >
                     DAPP
                   </ButtonComponent>

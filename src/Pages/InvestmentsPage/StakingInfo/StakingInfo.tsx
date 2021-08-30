@@ -9,22 +9,19 @@ import BigNumber from "bignumber.js";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
 
-const TotalInvestedAmount = styled.span`
-  font-size: 50px;
-  font-weight: 700;
-`;
+
 
 const StakingCard = styled.div`
   background-color: #fff;
-  border-radius: 4px;
-  padding: 40px 0;
+  border-radius: 20px;
+  padding: 30px 40px 30px 40px;
 `;
 
 const StakingCol = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  &:not(:last-child):after {
+  &:nth-last-child(n+3):after {
     content: "";
     display: block;
     width: 1px;
@@ -56,8 +53,9 @@ const StakingSubtitle = styled.p`
 `;
 
 export const StyledButton = styled(ButtonWidget)`
-  width: initial;
-  font-size: 14px;
+  width: 132px;
+  font-size: 12px;
+  border-radius: 10px !important;
   &:disabled {
     ${(props) => {
       if (
@@ -72,7 +70,7 @@ export const StyledButton = styled(ButtonWidget)`
 
 const HarvestCard = styled.div`
   background-color: #222;
-  border-radius: 4px;
+  border-radius: 20px;
   padding: 40px 0;
   color: #fff;
   display: flex;
@@ -124,7 +122,6 @@ export const StakingInfo = () => {
     stakedDon,
     tier,
     pendingReward,
-    investedAmount,
     isStaked,
     harvest,
     coolOffAmount,
@@ -162,8 +159,8 @@ export const StakingInfo = () => {
         <>
           {" "}
           <div>
-            <StakingTitle>Don Rewards</StakingTitle>
-            <StakingSubtitle>{pendingReward} DON</StakingSubtitle>
+            <StakingTitle>DON Rewards available</StakingTitle>
+            <StakingSubtitle>{pendingReward}</StakingSubtitle>
           </div>
           <StyledButton
             varaint="contained"
@@ -212,9 +209,9 @@ export const StakingInfo = () => {
             onClick={() => setisModalOpen(true)}
             varaint="contained"
             disabled={isInCoolOffPeriod}
-            className="py-1 px-3 mb-2"
+            className="py-1 px-3 mb-3"
           >
-            Stake
+            Stake Don
           </StyledButton>
 
           <StyledButton
@@ -223,7 +220,7 @@ export const StakingInfo = () => {
             onClick={openUnstake}
             className="py-1 px-3 rounded"
           >
-            Unstake
+            Unstake DON
           </StyledButton>
         </div>
       );
@@ -232,7 +229,9 @@ export const StakingInfo = () => {
 
   return (
     <>
-      <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
+  
+   
+     
       {isStakeModalOpen && (
         <AcceleratedAPYModal
           open={isStakeModalOpen}
@@ -241,24 +240,25 @@ export const StakingInfo = () => {
       )}
       {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
       <div className="row mt-3 mb-4">
-        <div className="col-md-8">
-          <StakingCard className="row">
-            <StakingCol className="col-md-3">
+        <div className="col-lg-7 mb-2">
+
+        <StakingCard className="d-flex flex-wrap">
+            <StakingCol className="col-lg-3">
               <StakingTitle>DON Staked</StakingTitle>
-              <StakingSubtitle>{stakedDon} DON</StakingSubtitle>
+              <StakingSubtitle>{stakedDon}</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-md-3">
+            <StakingCol className="col-lg-3">
               <StakingTitle>Tier</StakingTitle>
               <StakingSubtitle>{tier.donRequired} DON</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-md-3">
+            <StakingCol className="col-lg-3">
               <StakingTitle>Extra APY</StakingTitle>
               <StakingSubtitle>{tier.apy} %</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-md-3">{showButtonsOrTimer()}</StakingCol>
+            <StakingCol className="col-lg-3">{showButtonsOrTimer()}</StakingCol>
           </StakingCard>
         </div>
-        <div className="col-md-4">
+        <div className="col-lg-5 mb-2">
           <HarvestCard>{renderHarvestCard()}</HarvestCard>
         </div>
       </div>
