@@ -47,15 +47,9 @@ const HeadingTitle = styled.p({
   fontSize: "45px",
   fontWeight: 800,
   color: "#070602",
-  marginBottom: 50,
+  marginBottom: 30,
 });
 
-const TotalInvestmentTitle = styled.p({
-  fontFamily: "Poppins",
-  fontSize: "18px",
-  fontWeight: 600,
-  marginBottom: 0,
-});
 
 export const ZeroInvestmentBox = styled.div({
   // minHeight: 00,
@@ -158,6 +152,7 @@ const ALL_FARMER_QUERY = gql`
 
 
 const TotalInvestedAmount = styled.span`
+  font-family: ObjectSans-Bold;
   font-size: 50px;
   font-weight: 700;
 `;
@@ -322,7 +317,6 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
-                  <TotalInvestmentTitle>Total investment</TotalInvestmentTitle>
                   <div className="d-flex align-items-center justify-content-between mb-5 flex-wrap">
                     <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
                     <div className="d-flex px-2 flex-wrap">

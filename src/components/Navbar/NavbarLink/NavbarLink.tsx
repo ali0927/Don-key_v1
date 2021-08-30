@@ -5,8 +5,8 @@ import clsx from "clsx";
 import styled from "styled-components";
 
 const styles = `
-font-weight: 400;
-font-family: Open Sans, sans-serif;
+  font-weight: 400;
+  font-family: Poppins;
   font-size: 16px;
   line-height: 19px;
   display: -webkit-flex;
@@ -20,13 +20,15 @@ font-family: Open Sans, sans-serif;
   cursor: pointer;
   word-spacing: 0pt;
   letter-spacing: 1pt;
+  position: relative;
   @media (min-width: 992px) {
     padding-left: 0.5rem;
   }
-  :hover{
-    transform: scale(1.15);
-    transform: translate(-2.2px, 2.2px);
-  }
+
+  // :hover {
+  //   animation: move 1s;
+  //   border-bottom: 3px solid #222222;
+  // }
 
   @media (min-width: 800px) {
     padding-right: 3rem !important;
@@ -56,6 +58,7 @@ export const NavbarLink = ({
 
   const className = clsx("pr-md-5", {
     active: pathname === to,
+    "nav-item": pathname !== to,
     colorBlack: linkColor === "black",
     "text-white": linkColor === "white",
   });

@@ -170,6 +170,31 @@ button:disabled.btn-outline{
   right: 3%;
 }
 
+
+
+@keyframes move {
+  0%   {
+    border: 2px solid #222222;
+    width: calc(50% - 3em);
+  }
+  50%  {
+    border: 2px solid #222222;
+    width: calc(100% - 3em);
+  }
+  100% {
+    border: 0px solid #222222;
+    width: 0%;
+  }
+}
+
+.navbar-nav .nav-item:hover:after {
+  position: absolute;
+  content: "";
+  bottom: -6px;
+  background: #222222;
+  animation: move 1s;
+}
+
 .navbar-nav .active:before {
   border: 2px solid #222222;
   position: absolute;
@@ -197,7 +222,7 @@ button:disabled.btn-outline{
   display: flex;
   align-items: center;
   color: $paracolorBlack;
-justify-content: center;
+  justify-content: center;
   border: 1px solid #222222;
   box-sizing: border-box;
   border-radius: 10px;
