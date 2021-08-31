@@ -27,6 +27,7 @@ import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { gql, useQuery } from "@apollo/client";
 import { sortBy } from "lodash";
+import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 
 const FarmerTitle = styled.p({
   fontSize: "45px",
@@ -225,8 +226,7 @@ export const DashboardPage = () => {
           </CustomizedContainer>
         )}
       </Body>
-
-      <Footer />
+      <Footer /> 
     </>
   );
 };

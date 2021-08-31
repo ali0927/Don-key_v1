@@ -21,7 +21,7 @@ export const Web3Provider: React.FC<{
           if (web3instance) {
             setWeb3(web3instance);
           }
-        } catch (e) {
+        } catch (e:any) {
           setError(e);
         }
       })();

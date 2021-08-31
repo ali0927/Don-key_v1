@@ -17,6 +17,8 @@ export const StakingBSCAddress = "0xe2451a1F50Dc718eF2b37D2C29539121B18b9d24";
 export const StakingEthAddress = "0x21A05270dCeCB199C8E41E8297c15e6e1328aE48";
 export const WBNBAddress = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c";
 export const USDTAddressEth = "0xdac17f958d2ee523a2206206994597c13d831ec7";
+export const DONBSCbridge = "0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255";
+export const DONETHbridge = "0x533e3c0e6b48010873B947bddC4721b1bDFF9648";
 const ReferralSystemAddress = "0x7e9Aa7Ecb1C2c2C3d0Ed455cE9b86B86a811BBd8";
 const DonkeyPriceFeedAddress = "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6";
 let ibusdContract: Contract | null = null;
@@ -37,6 +39,9 @@ export const getBSCDon = async (web3: Web3) => {
   return await getERCContract(web3, DONTokenAddressBSC);
 };
 
+export const getETHDon = async (web3: Web3) => {
+  return await getERCContract(web3, DONTokenAddressEth);
+};
 export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
   try {
     const tokenAddress = await (
@@ -49,6 +54,14 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
     return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
   }
 };
+//get DON BSC bridge contract
+export const getDONBSCbridgeContract = async (web3: Web3) => {
+  const json = await import("JsonData/DONBSCbridge.json");
+  return new web3.eth.Contract(json.abi as any, DONBSCbridge);
+};
+
+//you only need to transfer DON to ETH bridge contract
+
 export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   const tokenAddress = await getTokenAddress(web3, poolAddress);
   return getERCContract(web3, tokenAddress);
