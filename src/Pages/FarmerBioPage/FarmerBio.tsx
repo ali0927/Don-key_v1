@@ -60,26 +60,29 @@ const TypographyShare = styled.div`
 `;
 
 const ShareButton = styled.button`
-  background-color: transparent;
+  background: linear-gradient(146.14deg, #35424B 0%, #0B0E12 100%);
+  box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08), 4px 4px 18px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
   border: 2px solid #000;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
-  font-weight: bold;
-  font-size: 14px;
   padding: 14px 30px;
   position: relative;
   background-color: #fff037;
+  font-family: Poppins;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 21px;
+  color: #ffffff;
+  :hover {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(146.14deg, #606060 0%, #0B0E12 100%);
+    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08), 4px 4px 18px rgba(0, 0, 0, 0.5);
+  }
+ 
 `;
 
 
-const StyledShareIcon = styled(ShareandEarnIcon)`
-  position: absolute;
-  top: -16px;
-  right: 35px;
-  background-color: #fff037;
-  padding: 4px;
-  transform: scale(1.2);
-`;
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
@@ -222,9 +225,10 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {true ? (
+          
+              {pool_version === 3 ? (
                 <ShareButton onClick={handleShareClick}>
-                  <StyledShareIcon />
+                  <ShareandEarnIcon className="mr-2" color="#fff"/>
                   Share and Earn
                 </ShareButton>
               ) : (
