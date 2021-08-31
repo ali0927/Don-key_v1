@@ -56,3 +56,5 @@ export * from "./ShareArrowIcon";
 export * from "./InvestmentIcon";
 export * from "./ProfitIcon";
 export * from "./LPShareIcon";
+export * from "./LeftSliderArrow";
+export * from "./RightSliderArrow";

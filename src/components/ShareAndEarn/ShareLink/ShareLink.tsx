@@ -6,6 +6,7 @@ import { HyperLinkIcon, TwitterIcon, TelegramIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
+import { Slider } from "./Slider/Slider";
 
 const TextOnInput = styled.div`
   position: relative;
@@ -40,6 +41,7 @@ const Input = styled.input`
   height: 50px;
   width: 100%;
   border: 1px solid #3e3e3e !important;
+  border-radius: 10px;
   outline: 0px !important;
   padding-left: 10px;
   :focus-visible {
@@ -93,7 +95,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           style={{ alignItems: "flex-end" }}
         >
           <div className="col-lg-8 mb-2">
-            <TextOnInput className="mt-5">
+            <TextOnInput className="mt-3">
               <Label htmlFor="inputText">Your Sharable Link</Label>
               <Input  type="text" value={props.link} />
             </TextOnInput>
@@ -126,10 +128,11 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         </div>
 
         <div className="mt-4">
-          <img src={props.imageUrl} alt="Image not found" />
+          {/* <img src={props.imageUrl} alt="Image not found" /> */}
+          <Slider poolAddress={props.poolAddress} apy={props.apy} farmerName={props.farmerName} strategyName={props.strategyName}/>
         </div>
 
-        <div className="row justify-content-center mt-5">
+        <div className="row justify-content-center mt-2">
           <div className="col-lg-2" />
           <div className="col-lg-4 mb-2">
             <TwitterShareButton className="w-100" url={props.link} title={"Check out my investment on Don-key"}>

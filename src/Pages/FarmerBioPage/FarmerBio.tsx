@@ -222,7 +222,7 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {pool_version === 3 ? (
+              {true ? (
                 <ShareButton onClick={handleShareClick}>
                   <StyledShareIcon />
                   Share and Earn
@@ -265,6 +265,10 @@ export const FarmerBio = ({
           link={shortLink}
           open={openShareLink}
           imageUrl={imageUrl}
+          farmerName={name}
+          strategyName={strategyName}
+          poolAddress={poolAddress}
+          apy={apy}
           onClose={() => setShareLink(false)}
         />
       )}

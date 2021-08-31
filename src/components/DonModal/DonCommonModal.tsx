@@ -9,6 +9,7 @@ import {
 import styled from "styled-components";
 import produce from "immer";
 import { set } from "lodash";
+import { useDialogStyles } from "./styles/useDialogStyles";
 
 const CutomizeModalHeading = styled.h4`
   font-size: 25px;
@@ -20,9 +21,11 @@ const CutomizeModalHeading = styled.h4`
 
 
 const StyledDialog = (withStyles({
+
   paperWidthMd: {
     maxWidth: "761px",
   },
+  papper:{}
 })(Dialog));
 
 export const DonCommonmodal = ({
@@ -50,6 +53,7 @@ export const DonCommonmodal = ({
   children: React.ReactNode;
   rounded?: boolean;
 }) => {
+  const classes = useDialogStyles();
   const modalInnerContent = () => {
     if (variant === "common") {
       return (
@@ -77,20 +81,20 @@ export const DonCommonmodal = ({
     );
   };
 
-   const getPaperProps = () => {
-     return produce(PaperProps || {}, draft=> {
-       if(rounded){
-         return set(draft, "style.borderRadius", 20);
-       }
-     })
-   }
+  //  const getPaperProps = () => {
+  //    return produce(PaperProps || {}, draft=> {
+  //      if(rounded){
+  //        return set(draft, "style.borderRadius", 20);
+  //      }
+  //    })
+  //  }
 
   return (
     <StyledDialog
       open={isOpen}
       style={style}
       onClose={onClose}
-      PaperProps={getPaperProps()}
+      classes={{paper: classes.paper}}
       fullWidth={true}
       maxWidth={size}
       

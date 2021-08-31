@@ -23,7 +23,7 @@ const CotainedVariant = styled.button`
   font-weight: 400;
   text-align: center;
   border: 0px;
-  border-radius: 5px;
+  border-radius: 10px;
   ${(props: IContainedButton) => getContainedCSS(props).default};
   :hover {
     ${(props: IContainedButton) => getContainedCSS(props).hover};
