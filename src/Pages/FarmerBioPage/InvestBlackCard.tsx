@@ -130,10 +130,11 @@ export const InvestBlackCard = ({
     label: string,
     value: string | React.ReactNode,
     icon: React.ReactNode,
-    color: "black" | "white"
+    color: "black" | "white",
+    col:number,
   ) => {
     return label === "Profit/Loss" ? (
-      <Columns className="col d-flex   flex-column align-items-center justify-content-between">
+      <Columns className={"col-md-"+ col +" d-flex  flex-column align-items-center justify-content-between"}>
         <OverlayTrigger
           placement="right"
           delay={{ show: 250, hide: 400 }}
@@ -154,7 +155,7 @@ export const InvestBlackCard = ({
         <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
     ) : (
-      <Columns className="col d-flex   flex-column align-items-center justify-content-between">
+      <Columns className={"col-md-"+col+" d-flex   flex-column align-items-center justify-content-between"}>
         <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
          {icon} {label}
         </ColumnsTitle1>
@@ -334,7 +335,8 @@ export const InvestBlackCard = ({
             />
           ),
           <InvestmentIcon className="mr-1" />,
-          "white"
+          "white",
+          5
         )}
 
         {getSecondCardColumns(
@@ -344,13 +346,15 @@ export const InvestBlackCard = ({
             poolAddress={poolAddress}
           />,
           <ProfitIcon className="mr-1" />,
-          "white"
+          "white",
+          4
         )}
         {getSecondCardColumns(
           "My share",
           Number(myShare).toFixed(2) + " %",
           <LPShareIcon className="mr-1" />,
-          "white"
+          "white",
+          3
         )}
       </div>
       {showInvestmentPopup && (

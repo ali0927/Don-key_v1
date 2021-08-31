@@ -95,7 +95,7 @@ const FirstCardRow = styled.div``;
 export const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
   height: 70px;
-  padding: 5px 13px;
+  margin: 5px -5px;
   :last-child {
     border-right: none;
   }
