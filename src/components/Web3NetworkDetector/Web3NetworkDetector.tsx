@@ -33,7 +33,7 @@ export const Web3NetworkDetector = () => {
 
   const web3 = useWeb3();
   async function apiCall() {
-    let network = await web3.eth.net.getId();
+    let network = await web3.eth.getChainId();
 
     setChainId(network);
   }

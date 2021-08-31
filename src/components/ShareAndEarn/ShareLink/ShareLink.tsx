@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { DonCommonmodal } from "components/DonModal";
 import { IShareLinkProps } from "./interfaces/IShareLinkProps";
 import styled from "styled-components";
@@ -7,6 +7,14 @@ import { ButtonWidget } from "components/Button";
 import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
+import { LinkImage } from "../LinkImage";
+import { formatNum } from "Pages/FarmerBioPage/DetailTable";
+import { useTVL } from "hooks";
+import { getShareUrl, getUserReferralCode } from "helpers";
+import { useWeb3 } from "don-components";
+import html2canvas from "html2canvas";
+import { api, uuidv4 } from "don-utils";
+import { Spinner } from "react-bootstrap";
 
 const TextOnInput = styled.div`
   position: relative;
@@ -68,6 +76,8 @@ const TelegramButton = styled(ButtonWidget)`
 export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
+  const { tvl } = useTVL(props.poolAddress);
+
   React.useEffect(() => {
     if (openTooltip) {
       setTimeout(() => {
@@ -79,6 +89,38 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const handleCopy = () => {
     navigator.clipboard.writeText(props.link);
     setOpenTooltip(true);
+  };
+
+  const [loading, setLoading] = useState(false);
+
+  const handleImageGenerate = async () => {
+    setLoading(true);
+
+    const element = document.querySelector("#shareEarnImage") as HTMLElement;
+    if (element) {
+      const canvas = await html2canvas(element, {
+        useCORS: true,
+        scrollY: 0,
+        logging: process.env.NODE_ENV === "development",
+        removeContainer: true,
+      });
+      const dataUrl = canvas.toDataURL("image/jpeg");
+      const res: Response = await fetch(dataUrl);
+      const blob: Blob = await res.blob();
+
+      const file = new File([blob], "file-" + uuidv4() + ".png", {
+        type: "image/jpeg",
+      });
+      const formData = new FormData();
+
+      formData.append("code", props.code);
+      formData.append("image", file);
+
+      const result = await api.put("/api/v2/shortener", formData);
+      const shortUrl = getShareUrl(result.data.code);
+      console.log(shortUrl, "Worked");
+      setLoading(false);
+    }
   };
 
   return (
@@ -97,7 +139,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-8 mb-2">
             <TextOnInput className="mt-3">
               <Label htmlFor="inputText">Your Sharable Link</Label>
-              <Input  type="text" value={props.link} />
+              <Input type="text" value={props.link} />
             </TextOnInput>
           </div>
 
@@ -120,7 +162,14 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
                   containedVariantColor="lightYellow"
                   onClick={handleCopy}
                 >
-                  <HyperLinkIcon /> Copy Link
+                  {loading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    <>
+                      {" "}
+                      <HyperLinkIcon /> Copy Link
+                    </>
+                  )}
                 </ButtonWidget>
               </span>
             </Tooltip>
@@ -128,14 +177,23 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         </div>
 
         <div className="mt-4">
-          {/* <img src={props.imageUrl} alt="Image not found" /> */}
-          <Slider poolAddress={props.poolAddress} apy={props.apy} farmerName={props.farmerName} strategyName={props.strategyName}/>
+          <Slider
+            tvl={tvl}
+            apy={props.apy}
+            farmerName={props.farmerName}
+            strategyName={props.strategyName}
+            onChange={(image) => {handleImageGenerate()}}
+          />
         </div>
 
         <div className="row justify-content-center mt-2">
           <div className="col-lg-2" />
           <div className="col-lg-4 mb-2">
-            <TwitterShareButton className="w-100" url={props.link} title={"Check out my investment on Don-key"}>
+            <TwitterShareButton
+              className="w-100"
+              url={props.link}
+              title={"Check out my investment on Don-key"}
+            >
               <TwitterButton
                 varaint="contained"
                 height={"50px"}
@@ -165,6 +223,15 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-2" />
         </div>
       </DonCommonmodal>
+      <LinkImage
+        farmerData={{
+          farmerName: props.farmerName,
+          imageUrl: "",
+          strategyName: props.strategyName,
+        }}
+        tvl={`$${formatNum(tvl)}`}
+        apy={props.apy}
+      />
     </>
   );
 };

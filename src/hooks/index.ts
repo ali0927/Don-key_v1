@@ -9,3 +9,4 @@ export * from "./useStrapi";
 export * from "./useSwitchNetwork";
 export * from "./useTVL";
 export * from "./useEffectOnTabFocus";
+export * from "./useDidUpdate";

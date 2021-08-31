@@ -60,8 +60,9 @@ const TypographyShare = styled.div`
 `;
 
 const ShareButton = styled.button`
-  background: linear-gradient(146.14deg, #35424B 0%, #0B0E12 100%);
-  box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08), 4px 4px 18px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(146.14deg, #35424b 0%, #0b0e12 100%);
+  box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
+    4px 4px 18px rgba(0, 0, 0, 0.5);
   border-radius: 10px;
   border: 2px solid #000;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -76,12 +77,12 @@ const ShareButton = styled.button`
   line-height: 21px;
   color: #ffffff;
   :hover {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), linear-gradient(146.14deg, #606060 0%, #0B0E12 100%);
-    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08), 4px 4px 18px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+      linear-gradient(146.14deg, #606060 0%, #0b0e12 100%);
+    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
+      4px 4px 18px rgba(0, 0, 0, 0.5);
   }
- 
 `;
-
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -125,6 +126,7 @@ export const FarmerBio = ({
     setShareLink(true);
     setShortLink(short);
   };
+  const [code, setCode] = useState("");
   const web3 = useWeb3();
   const fetchInfoFromApi = async () => {
     const accounts = await web3.eth.getAccounts();
@@ -137,6 +139,7 @@ export const FarmerBio = ({
     );
     if (response.data) {
       setShortLink(getShareUrl(response.data.code));
+      setCode(response.data.code);
       setImageUrl(response.data.image);
     }
   };
@@ -203,12 +206,6 @@ export const FarmerBio = ({
                               ></TwitterIcon>
                             )}
                           </div>
-                          {/* <div>
-                          <TelegramIcon
-                            fill={"#000"}
-                            handle={telegram || "#"}
-                          ></TelegramIcon>
-                        </div> */}
                         </div>
                       </div>
 
@@ -225,10 +222,9 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-          
               {pool_version === 3 ? (
                 <ShareButton onClick={handleShareClick}>
-                  <ShareandEarnIcon className="mr-2" color="#fff"/>
+                  <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
                 </ShareButton>
               ) : (
@@ -273,6 +269,7 @@ export const FarmerBio = ({
           strategyName={strategyName}
           poolAddress={poolAddress}
           apy={apy}
+          code={code}
           onClose={() => setShareLink(false)}
         />
       )}

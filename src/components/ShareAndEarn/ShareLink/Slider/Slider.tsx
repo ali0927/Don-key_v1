@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import Banner2 from "./images/Banner2.png";
 import Banner3 from "./images/Banner3.png";
 import Banner4 from "./images/Banner4.png";
@@ -7,15 +7,10 @@ import Banner7 from "./images/Banner7.png";
 import Banner1 from "./images/Banner1.jpeg";
 import Banner5 from "./images/Banner5.jpeg";
 import styled from "styled-components";
-import clsx from 'clsx';
+import clsx from "clsx";
 import SlickSlider from "react-slick";
-import {LeftSliderArrow, RightSliderArrow} from "icons";
-import { useWeb3 } from "don-components";
-import {getTotalPoolValue,getTokenAddress, getTokenPrice, toEther,getShareUrl,getUserReferralCode,signUpAsReferral} from "helpers";
-import BigNumber from "bignumber.js";
-import html2canvas from "html2canvas";
-import { api, uuidv4 } from "don-utils"
-import { useReferralContext } from "contexts/ReferralContext";
+import { LeftSliderArrow, RightSliderArrow } from "icons";
+import { useDidUpdate } from "hooks";
 
 const BannerRoot = styled.div`
   min-height: 227px;
@@ -24,7 +19,7 @@ const BannerRoot = styled.div`
 `;
 
 const BannerImage = styled.img`
-    width: 100%;
+  width: 100%;
 `;
 
 const Heading = styled.h2`
@@ -37,22 +32,26 @@ const Heading = styled.h2`
 const SubHeading = styled.p`
   font-family: Poppins;
   font-size: 14px;
-  font-weight: 400; 
-  color: #FFFFFF;
+  font-weight: 400;
+  color: #ffffff;
   margin-bottom: 0px;
-`
+`;
 
 const Value = styled(SubHeading)`
-    font-weight: 500; 
+  font-weight: 500;
 `;
 
 const BannerContentRoot = styled.div`
-   background-image: linear-gradient(to left, rgba(255,255,255,0.1) 0, #000000 100%);
-   top: 0;
-   position: absolute;
-   height: 100%;
-   width: 100%;
-   border-radius: 15px;
+  background-image: linear-gradient(
+    to left,
+    rgba(255, 255, 255, 0.1) 0,
+    #000000 100%
+  );
+  top: 0;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
 `;
 
 const BannerLeftFooter = styled.div`
@@ -63,14 +62,13 @@ const BannerLeftFooter = styled.div`
 const HighLight = styled.div`
   width: 39px;
   height: 22px;
-  background: #FDD700;
+  background: #fdd700;
   font-family: Poppins;
   font-size: 12px;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-
 `;
 
 const Divider = styled.div`
@@ -80,216 +78,174 @@ const Divider = styled.div`
 `;
 
 const Wordhighlight = styled.span`
-   background: #FDD700;
+  background: #fdd700;
 `;
 
 const CutomSlickSlider = styled(SlickSlider)`
-    .selected {
-      border: 4px solid #FED700;
-      border-radius: 10px;
-    }
+  .selected {
+    border: 4px solid #fed700;
+    border-radius: 10px;
+  }
 `;
 
 const ThumbDiv = styled.div`
-    width: 72px !important;
-    height: 72px;
-    border: 1px solid #5C5C5C;
-    border-radius: 10px;
-    cursor: pointer;
-    overflow: hidden;
+  width: 72px !important;
+  height: 72px;
+  border: 1px solid #5c5c5c;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
 `;
 
 const LIImage = styled.img`
-    height: 100%;
-    object-fit: cover;
+  height: 100%;
+  object-fit: cover;
 `;
 
 const FooterText = styled.p`
-   font-family: Roboto;
-   font-size: 16px;
-   font-weight: 500;
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 500;
 `;
+const banners = [
+  Banner1,
+  Banner2,
+  Banner3,
+  Banner4,
+  Banner5,
+  Banner6,
+  Banner7,
+];
+const settings = {
+  dots: false,
+  infinite: false,
+  speed: 500,
+  slidesToShow: 5,
+  initialSlide: 0,
+};
 
-export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: string; strategyName: string}> = (props) => {
-    const {poolAddress, apy, farmerName, strategyName} = props;
-
-    const banners = [Banner1,Banner2, Banner3, Banner4,Banner5, Banner6, Banner7];
-    const slickRef = React.useRef<SlickSlider | null>(null);
-
-    const [selectedBanner, setSelectedBanner] = useState(0);
-
-    const settings = {
-        dots: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 5,
-        initialSlide: 0,
-      };
 
 
-      const [tvl, setTvl] = useState("");
 
-  const web3 = useWeb3();
-  const fetchTvl = async () => {
-      const poolValue = await getTotalPoolValue(web3, poolAddress);
-     const tokenPrice = await getTokenPrice(
-      web3,
-      await getTokenAddress(web3, poolAddress)
-      );
-    
-           setTvl(new BigNumber(toEther(poolValue)).multipliedBy(tokenPrice).toFixed(1));
-     };
+export const Slider: React.FC<{
+  tvl: string;
+  apy: string;
+  farmerName: string;
+  strategyName: string;
+  onChange: (image: string) => void;
+}> = (props) => {
+  const { tvl, apy, farmerName, strategyName } = props;
 
-     React.useEffect(() => {
-        fetchTvl();
-     }, []);
+ 
+  const slickRef = React.useRef<SlickSlider | null>(null);
 
-     const {checkSignUp} = useReferralContext();
+  const [selectedBanner, setSelectedBanner] = useState(0);
 
-    const handleChangeImage = (index: number) => () => {
-        setSelectedBanner(index);
+
+  const handleChangeImage = (index: number) => () => {
+    setSelectedBanner(index);
+  };
+
+  const handleNext = () => {
+    if (slickRef.current) {
+      const nextSlide = selectedBanner + 1;
+      if (banners.length > nextSlide) {
+        slickRef.current.slickGoTo(nextSlide);
+        setSelectedBanner(nextSlide);
+      } else {
+        slickRef.current.slickGoTo(0);
+        setSelectedBanner(0);
+      }
     }
-
-    const createImageUrl = async() => {
-        let code = await getUserReferralCode(web3);
-        if (!code) {
-          code = uuidv4().slice(0, 7);
-          await signUpAsReferral(web3, code.toLowerCase());
-          checkSignUp();
-        }
-        const element = document.querySelector("#shareEarnImage") as HTMLElement;
-        if (element) {
-          const canvas = await html2canvas(element, {
-            useCORS: true,
-            scrollY: 0,
-            logging: process.env.NODE_ENV === "development",
-            removeContainer: true,
-          });
-          const dataUrl = canvas.toDataURL("image/jpeg");
-          const res: Response = await fetch(dataUrl);
-          const blob: Blob = await res.blob();
-                //Use this file in api call
-          const file = new File([blob], "file-" + uuidv4() + ".png", {
-             type: "image/jpeg",
-          });
-          const formData = new FormData();
-          const urlToShorten =
-            window.location.origin + window.location.pathname + `?referral=${code}`;
-          formData.append("url", urlToShorten);
-          formData.append("image", file);
-          formData.append("pool_address", props.poolAddress);
-          const result = await api.post("/api/v2/shortener", formData);
-          const shortUrl = getShareUrl(result.data.code);
-          console.log(dataUrl);
-        }
-    }
-
-    const handleNext = () => {
-        if(slickRef.current){
-            const nextSlide = selectedBanner+1;
-            if(banners.length > nextSlide){
-               slickRef.current.slickGoTo(nextSlide);
-               setSelectedBanner(nextSlide);
-            }
-            else {
-                slickRef.current.slickGoTo(0);
-                setSelectedBanner(0);
-            }
-
-        }
-    }
-
-    const handlePrev = () => {
-        if(slickRef.current){
-            const nextSlide = selectedBanner-1;
-            if(nextSlide === 0){
-               slickRef.current.slickGoTo(banners.length-1);
-               setSelectedBanner(banners.length-1);
-            }
-            else {
-                slickRef.current.slickGoTo(nextSlide);
-                setSelectedBanner(nextSlide);
-            }
-        }
-    }
-
-    return (
-        <>
-      
-              <BannerRoot id="shareEarnImage" className="position-relative">
-              
-                  <BannerImage   src={banners[selectedBanner]} alt="Banner image not found"/>
-                
-                  <BannerContentRoot >
-                
-                         <Heading>{farmerName}</Heading>
-                        <div className="row">
-                         <div className="col-lg-5">
-                            <BannerLeftFooter>
-                                <SubHeading className="mb-3">{strategyName}</SubHeading>
-                         
-
-                        <div className="row">
-                           <div className="col-5">
-                              <HighLight>TVL</HighLight>
-                             <Value className="mt-2">{"$"+tvl}</Value>
-                         </div>
-
-                         <div className="col-2 d-flex justify-content-center">
-                             <Divider/>
-                          </div>
-
-                         <div className="col-5">
-                            <HighLight>APY</HighLight>
-                            <Value className="mt-2">{apy}</Value>
-                         </div>
-                         </div>
-                         </BannerLeftFooter>
-                         </div>
-                         <div className="col-lg-7 d-flex align-items-end justify-content-center pl-0">
-                            <Value>
-                                Invest in <Wordhighlight>strategies</Wordhighlight> and make the best yield
-                            </Value>
-                     </div> 
-                   </div>
-                      
-                      
-                  </BannerContentRoot>
-                  
-                 
-                
-              </BannerRoot>
-
-        
-              
-                 <CutomSlickSlider ref={slickRef} className="mt-3" {...settings} >
-                 {banners.map((banner, index)=>{
-                       return(
-                       <div key={index}>
-                           <ThumbDiv   className={clsx({
-                            "selected": index === selectedBanner
-                        })}>
-                               <LIImage 
-                             
-                               src={banner} alt="Banner image not found" onClick={handleChangeImage(index)}/>
-                           </ThumbDiv>
-                           </div>   
-                       )
-                    
-                   })
-
-                   }
-                 </CutomSlickSlider>
-
-                 <div className="d-flex justify-content-center mt-2">
-                     <LeftSliderArrow role="button" className="mr-2" onClick={handlePrev}/>
-                     <FooterText className="ml-2 mr-2">Select the background for the banner</FooterText>
-                     <RightSliderArrow role="button" className="ml-2"  onClick={handleNext}/>
-                 </div>
-                 
-
+  };
   
 
-        </>
-    )
-}
+  const handlePrev = () => {
+    if (slickRef.current) {
+      const nextSlide = selectedBanner - 1;
+      if (nextSlide === 0) {
+        slickRef.current.slickGoTo(banners.length - 1);
+        setSelectedBanner(banners.length - 1);
+      } else {
+        slickRef.current.slickGoTo(nextSlide);
+        setSelectedBanner(nextSlide);
+      }
+    }
+  };
+
+  useDidUpdate(() => {
+    props.onChange(banners[selectedBanner]);
+  }, [selectedBanner])
+
+  return (
+    <>
+      <BannerRoot id="shareEarnImage" className="position-relative">
+        <BannerImage
+          src={banners[selectedBanner]}
+          alt="Banner image not found"
+        />
+
+        <BannerContentRoot>
+          <Heading>{farmerName}</Heading>
+          <div className="row">
+            <div className="col-lg-5">
+              <BannerLeftFooter>
+                <SubHeading className="mb-3">{strategyName}</SubHeading>
+
+                <div className="row">
+                  <div className="col-5">
+                    <HighLight>TVL</HighLight>
+                    <Value className="mt-2">{"$" + tvl}</Value>
+                  </div>
+
+                  <div className="col-2 d-flex justify-content-center">
+                    <Divider />
+                  </div>
+
+                  <div className="col-5">
+                    <HighLight>APY</HighLight>
+                    <Value className="mt-2">{apy}</Value>
+                  </div>
+                </div>
+              </BannerLeftFooter>
+            </div>
+            <div className="col-lg-7 d-flex align-items-end justify-content-center pl-0">
+              <Value>
+                Invest in <Wordhighlight>strategies</Wordhighlight> and make the
+                best yield
+              </Value>
+            </div>
+          </div>
+        </BannerContentRoot>
+      </BannerRoot>
+
+      <CutomSlickSlider ref={slickRef} className="mt-3" {...settings}>
+        {banners.map((banner, index) => {
+          return (
+            <div key={index}>
+              <ThumbDiv
+                className={clsx({
+                  selected: index === selectedBanner,
+                })}
+              >
+                <LIImage
+                  src={banner}
+                  alt="Banner image not found"
+                  onClick={handleChangeImage(index)}
+                />
+              </ThumbDiv>
+            </div>
+          );
+        })}
+      </CutomSlickSlider>
+
+      <div className="d-flex justify-content-center mt-2">
+        <LeftSliderArrow role="button" className="mr-2" onClick={handlePrev} />
+        <FooterText className="ml-2 mr-2">
+          Select the background for the banner
+        </FooterText>
+        <RightSliderArrow role="button" className="ml-2" onClick={handleNext} />
+      </div>
+    </>
+  );
+};
