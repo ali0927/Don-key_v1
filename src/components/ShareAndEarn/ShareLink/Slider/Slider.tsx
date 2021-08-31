@@ -11,16 +11,18 @@ import clsx from 'clsx';
 import SlickSlider from "react-slick";
 import {LeftSliderArrow, RightSliderArrow} from "icons";
 import { useWeb3 } from "don-components";
-import {getTotalPoolValue,getTokenAddress, getTokenPrice, toEther} from "helpers";
+import {getTotalPoolValue,getTokenAddress, getTokenPrice, toEther,getShareUrl,getUserReferralCode,signUpAsReferral} from "helpers";
 import BigNumber from "bignumber.js";
+import html2canvas from "html2canvas";
 
 const BannerRoot = styled.div`
   min-height: 227px;
+  border-radius: 15px;
+  overflow: hidden;
 `;
 
 const BannerImage = styled.img`
     width: 100%;
-    border-radius: 15px;
 `;
 
 const Heading = styled.h2`
@@ -144,6 +146,36 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
         setSelectedBanner(index);
     }
 
+    const createImageUrl = async() => {
+        let code = await getUserReferralCode(web3);
+        if (!code) {
+          code = uuidv4().slice(0, 7);
+          await signUpAsReferral(web3, code.toLowerCase());
+          checkSignUp();
+        }
+        const element = document.querySelector("#shareEarnImage") as HTMLElement;
+        if (element) {
+          const canvas = await html2canvas(element, {
+            useCORS: true,
+            scrollY: 0,
+            logging: process.env.NODE_ENV === "development",
+            removeContainer: true,
+          });
+          const dataUrl = canvas.toDataURL("image/jpeg");
+          const res: Response = await fetch(dataUrl);
+          const blob: Blob = await res.blob();
+          const formData = new FormData();
+          const urlToShorten =
+            window.location.origin + window.location.pathname + `?referral=${code}`;
+          formData.append("url", urlToShorten);
+          formData.append("image", file);
+          formData.append("pool_address", props.pool_address);
+          const result = await api.post("/api/v2/shortener", formData);
+          const shortUrl = getShareUrl(result.data.code);
+          console.log(dataUrl);
+        }
+    }
+
     const handleNext = () => {
         if(slickRef.current){
             const nextSlide = selectedBanner+1;
@@ -161,7 +193,6 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
 
     const handlePrev = () => {
         if(slickRef.current){
-      
             const nextSlide = selectedBanner-1;
             if(nextSlide === 0){
                slickRef.current.slickGoTo(banners.length-1);
@@ -177,9 +208,9 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
     return (
         <>
       
-              <BannerRoot className="position-relative">
-
-                  <BannerImage src={banners[selectedBanner]} alt="Banner image not found"/>
+              <BannerRoot id="shareEarnImage" className="position-relative">
+              
+                  <BannerImage   src={banners[selectedBanner]} alt="Banner image not found"/>
                 
                   <BannerContentRoot >
                 
@@ -216,7 +247,7 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
                       
                       
                   </BannerContentRoot>
-                 
+                  
                  
                 
               </BannerRoot>
