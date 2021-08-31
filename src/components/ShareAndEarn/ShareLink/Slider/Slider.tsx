@@ -14,6 +14,8 @@ import { useWeb3 } from "don-components";
 import {getTotalPoolValue,getTokenAddress, getTokenPrice, toEther,getShareUrl,getUserReferralCode,signUpAsReferral} from "helpers";
 import BigNumber from "bignumber.js";
 import html2canvas from "html2canvas";
+import { api, uuidv4 } from "don-utils"
+import { useReferralContext } from "contexts/ReferralContext";
 
 const BannerRoot = styled.div`
   min-height: 227px;
@@ -142,6 +144,8 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
         fetchTvl();
      }, []);
 
+     const {checkSignUp} = useReferralContext();
+
     const handleChangeImage = (index: number) => () => {
         setSelectedBanner(index);
     }
@@ -164,12 +168,16 @@ export const Slider: React.FC<{poolAddress: string; apy: string, farmerName: str
           const dataUrl = canvas.toDataURL("image/jpeg");
           const res: Response = await fetch(dataUrl);
           const blob: Blob = await res.blob();
+                //Use this file in api call
+          const file = new File([blob], "file-" + uuidv4() + ".png", {
+             type: "image/jpeg",
+          });
           const formData = new FormData();
           const urlToShorten =
             window.location.origin + window.location.pathname + `?referral=${code}`;
           formData.append("url", urlToShorten);
           formData.append("image", file);
-          formData.append("pool_address", props.pool_address);
+          formData.append("pool_address", props.poolAddress);
           const result = await api.post("/api/v2/shortener", formData);
           const shortUrl = getShareUrl(result.data.code);
           console.log(dataUrl);
