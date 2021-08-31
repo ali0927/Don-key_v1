@@ -38,11 +38,7 @@ export const FarmerStrategies = ({
         <Container>
           <Row>
             <Col sm={12}>
-              <StrategyTableForInvestor
-                poolAddress={farmer.poolAddress}
-                strategies={farmer.strategies}
-              />
-              <DescriptionTitle>
+            <DescriptionTitle>
                 {farmer.strategies[0].name || "Description"}
               </DescriptionTitle>
               <p style={{ fontSize: 15 }}>
@@ -54,7 +50,11 @@ export const FarmerStrategies = ({
                   }
                 />
               </p>
-              <div className="d-flex justify-content-center">
+              <StrategyTableForInvestor
+                poolAddress={farmer.poolAddress}
+                strategies={farmer.strategies}
+              />
+              <div className="d-flex justify-content-center mb-3">
                 <img
                   src={farmer.strategies[0].strategyImage.url}
                   className="img-fluid"
