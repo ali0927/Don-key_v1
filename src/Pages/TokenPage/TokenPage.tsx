@@ -17,7 +17,9 @@ import React, { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
+import { BoostButton } from "./BoostButton";
 import { StrategyInfo } from "./StrategyInfo";
+
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
   padding-bottom: 3rem;
@@ -105,6 +107,8 @@ const TokenInfoQuery = gql`
   }
 `;
 
+
+
 const sortStrategies = (list: any[]) => {
   return sortBy(list, (item) => {
     const risk = item.strategy.risk.Title.toLowerCase();
@@ -126,8 +130,11 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
-export const TokenPage = () => {
+export const TokenPage= () => {
+  const boostStrategies = ["wbnb", "cake","busd"];
   const { token } = useParams<{ token: string }>();
+  const isBoost = boostStrategies.indexOf(token) > -1;
+
 
   const { data, loading } = useQuery(TokenInfoQuery, {
     variables: {
@@ -166,20 +173,33 @@ export const TokenPage = () => {
       <Section>
         <div className="container">
           <div className="row">
-            <div className="col-md-8">
+            <div className="col-md-12">
               <StyledLink to="/dashboard">
                 <BackArrow /> <span className="ml-2">Back</span>
               </StyledLink>
               <Title className="mb-5">Strategy Risk Level</Title>
               <Subtitle>Description</Subtitle>
-              <p className="mb-5">
+             <div className="row">
+               <div className="col-md-8">
+               <p className="mb-5">
                 <ShowMoreContent
                   content={`We will run 2 main strategies:1) a long and short algo on BTC, w/ a Sortino of 5.5 (will post new backtest chart shortly, but it performs better).
 2) Active discretionary trading both long / short across all synthetic assets combining fundamental, technical`}
                   length={150}
                 />
               </p>
+               </div>
+               <div className="col-md-4" style={{textAlign: 'end'}}>
+            
+             
+              {isBoost &&
+               <BoostButton/>
+              }
+              </div>
             </div>
+           
+            </div>
+            
           </div>
         </div>
       </Section>

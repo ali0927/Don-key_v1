@@ -20,7 +20,7 @@ import {
 } from "components/Web3NetworkDetector";
 import { ButtonWidget } from "components/Button";
 import { useToggle } from "don-hooks";
-import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
+
 import { useStrapi } from "hooks/useStrapi";
 import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
@@ -143,25 +143,6 @@ const LIST_OF_TOKENS = gql`
   }
 `;
 
-const BoostButton = styled.button`
-  background-color: transparent;
-  border: 2px solid #000;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-  text-transform: uppercase;
-  padding: 16px 50px;
-  position: relative;
-  background-color: #fff037;
-`;
-
-const StyledApyIcon = styled(BoostApyIcon)`
-  position: absolute;
-  top: -22px;
-  right: 35px;
-  background-color: #fff037;
-  padding: 4px;
-  transform: scale(1.2);
-`;
 
 export const DashboardPage = () => {
 
@@ -176,7 +157,7 @@ export const DashboardPage = () => {
     return [];
   }, [data]);
 
-  const [isOpen, onOpen, onClose] = useToggle();
+
 
   if (loading) {
     return <LoadingPage />;
@@ -206,15 +187,6 @@ export const DashboardPage = () => {
                 <div className="col-sm-8">
                  {/* <h5>Follow Farmers and Increase your yield</h5> */}
                 </div>
-                <div className="col-sm-3 d-flex justify-content-end ">
-                  <BoostButton onClick={onOpen}>
-                    <StyledApyIcon />
-                    Boost APY
-                  </BoostButton>
-                  {isOpen && (
-                    <AcceleratedAPYModal open={isOpen} onClose={onClose} />
-                  )}
-                </div>
               </div>
             </Col>
           </Row>
@@ -240,7 +212,7 @@ export const DashboardPage = () => {
         ) : (
           <CustomizedContainer>
             <div className="row">
-              {tokens.map((item) => {
+              {tokens.map((item, index) => {
                 return (
                   <div className="col-md-4">
                     <TokenInfo key={item.id} token={item} />
