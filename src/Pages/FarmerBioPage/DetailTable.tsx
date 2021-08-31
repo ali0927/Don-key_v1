@@ -95,7 +95,7 @@ const FirstCardRow = styled.div``;
 export const Columns = styled.div`
   border-right: 1px solid #b4b4b4;
   height: 70px;
-  padding: 5px 20px;
+  padding: 5px 13px;
   :last-child {
     border-right: none;
   }
@@ -105,6 +105,7 @@ const ColumnsTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   text-align: center;
+  font-family: Poppins;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
 `;
@@ -140,7 +141,8 @@ const ColumnsSubTitleColored = styled.p`
 `;
 
 export const ColumnsTitle1 = styled(ColumnsTitleColored)`
-  font-size: 12px;
+  font-size: 14px;
+  font-family: Poppins;
   font-weight: 500;
 `;
 
