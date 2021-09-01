@@ -308,8 +308,6 @@ export const StakingInfo = () => {
     }
   };
 
-  // console.log("TIER",getTierInfo(200))
-
   return (
     <>
   
@@ -332,7 +330,7 @@ export const StakingInfo = () => {
             </StakingCol>
             <StakingCol style={{width: "21%"}} >
               <StakingTitle>Tier</StakingTitle>
-              <StakingSubtitle>{tier.donRequired } DON</StakingSubtitle>
+              <StakingSubtitle>{tier.tier }</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{width: "21%"}} >
               <StakingTitle>Extra APY</StakingTitle>
