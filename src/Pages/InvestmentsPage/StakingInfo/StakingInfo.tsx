@@ -11,8 +11,6 @@ import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { getTierInfo } from "components/StakingContractProvider";
 
-
-
 const StakingCard = styled.div`
   background-color: #fff;
   border-radius: 20px;
@@ -24,24 +22,24 @@ const StakingCol = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position:relative;
-  &:nth-last-child(n+2):after {
+  position: relative;
+  &:nth-last-child(n + 2):after {
     content: "";
     display: block;
     width: 1px;
     height: calc(100% - 10px);
-    background-color: #EDEDF2;
+    background-color: #ededf2;
     position: absolute;
     right: 0;
     top: 50%;
-    color: #EDEDF2;
+    color: #ededf2;
     transform: translateY(-50%);
   }
   &.hide:after {
     display: none;
   }
   @media only screen and (max-width: 600px) {
-     width: 100% !important;
+    width: 100% !important;
   }
 `;
 
@@ -86,7 +84,7 @@ const HarvestCard = styled.div`
 `;
 
 const TimeCard = styled.div`
-  height: 33px; 
+  height: 33px;
   width: 24.45px;
   background: rgba(0, 0, 0, 0.04);
   border-radius: 3.5px;
@@ -97,7 +95,6 @@ const TimeCard = styled.div`
 `;
 
 const TimerTime = styled.div`
-  font-family: Object Sans;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -105,32 +102,29 @@ const TimerTime = styled.div`
 `;
 
 const TimerLabel = styled.div`
- font-family: Roboto;
- font-size: 4.25px;
- font-style: normal;
- font-weight: 400;
- color: #000000;
-
- 
+  font-size: 4.25px;
+  font-style: normal;
+  font-weight: 400;
+  color: #000000;
 `;
 
 const TimerHeading = styled.div`
-font-family: Poppins;
-font-size: 16px;
-font-style: normal;
-font-weight: 500;
-text-align:center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  text-align: center;
 `;
 
 const DotsWrraper = styled.div`
-    display: flex;
-    align-items: center;
-    margin-left: 2px;
-    margin-right: 2px;
+  display: flex;
+  align-items: center;
+  margin-left: 2px;
+  margin-right: 2px;
 `;
 
 const TimmerRoot = styled.div`
-   margin-top: 12px;
+  margin-top: 12px;
+  transform: scale(1.4);
 `;
 
 const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
@@ -160,39 +154,43 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
   }, []);
 
   if (hasEnded) {
-    return (
-      <TimerHeading>Cool off period is over. Claim Tokens</TimerHeading>
-    );
+    return <TimerHeading>Cool off period is over. Claim Tokens</TimerHeading>;
   }
   // {days}d:{hrs}h:{mins}m:{secs}s{" "}
   return (
     <div>
       <TimerHeading>Cool off period ends in </TimerHeading>
       <TimmerRoot className="d-flex justify-content-center">
-      <TimeCard>
-          <TimerTime>{days}</TimerTime> 
+        <TimeCard>
+          <TimerTime>{days}</TimerTime>
           <TimerLabel>DAYS</TimerLabel>
-      </TimeCard>
+        </TimeCard>
 
-     <DotsWrraper> <SmallTimerDots /></DotsWrraper>
+        <DotsWrraper>
+          {" "}
+          <SmallTimerDots />
+        </DotsWrraper>
 
-      <TimeCard>
-          <TimerTime>{hrs}</TimerTime> 
+        <TimeCard>
+          <TimerTime>{hrs}</TimerTime>
           <TimerLabel>HOURS</TimerLabel>
-      </TimeCard>
-      <DotsWrraper> <SmallTimerDots /></DotsWrraper>
-      <TimeCard>
-         <TimerTime>{mins}</TimerTime> 
-         <TimerLabel>MINUTES</TimerLabel>
-      </TimeCard>
-      <DotsWrraper> <SmallTimerDots /></DotsWrraper>
-      <TimeCard>
-       
-       <TimerTime>{secs}</TimerTime> 
-       <TimerLabel>SECONDS</TimerLabel>
-      
-   </TimeCard>
-    
+        </TimeCard>
+        <DotsWrraper>
+          {" "}
+          <SmallTimerDots />
+        </DotsWrraper>
+        <TimeCard>
+          <TimerTime>{mins}</TimerTime>
+          <TimerLabel>MINUTES</TimerLabel>
+        </TimeCard>
+        <DotsWrraper>
+          {" "}
+          <SmallTimerDots />
+        </DotsWrraper>
+        <TimeCard>
+          <TimerTime>{secs}</TimerTime>
+          <TimerLabel>SECONDS</TimerLabel>
+        </TimeCard>
       </TimmerRoot>
     </div>
   );
@@ -310,9 +308,6 @@ export const StakingInfo = () => {
 
   return (
     <>
-  
-   
-     
       {isStakeModalOpen && (
         <AcceleratedAPYModal
           open={isStakeModalOpen}
@@ -322,21 +317,22 @@ export const StakingInfo = () => {
       {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
       <div className="row mt-3 mb-4">
         <div className="col-lg-7 mb-2">
-
-        <StakingCard className="d-flex flex-wrap justify-content-between">
-            <StakingCol style={{width: "21%"}}  >
+          <StakingCard className="d-flex flex-wrap justify-content-between">
+            <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>
               <StakingSubtitle>{stakedDon}</StakingSubtitle>
             </StakingCol>
-            <StakingCol style={{width: "21%"}} >
+            <StakingCol style={{ width: "21%" }}>
               <StakingTitle>Tier</StakingTitle>
-              <StakingSubtitle>{tier.tier }</StakingSubtitle>
+              <StakingSubtitle>{tier.tier}</StakingSubtitle>
             </StakingCol>
-            <StakingCol style={{width: "21%"}} >
+            <StakingCol style={{ width: "21%" }}>
               <StakingTitle>Extra APY</StakingTitle>
               <StakingSubtitle>{tier.apy} %</StakingSubtitle>
             </StakingCol>
-            <StakingCol style={{width: "36%"}}>{showButtonsOrTimer()}</StakingCol>
+            <StakingCol style={{ width: "36%" }}>
+              {showButtonsOrTimer()}
+            </StakingCol>
           </StakingCard>
         </div>
         <div className="col-lg-5 mb-2">

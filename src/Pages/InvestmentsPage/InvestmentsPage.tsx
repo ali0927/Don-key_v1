@@ -25,7 +25,14 @@ import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInitialInvestment } from "components/MyInvestment";
-import { getPoolContract, calculateInitialInvestmentInUSD } from "helpers";
+import {
+  getPoolContract,
+  calculateInitialInvestmentInUSD,
+  calculateInitialInvestment,
+  getTokenPrice,
+  getTokenAddress,
+  getDonPrice,
+} from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
@@ -41,6 +48,7 @@ import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import { gql, useQuery } from "@apollo/client";
 import { useStakingContract } from "hooks";
+import BigNumber from "bignumber.js";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -49,7 +57,6 @@ const HeadingTitle = styled.p({
   color: "#070602",
   marginBottom: 30,
 });
-
 
 export const ZeroInvestmentBox = styled.div({
   // minHeight: 00,
@@ -72,15 +79,15 @@ export const ZeroInvestmentContent = styled.div({
 
 const WithDrawButton = styled(LightGrayButton)`
   border-radius: 10px;
-  background: linear-gradient(0deg, #F2F4F7 0%, #F0F2F5 48.04%, #FFFFFF 100%);
+  background: linear-gradient(0deg, #f2f4f7 0%, #f0f2f5 48.04%, #ffffff 100%);
   height: 34px;
   width: 114px;
   font-family: Poppins;
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
-  color: #9B9B9B;
-  border: 1px solid #E5E6EA !important;
+  color: #9b9b9b;
+  border: 1px solid #e5e6ea !important;
   :hover {
     background: #ffec5c;
     border: 0px !important;
@@ -99,8 +106,8 @@ const AnimationDiv = styled.div({
 });
 
 const CustomTable = styled(Table)`
-    border-radius: 5px 5px 0px 0px;
-    text-align: center;
+  border-radius: 5px 5px 0px 0px;
+  text-align: center;
 `;
 
 const EmptyTableHeading = styled(TableHeading)`
@@ -170,8 +177,6 @@ const ALL_FARMER_QUERY = gql`
   }
 `;
 
-
-
 const TotalInvestedAmount = styled.span`
   font-family: ObjectSans-Bold;
   font-size: 50px;
@@ -184,13 +189,13 @@ export const InvestmentsPage = () => {
     { name: string; poolAddress: string; initialInvestmentinUSD: string }[]
   >([]);
   const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
-  const {investedAmount} = useStakingContract();
+
   const { data } = useQuery(ALL_FARMER_QUERY);
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
   const history = useHistory();
   const [loading, setLoading] = useState(true);
-
+  const [oldInvestments, setOldInvestments] = useState<IFarmerInter[]>([]);
   const { chainId: network } = useWeb3Network();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
@@ -209,6 +214,8 @@ export const InvestmentsPage = () => {
     setRefresh((old) => !old);
   };
 
+  const [investedAmount, setInvestedAmount] = useState("0");
+
   const handleToggle = () => {
     toggleCurrency();
     setInitialCheck(!initialCheck);
@@ -218,7 +225,9 @@ export const InvestmentsPage = () => {
     if (data && data.farmers.length > 0) {
       let arr: any = [];
       const CalInvestments = async () => {
+        let investedAmount = new BigNumber(0);
         const finalInvestments: IFarmerInter[] = [];
+        const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
         for (let invest of data.farmers as IFarmerInter[]) {
           try {
@@ -234,15 +243,31 @@ export const InvestmentsPage = () => {
                   invest.poolAddress,
                   accounts[0]
                 ),
+                calculateInitialInvestment(
+                  web3,
+                  invest.poolAddress,
+                  accounts[0]
+                ),
+                getTokenPrice(
+                  web3,
+                  await getTokenAddress(web3, invest.poolAddress)
+                ),
               ];
-              const results = await Promise.all(amounts);
 
+              const results = await Promise.all(amounts);
+              investedAmount = investedAmount.plus(
+                new BigNumber(results[1]).multipliedBy(results[2])
+              );
               arr.push({
                 name: invest.name,
                 poolAddress: invest.poolAddress,
                 initialInvestmentinUSD: results[0],
               });
-              finalInvestments.push(invest);
+              if (invest.poolVersion > 2) {
+                finalInvestments.push(invest);
+              } else {
+                oldInvestments.push(invest);
+              }
             }
           } catch (e) {
             console.error(e);
@@ -251,6 +276,8 @@ export const InvestmentsPage = () => {
         setPoolAddresses(arr);
         setLoading(false);
         setMyInvestments(finalInvestments);
+        setOldInvestments(oldInvestments);
+        setInvestedAmount(investedAmount.toFixed(3));
       };
       CalInvestments();
     }
@@ -261,6 +288,18 @@ export const InvestmentsPage = () => {
       return item.network?.chainId === strategyNetworkFilter;
     });
   }, [myInvestments, strategyNetworkFilter]);
+
+  const filteredOldInvestMents = useMemo(() => {
+    return oldInvestments.filter((item) => {
+      return item.network?.chainId === strategyNetworkFilter;
+    });
+  }, [oldInvestments, strategyNetworkFilter]);
+
+  const {
+    investedAmount: investAmount,
+    tier,
+    pendingReward,
+  } = useStakingContract();
 
   const handleSuccess = (farmerName: string) => {
     handleRefresh();
@@ -322,6 +361,247 @@ export const InvestmentsPage = () => {
     setIsInUsd((val) => !val);
   }, []);
   const { chainId } = useWeb3Network();
+  const [donPrice, setDonPrice] = useState({isReady: false, price: "-"});
+  useEffect(() => {
+    (async () => {
+      if(network === NetworksMap.BSC){
+       const donPrice = await getDonPrice(network === NetworksMap.BSC);
+       setDonPrice({isReady: true, price: donPrice});
+      }
+    })()
+  }, [network])
+  const renderSwitch = () => {
+    if (
+      !loading &&
+      (filteredInvestMents.length > 0 || filteredOldInvestMents.length > 0)
+    ) {
+      return (
+        <div className="d-flex align-items-center" style={{ marginBottom: 20 }}>
+          {"Base Token"}
+          <YellowSwitch
+            value={true}
+            onChange={handleToggle}
+            checked={initialCheck}
+          />{" "}
+          USD
+        </div>
+      );
+    }
+  };
+
+  const renderNoInvestmentsFound = () => {
+    if (
+      !loading &&
+      filteredOldInvestMents.length === 0 &&
+      filteredOldInvestMents.length === 0
+    ) {
+      return (
+        <>
+          <ZeroInvestmentBox>
+            <ZeroInvestmentInnerBox>
+              <ZeroInvestmentContent>
+                You’re not following any Farmers
+              </ZeroInvestmentContent>
+              <CenteredBox className="mb-5">
+                <ButtonWidget
+                  className="mt-4"
+                  varaint="contained"
+                  containedVariantColor="black"
+                  height="50px"
+                  width="210px"
+                  onClick={handleFindd}
+                >
+                  Explore Farmers
+                </ButtonWidget>
+              </CenteredBox>
+            </ZeroInvestmentInnerBox>
+          </ZeroInvestmentBox>
+        </>
+      );
+    }
+  };
+
+  const renderNewInvestments = () => {
+    if (!loading && filteredInvestMents.length > 0) {
+      return (
+        <TableResponsive>
+          <CustomTable style={{ borderRadius: "5px 5px 0px 0px;" }}>
+            <TableHead>
+              <TableRow isHoverOnRow={false}>
+                <CustomTableHeading className="py-4">#</CustomTableHeading>
+                <EmptyTableHeading></EmptyTableHeading>
+                <CustomTableHeading>FARMER NAME</CustomTableHeading>
+                <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
+                <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                {tier.tier > 0 && (
+                  <CustomTableHeading>DON REWARDS</CustomTableHeading>
+                )}
+                <CustomTableHeading style={{ textAlign: "center" }}>
+                  ACTION
+                </CustomTableHeading>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredInvestMents.map((investment, index) => {
+                let poolAddressFinal = poolAddresses.find((item: any) => {
+                  return investment.name === item.name;
+                });
+                let initialInvestmentinUSD =
+                  poolAddressFinal?.initialInvestmentinUSD || "0";
+
+                return (
+                  <TableRow key={investment.guid}>
+                    <CustomTableData style={{ color: "#9B9B9B" }}>
+                      {index + 1}
+                    </CustomTableData>
+                    <CustomTableData>
+                      <StyledImage src={investment.farmerImage.url} />
+                    </CustomTableData>
+                    <CustomTableData
+                      cursor="pointer"
+                      onClick={RedirectToFarmerProfile(investment.guid)}
+                      style={{ fontWeight: 500 }}
+                    >
+                      {investment.name}
+                    </CustomTableData>
+
+                    <CustomTableData>
+                      {isInUsd && !!poolAddressFinal ? (
+                        `$${formatNum(initialInvestmentinUSD)}`
+                      ) : (
+                        <MyInitialInvestment
+                          poolAddress={investment.poolAddress}
+                        />
+                      )}
+                    </CustomTableData>
+                    <CustomTableData className="bold">
+                      <TotalProfitLoss
+                        refresh={refresh}
+                        poolAddress={investment.poolAddress}
+                      />
+                    </CustomTableData>
+                    {tier.tier > 0 && (
+                      <CustomTableData>
+                        {(() => {
+                          const dons = new BigNumber(pendingReward)
+                          .multipliedBy(initialInvestmentinUSD)
+                          .dividedBy(investAmount);
+                          if(isInUsd){  
+                            return donPrice.isReady ? `$${dons.multipliedBy(donPrice.price).toFixed(2)}`: "-";
+                          }else {
+                            return `${dons.toFixed(2)} DON`
+                          }
+                        })()}
+                      </CustomTableData>
+                    )}
+                    <CustomTableData>
+                      <div className="d-flex justify-content-center">
+                        <WithDrawButton
+                          onClick={handleOpenWithDraw(
+                            investment.name,
+                            investment.poolAddress,
+                            investment.poolVersion ? investment.poolVersion : 1
+                          )}
+                        >
+                          WITHDRAW
+                        </WithDrawButton>
+                      </div>
+                    </CustomTableData>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </CustomTable>
+        </TableResponsive>
+      );
+    }
+  };
+
+  const renderOldInvestments = () => {
+    if (!loading && filteredOldInvestMents.length > 0) {
+      return (
+        <>
+          <h3 className="mt-4 mb-3">Deprecated Pools</h3>
+          <TableResponsive>
+            <CustomTable style={{ borderRadius: "5px 5px 0px 0px;" }}>
+              <TableHead>
+                <TableRow isHoverOnRow={false}>
+                  <CustomTableHeading className="py-4">#</CustomTableHeading>
+                  <EmptyTableHeading></EmptyTableHeading>
+                  <CustomTableHeading>FARMER NAME</CustomTableHeading>
+                  <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
+                  <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+
+                  <CustomTableHeading style={{ textAlign: "center" }}>
+                    ACTION
+                  </CustomTableHeading>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredOldInvestMents.map((investment, index) => {
+                  let poolAddressFinal = poolAddresses.find((item: any) => {
+                    return investment.name === item.name;
+                  });
+                  let initialInvestmentinUSD =
+                    poolAddressFinal?.initialInvestmentinUSD || "0";
+
+                  return (
+                    <TableRow key={investment.guid}>
+                      <CustomTableData style={{ color: "#9B9B9B" }}>
+                        {index + 1}
+                      </CustomTableData>
+                      <CustomTableData>
+                        <StyledImage src={investment.farmerImage.url} />
+                      </CustomTableData>
+                      <CustomTableData
+                        cursor="pointer"
+                        onClick={RedirectToFarmerProfile(investment.guid)}
+                        style={{ fontWeight: 500 }}
+                      >
+                        {investment.name}
+                      </CustomTableData>
+
+                      <CustomTableData>
+                        {isInUsd && !!poolAddressFinal ? (
+                          `$${formatNum(initialInvestmentinUSD)}`
+                        ) : (
+                          <MyInitialInvestment
+                            poolAddress={investment.poolAddress}
+                          />
+                        )}
+                      </CustomTableData>
+                      <CustomTableData className="bold">
+                        <TotalProfitLoss
+                          refresh={refresh}
+                          poolAddress={investment.poolAddress}
+                        />
+                      </CustomTableData>
+
+                      <CustomTableData>
+                        <div className="d-flex justify-content-center">
+                          <WithDrawButton
+                            onClick={handleOpenWithDraw(
+                              investment.name,
+                              investment.poolAddress,
+                              investment.poolVersion
+                                ? investment.poolVersion
+                                : 1
+                            )}
+                          >
+                            WITHDRAW
+                          </WithDrawButton>
+                        </div>
+                      </CustomTableData>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </CustomTable>
+          </TableResponsive>
+        </>
+      );
+    }
+  };
 
   return (
     <USDViewProvider
@@ -341,22 +621,21 @@ export const InvestmentsPage = () => {
                   <div className="d-flex align-items-center justify-content-between mb-5 flex-wrap">
                     <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
                     <div className="d-flex px-2 flex-wrap">
-                    <NetworkButton
-                      active={strategyNetworkFilter === BSCChainId}
-                      onClick={() => setStrategyNetworkFilter(BSCChainId)}
-                    >
-                      BSC
-                    </NetworkButton>
-                    <NetworkButton
-                      active={strategyNetworkFilter === PolygonChainId}
-                      onClick={() => setStrategyNetworkFilter(PolygonChainId)}
-                    >
-                      Polygon
-                    </NetworkButton>
+                      <NetworkButton
+                        active={strategyNetworkFilter === BSCChainId}
+                        onClick={() => setStrategyNetworkFilter(BSCChainId)}
+                      >
+                        BSC
+                      </NetworkButton>
+                      <NetworkButton
+                        active={strategyNetworkFilter === PolygonChainId}
+                        onClick={() => setStrategyNetworkFilter(PolygonChainId)}
+                      >
+                        Polygon
+                      </NetworkButton>
+                    </div>
                   </div>
-                 </div>
                   {chainId === NetworksMap.BSC && <StakingInfo />}
-               
                 </Col>
               </Row>
             </Container>
@@ -372,124 +651,10 @@ export const InvestmentsPage = () => {
                   </AnimationDiv>
                 </>
               )}
-              {!loading && filteredInvestMents.length > 0 && (
-                <>
-                  <div className="d-flex align-items-center"  style={{marginBottom: 20}}>
-                    {"Base Token"}
-                    <YellowSwitch
-                      value={true}
-                      onChange={handleToggle}
-                      checked={initialCheck}
-                    />{" "}
-                    USD
-                  </div>
-                  <TableResponsive>
-                    <CustomTable style={{borderRadius: "5px 5px 0px 0px;"}}>
-                      <TableHead>
-                        <TableRow isHoverOnRow={false}>
-                          <CustomTableHeading className="py-4">
-                            #
-                          </CustomTableHeading>
-                          <EmptyTableHeading></EmptyTableHeading>
-                          <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                          <CustomTableHeading>
-                            INVESTED AMOUNT
-                          </CustomTableHeading>
-                          <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                          <CustomTableHeading>DON REWARDS</CustomTableHeading>
-                          <CustomTableHeading style={{textAlign: 'center'}}>ACTION</CustomTableHeading>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {filteredInvestMents.map((investment, index) => {
-                          let poolAddressFinal = poolAddresses.find(
-                            (item: any) => {
-                              return investment.name === item.name;
-                            }
-                          );
-                          let initialInvestmentinUSD =
-                            poolAddressFinal?.initialInvestmentinUSD || "0";
-
-                          return (
-                            <TableRow key={investment.guid}>
-                              <CustomTableData style={{color: '#9B9B9B'}}>{index + 1}</CustomTableData>
-                              <CustomTableData>
-                                <StyledImage src={investment.farmerImage.url} />
-                              </CustomTableData>
-                              <CustomTableData
-                                cursor="pointer"
-                                onClick={RedirectToFarmerProfile(
-                                  investment.guid
-                                )}
-                                style={{fontWeight: 500}}
-                               
-                              >
-                                {investment.name}
-                              </CustomTableData>
-
-                              <CustomTableData>
-                                {isInUsd && !!poolAddressFinal ? (
-                                  `$${formatNum(initialInvestmentinUSD)}`
-                                ) : (
-                                  <MyInitialInvestment
-                                    poolAddress={investment.poolAddress}
-                                  />
-                                )}
-                              </CustomTableData>
-                              <CustomTableData className="bold">
-                                <TotalProfitLoss
-                                  refresh={refresh}
-                                  poolAddress={investment.poolAddress}
-                                />
-                              </CustomTableData>
-                              <CustomTableData>$1000</CustomTableData>
-                              <CustomTableData>
-                                <div className="d-flex justify-content-center">
-                                <WithDrawButton
-                                  onClick={handleOpenWithDraw(
-                                    investment.name,
-                                    investment.poolAddress,
-                                    investment.poolVersion
-                                      ? investment.poolVersion
-                                      : 1
-                                  )}
-                                >
-                                  WITHDRAW
-                                </WithDrawButton>
-                                </div>
-                              </CustomTableData>
-                            </TableRow>
-                          );
-                        })}
-                      </TableBody>
-                    </CustomTable>
-                  </TableResponsive>
-                </>
-              )}
-
-              {!loading && filteredInvestMents.length === 0 && (
-                <>
-                  <ZeroInvestmentBox>
-                    <ZeroInvestmentInnerBox>
-                      <ZeroInvestmentContent>
-                        You’re not following any Farmers
-                      </ZeroInvestmentContent>
-                      <CenteredBox className="mb-5">
-                        <ButtonWidget
-                          className="mt-4"
-                          varaint="contained"
-                          containedVariantColor="black"
-                          height="50px"
-                          width="210px"
-                          onClick={handleFindd}
-                        >
-                          Explore Farmers
-                        </ButtonWidget>
-                      </CenteredBox>
-                    </ZeroInvestmentInnerBox>
-                  </ZeroInvestmentBox>
-                </>
-              )}
+              {renderSwitch()}
+              {renderNewInvestments()}
+              {renderOldInvestments()}
+              {renderNoInvestmentsFound()}
             </Container>
           </div>
         </GridBackground>

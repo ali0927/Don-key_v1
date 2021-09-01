@@ -2,12 +2,12 @@
 import { useInvestedAmount } from "hooks/useInvestedAmount";
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
-import { calculateInitialInvestment, calculateWithdrawAmount } from "helpers";
+import { calculateWithdrawAmount } from "helpers";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { useInitialInvestment } from "hooks/useInitialInvestment";
 
 export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
-  const { isReady, investedAmmount } = useInvestedAmount(poolAddress);
+  const { isReady } = useInvestedAmount(poolAddress);
   const [withdrawalValue, setWithdrawalValue] = useState("-");
   const web3 = useWeb3();
 
