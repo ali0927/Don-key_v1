@@ -17,7 +17,7 @@ import React, { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
-import { BoostButton } from "./BoostButton";
+import { BoostButton } from "../FarmerBioPage/BoostButton";
 import { StrategyInfo } from "./StrategyInfo";
 
 const Section = styled.section`
@@ -131,10 +131,7 @@ const Image = styled.img`
 `;
 
 export const TokenPage= () => {
-  const boostStrategies = ["wbnb", "cake","busd"];
   const { token } = useParams<{ token: string }>();
-  const isBoost = boostStrategies.indexOf(token) > -1;
-
 
   const { data, loading } = useQuery(TokenInfoQuery, {
     variables: {
@@ -189,13 +186,9 @@ export const TokenPage= () => {
                 />
               </p>
                </div>
-               <div className="col-md-4" style={{textAlign: 'end'}}>
-            
-             
-              {isBoost &&
-               <BoostButton/>
-              }
-              </div>
+               {/* <div className="col-md-4" style={{textAlign: 'end'}}>
+              
+              </div> */}
             </div>
            
             </div>

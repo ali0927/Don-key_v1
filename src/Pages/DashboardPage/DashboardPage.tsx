@@ -213,11 +213,15 @@ export const DashboardPage = () => {
         ) : (
           <CustomizedContainer>
             <div className="row">
-              {tokens.map((item, index) => {
+              {tokens.map((item) => {
                 return (
-                  <div className="col-md-4">
-                    <TokenInfo key={item.id} token={item} />
-                  </div>
+                 <>
+                 {item.status !== "commingsoon" &&
+                    <div className="col-md-4">
+                       <TokenInfo key={item.id} token={item} />
+                    </div>
+                }
+                  </>
                 );
               })}
             </div>

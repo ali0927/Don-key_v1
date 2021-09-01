@@ -45,6 +45,7 @@ const OutlineVariant = styled.button`
   width: ${(props: IOutlinedButton) => (props.width ? props.width : "100%")};
   height: ${(props: IOutlinedButton) => (props.height ? props.height : "100%")};
   border: 1px solid ${theme.palette.border.main};
+  border-radius: 10px;
   :hover {
     background-color: ${theme.palette.common.yellow};
     color: ${theme.palette.text.black};

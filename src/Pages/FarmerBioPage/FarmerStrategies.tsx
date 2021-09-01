@@ -14,6 +14,15 @@ const DescriptionTitle = styled.p`
   line-height: 35.44px;
 `;
 
+const StrategyTableRoot = styled.div`
+   margin-top: 50px;
+   margin-bottom: 80px;
+`;
+
+const TableHeaderRoot = styled.div`
+    margin-bottom: 50px;
+`;
+
 export const FarmerStrategies = ({
   farmer,
   isLoaded,
@@ -38,10 +47,11 @@ export const FarmerStrategies = ({
         <Container>
           <Row>
             <Col sm={12}>
-            <DescriptionTitle>
+              <TableHeaderRoot>
+                 <DescriptionTitle>
                 {farmer.strategies[0].name || "Description"}
               </DescriptionTitle>
-              <p style={{ fontSize: 15 }}>
+                 <p style={{ fontSize: 15 }}>
                 <ShowMoreContent
                   length={80}
                   content={
@@ -50,18 +60,19 @@ export const FarmerStrategies = ({
                   }
                 />
               </p>
+              </TableHeaderRoot>
               <StrategyTableForInvestor
                 poolAddress={farmer.poolAddress}
                 strategies={farmer.strategies}
               />
-              <div className="d-flex justify-content-center mb-3">
+              <StrategyTableRoot className="d-flex justify-content-center">
                 <img
                   src={farmer.strategies[0].strategyImage.url}
                   className="img-fluid"
                   style={{ maxWidth: 800, minWidth: 400 }}
                   alt="strategy image"
                 />
-              </div>
+              </StrategyTableRoot>
               <InvestorListTable poolAddress={farmer.poolAddress} />
             </Col>
           </Row>

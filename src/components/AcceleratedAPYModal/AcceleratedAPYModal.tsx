@@ -42,6 +42,7 @@ const MaxButton = styled.span`
 `;
 const DonInputWrapper = styled.div`
   border: 1px solid #3e3e3e;
+  border-radius: 10px;
   position: relative;
   margin-bottom: 40px;
 `;
@@ -61,6 +62,7 @@ const DonHTMLInput = styled.input`
   text-align: right;
   font-size: 15px;
   border: none;
+  border-radius: 10px;
   width: 100%;
   height: 100%;
   padding: 14px 1rem;
@@ -294,7 +296,7 @@ export const AcceleratedAPYModal = ({
             <ButtonWidget
               varaint="contained"
               onClick={stakeDon}
-              className="py-2 rounded-0 font-weight-bold"
+              className="py-2 font-weight-bold"
               containedVariantColor="lightYellow"
             >
               {btnLoading ? (

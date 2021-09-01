@@ -34,13 +34,17 @@ import {
   formatNum,
 } from "./DetailTable";
 import { InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
+import { INetwork } from "interfaces";
+import { BoostButton } from "./BoostButton";
 
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
+  network,
 }: {
   poolAddress: string;
   poolVersion: number;
+  network: INetwork;
 }) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
@@ -283,7 +287,7 @@ export const InvestBlackCard = ({
           <>
             <CardLabel className="mb-2" color="white">
               {" "}
-              My current holdings{" "}
+              My Current Holdings{" "}
             </CardLabel>
             <CardValue color="white">
               <DollarView
@@ -292,11 +296,11 @@ export const InvestBlackCard = ({
               />
             </CardValue>
           </>
-          <div className="d-flex mt-2 mb-1 justify-content-center">
+          <div className="row mt-2 mb-1 justify-content-center">
             <ButtonWidget
               varaint="contained"
               fontSize="12px"
-              className={isInvested ? "mr-3" : ""}
+              className={clsx("mb-2",{"mr-3": isInvested})}
               containedVariantColor="lightYellow"
               height="30px"
               width="119px"
@@ -304,6 +308,8 @@ export const InvestBlackCard = ({
             >
               Invest
             </ButtonWidget>
+
+            
 
             {isInvested && (
               <ButtonWidget
@@ -318,6 +324,11 @@ export const InvestBlackCard = ({
                 Withdraw
               </ButtonWidget>
             )}
+
+            {network.symbol === "BSC" &&
+            <BoostButton />
+          
+           }
           </div>
           {renderFarmerUI()}
         </div>

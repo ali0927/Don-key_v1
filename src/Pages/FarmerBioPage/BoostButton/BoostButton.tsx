@@ -5,6 +5,7 @@ import {
   BoostApyIcon,
 } from "icons";
 import { useToggle } from "don-hooks";
+import { ButtonWidget } from "components/Button";
 
 const CustomButton = styled.button`
   background-color: transparent;
@@ -37,13 +38,20 @@ export const BoostButton: React.FC = () => {
 
     return(
         <>
-            <CustomButton onClick={onOpen}>
-                    <StyledApyIcon />
-                    Boost APY
-            </CustomButton>
-                  {isOpen && (
+          <ButtonWidget
+              varaint="contained"
+              fontSize="12px"
+              className={"ml-3"}
+              containedVariantColor="lightYellow"
+              height="30px"
+              width="119px"
+              onClick={onOpen}
+            >
+              Boost APY
+            </ButtonWidget>
+            {isOpen && (
                     <AcceleratedAPYModal open={isOpen} onClose={onClose} />
-                  )}
+             )}
         </>
     )
 }

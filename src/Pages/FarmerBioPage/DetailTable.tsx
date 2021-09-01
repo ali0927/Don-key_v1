@@ -365,6 +365,7 @@ export const DetailTable = ({
             <InvestBlackCard
               poolAddress={poolAddress}
               poolVersion={poolVersion}
+              network={network}
             />
           ): <InactiveNetworkCard correctNetwork={network} />}
         </CardWrapper>
