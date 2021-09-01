@@ -63,7 +63,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const [isStaked, setIsStaked] = useState<boolean | null>(null);
   const [stakedDon, setStakedDon] = useState<string>("0");
   const [currentTier, setCurrentTier] = useState<ITier>({
-    donRequired: "100",
+    donRequired: "0",
     apy: 0,
     tier: 0,
   });

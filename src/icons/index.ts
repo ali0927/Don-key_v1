@@ -59,3 +59,4 @@ export * from "./LPShareIcon";
 export * from "./LeftSliderArrow";
 export * from "./RightSliderArrow";
 export * from "./BoostRocketIcon";
+export * from "./SmallTimerDots"

@@ -8,34 +8,40 @@ import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
 import BigNumber from "bignumber.js";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
+import { SmallTimerDots } from "icons";
+import { getTierInfo } from "components/StakingContractProvider";
 
 
 
 const StakingCard = styled.div`
   background-color: #fff;
   border-radius: 20px;
-  padding: 30px 40px 30px 40px;
+  padding: 30px 0px 30px 0px;
+  height: 146px;
 `;
 
 const StakingCol = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  &:nth-last-child(n+3):after {
+  position:relative;
+  &:nth-last-child(n+2):after {
     content: "";
     display: block;
     width: 1px;
     height: calc(100% - 10px);
-    background-color: #000d09;
-    opacity: 0.3;
+    background-color: #EDEDF2;
     position: absolute;
     right: 0;
     top: 50%;
-    color: #000d09;
+    color: #EDEDF2;
     transform: translateY(-50%);
   }
   &.hide:after {
     display: none;
+  }
+  @media only screen and (max-width: 600px) {
+     width: 100% !important;
   }
 `;
 
@@ -79,6 +85,54 @@ const HarvestCard = styled.div`
   height: 100%;
 `;
 
+const TimeCard = styled.div`
+  height: 33px; 
+  width: 24.45px;
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 3.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const TimerTime = styled.div`
+  font-family: Object Sans;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  color: #000000;
+`;
+
+const TimerLabel = styled.div`
+ font-family: Roboto;
+ font-size: 4.25px;
+ font-style: normal;
+ font-weight: 400;
+ color: #000000;
+
+ 
+`;
+
+const TimerHeading = styled.div`
+font-family: Poppins;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+text-align:center;
+`;
+
+const DotsWrraper = styled.div`
+    display: flex;
+    align-items: center;
+    margin-left: 2px;
+    margin-right: 2px;
+`;
+
+const TimmerRoot = styled.div`
+   margin-top: 12px;
+`;
+
 const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
   const [days, setDays] = useState(0);
   const [hrs, setHrs] = useState(0);
@@ -107,12 +161,39 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
 
   if (hasEnded) {
     return (
-      <div className="text-center">Cool off period is over. Claim Tokens</div>
+      <TimerHeading>Cool off period is over. Claim Tokens</TimerHeading>
     );
   }
+  // {days}d:{hrs}h:{mins}m:{secs}s{" "}
   return (
     <div>
-      Cool off period ends in {days}d:{hrs}h:{mins}m:{secs}s{" "}
+      <TimerHeading>Cool off period ends in </TimerHeading>
+      <TimmerRoot className="d-flex justify-content-center">
+      <TimeCard>
+          <TimerTime>{days}</TimerTime> 
+          <TimerLabel>DAYS</TimerLabel>
+      </TimeCard>
+
+     <DotsWrraper> <SmallTimerDots /></DotsWrraper>
+
+      <TimeCard>
+          <TimerTime>{hrs}</TimerTime> 
+          <TimerLabel>HOURS</TimerLabel>
+      </TimeCard>
+      <DotsWrraper> <SmallTimerDots /></DotsWrraper>
+      <TimeCard>
+         <TimerTime>{mins}</TimerTime> 
+         <TimerLabel>MINUTES</TimerLabel>
+      </TimeCard>
+      <DotsWrraper> <SmallTimerDots /></DotsWrraper>
+      <TimeCard>
+       
+       <TimerTime>{secs}</TimerTime> 
+       <TimerLabel>SECONDS</TimerLabel>
+      
+   </TimeCard>
+    
+      </TimmerRoot>
     </div>
   );
 };
@@ -227,6 +308,8 @@ export const StakingInfo = () => {
     }
   };
 
+  // console.log("TIER",getTierInfo(200))
+
   return (
     <>
   
@@ -242,20 +325,20 @@ export const StakingInfo = () => {
       <div className="row mt-3 mb-4">
         <div className="col-lg-7 mb-2">
 
-        <StakingCard className="d-flex flex-wrap">
-            <StakingCol className="col-lg-3">
+        <StakingCard className="d-flex flex-wrap justify-content-between">
+            <StakingCol style={{width: "21%"}}  >
               <StakingTitle>DON Staked</StakingTitle>
               <StakingSubtitle>{stakedDon}</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-lg-3">
+            <StakingCol style={{width: "21%"}} >
               <StakingTitle>Tier</StakingTitle>
-              <StakingSubtitle>{tier.donRequired} DON</StakingSubtitle>
+              <StakingSubtitle>{tier.donRequired } DON</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-lg-3">
+            <StakingCol style={{width: "21%"}} >
               <StakingTitle>Extra APY</StakingTitle>
               <StakingSubtitle>{tier.apy} %</StakingSubtitle>
             </StakingCol>
-            <StakingCol className="col-lg-3">{showButtonsOrTimer()}</StakingCol>
+            <StakingCol style={{width: "36%"}}>{showButtonsOrTimer()}</StakingCol>
           </StakingCard>
         </div>
         <div className="col-lg-5 mb-2">

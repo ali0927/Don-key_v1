@@ -71,7 +71,6 @@ export const ZeroInvestmentContent = styled.div({
 });
 
 const WithDrawButton = styled(LightGrayButton)`
-  border: 0px !important;
   border-radius: 10px;
   background: linear-gradient(0deg, #F2F4F7 0%, #F0F2F5 48.04%, #FFFFFF 100%);
   height: 34px;
@@ -82,6 +81,11 @@ const WithDrawButton = styled(LightGrayButton)`
   font-size: 14px;
   color: #9B9B9B;
   border: 1px solid #E5E6EA !important;
+  :hover {
+    background: #ffec5c;
+    border: 0px !important;
+    color: #000000;
+  }
 `;
 
 export const CenteredBox = styled.div({
