@@ -146,6 +146,15 @@ export const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-weight: 500;
 `;
 
+const Col = styled.div`
+    width: 553px;
+      @media only screen and (max-width: 600px) {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+      }
+    
+`;
+
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
   let digits = wrappedNum.gt(1) ? 2 : 6;
@@ -281,7 +290,7 @@ export const DetailTable = ({
 
   return (
     <>
-      <div className="col-lg-6 mb-5">
+      <Col className="mb-5" style={{marginRight: 17}}>
         <CardWrapper color="white">
           <div style={{marginTop: 30}}>
             <CardInnerInfo className="d-flex justify-content-center mb-2">
@@ -358,8 +367,8 @@ export const DetailTable = ({
             )}
           </FirstCardRow>
         </CardWrapper>
-      </div>
-      <div className="col-lg-6 mb-5">
+      </Col>
+      <Col className="mb-5"  style={{ marginLeft: 17,}}>
         <CardWrapper  color="black">
           {isActiveNetwork ?(
             <InvestBlackCard
@@ -369,7 +378,7 @@ export const DetailTable = ({
             />
           ): <InactiveNetworkCard correctNetwork={network} />}
         </CardWrapper>
-      </div>
+      </Col>
     </>
   );
 };

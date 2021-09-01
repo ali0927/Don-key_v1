@@ -25,7 +25,7 @@ export const BoostButton: React.FC = () => {
               className={"ml-3 "}
               containedVariantColor="lightYellow"
               height="30px"
-              width="119px"
+              width="132px"
               onClick={onOpen}
             >
               <StyledApyIcon/>

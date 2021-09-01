@@ -303,7 +303,7 @@ export const InvestBlackCard = ({
               className={clsx("mb-2",{"mr-3": isInvested})}
               containedVariantColor="lightYellow"
               height="30px"
-              width="119px"
+              width="132px"
               onClick={() => setShowInvestmentPopup(true)}
             >
               Invest
@@ -317,7 +317,7 @@ export const InvestBlackCard = ({
                 varaint="contained"
                 height="30px"
                 containedVariantColor="lightYellow"
-                width="119px"
+                width="132px"
                 onClick={() => setShowWithdrawPopup(true)}
               >
                 Withdraw
@@ -333,7 +333,7 @@ export const InvestBlackCard = ({
         </div>
       </CardInnerInfo>
 
-      <div className="row mt-2">
+      <div className="row mt-2 justify-content-center">
         {getSecondCardColumns(
           "Initial Investment",
           isUSD ? (
@@ -346,7 +346,7 @@ export const InvestBlackCard = ({
           ),
           <InvestmentIcon className="mr-1" />,
           "white",
-          5
+          4
         )}
 
         {getSecondCardColumns(
@@ -364,7 +364,7 @@ export const InvestBlackCard = ({
           Number(myShare).toFixed(2) + " %",
           <LPShareIcon className="mr-1" />,
           "white",
-          3
+          4
         )}
       </div>
       {showInvestmentPopup && (
