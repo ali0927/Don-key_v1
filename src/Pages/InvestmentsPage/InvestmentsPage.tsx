@@ -72,6 +72,7 @@ export const ZeroInvestmentContent = styled.div({
 
 const WithDrawButton = styled(LightGrayButton)`
   border: 0px !important;
+  border-radius: 10px;
 `;
 
 export const CenteredBox = styled.div({
