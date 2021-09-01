@@ -1,6 +1,6 @@
 /**eslint-disable no-empty-pattern */
 import { CircularProgress } from "@material-ui/core";
-import { ContainedButton, OutlinedButton } from "components/Button";
+import { ButtonWidget, ContainedButton, OutlinedButton } from "components/Button";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -50,17 +50,20 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         Are you sure you want to withdraw all your holdings ?
       </div>
       <div className="d-flex mt-5">
-        <ContainedButton
+        <ButtonWidget
+          varaint="contained"
+          containedVariantColor="lightYellow"
           className="mr-3"
+          height="42px"
           disabled={loading}
           onClick={handleWithDraw}
         >
           {loading && <DonKeySpinner />}
           {!loading && <>Withdraw</>}
-        </ContainedButton>
-        <OutlinedButton onClick={() => props.onClose()}>
+        </ButtonWidget>
+        <ButtonWidget varaint="outlined" height="42px" onClick={() => props.onClose()}>
           Cancel
-        </OutlinedButton>
+        </ButtonWidget>
       </div>
     </>
   );

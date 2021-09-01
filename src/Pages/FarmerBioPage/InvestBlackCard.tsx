@@ -319,7 +319,6 @@ export const InvestBlackCard = ({
                 containedVariantColor="lightYellow"
                 width="119px"
                 onClick={() => setShowWithdrawPopup(true)}
-                className="ml-3"
               >
                 Withdraw
               </ButtonWidget>
