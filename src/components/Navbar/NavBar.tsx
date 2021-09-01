@@ -1,5 +1,5 @@
 /**eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Container } from "react-bootstrap";
 // import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
@@ -21,6 +21,7 @@ import { theme } from "theme";
 import moment from "moment";
 import { LotteryClosingTime } from "Pages/LotteryPage";
 import { useReferralContext } from "contexts/ReferralContext";
+import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 
 declare global {
   interface Window {
@@ -128,6 +129,16 @@ function NavBar(props: INavBarProps) {
   const address = useWalletAddress({ short: true });
   const history = useHistory();
 
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleOpen = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+  const handleClose = useCallback(() => {
+    setIsOpen(false)
+  }, []);
+
+
   const getLogo = React.useCallback(() => {
    
     return <Logo />;
@@ -191,14 +202,15 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
-                    <NavbarLink
-                      link
-                      target="openInNewTab"
-                      to="https://multichain.xyz/swap?pairID=donv4&src=1&dest=56"
-                      linkColor={variant === "builder" ? "white" : "black"}
+                    <Nav.Link
+                      onClick={(e: any) => {
+                        handleOpen();
+                      }}
+
+                       className={"colorBlack pr-md-5"}
                     >
                       Bridge
-                    </NavbarLink>
+                    </Nav.Link>
                     <MyReferralNavLink variant={variant} />
                 
                   </>
@@ -248,6 +260,7 @@ function NavBar(props: INavBarProps) {
               </>
             )}
           </Container>
+          {isOpen && <BridgePopup onClose={handleClose} />}
         </StyledNavBar>
       </>
     </>
