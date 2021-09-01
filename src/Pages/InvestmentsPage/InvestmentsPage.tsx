@@ -437,7 +437,8 @@ export const InvestmentsPage = () => {
                                 />
                               </CustomTableData>
                               <CustomTableData>$1000</CustomTableData>
-                              <CustomTableData className="investment_table_btn">
+                              <CustomTableData>
+                                <div className="d-flex justify-content-center">
                                 <WithDrawButton
                                   onClick={handleOpenWithDraw(
                                     investment.name,
@@ -449,6 +450,7 @@ export const InvestmentsPage = () => {
                                 >
                                   WITHDRAW
                                 </WithDrawButton>
+                                </div>
                               </CustomTableData>
                             </TableRow>
                           );
