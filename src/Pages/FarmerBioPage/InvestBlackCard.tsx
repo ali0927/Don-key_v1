@@ -5,6 +5,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
+import Dollars from "./images/dollars.png"
 import {
   calculateWithdrawAmount,
   getPoolContract,
@@ -37,15 +38,6 @@ import { CardDollar, InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "../TokenPage/BoostButton";
 import styled from "styled-components";
-
-const DollarCardRoot = styled.div`
-position: absolute;
-right: -15%;
-top: -17%;
-border-radius: 100%;
-background: #FFF037;
-`;
-
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -357,7 +349,8 @@ export const InvestBlackCard = ({
               tokenAmount={initialInvestment}
             />
           ),
-          <InvestmentIcon className="mr-1" />,
+          <img src={Dollars}  className="mr-1" alt="Dollar image not found"/>,
+
           "white",
           4
         )}
