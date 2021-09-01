@@ -79,6 +79,7 @@ const CardPoolAddress = styled.p`
   font-weight: bold;
   text-align: center;
   color: #000000;
+  margin-bottom: 23px;
 `;
 
 export const CardValue = styled.p`
@@ -295,7 +296,7 @@ export const DetailTable = ({
           <div style={{marginTop: 30}}>
             <CardInnerInfo className="d-flex justify-content-center mb-2">
               <div className="d-flex flex-column align-items-center">
-                <div className="d-flex align-items-baseline mb-2">
+                <div className="d-flex align-items-baseline" style={{marginBottom: 18}}>
                   <TotalPoolValueLabel color="black">
                     Total Pool Value
                   </TotalPoolValueLabel>

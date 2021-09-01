@@ -285,11 +285,11 @@ export const InvestBlackCard = ({
       <CardInnerInfo className="d-flex justify-content-center mb-3">
         <div style={{ marginTop: 30 }}>
           <>
-            <CardLabel className="mb-2" color="white">
+            <CardLabel style={{marginBottom: 20}} color="white">
               {" "}
               My Current Holdings{" "}
             </CardLabel>
-            <CardValue color="white">
+            <CardValue color="white" style={{marginBottom: 30}}>
               <DollarView
                 poolAddress={poolAddress}
                 tokenAmount={currentHoldings}
