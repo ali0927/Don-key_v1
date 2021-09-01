@@ -36,7 +36,6 @@ const ReadMore = styled.div`
 `;
 
 const CancelButton = styled(ButtonWidget)`
-  border-radius: 5px;
   :hover {
     background: #fff !important;
   }

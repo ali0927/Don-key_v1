@@ -8,6 +8,13 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
+import styled from "styled-components";
+
+const CancelButton = styled(ButtonWidget)`
+  :hover {
+    background: #fff !important;
+  }
+`;
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, poolVersion } = props;
@@ -61,9 +68,9 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           {loading && <DonKeySpinner />}
           {!loading && <>Withdraw</>}
         </ButtonWidget>
-        <ButtonWidget varaint="outlined" height="42px" onClick={() => props.onClose()}>
+        <CancelButton varaint="outlined" height="42px" onClick={() => props.onClose()}>
           Cancel
-        </ButtonWidget>
+        </CancelButton>
       </div>
     </>
   );
