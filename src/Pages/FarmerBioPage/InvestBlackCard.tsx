@@ -35,7 +35,7 @@ import {
 } from "./DetailTable";
 import { InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
-import { BoostButton } from "./BoostButton";
+import { BoostButton } from "../TokenPage/BoostButton";
 
 export const InvestBlackCard = ({
   poolAddress,

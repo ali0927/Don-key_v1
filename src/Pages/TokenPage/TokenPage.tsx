@@ -17,7 +17,7 @@ import React, { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
-import { BoostButton } from "../FarmerBioPage/BoostButton";
+import { BoostButton } from "./BoostButton";
 import { StrategyInfo } from "./StrategyInfo";
 
 const Section = styled.section`

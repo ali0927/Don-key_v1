@@ -2,7 +2,7 @@
 
 import BigNumber from "bignumber.js";
 
-export const convertToInternationalCurrencySystem = (labelValue: number) => {
+export const convertToInternationalCurrencySystem = (labelValue: number | string) => {
   // Nine Zeroes for Billions
 
   const value = Math.abs(Number(labelValue));

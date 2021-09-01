@@ -53,12 +53,6 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const TypographyShare = styled.div`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-`;
-
 const ShareButton = styled.button`
   background: linear-gradient(146.14deg, #35424b 0%, #0b0e12 100%);
   box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
@@ -76,6 +70,7 @@ const ShareButton = styled.button`
   font-weight: 600;
   line-height: 21px;
   color: #ffffff;
+  transition: all 0.50s;
   :hover {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
       linear-gradient(146.14deg, #606060 0%, #0b0e12 100%);

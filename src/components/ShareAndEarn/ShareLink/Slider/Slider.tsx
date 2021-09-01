@@ -11,6 +11,8 @@ import clsx from "clsx";
 import SlickSlider from "react-slick";
 import { LeftSliderArrow, RightSliderArrow } from "icons";
 import { useDidUpdate } from "hooks";
+import BigNumber from "bignumber.js";
+import {convertToInternationalCurrencySystem} from "helpers";
 
 const BannerRoot = styled.div`
   min-height: 227px;
@@ -126,7 +128,6 @@ const settings = {
 
 
 
-
 export const Slider: React.FC<{
   tvl: string;
   apy: string;
@@ -177,6 +178,9 @@ export const Slider: React.FC<{
     props.onChange(banners[selectedBanner]);
   }, [selectedBanner])
 
+
+  const tvlUpdate = convertToInternationalCurrencySystem(tvl)
+
   return (
     <>
       <BannerRoot id="shareEarnImage" className="position-relative">
@@ -195,7 +199,7 @@ export const Slider: React.FC<{
                 <div className="row">
                   <div className="col-5">
                     <HighLight>TVL</HighLight>
-                    <Value className="mt-2">{"$" + tvl}</Value>
+                    <Value className="mt-2">{"$" + tvlUpdate}</Value>
                   </div>
 
                   <div className="col-2 d-flex justify-content-center">

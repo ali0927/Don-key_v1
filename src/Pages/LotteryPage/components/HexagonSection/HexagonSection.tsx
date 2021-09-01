@@ -5,7 +5,7 @@ import gql from "graphql-tag";
 import React from "react";
 import { Container } from "react-bootstrap";
 import styled from "styled-components";
-import { convertToInternationalCurrencySystem } from "./helpers/convertToInternationalCurrency";
+import { convertToInternationalCurrencySystem } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
 
