@@ -10,7 +10,7 @@ const Table = styled.table({
   width: "100%",
   background: "#fff",
   marginBottom: "1rem",
-  borderRadius: 10,
+  borderRadius: 5,
 });
 
 const TableHead = styled.thead`

@@ -94,6 +94,10 @@ const AnimationDiv = styled.div({
   minHeight: 500,
 });
 
+const CustomTable = styled(Table)`
+    border-radius: 5px 5px 0px 0px;
+`;
+
 const EmptyTableHeading = styled(TableHeading)`
   min-width: 75px;
 `;
@@ -101,14 +105,15 @@ const EmptyTableHeading = styled(TableHeading)`
 const StyledImage = styled.img`
   width: 45px;
   height: 45px;
+  border-radius: 5px;
 `;
 
 const CustomTableHeading = styled(TableHeading)`
-  text-align: center;
 `;
 
 const CustomTableData = styled(TableData)`
-  text-align: center;
+  font-size: 16px;
+  font-family: Roboto;
   cursor: ${(props: { cursor?: string }) =>
     props.cursor ? props.cursor : "auto"};
 `;
@@ -373,7 +378,7 @@ export const InvestmentsPage = () => {
                     USD
                   </div>
                   <TableResponsive>
-                    <Table>
+                    <CustomTable style={{borderRadius: "5px 5px 0px 0px;"}}>
                       <TableHead>
                         <TableRow isHoverOnRow={false}>
                           <CustomTableHeading className="py-4">
@@ -385,8 +390,8 @@ export const InvestmentsPage = () => {
                             INVESTED AMOUNT
                           </CustomTableHeading>
                           <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                          {/* <CustomTableHeading>DON REWARDS</CustomTableHeading> */}
-                          <CustomTableHeading>ACTION</CustomTableHeading>
+                          <CustomTableHeading>DON REWARDS</CustomTableHeading>
+                          <CustomTableHeading style={{textAlign: 'center'}}>ACTION</CustomTableHeading>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -401,7 +406,7 @@ export const InvestmentsPage = () => {
 
                           return (
                             <TableRow key={investment.guid}>
-                              <CustomTableData>{index + 1}</CustomTableData>
+                              <CustomTableData style={{color: '#9B9B9B'}}>{index + 1}</CustomTableData>
                               <CustomTableData>
                                 <StyledImage src={investment.farmerImage.url} />
                               </CustomTableData>
@@ -410,7 +415,8 @@ export const InvestmentsPage = () => {
                                 onClick={RedirectToFarmerProfile(
                                   investment.guid
                                 )}
-                                className="font-weight-bold"
+                                style={{fontWeight: 500}}
+                               
                               >
                                 {investment.name}
                               </CustomTableData>
@@ -430,7 +436,7 @@ export const InvestmentsPage = () => {
                                   poolAddress={investment.poolAddress}
                                 />
                               </CustomTableData>
-                              {/* <CustomTableData>$1000</CustomTableData> */}
+                              <CustomTableData>$1000</CustomTableData>
                               <CustomTableData className="investment_table_btn">
                                 <WithDrawButton
                                   onClick={handleOpenWithDraw(
@@ -448,7 +454,7 @@ export const InvestmentsPage = () => {
                           );
                         })}
                       </TableBody>
-                    </Table>
+                    </CustomTable>
                   </TableResponsive>
                 </>
               )}
