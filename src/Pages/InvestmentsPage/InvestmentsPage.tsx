@@ -447,7 +447,7 @@ export const InvestmentsPage = () => {
                                       : 1
                                   )}
                                 >
-                                  Withdraw
+                                  WITHDRAW
                                 </WithDrawButton>
                               </CustomTableData>
                             </TableRow>
