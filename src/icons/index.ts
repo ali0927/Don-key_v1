@@ -58,3 +58,4 @@ export * from "./ProfitIcon";
 export * from "./LPShareIcon";
 export * from "./LeftSliderArrow";
 export * from "./RightSliderArrow";
+export * from "./BoostRocketIcon";
