@@ -7,6 +7,7 @@ import { getTotalPoolValue, toEther } from "helpers";
 import { useWeb3 } from "don-components";
 import {
   AwardIcon,
+  CardDollar,
   FollowersIcon,
   LinkIcon,
   StatisticIcon,
@@ -154,6 +155,15 @@ const Col = styled.div`
         margin-right: 0px !important;
       }
     
+`;
+
+
+const DollarCardRoot = styled.div`
+position: absolute;
+right: -15%;
+top: -17%;
+border-radius: 100%;
+background: #FFF037;
 `;
 
 export const formatNum = (num: string) => {
@@ -370,13 +380,19 @@ export const DetailTable = ({
         </CardWrapper>
       </Col>
       <Col className="mb-5"  style={{ marginLeft: 17,}}>
-        <CardWrapper  color="black">
+        <CardWrapper className="position-relative"  color="black">
+          
           {isActiveNetwork ?(
+            <>
+              <DollarCardRoot>
+                  <CardDollar style={{filter: "drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.1))"}}/>
+              </DollarCardRoot>
             <InvestBlackCard
               poolAddress={poolAddress}
               poolVersion={poolVersion}
               network={network}
             />
+            </>
           ): <InactiveNetworkCard correctNetwork={network} />}
         </CardWrapper>
       </Col>

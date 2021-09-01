@@ -56,6 +56,8 @@ const TokenInfoQuery = gql`
     tokens(where: { symbol_eq: $symbol }) {
       network {
         name
+        type
+        destination
       }
     }
   }

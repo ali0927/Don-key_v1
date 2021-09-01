@@ -220,7 +220,6 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     holdedDons,
     investedAmount,
   ]);
-  console.log("==========================",stakingObj)
 
   return (
     <StakingContractContext.Provider value={stakingObj}>

@@ -33,9 +33,19 @@ import {
   CardInnerInfo,
   formatNum,
 } from "./DetailTable";
-import { InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
+import { CardDollar, InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "../TokenPage/BoostButton";
+import styled from "styled-components";
+
+const DollarCardRoot = styled.div`
+position: absolute;
+right: -15%;
+top: -17%;
+border-radius: 100%;
+background: #FFF037;
+`;
+
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -282,6 +292,9 @@ export const InvestBlackCard = ({
   };
   return (
     <>
+    {/* <DollarCardRoot>
+     <CardDollar style={{filter: "drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.1))"}}/>
+     </DollarCardRoot> */}
       <CardInnerInfo className="d-flex justify-content-center mb-3">
         <div style={{ marginTop: 30 }}>
           <>
