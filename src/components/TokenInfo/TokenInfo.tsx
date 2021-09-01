@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import comingsoon from "images/comingsoonupdated.svg";
 import BigNumber from "bignumber.js";
+import { gql, useQuery } from "@apollo/client";
 
 const InfoWrapper = styled.div`
   background: #ffffff;
@@ -44,7 +45,23 @@ const DONApy = styled.h6`
   margin-bottom: 0;
 `;
 
-const SubText = styled.span({ fontSize: 12, fontWeight: "bold" });
+const Heading = styled.h5`
+  font-size: 18px;
+  font-weight: 900; 
+  font-family: Poppins;
+`
+
+const TokenInfoQuery = gql`
+  query tokenInfo($symbol: String!) {
+    tokens(where: { symbol_eq: $symbol }) {
+      network {
+        name
+      }
+    }
+  }
+`;
+
+const SubText = styled.span({ fontSize: 12, fontWeight: "bold", fontFamily: 'Poppins' });
 
 export const TokenInfo = ({
   token: { image, symbol, status, maxApy, RiskStrategy },
@@ -53,6 +70,14 @@ export const TokenInfo = ({
 }) => {
   const history = useHistory();
   const disabled = status === "commingsoon";
+  const { data } = useQuery(TokenInfoQuery, {
+    variables: {
+      symbol: symbol.toLowerCase(),
+    },
+  })
+  let networkName = data ? data.tokens[0].network.name : "";
+  const words = networkName.split(" ")
+  networkName = words[0]
 
   return (
     <InfoWrapper
@@ -67,26 +92,34 @@ export const TokenInfo = ({
         <img className="coming-soon" alt="coming" src={comingsoon} />
       )}
       <div className="row">
-        <div className="col-6 d-flex align-items-center">
-          <div className="mr-2">
-            <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
-          </div>
-          <div>
-            <SubText>Deposit with</SubText>
-            <h5 style={{ fontSize: 18, fontWeight: 900 }}>{symbol.toUpperCase()}</h5>
-          </div>
-        </div>
+      
+             <div className="col-6 d-flex align-items-center flex-wrap">
+                  <div className="mr-2">
+                      <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
+                  </div>
+         
+                  <div>
+                     <SubText>Deposit with</SubText>
+                     <Heading>{symbol.toUpperCase()}</Heading>
+                  </div>
+             </div>
+             <div className="col-6 d-flex flex-column align-items-end justify-content-end">
+                    <SubText>Network</SubText>
+                    <Heading>{networkName}</Heading>
+             </div>
+       
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
       <div className="row mt-5">
-        <div className="col-7">
+      <div className="col-5 d-flex flex-column  justify-content-end">
+          <h5 style={{ fontSize: 18, fontWeight: 900, fontFamily: 'Poppins'  }}>{maxApy}%</h5>
+          <SubText>Upto APY</SubText>
+        </div>
+        <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
           <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
           <SubText>APY for DON stakers</SubText>
         </div>
-        <div className="col-5 d-flex flex-column align-items-end justify-content-end">
-          <h5 style={{ fontSize: 18, fontWeight: 900 }}>{maxApy}%</h5>
-          <SubText>Upto APY</SubText>
-        </div>
+      
       </div>
     </InfoWrapper>
   );
