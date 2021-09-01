@@ -4,8 +4,8 @@ import styled from "styled-components";
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
 const InvestmentRoot = styled.div({
   border: "1px solid #d9d9d9",
+  borderRadius: "10px",
   display: "flex",
-  borderRadius: "3px",
 });
 
 const InvestmentCurrency = styled.div({
@@ -20,6 +20,7 @@ const InvestmentInputElement = styled.input`
   height: 100%;
   width: 100%;
   padding: 0.5rem 0.8rem;
+  border-radius: 10px;
   text-align: right;
   -moz-appearance: textfield;
   ::-webkit-inner-spin-button {
