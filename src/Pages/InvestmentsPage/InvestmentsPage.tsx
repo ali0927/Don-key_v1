@@ -96,6 +96,7 @@ const AnimationDiv = styled.div({
 
 const CustomTable = styled(Table)`
     border-radius: 5px 5px 0px 0px;
+    text-align: center;
 `;
 
 const EmptyTableHeading = styled(TableHeading)`
@@ -109,6 +110,7 @@ const StyledImage = styled.img`
 `;
 
 const CustomTableHeading = styled(TableHeading)`
+  text-align: center;
 `;
 
 const CustomTableData = styled(TableData)`
