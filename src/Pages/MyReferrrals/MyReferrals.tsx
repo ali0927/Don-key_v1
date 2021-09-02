@@ -344,7 +344,7 @@ export const MyReferrals = () => {
                   </div>
                   <div className="col-md">
                     <div className="d-flex justify-content-end">
-                      <NetworkButton active>BSC</NetworkButton>
+                      <NetworkButton varaint="outlined" height="50px" width="40%" active>BSC</NetworkButton>
                     </div>
                   </div>
                 </div>

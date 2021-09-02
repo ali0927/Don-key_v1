@@ -10,11 +10,7 @@ import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
 import styled from "styled-components";
 
-const CancelButton = styled(ButtonWidget)`
-  :hover {
-    background: #fff !important;
-  }
-`;
+
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, poolVersion } = props;
@@ -61,16 +57,16 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           varaint="contained"
           containedVariantColor="lightYellow"
           className="mr-3"
-          height="42px"
+          height="40px"
           disabled={loading}
           onClick={handleWithDraw}
         >
           {loading && <DonKeySpinner />}
           {!loading && <>Withdraw</>}
         </ButtonWidget>
-        <CancelButton varaint="outlined" height="42px" onClick={() => props.onClose()}>
+        <ButtonWidget varaint="outlined" height="40px" onClick={() => props.onClose()}>
           Cancel
-        </CancelButton>
+        </ButtonWidget>
       </div>
     </>
   );

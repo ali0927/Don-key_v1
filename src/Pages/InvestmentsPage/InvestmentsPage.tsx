@@ -620,14 +620,18 @@ export const InvestmentsPage = () => {
                   <HeadingTitle>My Investments</HeadingTitle>
                   <div className="d-flex align-items-center justify-content-between mb-5 flex-wrap">
                     <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
-                    <div className="d-flex px-2 flex-wrap">
+                    <div className="d-flex px-2" style={{width: "20%"}}>
                       <NetworkButton
+                        varaint="outlined"
+                        className="mr-1"
                         active={strategyNetworkFilter === BSCChainId}
                         onClick={() => setStrategyNetworkFilter(BSCChainId)}
                       >
                         BSC
                       </NetworkButton>
                       <NetworkButton
+                        varaint="outlined" 
+                        className="ml-1"
                         active={strategyNetworkFilter === PolygonChainId}
                         onClick={() => setStrategyNetworkFilter(PolygonChainId)}
                       >

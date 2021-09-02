@@ -38,12 +38,14 @@ export const BuyDonContent = () => {
             );
           }}
           varaint="contained"
+          height="40px"
           className="py-2 mr-3"
           containedVariantColor="lightYellow"
         >
           Buy ERC20 Don
         </ButtonWidget>
         <ButtonWidget
+          height="40px"
           onClick={() => {
             window.open(
               "https://pancakeswap.finance/swap?inputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&outputCurrency=0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255",

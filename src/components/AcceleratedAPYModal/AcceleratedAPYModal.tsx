@@ -298,6 +298,7 @@ export const AcceleratedAPYModal = ({
               onClick={stakeDon}
               className="py-2 font-weight-bold"
               containedVariantColor="lightYellow"
+              height="40px"
             >
               {btnLoading ? (
                 <Spinner animation="border" size="sm" />

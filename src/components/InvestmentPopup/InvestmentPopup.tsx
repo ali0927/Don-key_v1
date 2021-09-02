@@ -34,8 +34,7 @@ import { api } from "don-utils";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 const ButtonWrapper = styled.div({
-  marginRight: "10%",
-  width: "40%",
+  width: "100%",
 });
 
 const themeM = createMuiTheme({
@@ -293,13 +292,13 @@ export const InvestmentPopup = ({
                 />
                 {poolVersion < 3 && (
                   <ThemeProvider theme={themeM}>
-                    <p className="mb-1 mt-3">Slippage Tolerance</p>
-                    <div className="d-flex align-items-center">
+                    <p className="mb-2 mt-4">Slippage Tolerance</p>
+                    <div className="d-flex align-items-center mb-4">
                       {["5", "10", "15"].map((item) => {
                         return (
                           <Chip
                             size="medium"
-                            className="mr-2"
+                            className="mr-3"
                             label={`${new BigNumber(item)
                               .dividedBy(10)
                               .toFixed(2)}%`}
@@ -313,14 +312,14 @@ export const InvestmentPopup = ({
                   </ThemeProvider>
                 )}
               </div>
-              <div className="d-flex justify-content-between mt-3">
-                <ButtonWrapper>
+              <div className="d-flex justify-content-between mt-4">
+                <ButtonWrapper className="mr-2">
                   <ButtonWidget
                     varaint="contained"
                     fontSize="14px"
                     containedVariantColor="lightYellow"
-                    height="30px"
-                    width="119px"
+                    height="40px"
+                    width="100%"
                     disabled={!value || isLoading}
                     onClick={handleInvest}
                   >
@@ -328,12 +327,12 @@ export const InvestmentPopup = ({
                   </ButtonWidget>
                 </ButtonWrapper>
 
-                <ButtonWrapper className="mr-0">
+                <ButtonWrapper className="mr-0 ml-2">
                   <ButtonWidget
                     varaint="outlined"
                     fontSize="14px"
-                    height="30px"
-                    width="119px"
+                    height="40px"
+                    width="100%"
                     onClick={onClose}
                   >
                     Cancel

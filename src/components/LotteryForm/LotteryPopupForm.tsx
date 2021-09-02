@@ -1,4 +1,4 @@
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
 import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import { useWeb3 } from "don-components";
@@ -166,7 +166,7 @@ export const LotteryPopupForm = ({
           )}
 
           {isBSC && (
-            <div className="col-md-12">
+            <div className="col-md-12 mb-3">
               <div className="d-flex">
                 <BEP20 />
                 <div>
@@ -222,7 +222,7 @@ export const LotteryPopupForm = ({
             </div>
           </div>
         )}
-        <ContainedButton disabled={loading} onClick={handleSubmit}>
+        <ButtonWidget varaint="contained" height="40px" containedVariantColor="lightYellow" className="mt-2" disabled={loading} onClick={handleSubmit}>
           {loading ? (
             <Spinner animation="border" size="sm" />
           ) : isRegistered ? (
@@ -230,7 +230,7 @@ export const LotteryPopupForm = ({
           ) : (
             "Stake & Participate"
           )}
-        </ContainedButton>
+        </ButtonWidget>
       </DonCommonmodal>
     </>
   );

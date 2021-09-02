@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 import { useWeb3 } from "don-components";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
@@ -44,7 +44,11 @@ export const InputSmall = styled.input`
   border-radius: 5px;
   padding: 5px;
   padding-left: 15px;
+  border-radius: 10px;
   width: 100%;
+  :focus {
+     outline: 0px;
+  }
 `;
 
 const StakeButton = styled(ContainedButton)`
@@ -127,6 +131,22 @@ const ItemInfo = styled.p`
   font-weight: normal;
   font-size: 16px;
   line-height: 19px;
+`;
+
+export const StyledButton = styled(ButtonWidget)`
+  // width: 132px;
+  font-size: 12px;
+  border-radius: 10px !important;
+  &:disabled {
+    ${(props) => {
+      if (
+        props.varaint === "contained" &&
+        props.containedVariantColor === "lightYellow"
+      ) {
+        return `background-color: rgba(255, 236, 92, 0.5);`;
+      }
+    }}
+  }
 `;
 
 const PancakeSwapLink =
@@ -321,13 +341,16 @@ export const LotteryForm = () => {
                 </RewardsAmount>
               </div>
               <div className="mb-2 d-flex flex-column align-items-center ">
-                <ContainedButton
+                <StyledButton
+                  varaint="contained"
+                  containedVariantColor="lightYellow"
+                  height="41px"
                   disabled={!hasStakedAmount || disableButtons}
                   onClick={handleHarvest}
                   style={{ maxWidth: 200 }}
                 >
                   Harvest
-                </ContainedButton>
+                </StyledButton>
               </div>
             </WhiteCard>
           </div>

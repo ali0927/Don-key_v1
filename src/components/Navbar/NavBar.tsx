@@ -22,6 +22,7 @@ import moment from "moment";
 import { LotteryClosingTime } from "Pages/LotteryPage";
 import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
+import { ButtonWidget } from "components/Button";
 
 declare global {
   interface Window {
@@ -220,12 +221,14 @@ function NavBar(props: INavBarProps) {
             {variant === "landing" && (
               <>
                 <div className="position-relative mr-5 mr-sm-0">
-                  <ButtonComponent
+                  <ButtonWidget
+                    varaint="outlined"
+                    width="91px"
+                    height="50px"
                     onClick={() => history.push("/dashboard")}
-                    variant="colorBlack btn-outline position-relative px-4"
                   >
                     DAPP
-                  </ButtonComponent>
+                  </ButtonWidget>
                 </div>
               </>
             )}
@@ -233,14 +236,14 @@ function NavBar(props: INavBarProps) {
             {variant === "loggedin" && (
               <>
                 {isLoggedIn && !hideWallet ? (
-                  <ButtonComponent variant="colorBlack btnusername">
+                  <ButtonWidget varaint="outlined" height="50px" width="157px" >
                     <img
                       src="/assets/images/usericon.png"
                       className="d-inline-block align-top mr-md-2"
                       alt="ImageNotFound"
                     />
                     <span> {address}</span>
-                  </ButtonComponent>
+                  </ButtonWidget>
                 ) : (
                   <ConnectWalletButton />
                 )}
