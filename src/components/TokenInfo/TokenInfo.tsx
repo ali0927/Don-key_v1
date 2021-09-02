@@ -2,10 +2,17 @@ import { IStrapiToken } from "interfaces";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import comingsoon from "images/comingsoonupdated.svg";
+import crosschain from "images/CrossChain.png";
 import BigNumber from "bignumber.js";
 import { gql, useQuery } from "@apollo/client";
+import { ArrowUpDOwn } from "icons";
+import { useMemo } from "react";
 
 const InfoWrapper = styled.div`
+  min-height: 226px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   background: #ffffff;
   border-radius: 10px;
   position: relative;
@@ -49,37 +56,50 @@ const Heading = styled.h5`
   font-size: 18px;
   font-weight: 900; 
   font-family: Poppins;
-`
+`;
 
-const TokenInfoQuery = gql`
-  query tokenInfo($symbol: String!) {
-    tokens(where: { symbol_eq: $symbol }) {
-      network {
-        name
-        type
-        destination
-      }
-    }
-  }
+const CrossChainImage = styled.img`
+  position: absolute;
+  top: -13px;
+  right: 3%;
+`;
+
+const ArrowUpDOwnIcon = styled(ArrowUpDOwn)`
+   width: 45%;
+   text-align: center;
+   margin-top: 5px;
+   margin-bottom: 5px;
 `;
 
 const SubText = styled.span({ fontSize: 12, fontWeight: "bold", fontFamily: 'Poppins' });
 
 export const TokenInfo = ({
-  token: { image, symbol, status, maxApy, RiskStrategy },
+  token: { image, symbol, status, maxApy, RiskStrategy,network },
 }: {
   token: IStrapiToken;
 }) => {
   const history = useHistory();
   const disabled = status === "commingsoon";
-  const { data } = useQuery(TokenInfoQuery, {
-    variables: {
-      symbol: symbol.toLowerCase(),
-    },
-  })
-  let networkName = data ? data.tokens[0].network.name : "";
+
+  let networkName = network.name;
   const words = networkName.split(" ")
-  networkName = words[0]
+  networkName = words[0];
+
+
+  const NetworkElement = () => {
+    if(network.type && network.type === "crosschain"){
+      return   <div className="col-6 d-flex flex-column align-items-end justify-content-end">
+                   <SubText>Network</SubText>
+                   <Heading className="mb-0">{networkName}</Heading>
+                      <ArrowUpDOwnIcon/>
+                  <Heading>{network.destination || ""}</Heading>
+               </div>
+    }
+    return  <div className="col-6 d-flex flex-column align-items-end justify-content-end">
+                 <SubText>Network</SubText>
+                 <Heading>{networkName}</Heading>
+           </div>
+  }
 
   return (
     <InfoWrapper
@@ -93,9 +113,12 @@ export const TokenInfo = ({
       {disabled && (
         <img className="coming-soon" alt="coming" src={comingsoon} />
       )}
+      {(network.type && network.type === "crosschain") && (
+        <CrossChainImage  alt="crossChain" src={crosschain} />
+      )}
       <div className="row">
       
-             <div className="col-6 d-flex align-items-center flex-wrap">
+             <div className="col-6 d-flex  flex-wrap">
                   <div className="mr-2">
                       <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
                   </div>
@@ -105,14 +128,11 @@ export const TokenInfo = ({
                      <Heading>{symbol.toUpperCase()}</Heading>
                   </div>
              </div>
-             <div className="col-6 d-flex flex-column align-items-end justify-content-end">
-                    <SubText>Network</SubText>
-                    <Heading>{networkName}</Heading>
-             </div>
+             {NetworkElement()}
        
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
-      <div className="row mt-5">
+      <div className="row">
       <div className="col-5 d-flex flex-column  justify-content-end">
           <h5 style={{ fontSize: 18, fontWeight: 900, fontFamily: 'Poppins'  }}>{maxApy}%</h5>
           <SubText>Upto APY</SubText>

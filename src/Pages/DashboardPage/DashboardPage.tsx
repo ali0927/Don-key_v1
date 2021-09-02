@@ -131,6 +131,9 @@ const LIST_OF_TOKENS = gql`
       symbol
       network {
         chainId
+        type
+        destination
+        name
       }
       status
       RiskStrategy {
@@ -217,7 +220,7 @@ export const DashboardPage = () => {
                 return (
                  <>
                  {item.status !== "commingsoon" &&
-                    <div className="col-md-4">
+                    <div className="col-lg-4">
                        <TokenInfo key={item.id} token={item} />
                     </div>
                 }

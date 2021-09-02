@@ -198,6 +198,8 @@ export type IStrapiToken = {
     name: string;
     symbol: string;
     chainId: number;
+    type: string;
+    destination: string;
   };
   image: IStrapiImage;
   RiskStrategy: { strategy: IStrapiStrategy }[];

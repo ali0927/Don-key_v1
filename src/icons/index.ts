@@ -61,3 +61,4 @@ export * from "./RightSliderArrow";
 export * from "./BoostRocketIcon";
 export * from "./SmallTimerDots";
 export * from "./CardDollar";
+export * from "./ArrowUpDown";
