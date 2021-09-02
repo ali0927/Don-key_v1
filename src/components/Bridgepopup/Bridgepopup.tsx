@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useToggle } from "don-hooks";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
@@ -9,6 +9,8 @@ import {
   DONETHbridge,
   getETHDon,
   getBSCDon,
+  getDonPrice,
+  toEther,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -17,14 +19,16 @@ import { ButtonWidget } from "components/Button";
 import { InvestmentInput } from "components/InvestmentInput";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { CircularProgress } from "@material-ui/core";
-import { useEffectOnTabFocus } from "hooks";
+import { useEffectOnTabFocus, useSwitchNetwork } from "hooks";
+import { DonBinance, DonEthereum } from "icons";
+import { useWeb3Network } from "components/Web3NetworkDetector";
+import clsx from "clsx";
+import { InterchangeIcon } from "icons/InterchangeIcon";
 
 const ButtonWrapper = styled.div({
   marginRight: "10%",
   width: "40%",
 });
-
-
 
 const MyBalanceInDON = ({ onDone }: { onDone?: (val: string) => void }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
@@ -65,6 +69,81 @@ const MyBalanceInDON = ({ onDone }: { onDone?: (val: string) => void }) => {
   return <>{state.balance} </>;
 };
 
+const InputBox = styled.div`
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  display: flex;
+  align-items: stretch;
+  padding: 15px;
+`;
+
+const StyledInput = styled.input`
+  font-size: 25px;
+  color: #070602;
+  border: none;
+  background: transparent;
+  text-align: right;
+  font-weight: 700;
+  &:focus-visible {
+    outline: none;
+  }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  &[type="number"] {
+    -moz-appearance: textfield;
+  }
+`;
+
+const BridgeInput = (props: {
+  icon: React.ReactElement;
+  value: string;
+  className?: string;
+  placeholder?: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) => {
+  return (
+    <InputBox>
+      <div style={{ width: 85 }}>{props.icon}</div>
+      <StyledInput
+        type="number"
+        className={clsx("w-100", props.className)}
+        placeholder={props.placeholder}
+        value={props.value}
+        onChange={props.onChange}
+      />
+    </InputBox>
+  );
+};
+
+const InputLabel = styled.span`
+  font-weight: 600;
+  color: #a3a3a3;
+  font-size: 14px;
+`;
+
+const InputMaxButton = styled.span`
+  color: #fac200;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const RenderNetworkIcon = ({ chainId = 1 }) => {
+  if (chainId === 1) {
+    return <DonEthereum />;
+  }
+  if (chainId === 56) {
+    return <DonBinance />;
+  }
+  return <DonEthereum />;
+};
+
 export const BridgePopup = ({
   onClose,
   onSuccess,
@@ -74,9 +153,7 @@ export const BridgePopup = ({
 }) => {
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
-  const [balance, setBalance] = useState("0");
 
-  const web3 = useWeb3();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
 
@@ -112,7 +189,6 @@ export const BridgePopup = ({
       // refetch();
     }
   };
-  const symbol = "DON";
 
   const renderButtonText = () => {
     if (isLoading) {
@@ -121,82 +197,117 @@ export const BridgePopup = ({
 
     return "Swap";
   };
+  const { chainId } = useWeb3Network();
+  const { switchNetwork } = useSwitchNetwork();
+  const [bridgeInfo, setBridgeInfo] = useState();
 
-  const [hasCheckedDons, setHasChecked] = useState(false);
+  const [input1Chain, setInput1Chain] = useState(1);
+  const [input2Chain, setInput2Chain] = useState(56);
+  const [input1, setInput1] = useState("");
+  const [input2, setInput2] = useState("");
 
+  const [balance, setBalance] = useState("-");
+  const web3 = useWeb3();
+  const fetchbalance = async () => {
+    let token = await getETHDon(web3);
+    if (chainId === 1) {
+      token = await getETHDon(web3);
+    }
+    if (chainId === 56) {
+      token = await getBSCDon(web3);
+    }
+    const accounts = await web3.eth.getAccounts();
+    const balance = await token.methods.balanceOf(accounts[0]).call();
+    setBalance(toEther(balance));
+  };
+
+  const fetchBridgeInfo = async () => {
+
+  }
+
+  useEffect(() => {
+    fetchbalance();
+  }, [chainId]);
+  
+
+
+
+ 
 
 
   const renderContent = () => {
-    if (hasCheckedDons) {
-      return (
-        <>
-          <div>
-            <div className="mt-4">
-              <InvestmentInput
-                value={value}
-                disabled={isLoading}
-                currencySymbol={symbol}
-                setValue={setValue}
-                max={balance}
-              />
+    return (
+      <>
+        <div>
+          <div className="mt-4">
+            <div className="d-flex align-items-center justify-content-between">
+              <InputLabel>From</InputLabel>
+              <InputMaxButton onClick={() => setInput1(balance)}>Use MAX</InputMaxButton>
             </div>
-            <div className="d-flex justify-content-between mt-3">
-              <ButtonWrapper>
-                <ButtonWidget
-                  varaint="contained"
-                  fontSize="14px"
-                  containedVariantColor="lightYellow"
-                  height="30px"
-                  width="119px"
-                  disabled={!value || isLoading}
-                  onClick={handleSwap}
-                >
-                  {renderButtonText()}
-                </ButtonWidget>
-              </ButtonWrapper>
-
-              <ButtonWrapper className="mr-0">
-                <ButtonWidget
-                  varaint="outlined"
-                  fontSize="14px"
-                  height="30px"
-                  width="119px"
-                  onClick={onClose}
-                >
-                  Cancel
-                </ButtonWidget>
-              </ButtonWrapper>
+            <BridgeInput
+              icon={<RenderNetworkIcon chainId={input1Chain} />}
+              value={input1}
+              placeholder="0.0"
+              onChange={(e) => {
+                setInput1(e.target.value);
+              }}
+            />
+            <InputLabel>Balance: {new BigNumber(balance).toFixed(2)}</InputLabel>
+            <div className="my-2">
+              <InterchangeIcon />
             </div>
+            <BridgeInput
+            
+              icon={<RenderNetworkIcon chainId={input2Chain} />}
+              value={input2}
+              placeholder="0.0"
+              onChange={(e) => {
+                setInput2(e.target.value);
+              }}
+            />
           </div>
-          <p className="mt-4"></p>
-        </>
-      );
-    } else {
-      return (
-        <div
-          style={{ minHeight: 200 }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <CircularProgress color="inherit" />
+          <div className="d-flex justify-content-between mt-3">
+            <ButtonWrapper>
+              <ButtonWidget
+                varaint="contained"
+                fontSize="14px"
+                containedVariantColor="lightYellow"
+                height="30px"
+                width="119px"
+                disabled={!value || isLoading}
+                onClick={handleSwap}
+              >
+                {renderButtonText()}
+              </ButtonWidget>
+            </ButtonWrapper>
+
+            <ButtonWrapper className="mr-0">
+              <ButtonWidget
+                varaint="outlined"
+                fontSize="14px"
+                height="30px"
+                width="119px"
+                onClick={onClose}
+              >
+                Cancel
+              </ButtonWidget>
+            </ButtonWrapper>
+          </div>
         </div>
-      );
-    }
+        <p className="mt-4"></p>
+      </>
+    );
   };
 
   return (
     <DonCommonmodal
-      title={hasCheckedDons ? "Swap" : ""}
+      title={"Exchange"}
       variant="common"
-      isOpen={true}
+      subtitle="Transfer DON from Ethereum to Binance"
+      contentStyle={{ padding: 30 }}
+      isOpen
       size="xs"
       rounded
-      titleRightContent={
-        hasCheckedDons ? (
-          <>
-            Balance: {<MyBalanceInDON onDone={setBalance} />} {symbol}
-          </>
-        ) : undefined
-      }
       onClose={onClose}
     >
       {renderContent()}

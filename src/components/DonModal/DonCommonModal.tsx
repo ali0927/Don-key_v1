@@ -7,9 +7,8 @@ import {
   StyledCloseIcon,
 } from "./Components";
 import styled from "styled-components";
-import produce from "immer";
-import { set } from "lodash";
 import { useDialogStyles } from "./styles/useDialogStyles";
+import clsx from "clsx";
 
 const CutomizeModalHeading = styled.h4`
   font-size: 25px;
@@ -19,14 +18,11 @@ const CutomizeModalHeading = styled.h4`
   align-items: center;
 `;
 
-
-const StyledDialog = (withStyles({
-
+const StyledDialog = withStyles({
   paperWidthMd: {
     maxWidth: "761px",
   },
-  papper:{}
-})(Dialog));
+})(Dialog);
 
 export const DonCommonmodal = ({
   isOpen,
@@ -39,7 +35,8 @@ export const DonCommonmodal = ({
   style,
   PaperProps,
   titleRightContent,
-  rounded
+  contentStyle,
+  subtitle,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -52,6 +49,8 @@ export const DonCommonmodal = ({
   titleRightContent?: React.ReactElement;
   children: React.ReactNode;
   rounded?: boolean;
+  contentStyle?: React.CSSProperties;
+  subtitle?: string;
 }) => {
   const classes = useDialogStyles();
   const modalInnerContent = () => {
@@ -59,13 +58,14 @@ export const DonCommonmodal = ({
       return (
         <>
           <div className="d-flex align-items-center justify-content-between">
-            <CutomizeModalHeading>{title}</CutomizeModalHeading>
+            <CutomizeModalHeading className={clsx({"mb-1": !!subtitle})}>{title}</CutomizeModalHeading>
             {titleRightContent && (
               <p>
                 <small>{titleRightContent}</small>
               </p>
             )}
           </div>
+          <p style={{fontSize: 14, color: "#A3A3A3"}}>{subtitle}</p>
         </>
       );
     }
@@ -81,26 +81,19 @@ export const DonCommonmodal = ({
     );
   };
 
-  //  const getPaperProps = () => {
-  //    return produce(PaperProps || {}, draft=> {
-  //      if(rounded){
-  //        return set(draft, "style.borderRadius", 20);
-  //      }
-  //    })
-  //  }
-
   return (
     <StyledDialog
       open={isOpen}
       style={style}
       onClose={onClose}
-      classes={{paper: classes.paper}}
+      //@ts-ignore
+      classes={{ paper: classes.paper }}
       fullWidth={true}
+      PaperProps={PaperProps}
       maxWidth={size}
-      
     >
       <>
-        <ModalContent>
+        <ModalContent style={contentStyle}>
           <StyledCloseIcon onClick={onClose} />
           {modalInnerContent()}
           {children}
