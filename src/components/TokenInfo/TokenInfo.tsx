@@ -123,7 +123,7 @@ export const TokenInfo = ({
                       <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
                   </div>
          
-                  <div>
+                  <div className="d-flex flex-column">
                      <SubText>Deposit with</SubText>
                      <Heading>{symbol.toUpperCase()}</Heading>
                   </div>
