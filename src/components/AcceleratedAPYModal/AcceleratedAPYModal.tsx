@@ -71,6 +71,10 @@ const DonHTMLInput = styled.input`
   }
 `;
 
+const Header = styled.div`
+   width: 92%
+`;
+
 const DonInput = ({
   label,
   placeholder,
@@ -125,6 +129,14 @@ const DonSlider = withStyles({
     height: 5,
     marginTop: 7,
     backgroundColor: "#b0b0b0",
+    '&[data-index="4"]': {
+      left: '98% !important',
+    },
+  },
+  markLabel: {
+    '&[data-index="4"]': {
+      left: '97% !important',
+    },
   },
   active: {},
   valueLabel: {
@@ -233,7 +245,7 @@ export const AcceleratedAPYModal = ({
       size="xs"
     >
       <div style={{ marginTop: -30, marginBottom: -20 }}>
-        <div className="d-flex align-items-center justify-content-between">
+        <Header className="d-flex align-items-center justify-content-between">
           <div style={{ width: 100 }}>
             <img
               src="/assets/images/token.png"
@@ -241,8 +253,8 @@ export const AcceleratedAPYModal = ({
               alt="Don Token Logo"
             />
           </div>
-          <StyledH2 className="mb-0">Don-key APY program</StyledH2>
-        </div>
+          <StyledH2 className="mb-0">Accelerated APY</StyledH2>
+        </Header>
         <ApyForm>
           <DonInput
             label="Available DON"
@@ -275,7 +287,7 @@ export const AcceleratedAPYModal = ({
             marks={marks}
             step={20}
             min={0}
-            max={110}
+            max={100}
           />
           <p className="mb-1 text-center">Your DON Stake:</p>
           <h5 className="text-center">{donAmount}</h5>

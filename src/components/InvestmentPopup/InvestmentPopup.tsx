@@ -340,8 +340,9 @@ export const InvestmentPopup = ({
                 </ButtonWrapper>
               </div>
             </div>
-            <p className="mt-4">
-              <small>Withdrawals are completed every 12 hrs*</small>
+            <p className="d-flex mt-4">
+              <small> *</small>
+              <small>Withdraws are executed up to 12 hours upon request in order to minimize swap fees, price impact and slippage within the different pools.</small>
             </p>
           </>
         );

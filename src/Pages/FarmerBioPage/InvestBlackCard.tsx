@@ -301,7 +301,7 @@ export const InvestBlackCard = ({
           <div className="row mt-2 mb-1 justify-content-center">
             <ButtonWidget
               varaint="contained"
-              fontSize="12px"
+              fontSize="14px"
               className={clsx("mb-2",{"mr-3": isInvested})}
               containedVariantColor="lightYellow"
               height="30px"

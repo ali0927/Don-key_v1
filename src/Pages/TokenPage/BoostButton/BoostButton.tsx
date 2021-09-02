@@ -21,7 +21,7 @@ export const BoostButton: React.FC = () => {
         <>
           <ButtonWidget
               varaint="contained"
-              fontSize="12px"
+              fontSize="14px"
               className={"ml-3 "}
               containedVariantColor="lightYellow"
               height="30px"
