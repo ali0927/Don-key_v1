@@ -1,8 +1,5 @@
 import { useCallback, useState } from "react";
-import { Footer } from "components/Footer/Footer";
 import { withWeb3 } from "hoc";
-import styled from "styled-components";
-import { theme } from "theme";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
 import { InvestmentsPage } from "Pages/InvestmentsPage/InvestmentsPage";
