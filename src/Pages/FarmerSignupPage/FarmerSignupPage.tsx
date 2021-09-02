@@ -10,7 +10,7 @@ import { DonKeyTextField } from "components/DonKeyTextField";
 import { FileUploadButton } from "components/FileUploadButton";
 import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
 import { validate } from "./helpers";
-import { ContainedButton } from "components/Button";
+import { ButtonWidget, ContainedButton } from "components/Button";
 import { useSnackbar } from "notistack";
 import { ErrorSnackbar } from "components/Snackbars";
 
@@ -350,10 +350,10 @@ export const FarmerSignupPage = () => {
                 onChange={(image) => setImage(image)}
               />
             </Form.Group>
-            <MakeFarmerProfileBtn onClick={handleCreate}>
+            <ButtonWidget varaint="contained" height="40px" width="30%"  containedVariantColor="lightYellow" onClick={handleCreate}>
               {" "}
               Submit
-            </MakeFarmerProfileBtn>
+            </ButtonWidget>
 
             <StyledDonkey />
           </div>
