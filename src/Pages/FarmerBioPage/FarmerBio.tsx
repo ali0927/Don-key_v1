@@ -226,7 +226,7 @@ export const FarmerBio = ({
             </Col>
           </Row>
 
-          <Row className="mt-5 justify-content-center" style={{marginTop: "5rem"}}>
+          <Row className="mt-5 justify-content-center">
             <DetailTable
               apy={apy}
               network={network}

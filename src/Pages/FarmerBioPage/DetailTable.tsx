@@ -163,14 +163,6 @@ const Col = styled.div`
 `;
 
 
-const DollarCardRoot = styled.div`
-position: absolute;
-right: -12%;
-top: -19%;
-border-radius: 100%;
-background: #FFF037;
-`;
-
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
   let digits = wrappedNum.gt(1) ? 2 : 6;
@@ -385,15 +377,11 @@ export const DetailTable = ({
         </CardWrapper>
       </Col>
       <Col className="mb-5"  style={{ marginLeft: 17,}}>
-      {/* <h2>Share and Earn</h2> */}
         <BlackCardWrapper className="position-relative"  color="black">
           
           {isActiveNetwork ?(
             <>
-              <DollarCardRoot>
-                
-                  <CardDollar style={{filter: "drop-shadow(0px 1px 20px rgb(0 0 0 / 10%))"}}/>
-              </DollarCardRoot>
+
             <InvestBlackCard
               poolAddress={poolAddress}
               poolVersion={poolVersion}
