@@ -47,7 +47,7 @@ const OutlineVariant = styled.button`
   border: 1px solid ${theme.palette.border.main};
   border-radius: 10px;
   font-family: Poppins;
-
+  transition: background-color .40s;
   :hover {
     background-color: ${theme.palette.common.black};
     color: ${theme.palette.text.white};
