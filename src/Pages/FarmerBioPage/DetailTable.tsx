@@ -165,8 +165,8 @@ const Col = styled.div`
 
 const DollarCardRoot = styled.div`
 position: absolute;
-right: -15%;
-top: -17%;
+right: -12%;
+top: -19%;
 border-radius: 100%;
 background: #FFF037;
 `;

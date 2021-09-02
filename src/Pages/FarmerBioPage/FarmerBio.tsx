@@ -171,7 +171,7 @@ export const FarmerBio = ({
             </Col>
           </Row>
 
-          <Row className="mt-0 mt-sm-3 mb-4">
+          <Row className="mt-0 mt-sm-5 mb-5">
             <div className="col-lg-6">
               <div className="row">
                 <ImageWrapper className="pl-4">
@@ -222,13 +222,11 @@ export const FarmerBio = ({
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
                 </ShareButton>
-              ) : (
-                <DotsIcon />
-              )}
+              ) : null}
             </Col>
           </Row>
 
-          <Row className="mt-5 justify-content-center">
+          <Row className="mt-5 justify-content-center" style={{marginTop: "5rem"}}>
             <DetailTable
               apy={apy}
               network={network}
