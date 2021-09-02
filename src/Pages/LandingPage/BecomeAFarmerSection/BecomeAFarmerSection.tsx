@@ -68,7 +68,7 @@ export const BecomeAFarmerSection: React.FC = () => {
               Become a Don-key farmer
             </Heading3>
             <Row className="pt-5">
-              <Col md={4}>
+              <Col lg={4}>
                 <Card className="h-100">
                   <Card.Body>
                     <Icons src={buildStrategy} />
@@ -81,7 +81,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 </Card>
               </Col>
 
-              <Col md={4}>
+              <Col lg={4}>
                 <Card className="h-100">
                   <Card.Body>
                     <Icons src={getLiquidity} />
@@ -93,7 +93,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                   </Card.Body>
                 </Card>
               </Col>
-              <Col md={4}>
+              <Col lg={4}>
                 <Card className="h-100">
                   <Card.Body>
                     <Icons src={boostyield} />
