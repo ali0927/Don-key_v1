@@ -284,10 +284,7 @@ export const InvestBlackCard = ({
   };
   return (
     <>
-    {/* <DollarCardRoot>
-     <CardDollar style={{filter: "drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.1))"}}/>
-     </DollarCardRoot> */}
-      <CardInnerInfo className="d-flex justify-content-center mb-3">
+      <CardInnerInfo className="d-flex justify-content-center mb-3" >
         <div style={{ marginTop: 30 }}>
           <>
             <CardLabel style={{marginBottom: 20}} color="white">

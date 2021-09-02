@@ -31,6 +31,7 @@ import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "./InvestBlackCard";
 import { InactiveNetworkCard } from "./InactiveNetworkCard";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
+import { ButtonWidget } from "components/Button";
 
 export const CardWrapper = styled.div`
   min-height: 280px;
@@ -51,6 +52,10 @@ export const CardWrapper = styled.div`
     0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025),
     0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296),
     0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037);
+`;
+
+export const BlackCardWrapper = styled(CardWrapper)`
+    box-shadow: 0px 4px 10px rgb(0 0 0 / 35%)
 `;
 
 export const CardInnerInfo = styled.div`
@@ -380,12 +385,14 @@ export const DetailTable = ({
         </CardWrapper>
       </Col>
       <Col className="mb-5"  style={{ marginLeft: 17,}}>
-        <CardWrapper className="position-relative"  color="black">
+      {/* <h2>Share and Earn</h2> */}
+        <BlackCardWrapper className="position-relative"  color="black">
           
           {isActiveNetwork ?(
             <>
               <DollarCardRoot>
-                  <CardDollar style={{filter: "drop-shadow(0px 0px 30px rgba(0, 0, 0, 0.1))"}}/>
+                
+                  <CardDollar style={{filter: "drop-shadow(0px 1px 20px rgb(0 0 0 / 10%))"}}/>
               </DollarCardRoot>
             <InvestBlackCard
               poolAddress={poolAddress}
@@ -394,7 +401,7 @@ export const DetailTable = ({
             />
             </>
           ): <InactiveNetworkCard correctNetwork={network} />}
-        </CardWrapper>
+        </BlackCardWrapper>
       </Col>
     </>
   );
