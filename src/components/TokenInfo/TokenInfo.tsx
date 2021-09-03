@@ -4,9 +4,7 @@ import styled from "styled-components";
 import comingsoon from "images/comingsoonupdated.svg";
 import crosschain from "images/CrossChain.png";
 import BigNumber from "bignumber.js";
-import { gql, useQuery } from "@apollo/client";
 import { ArrowUpDOwn } from "icons";
-import { useMemo } from "react";
 
 const InfoWrapper = styled.div`
   min-height: 226px;
@@ -24,11 +22,12 @@ const InfoWrapper = styled.div`
   margin-bottom: 20px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.05);
   ${(props: { disabled?: boolean }) =>
-    props.disabled ? `cursor: default;` : `cursor: pointer; &:hover {
+    props.disabled
+      ? `cursor: default;`
+      : `cursor: pointer; &:hover {
     transform: translateY(-2px);
   }`}
   transition: transform 0.3s linear;
-  
 `;
 
 const GreenText = styled.p`
@@ -54,7 +53,7 @@ const DONApy = styled.h6`
 
 const Heading = styled.h5`
   font-size: 18px;
-  font-weight: 900; 
+  font-weight: 900;
   font-family: Poppins;
 `;
 
@@ -65,16 +64,20 @@ const CrossChainImage = styled.img`
 `;
 
 const ArrowUpDOwnIcon = styled(ArrowUpDOwn)`
-   width: 45%;
-   text-align: center;
-   margin-top: 5px;
-   margin-bottom: 5px;
+  width: 45%;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
 `;
 
-const SubText = styled.span({ fontSize: 12, fontWeight: "bold", fontFamily: 'Poppins' });
+const SubText = styled.span({
+  fontSize: 12,
+  fontWeight: "bold",
+  fontFamily: "Poppins",
+});
 
 export const TokenInfo = ({
-  token: { image, symbol, status, maxApy, RiskStrategy,network },
+  token: { image, symbol, status, maxApy, RiskStrategy, network, slug },
 }: {
   token: IStrapiToken;
 }) => {
@@ -82,66 +85,69 @@ export const TokenInfo = ({
   const disabled = status === "commingsoon";
 
   let networkName = network.name;
-  const words = networkName.split(" ")
+  const words = networkName.split(" ");
   networkName = words[0];
 
-
   const NetworkElement = () => {
-    if(network.type && network.type === "crosschain"){
-      return   <div className="col-6 d-flex flex-column align-items-end justify-content-end">
-                   <SubText>Network</SubText>
-                   <Heading className="mb-0">{networkName}</Heading>
-                      <ArrowUpDOwnIcon/>
-                  <Heading>{network.destination || ""}</Heading>
-               </div>
+    if (network.type && network.type === "crosschain") {
+      return (
+        <div className="col-6 d-flex flex-column align-items-end justify-content-end">
+          <SubText>Network</SubText>
+          <Heading className="mb-0">{networkName}</Heading>
+          <ArrowUpDOwnIcon />
+          <Heading>{network.destination || ""}</Heading>
+        </div>
+      );
     }
-    return  <div className="col-6 d-flex flex-column align-items-end justify-content-end">
-                 <SubText>Network</SubText>
-                 <Heading>{networkName}</Heading>
-           </div>
-  }
+    return (
+      <div className="col-6 d-flex flex-column align-items-end justify-content-end">
+        <SubText>Network</SubText>
+        <Heading>{networkName}</Heading>
+      </div>
+    );
+  };
 
   return (
     <InfoWrapper
       disabled={disabled}
       onClick={() => {
         if (!disabled) {
-          history.push("/dashboard/" + symbol.toLowerCase());
+          history.push(`/dashboard/${network.slug}/${slug.toLowerCase()}`);
         }
       }}
     >
       {disabled && (
         <img className="coming-soon" alt="coming" src={comingsoon} />
       )}
-      {(network.type && network.type === "crosschain") && (
-        <CrossChainImage  alt="crossChain" src={crosschain} />
+      {network.type && network.type === "crosschain" && (
+        <CrossChainImage alt="crossChain" src={crosschain} />
       )}
       <div className="row">
-      
-             <div className="col-6 d-flex  flex-wrap">
-                  <div className="mr-2">
-                      <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
-                  </div>
-         
-                  <div className="d-flex flex-column">
-                     <SubText>Deposit with</SubText>
-                     <Heading>{symbol.toUpperCase()}</Heading>
-                  </div>
-             </div>
-             {NetworkElement()}
-       
+        <div className="col-6 d-flex  flex-wrap">
+          <div className="mr-2">
+            <img style={{ width: 40 }} src={image.url} alt="token" />{" "}
+          </div>
+
+          <div className="d-flex flex-column">
+            <SubText>Deposit with</SubText>
+            <Heading>{symbol.toUpperCase()}</Heading>
+          </div>
+        </div>
+        {NetworkElement()}
+
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
       <div className="row">
-      <div className="col-5 d-flex flex-column  justify-content-end">
-          <h5 style={{ fontSize: 18, fontWeight: 900, fontFamily: 'Poppins'  }}>{maxApy}%</h5>
+        <div className="col-5 d-flex flex-column  justify-content-end">
+          <h5 style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins" }}>
+            {maxApy}%
+          </h5>
           <SubText>Upto APY</SubText>
         </div>
         <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
           <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
           <SubText>APY for DON stakers</SubText>
         </div>
-      
       </div>
     </InfoWrapper>
   );

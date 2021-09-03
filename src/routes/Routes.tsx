@@ -82,7 +82,7 @@ export default function Routes() {
         />
         <ProtectedRoute
           exact
-          path="/dashboard/:token"
+          path="/dashboard/:network/:token"
           children={
             <Suspense fallback={<LoadingPage />}>
               <TokenPage />
