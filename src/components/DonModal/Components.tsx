@@ -25,6 +25,7 @@ padding: 5px;
 const StyledCloseIcon = styled(CloseIcon)`
 position: absolute;
 top: 30px;
+z-index: 10;
 right: 30px;
 cursor: pointer;
 `;
