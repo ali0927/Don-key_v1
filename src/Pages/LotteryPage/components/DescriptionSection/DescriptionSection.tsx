@@ -75,7 +75,7 @@ export const DescriptionSection: React.FC = () => {
       <Root>
         <Container className="d-flex justify-content-center h-100 pt-5 pb-5">
           <div className="row justify-content-center">
-            <DescriptionBlock className="col-md-10  m-5">
+            <DescriptionBlock className="col-md-10  m-md-5">
               <OvalWrapper>
                 <ImageIconWrraper>
                   <ImageIcon src={DonImage} alt="donkeyImageNotFount" />

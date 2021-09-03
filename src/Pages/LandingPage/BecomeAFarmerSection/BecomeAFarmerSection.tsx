@@ -64,7 +64,7 @@ export const BecomeAFarmerSection: React.FC = () => {
       <CardBanner>
         <CardFooter className="pt-5 pb-5">
           <Container>
-            <Heading3 className="mb-5 justify-content-center">
+            <Heading3 className="mb-5 text-center">
               Become a Don-key farmer
             </Heading3>
             <Row className="pt-5">

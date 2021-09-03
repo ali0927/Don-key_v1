@@ -192,10 +192,11 @@ export type IStrapiToken = {
   status: "commingsoon" | "active" | "disabled" | "hidden"
   tokenAddress: string;
   maxApy: string;
-
+  slug: string;
   network: {
     id: number;
     name: string;
+    slug: string;
     symbol: string;
     chainId: number;
     type: string;

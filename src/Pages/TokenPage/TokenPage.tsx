@@ -64,8 +64,8 @@ const StyledLink = styled(Link)`
 `;
 
 const TokenInfoQuery = gql`
-  query tokenInfo($symbol: String!) {
-    tokens(where: { symbol_eq: $symbol }) {
+  query tokenInfo($slug: String!, $network: String!) {
+    tokens(where: { slug: $slug, network:{slug: $network}}) {
       network {
         chainId
         symbol
@@ -131,11 +131,12 @@ const Image = styled.img`
 `;
 
 export const TokenPage= () => {
-  const { token } = useParams<{ token: string }>();
+  const { token, network: tokenNetwork } = useParams<{ token: string; network: string; }>();
 
   const { data, loading } = useQuery(TokenInfoQuery, {
     variables: {
-      symbol: token,
+      slug: token,
+      network: tokenNetwork
     },
   });
   const history = useHistory();

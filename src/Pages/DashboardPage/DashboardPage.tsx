@@ -127,11 +127,13 @@ const LIST_OF_TOKENS = gql`
       }
       maxApy
       symbol
+      slug
       network {
         chainId
         type
         destination
         name
+        slug
       }
       status
       RiskStrategy {

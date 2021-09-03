@@ -7,7 +7,6 @@ import { ButtonWidget } from "components/Button";
 import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
-import { LinkImage } from "../LinkImage";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { useTVL } from "hooks";
 import { getShareUrl, getUserReferralCode } from "helpers";
@@ -77,6 +76,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
   const { tvl } = useTVL(props.poolAddress);
+  const [copyLink, setCopyLink] = React.useState(props.link || "");
 
   React.useEffect(() => {
     if (openTooltip) {
@@ -87,8 +87,10 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   }, [openTooltip]);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(props.link);
-    setOpenTooltip(true);
+    if(copyLink){
+      navigator.clipboard.writeText(copyLink);
+      setOpenTooltip(true);
+    }
   };
 
   const [loading, setLoading] = useState(false);
@@ -119,9 +121,18 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
       const result = await api.put("/api/v2/shortener", formData);
       const shortUrl = getShareUrl(result.data.code);
       console.log(shortUrl, "Worked");
+      setCopyLink(shortUrl);
       setLoading(false);
     }
   };
+
+
+  const handleFirstRender = async() =>{
+      if(!props.link){
+        console.log("---------------FIRST RENDER---------");
+        handleImageGenerate()
+      }
+  }
 
   return (
     <>
@@ -139,7 +150,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-8 mb-2">
             <TextOnInput className="mt-3">
               <Label htmlFor="inputText">Your Sharable Link</Label>
-              <Input type="text" value={props.link} />
+              <Input type="text" value={copyLink} />
             </TextOnInput>
           </div>
 
@@ -182,7 +193,8 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             apy={props.apy}
             farmerName={props.farmerName}
             strategyName={props.strategyName}
-            onChange={(image) => {handleImageGenerate()}}
+            onChange={() => {handleImageGenerate()}}
+            onFirstRender={handleFirstRender}
           />
         </div>
 
@@ -223,15 +235,6 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-2" />
         </div>
       </DonCommonmodal>
-      <LinkImage
-        farmerData={{
-          farmerName: props.farmerName,
-          imageUrl: "",
-          strategyName: props.strategyName,
-        }}
-        tvl={`$${formatNum(tvl)}`}
-        apy={props.apy}
-      />
     </>
   );
 };
