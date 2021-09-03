@@ -215,7 +215,7 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {true ? (
+              {(pool_version === 3 && network.symbol === 'BSC')  ? (
                 <ShareButton onClick={handleShareClick}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
