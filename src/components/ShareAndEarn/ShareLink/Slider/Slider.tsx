@@ -133,7 +133,9 @@ export const Slider: React.FC<{
   apy: string;
   farmerName: string;
   strategyName: string;
-  onChange: (image: string) => void;
+  onChange: () => void;
+  onFirstRender: () => void;
+
 }> = (props) => {
   const { tvl, apy, farmerName, strategyName } = props;
 
@@ -174,9 +176,14 @@ export const Slider: React.FC<{
     }
   };
 
+  React.useEffect(()=>{
+     props.onFirstRender();
+  },[])
+
   useDidUpdate(() => {
-    props.onChange(banners[selectedBanner]);
-  }, [selectedBanner])
+    props.onChange();
+  }, [selectedBanner]);
+
 
 
   const tvlUpdate = convertToInternationalCurrencySystem(tvl)

@@ -1,8 +1,7 @@
 
 export interface IShareLinkProps {
     open: boolean;
-    imageUrl: string;
-    link: string;
+    link: string | null;
     farmerName: string;
     strategyName: string;
     poolAddress: string;

@@ -115,11 +115,9 @@ export const FarmerBio = ({
   const [openShareLink, setShareLink] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [shortLink, setShortLink] = useState<string | null>(null);
-  const handleCreateLink = (url: string, short: string) => {
-    setImageUrl(url);
+  const handleCreateLink = () => {
     setSharePopup(false);
     setShareLink(true);
-    setShortLink(short);
   };
   const [code, setCode] = useState("");
   const web3 = useWeb3();
@@ -217,7 +215,7 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {(pool_version === 3 && network.symbol === 'BSC') ? (
+              {true ? (
                 <ShareButton onClick={handleShareClick}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
@@ -242,22 +240,16 @@ export const FarmerBio = ({
         <Share
           open={openSharePopup}
           pool_address={poolAddress}
-          imageData={{
-            farmerName: name,
-            imageUrl: picture,
-            strategyName,
-          }}
           apy={apy}
-          onCreateLink={handleCreateLink}
+          onCreateClick={handleCreateLink}
           onClose={() => setSharePopup(false)}
         />
       )}
 
-      {openShareLink && imageUrl && shortLink && (
+      {openShareLink  && (
         <ShareLink
           link={shortLink}
           open={openShareLink}
-          imageUrl={imageUrl}
           farmerName={name}
           strategyName={strategyName}
           poolAddress={poolAddress}
