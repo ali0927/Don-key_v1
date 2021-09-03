@@ -80,9 +80,10 @@ export const HeaderSection: React.FC<{
                   />
                 )}
               </div>
-              <MainHeading className="mb-0">
+              <MainHeading className="mb-0 text-center text-md-left">
                 Stake LP to earn Don Rewards
               </MainHeading>
+              <div className="d-flex justify-content-center justify-content-lg-start">
               <ButtonWidget
                 varaint="contained"
                 height="50px"
@@ -92,6 +93,7 @@ export const HeaderSection: React.FC<{
               >
                 Stake
               </ButtonWidget>
+              </div>   
             </div>
           </div>
         </Container>

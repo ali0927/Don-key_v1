@@ -11,20 +11,19 @@ const Root = styled.div`
   background:${theme.palette.background.yellow};
   overflow: hidden;
   padding: 200px 0;
+  @media screen and (max-width: 978px) {
+    padding: 0px;
+  }
 `;
 
 const Title = styled.h3`
   font-family: ObjectSans-Bold;
   font-weight: bold;
   font-size: 45px;
-  line-height: 130%;
-  display: flex;
-  align-items: center;
   color: #070602;
 `;
 
 const Paragraph = styled.p`
-  width: 71%;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;
@@ -73,13 +72,13 @@ border-radius: 4px;
 export const StrategyBuilderSection: React.FC = () => {
   return (
     <>
-      <Root >
+      <Root className="px-auto" >
         <Container >
           <Row className="my-5">
-            <Col md={7}>
+            <Col lg={7}>
               <div>
                 <Title className="mb-3 mt-3">Farming strategy builder</Title>
-                <Paragraph className="mt-4">
+                <Paragraph className="mt-4 col-lg-9 p-0">
                   Build your DeFi strategy with a drag and drop interface
                   allowing you to adapt fast to the dynamic world of DeFi and
                   secure your yield
@@ -96,7 +95,7 @@ export const StrategyBuilderSection: React.FC = () => {
                 </StyledButtonWidget>
               </div>
             </Col>
-            <Col md={4}>
+            <Col lg={4}>
               <TradingImageRoot>
                 <TradingImage src={BuilderImage} alt="Imagetrading" />
               </TradingImageRoot>

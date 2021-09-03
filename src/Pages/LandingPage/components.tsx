@@ -5,8 +5,6 @@ font-family: ObjectSans-Bold;
 font-weight: bold;
 font-size: 45px;
 line-height: 130%;
-display: flex;
-align-items: center;
 color: #070602;
 `;
 

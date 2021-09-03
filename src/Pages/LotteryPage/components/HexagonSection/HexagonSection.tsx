@@ -158,7 +158,7 @@ export const HexagonSection: React.FC = () => {
   return (
     <>
       <Container className="d-flex justify-content-center">
-        <Wrapper className="row">
+        <Wrapper className="row justify-content-md-center">
           <div className="col-lg-4 col-md-6 mb-2 d-flex justify-content-center">
             {Hexagon("$" + finalDerivedEth, "$DON price")}
           </div>
