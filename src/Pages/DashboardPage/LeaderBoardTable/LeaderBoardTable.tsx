@@ -63,7 +63,6 @@ const JoinUsWrapper = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  width: 100% !important;
   background-color: #F4F4F4;
   top: 50%;
   align-items: center;
@@ -135,12 +134,19 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
         {isDisable && (
           <>
           <Overlay/>
-          <JoinUsWrapper className="pt-4 pb-4">
-            <Heading>Join our farmers team</Heading>
-            <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="206px" className="ml-5" onClick={handleJoinUseClick}>
-              Become a farmer
-            </ButtonWidget>
+          <JoinUsWrapper className="row pt-4 pb-4">
+            <div className="col d-flex flex-column  justify-content-center  flex-md-row justify-content-center align-items-center">
+               <div className="mr-md-3">
+                   <Heading>Join our farmers team</Heading>
+              </div>
+              <div className="ml-md-3">
+                <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="206px" onClick={handleJoinUseClick}>
+                    Become a farmer
+                </ButtonWidget>
+              </div>
+          </div>
           </JoinUsWrapper>
+         
           </>
         )}
         <BlurTable disable={isDisable}>
