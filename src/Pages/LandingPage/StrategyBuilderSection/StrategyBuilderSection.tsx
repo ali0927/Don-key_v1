@@ -19,7 +19,7 @@ const Root = styled.div`
 const Title = styled.h3`
   font-family: ObjectSans-Bold;
   font-weight: bold;
-  font-size: 45px;
+  font-size: 2.80rem;
   color: #070602;
 `;
 
