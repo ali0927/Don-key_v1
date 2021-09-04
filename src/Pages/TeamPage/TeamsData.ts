@@ -8,6 +8,7 @@ import charis from "./images/charis.jpeg";
 import adarsh from "./images/adarsh.png";
 import vijay from "./images/vijay.jpg";
 import jason from "./images/jason.png";
+import deepak from "./images/deepak.jpeg";
 
 export const TeamJSON: ITeamBoardProps[] = [
   {
@@ -30,23 +31,6 @@ export const TeamJSON: ITeamBoardProps[] = [
     //linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
   },
   {
-    image: daniel,
-    name: "Daniel Jaffe",
-    designation: "Co-founder & Developer",
-    //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
-  },
-  {
-    image: alon,
-    name: "Alon Hershberg",
-    designation: "Advisor",
-    // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
-  },
-  {
-    image: charis,
-    name: "Charis Rafailids",
-    designation: "Team Manager",
-  },
-  {
     image: adarsh,
     name: "Adarshdeep Singh",
     designation: "Senior Frontend Developer",
@@ -57,8 +41,34 @@ export const TeamJSON: ITeamBoardProps[] = [
     designation: "Senior Solidity Developer",
   },
   {
+    image: deepak,
+    name: "Deepak Singla",
+    designation: "Senior Frontend Developer",
+  },
+  {
     image: jason,
     name: "Jason Kelman",
     designation: "Chief Marketing Officer",
   },
+  {
+    image: alon,
+    name: "Alon Hershberg",
+    designation: "Advisor",
+    // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
+  },
+  {
+    image: daniel,
+    name: "Daniel Jaffe",
+    designation: "Co-founder & Developer",
+    //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
+  },
+
+  {
+    image: charis,
+    name: "Charis Rafailids",
+    designation: "Developer",
+  },
+
+
+
 ];

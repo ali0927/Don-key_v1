@@ -15,6 +15,14 @@ const Paragraph = styled.p`
   text-align: center;
 `;
 
+
+const TeamHeading = styled.p`
+  font-family: ObjectSans-Bold;
+  font-size: 45px;
+  font-style: normal;
+  margin-bottom: 63px;
+`;
+
 export const TeamPage = () => {
   return (
     <Root>
@@ -23,19 +31,19 @@ export const TeamPage = () => {
         <Container>
           <div className="row">
             <div className="col">
-              <h1 className="text-center mt-md-3">Our Team</h1>
+              <TeamHeading className="mt-md-3">Our Team</TeamHeading>
             </div>
           </div>
-          <div className="row mt-5 justify-content-center">
+          <div className="row mt-5">
             {TeamJSON.map((team) => {
               return <TeamBoard key={team.name} {...team} />;
             })}
           </div>
-          <Paragraph>
+          {/* <Paragraph>
             No pre-sales. Team member will never sell tokens directly. All token
             sales and launches will be announced through our official Telegram
             and Twitter account.
-          </Paragraph>
+          </Paragraph> */}
         </Container>
       </div>
       {/*  footer */}
