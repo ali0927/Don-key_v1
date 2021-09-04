@@ -49,14 +49,20 @@ import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import { gql, useQuery } from "@apollo/client";
 import { useStakingContract } from "hooks";
 import BigNumber from "bignumber.js";
+import {breakPoints} from "breakponts";
 
-const HeadingTitle = styled.p({
-  fontFamily: "ObjectSans-Bold",
-  fontSize: "45px",
-  fontWeight: 800,
-  color: "#070602",
-  marginBottom: 30,
-});
+const HeadingTitle = styled.p`
+  font-family: ObjectSans-Bold;
+  font-size: 24px;
+  font-weight: 800;
+  color: #070602;
+  margin-bottom: 20px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+     font-size: 45px;
+     margin-bottom: 30px;
+  }
+`;
+
 
 export const ZeroInvestmentBox = styled.div({
   // minHeight: 00,
@@ -70,12 +76,15 @@ export const ZeroInvestmentInnerBox = styled.div({
   maxWidth: 599,
 });
 
-export const ZeroInvestmentContent = styled.div({
-  fontStyle: "normal",
-  fontWeight: 800,
-  textAlign: "center",
-  fontSize: "50px",
-});
+export const ZeroInvestmentContent = styled.div`
+  font-style: normal;
+  font-weight: 800;
+  text-align: center;
+  font-size: 24px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 50px;
+  }
+`;
 
 const WithDrawButton = styled(LightGrayButton)`
   border-radius: 10px;
@@ -181,6 +190,9 @@ const TotalInvestedAmount = styled.span`
   font-family: ObjectSans-Bold;
   font-size: 50px;
   font-weight: 700;
+  @media only screen and (max-width: ${breakPoints.sm}) {
+    font-size: 36px;
+  }
 `;
 
 export const InvestmentsPage = () => {
@@ -618,9 +630,11 @@ export const InvestmentsPage = () => {
               <Row>
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
-                  <div className="d-flex align-items-center justify-content-between mb-5 flex-wrap">
+                  <div className="row align-items-center justify-content-between mb-5 flex-wrap">
+                    <div className="col-6 col-md-8 col-lg-10">
                     <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
-                    <div className="d-flex px-2" style={{width: "20%"}}>
+                    </div>
+                    <div className="col-6 col-md-4 col-lg-2 d-flex px-2">
                       <NetworkButton
                         varaint="outlined"
                         className="mr-1"
