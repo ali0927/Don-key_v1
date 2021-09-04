@@ -107,6 +107,13 @@ const TokenInfoQuery = gql`
   }
 `;
 
+const formatUrl = (url: string) => {
+  if(url.includes("http")){
+    return url;
+  }
+  return `https://${url}`;
+}
+
 
 
 const sortStrategies = (list: any[]) => {
@@ -214,7 +221,7 @@ export const TokenPage= () => {
                     apy={item.strategy.apy + "%"}
                     isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
                     comingsoon={item.strategy.farmer.status === "comingsoon"}
-                    icon={<Image src={item.strategy.farmer.farmerImage.url} />}
+                    icon={<Image src={formatUrl(item.strategy.farmer.farmerImage.url)} />}
                     contentTitle={item.strategy.name}
                     title={item.strategy.farmer.name}
                     content={item.strategy.description}
