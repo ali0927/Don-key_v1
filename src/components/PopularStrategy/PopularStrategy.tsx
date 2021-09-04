@@ -111,6 +111,7 @@ export const PopularStrategy = ({
   totalValue = "$200 000.32",
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,
+  isCardComingsoon=false,
   strategyImage,
   contentTitle = "STRATEGY BTCUSD Feel Free to BYield new",
   title = `Saly Strategies WOW`,
@@ -150,6 +151,7 @@ export const PopularStrategy = ({
   risk?: string | null;
   riskDescription?: string | null;
   comingsoon?: boolean;
+  isCardComingsoon?: boolean;
   getTokenImage?: () => Promise<string>;
   getTokenSymbol?: () => Promise<string>;
   investers?: React.ReactElement | number | null;
@@ -370,6 +372,13 @@ export const PopularStrategy = ({
 
   return (
     <Papper>
+      {isCardComingsoon && 
+         <img
+                  className="coming-soon"
+                  src={comingsoon}
+                  alt="ImageNotFound"
+                />
+      }
       <PapperInner>
         {version === 2 ? (
           farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911" ||

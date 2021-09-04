@@ -43,10 +43,12 @@ export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
   network,
+  boostApy
 }: {
   poolAddress: string;
   poolVersion: number;
   network: INetwork;
+  boostApy: boolean;
 }) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
@@ -326,7 +328,7 @@ export const InvestBlackCard = ({
               </ButtonWidget>
             )}
 
-            {network.symbol === "BSC" &&
+            {(network.symbol === "BSC" && boostApy) &&
             <BoostButton />
           
            }

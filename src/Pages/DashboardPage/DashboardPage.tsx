@@ -122,6 +122,7 @@ const LIST_OF_TOKENS = gql`
     tokens {
       id
       symbol
+      boostApy
       image {
         url
       }
@@ -160,6 +161,7 @@ export const DashboardPage = () => {
     }
     return [];
   }, [data]);
+
 
 
 

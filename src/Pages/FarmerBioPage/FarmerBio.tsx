@@ -155,6 +155,9 @@ export const FarmerBio = ({
 
   const strategyName =
     strategies && strategies.length > 0 ? strategies[0].name : "";
+
+  const boostApy = strategies && strategies.length > 0 ? strategies[0].token.boostApy : false;
+
   return (
     <>
       <Section>
@@ -231,6 +234,7 @@ export const FarmerBio = ({
               poolVersion={pool_version}
               poolAddress={poolAddress}
               farmerId={GUID}
+              boostApy={boostApy}
             />
           </Row>
         </Container>

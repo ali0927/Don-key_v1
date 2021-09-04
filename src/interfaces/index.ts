@@ -72,7 +72,7 @@ export interface IFarmerInter {
   farmerImage: {
     url: string;
   }
-  status: "active" | "hidden";
+  status: "active" | "hidden" | "comingsoon";
   guid: string;
   active: boolean;
   twitter: string;
@@ -101,7 +101,10 @@ export type IStrategy = {
   description: string;
   strategyImage: {
     url: string;
-  }
+  };
+  token: {
+    boostApy: boolean;
+  };
 };
 
 export type CallBackorVal<T> = T | ((val: T) => T);
@@ -189,6 +192,7 @@ export type IStrapiToken = {
   id: number;
   name: string;
   symbol: string;
+  boostApy: boolean;
   status: "commingsoon" | "active" | "disabled" | "hidden"
   tokenAddress: string;
   maxApy: string;

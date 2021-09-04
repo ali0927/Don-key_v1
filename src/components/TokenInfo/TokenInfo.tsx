@@ -77,7 +77,7 @@ const SubText = styled.span({
 });
 
 export const TokenInfo = ({
-  token: { image, symbol, status, maxApy, RiskStrategy, network, slug },
+  token: { image, symbol, status, maxApy, RiskStrategy, network, slug,boostApy },
 }: {
   token: IStrapiToken;
 }) => {
@@ -144,10 +144,12 @@ export const TokenInfo = ({
           </h5>
           <SubText>Upto APY</SubText>
         </div>
-        <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
-          <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
-          <SubText>APY for DON stakers</SubText>
-        </div>
+        {boostApy && 
+           <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
+               <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
+               <SubText>APY for DON stakers</SubText>
+           </div>
+       }
       </div>
     </InfoWrapper>
   );

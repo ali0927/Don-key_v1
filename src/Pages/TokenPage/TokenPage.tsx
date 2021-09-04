@@ -152,7 +152,7 @@ export const TokenPage= () => {
     useMemo(() => {
       return sortStrategies(strategies).filter((item) => {
         const farmer = item.strategy.farmer as IFarmerInter;
-        if (farmer.active && farmer.status === "active") {
+        if (farmer.active &&( farmer.status === "active" || farmer.status === "comingsoon")) {
           return true;
         } else {
           return false;
@@ -212,6 +212,8 @@ export const TokenPage= () => {
                 <div className="col-md-4 py-3">
                   <PopularStrategy
                     apy={item.strategy.apy + "%"}
+                    isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
+                    comingsoon={item.strategy.farmer.status === "comingsoon"}
                     icon={<Image src={item.strategy.farmer.farmerImage.url} />}
                     contentTitle={item.strategy.name}
                     title={item.strategy.farmer.name}

@@ -232,10 +232,12 @@ export const DetailTable = ({
   farmerId,
   poolVersion,
   network,
+  boostApy,
 }: {
   poolAddress: string;
   apy: string;
   network: IFarmerInter["network"];
+  boostApy: boolean;
   poolVersion: number;
   farmerId: string;
   gasLimit?: string;
@@ -386,6 +388,7 @@ export const DetailTable = ({
               poolAddress={poolAddress}
               poolVersion={poolVersion}
               network={network}
+              boostApy={boostApy}
             />
             </>
           ): <InactiveNetworkCard correctNetwork={network} />}

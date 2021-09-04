@@ -42,6 +42,9 @@ const FARMER_QUERY = gql`
         strategyImage {
           url
         }
+        token {
+          boostApy
+        }
       }
     }
   }
@@ -51,6 +54,7 @@ export const FarmerBioFromApi = ({ farmerId }: { farmerId: string }) => {
   const { loading, data } = useQuery(FARMER_QUERY, {
     variables: { id: farmerId },
   });
+
 
   return (
     <>
