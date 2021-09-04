@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
+import { api } from "don-utils";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
@@ -60,6 +61,23 @@ export const getDONBSCbridgeContract = async (web3: Web3) => {
   return new web3.eth.Contract(json.abi as any, DONBSCbridge);
 };
 
+export const getUserDons = async (web3: Web3, chainIds: number[]) => {
+  const accounts = await web3.eth.getAccounts();
+
+  const promises = chainIds.map(async (chainId) => {
+    try {
+      const resp = await api.post("/api/v2/walletdetails/" + chainId, {
+        walletAddress: accounts[0],
+      });
+      return { balance: resp.data.balance };
+    } catch (e: any) {
+      console.log(e.message);
+      return { balance: "0", error: e.message };
+    }
+  });
+
+  return await Promise.all(promises);
+};
 //you only need to transfer DON to ETH bridge contract
 
 export const getPoolToken = async (web3: Web3, poolAddress: string) => {

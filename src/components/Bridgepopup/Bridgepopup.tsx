@@ -11,6 +11,7 @@ import {
   getBSCDon,
   getDonPrice,
   toEther,
+  getUserDons,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -29,6 +30,8 @@ import ethtoBsc from "./ethtobsc.json";
 import bsctoEth from "./bsctoeth.json";
 import BgImage from "./success-bg.png";
 import donTokenImage from "../../images/token.png";
+import { api, waitFor } from "don-utils";
+import Web3 from "web3";
 export const Transfer = (props: { chainId: number }) => {
   const defaultOptions = {
     loop: true,
@@ -736,23 +739,9 @@ export const BridgePopup = ({
   const [input1, setInput1] = useState("");
   const [input2, setInput2] = useState("");
 
-  const [balance, setBalance] = useState("-");
+  const [balance, setBalance] = useState<null | { [x: number]: string }>(null);
+
   const web3 = useWeb3();
-  const fetchbalance = async () => {
-    let token = await getETHDon(web3);
-    if (input1Chain !== chainId) {
-      return setBalance("-");
-    }
-    if (chainId === 1) {
-      token = await getETHDon(web3);
-    }
-    if (chainId === 56) {
-      token = await getBSCDon(web3);
-    }
-    const accounts = await web3.eth.getAccounts();
-    const balance = await token.methods.balanceOf(accounts[0]).call();
-    setBalance(toEther(balance));
-  };
 
   const [bridgeInfo, setBridgeInfo] = useState<null | typeof ExampleObject>(
     null
@@ -782,16 +771,40 @@ export const BridgePopup = ({
           .Swapout(web3.utils.toWei(input1), accounts[0])
           .send({ from: accounts[0] });
       }
-
-      onSuccess && onSuccess();
-      setStep("transfersuccess");
+      const isTransferred = await checkDonsAreTransferred(
+        balance![1],
+        balance![56]
+      );
+      if (isTransferred) {
+        onSuccess && onSuccess();
+        setStep("transfersuccess");
+      }
     } catch (err) {
       console.log(err);
       showFailure("Transaction failed.");
-      setStep("initial")
+      setStep("initial");
     } finally {
       // refetch();
     }
+  };
+
+  const fetchDons = async () => {
+    const dons = await getUserDons(web3, [1, 56]);
+    setBalance({ 1: dons[0].balance, 56: dons[1].balance });
+  };
+
+  const checkDonsAreTransferred = async (don1: string, don2: string) => {
+    let result = false;
+    while (true) {
+      const dons = await getUserDons(web3, [1, 56]);
+      await waitFor(4000);
+      console.log(dons,don1,don2, "Don");
+      if (dons[0].balance !== don1 && don2 !== dons[1].balance) {
+        result = true;
+        break;
+      }
+    }
+    return result;
   };
 
   const fetchBridgeInfo = async () => {
@@ -812,11 +825,9 @@ export const BridgePopup = ({
 
   useEffect(() => {
     fetchBridgeInfo();
+    fetchDons();
   }, []);
 
-  useEffect(() => {
-    fetchbalance();
-  }, [chainId, input1Chain]);
   const classes = useStylesBootstrap();
 
   const srcToken =
@@ -891,7 +902,7 @@ export const BridgePopup = ({
   };
 
   const isValid = useMemo(() => {
-    if (balance === "-") {
+    if (!balance) {
       return false;
     }
     if (!srcToken) {
@@ -902,7 +913,7 @@ export const BridgePopup = ({
     if (!!!input1) {
       return false;
     }
-    if (inputBN.gt(balance)) {
+    if (inputBN.gt(balance[input1Chain!])) {
       return false;
     }
     let fee = inputBN.multipliedBy(feeRate);
@@ -920,7 +931,11 @@ export const BridgePopup = ({
 
   const renderContent = () => {
     if (!bridgeInfo) {
-      return <CircularProgress />;
+      return (
+        <div className="d-flex justify-content-center align-items-center py-5 my-5">
+          <CircularProgress color="inherit" />
+        </div>
+      );
     }
     if (step === "transferring") {
       return <Transfer chainId={input1Chain} />;
@@ -966,7 +981,7 @@ export const BridgePopup = ({
           <div className="mt-4">
             <div className="d-flex align-items-center justify-content-between">
               <InputLabel>From</InputLabel>
-              <InputMaxButton onClick={() => handleChange(balance)}>
+              <InputMaxButton onClick={() => handleChange(balance![input1Chain!])}>
                 Use MAX
               </InputMaxButton>
             </div>
@@ -978,7 +993,9 @@ export const BridgePopup = ({
             />
             <InputLabel>
               Balance:{" "}
-              {balance !== "-" ? new BigNumber(balance).toFixed(2) : balance}
+              {balance !== null
+                ? new BigNumber(balance[input1Chain!]).toFixed(2)
+                : "-"}
             </InputLabel>
             <div className="my-2 d-flex justify-content-center mb-4">
               <InterchangeIcon
@@ -1027,6 +1044,7 @@ export const BridgePopup = ({
       isOpen
       size="xs"
       rounded
+      disableBackdropClick
       onClose={onClose}
     >
       {renderContent()}
