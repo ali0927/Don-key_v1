@@ -30,7 +30,7 @@ export const useWithdraw = () => {
         web3,
         poolAddress
       );
-      showProgress("Withdrawal is in Progress");
+      showProgress("Withdraw is in Progress");
       if (poolVersion === 1 || poolVersion === 4 || poolVersion === 3) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
@@ -53,12 +53,12 @@ export const useWithdraw = () => {
         },
       });
 
-      showSuccess("Withdrawal Successfull");
+      showSuccess("Withdraw Successfull");
 
       onSuccess && onSuccess();
     } catch (err) {
       console.log(err);
-      showFailure("Withdrawal Failed");
+      showFailure("Withdraw Failed");
       onError && onError(err);
     } finally {
       refetch();

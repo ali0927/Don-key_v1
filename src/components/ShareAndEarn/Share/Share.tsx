@@ -24,7 +24,7 @@ import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import BigNumber from "bignumber.js";
 import { useReferralContext } from "contexts/ReferralContext";
 
-const ReadMore = styled.div`
+const ReadMore = styled.a`
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
@@ -33,6 +33,10 @@ const ReadMore = styled.div`
   text-align: left;
   color: #a8a8a8;
   cursor: pointer;
+  :hover {
+    text-decoration: none;
+    color: #a8a8a8;
+  }
 `;
 
 const CancelButton = styled(ButtonWidget)`
@@ -125,7 +129,7 @@ export const Share: React.FC<IShareProps> = (props) => {
         size="md"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <h2>Share</h2> <ReadMore>Read more</ReadMore>
+          <h2>Share</h2> <ReadMore href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read more</ReadMore>
         </div>
         <div className="row py-5">
           <div className="col-lg-4 ">
@@ -136,8 +140,7 @@ export const Share: React.FC<IShareProps> = (props) => {
             />
             <p className="text-center mt-4 w-100">
               {" "}
-              <b>Step 1.</b> Create a shareable link and signup as affiliate and
-              earn more profit.
+              <b>Step 1.</b> Create a sharable link with a unique Don-key banner that you love!
             </p>
           </div>
           <div className="col-lg-4 ">
@@ -147,8 +150,7 @@ export const Share: React.FC<IShareProps> = (props) => {
               alt="Image not found"
             />
             <p className="text-center mt-4 w-100">
-              <b>Step 2.</b> Share the link on telegram or twitter to bring more
-              investors to the Dapp.
+              <b>Step 2.</b> Share the link on any platform to bring more users to the DAPP
             </p>
           </div>
           <div className="col-lg-4">
@@ -158,8 +160,7 @@ export const Share: React.FC<IShareProps> = (props) => {
               alt="Image not found"
             />
             <p className="text-center mt-4 w-100">
-              <b>Step 3.</b> For Each unique investor who invests you will DONs
-              Equivalent to 5% of the profit, When he withdraws.
+              <b>Step 3.</b> For each unique user who invests, you will earn the equivalent of 20% from their profit in DON tokens. 
             </p>
           </div>
         </div>

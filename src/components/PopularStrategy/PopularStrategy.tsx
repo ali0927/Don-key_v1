@@ -73,6 +73,7 @@ const GraphWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  max-height: 175px;
 `;
 
 const TitleRow = styled.div`

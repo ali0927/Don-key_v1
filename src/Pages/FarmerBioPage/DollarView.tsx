@@ -46,7 +46,7 @@ export const DollarView = ({
   }
   return (
     <>
-      {formatNum(tokenAmount)} {symbol}
+      {formatNum(tokenAmount)} {symbol.toUpperCase()}
     </>
   );
 };

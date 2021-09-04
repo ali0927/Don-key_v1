@@ -83,7 +83,7 @@ export const InactiveNetworkCard = ({
   if (variant === "black") {
     return (
       <div className="text-center pt-5">
-        <h5>You're connected to the wrong network!.</h5>
+        <h5>You're connected to the wrong network</h5>
         <Text>
           Change the network on your wallet to {correctNetwork.symbol}
         </Text>
@@ -96,9 +96,9 @@ export const InactiveNetworkCard = ({
           <LinkIcon style={{ marginTop: -2 }} className="ml-2" />
         </Text>
         <div className="mt-5">
-          <DonButtonOutlined className="mr-3">
+          {/* <DonButtonOutlined className="mr-3">
             <WalletIcon /> Disconnect
-          </DonButtonOutlined>
+          </DonButtonOutlined> */}
           <DonButtonContained
             onClick={() => switchNetwork(correctNetwork.chainId)}
           >
@@ -115,7 +115,7 @@ export const InactiveNetworkCard = ({
   }
   return (
     <CardWrapper className="row">
-      <div className="col-md-7">
+      <div className="col-md-8">
         <h6>
           You’re connected to the wrong network! Change the network on your
           wallet to {correctNetwork.symbol}.
@@ -126,9 +126,9 @@ export const InactiveNetworkCard = ({
         </Text>
       </div>
       <div className="col d-flex align-items-center justify-content-center justify-content-md-end">
-        <DonButtonOutlined color="black" className="mr-3">
+        {/* <DonButtonOutlined color="black" className="mr-3">
           <WalletIcon /> Disconnect
-        </DonButtonOutlined>
+        </DonButtonOutlined> */}
         <DonButtonContained
             onClick={() => switchNetwork(correctNetwork.chainId)}
           >

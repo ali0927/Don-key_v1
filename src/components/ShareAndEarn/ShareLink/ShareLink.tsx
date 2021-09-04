@@ -129,7 +129,6 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
 
   const handleFirstRender = async() =>{
       if(!props.link){
-        console.log("---------------FIRST RENDER---------");
         handleImageGenerate()
       }
   }

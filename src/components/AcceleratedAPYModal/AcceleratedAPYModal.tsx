@@ -21,10 +21,7 @@ const Info = styled.p`
   font-size: 12px;
   line-height: 20px;
   padding: 0 50px;
-  display: flex;
-  align-items: center;
   text-align: center;
-  justify-content: center;
 
   color: #656565;
 `;
@@ -72,7 +69,7 @@ const DonHTMLInput = styled.input`
 `;
 
 const Header = styled.div`
-   width: 92%
+   
 `;
 
 const DonInput = ({
@@ -239,20 +236,19 @@ export const AcceleratedAPYModal = ({
     <DonCommonmodal
       isOpen={open}
       title=""
-      PaperProps={{ style: { borderRadius: 1 } }}
       variant="common"
       onClose={onClose}
       size="xs"
     >
       <div style={{ marginTop: -30, marginBottom: -20 }}>
-        <Header className="d-flex align-items-center justify-content-between">
-          <div style={{ width: 100 }}>
+        <Header className="d-flex align-items-center justify-content-center">
+          {/* <div style={{ width: 100 }}>
             <img
               src="/assets/images/token.png"
               className="d-inline-block img-fluid"
               alt="Don Token Logo"
             />
-          </div>
+          </div> */}
           <StyledH2 className="mb-0">Accelerated APY</StyledH2>
         </Header>
         <ApyForm>
@@ -302,7 +298,8 @@ export const AcceleratedAPYModal = ({
           </p>
 
           <Info>
-            The DON tokens will be locked for {coolOffDuration} after unstaking
+            Staked DON tokens will be locked for {coolOffDuration} days after unstaking. DON rewards are claimable on the go.    
+             <a href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51" target="_blank" className="ml-1">Read more </a>
           </Info>
           <div className="d-flex align-items-center">
             <ButtonWidget

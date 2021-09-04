@@ -69,7 +69,7 @@ export const InvestmentInput = ({
   return (
     <div className="w-100">
       <InvestmentRoot>
-        <InvestmentCurrency>{currencySymbol}</InvestmentCurrency>
+        <InvestmentCurrency>{currencySymbol.toUpperCase()}</InvestmentCurrency>
         <div className="w-100">
           <InvestmentInputElement
             type="number"

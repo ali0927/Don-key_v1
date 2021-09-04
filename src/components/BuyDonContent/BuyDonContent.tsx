@@ -18,16 +18,16 @@ export const BuyDonContent = () => {
   return (
     <div style={{ marginTop: -30, padding: "30px 0 10px" }}>
       <div className="d-flex justify-content-center">
-        <div style={{ width: 100 }}>
+        {/* <div style={{ width: 100 }}>
           <img
             src="/assets/images/token.png"
             className="d-inline-block"
             alt="Don Token Logo"
           />
-        </div>
+        </div> */}
       </div>
       <StyledP>
-        In order to access Dapp you need to hold 100 DON in ERC or BEP
+        In order to use Don-key DAPP you need to hold at least 100 $DON tokens in your wallet
       </StyledP>
       <div className="d-flex align-items-center mt-5">
         <ButtonWidget
@@ -42,7 +42,7 @@ export const BuyDonContent = () => {
           className="py-2 mr-3"
           containedVariantColor="lightYellow"
         >
-          Buy ERC20 Don
+          Buy ERC20 DON
         </ButtonWidget>
         <ButtonWidget
           height="40px"
@@ -56,7 +56,7 @@ export const BuyDonContent = () => {
           className="py-2 mr-3"
           containedVariantColor="lightYellow"
         >
-          Buy BEP 20 Don
+          Buy BEP 20 DON
         </ButtonWidget>
       </div>
     </div>
