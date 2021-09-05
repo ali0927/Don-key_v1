@@ -5,10 +5,11 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
-import { useStakingContract } from "hooks";
+import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
-import { Slider, withStyles } from "@material-ui/core";
+import { CircularProgress, Slider, withStyles } from "@material-ui/core";
 import { theme } from "theme";
+import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 
 const StyledH2 = styled.h2`
   font-weight: bold;
@@ -182,8 +183,15 @@ export const AcceleratedAPYModal = ({
 }) => {
   const [availableDon, setAvailableDon] = useState("");
   const [donAmount, setDonAmount] = useState("1000");
-  const { stakedDon, stake, getTierInfo, getTierList, coolOffDuration } =
-    useStakingContract();
+  const {
+    stakedDon,
+    stake,
+    getTierInfo,
+    getTierList,
+    holdingDons,
+    coolOffDuration,
+    refetch,
+  } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
   const [loading, setLoading] = useState(false);
@@ -231,6 +239,125 @@ export const AcceleratedAPYModal = ({
     updatePredictedApy();
   }, [donAmount]);
 
+  const [hasCheckedDons, setHasChecked] = useState(false);
+
+  useEffectOnTabFocus(() => {
+    (async () => {
+      setHasChecked(false);
+      try {
+        await refetch();
+      } catch (e) {
+      } finally {
+        setHasChecked(true);
+      }
+    })();
+  }, []);
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+
+  const renderContent = () => {
+    if (!hasCheckedDons) {
+      return (
+        <div
+          style={{ minHeight: 200 }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <CircularProgress color="inherit" />
+        </div>
+      );
+    }
+    if (hasDons) {
+      return (
+        <div style={{ marginTop: -30, marginBottom: -20 }}>
+          <Header className="d-flex align-items-center justify-content-center">
+            {/* <div style={{ width: 100 }}>
+          <img
+            src="/assets/images/token.png"
+            className="d-inline-block img-fluid"
+            alt="Don Token Logo"
+          />
+        </div> */}
+            <StyledH2 className="mb-0">Accelerated APY</StyledH2>
+          </Header>
+          <ApyForm>
+            <DonInput
+              label="Available DON"
+              value={new BigNumber(availableDon).toFixed(2)}
+              placeholder="Amount"
+              onChange={() => {}}
+            />
+            <span>Choose Tier</span>
+            <DonSlider
+              defaultValue={20}
+              onChange={(e, val) => {
+                const cases: { [x: number]: string } = {};
+                const tiers = [...getTierList()];
+                tiers.shift();
+                const divider = 100 / tiers.length;
+                tiers.forEach((tier, index) => {
+                  cases[(index + 1) * divider] = tier.donRequired.toString();
+                });
+                const bnVal = new BigNumber(val as number);
+                if (bnVal.lt(20)) {
+                  return setDonAmount("0");
+                }
+                if (bnVal.gt(100)) {
+                  return setDonAmount(cases["100"]);
+                }
+
+                const amount = cases[val.toString() as "20"];
+                setDonAmount(amount);
+              }}
+              marks={marks}
+              step={20}
+              min={0}
+              max={100}
+            />
+            <p className="mb-1 text-center">Your DON Stake:</p>
+            <h5 className="text-center">{donAmount}</h5>
+            <p className="text-center font-weight-bold px-5">
+              {loading ? (
+                <Spinner animation="border" size="sm" />
+              ) : predictedApy !== "0" && predictedApy !== "" ? (
+                <>Extra APY Will Be: +{predictedApy}%</>
+              ) : (
+                <>Minimum 1000 DON's Required To Get Extra APY</>
+              )}
+            </p>
+
+            <Info>
+              Staked DON tokens will be locked for {coolOffDuration} days after
+              unstaking. DON rewards are claimable on the go.
+              <a
+                href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51"
+                target="_blank"
+                className="ml-1"
+              >
+                Read more{" "}
+              </a>
+            </Info>
+            <div className="d-flex align-items-center">
+              <ButtonWidget
+                varaint="contained"
+                onClick={stakeDon}
+                className="py-2 font-weight-bold"
+                containedVariantColor="lightYellow"
+                height="40px"
+              >
+                {btnLoading ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  "Lock DON"
+                )}
+              </ButtonWidget>
+            </div>
+          </ApyForm>
+        </div>
+      );
+    } else {
+      return <BuyDonContent />;
+    }
+  };
+
   return (
     <DonCommonmodal
       isOpen={open}
@@ -239,91 +366,7 @@ export const AcceleratedAPYModal = ({
       onClose={onClose}
       size="xs"
     >
-      <div style={{ marginTop: -30, marginBottom: -20 }}>
-        <Header className="d-flex align-items-center justify-content-center">
-          {/* <div style={{ width: 100 }}>
-            <img
-              src="/assets/images/token.png"
-              className="d-inline-block img-fluid"
-              alt="Don Token Logo"
-            />
-          </div> */}
-          <StyledH2 className="mb-0">Accelerated APY</StyledH2>
-        </Header>
-        <ApyForm>
-          <DonInput
-            label="Available DON"
-            value={new BigNumber(availableDon).toFixed(2)}
-            placeholder="Amount"
-            onChange={() => {}}
-          />
-          <span>Choose Tier</span>
-          <DonSlider
-            defaultValue={20}
-            onChange={(e, val) => {
-              const cases: { [x: number]: string } = {};
-              const tiers = [...getTierList()];
-              tiers.shift();
-              const divider = 100 / tiers.length;
-              tiers.forEach((tier, index) => {
-                cases[(index + 1) * divider] = tier.donRequired.toString();
-              });
-              const bnVal = new BigNumber(val as number);
-              if (bnVal.lt(20)) {
-                return setDonAmount("0");
-              }
-              if (bnVal.gt(100)) {
-                return setDonAmount(cases["100"]);
-              }
-
-              const amount = cases[val.toString() as "20"];
-              setDonAmount(amount);
-            }}
-            marks={marks}
-            step={20}
-            min={0}
-            max={100}
-          />
-          <p className="mb-1 text-center">Your DON Stake:</p>
-          <h5 className="text-center">{donAmount}</h5>
-          <p className="text-center font-weight-bold px-5">
-            {loading ? (
-              <Spinner animation="border" size="sm" />
-            ) : predictedApy !== "0" && predictedApy !== "" ? (
-              <>Extra APY Will Be: +{predictedApy}%</>
-            ) : (
-              <>Minimum 1000 DON's Required To Get Extra APY</>
-            )}
-          </p>
-
-          <Info>
-            Staked DON tokens will be locked for {coolOffDuration} days after
-            unstaking. DON rewards are claimable on the go.
-            <a
-              href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51"
-              target="_blank"
-              className="ml-1"
-            >
-              Read more{" "}
-            </a>
-          </Info>
-          <div className="d-flex align-items-center">
-            <ButtonWidget
-              varaint="contained"
-              onClick={stakeDon}
-              className="py-2 font-weight-bold"
-              containedVariantColor="lightYellow"
-              height="40px"
-            >
-              {btnLoading ? (
-                <Spinner animation="border" size="sm" />
-              ) : (
-                "Lock DON"
-              )}
-            </ButtonWidget>
-          </div>
-        </ApyForm>
-      </div>
+      {renderContent()}
     </DonCommonmodal>
   );
 };
