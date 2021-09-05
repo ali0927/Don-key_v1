@@ -19,6 +19,7 @@ export type IStakingContractContext = {
   loading: boolean;
   coolOffDuration: string;
   coolOffAmount: string;
+  getTierList: () => ITier[];
   getTierInfo: (amount: string) => Promise<ITier | null>
   stake: (amount: string) => Promise<any>;
   unstake: () => Promise<any>;

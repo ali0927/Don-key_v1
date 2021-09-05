@@ -68,9 +68,7 @@ const DonHTMLInput = styled.input`
   }
 `;
 
-const Header = styled.div`
-   
-`;
+const Header = styled.div``;
 
 const DonInput = ({
   label,
@@ -127,12 +125,12 @@ const DonSlider = withStyles({
     marginTop: 7,
     backgroundColor: "#b0b0b0",
     '&[data-index="4"]': {
-      left: '98% !important',
+      left: "98% !important",
     },
   },
   markLabel: {
     '&[data-index="4"]': {
-      left: '97% !important',
+      left: "97% !important",
     },
   },
   active: {},
@@ -184,7 +182,7 @@ export const AcceleratedAPYModal = ({
 }) => {
   const [availableDon, setAvailableDon] = useState("");
   const [donAmount, setDonAmount] = useState("1000");
-  const { stakedDon, stake, getTierInfo, coolOffDuration } =
+  const { stakedDon, stake, getTierInfo, getTierList, coolOffDuration } =
     useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
@@ -208,6 +206,7 @@ export const AcceleratedAPYModal = ({
       const apyObj = await getTierInfo(
         new BigNumber(donAmount).plus(stakedDon).toFixed(2)
       );
+
       if (apyObj) {
         setPredictedApy(apyObj.apy.toFixed());
       }
@@ -219,7 +218,7 @@ export const AcceleratedAPYModal = ({
   const stakeDon = async () => {
     setBtnLoading(true);
     try {
-      await stake(toWei(donAmount));
+      await stake(toWei(new BigNumber(donAmount).minus(stakedDon).toString()));
       onClose();
     } catch (e) {
       console.log(e);
@@ -262,13 +261,13 @@ export const AcceleratedAPYModal = ({
           <DonSlider
             defaultValue={20}
             onChange={(e, val) => {
-              const cases = {
-                "20": "1000",
-                "40": "2500",
-                "60": "5000",
-                "80": "25000",
-                "100": "50000",
-              };
+              const cases: { [x: number]: string } = {};
+              const tiers = [...getTierList()];
+              tiers.shift();
+              const divider = 100 / tiers.length;
+              tiers.forEach((tier, index) => {
+                cases[(index + 1) * divider] = tier.donRequired.toString();
+              });
               const bnVal = new BigNumber(val as number);
               if (bnVal.lt(20)) {
                 return setDonAmount("0");
@@ -298,8 +297,15 @@ export const AcceleratedAPYModal = ({
           </p>
 
           <Info>
-            Staked DON tokens will be locked for {coolOffDuration} days after unstaking. DON rewards are claimable on the go.    
-             <a href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51" target="_blank" className="ml-1">Read more </a>
+            Staked DON tokens will be locked for {coolOffDuration} days after
+            unstaking. DON rewards are claimable on the go.
+            <a
+              href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51"
+              target="_blank"
+              className="ml-1"
+            >
+              Read more{" "}
+            </a>
           </Info>
           <div className="d-flex align-items-center">
             <ButtonWidget
