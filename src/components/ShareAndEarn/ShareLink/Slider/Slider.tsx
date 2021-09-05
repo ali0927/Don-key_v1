@@ -16,7 +16,7 @@ import {convertToInternationalCurrencySystem} from "helpers";
 
 const BannerRoot = styled.div`
   min-height: 227px;
-  border-radius: 15px;
+  /* border-radius: 15px; */
   overflow: hidden;
 `;
 
@@ -46,14 +46,15 @@ const Value = styled(SubHeading)`
 const BannerContentRoot = styled.div`
   background-image: linear-gradient(
     to left,
-    rgba(255, 255, 255, 0.1) 0,
+    rgba(0, 0, 0, 0.1) 0,
     #000000 100%
   );
-  top: 0;
+  top: -1px;
   position: absolute;
-  height: 100%;
+  height: 101%;
   width: 100%;
-  border-radius: 15px;
+  
+  /* border-radius: 15px; */
 `;
 
 const BannerLeftFooter = styled.div`

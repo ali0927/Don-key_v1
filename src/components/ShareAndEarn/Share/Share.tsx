@@ -6,7 +6,6 @@ import Star from "../images/star.png";
 import shareTelegram from "../images/shareTelegram.png";
 import earnings from "../images/earnings.png";
 import { ButtonWidget } from "components/Button";
-import { LinkImage } from "../LinkImage/LinkImage";
 import html2canvas from "html2canvas";
 import { api, uuidv4 } from "don-utils";
 import { Spinner } from "react-bootstrap";
@@ -81,7 +80,6 @@ export const Share: React.FC<IShareProps> = (props) => {
       code = uuidv4().slice(0, 7);
       await signUpAsReferral(web3, code.toLowerCase());
       checkSignUp();
-    
     }
     setLoading(false);
     props.onCreateClick();

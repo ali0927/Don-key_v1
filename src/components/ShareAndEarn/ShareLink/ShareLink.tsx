@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DonCommonmodal } from "components/DonModal";
 import { IShareLinkProps } from "./interfaces/IShareLinkProps";
 import styled from "styled-components";
-import { HyperLinkIcon, TwitterIcon, TelegramIcon } from "icons";
+import { HyperLinkIcon, TwitterIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
-import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { useTVL } from "hooks";
 import { getShareUrl, getUserReferralCode } from "helpers";
 import { useWeb3 } from "don-components";
 import html2canvas from "html2canvas";
-import { api, uuidv4 } from "don-utils";
+import { api, uuidv4, waitFor } from "don-utils";
 import { Spinner } from "react-bootstrap";
-
 const TextOnInput = styled.div`
   position: relative;
 `;
@@ -77,7 +75,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
 
   const { tvl } = useTVL(props.poolAddress);
   const [copyLink, setCopyLink] = React.useState(props.link || "");
-
+  const [code, setCode] = useState(props.code || "");
   React.useEffect(() => {
     if (openTooltip) {
       setTimeout(() => {
@@ -87,17 +85,19 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   }, [openTooltip]);
 
   const handleCopy = () => {
-    if(copyLink){
+    if (copyLink) {
       navigator.clipboard.writeText(copyLink);
       setOpenTooltip(true);
     }
   };
 
+  const web3 = useWeb3();
+
   const [loading, setLoading] = useState(false);
 
-  const handleImageGenerate = async () => {
+  const handleImageGenerate = async (isUpdate?: string | null) => {
     setLoading(true);
-
+    await waitFor(2000);
     const element = document.querySelector("#shareEarnImage") as HTMLElement;
     if (element) {
       const canvas = await html2canvas(element, {
@@ -106,42 +106,47 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         logging: process.env.NODE_ENV === "development",
         removeContainer: true,
       });
-      const dataUrl = canvas.toDataURL("image/jpeg");
+      const dataUrl = canvas.toDataURL("image/webp", 1);
       const res: Response = await fetch(dataUrl);
       const blob: Blob = await res.blob();
 
       const file = new File([blob], "file-" + uuidv4() + ".png", {
         type: "image/jpeg",
       });
-      const formData = new FormData();
+      let formData = new FormData();
 
-      formData.append("code", props.code);
-      formData.append("image", file);
+      let result: any;
+      if (!isUpdate) {
+        let code = await getUserReferralCode(web3);
+        const urlToShorten =
+          window.location.origin +
+          window.location.pathname +
+          `?referral=${code}`;
+        formData.append("url", urlToShorten);
+        formData.append("image", file);
+        formData.append("pool_address", props.poolAddress);
+        result = await api.post("/api/v2/shortener", formData);
+        setCode(result.data.code)
+      } else {
+        formData.append("code", props.code);
+        formData.append("image", file);
+        result = await api.put("/api/v2/shortener", formData);
+      }
 
-      const result = await api.put("/api/v2/shortener", formData);
       const shortUrl = getShareUrl(result.data.code);
-      console.log(shortUrl, "Worked");
+
       setCopyLink(shortUrl);
       setLoading(false);
     }
   };
 
+  const handleFirstRender = async () => {
+    await handleImageGenerate(copyLink);
+  };
 
-  const handleFirstRender = async() =>{
-      if(!props.link){
-        handleImageGenerate()
-      }
-  }
-
-  return (
-    <>
-      <DonCommonmodal
-        isOpen={props.open}
-        title="Copy share link"
-        variant="common"
-        onClose={props.onClose}
-        size="sm"
-      >
+  const renderSpinner = () => {
+    return (
+      <>
         <div
           className="row justify-content-between"
           style={{ alignItems: "flex-end" }}
@@ -192,7 +197,9 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             apy={props.apy}
             farmerName={props.farmerName}
             strategyName={props.strategyName}
-            onChange={() => {handleImageGenerate()}}
+            onChange={() => {
+              handleImageGenerate("yes");
+            }}
             onFirstRender={handleFirstRender}
           />
         </div>
@@ -202,7 +209,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-4 mb-2">
             <TwitterShareButton
               className="w-100"
-              url={props.link}
+              url={copyLink}
               title={"Check out my investment on Don-key"}
             >
               <TwitterButton
@@ -218,7 +225,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-4 mb-2">
             <TelegramShareButton
               className="w-100"
-              url={props.link}
+              url={copyLink}
               title={"Check out my investment on Don-key"}
             >
               <TelegramButton
@@ -233,6 +240,20 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
 
           <div className="col-lg-2" />
         </div>
+      </>
+    );
+  };
+
+  return (
+    <>
+      <DonCommonmodal
+        isOpen={props.open}
+        title="Copy share link"
+        variant="common"
+        onClose={props.onClose}
+        size="sm"
+      >
+        {renderSpinner()}
       </DonCommonmodal>
     </>
   );
