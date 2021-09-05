@@ -28,7 +28,7 @@ const StakingCol = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border-right: 1px solid #EDEDF2;
+  border-right: 1px solid #ededf2;
   @media only screen and (max-width: ${breakPoints.lg}) {
     width: 33% !important;
     margin-bottom: 23px;
@@ -43,18 +43,17 @@ const StakingCol = styled.div`
   &.hide:after {
     display: none;
   }
-
 `;
 
 const StakingTitle = styled.h3`
   font-family: Poppins;
   font-size: 12px;
-  color: #7E7E7E ;
-  text-align: center; 
+  color: #7e7e7e;
+  text-align: center;
   font-weight: 500;
   @media only screen and (min-width: ${breakPoints.lg}) {
-     font-size: 14px;
-     color: #000;
+    font-size: 14px;
+    color: #000;
   }
 `;
 
@@ -82,9 +81,9 @@ export const StyledButton = styled(ButtonWidget)`
   @media only screen and (max-width: ${breakPoints.lg}) {
     height: 33px;
     width: 100%;
-     margin-left: 13px;
+    margin-left: 13px;
     margin-right: 13px;
- }
+  }
 `;
 
 const HarvestCard = styled.div`
@@ -130,7 +129,7 @@ const TimerHeading = styled.div`
   font-size: 12px;
   font-weight: 600;
   font-style: normal;
- 
+
   text-align: center;
   @media only screen and (min-width: ${breakPoints.lg}) {
     font-size: 16px;
@@ -145,7 +144,7 @@ const DotsWrraper = styled.div`
   margin-right: 2px;
 `;
 
-const TimmerRoot = styled.div` 
+const TimmerRoot = styled.div`
   margin-left: 12px;
   transform: scale(1.1);
   @media only screen and (min-width: ${breakPoints.lg}) {
@@ -154,7 +153,7 @@ const TimmerRoot = styled.div`
   }
 `;
 
-const Root =  styled.div`
+const Root = styled.div`
   @media only screen and (max-width: ${breakPoints.md}) {
     width: 42%;
   }
@@ -195,43 +194,42 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
   // {days}d:{hrs}h:{mins}m:{secs}s{" "}
   return (
     <div className="d-flex justify-content-center">
-       <Root className="d-flex flex-lg-column justify-content-between align-items-center">
-     
-          <TimerHeading>Cool off period ends in </TimerHeading>
-     
-          <TimmerRoot className=" d-flex justify-content-center">
-        <TimeCard>
-          <TimerTime>{days}</TimerTime>
-          <TimerLabel>DAYS</TimerLabel>
-        </TimeCard>
+      <Root className="d-flex flex-lg-column justify-content-between align-items-center">
+        <TimerHeading>Cool off period ends in </TimerHeading>
 
-        <DotsWrraper>
-          {" "}
-          <SmallTimerDots />
-        </DotsWrraper>
+        <TimmerRoot className=" d-flex justify-content-center">
+          <TimeCard>
+            <TimerTime>{days}</TimerTime>
+            <TimerLabel>DAYS</TimerLabel>
+          </TimeCard>
 
-        <TimeCard>
-          <TimerTime>{hrs}</TimerTime>
-          <TimerLabel>HOURS</TimerLabel>
-        </TimeCard>
-        <DotsWrraper>
-          {" "}
-          <SmallTimerDots />
-        </DotsWrraper>
-        <TimeCard>
-          <TimerTime>{mins}</TimerTime>
-          <TimerLabel>MINUTES</TimerLabel>
-        </TimeCard>
-        <DotsWrraper>
-          {" "}
-          <SmallTimerDots />
-        </DotsWrraper>
-        <TimeCard>
-          <TimerTime>{secs}</TimerTime>
-          <TimerLabel>SECONDS</TimerLabel>
-        </TimeCard>
-      </TimmerRoot>
-       </Root>
+          <DotsWrraper>
+            {" "}
+            <SmallTimerDots />
+          </DotsWrraper>
+
+          <TimeCard>
+            <TimerTime>{hrs}</TimerTime>
+            <TimerLabel>HOURS</TimerLabel>
+          </TimeCard>
+          <DotsWrraper>
+            {" "}
+            <SmallTimerDots />
+          </DotsWrraper>
+          <TimeCard>
+            <TimerTime>{mins}</TimerTime>
+            <TimerLabel>MINUTES</TimerLabel>
+          </TimeCard>
+          <DotsWrraper>
+            {" "}
+            <SmallTimerDots />
+          </DotsWrraper>
+          <TimeCard>
+            <TimerTime>{secs}</TimerTime>
+            <TimerLabel>SECONDS</TimerLabel>
+          </TimeCard>
+        </TimmerRoot>
+      </Root>
     </div>
   );
 };
@@ -279,21 +277,23 @@ export const StakingInfo = () => {
           {" "}
           <div className="row w-100 align-items-center">
             <div className="col-7 d-flex flex-column align-items-start align-items-lg-center">
-                <StakingTitle style={{color: "#fff"}}>DON Rewards available</StakingTitle>
-                <StakingSubtitle>{pendingReward}</StakingSubtitle>
+              <StakingTitle style={{ color: "#fff" }}>
+                DON Rewards available
+              </StakingTitle>
+              <StakingSubtitle>{pendingReward}</StakingSubtitle>
             </div>
-        
             <div className="col-5 d-flex justify-content-center">
-                     <StyledButton
-                          varaint="contained"
-                         disabled={new BigNumber(pendingReward).isEqualTo(0)}
-                         containedVariantColor="lightYellow"
-                         className="py-1 px-3 m-0"
-                        onClick={harvestDon}
-                    >
-            {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
-          </StyledButton>
-          </div> </div>
+              <StyledButton
+                varaint="contained"
+                disabled={new BigNumber(pendingReward).isEqualTo(0)}
+                containedVariantColor="lightYellow"
+                className="py-1 px-3 m-0"
+                onClick={harvestDon}
+              >
+                {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
+              </StyledButton>
+            </div>{" "}
+          </div>
         </>
       );
     } else {
@@ -362,13 +362,13 @@ export const StakingInfo = () => {
       <div className="row mt-3 mb-4">
         <div className="col-lg-7 mb-2">
           <StakingCard className="d-flex flex-wrap justify-content-between">
-              <StakingCol style={{ width: "21%" }}>
-                  <StakingTitle>DON Staked</StakingTitle>
-                  <StakingSubtitle>{stakedDon}</StakingSubtitle>
-              </StakingCol>
-              <StakingCol style={{ width: "21%" }}>
-                 <StakingTitle>Tier</StakingTitle>
-                 <StakingSubtitle>{tier.tier}</StakingSubtitle>
+            <StakingCol style={{ width: "21%" }}>
+              <StakingTitle>DON Staked</StakingTitle>
+              <StakingSubtitle>{stakedDon}</StakingSubtitle>
+            </StakingCol>
+            <StakingCol style={{ width: "21%" }}>
+              <StakingTitle>Tier</StakingTitle>
+              <StakingSubtitle>{tier.tier}</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>Extra APY</StakingTitle>

@@ -42,6 +42,12 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
       }
     }
     const nextTier = tierInfo.data[tierNum + 1];
+    if (tierNum === 0) {
+      if (amountBN.lt(nextTier.donRequired)) {
+        return tier;
+      }
+    }
+
     if (amountBN.gte(tier.donRequired) && amountBN.lt(nextTier.donRequired)) {
       return tier;
     }
@@ -97,10 +103,10 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       pendingRewards = "0";
     }
     try {
-      const minDuration = await stakingContract.methods.getMinDuration().call()
+      const minDuration = await stakingContract.methods.getMinDuration().call();
       const duration = moment.duration(minDuration * 1000);
       setCoolOffDuration(duration.humanize());
-    } catch(e){
+    } catch (e) {
       setCoolOffDuration("2 weeks");
     }
 
@@ -166,9 +172,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   };
   const unstake = async () => {
     const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods
-      .unstake()
-      .send({ from: accounts[0] });
+    await stakingContract.methods.unstake().send({ from: accounts[0] });
     await fetchState();
   };
 
@@ -200,6 +204,11 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       refetch: fetchState,
       investedAmount,
       loading,
+      getTierList: () => {
+        return tiersList.map((val) => {
+          return tierInfo.data[val];
+        });
+      },
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
       stakingAddress: DonStakingAddress,
       stake,
