@@ -19,7 +19,8 @@ const tierInfo: {
   isReady: boolean;
   data: { [x: string]: ITier };
 } = { isReady: false, data: {} };
-export const getTierInfo = async (amount: string, stakingContract: any) => {
+
+const fetchTiers = async (stakingContract: any) => {
   if (!tierInfo.isReady) {
     for (const tierNum of tiersList) {
       const detail = await stakingContract.methods
@@ -28,11 +29,15 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
       tierInfo.data[tierNum] = {
         tier: tierNum,
         apy: parseInt(detail.rewardPer) / 100,
-        donRequired: toEther(detail.cap),
+        donRequired: tierNum === 0 ? "0": toEther(detail.cap),
       };
     }
     tierInfo.isReady = true;
   }
+}
+
+export const getTierInfo = async (amount: string, stakingContract: any) => {
+
   for (const tierNum of tiersList) {
     const tier = tierInfo.data[tierNum];
     const amountBN = new BigNumber(amount);
@@ -149,6 +154,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   useEffect(() => {
     if (chainId === NetworksMap.BSC) {
       fetchState();
+      fetchTiers(stakingContract);
     }
   }, [chainId]);
   const checkAndApproveDon = async (amount: string) => {
@@ -205,9 +211,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       investedAmount,
       loading,
       getTierList: () => {
-        return tiersList.map((val) => {
-          return tierInfo.data[val];
-        });
+        return tierInfo.data;
       },
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
       stakingAddress: DonStakingAddress,

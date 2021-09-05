@@ -1,7 +1,7 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
 import { getBSCDon, toEther, toWei } from "helpers";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
@@ -182,7 +182,7 @@ export const AcceleratedAPYModal = ({
   onClose: () => void;
 }) => {
   const [availableDon, setAvailableDon] = useState("");
-  const [donAmount, setDonAmount] = useState("1000");
+
   const {
     stakedDon,
     stake,
@@ -190,6 +190,7 @@ export const AcceleratedAPYModal = ({
     getTierList,
     holdingDons,
     coolOffDuration,
+    tier,
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
@@ -204,16 +205,21 @@ export const AcceleratedAPYModal = ({
     setAvailableDon(toEther(userBalance));
   };
 
+  const [selectedTier, setSelectedTier] = useState(tier.tier || 1);
+
   useEffect(() => {
     fetchAvailableDon();
   }, []);
 
+  const donAmount = useMemo(() => {
+    const amount = getTierList()[selectedTier].donRequired;
+    return amount;
+  }, [selectedTier]);
+
   const updatePredictedApy = async () => {
     setLoading(true);
     try {
-      const apyObj = await getTierInfo(
-        new BigNumber(donAmount).plus(stakedDon).toFixed(2)
-      );
+      const apyObj = await getTierInfo(donAmount);
 
       if (apyObj) {
         setPredictedApy(apyObj.apy.toFixed());
@@ -222,6 +228,8 @@ export const AcceleratedAPYModal = ({
       setLoading(false);
     }
   };
+
+
 
   const stakeDon = async () => {
     setBtnLoading(true);
@@ -287,25 +295,16 @@ export const AcceleratedAPYModal = ({
             />
             <span>Choose Tier</span>
             <DonSlider
-              defaultValue={20}
+              disabled={btnLoading}
+              value={selectedTier * 20}
               onChange={(e, val) => {
-                const cases: { [x: number]: string } = {};
-                const tiers = [...getTierList()];
-                tiers.shift();
-                const divider = 100 / tiers.length;
-                tiers.forEach((tier, index) => {
-                  cases[(index + 1) * divider] = tier.donRequired.toString();
-                });
-                const bnVal = new BigNumber(val as number);
-                if (bnVal.lt(20)) {
-                  return setDonAmount("0");
+                const currentVal = tier.tier * 20;
+                const valBn = new BigNumber(val as number);
+                if (valBn.lt(currentVal)) {
+                  return setSelectedTier(tier.tier as number);
+                } else {
+                  setSelectedTier(Math.round((val as number) / 20));
                 }
-                if (bnVal.gt(100)) {
-                  return setDonAmount(cases["100"]);
-                }
-
-                const amount = cases[val.toString() as "20"];
-                setDonAmount(amount);
               }}
               marks={marks}
               step={20}
