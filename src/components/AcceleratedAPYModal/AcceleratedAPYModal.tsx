@@ -295,7 +295,6 @@ export const AcceleratedAPYModal = ({
             />
             <span>Choose Tier</span>
             <DonSlider
-              disabled={btnLoading}
               value={selectedTier * 20}
               onChange={(e, val) => {
                 const currentVal = tier.tier * 20;
@@ -338,6 +337,7 @@ export const AcceleratedAPYModal = ({
               <ButtonWidget
                 varaint="contained"
                 onClick={stakeDon}
+                disabled={selectedTier <= tier.tier}
                 className="py-2 font-weight-bold"
                 containedVariantColor="lightYellow"
                 height="40px"

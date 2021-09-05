@@ -31,6 +31,7 @@ const CotainedVariant = styled.button`
   :disabled {
     background-color: ${theme.palette.common.lightYellow};
     box-shadow: none;
+    opacity: 0.8;
   }
 `;
 
