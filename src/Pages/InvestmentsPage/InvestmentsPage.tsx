@@ -254,21 +254,12 @@ export const InvestmentsPage = () => {
                   web3,
                   invest.poolAddress,
                   accounts[0]
-                ),
-                calculateInitialInvestment(
-                  web3,
-                  invest.poolAddress,
-                  accounts[0]
-                ),
-                getTokenPrice(
-                  web3,
-                  await getTokenAddress(web3, invest.poolAddress)
-                ),
+                )
               ];
 
               const results = await Promise.all(amounts);
               investedAmount = investedAmount.plus(
-                new BigNumber(results[1]).multipliedBy(results[2])
+                new BigNumber(results[0])
               );
               arr.push({
                 name: invest.name,
