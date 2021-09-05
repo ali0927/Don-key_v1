@@ -1,5 +1,5 @@
 [context.master]
-  environment = { REACT_APP_GRAPHQL_URL = "https://don-strapi-g36tg.ondigitalocean.app/graphql", REACT_APP_API_URL = "https://staging-api.don-key.finance", REACT_APP_ENV = "production", REACT_APP_SHARE_LINK = "https://next.don-key.finance/share/"}
+  environment = { REACT_APP_GRAPHQL_URL = "https://don-strapi-g36tg.ondigitalocean.app/graphql", REACT_APP_API_URL = "https://don-key-finance-backend-staging-fqpn6.ondigitalocean.app", REACT_APP_ENV = "production", REACT_APP_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context.staging]
   environment = { REACT_APP_GRAPHQL_URL = "https://don-strapi-g36tg.ondigitalocean.app/graphql", REACT_APP_API_URL = "https://api.don-key.finance", REACT_APP_ENV = "production", REACT_APP_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context."feature/*"]
