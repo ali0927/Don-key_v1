@@ -32,6 +32,7 @@ import {
   getTokenPrice,
   getTokenAddress,
   getDonPrice,
+  fixUrl,
 } from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
@@ -458,7 +459,7 @@ export const InvestmentsPage = () => {
                       {index + 1}
                     </CustomTableData>
                     <CustomTableData>
-                      <StyledImage src={investment.farmerImage.url} />
+                      <StyledImage src={fixUrl(investment.farmerImage.url)} />
                     </CustomTableData>
                     <CustomTableData
                       cursor="pointer"
@@ -554,7 +555,7 @@ export const InvestmentsPage = () => {
                         {index + 1}
                       </CustomTableData>
                       <CustomTableData>
-                        <StyledImage src={investment.farmerImage.url} />
+                        <StyledImage src={fixUrl(investment.farmerImage.url)} />
                       </CustomTableData>
                       <CustomTableData
                         cursor="pointer"

@@ -94,3 +94,10 @@ export const getShareUrl = (code: string) => {
 export const getReferralCode = () => {
   return localStorage.getItem(REFERRAL_CODE);
 };
+
+export const fixUrl = (url: string) => {
+  if(url.includes("http")){
+    return url;
+  }
+  return `https://${url}`;
+}

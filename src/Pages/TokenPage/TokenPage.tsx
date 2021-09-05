@@ -8,6 +8,7 @@ import { PoolAmount } from "components/PoolAmount";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useWeb3Network } from "components/Web3NetworkDetector";
+import { fixUrl } from "helpers";
 import { useStrapi, useSwitchNetwork } from "hooks";
 import { IFarmer, IFarmerInter, IStrategy } from "interfaces";
 import { sortBy } from "lodash";
@@ -107,12 +108,7 @@ const TokenInfoQuery = gql`
   }
 `;
 
-const formatUrl = (url: string) => {
-  if(url.includes("http")){
-    return url;
-  }
-  return `https://${url}`;
-}
+
 
 
 
@@ -221,7 +217,7 @@ export const TokenPage= () => {
                     apy={item.strategy.apy + "%"}
                     isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
                     comingsoon={item.strategy.farmer.status === "comingsoon"}
-                    icon={<Image src={formatUrl(item.strategy.farmer.farmerImage.url)} />}
+                    icon={<Image src={fixUrl(item.strategy.farmer.farmerImage.url)} />}
                     contentTitle={item.strategy.name}
                     title={item.strategy.farmer.name}
                     content={item.strategy.description}

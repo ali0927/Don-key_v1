@@ -13,7 +13,7 @@ import { theme } from "theme";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { api } from "don-utils";
 import { useWeb3 } from "don-components";
-import { getShareUrl } from "helpers";
+import { fixUrl, getShareUrl } from "helpers";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -177,7 +177,7 @@ export const FarmerBio = ({
               <div className="row">
                 <ImageWrapper className="pl-4">
                   <StyledFarmerImage
-                    src={picture}
+                    src={fixUrl(picture)}
                     className="img-fluid "
                     alt="farmer"
                     style={{ borderRadius: 0 }}
