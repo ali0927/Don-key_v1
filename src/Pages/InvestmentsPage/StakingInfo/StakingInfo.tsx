@@ -340,7 +340,7 @@ export const StakingInfo = () => {
 
           <StyledButton
             varaint="outlined"
-            disabled={false}
+            disabled={!isStaked || isInCoolOffPeriod}
             onClick={openUnstake}
             className="py-1 px-3 rounded"
           >

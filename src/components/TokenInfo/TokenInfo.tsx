@@ -142,7 +142,7 @@ export const TokenInfo = ({
           <h5  style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins", marginBottom: 12 }}>
             {maxApy}%
           </h5>
-          <SubText>Upto APY</SubText>
+          <SubText>Up to APY</SubText>
         </div>
         {boostApy && 
            <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
