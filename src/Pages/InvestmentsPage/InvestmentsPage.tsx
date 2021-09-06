@@ -398,7 +398,7 @@ export const InvestmentsPage = () => {
     if (
       !loading &&
       filteredOldInvestMents.length === 0 &&
-      filteredOldInvestMents.length === 0
+      filteredInvestMents.length === 0
     ) {
       return (
         <>
