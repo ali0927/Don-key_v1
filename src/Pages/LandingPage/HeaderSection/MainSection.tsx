@@ -8,6 +8,7 @@ import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
 import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
+import { useHistory } from "react-router";
 
 
 const Root =styled.div`
@@ -113,6 +114,7 @@ const TOKEN_DATA = gql`
 export const MainSection: React.FC = () => {
 
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
+  const history = useHistory();
 
   const [{ data: coingecko }] = useAxios({
     method: "GET",
@@ -146,17 +148,27 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
+  const handleTakePart = () => {
+    history.push("/lottery/participate");
+  };
+
     return(
         <>
           <Root>
             <div className="container">
                <div className="row">
                       <div className="col-lg-7 mb-5">
-                           <Heading>Join the best cryptocurrency exchange</Heading>
+                           <Heading>Beta DAPP is now live and open for the public</Heading>
                            <Paragraph className="mt-4 w-50">
-                               Build, grow, Multiply and scale your network with DON-KEY exchange
+                               Explore and follow stratagies built by real farmers
                            </Paragraph>
-                           <Button className="mt-5" varaint="contained" containedVariantColor="black" width="30%" height="50px">Buy DON</Button>
+                           <Button className="mt-5" 
+                               varaint="contained" 
+                               containedVariantColor="black"
+                               width="30%" 
+                               height="50px"
+                               onClick={handleTakePart}
+                               >Stake LP token</Button>
                        </div>
 
                       <div className="col-lg-4 mb-5 d-flex justify-content-center justify-content-lg-end">
@@ -164,7 +176,7 @@ export const MainSection: React.FC = () => {
                       </div>
               </div>
 
-            <div className="d-flex mt-4 justify-content-center">
+            <div className="d-flex mt-4 pb-5 justify-content-center">
                  <FooterRow className="row position-relative justify-content-center">
                       <GrayBorder className="d-none d-md-block"/>
                       <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
