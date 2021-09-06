@@ -11,6 +11,8 @@ import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { getTierInfo } from "components/StakingContractProvider";
 import { breakPoints } from "breakponts";
+import { getDonPriceWeb3 } from "helpers";
+import { useWeb3 } from "don-components";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -192,7 +194,7 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
   if (hasEnded) {
     return <TimerHeading>Cool off period is over. Claim Tokens</TimerHeading>;
   }
-  // {days}d:{hrs}h:{mins}m:{secs}s{" "}
+
   return (
     <div className="d-flex justify-content-center">
       <Root className="d-flex flex-lg-column justify-content-between align-items-center">
@@ -254,6 +256,12 @@ export const StakingInfo = () => {
 
   const [loading, enableLoading, disableLoading] = useToggle();
 
+  const [donPrice, setDonPrice] = useState<string | null>(null);
+  const web3 = useWeb3();
+  useEffect(() => {
+    getDonPriceWeb3(web3).then(setDonPrice)
+  }, [])
+
   const harvestDon = async () => {
     enableLoading();
     try {
@@ -281,7 +289,7 @@ export const StakingInfo = () => {
               <StakingTitle style={{ color: "#fff" }}>
                 DON Rewards available
               </StakingTitle>
-              <StakingSubtitle>{pendingReward}</StakingSubtitle>
+              <StakingSubtitle>{new BigNumber(pendingReward).toFixed(6)} DON {donPrice && `($${new BigNumber(pendingReward).multipliedBy(donPrice).toFixed(2)})`}</StakingSubtitle>
             </div>
             <div className="col-5 d-flex justify-content-center">
               <StyledButton
