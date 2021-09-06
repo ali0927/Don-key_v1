@@ -149,6 +149,7 @@ const TimmerRoot = styled.div`
   transform: scale(1.1);
   @media only screen and (min-width: ${breakPoints.lg}) {
     margin-top: 12px;
+    margin-left: 0px;
     transform: scale(1.4);
   }
 `;
@@ -339,7 +340,7 @@ export const StakingInfo = () => {
 
           <StyledButton
             varaint="outlined"
-            disabled={!isStaked || isInCoolOffPeriod}
+            disabled={false}
             onClick={openUnstake}
             className="py-1 px-3 rounded"
           >

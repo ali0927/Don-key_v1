@@ -139,7 +139,7 @@ export const TokenInfo = ({
       </div>
       <div className="row">
         <div className="col-5 d-flex flex-column  justify-content-end">
-          <h5 style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins" }}>
+          <h5  style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins", marginBottom: 12 }}>
             {maxApy}%
           </h5>
           <SubText>Upto APY</SubText>

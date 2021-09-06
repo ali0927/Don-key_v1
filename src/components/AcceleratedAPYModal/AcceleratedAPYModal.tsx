@@ -57,9 +57,10 @@ const DonInputLabel = styled.label`
   margin-bottom: 0%;
 `;
 const DonHTMLInput = styled.input`
-  text-align: right;
+  text-align: left;
   font-size: 15px;
   border: none;
+  color: gray;
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -92,6 +93,7 @@ const DonInput = ({
       <DonHTMLInput
         placeholder={placeholder}
         type="text"
+        readOnly
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
@@ -207,6 +209,8 @@ export const AcceleratedAPYModal = ({
 
   const [selectedTier, setSelectedTier] = useState(tier.tier || 1);
 
+  console.log("------------selected tier---",selectedTier,tier.tier)
+
   useEffect(() => {
     fetchAvailableDon();
   }, []);
@@ -302,7 +306,9 @@ export const AcceleratedAPYModal = ({
                 if (valBn.lt(currentVal)) {
                   return setSelectedTier(tier.tier as number);
                 } else {
-                  setSelectedTier(Math.round((val as number) / 20));
+                  if(val > currentVal){
+                     setSelectedTier(Math.round((val as number) / 20));
+                  }
                 }
               }}
               marks={marks}

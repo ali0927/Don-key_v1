@@ -19,6 +19,9 @@ const StyledH2 = styled.h2`
 const Info = styled.p`
   color: #222222;
   margin-bottom: 0;
+  font-size: 15px;
+  font-family: Poppins;
+  font-weight: 400;
 `;
 
 export const UnstakeDonModal = ({
@@ -46,20 +49,19 @@ export const UnstakeDonModal = ({
     <DonCommonmodal
       isOpen={open}
       title=""
-      PaperProps={{ style: { borderRadius: 1 } }}
       variant="common"
       onClose={onClose}
       size="xs"
     >
       <div style={{ marginTop: -30, marginBottom: -20 }}>
-        <div className="d-flex align-items-center justify-content-between">
-          <div style={{ width: 100 }}>
+        <div className="d-flex align-items-center justify-content-center">
+          {/* <div style={{ width: 100 }}>
             <img
               src="/assets/images/token.png"
               className="d-inline-block img-fluid"
               alt="Don Token Logo"
             />
-          </div>
+          </div> */}
           <StyledH2 className="mb-0">Don-key APY program</StyledH2>
         </div>
 
@@ -72,8 +74,9 @@ export const UnstakeDonModal = ({
         <div className="d-flex align-items-center">
           <ButtonWidget
             varaint="contained"
+            height="40px"
             onClick={unstakeDon}
-            className="py-2 rounded-0 font-weight-bold"
+            className="py-2 font-weight-bold"
             containedVariantColor="lightYellow"
           >
             {btnLoading ? (

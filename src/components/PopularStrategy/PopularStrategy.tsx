@@ -301,7 +301,7 @@ export const PopularStrategy = ({
           className="d-flex justify-content-between"
           // style={riskImage ? { marginTop: -22 } : {}}
         >
-          <div>
+          <div className="mb-3">
             <p className="mb-0">APY</p>
             <h5 className="primary-text">{apy}</h5>
           </div>
