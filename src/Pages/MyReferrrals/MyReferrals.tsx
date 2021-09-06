@@ -5,6 +5,7 @@ import { useReferralContext } from "contexts/ReferralContext";
 import {
   calculateInitialInvestment,
   calculateUserClaimableAmount,
+  fixUrl,
   getDonPriceWeb3,
   getReferralSystemContract,
   getRewardSystemContract,
@@ -236,7 +237,7 @@ const useTransformedData = () => {
         if (farmer) {
           const referralState: ReferralTableState = {
             expired: referrerInfo.expired,
-            farmerImage: farmer.farmerImage.url,
+            farmerImage: fixUrl(farmer?.farmerImage?.url) || "",
             poolSymbol: symbol,
             pool_address: referrerInfo.poolAddress,
             farmerName: farmer.name,

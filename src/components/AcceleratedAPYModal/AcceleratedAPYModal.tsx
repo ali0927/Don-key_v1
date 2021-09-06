@@ -150,8 +150,6 @@ export const AcceleratedAPYModal = ({
     }
   };
 
-
-
   const stakeDon = async () => {
     setBtnLoading(true);
     try {
@@ -466,8 +464,8 @@ export const AcceleratedAPYModal = ({
                 if (valBn.lt(currentVal)) {
                   return setSelectedTier(tier.tier as number);
                 } else {
-                  if(val > currentVal){
-                     setSelectedTier(Math.round((val as number) / 20));
+                  if (val > currentVal) {
+                    setSelectedTier(Math.round((val as number) / 20));
                   }
                 }
               }}

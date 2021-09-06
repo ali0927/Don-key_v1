@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { toEther } from "helpers";
 import Web3 from "web3";
 import {
   calculateInitialInvestment,
@@ -63,7 +64,7 @@ export const getProfitLoss = async (web3: Web3, poolAddress: string) => {
 export const getPoolValue = async (web3: Web3, poolAddress: string) => {
   try {
     const amount = await getTotalPoolValue(web3, poolAddress);
-    const bn = new BigNumber(web3.utils.fromWei(amount, "ether")).toFixed(2);
+    const bn = new BigNumber(toEther(amount)).toFixed(2);
     return bn.toString();
   } catch (e) {
     return "0";
@@ -94,7 +95,10 @@ export const getReferralCode = () => {
   return localStorage.getItem(REFERRAL_CODE);
 };
 
-export const fixUrl = (url: string) => {
+export const fixUrl = (url?: string) => {
+  if(!url){
+    return url;
+  }
   if(url.includes("http")){
     return url;
   }

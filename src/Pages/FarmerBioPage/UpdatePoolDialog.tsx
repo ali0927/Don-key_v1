@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
 import {
-  getPoolContract,
+  getPoolContract, toWei,
 } from "helpers";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
@@ -38,7 +38,7 @@ export const UpdatePoolDialog: React.FC<{
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
       await pool.methods
-        .updateTotalPoolValue( Web3.utils.toWei(new_pool))
+        .updateTotalPoolValue( toWei(new_pool))
         .send({ from: accounts[0] });
     } finally {
       setLoading(false);

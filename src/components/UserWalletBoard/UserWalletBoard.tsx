@@ -53,13 +53,13 @@ export const UserWalletBoard: React.FC<IUserWalletProps> = (props) => {
 
   const onSuccess = async () => {
     // let d = await getTotalPoolValue(web3, poolAddress);
-    // setTotalPoolValue(web3.utils.fromWei(d, "ether"));
+    // setTotalPoolValue(toEther(d, "ether"));
     // const accounts = await web3.eth.getAccounts();
     // const pool = await getPoolContract(web3, poolAddress);
     // let lptokensresponse = await pool.methods.balanceOf(accounts[0]).call();
-    // setUserLPTokens(web3.utils.fromWei(lptokensresponse, "ether"));
+    // setUserLPTokens(toEther(lptokensresponse, "ether"));
     // let total = await pool.methods.totalSupply().call();
-    // setTotalLPTokens(web3.utils.fromWei(total, "ether"));
+    // setTotalLPTokens(toEther(total, "ether"));
 
     // let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
     // setCurrentHoldings(withdrawAmount);

@@ -228,7 +228,7 @@ export const TokenPage = () => {
                     comingsoon={item.strategy.farmer.status === "comingsoon"}
                     icon={
                       <Image
-                        src={fixUrl(item.strategy.farmer.farmerImage.url)}
+                        src={fixUrl(item.strategy?.farmer?.farmerImage?.url)}
                       />
                     }
                     contentTitle={item.strategy.name}

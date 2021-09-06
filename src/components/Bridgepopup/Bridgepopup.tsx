@@ -12,6 +12,7 @@ import {
   getDonPrice,
   toEther,
   getUserDons,
+  toWei,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -78,10 +79,10 @@ const MyBalanceInDON = ({ onDone }: { onDone?: (val: string) => void }) => {
         balance = 0;
       }
       setState({
-        balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
+        balance: new BigNumber(toEther(balance)).toFixed(2),
         isReady: true,
       });
-      onDone && onDone(web3.utils.fromWei(balance, "ether"));
+      onDone && onDone(toEther(balance));
     } catch (err) {}
   };
   useLayoutEffect(() => {
@@ -762,13 +763,13 @@ export const BridgePopup = ({
       if (input1Chain == 1) {
         let acceptedToken = await getETHDon(web3);
         await acceptedToken.methods
-          .transfer(DONETHbridge, web3.utils.toWei(input1))
+          .transfer(DONETHbridge, toWei(input1))
           .send({ from: accounts[0] });
       }
       if (input1Chain == 56) {
         let BSCbridge = await getDONBSCbridgeContract(web3);
         await BSCbridge.methods
-          .Swapout(web3.utils.toWei(input1), accounts[0])
+          .Swapout(toWei(input1), accounts[0])
           .send({ from: accounts[0] });
       }
       const isTransferred = await checkDonsAreTransferred(

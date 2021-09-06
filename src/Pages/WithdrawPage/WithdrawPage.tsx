@@ -4,6 +4,7 @@ import swampJSON from "JsonData/SwampFinance.json";
 import BUSDJSon from "JsonData/BUSDToken.json";
 import strategys from "JsonData/strategys.json";
 import moment from "moment";
+import { toEther } from "helpers";
 
 const swampFinanceAddress = "0x33AdBf5f1ec364a4ea3a5CA8f310B597B8aFDee3";
 const swampTokenAddress = "0xc5A49b4CBe004b6FD55B30Ba1dE6AC360FF9765d";
@@ -33,7 +34,7 @@ const ShowInfo = ({
     (async () => {
       setLoading(true);
       const newVal = await getValue();
-      setValue(web3.utils.fromWei(newVal));
+      setValue(toEther(newVal));
       setLoading(false);
     })();
   }, [refresh]);
@@ -182,7 +183,7 @@ export const WithdrawPage = () => {
 
   const logBalance = async () => {
     // const balance =;
-    // console.log(web3.utils.fromWei(balance));
+    // console.log(toEther(balance));
   };
 
   useEffect(() => {
@@ -246,7 +247,7 @@ export const WithdrawPage = () => {
             />
             <p>
               withdraw Amount:{" "}
-              {swampAmount ? web3.utils.fromWei(swampAmount) : "Full Amount"}
+              {swampAmount ? toEther(swampAmount) : "Full Amount"}
             </p>
             <button onClick={unstakeSwamp}>Unstake Swamp</button>
             <ShowInfo
@@ -264,7 +265,7 @@ export const WithdrawPage = () => {
             />
             <p>
               withdraw Amount:{" "}
-              {beefyAmount ? web3.utils.fromWei(beefyAmount) : "Full Amount"}
+              {beefyAmount ? toEther(beefyAmount) : "Full Amount"}
             </p>
             <button onClick={transferBeefy}>Transfer Beefy</button>
           </div>
@@ -276,7 +277,7 @@ export const WithdrawPage = () => {
             />
             <p>
               Unstaked Cake Amount:{" "}
-              {cakeLP ? web3.utils.fromWei(autoAmount) : "Full Amount"}
+              {cakeLP ? toEther(autoAmount) : "Full Amount"}
             </p>
             <button onClick={unstakeCakeLp}>Unstake Cake Lp</button>
             <ShowInfo

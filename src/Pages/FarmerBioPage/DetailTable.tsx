@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { Switch, withStyles } from "@material-ui/core";
-import { getTotalPoolValue, toEther } from "helpers";
+import { getPoolToken, getTotalPoolValue, toEther } from "helpers";
 import { useWeb3 } from "don-components";
 import {
   AwardIcon,
@@ -264,7 +264,9 @@ export const DetailTable = ({
   useEffect(() => {
     (async () => {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
-      setTotalPoolValue(toEther(poolValue));
+      const token = await getPoolToken(web3, poolAddress);
+      const decimals = await token.methods.decimals().call();
+      setTotalPoolValue(toEther(poolValue,decimals));
     })();
   }, [dependsOn, currentNetwork]);
 

@@ -17,7 +17,7 @@ export const getEstimatedAmount = async (
   );
 
   var weiAmout = web3.utils.toBN(amount)
-  var weiAmount2 = web3.utils.toWei(weiAmout.toString() );
+  var weiAmount2 = (weiAmout.toString() );
 
   const estimate = await pancakeRouter.methods
     .getAmountsOut(weiAmount2, [tokenA, tokenB])
