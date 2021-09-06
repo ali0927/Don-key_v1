@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { toEther } from "helpers";
+import { getPoolToken, toEther } from "helpers";
 import Web3 from "web3";
 import {
   calculateInitialInvestment,
@@ -64,7 +64,9 @@ export const getProfitLoss = async (web3: Web3, poolAddress: string) => {
 export const getPoolValue = async (web3: Web3, poolAddress: string) => {
   try {
     const amount = await getTotalPoolValue(web3, poolAddress);
-    const bn = new BigNumber(toEther(amount)).toFixed(2);
+    const token = await getPoolToken(web3, poolAddress);
+    const decimals = await token.methods.decimals().call();
+    const bn = new BigNumber(toEther(amount, decimals)).toFixed(2);
     return bn.toString();
   } catch (e) {
     return "0";
