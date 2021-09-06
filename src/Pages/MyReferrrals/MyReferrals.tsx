@@ -135,7 +135,7 @@ const calcDonRewards = async (
   }
   const tokenPrice = await getTokenPrice(
     web3,
-    await getTokenAddress(web3, poolAddress)
+    poolAddress
   );
 
   const tokenValueInUsd = profit.multipliedBy(tokenPrice).multipliedBy(0.02);

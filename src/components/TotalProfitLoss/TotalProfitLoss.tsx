@@ -49,10 +49,10 @@ export const TotalProfitLoss = ({
           );
           
         } else {
-          const tokenAddress =  await getTokenAddress(web3, poolAddress);
+         
           const tokenPrice = await getTokenPrice(
             web3,
-           tokenAddress
+           poolAddress
           );
         
 

@@ -85,10 +85,11 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
-export const getDonkeyPriceFeedContract = async (web3: Web3) => {
+export const getDonkeyPriceFeedContract = async (web3: Web3, feedsAddress = DonkeyPriceFeedAddress) => {
   const json = await import("JsonData/DonKeyPriceFeeds.json");
-  return new web3.eth.Contract(json.abi as any, DonkeyPriceFeedAddress);
+  return new web3.eth.Contract(json.abi as any, feedsAddress);
 };
+
 export const getReferralSystemContract = async (web3: Web3) => {
   const json = await import("JsonData/ReferralSystem.json");
   return new web3.eth.Contract(json.abi as any, ReferralSystemAddress);
@@ -282,7 +283,8 @@ const memoizeAsync = <T extends any[], V>(
 };
 
 export const getTokenPrice = memoizeAsync(
-  async (web3: Web3, tokenAddress: string) => {
+  async (web3: Web3, poolAddress: string) => {
+    const tokenAddress = (await getTokenAddress(web3, poolAddress));
     if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
       return "1";
     }
@@ -295,8 +297,16 @@ export const getTokenPrice = memoizeAsync(
         web3,
         tokenPriceGetter[index].priceFeedAddress
       );
-
       return price;
+    }
+    if (index === -1) {
+      const pool = await getPoolContract(web3, poolAddress, 3);
+      const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
+      const priceFeeds = await getDonkeyPriceFeedContract(web3,
+        priceFeedsListAddress
+      );
+      const usdPrice = await priceFeeds.methods.getPriceinUSD(tokenAddress).call();
+      return toEther(usdPrice);
     }
     const bnbPrice = await (await getPancakeContract(web3)).methods
       .getAmountsOut(web3.utils.toWei("0.1"), [tokenAddress, BUSDAddress])
@@ -312,7 +322,6 @@ export const getTokenPrice = memoizeAsync(
 
 export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
-
   return (await token.methods.symbol().call()) as string;
 };
 
@@ -391,8 +400,10 @@ export const getPancakeContract = async (web3: Web3) => {
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress, 2);
+  console.log("Called Total", poolAddress, contract.methods);
 
   const amount = await contract.methods.getinvestedAmountWithReward().call();
+  console.log("Checked", amount, poolAddress);
   return amount;
 };
 
@@ -496,7 +507,7 @@ export const calculateInitialInvestmentInUSD = async (
     );
     const tokenPrice = await getTokenPrice(
       web3,
-      await getTokenAddress(web3, poolAddress)
+      poolAddress
     );
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }

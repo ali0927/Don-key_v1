@@ -55,7 +55,7 @@ export const CardWrapper = styled.div`
 `;
 
 export const BlackCardWrapper = styled(CardWrapper)`
-    box-shadow: 0px 4px 10px rgb(0 0 0 / 35%)
+  box-shadow: 0px 4px 10px rgb(0 0 0 / 35%);
 `;
 
 export const CardInnerInfo = styled.div`
@@ -76,7 +76,6 @@ export const CardLabel = styled.p`
 
 const TotalPoolValueLabel = styled(CardLabel)`
   font-weight: 600;
- 
 `;
 
 const CardPoolAddress = styled.p`
@@ -154,14 +153,12 @@ export const ColumnsTitle1 = styled(ColumnsTitleColored)`
 `;
 
 const Col = styled.div`
-    width: 553px;
-      @media only screen and (max-width: 600px) {
-        margin-left: 0px !important;
-        margin-right: 0px !important;
-      }
-    
+  width: 553px;
+  @media only screen and (max-width: 600px) {
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+  }
 `;
-
 
 export const formatNum = (num: string) => {
   const wrappedNum = new BigNumber(num);
@@ -176,20 +173,20 @@ export const formatNum = (num: string) => {
   });
 };
 
-const YellowSwitch =  withStyles((theme) => ({
+const YellowSwitch = withStyles((theme) => ({
   root: {
     width: 28,
     height: 16,
     padding: 0,
-    display: 'flex',
+    display: "flex",
   },
   switchBase: {
     padding: 2,
     color: "#fff",
-    '&$checked': {
-      transform: 'translateX(12px)',
+    "&$checked": {
+      transform: "translateX(12px)",
       color: theme.palette.common.white,
-      '& + $track': {
+      "& + $track": {
         opacity: 1,
         backgroundColor: yellow[300],
         borderColor: yellow[500],
@@ -199,7 +196,7 @@ const YellowSwitch =  withStyles((theme) => ({
   thumb: {
     width: 12,
     height: 12,
-    boxShadow: 'none',
+    boxShadow: "none",
   },
   track: {
     border: `1px solid #fff`,
@@ -208,7 +205,7 @@ const YellowSwitch =  withStyles((theme) => ({
     backgroundColor: yellow[500],
   },
   checked: {},
-}))(Switch);;
+}))(Switch);
 
 const URLMap = {
   [BSCChainId]: "https://bscscan.com",
@@ -216,14 +213,13 @@ const URLMap = {
 };
 
 const TokenSwitchLabels = styled.div`
-font-weight: 500;
-font-size: 14px;
-color: #808080;
+  font-weight: 500;
+  font-size: 14px;
+  color: #808080;
 `;
 
-
 const IconWrapper = styled.div`
-transform: scale(0.7);
+  transform: scale(0.7);
 `;
 
 export const DetailTable = ({
@@ -300,12 +296,15 @@ export const DetailTable = ({
 
   return (
     <>
-      <Col className="mb-5" style={{marginRight: 17}}>
+      <Col className="mb-5" style={{ marginRight: 17 }}>
         <CardWrapper color="white">
-          <div style={{marginTop: 30}}>
+          <div style={{ marginTop: 30 }}>
             <CardInnerInfo className="d-flex justify-content-center mb-2">
               <div className="d-flex flex-column align-items-center">
-                <div className="d-flex align-items-baseline" style={{marginBottom: 18}}>
+                <div
+                  className="d-flex align-items-baseline"
+                  style={{ marginBottom: 18 }}
+                >
                   <TotalPoolValueLabel color="black">
                     Total Pool Value
                   </TotalPoolValueLabel>
@@ -320,7 +319,7 @@ export const DetailTable = ({
                     <LinkIcon />
                   </a>
                 </div>
-                <CardPoolAddress >
+                <CardPoolAddress>
                   {isActiveNetwork ? (
                     <DollarView
                       poolAddress={poolAddress}
@@ -334,7 +333,7 @@ export const DetailTable = ({
                   <TokenSwitchLabels className="d-flex align-items-center">
                     {symbol}
                     <YellowSwitch
-                    className="mx-2"
+                      className="mx-2"
                       value={true}
                       onChange={handleToggle}
                       checked={initialCheck}
@@ -342,7 +341,9 @@ export const DetailTable = ({
                     USD
                   </TokenSwitchLabels>
                 ) : (
-                  <TokenSwitchLabels>You are connected To Wrong Network</TokenSwitchLabels>
+                  <TokenSwitchLabels>
+                    You are connected To Wrong Network
+                  </TokenSwitchLabels>
                 )}
               </div>
             </CardInnerInfo>
@@ -371,27 +372,27 @@ export const DetailTable = ({
               "Dominance",
               dominance + " %",
               "black",
-              <IconWrapper className="mr-2" >
+              <IconWrapper className="mr-2">
                 <AwardIcon />
               </IconWrapper>
             )}
           </FirstCardRow>
         </CardWrapper>
       </Col>
-      <Col className="mb-5"  style={{ marginLeft: 17,}}>
-        <BlackCardWrapper className="position-relative"  color="black">
-          
-          {isActiveNetwork ?(
+      <Col className="mb-5" style={{ marginLeft: 17 }}>
+        <BlackCardWrapper className="position-relative" color="black">
+          {isActiveNetwork ? (
             <>
-
-            <InvestBlackCard
-              poolAddress={poolAddress}
-              poolVersion={poolVersion}
-              network={network}
-              boostApy={boostApy}
-            />
+              <InvestBlackCard
+                poolAddress={poolAddress}
+                poolVersion={poolVersion}
+                network={network}
+                boostApy={boostApy}
+              />
             </>
-          ): <InactiveNetworkCard correctNetwork={network} />}
+          ) : (
+            <InactiveNetworkCard correctNetwork={network} />
+          )}
         </BlackCardWrapper>
       </Col>
     </>

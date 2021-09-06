@@ -19,9 +19,10 @@ export const usePoolSymbol = (poolAddress: string) => {
         symbol = await getTokenSymbol(web3, poolAddress);
         //   symbolCache.set(poolAddress, symbol);
         // }
-
+      
         setSymbol(symbol);
       } catch (e) {
+        console.log(e, "Symbol Error");
         symbol = "BUSD";
         // symbolCache.set(poolAddress, symbol);
         setSymbol(symbol);
