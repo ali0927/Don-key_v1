@@ -59,6 +59,9 @@ export const useDominance = (farmerPoolAddress: string) => {
           web3,
           farmerPoolAddress
         );
+        if(allPoolValues.isEqualTo(0)){
+          return setDominance("0");
+        }
 
         const dominanceValue = new BigNumber(currentPoolValue)
           .dividedBy(allPoolValues)
