@@ -1,29 +1,70 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import { gql, useQuery } from "@apollo/client";
+import BigNumber from "bignumber.js";
+import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useWeb3 } from "don-components";
 import { getPoolValueInUSD } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import { useEffect, useState } from "react";
 
+const ALL_FARMER_QUERY = gql`
+  query allFarmerQuery($chainId: Int!) {
+    farmers(
+      where: {
+        active_eq: true
+        status_in: ["active"]
+        network: { chainId: $chainId }
+      }
+    ) {
+      name
+      description
+      farmerImage {
+        url
+      }
+      guid
+      active
+      twitter
+      telegram
+      poolAddress
+      poolVersion
+      network {
+        name
+        chainId
+        symbol
+      }
+    }
+  }
+`;
+
 export const useDominance = (farmerPoolAddress: string) => {
-  const [{ data }] = useAxios("/api/v2/farmer");
-  const [dominance, setDominance] = useState("0");
+  const { chainId } = useWeb3Network();
+
+  const { data } = useQuery(ALL_FARMER_QUERY, {
+    variables: {
+      chainId,
+    },
+  });
+  const [dominance, setDominance] = useState("-");
   const web3 = useWeb3();
 
   useEffect(() => {
     if (data) {
       const apiCall = async () => {
-        let farmersTotalPoolValue = 0;
-        for (let farmer of data.data) {
+        let allPoolValues = new BigNumber(0);
+        for (let farmer of data.farmers) {
           const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
-          farmersTotalPoolValue = farmersTotalPoolValue + parseFloat(poolValue);
+          allPoolValues = allPoolValues.plus(poolValue);
         }
-        const farmerPoolValue = await getPoolValueInUSD(
+        const currentPoolValue = await getPoolValueInUSD(
           web3,
           farmerPoolAddress
         );
-        const dominanceValue =
-          parseFloat(farmerPoolValue) / farmersTotalPoolValue;
-        setDominance((dominanceValue * 100).toFixed(2));
+
+        const dominanceValue = new BigNumber(currentPoolValue)
+          .dividedBy(allPoolValues)
+          .multipliedBy(100);
+
+        setDominance(dominanceValue.toFixed(2));
       };
       apiCall();
     }

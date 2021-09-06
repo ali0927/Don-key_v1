@@ -404,10 +404,10 @@ export const getPancakeContract = async (web3: Web3) => {
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress, 2);
-  console.log("Called Total", poolAddress, contract.methods);
-
+ 
   const amount = await contract.methods.getinvestedAmountWithReward().call();
-  console.log("Checked", amount, poolAddress);
+ 
+  
   return amount;
 };
 
