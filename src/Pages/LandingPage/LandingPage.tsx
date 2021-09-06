@@ -9,6 +9,7 @@ import { JoinCommunity } from "./JoinCommunity";
 import { RoundedCompletedSection } from "./RoundedCompletedSection";
 import { LotteryPage } from "Pages/LotteryPage";
 import { RoadMap } from "./RoadMap/RoadMap";
+import { MainSection } from "./HeaderSection";
 
 
 
@@ -20,11 +21,17 @@ const LandingPage = () => {
   return (
     <div>
       <NavBar />
+      
+      <MainSection/>
+      
 
       <LotteryPage />
+     
 
       {/* Banner */}
       <BannerSection />
+
+      
 
       {/* Cards */}
       <CardsSection />
