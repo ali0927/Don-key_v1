@@ -66,12 +66,14 @@ const StyledLink = styled(Link)`
 
 const TokenInfoQuery = gql`
   query tokenInfo($slug: String!, $network: String!) {
-    tokens(where: { slug: $slug, network:{slug: $network}}) {
+    tokens(where: { slug: $slug, network: { slug: $network } }) {
       network {
         chainId
         symbol
         name
       }
+      subtitle
+      description
       RiskStrategy {
         strategy {
           risk {
@@ -108,10 +110,6 @@ const TokenInfoQuery = gql`
   }
 `;
 
-
-
-
-
 const sortStrategies = (list: any[]) => {
   return sortBy(list, (item) => {
     const risk = item.strategy.risk.Title.toLowerCase();
@@ -133,13 +131,14 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
-export const TokenPage= () => {
-  const { token, network: tokenNetwork } = useParams<{ token: string; network: string; }>();
+export const TokenPage = () => {
+  const { token, network: tokenNetwork } =
+    useParams<{ token: string; network: string }>();
 
   const { data, loading } = useQuery(TokenInfoQuery, {
     variables: {
       slug: token,
-      network: tokenNetwork
+      network: tokenNetwork,
     },
   });
   const history = useHistory();
@@ -149,13 +148,18 @@ export const TokenPage= () => {
   const { switchNetwork } = useSwitchNetwork();
   const { chainId } = useWeb3Network();
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
-  const network = data ? data.tokens[0].network: {chainId: null};
+  const network = data ? data.tokens[0].network : { chainId: null };
+  const subtitle = data ? data.tokens[0].subtitle : null;
+  const description = data ? data.tokens[0].description : null;
   const isActiveNetwork = network.chainId === chainId;
   const sortedStrategies: { strategy: IStrategy & { farmer: IFarmerInter } }[] =
     useMemo(() => {
       return sortStrategies(strategies).filter((item) => {
         const farmer = item.strategy.farmer as IFarmerInter;
-        if (farmer.active &&( farmer.status === "active" || farmer.status === "comingsoon")) {
+        if (
+          farmer.active &&
+          (farmer.status === "active" || farmer.status === "comingsoon")
+        ) {
           return true;
         } else {
           return false;
@@ -178,25 +182,28 @@ export const TokenPage= () => {
               <StyledLink to="/dashboard">
                 <BackArrow /> <span className="ml-2">Back</span>
               </StyledLink>
-              <Title className="mb-5">Strategy Risk Level</Title>
+              <Title className="mb-5">
+                {subtitle || "Strategy Risk Level"}
+              </Title>
               <Subtitle>Description</Subtitle>
-             <div className="row">
-               <div className="col-md-8">
-               <p className="mb-5">
-                <ShowMoreContent
-                  content={`We will run 2 main strategies:1) a long and short algo on BTC, w/ a Sortino of 5.5 (will post new backtest chart shortly, but it performs better).
-2) Active discretionary trading both long / short across all synthetic assets combining fundamental, technical`}
-                  length={150}
-                />
-              </p>
-               </div>
-               {/* <div className="col-md-4" style={{textAlign: 'end'}}>
+              <div className="row">
+                <div className="col-md-8">
+                  <p className="mb-5">
+                    <ShowMoreContent
+                      content={
+                        description ||
+                        `We will run 2 main strategies:1) a long and short algo on BTC, w/ a Sortino of 5.5 (will post new backtest chart shortly, but it performs better).
+2) Active discretionary trading both long / short across all synthetic assets combining fundamental, technical`
+                      }
+                      length={150}
+                    />
+                  </p>
+                </div>
+                {/* <div className="col-md-4" style={{textAlign: 'end'}}>
               
               </div> */}
+              </div>
             </div>
-           
-            </div>
-            
           </div>
         </div>
       </Section>
@@ -215,9 +222,15 @@ export const TokenPage= () => {
                 <div className="col-md-4 py-3">
                   <PopularStrategy
                     apy={item.strategy.apy + "%"}
-                    isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
+                    isCardComingsoon={
+                      item.strategy.farmer.status === "comingsoon"
+                    }
                     comingsoon={item.strategy.farmer.status === "comingsoon"}
-                    icon={<Image src={fixUrl(item.strategy.farmer.farmerImage.url)} />}
+                    icon={
+                      <Image
+                        src={fixUrl(item.strategy.farmer.farmerImage.url)}
+                      />
+                    }
                     contentTitle={item.strategy.name}
                     title={item.strategy.farmer.name}
                     content={item.strategy.description}
