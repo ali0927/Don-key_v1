@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
 import {
-  getPoolContract,
+  getPoolContract, toWei,
 } from "helpers";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
@@ -43,7 +43,7 @@ export const SendWithdrawalsDialog: React.FC<{
           poolVersion
         );
         const accounts = await web3.eth.getAccounts();
-         await poolContract.methods.withdraw(Web3.utils.toWei(withdrawValue),Web3.utils.toWei(new_pool)).send({from : accounts[0]});
+         await poolContract.methods.withdraw(toWei(withdrawValue),toWei(new_pool)).send({from : accounts[0]});
       }
     } finally {
       setLoading(false);

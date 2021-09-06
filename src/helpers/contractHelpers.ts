@@ -85,7 +85,10 @@ export const getPoolToken = async (web3: Web3, poolAddress: string) => {
   return getERCContract(web3, tokenAddress);
 };
 
-export const getDonkeyPriceFeedContract = async (web3: Web3, feedsAddress = DonkeyPriceFeedAddress) => {
+export const getDonkeyPriceFeedContract = async (
+  web3: Web3,
+  feedsAddress = DonkeyPriceFeedAddress
+) => {
   const json = await import("JsonData/DonKeyPriceFeeds.json");
   return new web3.eth.Contract(json.abi as any, feedsAddress);
 };
@@ -284,7 +287,7 @@ const memoizeAsync = <T extends any[], V>(
 
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
-    const tokenAddress = (await getTokenAddress(web3, poolAddress));
+    const tokenAddress = await getTokenAddress(web3, poolAddress);
     if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
       return "1";
     }
@@ -302,19 +305,20 @@ export const getTokenPrice = memoizeAsync(
     if (index === -1) {
       const pool = await getPoolContract(web3, poolAddress, 3);
       const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
-      const priceFeeds = await getDonkeyPriceFeedContract(web3,
+      const priceFeeds = await getDonkeyPriceFeedContract(
+        web3,
         priceFeedsListAddress
       );
-      const usdPrice = await priceFeeds.methods.getPriceinUSD(tokenAddress).call();
+      const usdPrice = await priceFeeds.methods
+        .getPriceinUSD(tokenAddress)
+        .call();
       return toEther(usdPrice);
     }
     const bnbPrice = await (await getPancakeContract(web3)).methods
-      .getAmountsOut(web3.utils.toWei("0.1"), [tokenAddress, BUSDAddress])
+      .getAmountsOut(toWei("0.1"), [tokenAddress, BUSDAddress])
       .call();
 
-    let price = new BigNumber(web3.utils.fromWei(bnbPrice[1]))
-      .dividedBy(0.1)
-      .toString();
+    let price = new BigNumber(toEther(bnbPrice[1])).dividedBy(0.1).toString();
 
     return price;
   }
@@ -389,7 +393,7 @@ export const getInvestedAmount = async (web3: Web3, poolAddress: string) => {
   const investment = await contract.methods
     .getInvestorClaimableAmount(accounts[0])
     .call();
-  const num = new BigNumber(web3.utils.fromWei(investment, "ether"));
+  const num = new BigNumber(toEther(investment));
   return num;
 };
 
@@ -441,8 +445,9 @@ export const getAmount = async (
     const claimableAmount = await poolContract.methods
       .getFinalClaimableAmount(address)
       .call();
-
-    return web3.utils.fromWei(claimableAmount);
+    const token = await getPoolToken(web3, poolAddress);
+    const decimals = await token.methods.decimals().call();
+    return toEther(claimableAmount, decimals);
   } catch (e) {
     return "0";
   }
@@ -468,7 +473,7 @@ export const calculateUserClaimableAmount = async (
       .getInvestorClaimableAmount(accounts[0])
       .call();
 
-    return web3.utils.fromWei(claimableAmount);
+    return toEther(claimableAmount);
   } catch (e) {
     return "0";
   }
@@ -483,7 +488,9 @@ export const calculateInitialInvestment = async (
   const initialAmount = await poolContract.methods
     .getUserInvestedAmount(address)
     .call();
-  const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
+  const token = await getPoolToken(web3, poolAddress);
+  const decimals = await token.methods.decimals().call();
+  const amount = new BigNumber(toEther(initialAmount, decimals)).toString();
   return amount;
 };
 
@@ -497,7 +504,9 @@ export const calculateInitialInvestmentInUSD = async (
     const initialAmount = await poolContract.methods
       .getUserInvestedAmountInUSD(address)
       .call();
-    const amount = new BigNumber(web3.utils.fromWei(initialAmount)).toString();
+    const token = await getPoolToken(web3, poolAddress);
+    const decimals = await token.methods.decimals().call();
+    const amount = new BigNumber(toEther(initialAmount,decimals)).toString();
     return amount;
   } catch (e) {
     const initialInvestment = await calculateInitialInvestment(
@@ -505,10 +514,7 @@ export const calculateInitialInvestmentInUSD = async (
       poolAddress,
       address
     );
-    const tokenPrice = await getTokenPrice(
-      web3,
-      poolAddress
-    );
+    const tokenPrice = await getTokenPrice(web3, poolAddress);
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }
 };
@@ -578,11 +584,11 @@ export const getDonPrice = async (isBSC = false) => {
   return donPrice.toFixed(10);
 };
 
-export const toEther = (val: string) => {
-  return Web3.utils.fromWei(val, "ether");
+export const toEther = (val: string, decimals = 18) => {
+  return new BigNumber(val).dividedBy(10 ** decimals).toString();
 };
-export const toWei = (val: string) => {
-  return Web3.utils.toWei(val, "ether");
+export const toWei = (val: string, decimals = 18) => {
+  return new BigNumber(val).multipliedBy(10 ** decimals).toString();
 };
 
 export const getWBNBPrice = async () => {

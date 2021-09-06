@@ -1,5 +1,5 @@
 import { useRefresh } from "components/LotteryForm/useRefresh";
-import { getTotalPoolValue } from "helpers";
+import { getTotalPoolValue, toEther } from "helpers";
 import { useEffect, useState } from "react";
 import { useWeb3 } from "don-components";
 
@@ -10,7 +10,7 @@ export const useTVL = (poolAddress: string) => {
     useEffect(() => {
       (async () => {
         let poolValue = await getTotalPoolValue(web3, poolAddress);
-        setTvl(web3.utils.fromWei(poolValue, "ether"));
+        setTvl(toEther(poolValue));
       })();
     }, [poolAddress, dependsOn]);
     return { tvl };

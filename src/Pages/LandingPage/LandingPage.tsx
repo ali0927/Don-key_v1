@@ -25,8 +25,8 @@ const LandingPage = () => {
       <MainSection/>
       
 
-      <LotteryPage />
-     
+      {/* <LotteryPage />
+      */}
 
       {/* Banner */}
       <BannerSection />

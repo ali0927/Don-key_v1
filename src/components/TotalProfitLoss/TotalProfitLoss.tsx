@@ -47,14 +47,8 @@ export const TotalProfitLoss = ({
           setTotalProfitLoss(
             new BigNumber(amountWithdraw).minus(amountInitial).toFixed(digits)
           );
-          
         } else {
-         
-          const tokenPrice = await getTokenPrice(
-            web3,
-           poolAddress
-          );
-        
+          const tokenPrice = await getTokenPrice(web3, poolAddress);
 
           setTotalProfitLoss(
             new BigNumber(amountWithdraw)

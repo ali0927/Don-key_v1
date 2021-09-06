@@ -8,7 +8,7 @@ import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
-import { calculateTVL, getStakingContract } from "helpers";
+import { calculateTVL, getStakingContract, toEther } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
@@ -188,15 +188,15 @@ export const LotteryForm = () => {
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens
-    ? parseFloat(web3.utils.fromWei(lpTokens)).toFixed(5)
+    ? parseFloat(toEther(lpTokens)).toFixed(5)
     : "-";
 
   const stakedTokensInEther = stakedTokens
-    ? parseFloat(web3.utils.fromWei(stakedTokens)).toFixed(5)
+    ? parseFloat(toEther(stakedTokens)).toFixed(5)
     : "-";
 
   const rewardsInEther = rewards
-    ? parseFloat(web3.utils.fromWei(rewards)).toFixed(3)
+    ? parseFloat(toEther(rewards)).toFixed(3)
     : "-";
 
   const [disableButtons, setDisableButtons] = useState(false);
@@ -356,7 +356,7 @@ export const LotteryForm = () => {
           </div>
           {isPopupOpen && (
             <LotteryPopupForm
-              availableAmount={lpTokens ? web3.utils.fromWei(lpTokens) : "0"}
+              availableAmount={lpTokens ? toEther(lpTokens) : "0"}
               isOpen={isPopupOpen}
               isRegistered={!!registeredEmail}
               onClose={() => {

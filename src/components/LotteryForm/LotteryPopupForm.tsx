@@ -8,6 +8,7 @@ import { Label, InputSmall, Caption } from "./LotteryForm";
 import {
   getLPTokenContract,
   getStakingContract,
+  toWei,
 } from "helpers";
 import { Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
@@ -78,17 +79,17 @@ export const LotteryPopupForm = ({
         .allowance(accounts[0], stakingContract.options.address)
         .call();
 
-      if (new BigNumber(web3.utils.toWei(state.amount)).gt(allowance)) {
+      if (new BigNumber(toWei(state.amount)).gt(allowance)) {
         await lpTokenContract.methods
           .approve(
             stakingContract.options.address,
-            web3.utils.toWei(state.amount)
+            toWei(state.amount)
           )
           .send({ from: accounts[0] });
       }
       showProgress("Stake LP Token on Don-key");
       await stakingContract.methods
-        .stake(web3.utils.toWei(state.amount))
+        .stake(toWei(state.amount))
         .send({ from: accounts[0] });
       showSuccess("LP Tokens Staked");
       refresh();

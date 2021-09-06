@@ -48,9 +48,9 @@ import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import { gql, useQuery } from "@apollo/client";
-import { useStakingContract } from "hooks";
+import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
-import {breakPoints} from "breakponts";
+import { breakPoints } from "breakponts";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -59,11 +59,10 @@ const HeadingTitle = styled.p`
   color: #070602;
   margin-bottom: 20px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-     font-size: 45px;
-     margin-bottom: 30px;
+    font-size: 45px;
+    margin-bottom: 30px;
   }
 `;
-
 
 export const ZeroInvestmentBox = styled.div({
   // minHeight: 00,
@@ -256,13 +255,11 @@ export const InvestmentsPage = () => {
                   web3,
                   invest.poolAddress,
                   accounts[0]
-                )
+                ),
               ];
 
               const results = await Promise.all(amounts);
-              investedAmount = investedAmount.plus(
-                new BigNumber(results[0])
-              );
+              investedAmount = investedAmount.plus(new BigNumber(results[0]));
               arr.push({
                 name: invest.name,
                 poolAddress: invest.poolAddress,
@@ -286,7 +283,7 @@ export const InvestmentsPage = () => {
       };
       CalInvestments();
     }
-  }, [data, refresh]);
+  }, [data, refresh, network]);
 
   const filteredInvestMents = useMemo(() => {
     return myInvestments.filter((item) => {
@@ -366,15 +363,15 @@ export const InvestmentsPage = () => {
     setIsInUsd((val) => !val);
   }, []);
   const { chainId } = useWeb3Network();
-  const [donPrice, setDonPrice] = useState({isReady: false, price: "-"});
+  const [donPrice, setDonPrice] = useState({ isReady: false, price: "-" });
   useEffect(() => {
     (async () => {
-      if(network === NetworksMap.BSC){
-       const donPrice = await getDonPrice(network === NetworksMap.BSC);
-       setDonPrice({isReady: true, price: donPrice});
+      if (network === NetworksMap.BSC) {
+        const donPrice = await getDonPrice(network === NetworksMap.BSC);
+        setDonPrice({ isReady: true, price: donPrice });
       }
-    })()
-  }, [network])
+    })();
+  }, [network]);
   const renderSwitch = () => {
     if (
       !loading &&
@@ -394,12 +391,41 @@ export const InvestmentsPage = () => {
     }
   };
 
+  const { switchNetwork } = useSwitchNetwork();
   const renderNoInvestmentsFound = () => {
     if (
       !loading &&
       filteredOldInvestMents.length === 0 &&
       filteredInvestMents.length === 0
     ) {
+      if (strategyNetworkFilter !== network) {
+        const handleSwitch = () => {
+          switchNetwork(strategyNetworkFilter as number);
+        };
+        return (
+          <>
+            <ZeroInvestmentBox>
+              <ZeroInvestmentInnerBox>
+                <ZeroInvestmentContent>
+                  Switch Network to view These Investments
+                </ZeroInvestmentContent>
+                <CenteredBox className="mb-5">
+                  <ButtonWidget
+                    className="mt-4"
+                    varaint="contained"
+                    containedVariantColor="black"
+                    height="50px"
+                    width="210px"
+                    onClick={handleSwitch}
+                  >
+                    Switch Network
+                  </ButtonWidget>
+                </CenteredBox>
+              </ZeroInvestmentInnerBox>
+            </ZeroInvestmentBox>
+          </>
+        );
+      }
       return (
         <>
           <ZeroInvestmentBox>
@@ -460,7 +486,7 @@ export const InvestmentsPage = () => {
                       {index + 1}
                     </CustomTableData>
                     <CustomTableData>
-                      <StyledImage src={fixUrl(investment.farmerImage.url)} />
+                      <StyledImage src={fixUrl(investment?.farmerImage?.url)} />
                     </CustomTableData>
                     <CustomTableData
                       cursor="pointer"
@@ -489,12 +515,16 @@ export const InvestmentsPage = () => {
                       <CustomTableData>
                         {(() => {
                           const dons = new BigNumber(pendingReward)
-                          .multipliedBy(initialInvestmentinUSD)
-                          .dividedBy(investAmount);
-                          if(isInUsd){  
-                            return donPrice.isReady ? `$${dons.multipliedBy(donPrice.price).toFixed(2)}`: "-";
-                          }else {
-                            return `${dons.toFixed(2)} DON`
+                            .multipliedBy(initialInvestmentinUSD)
+                            .dividedBy(investAmount);
+                          if (isInUsd) {
+                            return donPrice.isReady
+                              ? `$${dons
+                                  .multipliedBy(donPrice.price)
+                                  .toFixed(2)}`
+                              : "-";
+                          } else {
+                            return `${dons.toFixed(2)} DON`;
                           }
                         })()}
                       </CustomTableData>
@@ -556,7 +586,9 @@ export const InvestmentsPage = () => {
                         {index + 1}
                       </CustomTableData>
                       <CustomTableData>
-                        <StyledImage src={fixUrl(investment.farmerImage.url)} />
+                        <StyledImage
+                          src={fixUrl(investment?.farmerImage?.url)}
+                        />
                       </CustomTableData>
                       <CustomTableData
                         cursor="pointer"
@@ -625,7 +657,9 @@ export const InvestmentsPage = () => {
                   <HeadingTitle>My Investments</HeadingTitle>
                   <div className="row align-items-center justify-content-between mb-5 flex-wrap">
                     <div className="col-6 col-md-8 col-lg-10">
-                    <TotalInvestedAmount>${investedAmount}</TotalInvestedAmount>
+                      <TotalInvestedAmount>
+                        {loading ? "-": `$${investedAmount}`}
+                      </TotalInvestedAmount>
                     </div>
                     <div className="col-6 col-md-4 col-lg-2 d-flex px-2">
                       <NetworkButton
@@ -637,7 +671,7 @@ export const InvestmentsPage = () => {
                         BSC
                       </NetworkButton>
                       <NetworkButton
-                        varaint="outlined" 
+                        varaint="outlined"
                         className="ml-1"
                         active={strategyNetworkFilter === PolygonChainId}
                         onClick={() => setStrategyNetworkFilter(PolygonChainId)}

@@ -15,6 +15,7 @@ import {
   getUserAddressFromCode,
   getUserReferralCode,
   isValidReferralCode,
+  toWei,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -64,11 +65,13 @@ const MyBalanceInBUSD = ({
           ? await getBUSDTokenContract(web3)
           : await getPoolToken(web3, poolAddress);
       const balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
+      const decimals = await acceptedToken.methods.decimals().call();
+      const balanceBN = new BigNumber(balance).dividedBy(10 ** decimals);
       setState({
-        balance: new BigNumber(web3.utils.fromWei(balance, "ether")).toFixed(2),
+        balance: balanceBN.toFixed(2),
         isReady: true,
       });
-      onDone && onDone(web3.utils.fromWei(balance, "ether"));
+      onDone && onDone(balanceBN.toString());
     } catch (err) {}
   };
   useLayoutEffect(() => {
@@ -171,12 +174,13 @@ export const InvestmentPopup = ({
       let allowance = await acceptedToken.methods
         .allowance(accounts[0], poolAddress)
         .call();
+      const decimals = await acceptedToken.methods.decimals().call();
       const tokenPrice = await getTokenPrice(
         web3,
        poolAddress
       );
       allowance = new BigNumber(allowance);
-      const amount = new BigNumber(web3.utils.toWei(value, "ether"));
+      const amount = new BigNumber(toWei(value,decimals));
       const inputAmount = amount.toFixed(0);
       onClose();
       showProgress("Transaction is in Progress");
