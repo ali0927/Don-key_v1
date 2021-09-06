@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
-import { api } from "don-utils";
+import { api, waitFor } from "don-utils";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
@@ -326,6 +326,7 @@ export const getTokenPrice = memoizeAsync(
 
 export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
+  await waitFor(100);
   return (await token.methods.symbol().call()) as string;
 };
 
@@ -353,6 +354,7 @@ export const getPoolContract = async (
   poolAddress: string,
   version: number
 ) => {
+  await waitFor(100);
   const POOLJson = await getPoolJSON(version);
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
 };
@@ -404,10 +406,9 @@ export const getPancakeContract = async (web3: Web3) => {
 
 export const getTotalPoolValue = async (web3: Web3, poolAddress: string) => {
   const contract = await getPoolContract(web3, poolAddress, 2);
- 
+
   const amount = await contract.methods.getinvestedAmountWithReward().call();
- 
-  
+
   return amount;
 };
 
@@ -506,7 +507,7 @@ export const calculateInitialInvestmentInUSD = async (
       .call();
     const token = await getPoolToken(web3, poolAddress);
     const decimals = await token.methods.decimals().call();
-    const amount = new BigNumber(toEther(initialAmount,decimals)).toString();
+    const amount = new BigNumber(toEther(initialAmount, decimals)).toString();
     return amount;
   } catch (e) {
     const initialInvestment = await calculateInitialInvestment(

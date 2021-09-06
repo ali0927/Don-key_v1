@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useWeb3 } from "don-components";
-import { getTotalPoolValue, toEther } from "helpers";
+import { getPoolToken, getTotalPoolValue, toEther } from "helpers";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { useLayoutEffect, useState } from "react";
 
@@ -18,7 +18,9 @@ export const PoolAmount = ({
   const getPoolValue = async () => {
     try {
       const amount = await getTotalPoolValue(web3, poolAddress);
-      const bn = new BigNumber(toEther(amount)).toFixed(2);
+      const token = await getPoolToken(web3, poolAddress);
+      const decimals = await token.methods.decimals().call();
+      const bn = new BigNumber(toEther(amount,decimals)).toFixed(2);
       setPoolAmount(bn);
     } catch (e) {
       setPoolAmount("0");
