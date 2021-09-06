@@ -72,8 +72,7 @@ export const getPoolValue = async (web3: Web3, poolAddress: string) => {
 
 export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
   const totalPoolValue = await getPoolValue(web3, poolAddress);
-  const tokenAddress = await getTokenAddress(web3, poolAddress);
-  const tokenPrice = await getTokenPrice(web3, tokenAddress);
+  const tokenPrice = await getTokenPrice(web3, poolAddress);
 
   return new BigNumber(totalPoolValue).multipliedBy(tokenPrice).toString();
 };

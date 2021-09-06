@@ -173,7 +173,7 @@ export const InvestmentPopup = ({
         .call();
       const tokenPrice = await getTokenPrice(
         web3,
-        acceptedToken.options.address
+       poolAddress
       );
       allowance = new BigNumber(allowance);
       const amount = new BigNumber(web3.utils.toWei(value, "ether"));

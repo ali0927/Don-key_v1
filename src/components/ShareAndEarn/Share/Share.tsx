@@ -63,7 +63,7 @@ export const Share: React.FC<IShareProps> = (props) => {
     const poolValue = await getTotalPoolValue(web3, pool_address);
     const tokenPrice = await getTokenPrice(
       web3,
-      await getTokenAddress(web3, pool_address)
+      pool_address
     );
     
     setTvl(new BigNumber(toEther(poolValue)).multipliedBy(tokenPrice).toFixed(1));

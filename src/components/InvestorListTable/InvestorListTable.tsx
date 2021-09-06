@@ -88,7 +88,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
           const investors = data.data;
           const tokenPrice = await getTokenPrice(
             web3,
-            await getTokenAddress(web3, poolAddress)
+            poolAddress
           );
           const pool = await getPoolContract(web3, poolAddress, 2);
           await Promise.all(
