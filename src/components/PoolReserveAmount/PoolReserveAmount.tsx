@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { useWeb3 } from "don-components";
-import { getTotalReservePoolValue } from "helpers";
+import { getTotalReservePoolValue, toEther } from "helpers";
 import { useLayoutEffect, useState } from "react";
 
 
@@ -13,7 +13,7 @@ export const PoolReserveAmount = ({ poolAddress }: { poolAddress: string }) => {
   const getPoolValue = async () => {
     try {
       const amount = await getTotalReservePoolValue(web3, poolAddress);
-      const bn = new BigNumber(web3.utils.fromWei(amount, "ether")).toFixed(2);
+      const bn = new BigNumber(toEther(amount)).toFixed(2);
       setPoolAmount(bn);
     }catch(e){
       setPoolAmount("0")

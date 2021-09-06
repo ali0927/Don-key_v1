@@ -3,13 +3,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
-import {
-  getPoolContract,
-} from "helpers";
+import { getPoolContract, getPoolToken, toWei } from "helpers";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
-
-
 
 const CancelButton = styled(ButtonWidget)`
   border-radius: 5px;
@@ -17,7 +13,6 @@ const CancelButton = styled(ButtonWidget)`
     background: #fff !important;
   }
 `;
-
 
 export const UpdatePoolDialog: React.FC<{
   open: boolean;
@@ -29,7 +24,6 @@ export const UpdatePoolDialog: React.FC<{
 
   const [loading, setLoading] = React.useState(false);
 
-  
   const [new_pool, setnewPoolvalue] = useState("");
   const web3 = useWeb3();
   const handleUpdate = async () => {
@@ -37,12 +31,16 @@ export const UpdatePoolDialog: React.FC<{
     try {
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
+      const token = await getPoolToken(web3, pool_address);
+      const decimals = await token.methods.decimals().call();
       await pool.methods
-        .updateTotalPoolValue( Web3.utils.toWei(new_pool))
+        .updateTotalPoolValue(toWei(new_pool, decimals))
         .send({ from: accounts[0] });
+    } catch(e){
+      console.log(e);
     } finally {
       setLoading(false);
-      onClose()
+      onClose();
     }
   };
 
@@ -55,7 +53,6 @@ export const UpdatePoolDialog: React.FC<{
         onClose={props.onClose}
         size="sm"
       >
-        
         <div>
           <p>New Pool Value</p>
           <input

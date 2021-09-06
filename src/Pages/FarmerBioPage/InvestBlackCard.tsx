@@ -111,7 +111,7 @@ export const InvestBlackCard = ({
   useEffect(() => {
     async function apiCall() {
       let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
-
+      
       setCurrentHoldings(withdrawAmount);
       getIsInvested();
       fetchRoi();
