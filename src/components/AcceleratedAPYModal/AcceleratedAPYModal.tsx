@@ -64,8 +64,17 @@ const DonAvaliableInput = styled.div`
 `;
 
 const HrLine = styled.hr`
-     border-top: 1px solid #ECECEC;
-     margin: 25px -14% 25px -14%;
+    
+     border: none;
+     &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      max-width: 100%;
+      width: 100%;
+      border-top: 1px solid #ECECEC;
+    }
 `;
 
 
@@ -73,28 +82,6 @@ const Header = styled.div``;
 
 
 
-const marks = [
-  {
-    value: 1,
-    label: "Tier 1",
-  },
-  {
-    value: 2,
-    label: "Tier 2",
-  },
-  {
-    value: 3,
-    label: "Tier 3",
-  },
-  {
-    value: 4,
-    label: "Tier 4",
-  },
-  {
-    value: 5,
-    label: "Tier 5",
-  },
-];
 export const AcceleratedAPYModal = ({
   open,
   onClose,
@@ -118,6 +105,9 @@ export const AcceleratedAPYModal = ({
   const web3 = useWeb3();
   const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+  const tiersList =  getTierList();
+  const tiersListLength = Object.keys(tiersList).length;
+
   const fetchAvailableDon = async () => {
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
@@ -136,6 +126,8 @@ export const AcceleratedAPYModal = ({
     const amount = getTierList()[selectedTier].donRequired;
     return amount;
   }, [selectedTier]);
+
+  
 
   const updatePredictedApy = async () => {
     setLoading(true);
@@ -183,6 +175,8 @@ export const AcceleratedAPYModal = ({
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
+ 
+
   const renderContent = () => {
     if (!hasCheckedDons) {
       return (
@@ -211,19 +205,27 @@ export const AcceleratedAPYModal = ({
              <SubHeading>Upgrade Tier</SubHeading>
 
              <TierRoot className="d-flex ml-0 mr-0">
-                 {marks.map((mark)=>{
-                   const isSelected =  selectedTier === mark.value;
-                   return(
-                
-                      <div className={clsx("tierButton",{"tierSelected": isSelected})}
-                         onClick={() => {
-                           if(mark.value >= tier.tier){
-                             setSelectedTier(mark.value as number)
-                           }
-                         }}   > {mark.label}</div>
-                     
-                   )
-                 })} 
+                {Object.keys(tiersList).map((item,index)=>{
+                         const tierItem = tiersList[item];
+                         const isSelected =  selectedTier === tierItem.tier;
+                        //  const isDisabledAll = (tiersListLength - 1) === index;
+                         if(tierItem.tier !== 0){
+                         return(
+                      
+                            <div className={clsx("tierButton",{"tierSelected": (isSelected )})}
+                               onClick={() => {
+                                 if(tierItem.tier >= tier.tier){
+                                   setSelectedTier(tierItem.tier as number)
+                                 }
+                               }}   > Tier {tierItem.tier}</div>
+                           
+                         )
+                        }
+                        return null;
+                         
+                })
+
+                }
              </TierRoot>
 
              <DonInfoRoot>
@@ -271,7 +273,7 @@ export const AcceleratedAPYModal = ({
               </ButtonWidget>
             </div>
 
-                <HrLine className="mt-4"/>
+                <HrLine className="mt-4 mb-5"/>
 
                 
                    <SubHeading className="m-0">

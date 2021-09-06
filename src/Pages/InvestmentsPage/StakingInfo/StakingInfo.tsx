@@ -310,7 +310,7 @@ export const StakingInfo = () => {
         <>
           {" "}
           <div>
-            <StakingTitle>Don Tokens</StakingTitle>
+            <StakingTitle style={{ color: "#fff" }}>Don Tokens</StakingTitle>
             <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
           </div>
           <StyledButton
