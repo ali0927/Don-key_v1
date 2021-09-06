@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
 import {
-  getPoolContract, toWei,
+  getPoolContract, getPoolToken, toWei,
 } from "helpers";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
@@ -38,8 +38,10 @@ export const AssignLpTokens: React.FC<{
     try {
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
+      const token = await getPoolToken(web3, pool_address);
+      const decimals = await token.methods.decimals().call();
       await pool.methods
-        .invested(toWei(pool_value), toWei(new_pool))
+        .invested(toWei(pool_value, decimals), toWei(new_pool,decimals))
         .send({ from: accounts[0] });
     } finally {
       setLoading(false);
