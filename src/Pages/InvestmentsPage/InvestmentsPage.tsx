@@ -173,6 +173,7 @@ const ALL_FARMER_QUERY = gql`
       farmerImage {
         url
       }
+      guid
       active
       twitter
       telegram
