@@ -212,7 +212,7 @@ function NavBar(props: INavBarProps) {
                     >
                       Bridge
                     </Nav.Link>
-                    <MyReferralNavLink variant={variant} />
+                    {/* <MyReferralNavLink variant={variant} /> */}
                 
                   </>
                 )}
