@@ -217,7 +217,7 @@ export const InvestBlackCard = ({
           <CardValue color="white">
             {totalLp.isEqualTo(0)
               ? 0
-              : withdrawLp.dividedBy(totalLp).multipliedBy(100).toFixed(0)}{" "}
+              : withdrawLp.dividedBy(totalLp).multipliedBy(100).toFixed(6)}{" "}
             %
           </CardValue>
           <div className="d-flex mt-2 mb-2 justify-content-center">
