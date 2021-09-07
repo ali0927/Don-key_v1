@@ -111,7 +111,7 @@ export const PopularStrategy = ({
   totalValue = "$200 000.32",
   apy = "+30.30%",
   comingsoon: comingSoonProp = false,
-  isCardComingsoon=false,
+  isCardComingsoon = false,
   strategyImage,
   contentTitle = "STRATEGY BTCUSD Feel Free to BYield new",
   title = `Saly Strategies WOW`,
@@ -129,6 +129,7 @@ export const PopularStrategy = ({
   onChangeChain,
   network,
   version,
+  showOnRight,
   onShowLessClick,
   getTokenImage,
   getTokenSymbol,
@@ -152,6 +153,7 @@ export const PopularStrategy = ({
   riskDescription?: string | null;
   comingsoon?: boolean;
   isCardComingsoon?: boolean;
+  showOnRight?: boolean;
   getTokenImage?: () => Promise<string>;
   getTokenSymbol?: () => Promise<string>;
   investers?: React.ReactElement | number | null;
@@ -302,8 +304,13 @@ export const PopularStrategy = ({
           // style={riskImage ? { marginTop: -22 } : {}}
         >
           <div className="mb-3">
-            <p className="mb-0">APY</p>
-            <h5 className="primary-text">{apy}</h5>
+            {!showOnRight && (
+              <>
+                {" "}
+                <p className="mb-0">APY</p>
+                <h5 className="primary-text">{apy}</h5>
+              </>
+            )}
           </div>
           {extraApy && (
             <div>
@@ -312,7 +319,18 @@ export const PopularStrategy = ({
                 style={{ color: "#31c77f" }}
                 className="primary-text text-right"
               >
-                +{extraApy}
+                +{apy}
+              </h5>
+            </div>
+          )}
+          {showOnRight && (
+            <div>
+              <p className="mb-0 font-weight-bold text-right">APY</p>
+              <h5
+                style={{ color: "#31c77f" }}
+                className="primary-text text-right"
+              >
+                +{apy}
               </h5>
             </div>
           )}
@@ -372,13 +390,9 @@ export const PopularStrategy = ({
 
   return (
     <Papper>
-      {isCardComingsoon && 
-         <img
-                  className="coming-soon"
-                  src={comingsoon}
-                  alt="ImageNotFound"
-                />
-      }
+      {isCardComingsoon && (
+        <img className="coming-soon" src={comingsoon} alt="ImageNotFound" />
+      )}
       <PapperInner>
         {version === 2 ? (
           farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911" ||

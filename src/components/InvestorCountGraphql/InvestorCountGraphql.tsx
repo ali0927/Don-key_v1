@@ -3,6 +3,7 @@ import { getPoolContract } from "helpers";
 import { useEffect, useRef, useState } from "react";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
+import { useWeb3Network } from "components/Web3NetworkDetector";
 
 const INVESTOR_COUNT_QUERY = gql`
   query investorCount($list: [String]) {
@@ -58,10 +59,11 @@ export const InvestorCountContract = ({
   poolAddresses: string[];
   refresh?: boolean;
 }) => {
-  const [investorCount, setInvestorCount] = useState(0);
+  const [investorCount, setInvestorCount] = useState("-");
   const [loading, setLoading] = useState(true);
   const web3 = useWeb3();
 
+  const { chainId} = useWeb3Network();
   const fetchCount = async () => {
     const promises = poolAddresses.map(async (item) => {
       const pool = await getPoolContract(web3, item, 2);
@@ -69,20 +71,23 @@ export const InvestorCountContract = ({
         const count = await pool.methods.getInvestorCount().call();
         return count;
       } catch (e) {
-        return 0;
+        return "-";
       }
     });
     const allCounts = await Promise.all(promises);
     const count = allCounts.reduce((prev, next) => {
+      if (next === "-" || prev === "-") {
+        return "-";
+      }
       return prev.plus(next);
     }, new BigNumber(0));
-    setInvestorCount(count.toFixed(0));
+    setInvestorCount(typeof count === "string" ? count: count.toFixed(0));
     setLoading(false);
   };
 
   useEffect(() => {
     fetchCount();
-  }, [refresh]);
+  }, [refresh, chainId]);
 
   if (loading) {
     return <>-</>;
