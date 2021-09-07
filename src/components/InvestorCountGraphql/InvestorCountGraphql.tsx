@@ -58,7 +58,7 @@ export const InvestorCountContract = ({
   poolAddresses: string[];
   refresh?: boolean;
 }) => {
-  const [investorCount, setInvestorCount] = useState(0);
+  const [investorCount, setInvestorCount] = useState("-");
   const [loading, setLoading] = useState(true);
   const web3 = useWeb3();
 
@@ -69,14 +69,17 @@ export const InvestorCountContract = ({
         const count = await pool.methods.getInvestorCount().call();
         return count;
       } catch (e) {
-        return 0;
+        return "-";
       }
     });
     const allCounts = await Promise.all(promises);
     const count = allCounts.reduce((prev, next) => {
+      if (next === "-" || prev === "-") {
+        return "-";
+      }
       return prev.plus(next);
     }, new BigNumber(0));
-    setInvestorCount(count.toFixed(0));
+    setInvestorCount(typeof count === "string" ? count: count.toFixed(0));
     setLoading(false);
   };
 
