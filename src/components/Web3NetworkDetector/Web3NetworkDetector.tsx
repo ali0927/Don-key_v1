@@ -27,6 +27,7 @@ export const Web3NetworkProvider: React.FC = ({ children }) => {
 
 export const BSCChainId = 56;
 export const PolygonChainId = 137;
+export const AvaxId= 43114;
 
 export const Web3NetworkDetector = () => {
   const { setChainId } = useWeb3Network();

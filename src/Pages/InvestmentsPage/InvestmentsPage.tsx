@@ -42,6 +42,7 @@ import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
 import {
   BSCChainId,
   PolygonChainId,
+  AvaxId,
   useWeb3Network,
 } from "components/Web3NetworkDetector";
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
@@ -657,12 +658,12 @@ export const InvestmentsPage = () => {
                 <Col lg={12}>
                   <HeadingTitle>My Investments</HeadingTitle>
                   <div className="row align-items-center justify-content-between mb-5 flex-wrap">
-                    <div className="col-6 col-md-8 col-lg-10">
+                    <div className="col-12 col-md-8 col-lg-9 mb-1">
                       <TotalInvestedAmount>
                         {loading ? "-": `$${investedAmount}`}
                       </TotalInvestedAmount>
                     </div>
-                    <div className="col-6 col-md-4 col-lg-2 d-flex px-2">
+                    <div className="col-12 col-md-4 col-lg-3 d-flex px-2">
                       <NetworkButton
                         varaint="outlined"
                         className="mr-1"
@@ -678,6 +679,14 @@ export const InvestmentsPage = () => {
                         onClick={() => setStrategyNetworkFilter(PolygonChainId)}
                       >
                         Polygon
+                      </NetworkButton>
+                      <NetworkButton
+                        varaint="outlined"
+                        className="ml-1"
+                        active={strategyNetworkFilter === AvaxId}
+                        onClick={() => setStrategyNetworkFilter(AvaxId)}
+                      >
+                        AVAX
                       </NetworkButton>
                     </div>
                   </div>

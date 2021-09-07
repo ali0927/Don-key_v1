@@ -172,23 +172,37 @@ button:disabled.btn-outline{
 
 
 
-@keyframes move {
+@keyframes moveIn {
   0%   {
     border: 2px solid #222222;
     width: calc(50% - 3em);
   }
   100% {
     border: 2px solid #222222;
-    width: calc(100% - 3em);
+    width: calc(100% - 3.5em);
   }
 }
+
+@keyframes moveOut {
+  to  {
+    border: 2px solid #222222;
+    width: 0px;
+  }
+
+}
+
 
 .navbar-nav .nav-item:hover:after {
   position: absolute;
   content: "";
   bottom: -6px;
   background: #222222;
-  animation: move 1s;
+  animation: moveIn 1s;
+  animation-fill-mode: forwards;  
+}
+
+.navbar-nav .nav-item:after {
+  animation: moveOut 1s;
   animation-fill-mode: forwards;  
 }
 

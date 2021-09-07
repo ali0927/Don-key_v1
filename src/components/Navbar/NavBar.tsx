@@ -162,12 +162,13 @@ function NavBar(props: INavBarProps) {
               <Nav className="ml-auto mr-auto">
                 {variant === "landing" && (
                   <>
-                    <Nav.Link
-                      href="/litepaper.pdf"
-                      className={"colorBlack pr-md-5"}
+                    <NavbarLink
+                      to="/litepaper.pdf"
+                      target="openInCurrentTab"
+                      link
                     >
                       Litepaper
-                    </Nav.Link>
+                    </NavbarLink>
                     <NavbarLink to="/farmers" linkColor="black">
                       Farmers
                     </NavbarLink>
@@ -203,15 +204,12 @@ function NavBar(props: INavBarProps) {
                     >
                       My Investments
                     </NavbarLink>
-                    <Nav.Link
-                      onClick={(e: any) => {
+                    <NavbarLink to="#">
+                     <div onClick={(e: any) => {
+                       e.preventDefault();
                         handleOpen();
-                      }}
-
-                       className={"colorBlack pr-md-5"}
-                    >
-                      Bridge
-                    </Nav.Link>
+                      }}>  Bridge</div>
+                    </NavbarLink>
                     {/* <MyReferralNavLink variant={variant} /> */}
                 
                   </>
