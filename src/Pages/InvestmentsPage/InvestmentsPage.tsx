@@ -52,7 +52,12 @@ import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
-import {Accordion, AccordionSummary, AccordionDetails,Typography} from "@material-ui/core";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@material-ui/core";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -198,11 +203,16 @@ const TotalInvestedAmount = styled.span`
   }
 `;
 
+type ExtraInfo = {
+  name: string;
+  poolAddress: string;
+  initialInvestmentinUSD: string;
+  isWithdrawRequest: boolean;
+}[];
+
 export const InvestmentsPage = () => {
   const web3 = useWeb3();
-  const [poolAddresses, setPoolAddresses] = useState<
-    { name: string; poolAddress: string; initialInvestmentinUSD: string }[]
-  >([]);
+  const [poolAddresses, setPoolAddresses] = useState<ExtraInfo>([]);
   const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
 
   const { data } = useQuery(ALL_FARMER_QUERY);
@@ -238,7 +248,7 @@ export const InvestmentsPage = () => {
 
   useEffect(() => {
     if (data && data.farmers.length > 0) {
-      let arr: any = [];
+      let arr: ExtraInfo = [];
       const CalInvestments = async () => {
         let investedAmount = new BigNumber(0);
         const finalInvestments: IFarmerInter[] = [];
@@ -258,6 +268,7 @@ export const InvestmentsPage = () => {
                   invest.poolAddress,
                   accounts[0]
                 ),
+                contract.methods.isWithdrawalRequested(accounts[0]).call(),
               ];
 
               const results = await Promise.all(amounts);
@@ -266,6 +277,7 @@ export const InvestmentsPage = () => {
                 name: invest.name,
                 poolAddress: invest.poolAddress,
                 initialInvestmentinUSD: results[0],
+                isWithdrawRequest: amounts[1],
               });
               if (invest.poolVersion > 2) {
                 finalInvestments.push(invest);
@@ -481,7 +493,7 @@ export const InvestmentsPage = () => {
                 });
                 let initialInvestmentinUSD =
                   poolAddressFinal?.initialInvestmentinUSD || "0";
-
+                const isWithdrawRequested = poolAddressFinal?.isWithdrawRequest;
                 return (
                   <TableRow key={investment.guid}>
                     <CustomTableData style={{ color: "#9B9B9B" }}>
@@ -534,13 +546,19 @@ export const InvestmentsPage = () => {
                     <CustomTableData>
                       <div className="d-flex justify-content-center">
                         <WithDrawButton
-                          onClick={handleOpenWithDraw(
-                            investment.name,
-                            investment.poolAddress,
-                            investment.poolVersion ? investment.poolVersion : 1
-                          )}
+                          onClick={
+                            !isWithdrawRequested
+                              ? handleOpenWithDraw(
+                                  investment.name,
+                                  investment.poolAddress,
+                                  investment.poolVersion
+                                    ? investment.poolVersion
+                                    : 1
+                                )
+                              : () => {}
+                          }
                         >
-                          WITHDRAW
+                          {isWithdrawRequested ? "PENDING" : "WITHDRAW"}
                         </WithDrawButton>
                       </div>
                     </CustomTableData>
@@ -581,7 +599,8 @@ export const InvestmentsPage = () => {
                   });
                   let initialInvestmentinUSD =
                     poolAddressFinal?.initialInvestmentinUSD || "0";
-
+                  const isWithdrawRequested =
+                    poolAddressFinal?.isWithdrawRequest;
                   return (
                     <TableRow key={investment.guid}>
                       <CustomTableData style={{ color: "#9B9B9B" }}>
@@ -619,15 +638,19 @@ export const InvestmentsPage = () => {
                       <CustomTableData>
                         <div className="d-flex justify-content-center">
                           <WithDrawButton
-                            onClick={handleOpenWithDraw(
-                              investment.name,
-                              investment.poolAddress,
-                              investment.poolVersion
-                                ? investment.poolVersion
-                                : 1
-                            )}
+                            onClick={
+                              !isWithdrawRequested
+                                ? handleOpenWithDraw(
+                                    investment.name,
+                                    investment.poolAddress,
+                                    investment.poolVersion
+                                      ? investment.poolVersion
+                                      : 1
+                                  )
+                                : () => {}
+                            }
                           >
-                            WITHDRAW
+                            {isWithdrawRequested ? "PENDING" : "WITHDRAW"}
                           </WithDrawButton>
                         </div>
                       </CustomTableData>
@@ -660,7 +683,7 @@ export const InvestmentsPage = () => {
                   <div className="row align-items-center justify-content-between mb-5 flex-wrap">
                     <div className="col-12 col-md-8 col-lg-9 mb-1">
                       <TotalInvestedAmount>
-                        {loading ? "-": `$${investedAmount}`}
+                        {loading ? "-" : `$${investedAmount}`}
                       </TotalInvestedAmount>
                     </div>
                     <div className="col-12 col-md-4 col-lg-3 d-flex px-2">

@@ -1,6 +1,10 @@
+import { gql, useQuery } from "@apollo/client";
 import { useSwitchNetwork } from "hooks";
 import { LinkIcon, WalletIcon } from "icons";
 import { INetwork } from "interfaces";
+import moment from "moment";
+import { StakingTimer } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
+import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 const Text = styled.p`
   font-size: 15px;
@@ -72,6 +76,20 @@ const CardWrapper = styled.div`
   padding: 30px 36px;
 `;
 
+const WITHDRAWALREQUESTS_QUERY = gql`
+  query withdrawRequestQuery($poolAddress: String!, $walletAddress: String!) {
+    withdrawRequests(
+      where: { poolAddress: $poolAddress, walletAddress: $walletAddress }
+    ) {
+      id
+      created_at
+    }
+    farmers(where: { poolAddress: $poolAddress }) {
+      withdrawTimeFrame
+    }
+  }
+`;
+
 export const InactiveNetworkCard = ({
   correctNetwork,
   variant = "black",
@@ -130,16 +148,63 @@ export const InactiveNetworkCard = ({
           <WalletIcon /> Disconnect
         </DonButtonOutlined> */}
         <DonButtonContained
-            onClick={() => switchNetwork(correctNetwork.chainId)}
-          >
-            <img
-              src="/assets/images/usericon.png"
-              className="d-inline-block align-top mr-md-2"
-              alt="ImageNotFound"
-            />{" "}
-            Switch to {correctNetwork.symbol}
-          </DonButtonContained>
+          onClick={() => switchNetwork(correctNetwork.chainId)}
+        >
+          <img
+            src="/assets/images/usericon.png"
+            className="d-inline-block align-top mr-md-2"
+            alt="ImageNotFound"
+          />{" "}
+          Switch to {correctNetwork.symbol}
+        </DonButtonContained>
       </div>
     </CardWrapper>
+  );
+};
+
+export const WithdrawRequestedCard = ({
+  poolAddress,
+  walletAddress,
+}: {
+  poolAddress: string;
+  walletAddress: string;
+}) => {
+  const { loading, data } = useQuery(WITHDRAWALREQUESTS_QUERY, {
+    variables: {
+      poolAddress,
+      walletAddress,
+    },
+  });
+
+  if (loading) {
+    return (
+      <div className="text-center pt-5 d-flex align-items-center justify-content-center">
+        <Spinner animation="border" />
+      </div>
+    );
+  }
+
+  const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
+  const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
+
+  return (
+    <div className="text-center pt-5">
+      <h5>Withdrawal in Progress</h5>
+      <Text>
+        {" "}
+        Your withdrawal request has been raised. It will be completed in next{" "}
+        {timeframe}
+        hrs
+      </Text>
+
+      <div className="mt-2">
+        <StakingTimer
+          variant="light"
+          title="Withdrawal Will be completed in"
+          endMessage="Withdraw Completed Check Your Wallet"
+          timerEnd={moment(createTimer).add(timeframe, "hours").unix()}
+        />
+      </div>
+    </div>
   );
 };
