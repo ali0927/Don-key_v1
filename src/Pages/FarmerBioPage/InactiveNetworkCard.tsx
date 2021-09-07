@@ -189,10 +189,10 @@ export const WithdrawRequestedCard = ({
 
   return (
     <div className="text-center pt-5">
-      <h5>Withdrawal in Progress</h5>
-      <Text>
+      <h5>Withdraw Request</h5>
+      <Text className="mt-4 mb-3">
         {" "}
-        Your withdrawal request has been raised. It will be completed in next{" "}
+        Your withdraw will be executed at minimum slippage and fees withhin: {" "}
         {timeframe}
         hrs
       </Text>
@@ -200,7 +200,7 @@ export const WithdrawRequestedCard = ({
       <div className="mt-2">
         <StakingTimer
           variant="light"
-          title="Withdrawal Will be completed in"
+          title=""
           endMessage="Withdraw Completed Check Your Wallet"
           timerEnd={moment(createTimer).add(timeframe, "hours").unix()}
         />

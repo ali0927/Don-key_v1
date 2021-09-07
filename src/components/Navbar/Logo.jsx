@@ -6,6 +6,7 @@ import LogoDon from "images/logo-don.png"
 
 const Pargraph = styled.p`
    font-family: ObjectSans-Bold;
+   font-weight: bolder;
    margin: 0;
 `;
 

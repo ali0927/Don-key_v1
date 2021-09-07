@@ -338,7 +338,7 @@ export const StakingInfo = () => {
         <>
           {" "}
           <div>
-            <StakingTitle style={{ color: "#fff" }}>Don Tokens</StakingTitle>
+            <StakingTitle style={{ color: "#fff" }}>DON Tokens</StakingTitle>
             <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
           </div>
           <StyledButton
@@ -371,7 +371,7 @@ export const StakingInfo = () => {
             disabled={isInCoolOffPeriod}
             className="py-1 px-3 mb-lg-3"
           >
-            Stake Don
+            Stake DON
           </StyledButton>
 
           <StyledButton
