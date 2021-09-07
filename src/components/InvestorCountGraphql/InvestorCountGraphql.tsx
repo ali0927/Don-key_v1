@@ -3,6 +3,7 @@ import { getPoolContract } from "helpers";
 import { useEffect, useRef, useState } from "react";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
+import { useWeb3Network } from "components/Web3NetworkDetector";
 
 const INVESTOR_COUNT_QUERY = gql`
   query investorCount($list: [String]) {
@@ -62,6 +63,7 @@ export const InvestorCountContract = ({
   const [loading, setLoading] = useState(true);
   const web3 = useWeb3();
 
+  const { chainId} = useWeb3Network();
   const fetchCount = async () => {
     const promises = poolAddresses.map(async (item) => {
       const pool = await getPoolContract(web3, item, 2);
@@ -85,7 +87,7 @@ export const InvestorCountContract = ({
 
   useEffect(() => {
     fetchCount();
-  }, [refresh]);
+  }, [refresh, chainId]);
 
   if (loading) {
     return <>-</>;
