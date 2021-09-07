@@ -72,6 +72,7 @@ const TokenInfoQuery = gql`
         symbol
         name
       }
+      boostApy
       subtitle
       description
       RiskStrategy {
@@ -147,6 +148,7 @@ export const TokenPage = () => {
   };
   const { switchNetwork } = useSwitchNetwork();
   const { chainId } = useWeb3Network();
+  const tokenObj = data ? data.tokens[0]: null;
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
   const network = data ? data.tokens[0].network : { chainId: null };
   const subtitle = data ? data.tokens[0].subtitle : null;
@@ -239,8 +241,9 @@ export const TokenPage = () => {
                     onChangeChain={switchNetwork}
                     onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
                     onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
+                    showOnRight={!tokenObj.boostApy}
                     extraApy={
-                      new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
+                     tokenObj.boostApy &&  new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
                     }
                     totalValue={
                       <PoolAmount

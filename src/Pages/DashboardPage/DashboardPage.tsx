@@ -149,22 +149,20 @@ const LIST_OF_TOKENS = gql`
   }
 `;
 
-
 export const DashboardPage = () => {
-
   const { data, loading } = useQuery(LIST_OF_TOKENS);
 
   useAddDonTokenonLoad();
 
   const tokens: IStrapiToken[] = useMemo(() => {
     if (data) {
-      return sortBy(data.tokens as IStrapiToken[], item => item.status !== "active");
+      return sortBy(
+        data.tokens as IStrapiToken[],
+        (item) => item.status !== "active"
+      );
     }
     return [];
   }, [data]);
-
-
-
 
   if (loading) {
     return <LoadingPage />;
@@ -172,7 +170,6 @@ export const DashboardPage = () => {
   return (
     <>
       <NavBar variant={"loggedin"} />
-
       <RootWrapper className="pt-5 borderCollapse position-relative">
         <CustomizedContainer>
           <Row>
@@ -192,14 +189,13 @@ export const DashboardPage = () => {
               <FarmerTitle>Explore Farmers</FarmerTitle>
               <div className="row justify-content-between px-2">
                 <div className="col-sm-8">
-                 {/* <h5>Follow Farmers and Increase your yield</h5> */}
+                  {/* <h5>Follow Farmers and Increase your yield</h5> */}
                 </div>
               </div>
             </Col>
           </Row>
         </CustomizedContainer>
       </RootWrapper>
-
       {/* Table */}
       <Body className="leaderbord-top mb-5">
         {tokens.length === 0 ? (
@@ -221,12 +217,12 @@ export const DashboardPage = () => {
             <div className="row">
               {tokens.map((item) => {
                 return (
-                 <>
-                 {item.status !== "commingsoon" &&
-                    <div className="col-lg-4">
-                       <TokenInfo key={item.id} token={item} />
-                    </div>
-                }
+                  <>
+                    {item.status !== "commingsoon" && (
+                      <div className="col-lg-4">
+                        <TokenInfo key={item.id} token={item} />
+                      </div>
+                    )}
                   </>
                 );
               })}
