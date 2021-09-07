@@ -58,6 +58,7 @@ import {
   AccordionDetails,
   Typography,
 } from "@material-ui/core";
+import { CatchLuckSection } from "Pages/LotteryPage/components/CatchLuckSection";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -256,7 +257,7 @@ export const InvestmentsPage = () => {
         setLoading(true);
         for (let invest of data.farmers as IFarmerInter[]) {
           try {
-            const contract = await getPoolContract(web3, invest.poolAddress, 2);
+            const contract = await getPoolContract(web3, invest.poolAddress, 3);
             const accounts = await web3.eth.getAccounts();
             const isInvested = await contract.methods
               .isInvestor(accounts[0])
@@ -268,7 +269,19 @@ export const InvestmentsPage = () => {
                   invest.poolAddress,
                   accounts[0]
                 ),
-                contract.methods.isWithdrawalRequested(accounts[0]).call(),
+                (async () => {
+                  try {
+                    if (invest.poolVersion > 2) {
+                      return await contract.methods
+                        .isWithdrawalRequested(accounts[0])
+                        .call();
+                    } else {
+                      return false;
+                    }
+                  } catch (e) {
+                    return false;
+                  }
+                })(),
               ];
 
               const results = await Promise.all(amounts);
@@ -277,7 +290,7 @@ export const InvestmentsPage = () => {
                 name: invest.name,
                 poolAddress: invest.poolAddress,
                 initialInvestmentinUSD: results[0],
-                isWithdrawRequest: amounts[1],
+                isWithdrawRequest: results[1],
               });
               if (invest.poolVersion > 2) {
                 finalInvestments.push(invest);
