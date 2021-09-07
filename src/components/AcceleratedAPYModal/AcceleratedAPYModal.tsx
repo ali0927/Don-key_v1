@@ -36,7 +36,7 @@ const TierRoot = styled.div`
        font-family: Poppins;
        font-size: 12px;
        font-weight: 600;
-       color: #A2A2A2;
+       color: #000;
        display: flex;
        align-items: center;
        justify-content: center;
@@ -49,6 +49,9 @@ const TierRoot = styled.div`
     box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
     border-radius: 10px;
     color: #081E3F;
+   }
+   & .tierDisabled {
+      color: #A2A2A2;
    }
 `;
 
@@ -116,15 +119,28 @@ export const AcceleratedAPYModal = ({
     setAvailableDon(toEther(userBalance));
   };
 
-  const [selectedTier, setSelectedTier] = useState(tier.tier || 1);
+  const initialTier = tier.tier ? tier.tier+1 : 1;
+  const [selectedTier, setSelectedTier] = useState(initialTier);
 
   useEffect(() => {
     fetchAvailableDon();
   }, []);
 
   const donAmount = useMemo(() => {
-    const amount = getTierList()[selectedTier].donRequired;
-    return amount;
+    let currentTier = getTierList()[selectedTier]
+    if(getTierList()[selectedTier]){
+        const amount = getTierList()[selectedTier].donRequired;
+        return amount;
+    }
+    else {
+       currentTier = getTierList()[tier.tier];
+       if(currentTier){
+          const amount = getTierList()[tier.tier].donRequired;
+          return amount;
+       }
+    }
+    return "0";
+
   }, [selectedTier]);
 
   
@@ -196,7 +212,7 @@ export const AcceleratedAPYModal = ({
 
           <div className="d-flex justify-content-between align-items-center mt-4">
             <SubHeading>Your current Tier:</SubHeading>
-            <Heading fontSize="27px">Tier {selectedTier}</Heading>
+            <Heading fontSize="27px">Tier {tier.tier }</Heading>
           </div>
 
           <div className="mt-2">
@@ -206,13 +222,17 @@ export const AcceleratedAPYModal = ({
                 {Object.keys(tiersList).map((item,index)=>{
                          const tierItem = tiersList[item];
                          const isSelected =  selectedTier === tierItem.tier;
-                        //  const isDisabledAll = (tiersListLength - 1) === index;
-                         if(tierItem.tier !== 0){
+                         const isTierDisabled = initialTier > tierItem.tier;
+                         const isAllDisabled =  initialTier > tiersListLength;
+                         if(index !== 0){
                          return(
                       
-                            <div className={clsx("tierButton",{"tierSelected": (isSelected )})}
+                            <div className={clsx("tierButton",{ 
+                              "tierSelected": (isSelected && !isAllDisabled),
+                              "tierDisabled": isTierDisabled,
+                            })}
                                onClick={() => {
-                                 if(tierItem.tier >= tier.tier){
+                                 if(!isTierDisabled && !isAllDisabled){
                                    setSelectedTier(tierItem.tier as number)
                                  }
                                }}   > Tier {tierItem.tier}</div>
