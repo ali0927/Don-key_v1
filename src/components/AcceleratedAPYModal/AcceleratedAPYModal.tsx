@@ -159,14 +159,16 @@ export const AcceleratedAPYModal = ({
   };
 
   const stakeDon = async () => {
-    setBtnLoading(true);
-    try {
-      await stake(toWei(new BigNumber(donAmount).minus(stakedDon).toString()));
-      onClose();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setBtnLoading(false);
+    if(initialTier < tiersListLength){
+        setBtnLoading(true);
+        try {
+           await stake(toWei(new BigNumber(donAmount).minus(stakedDon).toString()));
+           onClose();
+         } catch (e) {
+              console.log(e);
+          } finally {
+                setBtnLoading(false);
+          }
     }
   };
 
@@ -188,6 +190,8 @@ export const AcceleratedAPYModal = ({
     })();
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+
+
 
  
 
@@ -277,7 +281,7 @@ export const AcceleratedAPYModal = ({
                  <ButtonWidget
                     varaint="contained"
                     onClick={stakeDon}
-                    disabled={selectedTier <= tier.tier}
+                    disabled={initialTier >= tiersListLength}
                     className="py-2 font-weight-bold"
                     containedVariantColor="lightYellow"
                     width="205px"
