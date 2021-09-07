@@ -197,7 +197,7 @@ export const DashboardPage = () => {
         </CustomizedContainer>
       </RootWrapper>
       {/* Table */}
-      <Body className="leaderbord-top mb-5">
+      <Body className="leaderbord-top pb-5">
         {tokens.length === 0 ? (
           <CustomizedContainer>
             <div className="container">
