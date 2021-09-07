@@ -34,7 +34,7 @@ export const useWithdraw = () => {
       if (poolVersion === 1 || poolVersion === 4 || poolVersion === 3) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
-      if (poolVersion === 2 ) {
+      if (poolVersion === 2) {
         const userLPTokens = await pool.methods.balanceOf(accounts[0]).call();
         await pool.methods
           .withdrawLiquidity(
@@ -46,12 +46,13 @@ export const useWithdraw = () => {
           )
           .send({ from: accounts[0] });
       }
-
-      await executeDelete({
-        data: {
-          poolAddress: poolAddress,
-        },
-      });
+      if (poolVersion < 3) {
+        await executeDelete({
+          data: {
+            poolAddress: poolAddress,
+          },
+        });
+      }
 
       showSuccess("Withdraw Successfull");
 
