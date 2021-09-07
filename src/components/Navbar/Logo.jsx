@@ -32,7 +32,7 @@ export const Logo = () => {
             fillRule="evenodd"
             clipRule="evenodd"
             d="M24 4.996a7.966 7.966 0 11-.002 15.932A7.966 7.966 0 0124 4.996z"
-            fill="#fff"
+            fill="#FFF037"
           />
           <path
             fillRule="evenodd"
