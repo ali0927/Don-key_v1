@@ -1,3 +1,4 @@
+import { gql, useMutation } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { useWeb3 } from "don-components";
@@ -5,11 +6,43 @@ import { calculateUserClaimableAmount, getPoolContract } from "helpers";
 import { useAxios } from "./useAxios";
 import { useStakingContract } from "./useStakingContract";
 
+const ADD_WITHDRAW_REQUEST = gql`
+  mutation allFarmerQuery(
+    $poolAddress: String!
+    $walletAddress: String!
+    $investedAmountinUSD: String
+    $investedAmount: String
+    $profit: String
+    $lpTokens: String
+    $currentHoldings: String
+  ) {
+    createWithdrawRequest(
+      input: {
+        data: {
+          walletAddress: $walletAddress
+          poolAddress: $poolAddress
+          investedAmountinUSD: $investedAmountinUSD
+          investedAmount: $investedAmount
+          profit: $profit
+          lpTokens: $lpTokens
+          currentHoldings: $currentHoldings
+        }
+      }
+    ) {
+      withdrawRequest {
+        id
+      }
+    }
+  }
+`;
+
 export const useWithdraw = () => {
   const [{}, executeDelete] = useAxios(
     { method: "DELETE", url: "/api/v2/investments" },
     { manual: true }
   );
+
+  const [create] = useMutation(ADD_WITHDRAW_REQUEST);
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
   const { refetch } = useStakingContract();
@@ -52,9 +85,13 @@ export const useWithdraw = () => {
             poolAddress: poolAddress,
           },
         });
+      } else {
+        await create({
+          variables: { poolAddress, walletAddress: accounts[0] },
+        });
       }
 
-      showSuccess("Withdraw Successfull");
+      showSuccess("Withdraw Request Created");
 
       onSuccess && onSuccess();
     } catch (err) {

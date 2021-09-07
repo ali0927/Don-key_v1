@@ -240,7 +240,7 @@ export const FarmerBio = ({
         </Container>
       </Section>
 
-      {openSharePopup && (
+      {/* {openSharePopup && (
         <Share
           open={openSharePopup}
           pool_address={poolAddress}
@@ -261,7 +261,7 @@ export const FarmerBio = ({
           code={code}
           onClose={() => setShareLink(false)}
         />
-      )}
+      )} */}
     </>
   );
 };

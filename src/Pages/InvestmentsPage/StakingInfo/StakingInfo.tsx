@@ -13,6 +13,7 @@ import { getTierInfo } from "components/StakingContractProvider";
 import { breakPoints } from "breakponts";
 import { getDonPriceWeb3 } from "helpers";
 import { useWeb3 } from "don-components";
+import { dark } from "@material-ui/core/styles/createPalette";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -108,12 +109,20 @@ const HarvestCard = styled.div`
 const TimeCard = styled.div`
   height: 33px;
   width: 24.45px;
-  background: rgba(0, 0, 0, 0.04);
+
   border-radius: 3.5px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  ${({ variant = "dark" }: { variant?: "light" | "dark" }) => {
+    if (variant === "dark") {
+      return `background: rgba(0, 0, 0, 0.04);`;
+    }
+    if (variant === "light") {
+      return `background: rgba(255, 255, 255, 0.44);`;
+    }
+  }}
 `;
 
 const TimerTime = styled.div`
@@ -168,7 +177,17 @@ const Root = styled.div`
   }
 `;
 
-const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
+export const StakingTimer = ({
+  timerEnd,
+  endMessage = "Cool off period is over. Claim Tokens",
+  title = "Cool off period ends in ",
+  variant = "dark",
+}: {
+  timerEnd: number;
+  endMessage?: string;
+  title?: string;
+  variant?: "light" | "dark";
+}) => {
   const [days, setDays] = useState(0);
   const [hrs, setHrs] = useState(0);
   const [mins, setMins] = useState(0);
@@ -195,16 +214,16 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
   }, []);
 
   if (hasEnded) {
-    return <TimerHeading>Cool off period is over. Claim Tokens</TimerHeading>;
+    return <TimerHeading>{endMessage}</TimerHeading>;
   }
 
   return (
     <div className="d-flex justify-content-center">
       <Root className="d-flex flex-lg-column justify-content-between align-items-center">
-        <TimerHeading>Cool off period ends in </TimerHeading>
+        <TimerHeading>{title}</TimerHeading>
 
         <TimmerRoot className=" d-flex justify-content-center">
-          <TimeCard>
+          <TimeCard variant={variant}>
             <TimerTime>{days}</TimerTime>
             <TimerLabel>DAYS</TimerLabel>
           </TimeCard>
@@ -214,7 +233,7 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
             <SmallTimerDots />
           </DotsWrraper>
 
-          <TimeCard>
+          <TimeCard variant={variant}>
             <TimerTime>{hrs}</TimerTime>
             <TimerLabel>HOURS</TimerLabel>
           </TimeCard>
@@ -222,7 +241,7 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
             {" "}
             <SmallTimerDots />
           </DotsWrraper>
-          <TimeCard>
+          <TimeCard variant={variant}>
             <TimerTime>{mins}</TimerTime>
             <TimerLabel>MINUTES</TimerLabel>
           </TimeCard>
@@ -230,7 +249,7 @@ const StakingTimer = ({ timerEnd }: { timerEnd: number }) => {
             {" "}
             <SmallTimerDots />
           </DotsWrraper>
-          <TimeCard>
+          <TimeCard variant={variant}>
             <TimerTime>{secs}</TimerTime>
             <TimerLabel>SECONDS</TimerLabel>
           </TimeCard>
@@ -262,8 +281,8 @@ export const StakingInfo = () => {
   const [donPrice, setDonPrice] = useState<string | null>(null);
   const web3 = useWeb3();
   useEffect(() => {
-    getDonPriceWeb3(web3).then(setDonPrice)
-  }, [])
+    getDonPriceWeb3(web3).then(setDonPrice);
+  }, []);
 
   const harvestDon = async () => {
     enableLoading();
@@ -292,7 +311,13 @@ export const StakingInfo = () => {
               <StakingTitle style={{ color: "#fff" }}>
                 DON Rewards available
               </StakingTitle>
-              <StakingSubtitle>{new BigNumber(pendingReward).toFixed(6)} DON {donPrice && `($${new BigNumber(pendingReward).multipliedBy(donPrice).toFixed(2)})`}</StakingSubtitle>
+              <StakingSubtitle>
+                {new BigNumber(pendingReward).toFixed(6)} DON{" "}
+                {donPrice &&
+                  `($${new BigNumber(pendingReward)
+                    .multipliedBy(donPrice)
+                    .toFixed(2)})`}
+              </StakingSubtitle>
             </div>
             <div className="col-5 d-flex justify-content-center">
               <StyledButton

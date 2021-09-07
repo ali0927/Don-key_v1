@@ -3,7 +3,12 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { Switch, withStyles } from "@material-ui/core";
-import { getPoolToken, getTotalPoolValue, toEther } from "helpers";
+import {
+  getPoolContract,
+  getPoolToken,
+  getTotalPoolValue,
+  toEther,
+} from "helpers";
 import { useWeb3 } from "don-components";
 import {
   AwardIcon,
@@ -29,9 +34,14 @@ import {
 } from "components/Web3NetworkDetector";
 import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "./InvestBlackCard";
-import { InactiveNetworkCard } from "./InactiveNetworkCard";
+import {
+  InactiveNetworkCard,
+  WithdrawRequestedCard,
+} from "./InactiveNetworkCard";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { ButtonWidget } from "components/Button";
+import { gql, useQuery } from "@apollo/client";
+import { Spinner } from "react-bootstrap";
 
 export const CardWrapper = styled.div`
   min-height: 280px;
@@ -244,6 +254,10 @@ export const DetailTable = ({
   const web3 = useWeb3();
   const [initialCheck, setInitialCheck] = useState(false);
   const { chainId: currentNetwork } = useWeb3Network();
+  const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
+    null
+  );
 
   useEffect(() => {
     if (farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911") {
@@ -261,12 +275,30 @@ export const DetailTable = ({
   const { symbol } = usePoolSymbol(poolAddress);
 
   const isActiveNetwork = network?.chainId === currentNetwork;
+
+  useEffect(() => {
+    (async () => {
+      if (poolVersion > 2) {
+        const pool = await getPoolContract(web3, poolAddress, poolVersion);
+        const accounts = await web3.eth.getAccounts();
+        const isRequested = await pool.methods
+          .isWithdrawalRequested(accounts[0])
+          .call();
+        setWithdrawRequested(isRequested);
+
+        setWalletAddress(accounts[0]);
+      }else {
+        setWithdrawRequested(false);
+      }
+    })();
+  }, [dependsOn, currentNetwork]);
+
   useEffect(() => {
     (async () => {
       let poolValue = await getTotalPoolValue(web3, poolAddress);
       const token = await getPoolToken(web3, poolAddress);
       const decimals = await token.methods.decimals().call();
-      setTotalPoolValue(toEther(poolValue,decimals));
+      setTotalPoolValue(toEther(poolValue, decimals));
     })();
   }, [dependsOn, currentNetwork]);
 
@@ -383,7 +415,16 @@ export const DetailTable = ({
       </Col>
       <Col className="mb-5" style={{ marginLeft: 17 }}>
         <BlackCardWrapper className="position-relative" color="black">
-          {isActiveNetwork ? (
+          {isWithdrawRequested === null ? (
+            <div className="text-center pt-5 d-flex align-items-center justify-content-center">
+              <Spinner animation="border" />
+            </div>
+          ) : isWithdrawRequested && walletAddress ? (
+            <WithdrawRequestedCard
+              walletAddress={walletAddress}
+              poolAddress={poolAddress}
+            />
+          ) : isActiveNetwork ? (
             <>
               <InvestBlackCard
                 poolAddress={poolAddress}
