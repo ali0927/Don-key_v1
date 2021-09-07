@@ -268,7 +268,7 @@ export const AcceleratedAPYModal = ({
              </DonInfoRoot>
 
              <div className="d-flex justify-content-between align-items-center mt-3">
-                <SubHeading>Your DON Stake:</SubHeading>
+                <SubHeading>Required DON Stake:</SubHeading>
                 <Heading fontSize="27px">{donAmount}</Heading>
              </div>
 
