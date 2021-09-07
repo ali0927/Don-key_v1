@@ -107,6 +107,33 @@ export const TokenInfo = ({
     );
   };
 
+  const RenderFooter = () => {
+    if(boostApy){
+        return(
+          <>
+              <div className="col-5 d-flex flex-column  justify-content-end">
+                 <h5  style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins", marginBottom: 12 }}>
+                     {maxApy}%
+                </h5>
+                <SubText>Up to APY</SubText>
+              </div>
+              <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
+                 <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
+                 <SubText>APY for DON stakers</SubText>
+              </div>
+          </>
+        )
+    }
+    return (
+        <>
+            <div className="col-12 d-flex flex-column align-items-end  justify-content-end">
+                 <DONApy>{maxApy}%</DONApy>
+                 <SubText>Up to APY</SubText>
+            </div>          
+        </>
+    )
+  }
+
   return (
     <InfoWrapper
       disabled={disabled}
@@ -138,18 +165,7 @@ export const TokenInfo = ({
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
       <div className="row">
-        <div className="col-5 d-flex flex-column  justify-content-end">
-          <h5  style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins", marginBottom: 12 }}>
-            {maxApy}%
-          </h5>
-          <SubText>Up to APY</SubText>
-        </div>
-        {boostApy && 
-           <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
-               <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
-               <SubText>APY for DON stakers</SubText>
-           </div>
-       }
+         {RenderFooter()}
       </div>
     </InfoWrapper>
   );
