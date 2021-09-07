@@ -43,7 +43,9 @@ export const AssignLpTokens: React.FC<{
       await pool.methods
         .invested(toWei(pool_value, decimals), toWei(new_pool,decimals))
         .send({ from: accounts[0] });
-    } finally {
+    }catch(e) {
+      console.log(e, "Assign Lp")
+    }finally {
       setLoading(false);
       onClose()
     }

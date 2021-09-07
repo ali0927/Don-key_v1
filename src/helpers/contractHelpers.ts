@@ -589,7 +589,7 @@ export const toEther = (val: string, decimals = 18) => {
   return new BigNumber(val).dividedBy(10 ** decimals).toString();
 };
 export const toWei = (val: string, decimals = 18) => {
-  return new BigNumber(val).multipliedBy(10 ** decimals).toString();
+  return new BigNumber(val).multipliedBy(10 ** decimals).toFixed(0);
 };
 
 export const getWBNBPrice = async () => {
