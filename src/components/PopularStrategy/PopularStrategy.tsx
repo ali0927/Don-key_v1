@@ -330,7 +330,7 @@ export const PopularStrategy = ({
                 style={{ color: "#31c77f" }}
                 className="primary-text text-right"
               >
-                +{apy}
+                {apy}
               </h5>
             </div>
           )}

@@ -59,6 +59,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { CatchLuckSection } from "Pages/LotteryPage/components/CatchLuckSection";
+import { uniqBy } from "lodash";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -173,8 +174,14 @@ const YellowSwitch = withStyles({
 })(Switch);
 
 const ALL_FARMER_QUERY = gql`
-  query allFarmerQuery {
-    farmers(where: { active_eq: true, status_in: ["active"] }) {
+  query allFarmerQuery($chainId: Int!) {
+    farmers(
+      where: {
+        active_eq: true
+        status_in: ["active"]
+        network: { chainId: $chainId }
+      }
+    ) {
       name
       description
       farmerImage {
@@ -216,7 +223,6 @@ export const InvestmentsPage = () => {
   const [poolAddresses, setPoolAddresses] = useState<ExtraInfo>([]);
   const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
 
-  const { data } = useQuery(ALL_FARMER_QUERY);
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
   const history = useHistory();
@@ -231,7 +237,9 @@ export const InvestmentsPage = () => {
     poolAddress: "",
     pool_version: 1,
   });
-
+  const { data } = useQuery(ALL_FARMER_QUERY, {
+    variables: { chainId: network },
+  });
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
@@ -255,7 +263,10 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        for (let invest of data.farmers as IFarmerInter[]) {
+        for (let invest of uniqBy(
+          data.farmers as IFarmerInter[],
+          (item) => item.poolAddress
+        )) {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 3);
             const accounts = await web3.eth.getAccounts();
@@ -299,7 +310,7 @@ export const InvestmentsPage = () => {
               }
             }
           } catch (e) {
-            console.error(e);
+            console.error(e, "Call Investment Error");
           }
         }
         setPoolAddresses(arr);

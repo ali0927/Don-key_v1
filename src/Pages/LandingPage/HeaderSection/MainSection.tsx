@@ -1,7 +1,7 @@
-import { ButtonWidget } from 'components/Button';
-import React from 'react';
-import  styled from "styled-components";
-import Donkey from "./images/Donkey.png"
+import { ButtonWidget } from "components/Button";
+import React from "react";
+import styled from "styled-components";
+import Donkey from "./images/Donkey.png";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
@@ -10,21 +10,18 @@ import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { useHistory } from "react-router";
 
-
-const Root =styled.div`
-    background-color: #FFF037;
-    min-height: 500px;
-    padding-top: 116px;
+const Root = styled.div`
+  background-color: #fff037;
+  min-height: 500px;
+  padding-top: 116px;
 `;
 
-
-
 const Heading = styled.h1`
-   font-family: Poppins;
-   font-size: 42px;
-   font-weight: 900;
-   text-align: left;
-   color: #222222;
+  font-family: Poppins;
+  font-size: 42px;
+  font-weight: 900;
+  text-align: left;
+  color: #222222;
 `;
 
 const Paragraph = styled.p`
@@ -52,37 +49,33 @@ const FooterSubHeading = styled.h1`
 `;
 
 const Button = styled(ButtonWidget)`
-  background: linear-gradient(146.14deg,#0b0e12 50%, #35424b 100%);
+  background: linear-gradient(146.14deg, #0b0e12 50%, #35424b 100%);
   font-size: 14px;
-  transition: all 0.50s;
+  transition: all 0.5s;
   :hover {
     box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
       4px 4px 18px rgba(0, 0, 0, 0.5);
   }
 `;
 
-
 const FooterRow = styled.div`
-    width: 80%;
+  width: 80%;
 `;
 
-const Col = styled.div`
-  
-`;
-
+const Col = styled.div``;
 
 const GrayBorder = styled.hr`
-   position: absolute;
-   width: 69%;
-   border-top: 1.5px dashed #C9C5C5;
-   top: 2px;
-   margin: 0;
+  position: absolute;
+  width: 69%;
+  border-top: 1.5px dashed #c9c5c5;
+  top: 2px;
+  margin: 0;
 `;
 
 const DarkBorder = styled.div`
-    width: 29px;
-    height: 5px;
-    background: #000
+  width: 29px;
+  height: 5px;
+  background: #000;
 `;
 
 const ETH_PRICE = gql`
@@ -106,13 +99,7 @@ const TOKEN_DATA = gql`
   }
 `;
 
-
-
-
-
-
 export const MainSection: React.FC = () => {
-
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
   const history = useHistory();
 
@@ -152,56 +139,55 @@ export const MainSection: React.FC = () => {
     history.push("/lottery/participate");
   };
 
-    return(
-        <>
-          <Root>
-            <div className="container">
-               <div className="row">
-                      <div className="col-lg-7 mb-5">
-                           <Heading>Beta DAPP is now live and open for the public</Heading>
-                           <Paragraph className="mt-4 w-50">
-                               Explore and follow stratagies built by real farmers
-                           </Paragraph>
-                           <Button className="mt-5" 
-                               varaint="contained" 
-                               containedVariantColor="black"
-                               width="30%" 
-                               height="50px"
-                               onClick={handleTakePart}
-                               >Stake LP token</Button>
-                       </div>
-
-                      <div className="col-lg-4 mb-5 d-flex justify-content-center justify-content-lg-end">
-                          <img src={Donkey} alt="Donkey image not found"/>
-                      </div>
-              </div>
-
-            <div className="d-flex mt-4 pb-5 justify-content-center">
-                 <FooterRow className="row position-relative justify-content-center">
-                      <GrayBorder className="d-none d-md-block"/>
-                      <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
-                      <DarkBorder/>
-                          <FooterHeading className="mt-4">DON price</FooterHeading>
-                          <FooterSubHeading>${finalDerivedEth}</FooterSubHeading>
-                      </Col>
-                      <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
-                      <DarkBorder/>
-                           <FooterHeading className="mt-4">24-hour volume</FooterHeading>
-                           <FooterSubHeading>${volume24hrs}</FooterSubHeading>
-                      </Col>
-                      <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
-                      <DarkBorder/>
-                         <FooterHeading className="mt-4">Market Cap</FooterHeading>
-                         <FooterSubHeading>${marketCap}</FooterSubHeading>
-                      </Col>
-                 </FooterRow>
-
-              </div>
-
-        
-
+  return (
+    <>
+      <Root>
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-7 mb-5">
+              <Heading>Beta DAPP is now live and open for the public</Heading>
+              <Paragraph className="mt-4 w-50">
+                Explore and follow strategies built by real farmers
+              </Paragraph>
+              <Button
+                className="mt-5"
+                varaint="contained"
+                containedVariantColor="black"
+                width="30%"
+                height="50px"
+                onClick={handleTakePart}
+              >
+                Stake LP token
+              </Button>
             </div>
-           </Root>
-        </>
-    )
-}
+
+            <div className="col-lg-4 mb-5 d-flex justify-content-center justify-content-lg-end">
+              <img src={Donkey} alt="Donkey image not found" />
+            </div>
+          </div>
+
+          <div className="d-flex mt-4 pb-5 justify-content-center">
+            <FooterRow className="row position-relative justify-content-center">
+              <GrayBorder className="d-none d-md-block" />
+              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+                <DarkBorder />
+                <FooterHeading className="mt-4">DON price</FooterHeading>
+                <FooterSubHeading>${finalDerivedEth}</FooterSubHeading>
+              </Col>
+              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+                <DarkBorder />
+                <FooterHeading className="mt-4">24-hour volume</FooterHeading>
+                <FooterSubHeading>${volume24hrs}</FooterSubHeading>
+              </Col>
+              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+                <DarkBorder />
+                <FooterHeading className="mt-4">Market Cap</FooterHeading>
+                <FooterSubHeading>${marketCap}</FooterSubHeading>
+              </Col>
+            </FooterRow>
+          </div>
+        </div>
+      </Root>
+    </>
+  );
+};
