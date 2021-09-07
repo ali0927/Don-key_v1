@@ -51,6 +51,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
+import {Accordion, AccordionSummary, AccordionDetails,Typography} from "@material-ui/core";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -700,6 +701,24 @@ export const InvestmentsPage = () => {
               {renderNewInvestments()}
               {renderOldInvestments()}
               {renderNoInvestmentsFound()}
+ 
+              <>
+              <Accordion>
+                      <AccordionSummary
+                          expandIcon={< div></div>}
+                          aria-controls="panel1a-content"
+                           id="panel1a-header"
+                         >
+                               <Typography>Accordion 1</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                              <Typography>
+                                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                                 sit amet blandit leo lobortis eget.
+                             </Typography>
+                     </AccordionDetails>
+             </Accordion>
+              </>
             </Container>
           </div>
         </GridBackground>

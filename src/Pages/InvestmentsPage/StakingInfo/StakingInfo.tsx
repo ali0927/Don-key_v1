@@ -61,9 +61,12 @@ const StakingTitle = styled.h3`
 
 const StakingSubtitle = styled.p`
   font-weight: 400;
-  font-size: 16px;
   margin-bottom: 0;
   text-align: center;
+  font-size: 14px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 16px;
+  }
 `;
 
 export const StyledButton = styled(ButtonWidget)`
@@ -310,7 +313,7 @@ export const StakingInfo = () => {
         <>
           {" "}
           <div>
-            <StakingTitle>Don Tokens</StakingTitle>
+            <StakingTitle style={{ color: "#fff" }}>Don Tokens</StakingTitle>
             <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
           </div>
           <StyledButton

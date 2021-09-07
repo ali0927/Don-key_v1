@@ -36,7 +36,7 @@ const TierRoot = styled.div`
        font-family: Poppins;
        font-size: 12px;
        font-weight: 600;
-       color: #A2A2A2;
+       color: #000;
        display: flex;
        align-items: center;
        justify-content: center;
@@ -49,6 +49,9 @@ const TierRoot = styled.div`
     box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
     border-radius: 10px;
     color: #081E3F;
+   }
+   & .tierDisabled {
+      color: #A2A2A2;
    }
 `;
 
@@ -64,8 +67,17 @@ const DonAvaliableInput = styled.div`
 `;
 
 const HrLine = styled.hr`
-     border-top: 1px solid #ECECEC;
-     margin: 25px -14% 25px -14%;
+    
+     border: none;
+     &:before {
+      content: "";
+      display: block;
+      position: absolute;
+      right: 0;
+      max-width: 100%;
+      width: 100%;
+      border-top: 1px solid #ECECEC;
+    }
 `;
 
 
@@ -73,28 +85,6 @@ const Header = styled.div``;
 
 
 
-const marks = [
-  {
-    value: 1,
-    label: "Tier 1",
-  },
-  {
-    value: 2,
-    label: "Tier 2",
-  },
-  {
-    value: 3,
-    label: "Tier 3",
-  },
-  {
-    value: 4,
-    label: "Tier 4",
-  },
-  {
-    value: 5,
-    label: "Tier 5",
-  },
-];
 export const AcceleratedAPYModal = ({
   open,
   onClose,
@@ -118,6 +108,9 @@ export const AcceleratedAPYModal = ({
   const web3 = useWeb3();
   const [loading, setLoading] = useState(false);
   const [btnLoading, setBtnLoading] = useState(false);
+  const tiersList =  getTierList();
+  const tiersListLength = Object.keys(tiersList).length;
+
   const fetchAvailableDon = async () => {
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
@@ -126,16 +119,31 @@ export const AcceleratedAPYModal = ({
     setAvailableDon(toEther(userBalance));
   };
 
-  const [selectedTier, setSelectedTier] = useState(tier.tier || 1);
+  const initialTier = tier.tier ? tier.tier+1 : 1;
+  const [selectedTier, setSelectedTier] = useState(initialTier);
 
   useEffect(() => {
     fetchAvailableDon();
   }, []);
 
   const donAmount = useMemo(() => {
-    const amount = getTierList()[selectedTier].donRequired;
-    return amount;
+    let currentTier = getTierList()[selectedTier]
+    if(getTierList()[selectedTier]){
+        const amount = getTierList()[selectedTier].donRequired;
+        return amount;
+    }
+    else {
+       currentTier = getTierList()[tier.tier];
+       if(currentTier){
+          const amount = getTierList()[tier.tier].donRequired;
+          return amount;
+       }
+    }
+    return "0";
+
   }, [selectedTier]);
+
+  
 
   const updatePredictedApy = async () => {
     setLoading(true);
@@ -151,14 +159,16 @@ export const AcceleratedAPYModal = ({
   };
 
   const stakeDon = async () => {
-    setBtnLoading(true);
-    try {
-      await stake(toWei(new BigNumber(donAmount).minus(stakedDon).toString()));
-      onClose();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setBtnLoading(false);
+    if(initialTier < tiersListLength){
+        setBtnLoading(true);
+        try {
+           await stake(toWei(new BigNumber(donAmount).minus(stakedDon).toString()));
+           onClose();
+         } catch (e) {
+              console.log(e);
+          } finally {
+                setBtnLoading(false);
+          }
     }
   };
 
@@ -181,6 +191,10 @@ export const AcceleratedAPYModal = ({
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
+
+
+ 
+
   const renderContent = () => {
     if (!hasCheckedDons) {
       return (
@@ -202,26 +216,38 @@ export const AcceleratedAPYModal = ({
 
           <div className="d-flex justify-content-between align-items-center mt-4">
             <SubHeading>Your current Tier:</SubHeading>
-            <Heading fontSize="27px">Tier {selectedTier}</Heading>
+            <Heading fontSize="27px">Tier {tier.tier }</Heading>
           </div>
 
           <div className="mt-2">
              <SubHeading>Upgrade Tier</SubHeading>
 
              <TierRoot className="d-flex ml-0 mr-0">
-                 {marks.map((mark)=>{
-                   const isSelected =  selectedTier === mark.value;
-                   return(
-                
-                      <div className={clsx("tierButton",{"tierSelected": isSelected})}
-                         onClick={() => {
-                           if(mark.value >= tier.tier){
-                             setSelectedTier(mark.value as number)
-                           }
-                         }}   > {mark.label}</div>
-                     
-                   )
-                 })} 
+                {Object.keys(tiersList).map((item,index)=>{
+                         const tierItem = tiersList[item];
+                         const isSelected =  selectedTier === tierItem.tier;
+                         const isTierDisabled = initialTier > tierItem.tier;
+                         const isAllDisabled =  initialTier > tiersListLength;
+                         if(index !== 0){
+                         return(
+                      
+                            <div className={clsx("tierButton",{ 
+                              "tierSelected": (isSelected && !isAllDisabled),
+                              "tierDisabled": isTierDisabled,
+                            })}
+                               onClick={() => {
+                                 if(!isTierDisabled && !isAllDisabled){
+                                   setSelectedTier(tierItem.tier as number)
+                                 }
+                               }}   > Tier {tierItem.tier}</div>
+                           
+                         )
+                        }
+                        return null;
+                         
+                })
+
+                }
              </TierRoot>
 
              <DonInfoRoot>
@@ -255,7 +281,7 @@ export const AcceleratedAPYModal = ({
                  <ButtonWidget
                     varaint="contained"
                     onClick={stakeDon}
-                    disabled={selectedTier <= tier.tier}
+                    disabled={initialTier >= tiersListLength}
                     className="py-2 font-weight-bold"
                     containedVariantColor="lightYellow"
                     width="205px"
@@ -269,7 +295,7 @@ export const AcceleratedAPYModal = ({
               </ButtonWidget>
             </div>
 
-                <HrLine className="mt-4"/>
+                <HrLine className="mt-4 mb-5"/>
 
                 
                    <SubHeading className="m-0">
