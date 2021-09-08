@@ -89,6 +89,7 @@ const TokenInfoQuery = gql`
           name
           apy
           active
+          description
           farmer {
             status
             name
