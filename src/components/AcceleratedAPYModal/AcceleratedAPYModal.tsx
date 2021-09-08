@@ -301,7 +301,7 @@ export const AcceleratedAPYModal = ({
                    <SubHeading className="m-0">
                      Staked DON tokens will be lcoked for 2 minutes after unstaking.
                     DON rewards are claimable on the go.  <a
-                      href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51"
+                      href="https://don-key-finance.medium.com/introducing-don-key-accelerated-rewards-b27f629cb33b"
                       target="_blank"
                      className="ml-1"
                      style={{color: "#000"}}
