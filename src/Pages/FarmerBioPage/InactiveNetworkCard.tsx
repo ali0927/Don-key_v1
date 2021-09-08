@@ -206,16 +206,16 @@ export const WithdrawRequestedCard = ({
           title=""
           endMessage={
             <>
-              Withdraw Completed Check Your Wallet
+             Oops somthing went wrong, we are going to try again
               <ButtonWidget
-                onClick={() => history.push("/dashboard")}
+                onClick={() => window.location.reload()}
                 varaint="contained"
                 width="200px"
                 className="mt-3"
                 height="40px"
                 containedVariantColor="lightYellow"
               >
-                Back to Dashboard
+                Refresh
               </ButtonWidget>
             </>
           }
