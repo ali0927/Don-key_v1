@@ -33,6 +33,35 @@ import BgImage from "./success-bg.png";
 import donTokenImage from "../../images/token.png";
 import { api, waitFor } from "don-utils";
 import Web3 from "web3";
+
+const Heading = styled.div`
+    font-family: Poppins;
+   font-size: 23px;
+   font-style: normal;
+   font-weight: 600;
+   text-align: center;
+   color: #070602;
+`;
+
+const Root = styled.div`
+   svg {
+    transform: translate3d(0px, 7px, 0px) !important;
+   }
+`;
+
+const IconRoot = styled.div`
+   height: 252px;
+`;
+
+const Caption = styled.div`
+   font-family: Poppins;
+   font-size: 14px;
+   font-style: normal;
+   font-weight: 600;
+   color:#A3A3A3;
+   text-align: center;
+`;
+
 export const Transfer = (props: { chainId: number }) => {
   const defaultOptions = {
     loop: true,
@@ -43,12 +72,20 @@ export const Transfer = (props: { chainId: number }) => {
     },
   };
   return (
-    <Lottie
-      width={400}
-      style={{ maxWidth: "100%", pointerEvents: "none" }}
-      isClickToPauseDisabled
-      options={defaultOptions}
-    />
+    <Root className="">
+       <IconRoot>
+           <Lottie
+               width={400}
+               style={{ maxWidth: "100%", pointerEvents: "none" }}
+                isClickToPauseDisabled
+                options={defaultOptions}
+           />
+      </IconRoot>
+       <div className="mb-4">
+         <Heading>We’re Transfering Tokens!</Heading>
+         <Caption className="mt-1">It may take up to 5 minutes...</Caption>
+       </div>
+    </Root>
   );
 };
 
