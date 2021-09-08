@@ -1,34 +1,24 @@
 import { Row, Col } from "react-bootstrap";
 import "./DashboardPage.scss";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { theme } from "theme";
 import {
-  BoostApyIcon,
   LargeEllipse,
   MeadiumEllipse,
   SmallEllipse,
 } from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
-import {
-  BSCChainId,
-  PolygonChainId,
-  useWeb3Network,
-} from "components/Web3NetworkDetector";
 import { ButtonWidget } from "components/Button";
-import { useToggle } from "don-hooks";
 
-import { useStrapi } from "hooks/useStrapi";
 import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { gql, useQuery } from "@apollo/client";
 import { sortBy } from "lodash";
-import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
-import { MainSection } from "../LandingPage/HeaderSection";
 
 const FarmerTitle = styled.p({
   fontSize: "45px",
