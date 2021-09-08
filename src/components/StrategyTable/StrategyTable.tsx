@@ -19,6 +19,7 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon } from "icons/InfoIcon";
 import { useTVL } from "hooks";
+import {isNull, isUndefined} from "lodash";
 
 const formatDate = (
   date: string | null | undefined,
@@ -34,18 +35,20 @@ const formatDate = (
   }
 };
 
-
-
-
 export const StrategyTableForInvestor = ({
   strategies,
   poolAddress,
+  farmerfee,
+  performancefee,
 }: {
   strategies: IStrategy[];
   poolAddress: string;
+  farmerfee: number;
+  performancefee: number;
 }) => {
   const { tvl } = useTVL(poolAddress);
 
+  
   const getFee = (key: keyof IStrategy) => {
     const item = strategies[0];
     if (item) {
@@ -96,22 +99,10 @@ export const StrategyTableForInvestor = ({
           <br />
         </React.Fragment>
       )}
-      <strong>
-        Farmer performance fee:{" "}
-        {poolAddress.toLowerCase() ===
-        "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase()
-          ? "0"
-          : "10"}
-        %
-      </strong>
+      <strong>Farmer performance fee: {isNull(farmerfee) ? "10": farmerfee}%</strong>
       <br />{" "}
       <strong>
-        Don-key Performance fee:{" "}
-        {poolAddress.toLowerCase() ===
-        "0x76406fb2b9C202D9321471504c754e009136328d".toLowerCase()
-          ? "0"
-          : "5"}
-        %
+        Don-key Performance fee: {isNull(performancefee) ? "5": performancefee}%
         <br />
       </strong>{" "}
     </Tooltip>

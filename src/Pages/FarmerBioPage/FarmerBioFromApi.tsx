@@ -22,6 +22,8 @@ const FARMER_QUERY = gql`
       twitter
       telegram
       guid
+      farmerfee
+      performancefee
       poolAddress
       poolVersion
       network {
