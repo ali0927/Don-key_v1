@@ -5,6 +5,7 @@ import getLiquidity from "../get-liquidity.png";
 import boostyield from "../boost-yield.png";
 import styled from "styled-components";
 import { Heading3 } from "../components";
+import Line from "./images/line.png";
 
 const CardBanner = styled.div`
   position: relative;
@@ -57,16 +58,18 @@ const Icons = styled.img`
   height: 265px;
   display: block;
   margin: 0 auto;
+  margin-bottom: 75px !important;
 `;
 
-const Border = styled.hr`
-  position: absolute;
-  width: 50%;
-  border-top: 1.8px dashed#000D09;
-  top: 2px;
-  margin: 0px;
-  margin-left: 15px;
+const LinesRoot = styled.div`
+    position: absolute;
+    bottom: 33%;
+    width: 100%;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
 `;
+
 
 
 
@@ -79,12 +82,13 @@ export const BecomeAFarmerSection: React.FC = () => {
             <Heading3 className="mb-5 text-center">
               Become a Don-key farmer
             </Heading3>
-            <Row className="pt-5">
-            {/* <Border className="d-none d-md-block" /> */}
+            <Row className="pt-5 position-relative">
+           
               <Col lg={4}>
+               
                 <Card className="h-100">
                   <Card.Body>
-                    <Icons src={buildStrategy} />
+                    <Icons  src={buildStrategy} />
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-4 text-center">
                       The most user friendly interface in the DeFi space. create
@@ -95,9 +99,10 @@ export const BecomeAFarmerSection: React.FC = () => {
               </Col>
 
               <Col lg={4}>
+            
                 <Card className="h-100">
                   <Card.Body>
-                    <Icons src={getLiquidity} />
+                    <Icons  src={getLiquidity} />
                     <Card.Title>Get liquidity</Card.Title>
                     <Card.Text className="mt-4 text-center">
                       Climb up the leader board and get more liquidity in your
@@ -107,9 +112,10 @@ export const BecomeAFarmerSection: React.FC = () => {
                 </Card>
               </Col>
               <Col lg={4}>
+             
                 <Card className="h-100">
                   <Card.Body>
-                    <Icons src={boostyield} />
+                    <Icons  src={boostyield} />
                     <Card.Title>Boost your yield</Card.Title>
                     <Card.Text className="mt-4 text-center">
                       Make commission on your yields and get extra bonuses based
@@ -118,6 +124,9 @@ export const BecomeAFarmerSection: React.FC = () => {
                   </Card.Body>
                 </Card>
               </Col>
+            <LinesRoot className="d-none d-lg-flex">
+              <img src={Line} style={{width: "73%"}} alt="Lines not found"/>
+            </LinesRoot>
             </Row>
           </Container>
         </CardFooter>
