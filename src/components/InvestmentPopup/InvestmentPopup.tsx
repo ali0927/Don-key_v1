@@ -34,6 +34,7 @@ import { theme } from "theme";
 import { api } from "don-utils";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
+import { gql, useQuery } from "@apollo/client";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
@@ -85,6 +86,14 @@ const MyBalanceInBUSD = ({
   return <>{state.balance} </>;
 };
 
+const FARMER_WITHDRAW_FRAME = gql`
+  query farmersWithdrawFrame($poolAddress: String!) {
+    farmers(where: { poolAddress: $poolAddress }) {
+      withdrawTimeFrame
+    }
+  }
+`;
+
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
@@ -107,6 +116,9 @@ export const InvestmentPopup = ({
     { manual: true }
   );
   const web3 = useWeb3();
+  const {loading, data} = useQuery(FARMER_WITHDRAW_FRAME, {
+    variables: {poolAddress}
+  });
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
   const { refetch, holdingDons } = useStakingContract();
@@ -158,6 +170,9 @@ export const InvestmentPopup = ({
     }
   }, []);
 
+
+  const timeframe = !loading ? data.farmers[0]?.withdrawTimeFrame || "12" : "-";
+
   const handleInvest = async () => {
     if (isLoading) {
       return;
@@ -175,12 +190,9 @@ export const InvestmentPopup = ({
         .allowance(accounts[0], poolAddress)
         .call();
       const decimals = await acceptedToken.methods.decimals().call();
-      const tokenPrice = await getTokenPrice(
-        web3,
-       poolAddress
-      );
+      const tokenPrice = await getTokenPrice(web3, poolAddress);
       allowance = new BigNumber(allowance);
-      const amount = new BigNumber(toWei(value,decimals));
+      const amount = new BigNumber(toWei(value, decimals));
       const inputAmount = amount.toFixed(0);
       onClose();
       showProgress("Transaction is in Progress");
@@ -346,7 +358,11 @@ export const InvestmentPopup = ({
             </div>
             <p className="d-flex mt-4">
               <small> *</small>
-              <small>Withdraws are executed up to 12 hours upon request in order to minimize swap fees, price impact and slippage within the different pools.</small>
+              <small>
+                Withdraws are executed up to {timeframe} hours upon request in order to
+                minimize swap fees, price impact and slippage within the
+                different pools.
+              </small>
             </p>
           </>
         );
@@ -354,9 +370,14 @@ export const InvestmentPopup = ({
         return <BuyDonContent />;
       }
     } else {
-      return <div style={{minHeight: 200}} className="d-flex justify-content-center align-items-center">
-        <CircularProgress color="inherit" />
-      </div>
+      return (
+        <div
+          style={{ minHeight: 200 }}
+          className="d-flex justify-content-center align-items-center"
+        >
+          <CircularProgress color="inherit" />
+        </div>
+      );
     }
   };
 

@@ -5,8 +5,6 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { InvestorListTable } from "components/InvestorListTable/InvestorListTable";
 import { IFarmerInter } from "interfaces";
 
-
-
 const DescriptionTitle = styled.p`
   font-size: 20px;
   font-weight: 400;
@@ -15,12 +13,12 @@ const DescriptionTitle = styled.p`
 `;
 
 const StrategyTableRoot = styled.div`
-   margin-top: 50px;
-   margin-bottom: 80px;
+  margin-top: 50px;
+  margin-bottom: 80px;
 `;
 
 const TableHeaderRoot = styled.div`
-    margin-bottom: 50px;
+  margin-bottom: 50px;
 `;
 
 export const FarmerStrategies = ({
@@ -48,20 +46,22 @@ export const FarmerStrategies = ({
           <Row>
             <Col sm={12}>
               <TableHeaderRoot>
-                 <DescriptionTitle>
-                {farmer.strategies[0].name || "Description"}
-              </DescriptionTitle>
-                 <p style={{ fontSize: 15 }}>
-                <ShowMoreContent
-                  length={80}
-                  content={
-                    farmer.strategies[0].description ||
-                    "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
-                  }
-                />
-              </p>
+                <DescriptionTitle>
+                  {farmer.strategies[0].name || "Description"}
+                </DescriptionTitle>
+                <p style={{ fontSize: 15 }}>
+                  <ShowMoreContent
+                    length={80}
+                    content={
+                      farmer.strategies[0].description ||
+                      "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
+                    }
+                  />
+                </p>
               </TableHeaderRoot>
               <StrategyTableForInvestor
+                farmerfee={farmer.farmerfee}
+                performancefee={farmer.performancefee}
                 poolAddress={farmer.poolAddress}
                 strategies={farmer.strategies}
               />

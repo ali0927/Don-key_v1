@@ -579,7 +579,7 @@ export const InvestmentsPage = () => {
                                     ? investment.poolVersion
                                     : 1
                                 )
-                              : () => {}
+                              :  RedirectToFarmerProfile(investment.guid)
                           }
                         >
                           {isWithdrawRequested ? "PENDING" : "WITHDRAW"}
@@ -671,7 +671,7 @@ export const InvestmentsPage = () => {
                                       ? investment.poolVersion
                                       : 1
                                   )
-                                : () => {}
+                                : RedirectToFarmerProfile(investment.guid)
                             }
                           >
                             {isWithdrawRequested ? "PENDING" : "WITHDRAW"}
