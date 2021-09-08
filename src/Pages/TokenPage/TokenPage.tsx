@@ -185,9 +185,9 @@ export const TokenPage = () => {
                 <BackArrow /> <span className="ml-2">Back</span>
               </StyledLink>
               <Title className="mb-5">
-                {subtitle || "Strategy Risk Level"}
+                {subtitle || "Description"}
               </Title>
-              <Subtitle>Description</Subtitle>
+              {/* <Subtitle>Description</Subtitle> */}
               <div className="row">
                 <div className="col-md-8">
                   <p className="mb-5">
