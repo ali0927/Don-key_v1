@@ -27,7 +27,7 @@ const images = [
 ];
 
 const InvestorSection = styled.section`
-  background:${theme.palette.background.yellow};
+  background: #F3F3F3;
   padding: 6rem 0;
 `;
 
