@@ -179,12 +179,12 @@ const Root = styled.div`
 
 export const StakingTimer = ({
   timerEnd,
-  endMessage = "Cool off period is over. Claim Tokens",
+  endMessage = <>Cool off period is over. Claim Tokens</>,
   title = "Cool off period ends in ",
   variant = "dark",
 }: {
   timerEnd: number;
-  endMessage?: string;
+  endMessage?: React.ReactElement;
   title?: string;
   variant?: "light" | "dark";
 }) => {
