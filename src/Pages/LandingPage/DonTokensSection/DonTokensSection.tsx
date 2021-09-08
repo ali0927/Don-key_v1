@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Heading3,LandingParagraph } from "../components";
 import Lines from "./images/img.png"
 import styled from "styled-components";
+import Donkey from "./images/donkey.png"
 
 const Heading = styled.h1`
   font-family: Poppins;
@@ -34,10 +35,10 @@ export const DonTokenSection: React.FC = () => {
       <div className="pt-5 pb-5">
         <Container>
           <Row className="mt-5 mb-5">
-            <Col md={4} className="mr-md-4">
+            <Col md={4} className="mr-md-4 d-flex align-items-center">
               <div>
                 <img
-                  src="/assets/images/token.png"
+                  src={Donkey}
                   className="d-inline-block"
                   alt="ImageNotFound"
                 />
@@ -48,7 +49,7 @@ export const DonTokenSection: React.FC = () => {
                 <Heading3 className="mb-3 mt-md-2 mt-5">DON Tokens</Heading3>
                 <div className="d-flex">
                 <div style={{marginRight: 50, width: "18%"}}>
-                     <img style={{height: "100%"}} src={Lines} alt="Image not found"/>
+                     <img style={{height: "99%"}} src={Lines} alt="Image not found"/>
                 </div>
                 <div>
                 <Content>

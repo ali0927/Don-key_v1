@@ -46,6 +46,8 @@ const CardBanner = styled.div`
 `;
 
 const CardFooter = styled.div`
+   padding-top: 180px;
+   padding-bottom: 180px;
    .card {
     background: #f5f5f5;
   }
@@ -57,17 +59,28 @@ const Icons = styled.img`
   margin: 0 auto;
 `;
 
+const Border = styled.hr`
+  position: absolute;
+  width: 50%;
+  border-top: 1.8px dashed#000D09;
+  top: 2px;
+  margin: 0px;
+  margin-left: 15px;
+`;
+
+
 
 export const BecomeAFarmerSection: React.FC = () => {
   return (
     <>
       <CardBanner>
-        <CardFooter className="pt-5 pb-5">
+        <CardFooter>
           <Container>
             <Heading3 className="mb-5 text-center">
               Become a Don-key farmer
             </Heading3>
             <Row className="pt-5">
+            {/* <Border className="d-none d-md-block" /> */}
               <Col lg={4}>
                 <Card className="h-100">
                   <Card.Body>
