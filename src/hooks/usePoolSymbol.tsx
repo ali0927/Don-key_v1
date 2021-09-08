@@ -1,3 +1,4 @@
+import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useWeb3 } from "don-components";
 import { getTokenSymbol } from "helpers";
@@ -11,6 +12,7 @@ export const usePoolSymbol = (poolAddress: string) => {
 
   const [loading, setLoading] = useState(true);
   const web3 = useWeb3();
+  const { chainId } = useWeb3Network();
   useIsomorphicEffect(() => {
     (async () => {
       let symbol;
@@ -19,7 +21,7 @@ export const usePoolSymbol = (poolAddress: string) => {
         symbol = await getTokenSymbol(web3, poolAddress);
         //   symbolCache.set(poolAddress, symbol);
         // }
-      
+
         setSymbol(symbol);
       } catch (e) {
         console.log(e, "Symbol Error");
@@ -30,7 +32,7 @@ export const usePoolSymbol = (poolAddress: string) => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [chainId]);
 
   return { symbol, loading };
 };
