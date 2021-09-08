@@ -29,7 +29,7 @@ const LandingPage = () => {
       */}
 
       {/* Banner */}
-      <BannerSection />
+      {/* <BannerSection /> */}
 
       
 

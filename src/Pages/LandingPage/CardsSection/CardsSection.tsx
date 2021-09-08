@@ -16,12 +16,13 @@ const CardBanner = styled.div`
   z-index: 9;
 `;
 
+
 const CardBannerAdvantage = styled.div`
   position: relative;
   width: 100%;
-  background:${theme.palette.background.yellow};
+  background:${theme.palette.common.white};
   // margin-top: -8%;
-  padding: 9% 0%;
+  padding: 0% 0%;
   padding-bottom: 20px;
 
   & .card {
@@ -66,16 +67,6 @@ const CardBannerAdvantage = styled.div`
   @media (max-width: 767px) {
     margin-top: 6%;
   }
-`;
-const BorderCurve = styled.div`
-  border-radius: 0% 0% 200vh 200vh / 0% 0% 35vh 35vh;
-  background: #fff;
-  height: 50px;
-  width: 100%;
-  display: block;
-  z-index: 9;
-  position: absolute;
-  top: 0;
 `;
 
 const ImageCommingSoon = styled.img`
@@ -207,9 +198,8 @@ export const CardsSection: React.FC = () => {
 
   return (
     <>
-      <CardBanner className="mt-5">
+      <CardBanner className="mt-0">
         <CardBannerAdvantage className="mt-0">
-          <BorderCurve></BorderCurve>
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
               <Col md={6}>

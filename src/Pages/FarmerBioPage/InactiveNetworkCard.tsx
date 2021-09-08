@@ -192,7 +192,7 @@ export const WithdrawRequestedCard = ({
       <h5>Withdraw Request</h5>
       <Text className="mt-4 mb-3">
         {" "}
-        Your withdraw will be executed at minimum slippage and fees withhin: {" "}
+        Your withdraw will be executed at minimum slippage and fees within: {" "}
         {timeframe}
         hrs
       </Text>

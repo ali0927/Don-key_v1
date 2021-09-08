@@ -9,12 +9,23 @@ import { uniswapClient } from "apolloClient";
 import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { useHistory } from "react-router";
+import { HeroImage } from "../HeroImage";
 
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
   padding-top: 116px;
+
 `;
+
+
+const Rounded = styled.div`
+  height:90px;
+  border-bottom-left-radius:50%;
+    border-bottom-right-radius:50%;
+`;
+
+
 
 const Heading = styled.h1`
   font-family: Poppins;
@@ -59,14 +70,14 @@ const Button = styled(ButtonWidget)`
 `;
 
 const FooterRow = styled.div`
-  width: 80%;
+  width: 100%;
 `;
 
 const Col = styled.div``;
 
 const GrayBorder = styled.hr`
   position: absolute;
-  width: 69%;
+  width: 53%;
   border-top: 1.5px dashed #c9c5c5;
   top: 2px;
   margin: 0;
@@ -139,9 +150,11 @@ export const MainSection: React.FC = () => {
     history.push("/lottery/participate");
   };
 
+
   return (
     <>
       <Root>
+      
         <div className="container">
           <div className="row">
             <div className="col-lg-7 mb-5">
@@ -162,24 +175,24 @@ export const MainSection: React.FC = () => {
             </div>
 
             <div className="col-lg-4 mb-5 d-flex justify-content-center justify-content-lg-end">
-              <img src={Donkey} alt="Donkey image not found" />
+                <HeroImage />
             </div>
           </div>
 
-          <div className="d-flex mt-4 pb-5 justify-content-center">
-            <FooterRow className="row position-relative justify-content-center">
+          <div className="d-flex mt-4 pb-5 justify-content-start">
+            <FooterRow className="row position-relative">
               <GrayBorder className="d-none d-md-block" />
-              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">DON price</FooterHeading>
                 <FooterSubHeading>${finalDerivedEth}</FooterSubHeading>
               </Col>
-              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">24-hour volume</FooterHeading>
                 <FooterSubHeading>${volume24hrs}</FooterSubHeading>
               </Col>
-              <Col className="col-md-4 mb-4 position-relative d-flex flex-column align-items-center">
+              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">Market Cap</FooterHeading>
                 <FooterSubHeading>${marketCap}</FooterSubHeading>
@@ -187,6 +200,7 @@ export const MainSection: React.FC = () => {
             </FooterRow>
           </div>
         </div>
+         <Rounded/>
       </Root>
     </>
   );
