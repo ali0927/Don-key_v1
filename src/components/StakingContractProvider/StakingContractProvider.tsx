@@ -11,6 +11,7 @@ import { api } from "don-utils";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
+import { useEffectOnTabFocus } from "hooks";
 
 const DonStakingAddress = "0x8d40C8a9F4bD8D23a244cEc57b20B7f8f43C5e0d";
 export type ITier = { apy: number; donRequired: string; tier: number };
@@ -98,6 +99,20 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     return totalDons;
   };
 
+  const fetchPendingRewards = async () => {
+    let pendingRewards = "0";
+    try {
+      const accounts = await web3.eth.getAccounts();
+      pendingRewards = await stakingContract.methods
+        .pendingReward(accounts[0])
+        .call();
+    } catch (e) {
+      console.log("Pending Reward Error", e);
+      pendingRewards = "0";
+    }
+    setPendingReward(toEther(pendingRewards));
+  };
+
   const fetchState = async () => {
     setLoading(true);
     const accounts = await web3.eth.getAccounts();
@@ -106,15 +121,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
     const donsFromApi = await fetchDonsFromApi();
     totalDons = totalDons.plus(donsFromApi);
-    let pendingRewards = "0";
-    try {
-      pendingRewards = await stakingContract.methods
-        .pendingReward(accounts[0])
-        .call();
-    } catch (e) {
-      console.log("Error");
-      pendingRewards = "0";
-    }
+
     try {
       const minDuration = await stakingContract.methods.getMinDuration().call();
       const duration = moment.duration(minDuration * 1000);
@@ -134,7 +141,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       setCurrentTier(tierInfo);
     }
 
-    setPendingReward(toEther(pendingRewards));
+    await fetchPendingRewards();
     setCoolOffTime(userInfo.coolOffPeriod);
     setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
     setCoolOffAmount(toEther(userInfo.coolOffAmount));
@@ -163,10 +170,17 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     if (chainId === NetworksMap.BSC) {
       fetchState();
       fetchTiers(stakingContract);
+      const interval = setInterval(() => {
+        fetchPendingRewards();
+      }, 1000);
+      return () => {
+        clearInterval(interval);
+      };
     } else {
       fetchDonsFromApi().then(setHoldedDons);
     }
   }, [chainId]);
+
   const checkAndApproveDon = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
