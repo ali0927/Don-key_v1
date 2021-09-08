@@ -15,6 +15,9 @@ const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
   padding-top: 116px;
+  svg {
+    transform: translate3d(0px, 0px, 0px) scale(1.15) !important;
+  }
 
 `;
 
