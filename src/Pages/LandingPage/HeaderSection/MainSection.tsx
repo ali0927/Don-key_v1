@@ -83,7 +83,7 @@ const Col = styled.div``;
 
 const GrayBorder = styled.hr`
   position: absolute;
-  width: 53%;
+  width: 50%;
   border-top: 1.8px dashed#000D09;
   top: 2px;
   margin: 0px;
