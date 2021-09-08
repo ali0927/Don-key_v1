@@ -1,3 +1,4 @@
+import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useWeb3 } from "don-components";
 import {
   calculateInitialInvestment,
@@ -14,6 +15,7 @@ export const useInitialInvestment = (
   const [initialInvestment, setinitialInvestment] = useState("-");
   const [initialInvestmentInUSD, setinitialInvestmentinUSD] = useState("-");
   const [isReady, setIsReady] = useState(false);
+  const {chainId} = useWeb3Network();
   useEffect(() => {
     (async () => {
       try {
@@ -23,7 +25,6 @@ export const useInitialInvestment = (
           calculateInitialInvestmentInUSD(web3, poolAddress, accounts[0]),
         ];
         const results = await Promise.all(amounts);
-        console.log(results, "result")
         setinitialInvestment(results[0]);
         setinitialInvestmentinUSD(results[1]);
       } catch (err) {
@@ -33,7 +34,7 @@ export const useInitialInvestment = (
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh]);
+  }, [refresh,chainId]);
 
   return {
     isReady,
