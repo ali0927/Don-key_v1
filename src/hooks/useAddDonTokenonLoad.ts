@@ -8,7 +8,7 @@ export const useAddDonTokenonLoad = () => {
         const tokenSymbol = "DON";
         const tokenDecimals = 18;
         const tokenImage =
-          "https://don-key.fra1.digitaloceanspaces.com/farmer-icons/logo.gold.png";
+          "https://don-key.fra1.digitaloceanspaces.com/farmer-icons/logo-gold.png";
         let tokenAdded = localStorage.getItem("tokenLogo");
         if (network === 56 && !tokenAdded) {
           // Binance Smart Chain
