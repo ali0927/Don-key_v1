@@ -132,7 +132,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
-    totalDons = totalDons.plus(donAmount);
+    const coolOffDons = toEther(userInfo.coolOffAmount);
+    totalDons = totalDons.plus(donAmount).plus(coolOffDons);
+
     setHoldedDons(totalDons);
     setIsStaked(userInfo.isStaked);
     setStakedDon(donAmount);
@@ -144,7 +146,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     await fetchPendingRewards();
     setCoolOffTime(userInfo.coolOffPeriod);
     setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
-    setCoolOffAmount(toEther(userInfo.coolOffAmount));
+    setCoolOffAmount(coolOffDons);
     setLoading(false);
   };
 
