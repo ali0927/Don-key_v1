@@ -9,7 +9,7 @@ import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { fixUrl } from "helpers";
-import { useStrapi, useSwitchNetwork } from "hooks";
+import { useSwitchNetwork } from "hooks";
 import { IFarmer, IFarmerInter, IStrategy } from "interfaces";
 import { sortBy } from "lodash";
 import { InactiveNetworkCard } from "Pages/FarmerBioPage/InactiveNetworkCard";
@@ -18,8 +18,7 @@ import React, { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
-import { BoostButton } from "./BoostButton";
-import { StrategyInfo } from "./StrategyInfo";
+
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
