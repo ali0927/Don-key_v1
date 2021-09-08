@@ -28,6 +28,7 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import {
+  AvaxId,
   BSCChainId,
   PolygonChainId,
   useWeb3Network,
@@ -220,6 +221,7 @@ const YellowSwitch = withStyles((theme) => ({
 const URLMap = {
   [BSCChainId]: "https://bscscan.com",
   [PolygonChainId]: "https://polygonscan.com",
+  [AvaxId]: "https://cchain.explorer.avax.network"
 };
 
 const TokenSwitchLabels = styled.div`
