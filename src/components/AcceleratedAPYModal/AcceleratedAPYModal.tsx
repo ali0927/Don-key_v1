@@ -11,6 +11,8 @@ import { CircularProgress, Slider, withStyles } from "@material-ui/core";
 import { theme } from "theme";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import clsx from "clsx";
+import BgImage from "images/success-bg.png";
+import { DonTokenIcon } from "icons/DonTokenIcon";
 
 const Heading = styled.h2`
   font-weight: bold;
@@ -101,7 +103,7 @@ export const AcceleratedAPYModal = ({
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
   const web3 = useWeb3();
-  const [loading, setLoading] = useState(false);
+
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();
   const tiersListLength = Object.keys(tiersList).length;
@@ -116,7 +118,7 @@ export const AcceleratedAPYModal = ({
 
   const initialTier = tier.tier ? tier.tier + 1 : 1;
   const [selectedTier, setSelectedTier] = useState(initialTier);
-
+  const [hasCompleted, setHasCompleted] = useState(false);
   useEffectOnTabFocus(() => {
     fetchAvailableDon();
   }, []);
@@ -149,16 +151,14 @@ export const AcceleratedAPYModal = ({
   }, [requiredDons, availableDon]);
 
   const updatePredictedApy = async () => {
-    setLoading(true);
+    // setLoading(true);
     try {
       const apyObj = await getTierInfo(donAmount);
 
       if (apyObj) {
         setPredictedApy(apyObj.apy.toFixed());
       }
-    } finally {
-      setLoading(false);
-    }
+    } catch (e) {}
   };
 
   const stakeDon = async () => {
@@ -168,7 +168,7 @@ export const AcceleratedAPYModal = ({
         await stake(
           toWei(new BigNumber(donAmount).minus(stakedDon).toString())
         );
-        onClose();
+        setHasCompleted(true);
       } catch (e) {
         console.log(e);
       } finally {
@@ -208,6 +208,34 @@ export const AcceleratedAPYModal = ({
       );
     }
     if (hasDons) {
+      if (hasCompleted) {
+        return (
+          <>
+            <img
+              src={BgImage}
+              style={{
+                position: "absolute",
+                zIndex: 0,
+                top: 0,
+                left: 0,
+                right: 0,
+              }}
+            />
+            <div
+              style={{
+                position: "relative",
+                zIndex: 1,
+                marginTop: 80,
+
+                textAlign: "center",
+              }}
+            >
+              <DonTokenIcon style={{ marginBottom: 40 }} />
+              <h4>Your now in Tier {tier.tier}</h4>
+            </div>
+          </>
+        );
+      }
       return (
         <div style={{ marginTop: -30, marginBottom: -20 }}>
           <Header>

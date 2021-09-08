@@ -112,8 +112,7 @@ export const InactiveNetworkCard = ({
           muted
           pointer
         >
-          Read our guide for setting up Metamask{" "}
-          <LinkIcon style={{ marginTop: -2 }} className="ml-2" />
+          Click on switch to add or change network
         </Text>
         <div className="mt-5">
           {/* <DonButtonOutlined className="mr-3">
@@ -141,8 +140,7 @@ export const InactiveNetworkCard = ({
           wallet to {correctNetwork.symbol}.
         </h6>
         <Text className="mb-0" muted pointer>
-          Read our guide for setting up Metamask{" "}
-          <LinkIcon style={{ marginTop: -2 }} className="ml-2" />
+          Click on switch to add or change network
         </Text>
       </div>
       <div className="col d-flex align-items-center justify-content-center justify-content-md-end">
@@ -206,7 +204,7 @@ export const WithdrawRequestedCard = ({
           title=""
           endMessage={
             <>
-             Oops somthing went wrong, we are going to try again
+              Oops somthing went wrong, we are going to try again
               <ButtonWidget
                 onClick={() => window.location.reload()}
                 varaint="contained"
