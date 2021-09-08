@@ -29,6 +29,9 @@ const images = [
 const InvestorSection = styled.section`
   background: #F3F3F3;
   padding: 6rem 0;
+  min-height: 559px;
+  display: flex;
+  align-items: center;
 `;
 
 const ImageWrapper = styled.div`
