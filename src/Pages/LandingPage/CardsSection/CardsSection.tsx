@@ -10,6 +10,7 @@ import image3 from "../image.svg";
 import { Heading3, LandingParagraph } from "../components";
 import { useHistory } from "react-router";
 import { theme } from "theme";
+import { ButtonWidget } from "components/Button";
 
 const CardBanner = styled.div`
   position: relative;
@@ -192,9 +193,6 @@ const Graph3 = () => {
 export const CardsSection: React.FC = () => {
   const history = useHistory();
 
-  const handleClick = () => {
-    history.push("/strategy");
-  };
 
   return (
     <>
@@ -212,13 +210,15 @@ export const CardsSection: React.FC = () => {
                   can see it all.
                 </LandingParagraph>
                 <div className="position-relative d-inline-block mt-4">
-                  <ButtonComponent
-                    disabled
-                    variant="position-relative   colorBlack  btn-outline"
+                  <ButtonWidget
+                    varaint="outlined"
+                    width="210px"
+                    height="50px"
+                    onClick={() => history.push("/dashboard")}
                   >
-                    Discover best farmers
-                  </ButtonComponent>
-                  <ImageCommingSoon src={comingsoon} alt="ImageNotFound" />
+                     Discover best farmers
+                  </ButtonWidget>
+          
                 </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
@@ -233,8 +233,6 @@ export const CardsSection: React.FC = () => {
                       apy="40%"
                       comingsoon
                       totalValue="$178,890"
-                      onButtonClick={handleClick}
-                      onCardClick={handleClick}
                     />
                   </div>
                 </div>
@@ -253,8 +251,7 @@ export const CardsSection: React.FC = () => {
                       apy="134%"
                       comingsoon
                       totalValue="$1,354,560"
-                      onButtonClick={handleClick}
-                      onCardClick={handleClick}
+                      
                     />
                   </div>
                   <div className="mt-4">
@@ -268,8 +265,7 @@ export const CardsSection: React.FC = () => {
                       content="I’ll bring you to the well of new and show you the harvest looking for crazy APY’s sometimes Rek"
                       apy="167%"
                       totalValue="$870,650"
-                      onButtonClick={handleClick}
-                      onCardClick={handleClick}
+                   
                     />
                   </div>
                 </div>
