@@ -74,6 +74,8 @@ export interface IFarmerInter {
   }
   status: "active" | "hidden" | "comingsoon";
   guid: string;
+  farmerfee: number;
+  performancefee: number;
   active: boolean;
   twitter: string;
   telegram: string;
