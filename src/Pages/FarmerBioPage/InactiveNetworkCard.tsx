@@ -1,10 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
+import { ButtonWidget } from "components/Button";
 import { useSwitchNetwork } from "hooks";
 import { LinkIcon, WalletIcon } from "icons";
 import { INetwork } from "interfaces";
 import moment from "moment";
 import { StakingTimer } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
 import { Spinner } from "react-bootstrap";
+import { useHistory } from "react-router";
 import styled from "styled-components";
 const Text = styled.p`
   font-size: 15px;
@@ -175,6 +177,7 @@ export const WithdrawRequestedCard = ({
       walletAddress,
     },
   });
+  const history = useHistory();
 
   if (loading) {
     return (
@@ -192,7 +195,7 @@ export const WithdrawRequestedCard = ({
       <h5>Withdraw Request</h5>
       <Text className="mt-4 mb-3">
         {" "}
-        Your withdraw will be executed at minimum slippage and fees within: {" "}
+        Your withdraw will be executed at minimum slippage and fees within:{" "}
         {timeframe}
         hrs
       </Text>
@@ -201,8 +204,22 @@ export const WithdrawRequestedCard = ({
         <StakingTimer
           variant="light"
           title=""
-          endMessage="Withdraw Completed Check Your Wallet"
-          timerEnd={moment(createTimer).add(timeframe, "hours").unix()}
+          endMessage={
+            <>
+              Withdraw Completed Check Your Wallet
+              <ButtonWidget
+                onClick={() => history.push("/dashboard")}
+                varaint="contained"
+                width="200px"
+                className="mt-3"
+                height="40px"
+                containedVariantColor="lightYellow"
+              >
+                Back to Dashboard
+              </ButtonWidget>
+            </>
+          }
+          timerEnd={moment(createTimer).unix()}
         />
       </div>
     </div>

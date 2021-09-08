@@ -287,7 +287,7 @@ export const DetailTable = ({
         setWithdrawRequested(isRequested);
 
         setWalletAddress(accounts[0]);
-      }else {
+      } else {
         setWithdrawRequested(false);
       }
     })();
@@ -326,6 +326,39 @@ export const DetailTable = ({
         </div>
       </Columns>
     );
+  };
+
+  const renderCardData = () => {
+    if (isWithdrawRequested === null) {
+      return (
+        <div className="text-center pt-5 d-flex align-items-center justify-content-center">
+          <Spinner animation="border" />
+        </div>
+      );
+    }
+    if (isWithdrawRequested) {
+      return (
+        walletAddress && (
+          <WithdrawRequestedCard
+            walletAddress={walletAddress}
+            poolAddress={poolAddress}
+          />
+        )
+      );
+    } else {
+      if (isActiveNetwork) {
+        return (
+          <InvestBlackCard
+            poolAddress={poolAddress}
+            poolVersion={poolVersion}
+            network={network}
+            boostApy={boostApy}
+          />
+        );
+      } else {
+        return <InactiveNetworkCard correctNetwork={network} />;
+      }
+    }
   };
 
   return (
@@ -415,27 +448,7 @@ export const DetailTable = ({
       </Col>
       <Col className="mb-5" style={{ marginLeft: 17 }}>
         <BlackCardWrapper className="position-relative" color="black">
-          {isWithdrawRequested === null ? (
-            <div className="text-center pt-5 d-flex align-items-center justify-content-center">
-              <Spinner animation="border" />
-            </div>
-          ) : isWithdrawRequested && walletAddress ? (
-            <WithdrawRequestedCard
-              walletAddress={walletAddress}
-              poolAddress={poolAddress}
-            />
-          ) : isActiveNetwork ? (
-            <>
-              <InvestBlackCard
-                poolAddress={poolAddress}
-                poolVersion={poolVersion}
-                network={network}
-                boostApy={boostApy}
-              />
-            </>
-          ) : (
-            <InactiveNetworkCard correctNetwork={network} />
-          )}
+          {renderCardData()}
         </BlackCardWrapper>
       </Col>
     </>
