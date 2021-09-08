@@ -28,6 +28,7 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import {
+  AvaxId,
   BSCChainId,
   PolygonChainId,
   useWeb3Network,
@@ -220,6 +221,7 @@ const YellowSwitch = withStyles((theme) => ({
 const URLMap = {
   [BSCChainId]: "https://bscscan.com",
   [PolygonChainId]: "https://polygonscan.com",
+  [AvaxId]: "https://cchain.explorer.avax.network",
 };
 
 const TokenSwitchLabels = styled.div`
@@ -278,7 +280,7 @@ export const DetailTable = ({
 
   useEffect(() => {
     (async () => {
-      if (poolVersion > 2) {
+      if (poolVersion > 2 && isActiveNetwork) {
         const pool = await getPoolContract(web3, poolAddress, poolVersion);
         const accounts = await web3.eth.getAccounts();
         const isRequested = await pool.methods
@@ -331,7 +333,7 @@ export const DetailTable = ({
   const renderCardData = () => {
     if (isWithdrawRequested === null) {
       return (
-        <div className="text-center pt-5 d-flex align-items-center justify-content-center">
+        <div className="text-center h-100 pt-5 d-flex align-items-center justify-content-center">
           <Spinner animation="border" />
         </div>
       );

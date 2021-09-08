@@ -219,7 +219,7 @@ export const WithdrawRequestedCard = ({
               </ButtonWidget>
             </>
           }
-          timerEnd={moment(createTimer).unix()}
+          timerEnd={moment(createTimer).add(timeframe, "hours").unix()}
         />
       </div>
     </div>
