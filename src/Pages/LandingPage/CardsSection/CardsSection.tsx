@@ -199,10 +199,10 @@ export const CardsSection: React.FC = () => {
   return (
     <>
       <CardBanner className="mt-0">
-        <CardBannerAdvantage className="mt-0">
+        <CardBannerAdvantage className="mt-2">
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
-              <Col md={6}>
+              <Col md={6} className="pt-5">
                 <Heading3 className="mb-3 mt-3">
                   Come discover our Don-key farmers and follow the best
                 </Heading3>
@@ -240,7 +240,7 @@ export const CardsSection: React.FC = () => {
                 </div>
               </Col>
 
-              <Col md={6}>
+              <Col md={6}  className="pt-5">
                 <div className="col-lg-9">
                   <div className="mt-4">
                     <PopularStrategy

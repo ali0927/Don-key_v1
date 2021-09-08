@@ -1,7 +1,7 @@
 import { ButtonWidget } from "components/Button";
 import React from "react";
 import styled from "styled-components";
-import Donkey from "./images/Donkey.png";
+import MainImage from "./images/Main.png";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
@@ -18,12 +18,15 @@ const Root = styled.div`
 
 `;
 
+const Rounded = styled.img`
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   bottom: -7%;
 
-const Rounded = styled.div`
-  height:90px;
-  border-bottom-left-radius:50%;
-    border-bottom-right-radius:50%;
 `;
+
+
 
 
 
@@ -153,8 +156,8 @@ export const MainSection: React.FC = () => {
 
   return (
     <>
-      <Root>
-      
+      <Root className="position-relative">
+       <Rounded  src={MainImage} alt="Main image not found"/>
         <div className="container">
           <div className="row">
             <div className="col-lg-7 mb-5">
@@ -200,7 +203,6 @@ export const MainSection: React.FC = () => {
             </FooterRow>
           </div>
         </div>
-         <Rounded/>
       </Root>
     </>
   );
