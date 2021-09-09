@@ -14,7 +14,7 @@ import { HeroImage } from "../HeroImage";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
-  padding-top: 116px;
+  padding-top: 59px;
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
   }
@@ -34,9 +34,9 @@ const Rounded = styled.img`
 
 
 const Heading = styled.h1`
-  font-family: Poppins;
-  font-size: 42px;
-  font-weight: 900;
+  font-family: 'ObjectSans-Bold';
+  font-size: 50px;
+  font-weight: 800;
   text-align: left;
   color: #222222;
 `;
@@ -163,7 +163,7 @@ export const MainSection: React.FC = () => {
       <Root className="position-relative">
        <Rounded  src={MainImage} alt="Main image not found"/>
         <div className="container">
-          <div className="row">
+          <div className="row align-items-center">
             <div className="col-lg-7 mb-5">
               <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-50">
@@ -181,7 +181,7 @@ export const MainSection: React.FC = () => {
               </Button>
             </div>
 
-            <div className="col-lg-4 mb-5 d-flex justify-content-center justify-content-lg-end">
+            <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
                 <HeroImage />
             </div>
           </div>
