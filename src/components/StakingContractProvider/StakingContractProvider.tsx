@@ -37,6 +37,7 @@ const fetchTiers = async (stakingContract: any) => {
 };
 
 export const getTierInfo = async (amount: string, stakingContract: any) => {
+  await fetchTiers(stakingContract);
   for (const tierNum of tiersList) {
     const tier = tierInfo.data[tierNum];
     const amountBN = new BigNumber(amount);
