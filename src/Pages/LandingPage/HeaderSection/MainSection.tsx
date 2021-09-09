@@ -120,7 +120,7 @@ const TOKEN_DATA = gql`
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
   const history = useHistory();
-
+  console.log("ethPriceInfo ", ethPriceInfo);
   const [{ data: coingecko }] = useAxios({
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
@@ -142,7 +142,9 @@ export const MainSection: React.FC = () => {
       ).toString()
     : 0;
 
-  const derivedETH = data && data.token.derivedETH;
+  const derivedETH = coingecko
+  ? coingecko.market_data.current_price.eth
+  : 0;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
     parseFloat(derivedETH) * parseFloat(ethPriceInUSD)

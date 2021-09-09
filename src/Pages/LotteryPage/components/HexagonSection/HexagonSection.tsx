@@ -107,7 +107,8 @@ const TOKEN_DATA = gql`
 
 export const HexagonSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
-
+  
+  
   const [{ data: coingecko }] = useAxios({
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
