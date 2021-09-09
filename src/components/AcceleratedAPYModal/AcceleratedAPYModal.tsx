@@ -13,11 +13,15 @@ import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import clsx from "clsx";
 import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
+import { breakPoints } from "breakponts";
 
 const Heading = styled.h2`
   font-weight: bold;
-  font-size: ${(props: { fontSize: string }) => props.fontSize};
+  font-size: ${(props: { fontSize: string, mobileFontSize: string }) => props.mobileFontSize};
   color: #070602;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: ${(props: { fontSize: string, mobileFontSize: string }) => props.fontSize};
+  }
 `;
 
 const SubHeading = styled.p`
@@ -33,8 +37,8 @@ const TierRoot = styled.div`
   border-radius: 10px;
   padding: 5px;
   & .tierButton {
-    width: 92px;
-    height: 37px;
+    width: 52px;
+    height: 37px; 
     font-family: Poppins;
     font-size: 12px;
     font-weight: 600;
@@ -43,8 +47,14 @@ const TierRoot = styled.div`
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    margin-right: 5px;
+    :last-child {
+        margin-right: 0px;
+    }
   }
   & .tierSelected {
+    width: 92px;
+    height: 37px; 
     background: #fceb74;
     border: 1px solid #fed700;
     box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
@@ -239,7 +249,7 @@ export const AcceleratedAPYModal = ({
       return (
         <div style={{ marginTop: -30, marginBottom: -20 }}>
           <Header>
-            <Heading fontSize="23px" className="mb-2">
+            <Heading fontSize="23px" mobileFontSize="23px" className="mb-2">
               Accelerated APY
             </Heading>
             <SubHeading>Stake DON tokens and get Accelerated APY</SubHeading>
@@ -247,13 +257,13 @@ export const AcceleratedAPYModal = ({
 
           <div className="d-flex justify-content-between align-items-center mt-4">
             <SubHeading>Your current Tier:</SubHeading>
-            <Heading fontSize="27px">Tier {tier.tier}</Heading>
+            <Heading fontSize="27px"  mobileFontSize="23px">Tier {tier.tier}</Heading>
           </div>
 
           <div className="mt-2">
             <SubHeading>Upgrade Tier</SubHeading>
 
-            <TierRoot className="d-flex ml-0 mr-0">
+            <TierRoot className="d-flex ml-0 mr-0 flex-wrap flex-lg-nowrap">
               {Object.keys(tiersList).map((item, index) => {
                 const tierItem = tiersList[item];
                 const isSelected = selectedTier === tierItem.tier;
@@ -283,7 +293,7 @@ export const AcceleratedAPYModal = ({
 
             <DonInfoRoot>
               {!hasDons && (
-                <Heading className="text-center mb-5" fontSize="20px">
+                <Heading className="text-center mb-5" fontSize="20px"  mobileFontSize="15px">
                   You don’t have DON available in your wallet
                 </Heading>
               )}
@@ -291,7 +301,7 @@ export const AcceleratedAPYModal = ({
                 <>
                   <SubHeading>Available DON</SubHeading>
                   <DonAvaliableInput>
-                    <Heading className="m-0 text-right" fontSize="25px">
+                    <Heading className="m-0 text-right" fontSize="25px"  mobileFontSize="20px">
                       {new BigNumber(availableDon).toFixed(2)}
                     </Heading>
                   </DonAvaliableInput>
@@ -301,12 +311,12 @@ export const AcceleratedAPYModal = ({
 
             <div className="d-flex justify-content-between align-items-center mt-3">
               <SubHeading>Required DON Stake:</SubHeading>
-              <Heading fontSize="27px">{requiredDons}</Heading>
+              <Heading fontSize="27px"  mobileFontSize="20px">{requiredDons}</Heading>
             </div>
 
             <div className="d-flex align-items-center justify-content-between ">
               <SubHeading>Extra APY will be</SubHeading>
-              <Heading fontSize="20px">+{predictedApy}%</Heading>
+              <Heading fontSize="20px"  mobileFontSize="18px">+{predictedApy}%</Heading>
             </div>
 
             <div className="d-flex align-items-center justify-content-center mt-3">
@@ -379,211 +389,3 @@ export const AcceleratedAPYModal = ({
     </DonCommonmodal>
   );
 };
-
-// const DonInput = ({
-//   label,
-//   placeholder,
-//   value,
-//   max,
-//   showMaxButton,
-//   onChange,
-// }: {
-//   label: string;
-//   placeholder?: string;
-//   value: string;
-//   max?: string;
-//   showMaxButton?: boolean;
-//   onChange: (e: string) => void;
-// }) => {
-//   return (
-//     <DonInputWrapper>
-//       <DonInputLabel>{label}</DonInputLabel>
-//       <DonHTMLInput
-//         placeholder={placeholder}
-//         type="text"
-//         readOnly
-//         value={value}
-//         onChange={(e) => onChange(e.target.value)}
-//       />
-//       {max && (
-//         <MaxButton className="link-primary" onClick={() => onChange(max)}>
-//           Max
-//         </MaxButton>
-//       )}
-//     </DonInputWrapper>
-//   );
-// };
-
-// const DonSlider = withStyles({
-//   root: {
-//     color: theme.palette.common.yellow,
-//     height: 8,
-//   },
-//   thumb: {
-//     height: 24,
-//     width: 24,
-//     backgroundColor: "#fff",
-//     border: "2px solid currentColor",
-//     marginTop: -8,
-//     marginLeft: -12,
-//     "&:focus, &:hover, &$active": {
-//       boxShadow: "inherit",
-//     },
-//   },
-//   mark: {
-//     width: 1,
-//     height: 5,
-//     marginTop: 7,
-//     backgroundColor: "#b0b0b0",
-//     '&[data-index="4"]': {
-//       left: "98% !important",
-//     },
-//   },
-//   markLabel: {
-//     '&[data-index="4"]': {
-//       left: "97% !important",
-//     },
-//   },
-//   active: {},
-//   valueLabel: {
-//     left: "calc(-50% + 4px)",
-//   },
-//   track: {
-//     height: 8,
-//     borderRadius: 4,
-//   },
-//   rail: {
-//     height: 8,
-//     borderRadius: 4,
-//   },
-// })(Slider);
-
-// const ApyForm = styled.div`
-//   margin-top: 4rem;
-// `;
-
-// const Info = styled.p`
-//   font-size: 12px;
-//   line-height: 20px;
-//   padding: 0 50px;
-//   text-align: center;
-
-//   color: #656565;
-// `;
-// const MaxButton = styled.span`
-//   cursor: pointer;
-//   position: absolute;
-//   right: 0;
-//   bottom: -20px;
-//   font-size: 12px;
-//   color: #0d6efd;
-//   &:hover,
-//   &:focus {
-//     color: #0a58ca;
-//   }
-// `;
-// const DonInputWrapper = styled.div`
-//   border: 1px solid #3e3e3e;
-//   border-radius: 10px;
-//   position: relative;
-//   margin-bottom: 40px;
-// `;
-// const DonInputLabel = styled.label`
-//   position: absolute;
-//   top: 0;
-//   background-color: #fff;
-//   padding-left: 5px;
-//   padding-right: 5px;
-//   left: 0;
-//   transform: translate(15px, -60%);
-//   font-size: 12px;
-//   color: #c6c6c6;
-//   margin-bottom: 0%;
-// `;
-// const DonHTMLInput = styled.input`
-//   text-align: left;
-//   font-size: 15px;
-//   border: none;
-//   color: gray;
-//   border-radius: 10px;
-//   width: 100%;
-//   height: 100%;
-//   padding: 14px 1rem;
-//   &:focus {
-//     outline: none;
-//   }
-// `;
-
-{
-  /* <ApyForm>
-            <DonInput
-              label="Available DON"
-              value={new BigNumber(availableDon).toFixed(2)}
-              placeholder="Amount"
-              onChange={() => {}}
-            />
-            <span>Choose Tier</span>
-            <DonSlider
-              value={selectedTier * 20}
-              onChange={(e, val) => {
-                const currentVal = tier.tier * 20;
-                const valBn = new BigNumber(val as number);
-
-                console.log("Tier",tier,"--selecedTier",selectedTier,"Value--",val)
-
-                if (valBn.lt(currentVal)) {
-                  return setSelectedTier(tier.tier as number);
-                } else {
-                  if (val > currentVal) {
-                    setSelectedTier(Math.round((val as number) / 20));
-                  }
-                }
-              }}
-              marks={marks}
-              step={20}
-              min={0}
-              max={100}
-            />
-            <p className="mb-1 text-center">Your DON Stake:</p>
-            <h5 className="text-center">{donAmount}</h5>
-            <p className="text-center font-weight-bold px-5">
-              {loading ? (
-                <Spinner animation="border" size="sm" />
-              ) : predictedApy !== "0" && predictedApy !== "" ? (
-                <>Extra APY Will Be: +{predictedApy}%</>
-              ) : (
-                <>Minimum 1000 DON's Required To Get Extra APY</>
-              )}
-            </p>
-
-            <Info>
-              Staked DON tokens will be locked for {coolOffDuration} days after
-              unstaking. DON rewards are claimable on the go.
-              <a
-                href="https://don-key-finance.medium.com/accelerated-apy-d31d5accbb51"
-                target="_blank"
-                className="ml-1"
-              >
-                Read more{" "}
-              </a>
-            </Info>
-            <div className="d-flex align-items-center">
-              <ButtonWidget
-                varaint="contained"
-                onClick={stakeDon}
-                disabled={selectedTier <= tier.tier}
-                className="py-2 font-weight-bold"
-                containedVariantColor="lightYellow"
-                height="40px"
-              >
-                {btnLoading ? (
-                  <Spinner animation="border" size="sm" />
-                ) : (
-                  "Lock DON"
-                )}
-              </ButtonWidget>
-            </div>
-          
-          </ApyForm>
-         */
-}
