@@ -91,8 +91,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       });
       const bep = resp.data.bep;
       const erc = resp.data.erc;
-
-      totalDons = totalDons.plus(bep).plus(erc);
+      const staked = resp.data.staked;
+      const coolOff = resp.data.coolOff;
+      totalDons = totalDons.plus(bep).plus(erc).plus(staked).plus(coolOff);
     } catch (e) {
       console.error(e);
     }
@@ -133,7 +134,6 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     const donAmount = toEther(userInfo.tokenAmount);
     const tierInfo = await getTierInfo(donAmount, stakingContract);
     const coolOffDons = toEther(userInfo.coolOffAmount);
-    totalDons = totalDons.plus(donAmount).plus(coolOffDons);
 
     setHoldedDons(totalDons);
     setIsStaked(userInfo.isStaked);
