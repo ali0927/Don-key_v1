@@ -209,7 +209,7 @@ export const CardsSection: React.FC = () => {
         <CardBannerAdvantage>
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
-              <Col md={6} className="pt-5">
+              <Col md={7} className="pt-5">
                 <Heading className="mb-3 mt-3">
                   Come discover our Don-key farmers and follow the best
                 </Heading>
@@ -231,7 +231,7 @@ export const CardsSection: React.FC = () => {
                 </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
-                  <div className="col-lg-9 mt-5">
+                  <div className="col-lg-8 mt-5">
                     <PopularStrategy
                       icon={<img src={farmerCard1} alt="ImageNotFound" />}
                       investers={568}
@@ -247,8 +247,8 @@ export const CardsSection: React.FC = () => {
                 </div>
               </Col>
 
-              <Col md={6}  className="pt-5">
-                <div className="col-lg-9">
+              <Col md={5}  className="pt-5">
+                <div className="col-lg-11">
                   <div className="mt-4">
                     <PopularStrategy
                       icon={<img src={image2} alt="ImageNotFound" />}
