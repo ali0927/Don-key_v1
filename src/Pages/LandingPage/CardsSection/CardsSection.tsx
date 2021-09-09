@@ -22,7 +22,7 @@ const CardBannerAdvantage = styled.div`
   position: relative;
   width: 100%;
   background:${theme.palette.common.white};
-  // margin-top: -8%;
+  margin-top: 160px;
   padding: 0% 0%;
   padding-bottom: 20px;
 
@@ -197,7 +197,7 @@ export const CardsSection: React.FC = () => {
   return (
     <>
       <CardBanner className="mt-0">
-        <CardBannerAdvantage className="mt-2">
+        <CardBannerAdvantage>
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
               <Col md={6} className="pt-5">
