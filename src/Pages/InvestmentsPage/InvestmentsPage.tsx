@@ -502,7 +502,7 @@ export const InvestmentsPage = () => {
                 <CustomTableHeading>FARMER NAME</CustomTableHeading>
                 <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                 <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                {tier.tier > 0 && (
+                {NetworksMap.BSC === network && tier.tier > 0 && (
                   <CustomTableHeading>DON REWARDS</CustomTableHeading>
                 )}
                 <CustomTableHeading style={{ textAlign: "center" }}>
@@ -549,7 +549,7 @@ export const InvestmentsPage = () => {
                         poolAddress={investment.poolAddress}
                       />
                     </CustomTableData>
-                    {tier.tier > 0 && (
+                    {NetworksMap.BSC === network && tier.tier > 0 && (
                       <CustomTableData>
                         {(() => {
                           const dons = new BigNumber(pendingReward)
@@ -579,7 +579,7 @@ export const InvestmentsPage = () => {
                                     ? investment.poolVersion
                                     : 1
                                 )
-                              :  RedirectToFarmerProfile(investment.guid)
+                              : RedirectToFarmerProfile(investment.guid)
                           }
                         >
                           {isWithdrawRequested ? "PENDING" : "WITHDRAW"}

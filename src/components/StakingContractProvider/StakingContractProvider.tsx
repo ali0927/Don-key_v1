@@ -82,6 +82,18 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const [pendingReward, setPendingReward] = useState("0");
   const [investedAmount, setInvestedAmount] = useState("0");
 
+  const clearState = () => {
+    setIsInCoolOffPeriod(false);
+    setCanClaimTokens(false);
+    setCoolOffAmount("0");
+    setHoldedDons(null);
+    setStakedDon("0");
+    setLoading(false);
+    setPendingReward("0");
+    setInvestedAmount("0");
+    setCoolOffAmount("0");
+  };
+
   const fetchDonsFromApi = async () => {
     let totalDons = new BigNumber(0);
     const accounts = await web3.eth.getAccounts();
@@ -176,9 +188,11 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         fetchPendingRewards();
       }, 1000);
       return () => {
+        clearState();
         clearInterval(interval);
       };
     } else {
+      clearState();
       fetchDonsFromApi().then(setHoldedDons);
     }
   }, [chainId]);
