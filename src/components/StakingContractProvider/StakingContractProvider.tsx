@@ -11,7 +11,6 @@ import { api } from "don-utils";
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
-import { useEffectOnTabFocus } from "hooks";
 
 const DonStakingAddress = "0x8d40C8a9F4bD8D23a244cEc57b20B7f8f43C5e0d";
 export type ITier = { apy: number; donRequired: string; tier: number };
@@ -109,7 +108,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     } catch (e) {
       console.error(e);
     }
-    return totalDons;
+    setHoldedDons(totalDons);
   };
 
   const fetchPendingRewards = async () => {
@@ -128,37 +127,40 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
   const fetchState = async () => {
     setLoading(true);
-    const accounts = await web3.eth.getAccounts();
-    const userInfo = await stakingContract.methods.userInfo(accounts[0]).call();
-    let totalDons = new BigNumber(0);
+    if (NetworksMap.BSC === chainId) {
+      const accounts = await web3.eth.getAccounts();
+      const userInfo = await stakingContract.methods
+        .userInfo(accounts[0])
+        .call();
 
-    const donsFromApi = await fetchDonsFromApi();
-    totalDons = totalDons.plus(donsFromApi);
+      try {
+        const minDuration = await stakingContract.methods
+          .getMinDuration()
+          .call();
+        const duration = moment.duration(minDuration * 1000);
+        setCoolOffDuration(duration.humanize());
+      } catch (e) {
+        setCoolOffDuration("2 weeks");
+      }
 
-    try {
-      const minDuration = await stakingContract.methods.getMinDuration().call();
-      const duration = moment.duration(minDuration * 1000);
-      setCoolOffDuration(duration.humanize());
-    } catch (e) {
-      setCoolOffDuration("2 weeks");
+      const donAmount = toEther(userInfo.tokenAmount);
+      const tierInfo = await getTierInfo(donAmount, stakingContract);
+      const coolOffDons = toEther(userInfo.coolOffAmount);
+
+      setIsStaked(userInfo.isStaked);
+      setStakedDon(donAmount);
+      setInvestedAmount(toEther(userInfo.totalInvestedAmount));
+      if (tierInfo) {
+        setCurrentTier(tierInfo);
+      }
+
+      await fetchPendingRewards();
+      setCoolOffTime(userInfo.coolOffPeriod);
+      setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
+      setCoolOffAmount(coolOffDons);
     }
+    await fetchDonsFromApi();
 
-    const donAmount = toEther(userInfo.tokenAmount);
-    const tierInfo = await getTierInfo(donAmount, stakingContract);
-    const coolOffDons = toEther(userInfo.coolOffAmount);
-
-    setHoldedDons(totalDons);
-    setIsStaked(userInfo.isStaked);
-    setStakedDon(donAmount);
-    setInvestedAmount(toEther(userInfo.totalInvestedAmount));
-    if (tierInfo) {
-      setCurrentTier(tierInfo);
-    }
-
-    await fetchPendingRewards();
-    setCoolOffTime(userInfo.coolOffPeriod);
-    setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
-    setCoolOffAmount(coolOffDons);
     setLoading(false);
   };
 
@@ -192,8 +194,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         clearInterval(interval);
       };
     } else {
-      clearState();
-      fetchDonsFromApi().then(setHoldedDons);
+      fetchDonsFromApi();
     }
   }, [chainId]);
 
@@ -248,6 +249,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       tier: currentTier,
       holdingDons: holdedDons,
       refetch: fetchState,
+      fetchHoldingDons: fetchDonsFromApi,
       investedAmount,
       loading,
       getTierList: () => {
