@@ -10,23 +10,21 @@ import { Providers } from "Providers";
 
 if (process.env.REACT_APP_ENV === "production") {
   Sentry.init({
-    dsn: "https://a02e8e703bab44d39b5cb4323ebce3ed@o571223.ingest.sentry.io/5719005",
+    dsn: "https://f5226d4ae8f2459db1606e17d1de5336@o994153.ingest.sentry.io/5952696",
     integrations: [new Integrations.BrowserTracing()],
 
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: 0.4,
+    tracesSampleRate: 0.6,
   });
 }
 
 ReactDOM.render(
   <>
-    <Sentry.ErrorBoundary fallback={"An error has occurred"}>
-      <Providers>
-        <App />
-      </Providers>
-    </Sentry.ErrorBoundary>
+    <Providers>
+      <App />
+    </Providers>
   </>,
   document.getElementById("root")
 );
