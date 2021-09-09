@@ -6,6 +6,11 @@ import styled from "styled-components";
 import Donkey from "./images/donkey.png"
 import { breakPoints } from "breakponts";
 
+const Root = styled.div`
+    margin-top: 120px;
+    margin-bottom: 120px;
+`;
+
 const Heading = styled.h1`
   font-family: Poppins;
   font-size: 23px;
@@ -44,7 +49,7 @@ const LineRoot = styled.div`
 export const DonTokenSection: React.FC = () => {
   return (
     <>
-      <div className="pt-5 pb-5">
+      <Root className="pt-5 pb-5">
         <Container>
           <Row className="mt-5 mb-5 justify-content-between">
             <Col lg={4} className="d-flex align-items-center mb-3 mb-lg-0">
@@ -93,7 +98,7 @@ export const DonTokenSection: React.FC = () => {
             </Col>
           </Row>
         </Container>
-      </div>
+      </Root>
     </>
   );
 };

@@ -17,12 +17,18 @@ const CardBanner = styled.div`
   z-index: 9;
 `;
 
+const Heading = styled(Heading3)`
+    font-size: 38px;
+    color: #070602;
+`
+
 
 const CardBannerAdvantage = styled.div`
   position: relative;
   width: 100%;
   background:${theme.palette.common.white};
   margin-top: 160px;
+  margin-bottom: 160px;
   padding: 0% 0%;
   padding-bottom: 20px;
 
@@ -81,6 +87,7 @@ const Graph1 = () => {
     <svg
       width={251}
       height={114}
+      className="mt-3"      
       viewBox="0 0 251 114"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -119,6 +126,7 @@ const Graph2 = () => {
     <svg
       width="250"
       height="111"
+      className="mt-3"   
       viewBox="0 0 250 111"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -157,6 +165,7 @@ const Graph3 = () => {
     <svg
       width={250}
       height={116}
+      className="mt-3"   
       viewBox="0 0 250 116"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -201,9 +210,9 @@ export const CardsSection: React.FC = () => {
           <Container>
             <Row className="mt-md-5 mb-5 mt-1">
               <Col md={6} className="pt-5">
-                <Heading3 className="mb-3 mt-3">
+                <Heading className="mb-3 mt-3">
                   Come discover our Don-key farmers and follow the best
-                </Heading3>
+                </Heading>
                 <LandingParagraph className="mt-4">
                   Discover and follow the best yield farmers with just one
                   click. Historical APY, farming philosophy, risk appetite; You
