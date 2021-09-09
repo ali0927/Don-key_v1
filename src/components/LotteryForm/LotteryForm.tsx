@@ -47,7 +47,7 @@ export const InputSmall = styled.input`
   border-radius: 10px;
   width: 100%;
   :focus {
-     outline: 0px;
+    outline: 0px;
   }
 `;
 
@@ -120,7 +120,6 @@ const CardItem = styled.div`
   }
 `;
 const ItemHeading = styled.h5`
-
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
@@ -183,7 +182,7 @@ export const LotteryForm = () => {
   const { refresh } = useRefresh();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
-  const [registeredEmail, setRegisteredEmail] = useState("");
+
   const { tvl } = useTVL();
   const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
@@ -241,16 +240,6 @@ export const LotteryForm = () => {
   };
 
   const { apyPercent } = useApy();
-
-  const fetchEmail = async () => {
-    const accounts = await web3.eth.getAccounts();
-    const res = await api.get(`/api/v2/lottery?wallet_address=${accounts[0]}`);
-    setRegisteredEmail(res.data.data.email);
-  };
-
-  useEffect(() => {
-    fetchEmail();
-  }, []);
 
   return (
     <section style={{ backgroundColor: "#F4F4F4" }}>
@@ -358,13 +347,10 @@ export const LotteryForm = () => {
             <LotteryPopupForm
               availableAmount={lpTokens ? toEther(lpTokens) : "0"}
               isOpen={isPopupOpen}
-              isRegistered={!!registeredEmail}
               onClose={() => {
                 setIsPopupOpen(false);
-                fetchEmail();
               }}
               onSuccess={() => {
-                fetchEmail();
                 setIsPopupOpen(false);
               }}
             />
