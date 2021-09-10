@@ -319,9 +319,10 @@ export const StakingInfo = () => {
                     .multipliedBy(donPrice)
                     .toFixed(2)})`}
               </StakingSubtitle>
-              {lastRewardTime !== 0 && (
-                <div style={{fontSize: 12}}>
-                 harvested {moment
+              {!new BigNumber(lastRewardTime).isEqualTo(0) && (
+                <div style={{ fontSize: 12 }}>
+                  harvested{" "}
+                  {moment
                     .duration(moment().diff(moment.unix(lastRewardTime)))
                     .humanize() + " ago"}
                 </div>
