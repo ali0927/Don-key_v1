@@ -315,6 +315,7 @@ const InfoLabel = styled.span`
 
 
 
+const SupportedChainIds = [1,56];
 
 export const BridgePopup = ({
   onClose,
@@ -358,7 +359,7 @@ export const BridgePopup = ({
   const { chainId } = useWeb3Network();
   const { switchNetwork } = useSwitchNetwork();
 
-  const [input1Chain, setInput1Chain] = useState(chainId ? chainId : 1);
+  const [input1Chain, setInput1Chain] = useState(SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1);
   const [input2Chain, setInput2Chain] = useState(
     chainId ? (chainId === 1 ? 56 : 1) : 56
   );

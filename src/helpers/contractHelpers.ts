@@ -78,7 +78,7 @@ export const getUserDons = async (web3: Web3, chainIds: number[]) => {
     }
   });
 
-  return await Promise.all(promises);
+  return await Promise.all(promises) as {balance: string; }[];
 };
 //you only need to transfer DON to ETH bridge contract
 
