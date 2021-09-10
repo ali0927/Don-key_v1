@@ -10,6 +10,7 @@ import { RoundedCompletedSection } from "./RoundedCompletedSection";
 import { LotteryPage } from "Pages/LotteryPage";
 import { RoadMap } from "./RoadMap/RoadMap";
 import { MainSection } from "./HeaderSection";
+import { FAQSection } from "components/FAQSection";
 
 
 
@@ -38,7 +39,7 @@ const LandingPage = () => {
 
       <BecomeAFarmerSection />
       {/* Trading strategy builder */}
-
+      <FAQSection />
       <StrategyBuilderSection />
 
       {/* DON Tokens */}
