@@ -254,22 +254,17 @@ export const DetailTable = ({
 
   const { dominance } = useDominance(poolAddress);
   const web3 = useWeb3();
-  const [initialCheck, setInitialCheck] = useState(false);
+
   const { chainId: currentNetwork } = useWeb3Network();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
   );
 
-  useEffect(() => {
-    if (farmerId === "e3ce43a6-963c-476a-bb3f-c07b7434f911") {
-      setInitialCheck(true);
-    }
-  }, [farmerId]);
   const { toggle } = useUSDViewBool();
   const handleToggle = () => {
     toggle();
-    setInitialCheck(!initialCheck);
+  
   };
 
   const { dependsOn } = useRefresh();
@@ -405,7 +400,7 @@ export const DetailTable = ({
                       className="mx-2"
                       value={true}
                       onChange={handleToggle}
-                      checked={initialCheck}
+                      
                     />{" "}
                     USD
                   </TokenSwitchLabels>

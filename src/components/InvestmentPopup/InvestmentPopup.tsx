@@ -27,8 +27,8 @@ import { useTransactionNotification } from "components/LotteryForm/useTransactio
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import {
   Chip,
-  createMuiTheme,
   ThemeProvider,
+  createTheme,
   CircularProgress,
 } from "@material-ui/core";
 import { theme } from "theme";
@@ -40,7 +40,7 @@ const ButtonWrapper = styled.div({
   width: "100%",
 });
 
-const themeM = createMuiTheme({
+const themeM = createTheme({
   palette: {
     primary: { main: theme.palette.background.yellow },
   },
