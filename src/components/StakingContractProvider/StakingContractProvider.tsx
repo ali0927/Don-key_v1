@@ -81,6 +81,8 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const [loading, setLoading] = useState(false);
   const [pendingReward, setPendingReward] = useState("0");
   const [investedAmount, setInvestedAmount] = useState("0");
+  const [lastRewardTime, setLastRewardTime] = useState(0);
+
 
   const clearState = () => {
     setIsInCoolOffPeriod(false);
@@ -92,6 +94,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     setPendingReward("0");
     setInvestedAmount("0");
     setCoolOffAmount("0");
+    setLastRewardTime(0)
   };
 
   const fetchDonsFromApi = async () => {
@@ -159,6 +162,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       setCoolOffTime(userInfo.coolOffPeriod);
       setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
       setCoolOffAmount(coolOffDons);
+      setLastRewardTime(userInfo.lastRewardTime);
     }
     await fetchDonsFromApi();
 
@@ -253,6 +257,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       fetchHoldingDons: fetchDonsFromApi,
       investedAmount,
       loading,
+      lastRewardTime,
       getTierList: () => {
         return tierInfo.data;
       },

@@ -10,6 +10,7 @@ export type IStakingContractContext = {
   stakingAddress: string;
   investedAmount: string;
   holdingDons: BigNumber | null;
+  lastRewardTime: number;
   tier: ITier;
   isInCoolOffPeriod: boolean;
   coolOffTime: string;

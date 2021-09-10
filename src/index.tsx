@@ -8,17 +8,17 @@ import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
 import { Providers } from "Providers";
 
-if (process.env.REACT_APP_ENV === "production") {
-  Sentry.init({
-    dsn: "https://f5226d4ae8f2459db1606e17d1de5336@o994153.ingest.sentry.io/5952696",
-    integrations: [new Integrations.BrowserTracing()],
-
-    // Set tracesSampleRate to 1.0 to capture 100%
-    // of transactions for performance monitoring.
-    // We recommend adjusting this value in production
-    tracesSampleRate: 0.6,
-  });
-}
+// if (process.env.REACT_APP_ENV === "production") {
+Sentry.init({
+  dsn: "https://f5226d4ae8f2459db1606e17d1de5336@o994153.ingest.sentry.io/5952696",
+  integrations: [new Integrations.BrowserTracing()],
+  environment: process.env.REACT_APP_ENV,
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 0.6,
+});
+// }
 
 ReactDOM.render(
   <>

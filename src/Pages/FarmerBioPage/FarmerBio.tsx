@@ -14,6 +14,7 @@ import { Share, ShareLink } from "components/ShareAndEarn";
 import { api } from "don-utils";
 import { useWeb3 } from "don-components";
 import { fixUrl, getShareUrl } from "helpers";
+import { useStakingContract } from "hooks";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -70,7 +71,7 @@ const ShareButton = styled.button`
   font-weight: 600;
   line-height: 21px;
   color: #ffffff;
-  transition: all 0.50s;
+  transition: all 0.5s;
   :hover {
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
       linear-gradient(146.14deg, #606060 0%, #0b0e12 100%);
@@ -111,52 +112,58 @@ export const FarmerBio = ({
     farmerImage: { url: picture },
   } = farmer;
 
-  const [openSharePopup, setSharePopup] = useState(false);
-  const [openShareLink, setShareLink] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [shortLink, setShortLink] = useState<string | null>(null);
-  const handleCreateLink = () => {
-    setSharePopup(false);
-    setShareLink(true);
-  };
-  const [code, setCode] = useState("");
-  const web3 = useWeb3();
-  const fetchInfoFromApi = async () => {
-    const accounts = await web3.eth.getAccounts();
-    const response = await api.get(
-      "/api/v2/shortener?" +
-        new URLSearchParams({
-          pool_address: poolAddress,
-          wallet_address: accounts[0],
-        }).toString()
-    );
-    if (response.data) {
-      setShortLink(getShareUrl(response.data.code));
-      setCode(response.data.code);
-      setImageUrl(response.data.image);
-    }
-  };
+  // const [openSharePopup, setSharePopup] = useState(false);
+  // const [openShareLink, setShareLink] = useState(false);
+  // const [imageUrl, setImageUrl] = useState<string | null>(null);
+  // const [shortLink, setShortLink] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchInfoFromApi();
-  }, []);
+  // const [code, setCode] = useState("");
 
-  const handleShareClick = () => {
-    if (shortLink && imageUrl) {
-      setShareLink(true);
-    } else {
-      setSharePopup(true);
-    }
-  };
+  // const fetchInfoFromApi = async () => {
+  //   const accounts = await web3.eth.getAccounts();
+  //   try {
+  //     const response = await api.get(
+  //       "/api/v2/shortener?" +
+  //         new URLSearchParams({
+  //           pool_address: poolAddress,
+  //           wallet_address: accounts[0],
+  //         }).toString()
+  //     );
+  //     if (response.data) {
+  //       setShortLink(getShareUrl(response.data.code));
+  //       setCode(response.data.code);
+  //       setImageUrl(response.data.image);
+  //     }
+  //   } catch(e){
+
+  //   }
+
+  // };
+
+  // useEffect(() => {
+  //   fetchInfoFromApi();
+  // }, []);
+
+  // const handleShareClick = () => {
+  //   if (shortLink && imageUrl) {
+  //     setShareLink(true);
+  //   } else {
+  //     setSharePopup(true);
+  //   }
+  // };
   const apy =
     strategies && strategies.length > 0
       ? new BigNumber(strategies![0].apy).toFixed(0) + "%"
       : "100%";
 
-  const strategyName =
-    strategies && strategies.length > 0 ? strategies[0].name : "";
+  const { tier } = useStakingContract();
 
-  const boostApy = strategies && strategies.length > 0 ? strategies[0].token.boostApy : false;
+  const boostApy =
+    tier.tier > 5
+      ? false
+      : strategies && strategies.length > 0
+      ? strategies[0].token.boostApy
+      : false;
 
   return (
     <>

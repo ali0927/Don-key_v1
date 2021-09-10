@@ -271,6 +271,7 @@ export const StakingInfo = () => {
     canClaimTokens,
     coolOffTime,
     claimTokens,
+    lastRewardTime,
   } = useStakingContract();
 
   const [isStakeModalOpen, setisModalOpen] = useState(false);
@@ -307,7 +308,7 @@ export const StakingInfo = () => {
         <>
           {" "}
           <div className="row w-100 align-items-center">
-            <div className="col-7 d-flex flex-column align-items-start align-items-lg-center">
+            <div className="col-7 h-100 d-flex flex-column align-items-start align-items-lg-center">
               <StakingTitle style={{ color: "#fff" }}>
                 DON Rewards available
               </StakingTitle>
@@ -318,6 +319,13 @@ export const StakingInfo = () => {
                     .multipliedBy(donPrice)
                     .toFixed(2)})`}
               </StakingSubtitle>
+              {lastRewardTime !== 0 && (
+                <div style={{fontSize: 12}}>
+                 harvested {moment
+                    .duration(moment().diff(moment.unix(lastRewardTime)))
+                    .humanize() + " ago"}
+                </div>
+              )}
             </div>
             <div className="col-5 d-flex justify-content-center">
               <StyledButton
@@ -337,7 +345,7 @@ export const StakingInfo = () => {
       return (
         <>
           {" "}
-          <div>
+          <div className="h-100">
             <StakingTitle style={{ color: "#fff" }}>DON Tokens</StakingTitle>
             <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
           </div>
@@ -398,7 +406,7 @@ export const StakingInfo = () => {
       {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
       <div className="row mt-3 mb-4">
         <div className="col-lg-7 mb-2">
-          <StakingCard className="d-flex flex-wrap justify-content-between">
+          <StakingCard className="d-flex h-100 flex-wrap justify-content-between">
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>
               <StakingSubtitle>{stakedDon}</StakingSubtitle>
