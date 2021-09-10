@@ -132,6 +132,11 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
+
+const StrategyBio = () => {
+  
+} 
+
 export const TokenPage = () => {
   const { token, network: tokenNetwork } =
     useParams<{ token: string; network: string }>();
@@ -275,3 +280,5 @@ export const TokenPage = () => {
     </>
   );
 };
+
+

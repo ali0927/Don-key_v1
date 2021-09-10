@@ -33,8 +33,8 @@ export default function Routes() {
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
         />
-        <ProtectedRoute exact path="/withdraw" children={<WithdrawPage />} />
-        <ProtectedRoute
+        <Route exact path="/withdraw" children={<WithdrawPage />} />
+        <Route
           exact
           path="/dashboard"
           children={
@@ -43,7 +43,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/farmer/me"
           children={
@@ -52,7 +52,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/farmer/:id"
           children={
@@ -62,7 +62,7 @@ export default function Routes() {
           }
         />
 
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/investment"
           children={
@@ -71,7 +71,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/referrals"
           children={
@@ -80,7 +80,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/:network/:token"
           children={

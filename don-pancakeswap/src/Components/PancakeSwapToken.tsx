@@ -1,6 +1,6 @@
 import { getEstimatedAmount } from "don-utils";
 import { useToggle } from "don-hooks";
-import { ICurrencyWithAddress, useWeb3,InputOutputPure } from "don-components";
+import { ICurrencyWithAddress, InputOutputPure } from "don-components";
 import React, { useEffect, useState } from "react";
 import { useBuilderActions} from "don-builder";
 import pancakejson from "./Pancakeswap.json";
@@ -45,32 +45,32 @@ export const PancakeSwapToken = () => {
   const [isOutputfocused, setFocus2, setBlur2] = useToggle(false);
   const [outputAmount, setOutPutAmount] = useState<number | string>("");
 
-  const web3 = useWeb3();
+  // const web3 = useWeb3();
 
   const updateInputAmount = async () => {
     if (outputAmount) {
-      const amount = await debouncedGetEstimate(
-        web3,
-        outputAmount as string,
-        outputCurrency.address,
-        inputCurrency.address
-      );
-      if (amount) {
-        setInputAmount(amount);
-      }
+      // const amount = await debouncedGetEstimate(
+      //   web3,
+      //   outputAmount as string,
+      //   outputCurrency.address,
+      //   inputCurrency.address
+      // );
+      // if (amount) {
+      //   setInputAmount(amount);
+      // }
     }
   };
   const updateOutputAmount = async () => {
     if (parseFloat(inputAmount as string)) {
-      const amount = await debouncedGetEstimate(
-        web3,
-        inputAmount as string,
-        inputCurrency.address,
-        outputCurrency.address
-      );
-      if (amount) {
-        setOutPutAmount(amount);
-      }
+      // const amount = await debouncedGetEstimate(
+      //   web3,
+      //   inputAmount as string,
+      //   inputCurrency.address,
+      //   outputCurrency.address
+      // );
+      // if (amount) {
+      //   setOutPutAmount(amount);
+      // }
     }
   };
   useEffect(() => {

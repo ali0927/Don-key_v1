@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ButtonWidget, ContainedButton } from "components/Button";
-import { useWeb3 } from "don-components";
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { LotteryPopupForm } from "./LotteryPopupForm";
@@ -155,17 +155,17 @@ const UniswapLink =
 
 const useTVL = () => {
   const [tvl, setTVL] = useState<string | null>(null);
-  const web3 = useWeb3();
-  const { isBSC, isReady } = useNetwork();
+  const { web3 ,chainId } = useWeb3Context();
+ 
   const { dependsOn } = useRefresh();
   useEffect(() => {
-    if (isReady) {
+    if (web3) {
       (async () => {
-        const tvl = await calculateTVL(web3, isBSC);
+        const tvl = await calculateTVL(web3, chainId === BINANCE_CHAIN_ID);
         setTVL(tvl);
       })();
     }
-  }, [isReady, dependsOn]);
+  }, [web3, dependsOn]);
 
   return { tvl };
 };
@@ -175,7 +175,7 @@ export const LotteryForm = () => {
 
   const { isReady, network, isEthereum, isBSC } = useNetwork();
 
-  const web3 = useWeb3();
+  const {} = useWeb3Context();
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { rewards } = useEarnedRewards();

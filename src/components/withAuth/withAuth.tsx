@@ -17,9 +17,6 @@ export const withAuth = (element?: RouteProps["children"]) => {
     const isLoggedIn = useSelector(
       (state: IStoreState) => state.auth.isLoggedIn
     );
-    const dispatch = useDispatch();
-
-    const { doMetaMaskLogin } = useMetaMaskLogin();
 
     useEffect(() => {
    
