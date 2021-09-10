@@ -186,7 +186,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                       <TableData>{item.profit7days}</TableData>
                       <TableData>{item.profit}</TableData>
                       <TableData>
-                        <MyInvestment poolAddress={item.poolAddress} />
+                        1  {/* <MyInvestment poolAddress={item.poolAddress} /> */}
                       </TableData>
                       <TableData>
                         <ButtonWidget varaint="outlined" disabled>
