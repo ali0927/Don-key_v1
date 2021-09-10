@@ -48,7 +48,7 @@ const Papper = styled.div`
   position: relative;
   background-color: rgb(251, 251, 251);
   box-shadow: 0px 5px 20px rgba(0, 18, 80, 0.1);
-  border-radius: 10px;
+  border-radius: 20px;
   font-size: 13px;
   height: 100%;
   h5 {

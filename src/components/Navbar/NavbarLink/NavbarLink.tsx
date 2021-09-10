@@ -5,9 +5,9 @@ import clsx from "clsx";
 import styled from "styled-components";
 
 const styles = `
-  font-weight: 400;
+  font-weight: 500;
   font-family: Poppins;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 19px;
   display: -webkit-flex;
   display: flex;
@@ -22,7 +22,7 @@ const styles = `
   letter-spacing: 1pt;
   position: relative;
   @media (min-width: 992px) {
-    padding-left: 0.5rem;
+    padding-left: 1.0rem;
   }
 
   // :hover {

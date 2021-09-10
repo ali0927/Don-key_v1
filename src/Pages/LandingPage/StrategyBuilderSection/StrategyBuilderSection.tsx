@@ -52,8 +52,8 @@ const TradingImageRoot = styled.div`
 `;
 
 const TradingImage = styled.img`
-  top: -100px;
-  min-width: 700px;
+  top: -65px;
+  min-width: 610px;
   position: absolute;
   @media screen and (max-width: 800px) {
     position: relative;

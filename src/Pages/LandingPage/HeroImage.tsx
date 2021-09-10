@@ -11,5 +11,5 @@ export const HeroImage = () => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-  return <Lottie width={400} style={{maxWidth: "100%", pointerEvents: 'none'}} isClickToPauseDisabled options={defaultOptions} />;
+  return <Lottie  style={{maxWidth: "100%", pointerEvents: 'none'}} isClickToPauseDisabled options={defaultOptions} />;
 };

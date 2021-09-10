@@ -82,6 +82,11 @@ const ImageCommingSoon = styled.img`
   right: 3%;
 `;
 
+const ImageIcon = styled.img`
+width: 60px;
+height: 60px;
+`;
+
 const Graph1 = () => {
   return (
     <svg
@@ -233,7 +238,7 @@ export const CardsSection: React.FC = () => {
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <div className="col-lg-8 mt-5">
                     <PopularStrategy
-                      icon={<img src={farmerCard1} alt="ImageNotFound" />}
+                      icon={<ImageIcon src={farmerCard1} alt="ImageNotFound" />}
                       investers={568}
                       graph={<Graph1 />}
                       contentTitle="STRATEGY BSC only here pay min gas"
@@ -251,7 +256,7 @@ export const CardsSection: React.FC = () => {
                 <div className="col-lg-11">
                   <div className="mt-4">
                     <PopularStrategy
-                      icon={<img src={image2} alt="ImageNotFound" />}
+                      icon={<ImageIcon src={image2} alt="ImageNotFound" />}
                       contentTitle="STRATEGY The no stress only yield way"
                       title="Don - Popeye"
                       investers={5874}
@@ -263,9 +268,9 @@ export const CardsSection: React.FC = () => {
                       
                     />
                   </div>
-                  <div className="mt-4">
+                  <div style={{marginTop: 69}}>
                     <PopularStrategy
-                      icon={<img src={image3} alt="ImageNotFound" />}
+                      icon={<ImageIcon src={image3} alt="ImageNotFound" />}
                       contentTitle="STRATEGY all or nothing here  "
                       title="Don – Unblinding"
                       graph={<Graph3 />}
