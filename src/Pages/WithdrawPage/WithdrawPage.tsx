@@ -181,10 +181,7 @@ export const WithdrawPage = () => {
     setTransferring("Beefy Done");
   };
 
-  const logBalance = async () => {
-    // const balance =;
-    // console.log(toEther(balance));
-  };
+
 
   useEffect(() => {
     logBalance();

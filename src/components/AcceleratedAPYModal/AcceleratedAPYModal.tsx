@@ -1,6 +1,6 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { getBSCDon, toEther, toWei } from "helpers";
+import { captureException, getBSCDon, toEther, toWei } from "helpers";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useWeb3 } from "don-components";
@@ -8,7 +8,6 @@ import BigNumber from "bignumber.js";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
 import { CircularProgress, Slider, withStyles } from "@material-ui/core";
-import { theme } from "theme";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import clsx from "clsx";
 import BgImage from "images/success-bg.png";
@@ -17,10 +16,12 @@ import { breakPoints } from "breakponts";
 
 const Heading = styled.h2`
   font-weight: bold;
-  font-size: ${(props: { fontSize: string, mobileFontSize: string }) => props.mobileFontSize};
+  font-size: ${(props: { fontSize: string; mobileFontSize: string }) =>
+    props.mobileFontSize};
   color: #070602;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: ${(props: { fontSize: string, mobileFontSize: string }) => props.fontSize};
+    font-size: ${(props: { fontSize: string; mobileFontSize: string }) =>
+      props.fontSize};
   }
 `;
 
@@ -38,7 +39,7 @@ const TierRoot = styled.div`
   padding: 5px;
   & .tierButton {
     width: 52px;
-    height: 37px; 
+    height: 37px;
     font-family: Poppins;
     font-size: 12px;
     font-weight: 600;
@@ -49,12 +50,12 @@ const TierRoot = styled.div`
     cursor: pointer;
     margin-right: 5px;
     :last-child {
-        margin-right: 0px;
+      margin-right: 0px;
     }
   }
   & .tierSelected {
     width: 92px;
-    height: 37px; 
+    height: 37px;
     background: #fceb74;
     border: 1px solid #fed700;
     box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
@@ -168,7 +169,9 @@ export const AcceleratedAPYModal = ({
       if (apyObj) {
         setPredictedApy(apyObj.apy.toFixed());
       }
-    } catch (e) {}
+    } catch (e) {
+      captureException(e, "Update Predicted Apy");
+    }
   };
 
   const stakeDon = async () => {
@@ -180,7 +183,7 @@ export const AcceleratedAPYModal = ({
         );
         setHasCompleted(true);
       } catch (e) {
-        console.log(e);
+        captureException(e, "StakeDon");
       } finally {
         setBtnLoading(false);
       }
@@ -199,6 +202,7 @@ export const AcceleratedAPYModal = ({
       try {
         await refetch();
       } catch (e) {
+        captureException(e, "UseEffect Accelerated APY Modal");
       } finally {
         setHasChecked(true);
       }
@@ -257,7 +261,9 @@ export const AcceleratedAPYModal = ({
 
           <div className="d-flex justify-content-between align-items-center mt-4">
             <SubHeading>Your current Tier:</SubHeading>
-            <Heading fontSize="27px"  mobileFontSize="23px">Tier {tier.tier}</Heading>
+            <Heading fontSize="27px" mobileFontSize="23px">
+              Tier {tier.tier}
+            </Heading>
           </div>
 
           <div className="mt-2">
@@ -293,7 +299,11 @@ export const AcceleratedAPYModal = ({
 
             <DonInfoRoot>
               {!hasDons && (
-                <Heading className="text-center mb-5" fontSize="20px"  mobileFontSize="15px">
+                <Heading
+                  className="text-center mb-5"
+                  fontSize="20px"
+                  mobileFontSize="15px"
+                >
                   You don’t have DON available in your wallet
                 </Heading>
               )}
@@ -301,7 +311,11 @@ export const AcceleratedAPYModal = ({
                 <>
                   <SubHeading>Available DON</SubHeading>
                   <DonAvaliableInput>
-                    <Heading className="m-0 text-right" fontSize="25px"  mobileFontSize="20px">
+                    <Heading
+                      className="m-0 text-right"
+                      fontSize="25px"
+                      mobileFontSize="20px"
+                    >
                       {new BigNumber(availableDon).toFixed(2)}
                     </Heading>
                   </DonAvaliableInput>
@@ -311,12 +325,16 @@ export const AcceleratedAPYModal = ({
 
             <div className="d-flex justify-content-between align-items-center mt-3">
               <SubHeading>Required DON Stake:</SubHeading>
-              <Heading fontSize="27px"  mobileFontSize="20px">{requiredDons}</Heading>
+              <Heading fontSize="27px" mobileFontSize="20px">
+                {requiredDons}
+              </Heading>
             </div>
 
             <div className="d-flex align-items-center justify-content-between ">
               <SubHeading>Extra APY will be</SubHeading>
-              <Heading fontSize="20px"  mobileFontSize="18px">+{predictedApy}%</Heading>
+              <Heading fontSize="20px" mobileFontSize="18px">
+                +{predictedApy}%
+              </Heading>
             </div>
 
             <div className="d-flex align-items-center justify-content-center mt-3">
@@ -358,8 +376,8 @@ export const AcceleratedAPYModal = ({
             <HrLine className="mt-4 mb-5" />
 
             <SubHeading className="m-0">
-              Staked DON tokens will be locked for {coolOffDuration} after unstaking.
-              DON rewards are claimable on the go.{" "}
+              Staked DON tokens will be locked for {coolOffDuration} after
+              unstaking. DON rewards are claimable on the go.{" "}
               <a
                 href="https://don-key-finance.medium.com/introducing-don-key-accelerated-rewards-b27f629cb33b"
                 target="_blank"

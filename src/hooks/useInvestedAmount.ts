@@ -1,5 +1,5 @@
 import { useWeb3 } from "don-components";
-import {  getInvestedAmount } from "helpers";
+import {  captureException, getInvestedAmount } from "helpers";
 import { useEffect, useState } from "react";
 
 
@@ -16,6 +16,7 @@ export const useInvestedAmount = (poolAddress:string) => {
       const num = await getInvestedAmount(web3, poolAddress);
       setinvestedAmmount(num.toFixed(2));
     }catch(e){
+      captureException(e, "useInvestedAmount");
       setinvestedAmmount("0")
     }finally {
       setIsReady(true);

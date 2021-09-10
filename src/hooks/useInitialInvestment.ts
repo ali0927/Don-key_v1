@@ -3,6 +3,7 @@ import { useWeb3 } from "don-components";
 import {
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
+  captureException,
 } from "helpers";
 import { useEffect, useState } from "react";
 
@@ -28,7 +29,7 @@ export const useInitialInvestment = (
         setinitialInvestment(results[0]);
         setinitialInvestmentinUSD(results[1]);
       } catch (err) {
-        // console.log(err);
+        captureException(err, "useInitialInvestment")
       } finally {
         setIsReady(true);
       }

@@ -8,7 +8,7 @@ import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
-import { calculateTVL, getStakingContract, toEther } from "helpers";
+import { calculateTVL, captureException, getStakingContract, toEther } from "helpers";
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
@@ -209,6 +209,7 @@ export const LotteryForm = () => {
       await staking.methods.exit().send({ from: accounts[0] });
       showSuccess("Transaction Successfull");
     } catch (e) {
+      captureException(e, "handleUnstake");
       showFailure("Transaction Failed");
     } finally {
       refresh();
@@ -232,6 +233,7 @@ export const LotteryForm = () => {
       await staking.methods.getReward().send({ from: accounts[0] });
       showSuccess("Rewards Harvested");
     } catch (e) {
+      captureException(e, "LotteryForm:handleHarvest");
       showFailure("Transaction Failed");
     } finally {
       refresh();

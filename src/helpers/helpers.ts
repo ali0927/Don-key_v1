@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { getPoolToken, toEther } from "helpers";
+import { captureException, getPoolToken, toEther } from "helpers";
 import Web3 from "web3";
 import {
   calculateInitialInvestment,
@@ -36,8 +36,7 @@ export const getROI = async (web3: any, poolAddress: string) => {
   const initialInvestment = new BigNumber(
     await calculateInitialInvestment(web3, poolAddress, accounts[0])
   );
-  console.log(initialInvestment.toFixed(0));
-  console.log(investedAmountWithReward.toFixed(0));
+
   if (initialInvestment.isEqualTo(0)) {
     return "0";
   }
@@ -69,6 +68,7 @@ export const getPoolValue = async (web3: Web3, poolAddress: string) => {
     const bn = new BigNumber(toEther(amount, decimals)).toFixed(2);
     return bn.toString();
   } catch (e) {
+    captureException(e, "getPoolValue: "+ poolAddress);
     return "0";
   }
 };

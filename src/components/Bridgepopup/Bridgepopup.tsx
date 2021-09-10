@@ -11,6 +11,7 @@ import {
   toEther,
   getUserDons,
   toWei,
+  captureException,
 } from "helpers";
 import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
@@ -90,44 +91,6 @@ const ButtonWrapper = styled.div({
   width: "40%",
 });
 
-const MyBalanceInDON = ({ onDone }: { onDone?: (val: string) => void }) => {
-  const [state, setState] = useState({ balance: "", isReady: false });
-  const web3 = useWeb3();
-
-  const fetchBalance = async () => {
-    try {
-      const accounts = await web3.eth.getAccounts();
-      //@ts-ignore
-      let acceptedToken;
-      let balance;
-      if ((await web3.eth.getChainId()) == 1) {
-        acceptedToken = await getETHDon(web3);
-      }
-      if ((await web3.eth.getChainId()) == 56) {
-        acceptedToken = await getBSCDon(web3);
-      }
-      if (acceptedToken) {
-        balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
-      } else {
-        balance = 0;
-      }
-      setState({
-        balance: new BigNumber(toEther(balance)).toFixed(2),
-        isReady: true,
-      });
-      onDone && onDone(toEther(balance));
-    } catch (err) {}
-  };
-  useLayoutEffect(() => {
-    fetchBalance();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (!state.isReady) {
-    return <>-</>;
-  }
-  return <>{state.balance} </>;
-};
 
 const InputBox = styled.div`
   border: 1px solid #ececec;
@@ -443,7 +406,7 @@ export const BridgePopup = ({
         setStep("transfersuccess");
       }
     } catch (err) {
-      console.log(err);
+      captureException(err, "Bridge Transfer Failed");
       showFailure("Transaction failed.");
       setStep("initial");
     } finally {

@@ -2,13 +2,13 @@ import { apiRequest } from "actions/apiActions";
 import { doLogin } from "actions/authActions";
 import { setFarmerDetail } from "actions/farmerActions";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
-import { IStoreState } from "interfaces";
+import { IStoreState, IUser } from "interfaces";
 import { LoadingPage } from "Pages/LoadingPage";
 import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RouteProps } from "react-router-dom";
-
+import * as Sentry from "@sentry/react";
 export const withAuth = (element?: RouteProps["children"]) => {
   if (!element) {
     return element;
@@ -28,6 +28,9 @@ export const withAuth = (element?: RouteProps["children"]) => {
           endpoint: "/api/v2/farmer/me",
           onDone: (res) => {
             dispatch(doLogin(res.data.user));
+            Sentry.setUser({
+              walletAddress: (res.data.user as IUser).walletAddress,
+            });
             dispatch(setFarmerDetail(res.data.data));
           },
           onFail: async (res) => {

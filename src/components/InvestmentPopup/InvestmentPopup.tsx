@@ -6,6 +6,7 @@ import { useAxios } from "hooks/useAxios";
 import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
+  captureException,
   getBUSDTokenContract,
   getPoolContract,
   getPoolToken,
@@ -73,7 +74,9 @@ const MyBalanceInBUSD = ({
         isReady: true,
       });
       onDone && onDone(balanceBN.toString());
-    } catch (err) {}
+    } catch (err) {
+      captureException(err, "fetchBalance");
+    }
   };
   useLayoutEffect(() => {
     fetchBalance();
@@ -116,8 +119,8 @@ export const InvestmentPopup = ({
     { manual: true }
   );
   const web3 = useWeb3();
-  const {loading, data} = useQuery(FARMER_WITHDRAW_FRAME, {
-    variables: {poolAddress}
+  const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
+    variables: { poolAddress },
   });
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
@@ -156,6 +159,8 @@ export const InvestmentPopup = ({
         setReferralCode(code.toUpperCase());
         setApplied(true);
       }
+    } catch (e) {
+      captureException(e, "Apply Code");
     } finally {
       setChecking(false);
     }
@@ -169,7 +174,6 @@ export const InvestmentPopup = ({
       }
     }
   }, []);
-
 
   const timeframe = !loading ? data.farmers[0]?.withdrawTimeFrame || "12" : "-";
 
@@ -256,12 +260,17 @@ export const InvestmentPopup = ({
         });
       }
 
-      await executePost({ data: { poolAddress } });
+      try {
+        await executePost({ data: { poolAddress } });
+      } catch (e) {
+        captureException(e, "Failed to post poolAddress");
+      }
 
       onSuccess && onSuccess();
 
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
+      captureException(err, "handleInvest");
       showFailure("Transaction failed.");
     } finally {
       refetch();
@@ -285,6 +294,7 @@ export const InvestmentPopup = ({
       try {
         await refetch();
       } catch (e) {
+        captureException(e, "InvestmentPopup useEffecOnTabFocus");
       } finally {
         setHasChecked(true);
       }
@@ -359,9 +369,9 @@ export const InvestmentPopup = ({
             <p className="d-flex mt-4">
               <small> *</small>
               <small>
-                Withdraws are executed up to {timeframe} hours upon request in order to
-                minimize swap fees, price impact and slippage within the
-                different pools.
+                Withdraws are executed up to {timeframe} hours upon request in
+                order to minimize swap fees, price impact and slippage within
+                the different pools.
               </small>
             </p>
           </>

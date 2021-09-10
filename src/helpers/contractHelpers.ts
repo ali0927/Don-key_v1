@@ -5,6 +5,7 @@ import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import { api, waitFor } from "don-utils";
+import { captureException } from "helpers";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
@@ -52,6 +53,7 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
       .call();
     return tokenAddress;
   } catch (e) {
+    captureException(e, "getTokenAddress:"+ poolAddress)
     return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
   }
 };
@@ -71,7 +73,7 @@ export const getUserDons = async (web3: Web3, chainIds: number[]) => {
       });
       return { balance: resp.data.balance };
     } catch (e: any) {
-      console.log(e.message);
+      captureException(e, "getUserDons");
       return { balance: "0", error: e.message };
     }
   });
@@ -450,6 +452,7 @@ export const getAmount = async (
     const decimals = await token.methods.decimals().call();
     return toEther(claimableAmount, decimals);
   } catch (e) {
+    captureException(e, `getAmount: Pool: ${poolAddress}`)
     return "0";
   }
 };
@@ -476,6 +479,7 @@ export const calculateUserClaimableAmount = async (
 
     return toEther(claimableAmount);
   } catch (e) {
+    captureException(e, "calculateUserClaimableAmount");
     return "0";
   }
 };
@@ -510,11 +514,13 @@ export const calculateInitialInvestmentInUSD = async (
     const amount = new BigNumber(toEther(initialAmount, decimals)).toString();
     return amount;
   } catch (e) {
+    captureException(e,"calculateUserClaimableAmount")
     const initialInvestment = await calculateInitialInvestment(
       web3,
       poolAddress,
       address
     );
+   
     const tokenPrice = await getTokenPrice(web3, poolAddress);
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }

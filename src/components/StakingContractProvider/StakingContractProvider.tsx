@@ -5,7 +5,7 @@ import {
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { useWeb3 } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
-import { getBSCDon, toEther } from "helpers";
+import { captureException, getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
 import { api } from "don-utils";
 import { useWeb3Network } from "components/Web3NetworkDetector";
@@ -110,7 +110,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       const coolOff = resp.data.coolOff;
       totalDons = totalDons.plus(bep).plus(erc).plus(staked).plus(coolOff);
     } catch (e) {
-      console.error(e);
+      captureException(e,"fetchDons From Api");
     }
     setHoldedDons(totalDons);
   };
@@ -123,7 +123,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         .pendingReward(accounts[0])
         .call();
     } catch (e) {
-      console.log("Pending Reward Error", e);
+      captureException(e, "fetchPendingRewards");
       pendingRewards = "0";
     }
     setPendingReward(toEther(pendingRewards));
@@ -144,6 +144,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         const duration = moment.duration(minDuration * 1000);
         setCoolOffDuration(duration.humanize());
       } catch (e) {
+        captureException(e, "getMinDuration");
         setCoolOffDuration("2 weeks");
       }
 

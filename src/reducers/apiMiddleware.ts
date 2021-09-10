@@ -3,6 +3,7 @@ import { ApiActions, onApiError, onApiSuccess } from "actions/apiActions";
 import { AuthActions, doLogin, doLogout } from "actions/authActions";
 import { IStoreState } from "interfaces";
 import { api } from "don-utils";
+import { captureException } from "helpers";
 
 export const apiMiddleware: Middleware<any, IStoreState> = (store) => (
   next
@@ -35,7 +36,8 @@ export const apiMiddleware: Middleware<any, IStoreState> = (store) => (
             })
           );
           req.onDone && req.onDone(res);
-        } catch (e) {
+        } catch (e:any) {
+          captureException(e, "apiMiddleware");
           if (e.response) {
             if (e.response.status === 401) {
               dispatch(doLogout());

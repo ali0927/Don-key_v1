@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
-import { getPoolContract, getPoolToken, toWei } from "helpers";
+import { captureException, getPoolContract, getPoolToken, toWei } from "helpers";
 import { useWeb3 } from "don-components";
 import Web3 from "web3";
 
@@ -37,7 +37,7 @@ export const UpdatePoolDialog: React.FC<{
         .updateTotalPoolValue(toWei(new_pool, decimals))
         .send({ from: accounts[0] });
     } catch(e){
-      console.log(e);
+      captureException(e, "Update Pool Dialog");
     } finally {
       setLoading(false);
       onClose();

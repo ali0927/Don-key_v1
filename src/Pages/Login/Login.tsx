@@ -10,6 +10,7 @@ import { doLogin } from "../../actions/authActions/authActions";
 import { AuthToken } from "don-utils";
 import { Logo } from "components/Navbar/Logo";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
+import { captureException } from "helpers";
 
 const Login = () => {
   const history = useHistory();
@@ -28,6 +29,7 @@ const Login = () => {
       try {
         user = JSON.parse(user);
       } catch (e) {
+        captureException(e, "Login");
         user = null;
       }
     }

@@ -5,6 +5,7 @@ import { useReferralContext } from "contexts/ReferralContext";
 import {
   calculateInitialInvestment,
   calculateUserClaimableAmount,
+  captureException,
   fixUrl,
   getDonPriceWeb3,
   getReferralSystemContract,
@@ -251,6 +252,7 @@ const useTransformedData = () => {
         }
         return null;
       } catch (e) {
+        captureException(e, "My Referrals");
         return null;
       }
     });

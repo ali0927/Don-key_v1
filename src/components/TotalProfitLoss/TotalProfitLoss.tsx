@@ -6,6 +6,7 @@ import {
   getTokenPrice,
   getTokenAddress,
   getAmount,
+  captureException,
 } from "helpers";
 import BigNumber from "bignumber.js";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
@@ -58,7 +59,7 @@ export const TotalProfitLoss = ({
           );
         }
       } catch (err) {
-        console.log(err);
+         captureException(err,"Total Profit Loss");
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import {
+  captureException,
   getTokenAddress,
   getTokenPrice
 } from "helpers";
@@ -29,7 +30,7 @@ export const DollarView = ({
         setPrice(await getTokenPrice(web3,poolAddress));
         setIsReady(true);
       }catch(e){
-        console.log("Token Price error" , e);
+        captureException(e, "Dollar View");
       } finally {
       }
     })();

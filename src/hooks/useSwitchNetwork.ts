@@ -1,4 +1,5 @@
 import { AvaxId, BSCChainId, PolygonChainId } from "components/Web3NetworkDetector";
+import { captureException } from "helpers";
 
 interface AddEthereumChainParameter {
   chainId: string; // A 0x-prefixed hexadecimal string
@@ -68,7 +69,7 @@ export const useSwitchNetwork = () => {
             });
           } catch (addError) {
             // handle "add" error
-            console.log("Couldnt Switch Chain");
+           captureException(addError, "Failed to Add Network")
           }
         }
         // handle other "switch" errors

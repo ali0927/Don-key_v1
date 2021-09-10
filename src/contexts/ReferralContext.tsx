@@ -26,7 +26,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     const userInfo = await referralContract.methods
       .userInfo(accounts[0])
       .call();
-      console.log(userInfo);
+
     if (userInfo.exists) {
       setState({
         hasSignedUp: true,

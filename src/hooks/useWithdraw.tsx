@@ -2,7 +2,7 @@ import { gql, useMutation } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { useWeb3 } from "don-components";
-import { calculateUserClaimableAmount, getPoolContract } from "helpers";
+import { calculateUserClaimableAmount, captureException, getPoolContract } from "helpers";
 import { useAxios } from "./useAxios";
 import { useStakingContract } from "./useStakingContract";
 
@@ -95,7 +95,7 @@ export const useWithdraw = () => {
 
       onSuccess && onSuccess();
     } catch (err) {
-      console.log(err);
+      captureException(err,"Withdraw Failed");
       showFailure("Withdraw Failed");
       onError && onError(err);
     } finally {

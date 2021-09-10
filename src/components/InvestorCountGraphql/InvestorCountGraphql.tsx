@@ -1,5 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
-import { getPoolContract } from "helpers";
+import { captureException, getPoolContract } from "helpers";
 import { useEffect, useRef, useState } from "react";
 import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
@@ -71,6 +71,7 @@ export const InvestorCountContract = ({
         const count = await pool.methods.getInvestorCount().call();
         return count;
       } catch (e) {
+        captureException(e, "InvestorCountContract");
         return "-";
       }
     });

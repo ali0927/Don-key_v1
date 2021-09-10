@@ -2,7 +2,7 @@
 import { useInvestedAmount } from "hooks/useInvestedAmount";
 import { useWeb3 } from "don-components";
 import { useEffect, useState } from "react";
-import { calculateWithdrawAmount } from "helpers";
+import { calculateWithdrawAmount, captureException } from "helpers";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { useInitialInvestment } from "hooks/useInitialInvestment";
 
@@ -17,7 +17,7 @@ export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
         const amount = await calculateWithdrawAmount(web3, poolAddress);
         setWithdrawalValue(amount);
       } catch (err) {
-        console.log(err);
+         captureException(err, "MyInvestment");
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

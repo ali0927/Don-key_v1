@@ -16,6 +16,7 @@ export const PoolReserveAmount = ({ poolAddress }: { poolAddress: string }) => {
       const bn = new BigNumber(toEther(amount)).toFixed(2);
       setPoolAmount(bn);
     }catch(e){
+      
       setPoolAmount("0")
     }finally{
       setIsReady(true)

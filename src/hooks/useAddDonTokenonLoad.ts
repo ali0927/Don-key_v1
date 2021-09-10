@@ -1,4 +1,5 @@
 import { useWeb3Network } from "components/Web3NetworkDetector";
+import { captureException } from "helpers";
 import { useEffect } from "react";
 
 export const useAddDonTokenonLoad = () => {
@@ -33,7 +34,9 @@ export const useAddDonTokenonLoad = () => {
                 throw new Error("Something went wrong.");
               }
             })
-            .catch(console.error);
+            .catch((err: any) => {
+              captureException(err, "useAddToken on Load")
+            });
         } else if (network === 1 && !tokenAdded) {
           // Ethereum Mainnet
           const tokenAddress = "0x217ddead61a42369a266f1fb754eb5d3ebadc88a";
@@ -57,7 +60,9 @@ export const useAddDonTokenonLoad = () => {
                 throw new Error("Something went wrong.");
               }
             })
-            .catch(console.error);
+            .catch((err: any) => {
+              captureException(err, "Eth Token Add Failed");
+            });
         }
       }, [network]);
 }

@@ -1,5 +1,5 @@
 import { useWeb3 } from "don-components";
-import { getPoolContract } from "helpers";
+import { captureException, getPoolContract } from "helpers";
 import { useEffect, useState } from "react";
 
 export const useIsInvested = (poolAddress: string) => {
@@ -15,6 +15,7 @@ export const useIsInvested = (poolAddress: string) => {
       const isInvested = await contract.methods.isInvestor(accounts[0]).call();
       setisInvested(isInvested);
     } catch (e) {
+      captureException(e, "useIsInvested");
       setisInvested(false);
     } finally {
       setIsReady(true);

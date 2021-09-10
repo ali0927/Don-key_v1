@@ -1,7 +1,7 @@
 import { useWeb3Network } from "components/Web3NetworkDetector";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useWeb3 } from "don-components";
-import { getTokenSymbol } from "helpers";
+import { captureException, getTokenSymbol } from "helpers";
 import { useState } from "react";
 import { useIsomorphicEffect } from "./useIsomorphicEffect";
 
@@ -24,7 +24,7 @@ export const usePoolSymbol = (poolAddress: string) => {
 
         setSymbol(symbol);
       } catch (e) {
-        console.log(e, "Symbol Error");
+        captureException(e, "usePoolSymbol");
         symbol = "BUSD";
         // symbolCache.set(poolAddress, symbol);
         setSymbol(symbol);

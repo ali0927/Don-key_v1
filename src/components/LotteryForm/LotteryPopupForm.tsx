@@ -5,7 +5,7 @@ import { useWeb3 } from "don-components";
 import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
 import { useState } from "react";
 import { Label, InputSmall, Caption } from "./LotteryForm";
-import { getLPTokenContract, getStakingContract, toWei } from "helpers";
+import { captureException, getLPTokenContract, getStakingContract, toWei } from "helpers";
 import { Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
@@ -79,6 +79,7 @@ export const LotteryPopupForm = ({
       refresh();
       onSuccess();
     } catch (e) {
+      captureException(e, "handleStake")
       showFailure("Transaction Failed");
     } finally {
       setLoading(false);

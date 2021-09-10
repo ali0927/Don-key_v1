@@ -33,6 +33,7 @@ import {
   getTokenAddress,
   getDonPrice,
   fixUrl,
+  captureException,
 } from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
@@ -290,6 +291,7 @@ export const InvestmentsPage = () => {
                       return false;
                     }
                   } catch (e) {
+                    captureException(e, "Withdraw Requested");
                     return false;
                   }
                 })(),
@@ -310,7 +312,7 @@ export const InvestmentsPage = () => {
               }
             }
           } catch (e) {
-            console.error(e, "Call Investment Error");
+           captureException(e, "CalInvestments");
           }
         }
         setPoolAddresses(arr);

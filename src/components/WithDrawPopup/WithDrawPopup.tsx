@@ -9,6 +9,7 @@ import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
 import styled from "styled-components";
+import { captureException } from "helpers";
 
 
 
@@ -27,6 +28,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         try {
           await refetch();
         } catch (e) {
+          captureException(e, "WithdrawPopup:useEffectOnTabFocus ");
         } finally {
           setHasChecked(true);
         }

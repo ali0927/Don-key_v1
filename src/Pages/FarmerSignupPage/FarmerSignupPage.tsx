@@ -13,6 +13,7 @@ import { validate } from "./helpers";
 import { ButtonWidget, ContainedButton } from "components/Button";
 import { useSnackbar } from "notistack";
 import { ErrorSnackbar } from "components/Snackbars";
+import { captureException } from "helpers";
 
 const Root = styled.div`
   z-index: 1;
@@ -168,8 +169,9 @@ export const FarmerSignupPage = () => {
       setSpinnerMsg("Submitting Form");
       await executePost({ data: formData });
       setIsSubmitted(true)
-    } catch (error) {
+    } catch (error: any) {
       let message = "Please try again.";
+      captureException(error,"Farmer Signup Page");
       if (
         error.response &&
         error.response.status === 400 &&

@@ -1,4 +1,5 @@
 import { api, getWeb3 } from "don-utils";
+import { IUser } from "interfaces";
 
 
 
@@ -24,7 +25,7 @@ export const getAuthToken = async (publicAddress: string, signature: string) => 
   const user = resps.data.user;
   return {
     token,
-    user,
+    user: user as IUser,
   };
 };
 

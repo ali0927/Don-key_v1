@@ -11,6 +11,7 @@ import {
 import {
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
+  captureException,
   getAmount,
   getPoolContract,
   getTokenAddress,
@@ -130,6 +131,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
           );
           setInvestments(investmentList);
         } catch (e) {
+          captureException(e, "InvestorListTable");
         } finally {
           setLoading(false);
         }
