@@ -8,6 +8,4 @@ import { transactionReducer } from "./transactionReducer";
 export const rootReducer = combineReducers<IStoreState>({
   auth: authReducer,
   farmer: farmerReducer,
-  api: apiReducer,
-  transactions: transactionReducer
 });

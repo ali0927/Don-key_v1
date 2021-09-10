@@ -111,24 +111,7 @@ export type IStrategy = {
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 
-export type API_STATE = {
-  requests: {
-    [endpoint: string]: {
-      method: string;
-      endpoint: string;
-      response?: any;
-      error?: any;
-      status: "PENDING" | "SUCCESS" | "ERROR";
-    };
-  };
-};
 
-type ITransactions = {
-  [id: string]: {
-    status: "PENDING" | "SUCCESS" | "ERROR";
-    message: string;
-  };
-};
 
 export interface IStoreState {
   auth: {
@@ -136,27 +119,12 @@ export interface IStoreState {
     isLoggedIn: boolean;
     hasStaked: null | true | false;
   };
-  api: API_STATE;
   farmer: IFarmerInter | null;
-  transactions: ITransactions;
 }
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;
 
-export type ICurrency = {
-  tokenIcon: string;
-  tokenSymbol: string;
-  apy_apyOneMonthSample: number;
-  balance?: number;
-};
 
-export type ICurrencyWithAddress = { address: string } & ICurrency;
-
-export type BuruRequest = {
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  endpoint: string;
-  data?: any;
-};
 
 export type IStrapiImage = {
   id: number;

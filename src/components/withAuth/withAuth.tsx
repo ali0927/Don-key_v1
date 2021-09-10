@@ -1,4 +1,4 @@
-import { apiRequest } from "actions/apiActions";
+
 import { doLogin } from "actions/authActions";
 import { setFarmerDetail } from "actions/farmerActions";
 import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
@@ -22,34 +22,7 @@ export const withAuth = (element?: RouteProps["children"]) => {
     const { doMetaMaskLogin } = useMetaMaskLogin();
 
     useEffect(() => {
-      dispatch(
-        apiRequest({
-          method: "GET",
-          endpoint: "/api/v2/farmer/me",
-          onDone: (res) => {
-            dispatch(doLogin(res.data.user));
-            Sentry.setUser({
-              walletAddress: (res.data.user as IUser).walletAddress,
-            });
-            dispatch(setFarmerDetail(res.data.data));
-          },
-          onFail: async (res) => {
-            if (res.status === 401) {
-              await doMetaMaskLogin();
-              dispatch(
-                apiRequest({
-                  method: "GET",
-                  endpoint: "/api/v2/farmer/me",
-                  onDone: (res) => {
-                    dispatch(setFarmerDetail(res.data.data));
-                  },
-                })
-              );
-            } else {
-            }
-          },
-        })
-      );
+   
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
