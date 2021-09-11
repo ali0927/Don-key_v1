@@ -37,6 +37,7 @@ const FARMER_QUERY = gql`
         created_at
         id
         entranceFees
+        info
         exitFees
         swapInFees
         swapOutFees
