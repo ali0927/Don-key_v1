@@ -1,0 +1,288 @@
+{
+
+	"abi": [
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "_name",
+					"type": "string"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address[]",
+					"name": "_protocolAddress",
+					"type": "address[]"
+				},
+				{
+					"internalType": "bytes[]",
+					"name": "_abis",
+					"type": "bytes[]"
+				},
+				{
+					"internalType": "enum Strategy.cubesType",
+					"name": "_cType",
+					"type": "uint8"
+				}
+			],
+			"name": "addCubes",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getCronAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Strategy.cubesType",
+					"name": "_cType",
+					"type": "uint8"
+				}
+			],
+			"name": "getCubeDetails",
+			"outputs": [
+				{
+					"components": [
+						{
+							"internalType": "address",
+							"name": "protocolAddress",
+							"type": "address"
+						},
+						{
+							"internalType": "bytes",
+							"name": "abis",
+							"type": "bytes"
+						}
+					],
+					"internalType": "struct Strategy.cubesDetails[]",
+					"name": "",
+					"type": "tuple[]"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Strategy.cubesType",
+					"name": "_cType",
+					"type": "uint8"
+				}
+			],
+			"name": "getCubeLength",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getLocked",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getName",
+			"outputs": [
+				{
+					"internalType": "string",
+					"name": "",
+					"type": "string"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "getPoolAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Strategy.cubesType",
+					"name": "_cType",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_cubeNumber",
+					"type": "uint256"
+				}
+			],
+			"name": "getSingleCubeDetail",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "pAddr",
+					"type": "address"
+				},
+				{
+					"internalType": "bytes",
+					"name": "abis",
+					"type": "bytes"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address payable",
+					"name": "_tokenAddress",
+					"type": "address"
+				}
+			],
+			"name": "getTokenAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "lockStrategy",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address[]",
+					"name": "_protocolAddress",
+					"type": "address[]"
+				},
+				{
+					"internalType": "bytes[]",
+					"name": "_abis",
+					"type": "bytes[]"
+				},
+				{
+					"internalType": "enum Strategy.cubesType",
+					"name": "_cType",
+					"type": "uint8"
+				}
+			],
+			"name": "overrideCubes",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "runFullStrategy",
+			"outputs": [],
+			"stateMutability": "payable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint8",
+					"name": "_cType",
+					"type": "uint8"
+				}
+			],
+			"name": "runStrategy",
+			"outputs": [],
+			"stateMutability": "payable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_cronAddress",
+					"type": "address"
+				}
+			],
+			"name": "setCronAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_newPool",
+					"type": "address"
+				}
+			],
+			"name": "setPoolAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address payable",
+					"name": "_tokenAddress",
+					"type": "address"
+				}
+			],
+			"name": "transferPool",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"stateMutability": "payable",
+			"type": "receive"
+		}
+	]
+}

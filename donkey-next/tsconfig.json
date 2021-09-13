@@ -11,6 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
+    "baseUrl": "./src",
     "noUnusedParameters": true,
     "removeComments": false,
     "preserveConstEnums": true,

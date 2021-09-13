@@ -16,8 +16,6 @@ import {
   NetworkConfigs,
   POLYGON_CHAIN_ID,
 } from "../Constants";
-import Web3Modal from "web3modal";
-import { convertUtf8ToHex } from "@walletconnect/utils";
 
 interface IAppState {
   address: string;
@@ -123,16 +121,17 @@ export const Web3Provider: React.FC<{
   const updateState = useCallback((newState: Partial<IAppState>) => {
     setState((old) => ({ ...old, ...newState }));
   }, []);
+  const web3ModalRef = useRef<any | null>(null);
 
-  const web3Modal = useMemo(() => {
-    return new Web3Modal({
-      network: "mainnet",
-      cacheProvider: true,
-    });
-  }, []);
+
+  useEffect(() => {
+    import("web3modal").then(item => {
+      web3ModalRef.current = item.default;
+    })
+  }, [])
 
   const connectDapp = useCallback(async (chainId: number) => {
-    const provider = await web3Modal.connect();
+    const provider = await web3ModalRef.current.connect();
 
     await subscribeProvider(provider);
 
@@ -167,7 +166,7 @@ export const Web3Provider: React.FC<{
       //@ts-ignore
       await web3.currentProvider.close();
     }
-    await web3Modal.clearCachedProvider();
+    await web3ModalRef.current.clearCachedProvider();
     web3Ref.current = null;
     updateState(INITIAL_STATE);
   }, []);

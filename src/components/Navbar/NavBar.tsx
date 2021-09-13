@@ -1,23 +1,16 @@
 /**eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Container } from "react-bootstrap";
-// import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
 import { Navbar, Nav } from "react-bootstrap";
-import "./NavbarStyle.scss";
 import { useHistory } from "react-router-dom";
 import clsx from "clsx";
 import { Logo } from "./Logo";
-import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
 import { shortenAddress } from "don-utils";
-import { IStoreState } from "interfaces";
-import comingsoon from "images/comingsoon.svg";
 import styled from "styled-components";
 import { theme } from "theme";
-import moment from "moment";
-import { LotteryClosingTime } from "Pages/LotteryPage";
 import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
