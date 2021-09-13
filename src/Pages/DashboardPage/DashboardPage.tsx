@@ -5,11 +5,7 @@ import { LeaderBoardTable } from "./LeaderBoardTable";
 import styled from "styled-components";
 import { LoadingPage } from "Pages/LoadingPage";
 import { theme } from "theme";
-import {
-  LargeEllipse,
-  MeadiumEllipse,
-  SmallEllipse,
-} from "icons";
+import { LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import { ButtonWidget } from "components/Button";
@@ -19,6 +15,10 @@ import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { gql, useQuery } from "@apollo/client";
 import { sortBy } from "lodash";
+
+const Root = styled.div`
+    background-color: ${theme.palette.background.yellow};
+`;
 
 const FarmerTitle = styled.p({
   fontSize: "45px",
@@ -49,12 +49,6 @@ export const CustomizedContainer = styled.div`
   @media (min-width: 1200px) {
     max-width: 1244px;
   }
-`;
-
-const Heading = styled.h3`
-  text-align: center;
-  font-size: 50px;
-  font-weight: 800;
 `;
 
 const RootWrapper = styled.div`
@@ -159,33 +153,35 @@ export const DashboardPage = () => {
   }
   return (
     <>
-      <NavBar variant={"loggedin"} />
-      <RootWrapper className="pt-5 borderCollapse position-relative">
-        <CustomizedContainer>
-          <Row>
-            <Ellipse1>
-              <LargeEllipse />
-            </Ellipse1>
-            <Ellipse2>
-              <LargeEllipse />
-            </Ellipse2>
-            <Ellipse3>
-              <MeadiumEllipse />
-            </Ellipse3>
-            <Ellipse4>
-              <SmallEllipse />
-            </Ellipse4>
-            <Col>
-              <FarmerTitle>Explore Farmers</FarmerTitle>
-              <div className="row justify-content-between px-2">
-                <div className="col-sm-8">
-                  {/* <h5>Follow Farmers and Increase your yield</h5> */}
+      <Root>
+        <NavBar variant={"loggedin"} />
+        <RootWrapper className="pt-5 borderCollapse position-relative">
+          <CustomizedContainer>
+            <Row>
+              <Ellipse1>
+                <LargeEllipse />
+              </Ellipse1>
+              <Ellipse2>
+                <LargeEllipse />
+              </Ellipse2>
+              <Ellipse3>
+                <MeadiumEllipse />
+              </Ellipse3>
+              <Ellipse4>
+                <SmallEllipse />
+              </Ellipse4>
+              <Col>
+                <FarmerTitle>Explore Farmers</FarmerTitle>
+                <div className="row justify-content-between px-2">
+                  <div className="col-sm-8">
+                    {/* <h5>Follow Farmers and Increase your yield</h5> */}
+                  </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
-        </CustomizedContainer>
-      </RootWrapper>
+              </Col>
+            </Row>
+          </CustomizedContainer>
+        </RootWrapper>
+      </Root>
       {/* Table */}
       <Body className="leaderbord-top pb-5">
         {tokens.length === 0 ? (
