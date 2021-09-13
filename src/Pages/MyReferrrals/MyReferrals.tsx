@@ -21,10 +21,8 @@ import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { theme } from "theme";
-import { useWeb3 } from "don-components";
 import Web3 from "web3";
 import { IFarmerInter } from "interfaces";
-import { useWeb3Network } from "components/Web3NetworkDetector";
 import { GridBackground } from "components/GridBackground";
 import {
   TableBody,
@@ -46,6 +44,7 @@ import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { gql, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
 import { StyledButton } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
+import { getWeb3, useWeb3Context } from "don-components";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -196,13 +195,13 @@ const ALL_FARMER_QUERY = gql`
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
   const [{ data }] = useAxios("/api/v2/referrer");
-  const web3 = useWeb3();
+  const web3 = getWeb3(56);
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
     []
   );
   const { data: farmersData } = useQuery(ALL_FARMER_QUERY);
 
-  const { chainId: network } = useWeb3Network();
+  const { chainId: network } = useWeb3Context();
   const farmers: IFarmerInter[] = useMemo(() => {
     if (farmersData) {
       return farmersData.farmers
@@ -287,7 +286,7 @@ const ReferralCol = styled.div`
 export const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
-  const web3 = useWeb3();
+  const web3 = getWeb3(56);
 
   const { isReady, transformedData, transformData } = useTransformedData();
 

@@ -1,18 +1,12 @@
 import { NavBar } from "components/Navbar/NavBar";
 import { useCallback, useState } from "react";
 import { Footer } from "components/Footer/Footer";
-import { withWeb3 } from "hoc";
-import { useSelector } from "react-redux";
-import { Redirect, useParams } from "react-router-dom";
-import { IStoreState } from "interfaces";
-import { FarmerStrategies } from "./FarmerStrategies";
-import { FarmerBio } from "./FarmerBio";
+import { useParams } from "react-router-dom";
 import { FarmerBioFromApi } from "./FarmerBioFromApi";
-import { GridBackground } from "components/GridBackground";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
 
-export const FarmerBioPage = withWeb3(() => {
+export const FarmerBioPage = () => {
   const { id: farmerId } = useParams<{ id: string }>();
   const [isInUsd, setIsInUsd] = useState(false);
 
@@ -39,4 +33,4 @@ export const FarmerBioPage = withWeb3(() => {
       </RefreshProvider>
     </USDViewProvider>
   );
-});
+};

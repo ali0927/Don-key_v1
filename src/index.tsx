@@ -21,11 +21,13 @@ Sentry.init({
 // }
 
 ReactDOM.render(
-  <>
-    <Providers>
-      <App />
-    </Providers>
-  </>,
+  <React.StrictMode>
+    <Sentry.ErrorBoundary fallback={<div />}>
+      <Providers>
+        <App />
+      </Providers>
+    </Sentry.ErrorBoundary>
+  </React.StrictMode>,
   document.getElementById("root")
 );
 

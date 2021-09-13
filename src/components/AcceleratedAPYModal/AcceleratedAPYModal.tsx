@@ -3,7 +3,6 @@ import { DonCommonmodal } from "components/DonModal";
 import { captureException, getBSCDon, toEther, toWei } from "helpers";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
-import { useWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
@@ -13,6 +12,7 @@ import clsx from "clsx";
 import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
+import { useWeb3Context } from "don-components";
 
 const Heading = styled.h2`
   font-weight: bold;
@@ -113,7 +113,7 @@ export const AcceleratedAPYModal = ({
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
 
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();

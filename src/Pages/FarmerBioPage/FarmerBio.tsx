@@ -10,9 +10,7 @@ import { IFarmerInter, IStrategy } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
-import { Share, ShareLink } from "components/ShareAndEarn";
-import { api } from "don-utils";
-import { useWeb3 } from "don-components";
+
 import { fixUrl, getShareUrl } from "helpers";
 import { useStakingContract } from "hooks";
 
@@ -161,14 +159,8 @@ export const FarmerBio = ({
       ? new BigNumber(strategies![0].apy).toFixed(0) + "%"
       : "100%";
 
-  const { tier } = useStakingContract();
-
   const boostApy =
-    tier.tier > 5
-      ? false
-      : strategies && strategies.length > 0
-      ? strategies[0].token.boostApy
-      : false;
+    strategies && strategies.length > 0 ? strategies[0].token.boostApy : false;
 
    const strategyName =   strategies && strategies.length > 0
                             ? strategies[0].name

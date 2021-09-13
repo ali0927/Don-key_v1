@@ -18,10 +18,9 @@ import {
   signUpAsReferral,
   toEther,
 } from "helpers";
-import { useWeb3 } from "don-components";
-import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import BigNumber from "bignumber.js";
 import { useReferralContext } from "contexts/ReferralContext";
+import { useWeb3Context } from "don-components";
 
 const ReadMore = styled.a`
   font-size: 16px;
@@ -58,7 +57,7 @@ export const Share: React.FC<IShareProps> = (props) => {
 
   const [tvl, setTvl] = useState("");
 
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
   const fetchTvl = async () => {
     const poolValue = await getTotalPoolValue(web3, pool_address);
     const tokenPrice = await getTokenPrice(

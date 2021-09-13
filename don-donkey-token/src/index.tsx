@@ -1,1 +1,0 @@
-export { donkeyConfig } from "./donkeyconfig";

@@ -1,11 +1,10 @@
 import { useCallback, useState } from "react";
-import { withWeb3 } from "hoc";
+
 import { USDViewProvider } from "contexts/USDViewContext";
 import { RefreshProvider } from "components/LotteryForm/useRefresh";
 import { InvestmentsPage } from "Pages/InvestmentsPage/InvestmentsPage";
 
-
-export const InvestmentsPageParent = withWeb3(() => {
+export const InvestmentsPageParent = () => {
   const [isInUsd, setIsInUsd] = useState(false);
 
   const toggleCurrency = useCallback(() => {
@@ -26,4 +25,4 @@ export const InvestmentsPageParent = withWeb3(() => {
       </RefreshProvider>
     </USDViewProvider>
   );
-});
+};

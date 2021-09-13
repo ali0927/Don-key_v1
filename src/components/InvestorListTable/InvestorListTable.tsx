@@ -20,7 +20,7 @@ import {
 import { useAxios } from "hooks/useAxios";
 import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { useWeb3 } from "don-components";
+import { getWeb3,  useWeb3Context } from "don-components";
 import { formatNum } from "Pages/FarmerBioPage/DetailTable";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
@@ -32,13 +32,16 @@ const ShowAmount = ({
   amount,
   amountInUSD,
   poolAddress,
+  chainId
 }: {
   poolAddress: string;
   amount: string;
   amountInUSD: string;
+  chainId: number;
 }) => {
   const { isUSD } = useUSDViewBool();
-  const { symbol, loading } = usePoolSymbol(poolAddress);
+  const web3 = getWeb3(chainId);
+  const { symbol, loading } = usePoolSymbol(poolAddress, web3);
   if (loading) {
     return <>-</>;
   }
@@ -74,11 +77,11 @@ type InvestorList = {
 
 
 
-export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
+export const InvestorListTable = ({ poolAddress, chainId }: { poolAddress: string; chainId: number }) => {
   const [loading, setLoading] = useState(true);
   const [investments, setInvestments] = useState<InvestorList>([]);
   const [{ data }] = useAxios(`/api/v2/investments/${poolAddress}`);
-  const web3 = useWeb3();
+  const web3 = getWeb3(chainId);
   const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
@@ -193,6 +196,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   <ShowAmount
+                    chainId={chainId}
                     amount={item.initialInvestment}
                     amountInUSD={item.initialInvestmentInUSD}
                     poolAddress={poolAddress}
@@ -201,6 +205,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
 
                 <TableData style={{ textAlign: "center" }}>
                   <ShowAmount
+                    chainId={chainId}
                     amount={item.claimableAmount}
                     amountInUSD={item.claimableAmountInUSD}
                     poolAddress={poolAddress}
@@ -208,6 +213,7 @@ export const InvestorListTable = ({ poolAddress }: { poolAddress: string }) => {
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   <ShowAmount
+                    chainId={chainId}
                     amount={item.profitLoss}
                     amountInUSD={item.profitLossInUSD}
                     poolAddress={poolAddress}

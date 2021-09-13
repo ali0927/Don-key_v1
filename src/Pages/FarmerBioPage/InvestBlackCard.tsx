@@ -12,7 +12,6 @@ import {
   getPoolToken,
   toEther,
 } from "helpers";
-import { useWeb3 } from "don-components";
 import { ButtonWidget } from "components/Button";
 import { useROIAndInitialInvestment } from "hooks/useROIAndInitialInvestment";
 import BigNumber from "bignumber.js";
@@ -38,6 +37,7 @@ import { CardDollar, InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "../TokenPage/BoostButton";
 import styled from "styled-components";
+import { getWeb3 } from "don-components";
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -56,7 +56,7 @@ export const InvestBlackCard = ({
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
   const [currentHoldings, setCurrentHoldings] = useState("0");
-  const web3 = useWeb3();
+  const web3 = getWeb3(network.chainId);
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
 
   const { isUSD } = useUSDViewBool();
@@ -149,6 +149,7 @@ export const InvestBlackCard = ({
           overlay={
             <Tooltip id="button-tooltip" className="mytooltip">
               <TotalProfitLoss
+                chainId={network.chainId}
                 refresh={dependsOn % 2 == 0}
                 poolAddress={poolAddress}
                 fromOverlay={true}
@@ -208,7 +209,7 @@ export const InvestBlackCard = ({
             Tokens in Pool{" "}
           </CardLabel>
           <CardValue color="white">
-            <DollarView poolAddress={poolAddress} tokenAmount={tokenInPool} />
+            <DollarView chainId={network.chainId} poolAddress={poolAddress} tokenAmount={tokenInPool} />
           </CardValue>
           <CardLabel color="white" className="mt-5">
             {" "}
@@ -295,6 +296,7 @@ export const InvestBlackCard = ({
             </CardLabel>
             <CardValue color="white" style={{marginBottom: 30}}>
               <DollarView
+                chainId={network.chainId}
                 poolAddress={poolAddress}
                 tokenAmount={currentHoldings}
               />
@@ -344,6 +346,7 @@ export const InvestBlackCard = ({
             `$${formatNum(initialInvestmentInUSD)}`
           ) : (
             <DollarView
+            chainId={network.chainId}
               poolAddress={poolAddress}
               tokenAmount={initialInvestment}
             />
@@ -357,6 +360,7 @@ export const InvestBlackCard = ({
         {getSecondCardColumns(
           "Profit/Loss",
           <TotalProfitLoss
+            chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
           />,

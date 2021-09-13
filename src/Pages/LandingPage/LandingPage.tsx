@@ -25,15 +25,6 @@ const LandingPage = () => {
       
       <MainSection/>
       
-
-      {/* <LotteryPage />
-      */}
-
-      {/* Banner */}
-      {/* <BannerSection /> */}
-
-      
-
       {/* Cards */}
       <CardsSection />
 

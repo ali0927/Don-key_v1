@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { gql, useQuery } from "@apollo/client";
 import BigNumber from "bignumber.js";
-import { useWeb3Network } from "components/Web3NetworkDetector";
-import { useWeb3 } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 import { getPoolValueInUSD } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import { useEffect, useState } from "react";
@@ -36,16 +35,15 @@ const ALL_FARMER_QUERY = gql`
   }
 `;
 
-export const useDominance = (farmerPoolAddress: string) => {
-  const { chainId } = useWeb3Network();
-
+export const useDominance = (farmerPoolAddress: string, chainId: number) => {
+  const web3 = getWeb3(chainId);
   const { data } = useQuery(ALL_FARMER_QUERY, {
     variables: {
       chainId,
     },
   });
   const [dominance, setDominance] = useState("-");
-  const web3 = useWeb3();
+ 
 
   useEffect(() => {
     if (data) {

@@ -1,28 +1,20 @@
 /**eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { Container } from "react-bootstrap";
-// import { Button } from "react-bootstrap";
 import ButtonComponent from "../Button/Button";
 import { Navbar, Nav } from "react-bootstrap";
-import "./NavbarStyle.scss";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { Logo } from "./Logo";
-import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { shortenAddress } from "don-utils";
-import { IStoreState } from "interfaces";
-import comingsoon from "images/comingsoon.svg";
 import styled from "styled-components";
 import { theme } from "theme";
-import moment from "moment";
-import { LotteryClosingTime } from "Pages/LotteryPage";
 import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
+import { useWeb3Context } from "don-components";
 
 declare global {
   interface Window {
@@ -37,9 +29,9 @@ const ImageCommingSoon = styled.img`
 `;
 
 const useWalletAddress = ({ short = false }) => {
-  const user = useSelector((state: any) => state.auth.user);
-  const walletAddress = user
-    ? user.walletAddress
+  const { address } = useWeb3Context();
+  const walletAddress = address
+    ? address
     : "0x1341133ba79815e04e008f7635212bf086e821301";
   return short ? shortenAddress(walletAddress) : walletAddress;
 };
@@ -84,14 +76,14 @@ const StyledNavBar = styled(Navbar)`
 `;
 
 const ConnectWalletButton = () => {
-  const { doMetaMaskLogin } = useMetaMaskLogin();
+  const { connectDapp } = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleConnection = async () => {
     setIsDisabled(true);
     try {
-      await doMetaMaskLogin();
+      await connectDapp(56);
     } finally {
       setIsDisabled(false);
     }
@@ -125,8 +117,8 @@ const MyReferralNavLink = ({ variant }: { variant: string }) => {
 
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
-  const isAuth = useSelector((state: IStoreState) => state.auth);
-  const { isLoggedIn } = isAuth;
+  const { connected, disconnectDapp } = useWeb3Context();
+  const isLoggedIn = connected;
   const address = useWalletAddress({ short: true });
   const history = useHistory();
 
@@ -136,12 +128,10 @@ function NavBar(props: INavBarProps) {
     setIsOpen(true);
   }, []);
   const handleClose = useCallback(() => {
-    setIsOpen(false)
+    setIsOpen(false);
   }, []);
 
-
   const getLogo = React.useCallback(() => {
-   
     return <Logo />;
   }, [variant]);
 
@@ -205,13 +195,17 @@ function NavBar(props: INavBarProps) {
                       My Investments
                     </NavbarLink>
                     <NavbarLink to="#">
-                     <div onClick={(e: any) => {
-                       e.preventDefault();
-                        handleOpen();
-                      }}>  Bridge</div>
+                      <div
+                        onClick={(e: any) => {
+                          e.preventDefault();
+                          handleOpen();
+                        }}
+                      >
+                        {" "}
+                        Bridge
+                      </div>
                     </NavbarLink>
                     {/* <MyReferralNavLink variant={variant} /> */}
-                
                   </>
                 )}
               </Nav>
@@ -234,7 +228,7 @@ function NavBar(props: INavBarProps) {
             {variant === "loggedin" && (
               <>
                 {isLoggedIn && !hideWallet ? (
-                  <ButtonWidget varaint="outlined" height="50px" width="157px" >
+                  <ButtonWidget varaint="outlined" height="50px" width="157px">
                     <img
                       src="/assets/images/usericon.png"
                       className="d-inline-block align-top mr-md-2"
@@ -250,7 +244,10 @@ function NavBar(props: INavBarProps) {
 
             {variant === "builder" && (
               <>
-                <ButtonComponent variant="btn-outline btnusername btnusername--white">
+                <ButtonComponent
+                  onClick={disconnectDapp}
+                  variant="btn-outline btnusername btnusername--white"
+                >
                   <img
                     src="/assets/images/usericon.png"
                     className="d-inline-block align-top mr-md-2"

@@ -9,7 +9,7 @@ import { LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import { ButtonWidget } from "components/Button";
-
+import React from "react";
 import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
@@ -203,13 +203,13 @@ export const DashboardPage = () => {
             <div className="row">
               {tokens.map((item) => {
                 return (
-                  <>
+                  <React.Fragment key={item.id}>
                     {item.status !== "commingsoon" && (
                       <div className="col-lg-4">
-                        <TokenInfo key={item.id} token={item} />
+                        <TokenInfo  token={item} />
                       </div>
                     )}
-                  </>
+                  </React.Fragment>
                 );
               })}
             </div>

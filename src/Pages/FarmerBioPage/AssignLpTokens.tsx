@@ -7,9 +7,7 @@ import {
   captureException,
   getPoolContract, getPoolToken, toWei,
 } from "helpers";
-import { useWeb3 } from "don-components";
-import Web3 from "web3";
-
+import { useWeb3Context } from "don-components";
 
 
 const CancelButton = styled(ButtonWidget)`
@@ -33,7 +31,7 @@ export const AssignLpTokens: React.FC<{
   const [pool_value, setPoolvalue] = useState("");
 
   const [new_pool, setnewPoolvalue] = useState("");
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
   const handleUpdate = async () => {
     setLoading(true);
     try {

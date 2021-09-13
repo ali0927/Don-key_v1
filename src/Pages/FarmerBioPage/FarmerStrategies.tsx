@@ -60,20 +60,26 @@ export const FarmerStrategies = ({
                 </p>
               </TableHeaderRoot>
               <StrategyTableForInvestor
+                 chainId={farmer.network.chainId}
                 farmerfee={farmer.farmerfee}
                 performancefee={farmer.performancefee}
                 poolAddress={farmer.poolAddress}
                 strategies={farmer.strategies}
               />
-              <StrategyTableRoot className="d-flex justify-content-center">
-                <img
-                  src={farmer.strategies[0].strategyImage.url}
-                  className="img-fluid"
-                  style={{ maxWidth: 800, minWidth: 400 }}
-                  alt="strategy image"
-                />
+              <StrategyTableRoot className="d-flex flex-column justify-content-center">
+                <div>
+                  <img
+                    src={farmer.strategies[0].strategyImage.url}
+                    className="img-fluid"
+                    style={{ maxWidth: 800, minWidth: 400 }}
+                    alt="strategy image"
+                  />
+                </div>
+                {farmer.strategies[0].info && (
+                  <p style={{ fontSize: 15 }}>{farmer.strategies[0].info}</p>
+                )}
               </StrategyTableRoot>
-              <InvestorListTable poolAddress={farmer.poolAddress} />
+              <InvestorListTable chainId={farmer.network.chainId} poolAddress={farmer.poolAddress} />
             </Col>
           </Row>
         </Container>

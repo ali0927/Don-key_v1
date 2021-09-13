@@ -9,10 +9,11 @@ import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
 import { useTVL } from "hooks";
 import { getShareUrl, getUserReferralCode } from "helpers";
-import { useWeb3 } from "don-components";
+
 import html2canvas from "html2canvas";
 import { api, uuidv4, waitFor } from "don-utils";
 import { Spinner } from "react-bootstrap";
+import { useWeb3Context } from "don-components";
 const TextOnInput = styled.div`
   position: relative;
 `;
@@ -73,7 +74,7 @@ const TelegramButton = styled(ButtonWidget)`
 export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
-  const { tvl } = useTVL(props.poolAddress);
+  const { tvl } = useTVL(props.poolAddress, props.chainId);
   const [copyLink, setCopyLink] = React.useState(props.link || "");
   const [code, setCode] = useState(props.code || "");
   React.useEffect(() => {
@@ -91,7 +92,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
 
   const [loading, setLoading] = useState(false);
 

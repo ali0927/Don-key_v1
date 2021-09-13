@@ -1,13 +1,11 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "Pages/LandingPage";
-import { ProtectedRoute } from "components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
 import TeamPage from "Pages/TeamPage";
 import { LotteryParticipatePage } from "Pages/LotteryPage/LotteryParticipatePage";
 import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations";
 import FarmerSignupPage from "Pages/FarmerSignupPage";
-import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
 
 
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
@@ -33,8 +31,7 @@ export default function Routes() {
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
         />
-        <ProtectedRoute exact path="/withdraw" children={<WithdrawPage />} />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard"
           children={
@@ -43,7 +40,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/farmer/me"
           children={
@@ -52,7 +49,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/farmer/:id"
           children={
@@ -62,7 +59,7 @@ export default function Routes() {
           }
         />
 
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/investment"
           children={
@@ -71,7 +68,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/referrals"
           children={
@@ -80,7 +77,7 @@ export default function Routes() {
             </Suspense>
           }
         />
-        <ProtectedRoute
+        <Route
           exact
           path="/dashboard/:network/:token"
           children={
