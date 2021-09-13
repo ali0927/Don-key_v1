@@ -28,7 +28,7 @@ const images = [
 ];
 
 const InvestorSection = styled.section`
-  background: #F3F3F3;
+  background: #f3f3f3;
   padding: 6rem 0;
   min-height: 559px;
   display: flex;
@@ -36,14 +36,14 @@ const InvestorSection = styled.section`
 `;
 
 const ImageWrapper = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-img {
-  height: 60px;
-  object-fit: contain;
-}
-`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  img {
+    height: 60px;
+    object-fit: contain;
+  }
+`;
 
 export const RoundedCompletedSection: React.FC = () => {
   return (
@@ -52,7 +52,9 @@ export const RoundedCompletedSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3 ">
-              <StyledP className="mb-5 mb-sm-0 text-center text-sm-left">Strategic Investment Round Completed</StyledP>
+              <StyledP className="mb-5 mb-sm-0 text-center text-sm-left">
+                Strategic Investment Round Completed
+              </StyledP>
             </div>
             <div className="col-md-9">
               <div className="row">
@@ -62,8 +64,13 @@ export const RoundedCompletedSection: React.FC = () => {
                       {item.map((src, key) => {
                         return (
                           <ImageWrapper key={key} className="py-3">
-                            
-                            <Image placeholder="blur" className="img-fluid" alt="ImageNotFound" key={key} src={src} />
+                            <Image
+                              loading="eager"
+                              className="img-fluid"
+                              alt="ImageNotFound"
+                              key={key}
+                              src={src}
+                            />
                           </ImageWrapper>
                         );
                       })}

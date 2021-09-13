@@ -207,6 +207,7 @@ export default function TokenPage({ data }: { data: any }) {
             {sortedStrategies.map((item) => {
               return (
                 <FarmerBioShort
+                  key={item.strategy.id}
                   isShown={isOpen}
                   onShowLess={() => setIsOpen(false)}
                   onShowMore={() => setIsOpen(true)}
@@ -325,7 +326,8 @@ export async function getStaticProps(context: any) {
       network: network,
     },
   });
+
   return {
-    props: resp.data.data,
+    props: resp.data,
   };
 }
