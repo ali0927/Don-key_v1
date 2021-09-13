@@ -9,6 +9,7 @@ import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, withStyles } from "@material-ui/core";
 import { yellow } from "@material-ui/core/colors";
 import { useNotification } from "components/Notification";
+import moment from "moment"
 import styled from "styled-components";
 import {
   Table,
