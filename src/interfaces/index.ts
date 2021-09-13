@@ -76,6 +76,7 @@ export interface IFarmerInter {
   guid: string;
   farmerfee: number;
   performancefee: number;
+  last_cycle: string;
   active: boolean;
   twitter: string;
   telegram: string;

@@ -61,6 +61,7 @@ import {
 } from "@material-ui/core";
 import { CatchLuckSection } from "Pages/LotteryPage/components/CatchLuckSection";
 import { uniqBy } from "lodash";
+import moment from "moment";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -199,6 +200,7 @@ const ALL_FARMER_QUERY = gql`
         chainId
         symbol
       }
+      last_cycle
     }
   }
 `;
@@ -504,6 +506,7 @@ export const InvestmentsPage = () => {
                 <CustomTableHeading>FARMER NAME</CustomTableHeading>
                 <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                 <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                <CustomTableHeading>LAST CYCLE</CustomTableHeading>
                 {NetworksMap.BSC === network && tier.tier > 0 && (
                   <CustomTableHeading>DON REWARDS</CustomTableHeading>
                 )}
@@ -550,6 +553,9 @@ export const InvestmentsPage = () => {
                         refresh={refresh}
                         poolAddress={investment.poolAddress}
                       />
+                    </CustomTableData>
+                    <CustomTableData >
+                     {moment.duration(moment().diff(moment(investment.last_cycle))).humanize()} ago
                     </CustomTableData>
                     {NetworksMap.BSC === network && tier.tier > 0 && (
                       <CustomTableData>
