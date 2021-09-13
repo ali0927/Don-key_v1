@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import LogoWhite from "./image/logo.svg";
 import styled from "styled-components";
-
+import Image from "next/image";
 
 const CustomFooter = styled.footer`
   background: #070602;
@@ -14,7 +14,7 @@ export const Footer = () => {
       <Container>
         <Row>
           <Col sm="2">
-            <img src={LogoWhite} alt="Logo not found"/>
+            <Image src={LogoWhite} alt="Logo not found"/>
           </Col>
           <Col sm="8" style={{ textAlign: "center" }}>
             <div>

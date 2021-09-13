@@ -10,7 +10,8 @@ import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { useHistory } from "react-router";
 import { HeroImage } from "../HeroImage";
-
+import Img from "next/image";
+import { useRouter } from "next/router";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -18,23 +19,17 @@ const Root = styled.div`
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
   }
-
 `;
 
-const Rounded = styled.img`
-   position: absolute;
-   height: 100%;
-   width: 100%;
-   bottom: -7%;
-
+const Rounded = styled(Img)`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  bottom: -7%;
 `;
-
-
-
-
 
 const Heading = styled.h1`
-  font-family: 'ObjectSans-Bold';
+  font-family: "ObjectSans-Bold";
   font-size: 50px;
   font-weight: 800;
   text-align: left;
@@ -119,8 +114,8 @@ const TOKEN_DATA = gql`
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
-  const history = useHistory();
- 
+  const history = useRouter();
+
   const [{ data: coingecko }] = useAxios({
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
@@ -142,9 +137,7 @@ export const MainSection: React.FC = () => {
       ).toString()
     : 0;
 
-  const derivedETH = coingecko
-  ? coingecko.market_data.current_price.eth
-  : 0;
+  const derivedETH = coingecko ? coingecko.market_data.current_price.eth : 0;
   const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
   const finalDerivedEth = (
     parseFloat(derivedETH) * parseFloat(ethPriceInUSD)
@@ -159,11 +152,10 @@ export const MainSection: React.FC = () => {
     history.push("/lottery/participate");
   };
 
-
   return (
     <>
       <Root className="position-relative">
-       <Rounded  src={MainImage} alt="Main image not found"/>
+        {/* <Rounded  src={MainImage} alt="bg" /> */}
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5">
@@ -184,7 +176,7 @@ export const MainSection: React.FC = () => {
             </div>
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
-                <HeroImage />
+              <HeroImage />
             </div>
           </div>
 

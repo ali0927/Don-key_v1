@@ -6,10 +6,10 @@ import farmerCard1 from "../gabriel.svg";
 import image2 from "../popeye.svg";
 import image3 from "../image.svg";
 import { Heading3, LandingParagraph } from "../components";
-import { useHistory } from "react-router";
 import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
-
+import { useRouter } from "next/router";
+import Img from "next/image"
 const CardBanner = styled.div`
   position: relative;
   z-index: 9;
@@ -80,7 +80,7 @@ const ImageCommingSoon = styled.img`
   right: 3%;
 `;
 
-const ImageIcon = styled.img`
+const ImageIcon = styled(Img)`
 width: 60px;
 height: 60px;
 `;
@@ -203,7 +203,7 @@ const Graph3 = () => {
 };
 
 export const CardsSection: React.FC = () => {
-  const history = useHistory();
+  const history = useRouter();
 
 
   return (

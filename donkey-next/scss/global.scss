@@ -1,3 +1,15 @@
+
+@font-face {
+  font-family: "ObjectSans-Bold";
+  src: local("ObjectSans-Bold"),
+    url(/fonts/ObjectSans-Bold.otf) format("truetype");
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  // background: $primary-color;
+}
 .inherit-color {
   color: inherit !important;
 }

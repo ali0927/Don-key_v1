@@ -1,15 +1,9 @@
 import React from "react";
 import { Navbar } from "react-bootstrap";
 import Img from "next/image";
-import styled from "styled-components"
-import LogoDon from "images/logo-don.png"
+import styled from "styled-components";
 import { Navigate } from "components/Navigate";
-
-const Pargraph = styled.p`
-   font-family: ObjectSans-Bold;
-   font-weight: bolder;
-   margin: 0;
-`;
+import donkeylogo from "./donkeylogo-black.svg";
 
 const Image = styled(Img)`
   position: relative;
@@ -20,22 +14,14 @@ const Image = styled(Img)`
 `;
 
 export const Logo = () => {
-  const key= " - key";
+
   return (
     <Navbar.Brand onClick={(e: any) => e.preventDefault()}>
       <Navigate
         className="d-flex align-items-center inherit-color no-underline"
         to="/"
       >
-    
-           <Pargraph >
-               <span  style={{letterSpacing: 2}}>D
-                  <Image src={LogoDon} alt="Logo not found"/>n
-               </span>
-               <span></span>
-              <span>{key}</span>
-           </Pargraph>
-     
+        <Image src={donkeylogo} alt="Don key Logo" />
       </Navigate>
     </Navbar.Brand>
   );

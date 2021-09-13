@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 import { IFarmer } from "interfaces";
-
+import Image from "next/image"
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -357,11 +357,13 @@ export const PopularStrategy = ({
                 <ButtonWidget varaint="outlined" height="40px" disabled>
                   Invest
                 </ButtonWidget>
-                <img
-                  className="coming-soon"
+                <div  className="position-absolute">
+                <Image
+                 
                   src={comingsoon}
                   alt="ImageNotFound"
                 />
+                </div>
               </div>
             ) : (
               <ButtonWidget

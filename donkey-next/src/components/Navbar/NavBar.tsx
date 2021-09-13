@@ -92,9 +92,7 @@ function NavBar(props: INavBarProps) {
     setIsOpen(false);
   }, []);
 
-  const getLogo = React.useCallback(() => {
-    return <Logo />;
-  }, [variant]);
+
 
   return (
     <>
@@ -107,7 +105,7 @@ function NavBar(props: INavBarProps) {
           })}
         >
           <Container>
-            {getLogo()}
+            <Logo />
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto mr-auto">
