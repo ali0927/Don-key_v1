@@ -34,6 +34,7 @@ const useWalletAddress = ({ short = false }) => {
 
 const StyledNavBar = styled(Navbar)`
   background-color: ${theme.palette.background.yellow};
+  z-index: 10;
 `;
 
 const ConnectWalletButton = () => {

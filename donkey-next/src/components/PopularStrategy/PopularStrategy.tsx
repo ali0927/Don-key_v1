@@ -125,8 +125,7 @@ export const PopularStrategy = ({
   showAllContent,
   farmerId,
   onShowMoreClick,
-  onChangeChain,
-  network,
+
   version,
   showOnRight,
   onShowLessClick,

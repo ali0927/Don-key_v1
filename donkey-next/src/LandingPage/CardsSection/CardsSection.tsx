@@ -74,11 +74,6 @@ const CardBannerAdvantage = styled.div`
   }
 `;
 
-const ImageCommingSoon = styled.img`
-  position: absolute;
-  top: -25px;
-  right: 3%;
-`;
 
 const ImageIcon = styled(Img)`
 width: 60px;
