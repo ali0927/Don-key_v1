@@ -198,7 +198,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             farmerName={props.farmerName}
             strategyName={props.strategyName}
             onChange={() => {
-              handleImageGenerate("yes");
+              handleImageGenerate();
             }}
             onFirstRender={handleFirstRender}
           />

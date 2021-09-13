@@ -112,12 +112,12 @@ export const FarmerBio = ({
     farmerImage: { url: picture },
   } = farmer;
 
-  // const [openSharePopup, setSharePopup] = useState(false);
-  // const [openShareLink, setShareLink] = useState(false);
-  // const [imageUrl, setImageUrl] = useState<string | null>(null);
-  // const [shortLink, setShortLink] = useState<string | null>(null);
+  const [openSharePopup, setSharePopup] = useState(false);
+  const [openShareLink, setShareLink] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [shortLink, setShortLink] = useState<string | null>(null);
 
-  // const [code, setCode] = useState("");
+  const [code, setCode] = useState("");
 
   // const fetchInfoFromApi = async () => {
   //   const accounts = await web3.eth.getAccounts();
@@ -144,13 +144,18 @@ export const FarmerBio = ({
   //   fetchInfoFromApi();
   // }, []);
 
-  // const handleShareClick = () => {
-  //   if (shortLink && imageUrl) {
-  //     setShareLink(true);
-  //   } else {
-  //     setSharePopup(true);
-  //   }
-  // };
+  const handleShareClick = () => {
+    if (shortLink && imageUrl) {
+      setShareLink(true);
+    } else {
+      setSharePopup(true);
+    }
+  };
+
+  const handleCreateLink = () => {
+    setShareLink(true);
+  }
+
   const apy =
     strategies && strategies.length > 0
       ? new BigNumber(strategies![0].apy).toFixed(0) + "%"
@@ -164,6 +169,10 @@ export const FarmerBio = ({
       : strategies && strategies.length > 0
       ? strategies[0].token.boostApy
       : false;
+
+   const strategyName =   strategies && strategies.length > 0
+                            ? strategies[0].name
+                            : "Description"
 
   return (
     <>
@@ -225,12 +234,12 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {/* {(pool_version === 3 && network.symbol === 'BSC')  ? (
+              {(pool_version === 3 && network.symbol === 'BSC')  ? (
                 <ShareButton onClick={handleShareClick}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
                 </ShareButton>
-              ) : null} */}
+              ) : null}
             </Col>
           </Row>
 
@@ -247,7 +256,7 @@ export const FarmerBio = ({
         </Container>
       </Section>
 
-      {/* {openSharePopup && (
+      {openSharePopup && (
         <Share
           open={openSharePopup}
           pool_address={poolAddress}
@@ -268,7 +277,7 @@ export const FarmerBio = ({
           code={code}
           onClose={() => setShareLink(false)}
         />
-      )} */}
+      )}
     </>
   );
 };

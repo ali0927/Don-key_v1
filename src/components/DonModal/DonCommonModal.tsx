@@ -37,7 +37,7 @@ export const DonCommonmodal = ({
   titleRightContent,
   contentStyle,
   subtitle,
-  disableBackdropClick
+  disableBackdropClick,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -60,14 +60,18 @@ export const DonCommonmodal = ({
       return (
         <>
           <div className="d-flex align-items-center justify-content-between">
-            <CutomizeModalHeading className={clsx({"mb-1": !!subtitle})}>{title}</CutomizeModalHeading>
+            <CutomizeModalHeading className={clsx({ "mb-1": !!subtitle })}>
+              {title}
+            </CutomizeModalHeading>
             {titleRightContent && (
               <p>
                 <small>{titleRightContent}</small>
               </p>
             )}
           </div>
-          <p style={{fontSize: 14, color: "#A3A3A3"}}>{subtitle}</p>
+          {subtitle && (
+            <p style={{ fontSize: 14, color: "#A3A3A3" }}>{subtitle}</p>
+          )}
         </>
       );
     }
