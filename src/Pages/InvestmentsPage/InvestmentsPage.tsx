@@ -187,6 +187,7 @@ const ALL_FARMER_QUERY = gql`
         chainId
         symbol
       }
+      last_cycle
     }
   }
 `;
@@ -492,6 +493,7 @@ export const InvestmentsPage = () => {
                 <CustomTableHeading>FARMER NAME</CustomTableHeading>
                 <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                 <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                <CustomTableHeading>LAST CYCLE</CustomTableHeading>
                 {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                   <CustomTableHeading>DON REWARDS</CustomTableHeading>
                 )}
@@ -541,7 +543,10 @@ export const InvestmentsPage = () => {
                         poolAddress={investment.poolAddress}
                       />
                     </CustomTableData>
-                    {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
+                    <CustomTableData >
+                     {moment.duration(moment().diff(moment(investment.last_cycle))).humanize()} ago
+                    </CustomTableData>
+                     {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                       <CustomTableData>
                         {(() => {
                           const dons = new BigNumber(pendingReward)

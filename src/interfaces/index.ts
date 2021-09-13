@@ -76,6 +76,7 @@ export interface IFarmerInter {
   guid: string;
   farmerfee: number;
   performancefee: number;
+  last_cycle: string;
   active: boolean;
   twitter: string;
   telegram: string;
@@ -94,6 +95,7 @@ export type IStrategy = {
   }
   created_at: string;
   id: string;
+  info: string;
   entranceFees?: string | null;
   exitFees?: string | null;
   swapInFees?: string | null;
