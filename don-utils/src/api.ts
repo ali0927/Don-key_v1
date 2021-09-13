@@ -8,9 +8,11 @@ export const api = axios.create({
   transformRequest: [
     ...(axios.defaults.transformRequest as any),
     (data, headers) => {
-      const token = localStorage.getItem(AuthToken);
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
+      if(typeof window !== "undefined"){
+        const token = localStorage.getItem(AuthToken);
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
       }
       return data;
     },
