@@ -56,12 +56,12 @@ export const TeamJSON: ITeamBoardProps[] = [
     designation: "Advisor",
     // linkedLink: "https://www.linkedin.com/in/alon-herschberg-38876a13a/",
   },
-  {
-    image: daniel,
-    name: "Daniel Jaffe",
-    designation: "Co-founder & Developer",
-    //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
-  },
+  // {
+  //   image: daniel,
+  //   name: "Daniel Jaffe",
+  //   designation: "Co-founder & Developer",
+  //   //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
+  // },
 
   {
     image: charis,
