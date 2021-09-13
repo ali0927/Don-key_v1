@@ -1,9 +1,8 @@
 import { gql, useQuery } from "@apollo/client";
 import { captureException, getPoolContract } from "helpers";
 import { useEffect, useRef, useState } from "react";
-import { useWeb3 } from "don-components";
+import { getWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
-import { useWeb3Network } from "components/Web3NetworkDetector";
 
 const INVESTOR_COUNT_QUERY = gql`
   query investorCount($list: [String]) {
@@ -55,15 +54,17 @@ export const InvestorCountGraphql = ({
 export const InvestorCountContract = ({
   poolAddresses,
   refresh,
+  chainId,
 }: {
   poolAddresses: string[];
+  chainId: number;
   refresh?: boolean;
 }) => {
   const [investorCount, setInvestorCount] = useState("-");
   const [loading, setLoading] = useState(true);
-  const web3 = useWeb3();
+  const web3 = getWeb3(chainId);
 
-  const { chainId} = useWeb3Network();
+
   const fetchCount = async () => {
     const promises = poolAddresses.map(async (item) => {
       const pool = await getPoolContract(web3, item, 2);
@@ -88,7 +89,7 @@ export const InvestorCountContract = ({
 
   useEffect(() => {
     fetchCount();
-  }, [refresh, chainId]);
+  }, [refresh]);
 
   if (loading) {
     return <>-</>;

@@ -1,8 +1,8 @@
 import { getReferralSystemContract } from "helpers";
 import { createContext, useContext, useEffect, useState } from "react";
-import { useWeb3 } from "don-components";
-import { useWeb3Network } from "components/Web3NetworkDetector";
+
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
+import { useWeb3Context } from "don-components";
 
 const ReferralContext = createContext({
   hasSignedUp: false,
@@ -18,7 +18,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     referralCount: 0,
   });
 
-  const web3 = useWeb3();
+  const { web3, chainId } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
     const referralContract = await getReferralSystemContract(web3);
@@ -37,7 +37,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
       setState({ hasSignedUp: false, code: "", referralCount: 0 });
     }
   };
-  const { chainId } = useWeb3Network();
+
   useEffect(() => {
     if (chainId === NetworksMap.BSC) {
       checkhasSignedUp();

@@ -7,7 +7,6 @@ import TeamPage from "Pages/TeamPage";
 import { LotteryParticipatePage } from "Pages/LotteryPage/LotteryParticipatePage";
 import { LotteryCongratulations } from "Pages/LotteryPage/LotteryCongratulations";
 import FarmerSignupPage from "Pages/FarmerSignupPage";
-import { WithdrawPage } from "Pages/WithdrawPage/WithdrawPage";
 
 
 const DashboardPage = lazy(() => import("Pages/DashboardPage"));
@@ -33,7 +32,6 @@ export default function Routes() {
           path="/lottery/participate/congratulations"
           children={<LotteryCongratulations />}
         />
-        <Route exact path="/withdraw" children={<WithdrawPage />} />
         <Route
           exact
           path="/dashboard"

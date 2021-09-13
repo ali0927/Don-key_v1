@@ -17,7 +17,6 @@ import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 import { IFarmer } from "interfaces";
-import { useWeb3Network } from "components/Web3NetworkDetector";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -191,7 +190,7 @@ export const PopularStrategy = ({
       {title}
     </h5>
   );
-  const { chainId: currentNetwork } = useWeb3Network();
+
   const [riskImage, setRiskImage] = useState<string | null>(null);
   const [tokenImage, setTokenImage] = useState<string | null>(null);
   const [tokenSymbol, settokenSymbol] = useState<string | null>(null);
@@ -243,15 +242,12 @@ export const PopularStrategy = ({
   }, [risk]);
 
   const renderContent = () => {
-    const isActiveNetwork =
-      !currentNetwork || currentNetwork === network?.chainId;
-
     return (
       <div className="popularstrategy__content">
         <div className="popularstrategy__content__info">
           <div>
             <p className="mb-0">Total Value</p>
-            <h5>{isActiveNetwork ? totalValue : "-"}</h5>
+            <h5>{totalValue}</h5>
           </div>
 
           {riskImage && (
@@ -335,7 +331,7 @@ export const PopularStrategy = ({
             </div>
           )}
         </div>
-        {isActiveNetwork && tokenImage && (
+        {tokenImage && (
           <div className="mb-3 mt-2 d-flex align-items-center">
             Deposit in <TokenImage src={tokenImage} />{" "}
             {tokenSymbol && (
@@ -371,15 +367,9 @@ export const PopularStrategy = ({
               <ButtonWidget
                 varaint="outlined"
                 height="40px"
-                onClick={
-                  isActiveNetwork
-                    ? ButtonClick
-                    : () =>
-                        onChangeChain &&
-                        onChangeChain(network?.chainId as number)
-                }
+                onClick={ButtonClick}
               >
-                {isActiveNetwork ? "Invest" : "Switch Network"}
+                Invest
               </ButtonWidget>
             )}
           </div>

@@ -9,30 +9,20 @@ import {
   getTotalPoolValue,
   toEther,
 } from "helpers";
-import { useWeb3 } from "don-components";
+import { getWeb3,  useWeb3Context, NetworkConfigs } from "don-components";
 import {
   AwardIcon,
-  CardDollar,
   FollowersIcon,
   LinkIcon,
   StatisticIcon,
-  StatisticRoi,
 } from "icons";
 import { useDominance } from "./useDominance";
-import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import BigNumber from "bignumber.js";
-
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { DollarView } from "./DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import {
-  AvaxId,
-  BSCChainId,
-  PolygonChainId,
-  useWeb3Network,
-} from "components/Web3NetworkDetector";
 import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "./InvestBlackCard";
 import {
@@ -40,8 +30,6 @@ import {
   WithdrawRequestedCard,
 } from "./InactiveNetworkCard";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
-import { ButtonWidget } from "components/Button";
-import { gql, useQuery } from "@apollo/client";
 import { Spinner } from "react-bootstrap";
 
 export const CardWrapper = styled.div`
@@ -218,11 +206,6 @@ const YellowSwitch = withStyles((theme) => ({
   checked: {},
 }))(Switch);
 
-const URLMap = {
-  [BSCChainId]: "https://bscscan.com",
-  [PolygonChainId]: "https://polygonscan.com",
-  [AvaxId]: "https://cchain.explorer.avax.network",
-};
 
 const TokenSwitchLabels = styled.div`
   font-weight: 500;
@@ -253,9 +236,8 @@ export const DetailTable = ({
   const [totalPoolValue, setTotalPoolValue] = useState("0");
 
   const { dominance } = useDominance(poolAddress);
-  const web3 = useWeb3();
-
-  const { chainId: currentNetwork } = useWeb3Network();
+  const web3 = getWeb3(network.chainId);
+  const { chainId: currentNetwork } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
@@ -264,12 +246,11 @@ export const DetailTable = ({
   const { toggle } = useUSDViewBool();
   const handleToggle = () => {
     toggle();
-  
   };
 
   const { dependsOn } = useRefresh();
 
-  const { symbol } = usePoolSymbol(poolAddress);
+  const { symbol } = usePoolSymbol(poolAddress, web3);
 
   const isActiveNetwork = network?.chainId === currentNetwork;
 
@@ -374,7 +355,7 @@ export const DetailTable = ({
                   </TotalPoolValueLabel>
                   <a
                     href={
-                      `${URLMap[(network?.chainId as 56) || 56]}/address/` +
+                      `${NetworkConfigs.find(item => item.chainId)?.scan}/address/` +
                       poolAddress
                     }
                     target="_blank"
@@ -386,6 +367,7 @@ export const DetailTable = ({
                 <CardPoolAddress>
                   {isActiveNetwork ? (
                     <DollarView
+                      chainId={network.chainId}
                       poolAddress={poolAddress}
                       tokenAmount={totalPoolValue}
                     />
@@ -400,7 +382,6 @@ export const DetailTable = ({
                       className="mx-2"
                       value={true}
                       onChange={handleToggle}
-                      
                     />{" "}
                     USD
                   </TokenSwitchLabels>
@@ -424,6 +405,7 @@ export const DetailTable = ({
             {getFirstCardcolumns(
               "Followers",
               <InvestorCountContract
+                chainId={network.chainId}
                 refresh={dependsOn % 2 === 0}
                 poolAddresses={[poolAddress]}
               />,

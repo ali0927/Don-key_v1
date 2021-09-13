@@ -6,8 +6,8 @@ import { Spinner } from "react-bootstrap";
 import {
   getPoolContract, getPoolToken, toWei,
 } from "helpers";
-import { useWeb3 } from "don-components";
-import Web3 from "web3";
+import { useWeb3Context } from "don-components";
+
 
 
 
@@ -32,7 +32,7 @@ export const SendWithdrawalsDialog: React.FC<{
   
   const [new_pool, setnewPoolvalue] = useState("");
   const [withdrawValue, setwithDrawvalue] = useState("");
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
   
   const handleUpdate = async () => {
     setLoading(true);

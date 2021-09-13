@@ -3,12 +3,11 @@ import {
   StakingContractContext,
 } from "contexts/StakingContractContext";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { useWeb3 } from "don-components";
+import {  getWeb3, useWeb3Context } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { captureException, getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
 import { api } from "don-utils";
-import { useWeb3Network } from "components/Web3NetworkDetector";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
 
@@ -60,11 +59,11 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
   return null;
 };
 export const StakingContractProvider: React.FC = memo(({ children }) => {
-  const web3 = useWeb3();
-  const { chainId } = useWeb3Network();
+
+  const { chainId, web3, connected } = useWeb3Context();
   const stakingContract = useMemo(() => {
-    return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
-  }, []);
+    return connected ? new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress): new getWeb3(56);
+  }, [connected]);
   const [coolOffTime, setCoolOffTime] = useState("0");
   const [isInCoolOffPeriod, setIsInCoolOffPeriod] = useState(false);
   const [canClaimTokens, setCanClaimTokens] = useState(false);

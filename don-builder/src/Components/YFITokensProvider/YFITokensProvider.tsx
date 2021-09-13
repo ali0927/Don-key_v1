@@ -1,10 +1,10 @@
-import { IToken } from "don-components";
+import { getWeb3, IToken } from "don-components";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { api , getWeb3} from "don-utils";
+import { api } from "don-utils";
 import Web3 from "web3";
 import abi from "erc-20-abi";
 const getTokenBalances = async (tokens: IToken[]) => {
-    const web3 = (await getWeb3()) as Web3;
+    const web3 = (await getWeb3(1)) as Web3;
     const tokenWithBalances = await Promise.all(
         tokens.map(async (token) => {
             const addrss = await web3.eth.getCoinbase();

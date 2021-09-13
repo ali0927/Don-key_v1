@@ -6,6 +6,7 @@ export interface IShareLinkProps {
     strategyName: string;
     poolAddress: string;
     apy: string;
+    chainId: number;
     code: string;
     onClose: ()=> void;
 }

@@ -1,9 +1,10 @@
-import { useWeb3Network } from "components/Web3NetworkDetector";
+
+import { useWeb3Context } from "don-components";
 import { captureException } from "helpers";
 import { useEffect } from "react";
 
 export const useAddDonTokenonLoad = () => {
-    const { chainId: network } = useWeb3Network();
+    const { chainId: network } = useWeb3Context();
     useEffect(() => {
         // Add DON token with icon on Metamask
         const tokenSymbol = "DON";

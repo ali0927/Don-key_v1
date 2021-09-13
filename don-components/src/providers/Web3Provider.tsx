@@ -9,11 +9,15 @@ import {
 } from "react";
 import Web3 from "web3";
 import React from "react";
-import { getWeb3 } from "don-utils";
 import { memoize } from "lodash";
-import { AVAX_CHAIN_ID, BINANCE_CHAIN_ID, NetworkConfigs, POLYGON_CHAIN_ID } from "../Constants";
+import {
+  AVAX_CHAIN_ID,
+  BINANCE_CHAIN_ID,
+  NetworkConfigs,
+  POLYGON_CHAIN_ID,
+} from "../Constants";
 import Web3Modal from "web3modal";
-import {convertUtf8ToHex} from "@walletconnect/utils";
+import { convertUtf8ToHex } from "@walletconnect/utils";
 
 interface IAppState {
   address: string;
@@ -24,8 +28,7 @@ interface IAppState {
 }
 
 type IAppContext = IAppState & {
-  getWeb3: (chainId: number) => Web3 | null;
-  web3: Web3 | null;
+  web3: Web3;
   connectDapp: (chainId: number) => Promise<void>;
   disconnectDapp: () => Promise<void>;
 };
@@ -81,10 +84,9 @@ const getRandom = (arr: string[]) => {
   const len = arr.length - 1;
   return arr[Math.round(Math.random() * len)];
 };
-const switchNetwork = async (provider: any,chainIdNum: number) => {
+const switchNetwork = async (provider: any, chainIdNum: number) => {
   const chainId = `0x${chainIdNum.toString(16)}`;
   if (provider.request) {
-    
     try {
       await provider.request({
         method: "wallet_switchEthereumChain",
@@ -93,17 +95,24 @@ const switchNetwork = async (provider: any,chainIdNum: number) => {
     } catch (switchError: any) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
-       
-          await provider.request({
-            method: "wallet_addEthereumChain",
-            params: [NetworkConfigsList.find((item) => item.chainId === chainId)],
-          });
-        } 
+        await provider.request({
+          method: "wallet_addEthereumChain",
+          params: [NetworkConfigsList.find((item) => item.chainId === chainId)],
+        });
       }
-      // handle other "switch" errors
     }
-  
+    // handle other "switch" errors
+  }
 };
+
+export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
+  const network = NetworkConfigs.find((item) => item.chainId === chainId);
+  if (!network) {
+    throw new Error("Unsupported Network");
+  }
+
+  return new Web3(new Web3.providers.HttpProvider(getRandom(network.rpcs)));
+});
 
 export const Web3Provider: React.FC<{
   children: React.ReactNode;
@@ -114,17 +123,6 @@ export const Web3Provider: React.FC<{
   const updateState = useCallback((newState: Partial<IAppState>) => {
     setState((old) => ({ ...old, ...newState }));
   }, []);
-  const getWeb3 = useCallback(
-    memoize((chainId: number) => {
-      const network = NetworkConfigs.find((item) => item.chainId === chainId);
-      if (!network) {
-        throw new Error("Unsupported Network");
-      }
-
-      return new Web3(new Web3.providers.HttpProvider(getRandom(network.rpcs)));
-    }),
-    []
-  );
 
   const web3Modal = useMemo(() => {
     return new Web3Modal({
@@ -132,8 +130,6 @@ export const Web3Provider: React.FC<{
       cacheProvider: true,
     });
   }, []);
-
-
 
   const connectDapp = useCallback(async (chainId: number) => {
     const provider = await web3Modal.connect();
@@ -146,7 +142,6 @@ export const Web3Provider: React.FC<{
 
     const address = accounts[0];
 
-
     const currentChainId = await web3.eth.chainId();
 
     updateState({
@@ -156,14 +151,10 @@ export const Web3Provider: React.FC<{
       chainId: currentChainId,
     });
 
-
-
     web3Ref.current = web3;
-    if(chainId !== currentChainId){
-      await switchNetwork(provider,chainId);
+    if (chainId !== currentChainId) {
+      await switchNetwork(provider, chainId);
     }
-  
-
   }, []);
   const disconnectDapp = useCallback(async () => {
     await resetApp();
@@ -197,8 +188,7 @@ export const Web3Provider: React.FC<{
   const context: IAppContext = useMemo(() => {
     return {
       ...state,
-      getWeb3: getWeb3 as IAppContext["getWeb3"],
-      web3: web3Ref.current,
+      web3: web3Ref.current as Web3,
       connectDapp,
       disconnectDapp,
     };

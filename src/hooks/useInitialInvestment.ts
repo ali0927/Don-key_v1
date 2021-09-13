@@ -1,5 +1,4 @@
-import { useWeb3Network } from "components/Web3NetworkDetector";
-import { useWeb3 } from "don-components";
+import { useWeb3Context } from "don-components";
 import {
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
@@ -12,11 +11,10 @@ export const useInitialInvestment = (
   refresh = false,
   address?: string
 ) => {
-  const web3 = useWeb3();
   const [initialInvestment, setinitialInvestment] = useState("-");
   const [initialInvestmentInUSD, setinitialInvestmentinUSD] = useState("-");
   const [isReady, setIsReady] = useState(false);
-  const {chainId} = useWeb3Network();
+  const { chainId, web3 } = useWeb3Context();
   useEffect(() => {
     (async () => {
       try {
@@ -29,13 +27,13 @@ export const useInitialInvestment = (
         setinitialInvestment(results[0]);
         setinitialInvestmentinUSD(results[1]);
       } catch (err) {
-        captureException(err, "useInitialInvestment")
+        captureException(err, "useInitialInvestment");
       } finally {
         setIsReady(true);
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh,chainId]);
+  }, [refresh, chainId]);
 
   return {
     isReady,

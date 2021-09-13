@@ -10,9 +10,7 @@ import { IFarmerInter, IStrategy } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
-import { Share, ShareLink } from "components/ShareAndEarn";
-import { api } from "don-utils";
-import { useWeb3 } from "don-components";
+
 import { fixUrl, getShareUrl } from "helpers";
 import { useStakingContract } from "hooks";
 

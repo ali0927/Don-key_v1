@@ -1,4 +1,4 @@
-import { useWeb3 } from "don-components";
+import {  useWeb3Context } from "don-components";
 import {  captureException, getInvestedAmount } from "helpers";
 import { useEffect, useState } from "react";
 
@@ -7,7 +7,7 @@ export const useInvestedAmount = (poolAddress:string) => {
   const [isReady, setIsReady] = useState(false)
   const [investedAmmount, setinvestedAmmount] = useState("-");
  
-  const web3 = useWeb3()
+  const {web3} = useWeb3Context()
 
   const getPoolValue = async () => {
     

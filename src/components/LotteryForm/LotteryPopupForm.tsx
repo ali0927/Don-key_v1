@@ -1,7 +1,6 @@
 import { ButtonWidget, ContainedButton } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { useNetwork } from "components/NetworkProvider/NetworkProvider";
-import { useWeb3 } from "don-components";
+
 import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
 import { useState } from "react";
 import { Label, InputSmall, Caption } from "./LotteryForm";
@@ -11,6 +10,7 @@ import { useRefresh } from "./useRefresh";
 import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
 import BigNumber from "bignumber.js";
+import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, ETHEREUM_RPC, useWeb3Context } from "don-components";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -36,8 +36,7 @@ export const LotteryPopupForm = ({
 
   const [invalidAmount, setInvalidAmount] = useState(false);
   const { refresh } = useRefresh();
-  const web3 = useWeb3();
-  const { isBSC, isEthereum } = useNetwork();
+  const { chainId, web3, connected} = useWeb3Context();
   const handleChange =
     (name: keyof ILotteryParticipate) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,8 +58,8 @@ export const LotteryPopupForm = ({
     const accounts = await web3.eth.getAccounts();
     setLoading(true);
     try {
-      const stakingContract = await getStakingContract(web3, isBSC);
-      const lpTokenContract = await getLPTokenContract(web3, isBSC);
+      const stakingContract = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
+      const lpTokenContract = await getLPTokenContract(web3, chainId === BINANCE_CHAIN_ID);
       showProgress("Approve LP Token for Spend");
       let allowance = await lpTokenContract.methods
         .allowance(accounts[0], stakingContract.options.address)
@@ -107,7 +106,7 @@ export const LotteryPopupForm = ({
         onClose={onClose}
       >
         <div className="row mt-5 mb-4">
-          {isEthereum && (
+          {chainId === ETHEREUM_CHAIN_ID && (
             <div className="col-md-12">
               <div className="d-flex">
                 <ERCIcon />
@@ -132,7 +131,7 @@ export const LotteryPopupForm = ({
             </div>
           )}
 
-          {isBSC && (
+          {chainId === BINANCE_CHAIN_ID && (
             <div className="col-md-12 mb-3">
               <div className="d-flex">
                 <BEP20 />

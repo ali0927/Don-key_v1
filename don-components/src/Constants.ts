@@ -10,14 +10,18 @@ export const POLYGON_CHAIN_ID = 137;
 export const NetworkConfigs = [{
     chainId: ETHEREUM_CHAIN_ID,
     rpcs: ETHEREUM_RPC,
+    scan: "https://ethscan.com"
 }, {
     chainId: BINANCE_CHAIN_ID,
     rpcs: BINANCE_RPC,
+    scan: "https://bscscan.com"
 }, {
     chainId: POLYGON_CHAIN_ID,
-    rpcs: MATIC_RPC
+    rpcs: MATIC_RPC,
+    scan:  "https://polygonscan.com"
 }, {
     chainId: AVAX_CHAIN_ID,
-    rpcs: AVAX_RPC
+    rpcs: AVAX_RPC,
+    scan: "https://cchain.explorer.avax.network"
 }]
 

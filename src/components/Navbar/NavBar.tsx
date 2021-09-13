@@ -12,7 +12,6 @@ import { Logo } from "./Logo";
 import { LogoWhite } from "components/Footer/LogoWhite";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-import { useMetaMaskLogin } from "hooks/useMetaMaskLogin";
 import { shortenAddress } from "don-utils";
 import { IStoreState } from "interfaces";
 import comingsoon from "images/comingsoon.svg";

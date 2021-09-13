@@ -1,4 +1,5 @@
-import { AvaxId, BSCChainId, PolygonChainId } from "components/Web3NetworkDetector";
+
+import { AVAX_CHAIN_ID, BINANCE_CHAIN_ID, POLYGON_CHAIN_ID } from "don-components";
 import { captureException } from "helpers";
 
 interface AddEthereumChainParameter {
@@ -15,7 +16,7 @@ interface AddEthereumChainParameter {
 }
 const NetworkConfigs: AddEthereumChainParameter[] = [
   {
-    chainId: `0x${BSCChainId.toString(16)}`,
+    chainId: `0x${BINANCE_CHAIN_ID.toString(16)}`,
     chainName: "BSC Mainnet",
     nativeCurrency: {
       name: "BNB",
@@ -26,7 +27,7 @@ const NetworkConfigs: AddEthereumChainParameter[] = [
     rpcUrls: ["https://bsc-dataseed.binance.org"],
   },
   {
-    chainId: `0x${PolygonChainId.toString(16)}`,
+    chainId: `0x${POLYGON_CHAIN_ID.toString(16)}`,
     chainName: "Matic Mainnet",
     nativeCurrency: {
       name: "MATIC",
@@ -37,7 +38,7 @@ const NetworkConfigs: AddEthereumChainParameter[] = [
     blockExplorerUrls: ["https://polygonscan.com"],
   },
   {
-    chainId: `0x${AvaxId.toString(16)}`,
+    chainId: `0x${AVAX_CHAIN_ID.toString(16)}`,
     chainName: "Avax Mainnet",
     nativeCurrency: {
       name: "AVAX",

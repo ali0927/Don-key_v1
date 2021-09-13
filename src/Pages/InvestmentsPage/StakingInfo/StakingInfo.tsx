@@ -9,11 +9,9 @@ import BigNumber from "bignumber.js";
 import { Spinner } from "react-bootstrap";
 import moment from "moment";
 import { SmallTimerDots } from "icons";
-import { getTierInfo } from "components/StakingContractProvider";
 import { breakPoints } from "breakponts";
 import { getDonPriceWeb3 } from "helpers";
-import { useWeb3 } from "don-components";
-import { dark } from "@material-ui/core/styles/createPalette";
+import { getWeb3 } from "don-components";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -280,7 +278,7 @@ export const StakingInfo = () => {
   const [loading, enableLoading, disableLoading] = useToggle();
 
   const [donPrice, setDonPrice] = useState<string | null>(null);
-  const web3 = useWeb3();
+  const web3 = getWeb3(56);
   useEffect(() => {
     getDonPriceWeb3(web3).then(setDonPrice);
   }, []);

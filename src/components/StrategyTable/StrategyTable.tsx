@@ -11,11 +11,9 @@ import {
 import moment from "moment";
 import React, { useEffect, useMemo, useState } from "react";
 import { IStrategy } from "interfaces";
-import { getPoolContract, toEther, getTotalPoolValue } from "helpers";
-import { useWeb3 } from "don-components";
+
 import BigNumber from "bignumber.js";
 import { DollarView } from "Pages/FarmerBioPage/DollarView";
-import { useRefresh } from "components/LotteryForm/useRefresh";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon } from "icons/InfoIcon";
 import { useTVL } from "hooks";
@@ -40,13 +38,15 @@ export const StrategyTableForInvestor = ({
   poolAddress,
   farmerfee,
   performancefee,
+  chainId
 }: {
   strategies: IStrategy[];
   poolAddress: string;
+  chainId: number;
   farmerfee: number;
   performancefee: number;
 }) => {
-  const { tvl } = useTVL(poolAddress);
+  const { tvl } = useTVL(poolAddress, chainId);
 
   
   const getFee = (key: keyof IStrategy) => {
@@ -157,7 +157,7 @@ export const StrategyTableForInvestor = ({
                   {item.name}
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
-                  <DollarView poolAddress={poolAddress} tokenAmount={tvl} />
+                  <DollarView chainId={chainId} poolAddress={poolAddress} tokenAmount={tvl} />
                 </TableData>
                 <TableData style={{ textAlign: "center" }}>
                   {totalFee}%

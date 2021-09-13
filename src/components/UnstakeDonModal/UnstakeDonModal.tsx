@@ -1,11 +1,7 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { InvestmentInput } from "components/InvestmentInput";
-import { getBSCDon, getERCContract, toEther, toWei } from "helpers";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
-import { useWeb3 } from "don-components";
-import BigNumber from "bignumber.js";
 import { useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
 

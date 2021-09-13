@@ -7,18 +7,17 @@ import { NavBar } from "components/Navbar";
 import { PoolAmount } from "components/PoolAmount";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { useWeb3Network } from "components/Web3NetworkDetector";
+import { getWeb3, useWeb3Context } from "don-components";
 import { fixUrl } from "helpers";
 import { useSwitchNetwork } from "hooks";
-import { IFarmer, IFarmerInter, IStrategy } from "interfaces";
+import { IFarmerInter, IStrategy } from "interfaces";
 import { sortBy } from "lodash";
 import { InactiveNetworkCard } from "Pages/FarmerBioPage/InactiveNetworkCard";
 import { LoadingPage } from "Pages/LoadingPage";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { theme } from "theme";
-
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -132,10 +131,68 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
+const FarmerBioShort = ({
+  item,
+  isShown,
+  onShowLess,
+  onShowMore,
+  tokenObj,
+}: {
+  item: { strategy: IStrategy & { farmer: IFarmerInter } };
+  isShown: boolean;
+  onShowMore: () => void;
+  onShowLess: () => void;
+  tokenObj?: any;
+}) => {
+ 
+  const history = useHistory();
+  const handleLeaderClick = (id: string) => () => {
+    history.push(`/dashboard/farmer/${id}`);
+  };
 
-const StrategyBio = () => {
-  
-} 
+
+
+  return (
+    <div className="col-md-4 py-3">
+      <PopularStrategy
+        apy={item.strategy.apy + "%"}
+        isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
+        comingsoon={item.strategy.farmer.status === "comingsoon"}
+        icon={<Image src={fixUrl(item.strategy?.farmer?.farmerImage?.url)} />}
+        contentTitle={item.strategy.name}
+        title={item.strategy.farmer.name}
+        content={item.strategy.description}
+        risk={item.strategy.risk.Title.toLowerCase()}
+        imageRisk={item.strategy.risk.image.url}
+        onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
+        onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
+        showOnRight={!tokenObj.boostApy}
+        extraApy={
+          tokenObj.boostApy &&
+          new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
+        }
+        totalValue={
+          <PoolAmount chainId={item.strategy.farmer.network.chainId} poolAddress={item.strategy.farmer.poolAddress} />
+        }
+        onShowLessClick={onShowLess}
+        onShowMoreClick={onShowMore}
+        showAllContent={isShown}
+        investers={
+          <InvestorCountContract
+            chainId={item.strategy.farmer.network.chainId}
+            poolAddresses={[item.strategy.farmer.poolAddress]}
+          />
+        }
+        strategyImage={item.strategy.strategyImage.url}
+        network={{
+          chainId: item.strategy.farmer.network.chainId,
+          networkName: item.strategy.farmer.network.name,
+          networkSymbol: item.strategy.farmer.network.symbol,
+        }}
+      />
+    </div>
+  );
+};
 
 export const TokenPage = () => {
   const { token, network: tokenNetwork } =
@@ -147,18 +204,15 @@ export const TokenPage = () => {
       network: tokenNetwork,
     },
   });
-  const history = useHistory();
-  const handleLeaderClick = (id: string) => () => {
-    history.push(`/dashboard/farmer/${id}`);
-  };
-  const { switchNetwork } = useSwitchNetwork();
-  const { chainId } = useWeb3Network();
-  const tokenObj = data ? data.tokens[0]: null;
+
+  const { chainId } = useWeb3Context();
+  const tokenObj = data ? data.tokens[0] : null;
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
   const network = data ? data.tokens[0].network : { chainId: null };
   const subtitle = data ? data.tokens[0].subtitle : null;
   const description = data ? data.tokens[0].description : null;
   const isActiveNetwork = network.chainId === chainId;
+
   const sortedStrategies: { strategy: IStrategy & { farmer: IFarmerInter } }[] =
     useMemo(() => {
       return sortStrategies(strategies).filter((item) => {
@@ -175,7 +229,7 @@ export const TokenPage = () => {
     }, [strategies]);
   const [isOpen, setIsOpen] = useState(false);
 
-  if (loading) {
+  if (loading || !data) {
     return <LoadingPage />;
   }
 
@@ -189,9 +243,7 @@ export const TokenPage = () => {
               <StyledLink to="/dashboard">
                 <BackArrow /> <span className="ml-2">Back</span>
               </StyledLink>
-              <Title className="mb-5">
-                {subtitle || "Description"}
-              </Title>
+              <Title className="mb-5">{subtitle || "Description"}</Title>
               {/* <Subtitle>Description</Subtitle> */}
               <div className="row">
                 <div className="col-md-8">
@@ -226,51 +278,13 @@ export const TokenPage = () => {
           <div className="row">
             {sortedStrategies.map((item) => {
               return (
-                <div className="col-md-4 py-3">
-                  <PopularStrategy
-                    apy={item.strategy.apy + "%"}
-                    isCardComingsoon={
-                      item.strategy.farmer.status === "comingsoon"
-                    }
-                    comingsoon={item.strategy.farmer.status === "comingsoon"}
-                    icon={
-                      <Image
-                        src={fixUrl(item.strategy?.farmer?.farmerImage?.url)}
-                      />
-                    }
-                    contentTitle={item.strategy.name}
-                    title={item.strategy.farmer.name}
-                    content={item.strategy.description}
-                    risk={item.strategy.risk.Title.toLowerCase()}
-                    imageRisk={item.strategy.risk.image.url}
-                    onChangeChain={switchNetwork}
-                    onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
-                    onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
-                    showOnRight={!tokenObj.boostApy}
-                    extraApy={
-                     tokenObj.boostApy &&  new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
-                    }
-                    totalValue={
-                      <PoolAmount
-                        poolAddress={item.strategy.farmer.poolAddress}
-                      />
-                    }
-                    onShowLessClick={() => setIsOpen(false)}
-                    onShowMoreClick={() => setIsOpen(true)}
-                    showAllContent={isOpen}
-                    investers={
-                      <InvestorCountContract
-                        poolAddresses={[item.strategy.farmer.poolAddress]}
-                      />
-                    }
-                    strategyImage={item.strategy.strategyImage.url}
-                    network={{
-                      chainId: item.strategy.farmer.network.chainId,
-                      networkName: item.strategy.farmer.network.name,
-                      networkSymbol: item.strategy.farmer.network.symbol,
-                    }}
-                  />
-                </div>
+                <FarmerBioShort
+                  isShown={isOpen}
+                  onShowLess={() => setIsOpen(false)}
+                  onShowMore={() => setIsOpen(true)}
+                  tokenObj={tokenObj}
+                  item={item}
+                />
               );
             })}
           </div>
@@ -280,5 +294,3 @@ export const TokenPage = () => {
     </>
   );
 };
-
-

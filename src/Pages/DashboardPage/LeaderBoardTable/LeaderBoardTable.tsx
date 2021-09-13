@@ -180,7 +180,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                       <TableData>{item.name}</TableData>
 
                       <TableData>
-                        <PoolAmount poolAddress={item.poolAddress} />
+                        {/* <PoolAmount poolAddress={item.poolAddress} /> */}
                       </TableData>
                       <TableData>{item.profit24hours}</TableData>
                       <TableData>{item.profit7days}</TableData>

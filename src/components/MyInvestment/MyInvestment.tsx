@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useInvestedAmount } from "hooks/useInvestedAmount";
-import { useWeb3 } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 import { useEffect, useState } from "react";
 import { calculateWithdrawAmount, captureException } from "helpers";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
@@ -9,7 +9,7 @@ import { useInitialInvestment } from "hooks/useInitialInvestment";
 export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   const { isReady } = useInvestedAmount(poolAddress);
   const [withdrawalValue, setWithdrawalValue] = useState("-");
-  const web3 = useWeb3();
+  const { web3 } = useWeb3Context();
 
   useEffect(() => {
     (async () => {
@@ -17,7 +17,7 @@ export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
         const amount = await calculateWithdrawAmount(web3, poolAddress);
         setWithdrawalValue(amount);
       } catch (err) {
-         captureException(err, "MyInvestment");
+        captureException(err, "MyInvestment");
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -31,11 +31,14 @@ export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
 
 export const MyInitialInvestment = ({
   poolAddress,
+  chainId,
 }: {
   poolAddress: string;
+  chainId: number;
 }) => {
   const { initialInvestment, isReady } = useInitialInvestment(poolAddress);
-  const { symbol } = usePoolSymbol(poolAddress);
+  const web3 = getWeb3(chainId);
+  const { symbol } = usePoolSymbol(poolAddress, web3);
 
   if (!isReady) {
     return <>-</>;

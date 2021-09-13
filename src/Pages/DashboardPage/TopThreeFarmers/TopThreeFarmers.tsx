@@ -3,18 +3,14 @@ import * as React from "react";
 import { ITopThreeFarmerProps } from "./interfaces";
 import styled from "styled-components";
 import { IFarmer } from "interfaces";
-import { Loader, useWeb3 } from "don-components";
+import { Loader, useWeb3Context } from "don-components";
 import { useHistory } from "react-router";
 import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import { PoolAmount } from "components/PoolAmount";
 import BigNumber from "bignumber.js";
-import { ComingSoonFarmer } from "../ComingSoonFarmer/ComingSoonFarmer";
 import { InvestorCount } from "components/InvestorCount/InvestorCount";
 import { getTokenImage, getTokenSymbol } from "helpers";
-import { BSCChainId, PolygonChainId } from "components/Web3NetworkDetector";
 import { useSwitchNetwork } from "hooks/useSwitchNetwork";
-
-
 
 const Image = styled.img`
   width: 45px;
@@ -38,7 +34,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
   const handleLeaderClick = (id: string) => () => {
     history.push(`/dashboard/farmer/${id}`);
   };
-  const {switchNetwork} = useSwitchNetwork();
+  const { switchNetwork } = useSwitchNetwork();
   const openInvestmentDialog =
     (farmerName: string, poolAddress: string, poolVersion: number) => () => {
       // e.stopPropagation();
@@ -64,7 +60,7 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setRefresh((old) => !old);
   };
 
-  const web3 = useWeb3();
+  const { web3 } = useWeb3Context();
 
   const StrategyCard = (leader: IFarmer, index: number) => {
     const APY = leader.apy
@@ -100,7 +96,11 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
           getTokenImage={getTokenImageAsync}
           getTokenSymbol={getTokenSymbolAsync}
           totalValue={
-            <PoolAmount refresh={refresh} poolAddress={leader.poolAddress} />
+            <PoolAmount
+              chainId={56}
+              refresh={refresh}
+              poolAddress={leader.poolAddress}
+            />
           }
           onCardClick={handleLeaderClick(leader.GUID)}
           onButtonClick={openInvestmentDialog(

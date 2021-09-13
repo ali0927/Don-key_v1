@@ -1,24 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useNetwork } from "components/NetworkProvider/NetworkProvider";
-import { useWeb3 } from "don-components";
+
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import { calculateAPY } from "helpers";
 import { useEffect, useState } from "react";
 import { useRefresh } from "./useRefresh";
 
 export const useApy = () => {
   const [apyPercent, setApyPercent] = useState<string | null>(null);
-  const { isBSC, isReady } = useNetwork();
+  const { connected, web3, chainId } = useWeb3Context();
   const { dependsOn } = useRefresh();
-  const web3 = useWeb3();
+
   useEffect(() => {
-    if (isReady) {
+    if (connected) {
       (async () => {
-        const apy = await calculateAPY(web3, isBSC);
+        const apy = await calculateAPY(web3, chainId === BINANCE_CHAIN_ID);
 
         setApyPercent(apy.toFixed(0));
       })();
     }
-  }, [dependsOn, isReady]);
+  }, [dependsOn, connected]);
 
   return {
     isReady: apyPercent !== null,

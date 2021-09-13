@@ -1,14 +1,13 @@
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { captureException, getPoolToken, getTotalPoolValue, toEther } from "helpers";
 import { useEffect, useState } from "react";
-import { useWeb3 } from "don-components";
-import { useWeb3Network } from "components/Web3NetworkDetector";
+import { getWeb3 } from "don-components";
 
-export const useTVL = (poolAddress: string) => {
+export const useTVL = (poolAddress: string, chainId: number) => {
   const [tvl, setTvl] = useState("-");
-  const web3 = useWeb3();
+  const web3 = getWeb3(chainId);
   const { dependsOn } = useRefresh();
-  const { chainId } = useWeb3Network();
+
   useEffect(() => {
     (async () => {
       try {
@@ -20,6 +19,6 @@ export const useTVL = (poolAddress: string) => {
         captureException(e, "useTVL")
       }
     })();
-  }, [poolAddress, dependsOn, chainId]);
+  }, [poolAddress, dependsOn]);
   return { tvl };
 };

@@ -1,4 +1,4 @@
-import { useWeb3 } from "don-components";
+import { getWeb3 } from "don-components";
 import { useEffect, useState } from "react";
 import {
   calculateInitialInvestment,
@@ -17,15 +17,18 @@ export const TotalProfitLoss = ({
   refresh = false,
   fromOverlay,
   address,
+  chainId,
 }: {
   poolAddress: string;
   refresh?: boolean;
   fromOverlay?: boolean;
+  chainId: number;
   address?: string;
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
-  const { symbol } = usePoolSymbol(poolAddress);
-  const web3 = useWeb3();
+  const web3 = getWeb3(chainId);
+  const { symbol } = usePoolSymbol(poolAddress, web3);
+
   const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
@@ -59,7 +62,7 @@ export const TotalProfitLoss = ({
           );
         }
       } catch (err) {
-         captureException(err,"Total Profit Loss");
+        captureException(err, "Total Profit Loss");
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps

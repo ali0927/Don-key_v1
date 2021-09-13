@@ -1,18 +1,15 @@
-import { useWeb3Network } from "components/Web3NetworkDetector";
-import { useUSDViewBool } from "contexts/USDViewContext";
-import { useWeb3 } from "don-components";
 import { captureException, getTokenSymbol } from "helpers";
 import { useState } from "react";
+import Web3 from "web3";
 import { useIsomorphicEffect } from "./useIsomorphicEffect";
 
 // const symbolCache = new Map();
 
-export const usePoolSymbol = (poolAddress: string) => {
+export const usePoolSymbol = (poolAddress: string, web3: Web3) => {
   const [symbol, setSymbol] = useState("-");
 
   const [loading, setLoading] = useState(true);
-  const web3 = useWeb3();
-  const { chainId } = useWeb3Network();
+
   useIsomorphicEffect(() => {
     (async () => {
       let symbol;
@@ -32,7 +29,7 @@ export const usePoolSymbol = (poolAddress: string) => {
         setLoading(false);
       }
     })();
-  }, [chainId]);
+  }, []);
 
   return { symbol, loading };
 };

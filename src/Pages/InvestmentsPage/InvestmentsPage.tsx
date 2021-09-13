@@ -4,7 +4,6 @@ import { NavBar } from "components/Navbar/NavBar";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import { useWeb3 } from "don-components";
 import "./InvestmentsPage.scss";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, withStyles } from "@material-ui/core";
@@ -40,12 +39,7 @@ import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
 import { IFarmerInter } from "interfaces";
 import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
-import {
-  BSCChainId,
-  PolygonChainId,
-  AvaxId,
-  useWeb3Network,
-} from "components/Web3NetworkDetector";
+
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
@@ -53,14 +47,9 @@ import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Typography,
-} from "@material-ui/core";
-import { CatchLuckSection } from "Pages/LotteryPage/components/CatchLuckSection";
-import { uniqBy } from "lodash";
+
+import { chain, uniqBy } from "lodash";
+import { AVAX_CHAIN_ID, BINANCE_CHAIN_ID, getWeb3, POLYGON_CHAIN_ID, useWeb3Context } from "don-components";
 
 const HeadingTitle = styled.p`
   font-family: ObjectSans-Bold;
@@ -220,7 +209,7 @@ type ExtraInfo = {
 }[];
 
 export const InvestmentsPage = () => {
-  const web3 = useWeb3();
+ 
   const [poolAddresses, setPoolAddresses] = useState<ExtraInfo>([]);
   const [myInvestments, setMyInvestments] = useState<IFarmerInter[]>([]);
 
@@ -229,7 +218,7 @@ export const InvestmentsPage = () => {
   const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [oldInvestments, setOldInvestments] = useState<IFarmerInter[]>([]);
-  const { chainId: network } = useWeb3Network();
+  const { chainId: network } = useWeb3Context();
   const [strategyNetworkFilter, setStrategyNetworkFilter] = useState(network);
 
   const [withDraw, setWidthDraw] = useState({
@@ -255,7 +244,7 @@ export const InvestmentsPage = () => {
     toggleCurrency();
     setInitialCheck(!initialCheck);
   };
-
+  const web3 = getWeb3(network);
   useEffect(() => {
     if (data && data.farmers.length > 0) {
       let arr: ExtraInfo = [];
@@ -402,7 +391,7 @@ export const InvestmentsPage = () => {
   const toggleCurrency = useCallback(() => {
     setIsInUsd((val) => !val);
   }, []);
-  const { chainId } = useWeb3Network();
+  const { chainId } = useWeb3Context();
   const [donPrice, setDonPrice] = useState({ isReady: false, price: "-" });
   useEffect(() => {
     (async () => {
@@ -716,24 +705,24 @@ export const InvestmentsPage = () => {
                       <NetworkButton
                         varaint="outlined"
                         className="mr-1"
-                        active={strategyNetworkFilter === BSCChainId}
-                        onClick={() => setStrategyNetworkFilter(BSCChainId)}
+                        active={strategyNetworkFilter === BINANCE_CHAIN_ID}
+                        onClick={() => setStrategyNetworkFilter(BINANCE_CHAIN_ID)}
                       >
                         BSC
                       </NetworkButton>
                       <NetworkButton
                         varaint="outlined"
                         className="ml-1"
-                        active={strategyNetworkFilter === PolygonChainId}
-                        onClick={() => setStrategyNetworkFilter(PolygonChainId)}
+                        active={strategyNetworkFilter === POLYGON_CHAIN_ID}
+                        onClick={() => setStrategyNetworkFilter(POLYGON_CHAIN_ID)}
                       >
                         Polygon
                       </NetworkButton>
                       <NetworkButton
                         varaint="outlined"
                         className="ml-1"
-                        active={strategyNetworkFilter === AvaxId}
-                        onClick={() => setStrategyNetworkFilter(AvaxId)}
+                        active={strategyNetworkFilter === AVAX_CHAIN_ID}
+                        onClick={() => setStrategyNetworkFilter(AVAX_CHAIN_ID)}
                       >
                         AVAX
                       </NetworkButton>

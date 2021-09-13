@@ -1,8 +1,13 @@
 import { gql, useMutation } from "@apollo/client";
 import BigNumber from "bignumber.js";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-import { useWeb3 } from "don-components";
-import { calculateUserClaimableAmount, captureException, getPoolContract } from "helpers";
+import { useWeb3Context } from "don-components";
+// import { useWeb3 } from "don-components";
+import {
+  calculateUserClaimableAmount,
+  captureException,
+  getPoolContract,
+} from "helpers";
 import { useAxios } from "./useAxios";
 import { useStakingContract } from "./useStakingContract";
 
@@ -46,7 +51,7 @@ export const useWithdraw = () => {
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
   const { refetch } = useStakingContract();
-  const web3 = useWeb3();
+  const { web3 } = useWeb3Context();
   const doWithdraw = async (
     poolAddress: string,
     poolVersion: number,
@@ -95,7 +100,7 @@ export const useWithdraw = () => {
 
       onSuccess && onSuccess();
     } catch (err) {
-      captureException(err,"Withdraw Failed");
+      captureException(err, "Withdraw Failed");
       showFailure("Withdraw Failed");
       onError && onError(err);
     } finally {

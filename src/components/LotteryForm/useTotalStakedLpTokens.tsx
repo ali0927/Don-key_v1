@@ -1,23 +1,24 @@
-import { useWeb3 } from "don-components";
+
 import { useEffect, useState } from "react";
-import { useNetwork } from "components/NetworkProvider/NetworkProvider";
+
 import { getStakingContract } from "helpers";
 import { useRefresh } from "./useRefresh";
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 
 export const useTotalStakedLpTokens = () => {
-  const web3 = useWeb3();
-  const { isReady, isBSC } = useNetwork();
+
+  const { web3, chainId, connectDapp, connected} = useWeb3Context();
   const [stakedLpTokens, setstakedLpTokens] = useState<string | null>(null);
   const {dependsOn} = useRefresh();
   useEffect(() => {
-    if (isReady) {
+    if (connected) {
       (async () => {
-        const stakingContract = await getStakingContract(web3, isBSC);
+        const stakingContract = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
         const amount = await stakingContract.methods.totalSupply().call();
         setstakedLpTokens(amount);
       })();
     }
-  }, [isReady, dependsOn]);
+  }, [connected, dependsOn]);
 
   return {
     isReady: stakedLpTokens !== null,
