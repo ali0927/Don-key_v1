@@ -8,7 +8,8 @@ import au21 from "./investorlogos/au21.svg";
 import blackEdage from "./investorlogos/blackedge.svg";
 import moonwhale from "./investorlogos/moonwhile.svg";
 import gbv from "./investorlogos/gbv.svg";
-import { theme } from "theme";
+import Image from "next/image";
+
 const StyledP = styled.p`
   border-left: 3px solid #070602;
   font-size: 25px;
@@ -61,7 +62,7 @@ export const RoundedCompletedSection: React.FC = () => {
                       {item.map((src, key) => {
                         return (
                           <ImageWrapper key={key} className="py-3">
-                            <img className="img-fluid" alt="ImageNotFound" key={key} src={src} />
+                            <Image className="img-fluid" alt="ImageNotFound" key={key} src={src} />
                           </ImageWrapper>
                         );
                       })}

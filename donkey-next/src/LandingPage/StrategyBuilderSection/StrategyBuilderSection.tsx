@@ -6,6 +6,7 @@ import comingsoon from "images/comingsoon.svg";
 import BuilderImage from "../Strategy.png";
 import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
+import Image from "next/image";
 
 const Root = styled.div`
   background:${theme.palette.background.yellow};
@@ -33,7 +34,7 @@ const Paragraph = styled.p`
   color: #222222;
 `;
 
-const ImageCommingSoon = styled.img`
+const ImageCommingSoon = styled.div`
   position: absolute;
   top: -25px;
   right: 3%;
@@ -51,7 +52,7 @@ const TradingImageRoot = styled.div`
   }
 `;
 
-const TradingImage = styled.img`
+const TradingImage = styled.div`
   top: -65px;
   min-width: 610px;
   position: absolute;
@@ -90,14 +91,18 @@ export const StrategyBuilderSection: React.FC = () => {
                   disabled
                   className="position-relative mt-4"
                 >
-                  <ImageCommingSoon src={comingsoon} />
+                  <ImageCommingSoon >
+                    <Image src={comingsoon} />
+                  </ImageCommingSoon>
                   Build strategy
                 </StyledButtonWidget>
               </div>
             </Col>
             <Col lg={4}>
               <TradingImageRoot>
-                <TradingImage src={BuilderImage} alt="Imagetrading" />
+                <TradingImage  >
+                  <Image src={BuilderImage} />
+                </TradingImage>
               </TradingImageRoot>
             </Col>
           </Row>
