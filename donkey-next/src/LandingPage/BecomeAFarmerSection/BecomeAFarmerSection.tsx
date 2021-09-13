@@ -5,7 +5,7 @@ import getLiquidity from "../get-liquidity.png";
 import boostyield from "../boost-yield.png";
 import styled from "styled-components";
 import { Heading3 } from "../components";
-import Line from "./images/line.png";
+// import line from "./line.png";
 import Image from "next/image";
 const CardBanner = styled.div`
   position: relative;
@@ -125,7 +125,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 </Card>
               </Col>
               <LinesRoot className="d-none d-lg-flex">
-                <Image src={Line} alt="Lines not found" />
+                {/* <img src={line.src} alt="Lines" /> */}
               </LinesRoot>
             </Row>
           </Container>

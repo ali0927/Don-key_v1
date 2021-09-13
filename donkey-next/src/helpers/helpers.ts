@@ -80,8 +80,8 @@ export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
 };
 const REFERRAL_CODE = "REFERRAL_CODE";
 
-export const setReferralCode = (code: string) => {
-  localStorage.setItem(REFERRAL_CODE, code);
+export const setReferralCode = (_: string) => {
+  // localStorage.setItem(REFERRAL_CODE, code);
 };
 
 export const getShareUrl = (code: string) => {
