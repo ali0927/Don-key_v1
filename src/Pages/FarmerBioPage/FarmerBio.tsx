@@ -13,6 +13,7 @@ import { theme } from "theme";
 
 import { fixUrl, getShareUrl } from "helpers";
 import { useStakingContract } from "hooks";
+import { Share, ShareLink } from "components/ShareAndEarn";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -152,7 +153,7 @@ export const FarmerBio = ({
 
   const handleCreateLink = () => {
     setShareLink(true);
-  }
+  };
 
   const apy =
     strategies && strategies.length > 0
@@ -162,9 +163,8 @@ export const FarmerBio = ({
   const boostApy =
     strategies && strategies.length > 0 ? strategies[0].token.boostApy : false;
 
-   const strategyName =   strategies && strategies.length > 0
-                            ? strategies[0].name
-                            : "Description"
+  const strategyName =
+    strategies && strategies.length > 0 ? strategies[0].name : "Description";
 
   return (
     <>
@@ -226,7 +226,7 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {(pool_version === 3 && network.symbol === 'BSC')  ? (
+              {pool_version === 3 && network.symbol === "BSC" ? (
                 <ShareButton onClick={handleShareClick}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
@@ -258,8 +258,9 @@ export const FarmerBio = ({
         />
       )}
 
-      {openShareLink  && (
+      {openShareLink && (
         <ShareLink
+          chainId={network.chainId}
           link={shortLink}
           open={openShareLink}
           farmerName={name}
