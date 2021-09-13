@@ -60,6 +60,7 @@ export const FarmerStrategies = ({
                 </p>
               </TableHeaderRoot>
               <StrategyTableForInvestor
+                 chainId={farmer.network.chainId}
                 farmerfee={farmer.farmerfee}
                 performancefee={farmer.performancefee}
                 poolAddress={farmer.poolAddress}
@@ -73,7 +74,7 @@ export const FarmerStrategies = ({
                   alt="strategy image"
                 />
               </StrategyTableRoot>
-              <InvestorListTable poolAddress={farmer.poolAddress} />
+              <InvestorListTable chainId={farmer.network.chainId} poolAddress={farmer.poolAddress} />
             </Col>
           </Row>
         </Container>

@@ -42,7 +42,6 @@ import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
 
 import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
-import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
@@ -395,8 +394,8 @@ export const InvestmentsPage = () => {
   const [donPrice, setDonPrice] = useState({ isReady: false, price: "-" });
   useEffect(() => {
     (async () => {
-      if (network === NetworksMap.BSC) {
-        const donPrice = await getDonPrice(network === NetworksMap.BSC);
+      if (network === BINANCE_CHAIN_ID) {
+        const donPrice = await getDonPrice(network === BINANCE_CHAIN_ID);
         setDonPrice({ isReady: true, price: donPrice });
       }
     })();
@@ -493,7 +492,7 @@ export const InvestmentsPage = () => {
                 <CustomTableHeading>FARMER NAME</CustomTableHeading>
                 <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
                 <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                {NetworksMap.BSC === network && tier.tier > 0 && (
+                {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                   <CustomTableHeading>DON REWARDS</CustomTableHeading>
                 )}
                 <CustomTableHeading style={{ textAlign: "center" }}>
@@ -530,17 +529,19 @@ export const InvestmentsPage = () => {
                         `$${formatNum(initialInvestmentinUSD)}`
                       ) : (
                         <MyInitialInvestment
+                          chainId={network}
                           poolAddress={investment.poolAddress}
                         />
                       )}
                     </CustomTableData>
                     <CustomTableData className="bold">
                       <TotalProfitLoss
+                        chainId={network}
                         refresh={refresh}
                         poolAddress={investment.poolAddress}
                       />
                     </CustomTableData>
-                    {NetworksMap.BSC === network && tier.tier > 0 && (
+                    {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                       <CustomTableData>
                         {(() => {
                           const dons = new BigNumber(pendingReward)
@@ -639,6 +640,7 @@ export const InvestmentsPage = () => {
                           `$${formatNum(initialInvestmentinUSD)}`
                         ) : (
                           <MyInitialInvestment
+                            chainId={network}
                             poolAddress={investment.poolAddress}
                           />
                         )}
@@ -646,6 +648,7 @@ export const InvestmentsPage = () => {
                       <CustomTableData className="bold">
                         <TotalProfitLoss
                           refresh={refresh}
+                          chainId={network}
                           poolAddress={investment.poolAddress}
                         />
                       </CustomTableData>
@@ -728,7 +731,7 @@ export const InvestmentsPage = () => {
                       </NetworkButton>
                     </div>
                   </div>
-                  {chainId === NetworksMap.BSC && <StakingInfo />}
+                  {chainId === BINANCE_CHAIN_ID && <StakingInfo />}
                 </Col>
               </Row>
             </Container>

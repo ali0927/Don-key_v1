@@ -149,6 +149,7 @@ export const InvestBlackCard = ({
           overlay={
             <Tooltip id="button-tooltip" className="mytooltip">
               <TotalProfitLoss
+                chainId={network.chainId}
                 refresh={dependsOn % 2 == 0}
                 poolAddress={poolAddress}
                 fromOverlay={true}
@@ -359,6 +360,7 @@ export const InvestBlackCard = ({
         {getSecondCardColumns(
           "Profit/Loss",
           <TotalProfitLoss
+            chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
           />,

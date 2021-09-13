@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ButtonWidget, ContainedButton } from "components/Button";
-import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, useWeb3Context } from "don-components";
 import { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { LotteryPopupForm } from "./LotteryPopupForm";
-import { useNetwork } from "components/NetworkProvider/NetworkProvider";
 import BigNumber from "bignumber.js";
 import { useAvailableLpTokens } from "./useAvailableLpTokens";
 import { useStakedLPTokens } from "./useStakedLPTokens";
@@ -173,9 +172,7 @@ const useTVL = () => {
 export const LotteryForm = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const { isReady, network, isEthereum, isBSC } = useNetwork();
-
-  const {} = useWeb3Context();
+  const { web3, connected, chainId} = useWeb3Context();
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { rewards } = useEarnedRewards();
@@ -184,7 +181,7 @@ export const LotteryForm = () => {
     useTransactionNotification();
 
   const { tvl } = useTVL();
-  const tokenSymbol = isEthereum ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
+  const tokenSymbol = chainId === ETHEREUM_CHAIN_ID ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
 
   const availableTokensinEther = lpTokens
     ? parseFloat(toEther(lpTokens)).toFixed(5)
@@ -201,7 +198,7 @@ export const LotteryForm = () => {
   const [disableButtons, setDisableButtons] = useState(false);
 
   const handleUnstake = async () => {
-    const staking = await getStakingContract(web3, isBSC);
+    const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
     setDisableButtons(true);
     try {
       showProgress("Unstaking Amount and Harvesting Rewards");
@@ -225,7 +222,7 @@ export const LotteryForm = () => {
   }, [stakedTokens]);
 
   const handleHarvest = async () => {
-    const staking = await getStakingContract(web3, isBSC);
+    const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
     setDisableButtons(true);
     try {
       showProgress("Harvesting Rewards");
@@ -254,7 +251,7 @@ export const LotteryForm = () => {
                   <ItemHeading className="font-weight-bold">
                     Network
                   </ItemHeading>
-                  <ItemInfo> {isReady ? network : "-"}</ItemInfo>
+                  <ItemInfo> {connected ? chainId : "-"}</ItemInfo>
                 </CardItem>
                 <CardItem className="col-2">
                   <ItemHeading className="font-weight-bold">
@@ -266,7 +263,7 @@ export const LotteryForm = () => {
                   <a
                     rel="noreferrer nofollow"
                     target="_blank"
-                    href={isEthereum ? UniswapLink : PancakeSwapLink}
+                    href={chainId === ETHEREUM_CHAIN_ID ? UniswapLink : PancakeSwapLink}
                   >
                     Get More
                   </a>

@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import LandingPage from "Pages/LandingPage";
-import { ProtectedRoute } from "components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import { LoadingPage } from "Pages/LoadingPage";
 import TeamPage from "Pages/TeamPage";

@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
-import { useWeb3 } from "don-components";
+import {  useWeb3Context } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
   captureException,
@@ -56,7 +56,7 @@ const MyBalanceInBUSD = ({
   poolVersion: number;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
 
   const fetchBalance = async () => {
     try {
@@ -118,7 +118,7 @@ export const InvestmentPopup = ({
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
-  const web3 = useWeb3();
+  const {web3} = useWeb3Context();
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
   });
@@ -276,7 +276,7 @@ export const InvestmentPopup = ({
       refetch();
     }
   };
-  const { symbol } = usePoolSymbol(poolAddress);
+  const { symbol } = usePoolSymbol(poolAddress, web3);
 
   const renderButtonText = () => {
     if (isLoading) {

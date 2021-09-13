@@ -1,7 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { useWeb3 } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
   getDONBSCbridgeContract,
@@ -19,7 +18,7 @@ import { useTransactionNotification } from "components/LotteryForm/useTransactio
 import { CircularProgress, makeStyles, Tooltip } from "@material-ui/core";
 import { useDidUpdate, useSwitchNetwork } from "hooks";
 import { BinanceIcon, DonBinance, DonEthereum, EthereumIcon } from "icons";
-import { useWeb3Network } from "components/Web3NetworkDetector";
+
 import clsx from "clsx";
 import { InterchangeIcon } from "icons/InterchangeIcon";
 import axios from "axios";
@@ -30,6 +29,7 @@ import bsctoEth from "./bsctoeth.json";
 import BgImage from "images/success-bg.png";
 import { waitFor } from "don-utils";
 import { DonTokenIcon } from "icons/DonTokenIcon";
+import { useWeb3Context } from "don-components";
 
 const Heading = styled.div`
     font-family: Poppins;
@@ -356,7 +356,7 @@ export const BridgePopup = ({
       }
     }
   };
-  const { chainId } = useWeb3Network();
+  const { chainId, web3 } = useWeb3Context();
   const { switchNetwork } = useSwitchNetwork();
 
   const [input1Chain, setInput1Chain] = useState(SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1);
@@ -368,7 +368,7 @@ export const BridgePopup = ({
 
   const [balance, setBalance] = useState<null | { [x: number]: string }>(null);
 
-  const web3 = useWeb3();
+
 
   const [bridgeInfo, setBridgeInfo] = useState<null | typeof ExampleObject>(
     null

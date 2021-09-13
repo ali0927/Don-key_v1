@@ -22,6 +22,7 @@ import { LotteryClosingTime } from "Pages/LotteryPage";
 import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
+import { useWeb3Context } from "don-components";
 
 declare global {
   interface Window {
@@ -83,14 +84,14 @@ const StyledNavBar = styled(Navbar)`
 `;
 
 const ConnectWalletButton = () => {
-  const { doMetaMaskLogin } = useMetaMaskLogin();
+  const { connectDapp } = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleConnection = async () => {
     setIsDisabled(true);
     try {
-      await doMetaMaskLogin();
+      await connectDapp(56);
     } finally {
       setIsDisabled(false);
     }

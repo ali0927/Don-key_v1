@@ -3,13 +3,11 @@ import { Footer } from "components/Footer";
 import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { NavBar } from "components/Navbar";
-import { Web3Provider } from "don-components";
 import { LotteryForm } from "components/LotteryForm/LotteryForm";
-import { LoadingPage } from "Pages/LoadingPage";
-import { NetworkProvider } from "components/NetworkProvider/NetworkProvider";
-import { RefreshProvider } from "components/LotteryForm/useRefresh";
+
 import donkeySvg from "./Donkey.svg";
 import { theme } from "theme";
+import { RefreshProvider } from "components/LotteryForm/useRefresh";
 
 const Header = styled.div`
   width: 100%;
@@ -44,32 +42,28 @@ const StyledImage = styled.img`
 
 export const LotteryParticipatePage: React.FC = () => {
   return (
-    <Web3Provider loader={<LoadingPage />}>
-      <NetworkProvider>
-        <RefreshProvider>
-          <NavBar />
-          <Header className="py-5 ">
-            <Container>
-              <div className="row">
-                <div className="col-md-8">
-                  <Heading className="my-3">
-                    DEPOSIT DON LP TOKEN TO GAIN $DON REWARDS
-                  </Heading>
-                </div>
-                <div className="col-md-4">
-                  <div className="d-flex align-items-center justify-content-center">
-                    <StyledImage src={donkeySvg} />
-                  </div>
-                </div>
+    <RefreshProvider>
+      <NavBar />
+      <Header className="py-5 ">
+        <Container>
+          <div className="row">
+            <div className="col-md-8">
+              <Heading className="my-3">
+                DEPOSIT DON LP TOKEN TO GAIN $DON REWARDS
+              </Heading>
+            </div>
+            <div className="col-md-4">
+              <div className="d-flex align-items-center justify-content-center">
+                <StyledImage src={donkeySvg} />
               </div>
-            </Container>
-          </Header>
+            </div>
+          </div>
+        </Container>
+      </Header>
 
-          <LotteryForm />
+      <LotteryForm />
 
-          <Footer />
-        </RefreshProvider>
-      </NetworkProvider>
-    </Web3Provider>
+      <Footer />
+    </RefreshProvider>
   );
 };

@@ -1,8 +1,7 @@
 import { getReferralSystemContract } from "helpers";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
-import { useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 
 const ReferralContext = createContext({
   hasSignedUp: false,
@@ -39,7 +38,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (chainId === NetworksMap.BSC) {
+    if (chainId === BINANCE_CHAIN_ID) {
       checkhasSignedUp();
     }
   }, [chainId]);

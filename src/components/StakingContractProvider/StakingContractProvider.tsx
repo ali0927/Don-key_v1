@@ -3,12 +3,11 @@ import {
   StakingContractContext,
 } from "contexts/StakingContractContext";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import {  getWeb3, useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { captureException, getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
 import { api } from "don-utils";
-import { NetworksMap } from "components/NetworkProvider/NetworkProvider";
 import moment from "moment";
 
 const DonStakingAddress = "0x8d40C8a9F4bD8D23a244cEc57b20B7f8f43C5e0d";
@@ -59,10 +58,12 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
   return null;
 };
 export const StakingContractProvider: React.FC = memo(({ children }) => {
-
   const { chainId, web3, connected } = useWeb3Context();
   const stakingContract = useMemo(() => {
-    return connected ? new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress): new getWeb3(56);
+    const newWeb3 = getWeb3(56);
+    return connected
+      ? new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress)
+      : new newWeb3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, [connected]);
   const [coolOffTime, setCoolOffTime] = useState("0");
   const [isInCoolOffPeriod, setIsInCoolOffPeriod] = useState(false);
@@ -82,7 +83,6 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const [investedAmount, setInvestedAmount] = useState("0");
   const [lastRewardTime, setLastRewardTime] = useState(0);
 
-
   const clearState = () => {
     setIsInCoolOffPeriod(false);
     setCanClaimTokens(false);
@@ -93,7 +93,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     setPendingReward("0");
     setInvestedAmount("0");
     setCoolOffAmount("0");
-    setLastRewardTime(0)
+    setLastRewardTime(0);
   };
 
   const fetchDonsFromApi = async () => {
@@ -109,7 +109,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       const coolOff = resp.data.coolOff;
       totalDons = totalDons.plus(bep).plus(erc).plus(staked).plus(coolOff);
     } catch (e) {
-      captureException(e,"fetchDons From Api");
+      captureException(e, "fetchDons From Api");
     }
     setHoldedDons(totalDons);
   };
@@ -130,7 +130,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
 
   const fetchState = async () => {
     setLoading(true);
-    if (NetworksMap.BSC === chainId) {
+    if (BINANCE_CHAIN_ID === chainId) {
       const accounts = await web3.eth.getAccounts();
       const userInfo = await stakingContract.methods
         .userInfo(accounts[0])
@@ -188,7 +188,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   }, [checkCanClaimTokens]);
 
   useEffect(() => {
-    if (chainId === NetworksMap.BSC) {
+    if (chainId === BINANCE_CHAIN_ID) {
       fetchState();
       fetchTiers(stakingContract);
       const interval = setInterval(() => {
