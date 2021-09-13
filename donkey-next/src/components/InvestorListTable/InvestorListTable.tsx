@@ -14,19 +14,17 @@ import {
   captureException,
   getAmount,
   getPoolContract,
-  getTokenAddress,
   getTokenPrice,
 } from "helpers";
 import { useAxios } from "hooks/useAxios";
 import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { getWeb3,  useWeb3Context } from "don-components";
-import { formatNum } from "Pages/FarmerBioPage/DetailTable";
+import { getWeb3 } from "don-components";
 import { useUSDViewBool } from "contexts/USDViewContext";
-import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { sortBy } from "lodash";
 import moment from "moment";
+import { formatNum } from "components/DollarView/DollarView";
 
 const ShowAmount = ({
   amount,

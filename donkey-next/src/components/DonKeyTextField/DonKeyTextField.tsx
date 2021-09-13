@@ -5,8 +5,6 @@ import { IDonKeyFieldInfoState, IDonKeyFieldProps } from "./interfaces";
 import styled from "styled-components";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import clsx from "clsx";
-import { ProvidedRequiredArgumentsRule } from "graphql";
-
 const FormGroup = styled(Form.Group)`
   & textarea::-webkit-scrollbar {
     width: 4px !important;

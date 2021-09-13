@@ -7,7 +7,7 @@ import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 
 export const useTotalStakedLpTokens = () => {
 
-  const { web3, chainId, connectDapp, connected} = useWeb3Context();
+  const { web3, chainId, connected} = useWeb3Context();
   const [stakedLpTokens, setstakedLpTokens] = useState<string | null>(null);
   const {dependsOn} = useRefresh();
   useEffect(() => {

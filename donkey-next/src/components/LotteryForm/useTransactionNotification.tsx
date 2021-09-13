@@ -21,7 +21,7 @@ export const useTransactionNotification = () => {
   const showProgress = useCallback((msg: string) => {
     hideProgress()
     progressRef.current = enqueueSnackbar(msg, {
-      content: (key, msg) => <ProgressSnackbar message={msg as string} />,
+      content: (_, msg) => <ProgressSnackbar message={msg as string} />,
       persist: true,
     });
   }, []);
@@ -29,7 +29,7 @@ export const useTransactionNotification = () => {
   const showSuccess = useCallback((msg) => {
     hideProgress();
     enqueueSnackbar(msg, {
-      content: (key, msg) => <SuccessSnackbar message={msg as string} />,
+      content: (_, msg) => <SuccessSnackbar message={msg as string} />,
       autoHideDuration: 5000,
       persist: false,
     });
@@ -38,7 +38,7 @@ export const useTransactionNotification = () => {
   const showFailure = useCallback((msg) => {
     hideProgress();
     enqueueSnackbar(msg, {
-      content: (key, msg) => <ErrorSnackbar message={msg as string} />,
+      content: (_, msg) => <ErrorSnackbar message={msg as string} />,
       autoHideDuration: 5000,
       persist: false,
     });

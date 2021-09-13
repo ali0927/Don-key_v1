@@ -11,7 +11,6 @@ import clsx from "clsx";
 import SlickSlider from "react-slick";
 import { LeftSliderArrow, RightSliderArrow } from "icons";
 import { useDidUpdate } from "hooks";
-import BigNumber from "bignumber.js";
 import {convertToInternationalCurrencySystem} from "helpers";
 
 const BannerRoot = styled.div`
@@ -193,7 +192,7 @@ export const Slider: React.FC<{
     <>
       <BannerRoot id="shareEarnImage" className="position-relative">
         <BannerImage
-          src={banners[selectedBanner]}
+          src={banners[selectedBanner].src}
           alt="Banner image not found"
         />
 
@@ -241,7 +240,7 @@ export const Slider: React.FC<{
                 })}
               >
                 <LIImage
-                  src={banner}
+                  src={banner.src}
                   alt="Banner image not found"
                   onClick={handleChangeImage(index)}
                 />

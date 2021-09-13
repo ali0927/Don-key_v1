@@ -14,7 +14,7 @@ export const useEffectOnTabFocus: typeof useEffect = (fn, deps) => {
         visibilityChange = "webkitvisibilitychange";
       }
   
-      const handleVisibilityChange = (data?: any) => {
+      const handleVisibilityChange = () => {
         const isHidden = document[hidden as "hidden"];
         if(!isHidden){
           fn()

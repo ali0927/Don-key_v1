@@ -1,4 +1,4 @@
-import { Dialog, DialogProps, Paper, withStyles } from "@material-ui/core";
+import { Dialog, DialogProps, withStyles } from "@material-ui/core";
 import * as React from "react";
 import {
   IconWrapper,

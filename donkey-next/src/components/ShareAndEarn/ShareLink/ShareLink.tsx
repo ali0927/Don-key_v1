@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DonCommonmodal } from "components/DonModal";
 import { IShareLinkProps } from "./interfaces/IShareLinkProps";
 import styled from "styled-components";
@@ -76,7 +76,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
 
   const { tvl } = useTVL(props.poolAddress, props.chainId);
   const [copyLink, setCopyLink] = React.useState(props.link || "");
-  const [code, setCode] = useState(props.code || "");
+  const [_, setCode] = useState(props.code || "");
   React.useEffect(() => {
     if (openTooltip) {
       setTimeout(() => {

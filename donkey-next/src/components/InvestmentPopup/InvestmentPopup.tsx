@@ -126,10 +126,10 @@ export const InvestmentPopup = ({
     useTransactionNotification();
   const { refetch, holdingDons } = useStakingContract();
   const [referralCode, setReferralCode] = useState("");
-  const [checking, setChecking] = useState(false);
+  const [_, setChecking] = useState(false);
 
   const [applied, setApplied] = useState(false);
-  const checkIfCodeisApplicable = async (code: string, showMsg = false) => {
+  const checkIfCodeisApplicable = async (code: string,) => {
     const userCode = await getUserReferralCode(web3);
 
     if (userCode === code.toLowerCase()) {
@@ -151,10 +151,10 @@ export const InvestmentPopup = ({
     return true;
   };
 
-  const applyCode = async (code: string, showMsg = false) => {
+  const applyCode = async (code: string) => {
     try {
       setChecking(true);
-      const isApplicable = await checkIfCodeisApplicable(code, showMsg);
+      const isApplicable = await checkIfCodeisApplicable(code);
       if (isApplicable) {
         setReferralCode(code.toUpperCase());
         setApplied(true);

@@ -6,13 +6,14 @@ import styled from "styled-components";
 import BigNumber from "bignumber.js";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
-import { CircularProgress, Slider, withStyles } from "@material-ui/core";
+import { CircularProgress } from "@material-ui/core";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import clsx from "clsx";
 import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
 import { useWeb3Context } from "don-components";
+// import Image from "next/image";
 
 const Heading = styled.h2`
   font-weight: bold;
@@ -226,7 +227,7 @@ export const AcceleratedAPYModal = ({
         return (
           <>
             <img
-              src={BgImage}
+              src={BgImage.src}
               style={{
                 position: "absolute",
                 zIndex: 0,

@@ -6,12 +6,9 @@ import Star from "../images/star.png";
 import shareTelegram from "../images/shareTelegram.png";
 import earnings from "../images/earnings.png";
 import { ButtonWidget } from "components/Button";
-import html2canvas from "html2canvas";
-import { api, uuidv4 } from "don-utils";
+import { uuidv4 } from "don-utils";
 import { Spinner } from "react-bootstrap";
 import {
-  getShareUrl,
-  getTokenAddress,
   getTokenPrice,
   getTotalPoolValue,
   getUserReferralCode,
@@ -43,19 +40,19 @@ const CancelButton = styled(ButtonWidget)`
   }
 `;
 
-const setShareUrl = (
-  poolAddress: string,
-  data: { imageUrl: string; shortUrl: string }
-) => {
-  localStorage.setItem(poolAddress, JSON.stringify(data));
-};
+// const setShareUrl = (
+//   poolAddress: string,
+//   data: { imageUrl: string; shortUrl: string }
+// ) => {
+//   localStorage.setItem(poolAddress, JSON.stringify(data));
+// };
 
 export const Share: React.FC<IShareProps> = (props) => {
   const { open, pool_address } = props;
 
   const [loading, setLoading] = React.useState(false);
 
-  const [tvl, setTvl] = useState("");
+  const [_, setTvl] = useState("");
 
   const {web3} = useWeb3Context();
   const fetchTvl = async () => {
@@ -131,7 +128,7 @@ export const Share: React.FC<IShareProps> = (props) => {
         <div className="row py-5">
           <div className="col-lg-4 ">
             <img
-              src={Star}
+              src={Star.src}
               className="img-fluid d-block mx-auto"
               alt="Image not found"
             />
@@ -142,7 +139,7 @@ export const Share: React.FC<IShareProps> = (props) => {
           </div>
           <div className="col-lg-4 ">
             <img
-              src={shareTelegram}
+              src={shareTelegram.src}
               className="img-fluid d-block mx-auto"
               alt="Image not found"
             />
@@ -152,7 +149,7 @@ export const Share: React.FC<IShareProps> = (props) => {
           </div>
           <div className="col-lg-4">
             <img
-              src={earnings}
+              src={earnings.src}
               className="img-fluid d-block mx-auto"
               alt="Image not found"
             />

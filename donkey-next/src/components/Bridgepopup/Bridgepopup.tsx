@@ -1,13 +1,11 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { BigNumber } from "bignumber.js";
 import {
   getDONBSCbridgeContract,
   DONETHbridge,
   getETHDon,
-  getBSCDon,
-  toEther,
   getUserDons,
   toWei,
   captureException,
@@ -22,7 +20,6 @@ import { BinanceIcon, DonBinance, DonEthereum, EthereumIcon } from "icons";
 import clsx from "clsx";
 import { InterchangeIcon } from "icons/InterchangeIcon";
 import axios from "axios";
-import { IIconProps } from "icons/interfaces";
 import Lottie from "react-lottie";
 import ethtoBsc from "./ethtobsc.json";
 import bsctoEth from "./bsctoeth.json";
@@ -86,10 +83,10 @@ export const Transfer = (props: { chainId: number }) => {
   );
 };
 
-const ButtonWrapper = styled.div({
-  marginRight: "10%",
-  width: "40%",
-});
+// const ButtonWrapper = styled.div({
+//   marginRight: "10%",
+//   width: "40%",
+// });
 
 
 const InputBox = styled.div`
@@ -570,7 +567,7 @@ export const BridgePopup = ({
       return (
         <>
           <img
-            src={BgImage}
+            src={BgImage.src}
             style={{
               position: "absolute",
               zIndex: 0,
@@ -634,7 +631,7 @@ export const BridgePopup = ({
               value={input2}
               disabled
               placeholder="0.0"
-              onChange={(e) => {}}
+              onChange={(_) => {}}
             />
           </div>
 

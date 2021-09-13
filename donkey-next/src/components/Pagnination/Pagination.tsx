@@ -59,7 +59,7 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
     const { rowscount } = props;
 
     const [activePage, setActivePage] = React.useState(1);
-    const [selectedRow, setSelectedRow] = React.useState(10);
+    const [selectedRow, _] = React.useState(10);
 
     const calculateTotalPages = React.useMemo(() => {
         if (selectedRow >= rowscount) {
@@ -82,9 +82,9 @@ export const Pagination: React.FC<IPaginationProps> = (props) => {
 
 
 
-    const handleRowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedRow(parseInt(event.target.value));
-    }
+    // const handleRowChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    //     setSelectedRow(parseInt(event.target.value));
+    // }
 
     const handleActivePage = (pageNumber: number) => () => {
         setActivePage(pageNumber);

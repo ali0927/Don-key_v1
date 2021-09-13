@@ -11,7 +11,7 @@ import { NavbarLink } from "./NavbarLink";
 import { shortenAddress } from "don-utils";
 import styled from "styled-components";
 import { theme } from "theme";
-import { useReferralContext } from "contexts/ReferralContext";
+// import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
 import { useWeb3Context } from "don-components";
@@ -61,21 +61,21 @@ const ConnectWalletButton = () => {
   );
 };
 
-const MyReferralNavLink = ({ variant }: { variant: string }) => {
-  const { hasSignedUp: isShown } = useReferralContext();
+// const MyReferralNavLink = ({ variant }: { variant: string }) => {
+//   const { hasSignedUp: isShown } = useReferralContext();
 
-  if (isShown) {
-    return (
-      <NavbarLink
-        to="/dashboard/referrals"
-        linkColor={variant === "builder" ? "white" : "black"}
-      >
-        My Referrals
-      </NavbarLink>
-    );
-  }
-  return <></>;
-};
+//   if (isShown) {
+//     return (
+//       <NavbarLink
+//         to="/dashboard/referrals"
+//         linkColor={variant === "builder" ? "white" : "black"}
+//       >
+//         My Referrals
+//       </NavbarLink>
+//     );
+//   }
+//   return <></>;
+// };
 
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;

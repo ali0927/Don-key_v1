@@ -1,16 +1,15 @@
-import { ButtonWidget, ContainedButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
 
-import { AddIcon, BEP20, EmailIcon, ERCIcon } from "icons";
+import { AddIcon, BEP20, ERCIcon } from "icons";
 import { useState } from "react";
-import { Label, InputSmall, Caption } from "./LotteryForm";
+import { Label, InputSmall } from "./LotteryForm";
 import { captureException, getLPTokenContract, getStakingContract, toWei } from "helpers";
 import { Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
-import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
 import BigNumber from "bignumber.js";
-import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, ETHEREUM_RPC, useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, useWeb3Context } from "don-components";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -36,7 +35,7 @@ export const LotteryPopupForm = ({
 
   const [invalidAmount, setInvalidAmount] = useState(false);
   const { refresh } = useRefresh();
-  const { chainId, web3, connected} = useWeb3Context();
+  const { chainId, web3} = useWeb3Context();
   const handleChange =
     (name: keyof ILotteryParticipate) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {

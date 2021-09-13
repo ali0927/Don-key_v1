@@ -1,6 +1,6 @@
 /**eslint-disable no-empty-pattern */
 import { CircularProgress } from "@material-ui/core";
-import { ButtonWidget, ContainedButton, OutlinedButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -8,7 +8,6 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
-import styled from "styled-components";
 import { captureException } from "helpers";
 
 

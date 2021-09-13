@@ -11,7 +11,6 @@ import { calculateTVL, captureException, getStakingContract, toEther } from "hel
 import { useEarnedRewards } from "./useEarnedRewards";
 import { useRefresh } from "./useRefresh";
 import { useApy } from "./useApy";
-import { api } from "don-utils";
 import { useTransactionNotification } from "./useTransactionNotification";
 export const Label = styled.p`
   font-size: 14px;

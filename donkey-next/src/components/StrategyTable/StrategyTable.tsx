@@ -9,15 +9,15 @@ import {
   TableRow,
 } from "components/Table";
 import moment from "moment";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import { IStrategy } from "interfaces";
 
 import BigNumber from "bignumber.js";
-import { DollarView } from "Pages/FarmerBioPage/DollarView";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon } from "icons/InfoIcon";
 import { useTVL } from "hooks";
-import {isNull, isUndefined} from "lodash";
+import {isNull} from "lodash";
+import { DollarView } from "components/DollarView/DollarView";
 
 const formatDate = (
   date: string | null | undefined,
@@ -150,7 +150,7 @@ export const StrategyTableForInvestor = ({
           </TableRow>
         </TableHead>
         <TableBody>
-          {strategies.map((item, i) => {
+          {strategies.map((item) => {
             return (
               <TableRow key={item.id}>
                 <TableData style={{ textAlign: "center" }}>

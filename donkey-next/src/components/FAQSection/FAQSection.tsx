@@ -2,17 +2,17 @@ import { DonKeyIcon } from "icons";
 import styled from "styled-components";
 import { theme } from "theme";
 
-const Header = styled.div`
-  width: 100%;
-  background: ${theme.palette.background.yellow};
-  padding-top: 2rem;
-  position: relative;
-  z-index: 10;
-`;
+// const Header = styled.div`
+//   width: 100%;
+//   background: ${theme.palette.background.yellow};
+//   padding-top: 2rem;
+//   position: relative;
+//   z-index: 10;
+// `;
 
-const BGYellow = styled.div`
-  background-color: ${theme.palette.background.yellow};
-`;
+// const BGYellow = styled.div`
+//   background-color: ${theme.palette.background.yellow};
+// `;
 
 const HeadingTitle = styled.div`
   flex: 1;
@@ -26,15 +26,15 @@ const HeadingTitle = styled.div`
   color: ${theme.palette.text.black};
 `;
 
-const HeaderContent = styled.p`
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 18px;
-  display: flex;
-  text-align: center;
-  color: ${theme.palette.text.black};
-`;
+// const HeaderContent = styled.p`
+//   font-family: Roboto;
+//   font-style: normal;
+//   font-weight: normal;
+//   font-size: 18px;
+//   display: flex;
+//   text-align: center;
+//   color: ${theme.palette.text.black};
+// `;
 
 const Body = styled.div`
   background-color: ${theme.palette.background.yellow};
@@ -68,23 +68,23 @@ const DonKeyIconWrapper = styled.div`
   right: -14px;
 `;
 
-const Ellipse1 = styled.div`
-  left: 16%;
-  top: 8%;
-  position: absolute;
-`;
+// const Ellipse1 = styled.div`
+//   left: 16%;
+//   top: 8%;
+//   position: absolute;
+// `;
 
-const Ellipse2 = styled.div`
-  left: 28%;
-  top: 3%;
-  position: absolute;
-`;
+// const Ellipse2 = styled.div`
+//   left: 28%;
+//   top: 3%;
+//   position: absolute;
+// `;
 
-const Ellipse3 = styled.div`
-  left: 23%;
-  top: 18%;
-  position: absolute;
-`;
+// const Ellipse3 = styled.div`
+//   left: 23%;
+//   top: 18%;
+//   position: absolute;
+// `;
 
 export const FAQSection = () => {
   return (

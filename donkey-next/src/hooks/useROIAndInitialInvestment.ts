@@ -1,7 +1,6 @@
 /**eslint-disable react-hooks/exhaustive-deps*/
 import BigNumber from "bignumber.js";
 import {
-  calculateInitialInvestment,
   getPoolContract,
   getROI,
   getTotalPoolValue,

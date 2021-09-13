@@ -30,19 +30,19 @@ const InfoWrapper = styled.div`
   transition: transform 0.3s linear;
 `;
 
-const GreenText = styled.p`
-  font-weight: 500;
-  font-size: 12px;
-  color: #31c77f;
-  margin-bottom: 0;
-`;
+// const GreenText = styled.p`
+//   font-weight: 500;
+//   font-size: 12px;
+//   color: #31c77f;
+//   margin-bottom: 0;
+// `;
 
-const GreyText = styled.p`
-  font-weight: 300;
-  font-size: 12px;
-  color: #b0b7c3;
-  margin-bottom: 0.5rem;
-`;
+// const GreyText = styled.p`
+//   font-weight: 300;
+//   font-size: 12px;
+//   color: #b0b7c3;
+//   margin-bottom: 0.5rem;
+// `;
 
 const DONApy = styled.h6`
   color: #ffc406;
@@ -77,7 +77,7 @@ const SubText = styled.span({
 });
 
 export const TokenInfo = ({
-  token: { image, symbol, status, maxApy, RiskStrategy, network, slug,boostApy },
+  token: { image, symbol, status, maxApy, network, slug,boostApy },
 }: {
   token: IStrapiToken;
 }) => {

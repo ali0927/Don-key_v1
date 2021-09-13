@@ -4,7 +4,6 @@ import {
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
   getTokenPrice,
-  getTokenAddress,
   getAmount,
   captureException,
 } from "helpers";
