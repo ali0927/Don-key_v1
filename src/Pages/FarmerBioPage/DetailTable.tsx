@@ -9,13 +9,8 @@ import {
   getTotalPoolValue,
   toEther,
 } from "helpers";
-import { getWeb3,  useWeb3Context, NetworkConfigs } from "don-components";
-import {
-  AwardIcon,
-  FollowersIcon,
-  LinkIcon,
-  StatisticIcon,
-} from "icons";
+import { getWeb3, useWeb3Context, NetworkConfigs } from "don-components";
+import { AwardIcon, FollowersIcon, LinkIcon, StatisticIcon } from "icons";
 import { useDominance } from "./useDominance";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
@@ -206,7 +201,6 @@ const YellowSwitch = withStyles((theme) => ({
   checked: {},
 }))(Switch);
 
-
 const TokenSwitchLabels = styled.div`
   font-weight: 500;
   font-size: 14px;
@@ -235,7 +229,7 @@ export const DetailTable = ({
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
 
-  const { dominance } = useDominance(poolAddress);
+  const { dominance } = useDominance(poolAddress, network.chainId);
   const web3 = getWeb3(network.chainId);
   const { chainId: currentNetwork } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -355,8 +349,9 @@ export const DetailTable = ({
                   </TotalPoolValueLabel>
                   <a
                     href={
-                      `${NetworkConfigs.find(item => item.chainId)?.scan}/address/` +
-                      poolAddress
+                      `${
+                        NetworkConfigs.find((item) => item.chainId)?.scan
+                      }/address/` + poolAddress
                     }
                     target="_blank"
                     className="ml-2"
@@ -365,31 +360,22 @@ export const DetailTable = ({
                   </a>
                 </div>
                 <CardPoolAddress>
-                  {isActiveNetwork ? (
-                    <DollarView
-                      chainId={network.chainId}
-                      poolAddress={poolAddress}
-                      tokenAmount={totalPoolValue}
-                    />
-                  ) : (
-                    "-"
-                  )}
+                  <DollarView
+                    chainId={network.chainId}
+                    poolAddress={poolAddress}
+                    tokenAmount={totalPoolValue}
+                  />
                 </CardPoolAddress>
-                {isActiveNetwork ? (
-                  <TokenSwitchLabels className="d-flex align-items-center">
-                    {symbol}
-                    <YellowSwitch
-                      className="mx-2"
-                      value={true}
-                      onChange={handleToggle}
-                    />{" "}
-                    USD
-                  </TokenSwitchLabels>
-                ) : (
-                  <TokenSwitchLabels>
-                    You are connected To Wrong Network
-                  </TokenSwitchLabels>
-                )}
+
+                <TokenSwitchLabels className="d-flex align-items-center">
+                  {symbol}
+                  <YellowSwitch
+                    className="mx-2"
+                    value={true}
+                    onChange={handleToggle}
+                  />{" "}
+                  USD
+                </TokenSwitchLabels>
               </div>
             </CardInnerInfo>
           </div>

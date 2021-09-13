@@ -136,13 +136,13 @@ export const Web3Provider: React.FC<{
 
     await subscribeProvider(provider);
 
-    const web3: any = new Web3(provider);
+    const web3: Web3 = new Web3(provider);
 
     const accounts = await web3.eth.getAccounts();
 
     const address = accounts[0];
 
-    const currentChainId = await web3.eth.chainId();
+    const currentChainId = await web3.eth.getChainId();
 
     updateState({
       provider,

@@ -35,16 +35,15 @@ const ALL_FARMER_QUERY = gql`
   }
 `;
 
-export const useDominance = (farmerPoolAddress: string) => {
-  const { chainId } = useWeb3Context();
-
+export const useDominance = (farmerPoolAddress: string, chainId: number) => {
+  const web3 = getWeb3(chainId);
   const { data } = useQuery(ALL_FARMER_QUERY, {
     variables: {
       chainId,
     },
   });
   const [dominance, setDominance] = useState("-");
-  const web3 = getWeb3(chainId);
+ 
 
   useEffect(() => {
     if (data) {

@@ -154,14 +154,8 @@ export const FarmerBio = ({
       ? new BigNumber(strategies![0].apy).toFixed(0) + "%"
       : "100%";
 
-  const { tier } = useStakingContract();
-
   const boostApy =
-    tier.tier > 5
-      ? false
-      : strategies && strategies.length > 0
-      ? strategies[0].token.boostApy
-      : false;
+    strategies && strategies.length > 0 ? strategies[0].token.boostApy : false;
 
   return (
     <>
