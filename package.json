@@ -8,7 +8,8 @@
     "don-components",
     "don-builder",
     "don-donkey-token",
-    "don-pancakeswap"
+    "don-pancakeswap",
+    "donkey-next"
   ],
   "dependencies": {
     "@apollo/client": "^3.3.18",
