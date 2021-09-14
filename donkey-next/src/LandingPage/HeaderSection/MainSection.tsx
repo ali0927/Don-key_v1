@@ -11,6 +11,7 @@ import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useIsomorphicEffect } from "hooks";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -151,6 +152,10 @@ export const MainSection: React.FC = () => {
   const handleTakePart = () => {
     history.push("/stake");
   };
+
+  useIsomorphicEffect(() => {
+    history.prefetch("/stake");
+  }, [])
 
   return (
     <>
