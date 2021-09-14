@@ -21,11 +21,10 @@ const Root = styled.div`
 `;
 
 const Rounded = styled.div`
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  bottom:200px;
-  /* z-index: 1; */
+    position: absolute;
+    bottom: 6.9%;
+    height: 100%;
+    width: 100%;
 `;
 
 const Heading = styled.h1`
@@ -155,9 +154,10 @@ export const MainSection: React.FC = () => {
   return (
     <>
       <Root className="position-relative">
-        <Rounded  >
-          <Image src={MainImage} alt="bg" />
+         <Rounded>
+          <Image src={MainImage} alt="bg"  />
         </Rounded>
+
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5">
@@ -203,6 +203,10 @@ export const MainSection: React.FC = () => {
             </FooterRow>
           </div>
         </div>
+    
+     
+    
+    
       </Root>
     </>
   );

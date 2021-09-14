@@ -49,14 +49,14 @@ const FrequentRoot = styled.div`
 `;
 
 const Question = styled.h3`
-  font-family: Roboto;
+  font-family: 'ObjectSans-Bold';
   font-style: normal;
-  font-size: 18px;
+  font-size: 16px;
   color: #333;
 `;
 
 const Content = styled.p`
-  font-family: Roboto;
+  font-family: 'Poppins';
   font-style: normal;
   font-size: 16px;
   color: #333;
