@@ -33,12 +33,12 @@ export const TeamJSON: ITeamBoardProps[] = [
   {
     image: adarsh,
     name: "Adarshdeep Singh",
-    designation: "Co-founder",
+    designation: "Co-founder & Senior Frontend Developer",
   },
   {
     image: vijay,
     name: "Vijay Bhayani",
-    designation: "Co-founder",
+    designation: "Co-founder & Senior Solidity Developer",
   },
   {
     image: deepak,
