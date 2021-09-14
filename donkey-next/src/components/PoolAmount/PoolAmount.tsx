@@ -1,8 +1,9 @@
 import BigNumber from "bignumber.js";
 import { getWeb3 } from "don-components";
 import { getPoolToken, getTotalPoolValue, toEther } from "helpers";
+import { useIsomorphicEffect } from "hooks";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import { useLayoutEffect, useState } from "react";
+import {  useState } from "react";
 
 export const PoolAmount = ({
   poolAddress,
@@ -32,7 +33,7 @@ export const PoolAmount = ({
     }
   };
 
-  useLayoutEffect(() => {
+  useIsomorphicEffect(() => {
     getPoolValue();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh]);

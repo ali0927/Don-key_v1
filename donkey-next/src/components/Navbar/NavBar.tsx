@@ -8,13 +8,15 @@ import clsx from "clsx";
 import { Logo } from "./Logo";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-import { shortenAddress } from "don-utils";
+import { api, AuthToken, shortenAddress } from "don-utils";
 import styled from "styled-components";
 import { theme } from "theme";
 // import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
 import { useWeb3Context } from "don-components";
+import Web3 from "web3";
+import { IUser } from "interfaces";
 
 declare global {
   interface Window {
@@ -37,18 +39,51 @@ const StyledNavBar = styled(Navbar)`
   z-index: 10;
 `;
 
+export const getNonce = async (publicAddress: string) => {
+  const res = await api.post("/api/v2/login/nonce", {
+    walletAddress: publicAddress,
+  });
+  const {
+    data: { data },
+  } = res;
+  return data.nonce;
+};
+
+
+export const getAuthToken = async (publicAddress: string, signature: string) => {
+  const resps = await api.post("/api/v2/login", {
+    signature,
+    walletAddress: publicAddress,
+  });
+  const { token } = resps.data.data;
+  const user = resps.data.user;
+  return {
+    token,
+    user: user as IUser,
+  };
+};
+
+
+export const getAuthTokenForPublicAddress = async (web3: Web3) => {
+  const [publicAddress] = await web3.eth.getAccounts();
+  const nonce = await getNonce(publicAddress);
+  //@ts-ignore
+  const signature = await web3.eth.personal.sign(nonce, publicAddress);
+
+  return await getAuthToken(publicAddress, signature);
+};
+
 const ConnectWalletButton = () => {
-  const { connectDapp } = useWeb3Context();
+  const { connectDapp , getWeb3Ref} = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleConnection = async () => {
     setIsDisabled(true);
-    try {
-      await connectDapp(56);
-    } finally {
-      setIsDisabled(false);
-    }
+    await connectDapp();
+    const web3 = getWeb3Ref().current as Web3;
+    const token =await getAuthTokenForPublicAddress(web3);
+    localStorage.setItem(AuthToken,token.token);
   };
   return (
     <ButtonComponent

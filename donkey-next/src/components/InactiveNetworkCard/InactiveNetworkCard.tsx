@@ -1,14 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
-// import { ButtonWidget } from "components/Button";
+import { ButtonWidget } from "components/Button";
+import { StakingTimer } from "components/StakingInfo";
 import { useSwitchNetwork } from "hooks";
-// import { LinkIcon, WalletIcon } from "icons";
 import { INetwork } from "interfaces";
-// import moment from "moment";
-import Image from "next/image";
-// import { StakingTimer } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
+import moment from "moment";
 import { Spinner } from "react-bootstrap";
-// import { useHistory } from "react-router";
 import styled from "styled-components";
+
+
 const Text = styled.p`
   font-size: 15px;
   margin-bottom: 5px;
@@ -36,7 +35,7 @@ const Text = styled.p`
 //       case "white": {
 //         return `
 //         color: #fff;
-//   border: 1px solid #fff;  
+//   border: 1px solid #fff;
 //         &:hover {
 //           color: #000;
 //     background-color: #fff;
@@ -46,7 +45,7 @@ const Text = styled.p`
 //       case "black": {
 //         return `
 //             color: #000;
-//             border: 1px solid #000;  
+//             border: 1px solid #000;
 //             &:hover {
 //           color: #fff;
 //     background-color: #000;
@@ -122,7 +121,7 @@ export const InactiveNetworkCard = ({
           <DonButtonContained
             onClick={() => switchNetwork(correctNetwork.chainId)}
           >
-            <Image
+            <img
               src="/images/usericon.png"
               className="d-inline-block align-top mr-md-2"
               alt="Metamask Icon"
@@ -151,8 +150,7 @@ export const InactiveNetworkCard = ({
         <DonButtonContained
           onClick={() => switchNetwork(correctNetwork.chainId)}
         >
-          <Image
-            placeholder="blur"
+          <img
             src="/images/usericon.png"
             className="d-inline-block align-top mr-md-2"
             alt="ImageNotFound"
@@ -187,7 +185,7 @@ export const WithdrawRequestedCard = ({
     );
   }
 
-  // const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
+  const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
   const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
 
   return (
@@ -201,7 +199,7 @@ export const WithdrawRequestedCard = ({
       </Text>
 
       <div className="mt-2">
-        {/* <StakingTimer
+        <StakingTimer
           variant="light"
           title=""
           endMessage={
@@ -220,7 +218,7 @@ export const WithdrawRequestedCard = ({
             </>
           }
           timerEnd={moment(createTimer).add(timeframe, "hours").unix()}
-        /> */}
+        />
       </div>
     </div>
   );

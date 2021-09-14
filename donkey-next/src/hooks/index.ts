@@ -9,3 +9,4 @@ export * from "./useSwitchNetwork";
 export * from "./useTVL";
 export * from "./useEffectOnTabFocus";
 export * from "./useDidUpdate";
+export * from "./useDominance";
