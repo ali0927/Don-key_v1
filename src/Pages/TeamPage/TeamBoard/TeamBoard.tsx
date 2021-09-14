@@ -6,7 +6,7 @@ import { FaLinkedin, FaTwitter } from "react-icons/fa";
 const Column = styled.div`
     margin-bottom: 140px;
     padding-left: 18px;
-    pading-right: 18px;
+    padding-right: 18px;
 `;
 
 const CardWarpper = styled.div`
@@ -43,6 +43,7 @@ const SubTitle = styled.p`
   font-size: 0.88rem;
   color: #8B8B8B;
   margin-bottom: 5px;
+  text-align: center;
 `;
 
 const IconsRoot = styled.div`

@@ -67,7 +67,7 @@ export const FarmerStrategies = ({
                 strategies={farmer.strategies}
               />
               <StrategyTableRoot className="d-flex flex-column justify-content-center">
-                <div>
+                <div className="d-flex justify-content-center">
                   <img
                     src={farmer.strategies[0].strategyImage.url}
                     className="img-fluid"
