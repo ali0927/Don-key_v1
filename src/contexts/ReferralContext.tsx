@@ -17,7 +17,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     referralCount: 0,
   });
 
-  const { web3, chainId } = useWeb3Context();
+  const { web3, chainId, connected } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
     const referralContract = await getReferralSystemContract(web3);
@@ -25,8 +25,9 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     const userInfo = await referralContract.methods
       .userInfo(accounts[0])
       .call();
-
+      console.log(userInfo);
     if (userInfo.exists) {
+     
       setState({
         hasSignedUp: true,
         code: userInfo.referralCode,
@@ -38,10 +39,10 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (chainId === BINANCE_CHAIN_ID) {
+    if (chainId === BINANCE_CHAIN_ID && connected) {
       checkhasSignedUp();
     }
-  }, [chainId]);
+  }, [chainId, connected]);
 
   return (
     <ReferralContext.Provider

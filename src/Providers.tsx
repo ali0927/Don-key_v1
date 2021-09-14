@@ -7,6 +7,7 @@ import { ApolloProvider } from "@apollo/client";
 import { client } from "./apolloClient";
 import { Web3Provider } from "don-components";
 import { StakingContractProvider } from "components/StakingContractProvider";
+import { ReferralStateProvider } from "contexts/ReferralContext";
 
 export const Providers: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -22,7 +23,9 @@ export const Providers: React.FC<{ children: React.ReactNode }> = ({
         >
           <Web3Provider>
             <StakingContractProvider>
-              <TooltipProvider>{children}</TooltipProvider>
+              <ReferralStateProvider>
+                <TooltipProvider>{children}</TooltipProvider>
+              </ReferralStateProvider>
             </StakingContractProvider>
           </Web3Provider>
         </SnackbarProvider>
