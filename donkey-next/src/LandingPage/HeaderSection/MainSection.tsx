@@ -149,7 +149,7 @@ export const MainSection: React.FC = () => {
   ).toString();
 
   const handleTakePart = () => {
-    history.push("/lottery/participate");
+    history.push("/stake");
   };
 
   return (
