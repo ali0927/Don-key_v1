@@ -37,7 +37,7 @@ import { CardDollar, InvestmentIcon, LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "../TokenPage/BoostButton";
 import styled from "styled-components";
-import { getWeb3 } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -65,7 +65,7 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
-
+  const {web3: connectedWeb3} = useWeb3Context();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
@@ -129,7 +129,7 @@ export const InvestBlackCard = ({
 
   const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
     useROIAndInitialInvestment(
-      web3,
+      connectedWeb3,
       finalPoolAddress,
       dependsOn % 2 == 0,
       true

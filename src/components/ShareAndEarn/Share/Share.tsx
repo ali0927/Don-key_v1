@@ -82,38 +82,6 @@ export const Share: React.FC<IShareProps> = (props) => {
     }
     setLoading(false);
     props.onCreateClick();
-    
-    // const element = document.querySelector("#shareEarnImage") as HTMLElement;
-    // if (element) {
-    //   const canvas = await html2canvas(element, {
-    //     useCORS: true,
-    //     scrollY: 0,
-    //     logging: process.env.NODE_ENV === "development",
-    //     removeContainer: true,
-    //   });
-    //   const dataUrl = canvas.toDataURL("image/jpeg");
-    //   const res: Response = await fetch(dataUrl);
-    //   const blob: Blob = await res.blob();
-
-    //   //Use this file in api call
-    //   const file = new File([blob], "file-" + uuidv4() + ".png", {
-    //     type: "image/jpeg",
-    //   });
-    //   const formData = new FormData();
-    //   const urlToShorten =
-    //     window.location.origin + window.location.pathname + `?referral=${code}`;
-    //   formData.append("url", urlToShorten);
-    //   formData.append("image", file);
-    //   formData.append("pool_address", props.pool_address);
-    //   const result = await api.post("/api/v2/shortener", formData);
-    //   const shortUrl = getShareUrl(result.data.code);
-    //   setShareUrl(props.pool_address, {
-    //     shortUrl,
-    //     imageUrl: result.data.image,
-    //   });
-    //   setLoading(false);
-    //   props.onCreateLink(result.data.image, shortUrl);
-    // }
   };
 
   return (

@@ -27,8 +27,10 @@ interface IAppState {
 
 type IAppContext = IAppState & {
   web3: Web3;
-  connectDapp: (chainId: number) => Promise<void>;
+  getWeb3Ref: () => React.RefObject<Web3>;
+  connectDapp: () => Promise<void>;
   disconnectDapp: () => Promise<void>;
+  switchNetwork: (chainId: number) => Promise<void>
 };
 
 const Web3Context = createContext<IAppContext | null>(null);
@@ -132,7 +134,7 @@ export const Web3Provider: React.FC<{
     });
   }, []);
 
-  const connectDapp = useCallback(async (chainId: number) => {
+  const connectDapp = useCallback(async () => {
     const provider = await web3ModalRef.current.connect();
 
     await subscribeProvider(provider);
@@ -144,7 +146,7 @@ export const Web3Provider: React.FC<{
     const address = accounts[0];
 
     const currentChainId = await web3.eth.getChainId();
-
+    web3Ref.current = web3;
     updateState({
       provider,
       connected: true,
@@ -152,10 +154,6 @@ export const Web3Provider: React.FC<{
       chainId: currentChainId,
     });
 
-    web3Ref.current = web3;
-    if (chainId !== currentChainId) {
-      await switchNetwork(provider, chainId);
-    }
   }, []);
   const disconnectDapp = useCallback(async () => {
     await resetApp();
@@ -198,12 +196,15 @@ export const Web3Provider: React.FC<{
     });
   }, []);
 
+
   const context: IAppContext = useMemo(() => {
     return {
       ...state,
       web3: web3Ref.current as Web3,
       connectDapp,
       disconnectDapp,
+      getWeb3Ref: () => web3Ref,
+      switchNetwork: (chainId: number) => switchNetwork(state.provider,chainId),
     };
   }, [state]);
 

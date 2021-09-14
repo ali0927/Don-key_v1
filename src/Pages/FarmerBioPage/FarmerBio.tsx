@@ -14,6 +14,9 @@ import { theme } from "theme";
 import { fixUrl, getShareUrl } from "helpers";
 import { useStakingContract } from "hooks";
 import { Share, ShareLink } from "components/ShareAndEarn";
+import { useWeb3Context } from "don-components";
+import { api } from "don-utils";
+import Web3 from "web3";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -117,33 +120,40 @@ export const FarmerBio = ({
   const [shortLink, setShortLink] = useState<string | null>(null);
 
   const [code, setCode] = useState("");
+  const { connected, getWeb3Ref} = useWeb3Context();
+  const fetchInfoFromApi = async () => {
+    const web3 = getWeb3Ref().current as Web3;
+    const accounts = await web3.eth.getAccounts();
+    try {
+      const response = await api.get(
+        "/api/v2/shortener?" +
+          new URLSearchParams({
+            pool_address: poolAddress,
+            wallet_address: accounts[0],
+          }).toString()
+      );
+      if (response.data) {
+        setShortLink(getShareUrl(response.data.code));
+        setCode(response.data.code);
+        setImageUrl(response.data.image);
+      }
+    } catch(e){
 
-  // const fetchInfoFromApi = async () => {
-  //   const accounts = await web3.eth.getAccounts();
-  //   try {
-  //     const response = await api.get(
-  //       "/api/v2/shortener?" +
-  //         new URLSearchParams({
-  //           pool_address: poolAddress,
-  //           wallet_address: accounts[0],
-  //         }).toString()
-  //     );
-  //     if (response.data) {
-  //       setShortLink(getShareUrl(response.data.code));
-  //       setCode(response.data.code);
-  //       setImageUrl(response.data.image);
-  //     }
-  //   } catch(e){
+    }
 
-  //   }
+  };
 
-  // };
+  useEffect(() => {
+    if(connected){
+      fetchInfoFromApi();
+    }
+  
+  }, [connected]);
 
-  // useEffect(() => {
-  //   fetchInfoFromApi();
-  // }, []);
-
-  const handleShareClick = () => {
+  const handleShareClick = async () => {
+    if(!connected){
+      return alert("Connect Wallet");
+    }
     if (shortLink && imageUrl) {
       setShareLink(true);
     } else {
@@ -153,6 +163,7 @@ export const FarmerBio = ({
 
   const handleCreateLink = () => {
     setShareLink(true);
+    setSharePopup(false);
   };
 
   const apy =
