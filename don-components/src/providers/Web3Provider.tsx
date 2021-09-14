@@ -123,12 +123,14 @@ export const Web3Provider: React.FC<{
   }, []);
   const web3ModalRef = useRef<any | null>(null);
 
-
   useEffect(() => {
-    import("web3modal").then(item => {
-      web3ModalRef.current = item.default;
-    })
-  }, [])
+    import("web3modal").then((Modal) => {
+      web3ModalRef.current = new Modal.default({
+        network: "mainnet", // optional
+        cacheProvider: true,
+      });
+    });
+  }, []);
 
   const connectDapp = useCallback(async (chainId: number) => {
     const provider = await web3ModalRef.current.connect();
@@ -175,16 +177,29 @@ export const Web3Provider: React.FC<{
     if (!provider.on) {
       return;
     }
-    provider.on("close", () => resetApp());
+
+    provider.on("close", () => {
+      resetApp();
+    });
     provider.on("accountsChanged", async (accounts: string[]) => {
-      updateState({ address: accounts[0] });
+      if (accounts[0]) {
+        updateState({ address: accounts[0] });
+      } else {
+        updateState({ address: accounts[0], connected: false });
+      }
     });
     provider.on("chainChanged", async (chainId: number) => {
       updateState({ chainId });
     });
+
+    // Subscribe to provider disconnection
+    provider.on("disconnect", (error: { code: number; message: string }) => {
+      resetApp();
+    });
   }, []);
 
   const context: IAppContext = useMemo(() => {
+    console.log(state, "state");
     return {
       ...state,
       web3: web3Ref.current as Web3,
