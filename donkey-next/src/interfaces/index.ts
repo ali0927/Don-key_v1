@@ -72,6 +72,7 @@ export interface IFarmerInter {
   farmerImage: {
     url: string;
   }
+  slug: string;
   status: "active" | "hidden" | "comingsoon";
   guid: string;
   farmerfee: number;

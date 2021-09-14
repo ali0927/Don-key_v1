@@ -10,7 +10,7 @@ import BigNumber from "bignumber.js";
 import { api } from "don-utils";
 import moment from "moment";
 
-const DonStakingAddress = "0x8d40C8a9F4bD8D23a244cEc57b20B7f8f43C5e0d";
+const DonStakingAddress = "0x7eD3526d1C1bC42756B31b097761dd0E1f7EABE4";
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
@@ -188,20 +188,22 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   }, [checkCanClaimTokens]);
 
   useEffect(() => {
-    if (chainId === BINANCE_CHAIN_ID) {
-      fetchState();
-      fetchTiers(stakingContract);
-      const interval = setInterval(() => {
-        fetchPendingRewards();
-      }, 1000);
-      return () => {
-        clearState();
-        clearInterval(interval);
-      };
-    } else {
-      fetchDonsFromApi();
+    if (connected) {
+      if (chainId === BINANCE_CHAIN_ID) {
+        fetchState();
+        fetchTiers(stakingContract);
+        const interval = setInterval(() => {
+          fetchPendingRewards();
+        }, 1000);
+        return () => {
+          clearState();
+          clearInterval(interval);
+        };
+      } else {
+        fetchDonsFromApi();
+      }
     }
-  }, [chainId]);
+  }, [chainId, connected]);
 
   const checkAndApproveDon = async (amount: string) => {
     const accounts = await web3.eth.getAccounts();

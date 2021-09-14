@@ -1,18 +1,16 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { EditIcon } from "icons/EditIcon";
-import { DollarIcon, DotsIcon, ShareArrowIcon, ShareandEarnIcon } from "icons";
-import { DetailTable } from "./DetailTable";
+import {  ShareandEarnIcon } from "icons";
+import { DetailTable } from "components/DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { useEffect, useState } from "react";
-import { IFarmerInter, IStrategy } from "interfaces";
+import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
 
 import { fixUrl, getShareUrl } from "helpers";
-import { useStakingContract } from "hooks";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { useWeb3Context } from "don-components";
 import { api } from "don-utils";
@@ -23,22 +21,6 @@ const StyledFarmerImage = styled.img`
   object-fit: cover;
   width: 100px;
   height: 100px;
-`;
-
-const OutlinedButton = styled.button`
-  background-color: transparent;
-  border: 1px solid rgba(128, 118, 2, 1);
-  border-radius: 5px;
-  font-size: 16px;
-  color: rgba(54, 53, 44, 1);
-  display: flex;
-  align-items: center;
-  padding: 5px 20px 5px 15px;
-  transition: all 0.3s linear;
-  &:hover {
-    background-color: #fff;
-    border-color: #fff;
-  }
 `;
 
 const Title = styled.h2`
@@ -110,7 +92,6 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
-    guid: GUID,
     farmerImage: { url: picture },
   } = farmer;
 
@@ -252,7 +233,6 @@ export const FarmerBio = ({
               network={network}
               poolVersion={pool_version}
               poolAddress={poolAddress}
-              farmerId={GUID}
               boostApy={boostApy}
             />
           </Row>

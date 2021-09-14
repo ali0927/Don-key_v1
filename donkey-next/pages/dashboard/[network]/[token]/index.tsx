@@ -92,8 +92,8 @@ const FarmerBioShort = ({
         content={item.strategy.description}
         risk={item.strategy.risk.Title.toLowerCase()}
         imageRisk={item.strategy.risk.image.url}
-        onCardClick={handleLeaderClick(item.strategy.farmer.guid)}
-        onButtonClick={handleLeaderClick(item.strategy.farmer.guid)}
+        onCardClick={handleLeaderClick(item.strategy.farmer.slug)}
+        onButtonClick={handleLeaderClick(item.strategy.farmer.slug)}
         showOnRight={!tokenObj.boostApy}
         extraApy={
           tokenObj.boostApy &&
@@ -290,6 +290,7 @@ query tokenInfo($slug: String!, $network: String!) {
               name
               symbol
             }
+            slug
             active
             guid
             poolVersion
