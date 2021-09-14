@@ -1,5 +1,4 @@
 import { NavBar } from "components/Navbar";
-import { MainSection } from "LandingPage/HeaderSection";
 import { CardsSection } from "LandingPage/CardsSection";
 import { BecomeAFarmerSection } from "LandingPage/BecomeAFarmerSection";
 import { FAQSection } from "components/FAQSection";
@@ -9,6 +8,7 @@ import { RoadMap } from "LandingPage/RoadMap/RoadMap";
 import { RoundedCompletedSection } from "LandingPage/RoundedCompletedSection";
 import { JoinCommunity } from "LandingPage/JoinCommunity";
 import { Footer } from "components/Footer";
+import { MainSection } from "LandingPage/HeaderSection";
 
 export default function Home() {
   return (

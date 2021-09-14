@@ -47,16 +47,6 @@ const styles = `
     padding-right: 3rem !important;
   }`;
 
-// .nav-item:hover:after {
-//   position: absolute;
-//   content: "";
-//   bottom: -6px;
-//   background: #222222;
-//   animation-name: ${moveInAnimation};
-//   animation-duration: 1s;
-//   animation-fill-mode: forwards;
-// }
-
 const CustomizedLink = styled(Navigate)`
   ${styles};
   position: relative;
@@ -135,14 +125,22 @@ export const NavbarLink = ({
 
   const handleRoute = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    router.push(to)
+    if(link){
+      window.open(to,target === "openInCurrentTab" ? "_self" : "_blank" );
+    }
+    else{
+      router.push(to)
+    }
+
   };
 
   if (link) {
     return (
       <Customizeda
         className={className}
+        onClick={handleRoute}
         target={target === "openInCurrentTab" ? "_self" : "_blank"}
+        // onClick={handleRoute}
       >
         {children}
       </Customizeda>
