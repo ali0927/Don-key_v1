@@ -5,7 +5,7 @@ import popeye from "./images/popeye.svg";
 export const leaderBoardData: IFarmer[] = [
   {
     name: "Djony111",
-    picture: image1,
+    picture: image1.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -18,7 +18,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Sally",
-    picture: popeye,
+    picture: popeye.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -31,7 +31,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Don",
-    picture: image1,
+    picture: image1.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -44,7 +44,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Alex",
-    picture: popeye,
+    picture: popeye.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -57,7 +57,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Djony112",
-    picture: image1,
+    picture: image1.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -70,7 +70,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Sally112",
-    picture: popeye,
+    picture: popeye.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -83,7 +83,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Don112",
-    picture: image1,
+    picture: image1.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -96,7 +96,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Alexgroup",
-    picture: popeye,
+    picture: popeye.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -109,7 +109,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Djony-don",
-    picture: image1,
+    picture: image1.src,
     status: "active",
     poolAddress: "",
     GUID: "",
@@ -122,7 +122,7 @@ export const leaderBoardData: IFarmer[] = [
   },
   {
     name: "Sallygroup12",
-    picture: popeye,
+    picture: popeye.src,
     status: "active",
     poolAddress: "",
     GUID: "",

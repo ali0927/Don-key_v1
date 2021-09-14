@@ -25,11 +25,11 @@ const styles = `
   @media (min-width: 992px) {
     padding-left: 1.0rem;
   }
+  color: #222;
 
-  // :hover {
-  //   animation: move 1s;
-  //   border-bottom: 3px solid #222222;
-  // }
+  &:hover {
+    color: #222;
+  }
 
   @media (min-width: 800px) {
     padding-right: 3rem !important;

@@ -21,7 +21,7 @@ export const Logo = () => {
         className="d-flex align-items-center inherit-color no-underline"
         to="/"
       >
-        <Image src={donkeylogo} alt="Don key Logo" />
+        <Image loading="eager" width={130} height={30} src={donkeylogo} alt="Don key Logo" />
       </Navigate>
     </Navbar.Brand>
   );

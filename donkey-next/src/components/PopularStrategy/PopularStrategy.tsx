@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 import { IFarmer } from "interfaces";
-import Image from "next/image"
+import Image from "next/image";
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
     <div className="straticon">
@@ -242,7 +242,7 @@ export const PopularStrategy = ({
 
   const renderContent = () => {
     return (
-      <div className="popularstrategy__content">
+      <div className="p-4">
         <div className="popularstrategy__content__info">
           <div>
             <p className="mb-0">Total Value</p>
@@ -339,7 +339,7 @@ export const PopularStrategy = ({
           </div>
         )}
         <h5 className="popularstrategy__content__title">{contentTitle}</h5>
-        <div className="d-flex flex-column justify-content-between h-100">
+        <div className="d-flex flex-column justify-content-between ">
           <DescriptionContent className="popularstrategy__content__text">
             <ShowMoreContent
               content={content}
@@ -356,12 +356,8 @@ export const PopularStrategy = ({
                 <ButtonWidget varaint="outlined" height="40px" disabled>
                   Invest
                 </ButtonWidget>
-                <div  className="position-absolute">
-                <Image
-                 
-                  src={comingsoon}
-                  alt="ImageNotFound"
-                />
+                <div style={{top: -25, right: 10}} className="position-absolute">
+                  <Image src={comingsoon} alt="ImageNotFound" />
                 </div>
               </div>
             ) : (
@@ -399,7 +395,7 @@ export const PopularStrategy = ({
             <Col
               sm={12}
               onClick={handleCardClick}
-              className={clsx("popularstrategy__title ", {
+              className={clsx("d-flex align-items-center", {
                 "cursor-pointer": !comingSoonProp,
               })}
             >
@@ -421,7 +417,7 @@ export const PopularStrategy = ({
             graph
           ) : (
             <div>
-              <img src={strategyImage} className="imageToShow" alt="graph" />
+              <img src={strategyImage} style={{maxWidth:`100%`}} alt="graph" />
             </div>
           )}
         </GraphWrapper>

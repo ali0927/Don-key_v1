@@ -125,7 +125,7 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     <>
       <HeadingWrapper className="position-relative mt-5 mb-5">
         <Heading>Leaderboard</Heading>
-        <CommingSoon src={comingsoon} />
+        <CommingSoon src={comingsoon.src} />
       </HeadingWrapper>
       <div className="position-relative">
         {isDisable && (

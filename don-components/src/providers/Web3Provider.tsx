@@ -199,7 +199,6 @@ export const Web3Provider: React.FC<{
   }, []);
 
   const context: IAppContext = useMemo(() => {
-    console.log(state, "state");
     return {
       ...state,
       web3: web3Ref.current as Web3,

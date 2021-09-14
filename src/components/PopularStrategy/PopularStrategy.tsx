@@ -398,7 +398,7 @@ export const PopularStrategy = ({
             <Col
               sm={12}
               onClick={handleCardClick}
-              className={clsx("popularstrategy__title ", {
+              className={clsx("d-flex align-items-center", {
                 "cursor-pointer": !comingSoonProp,
               })}
             >

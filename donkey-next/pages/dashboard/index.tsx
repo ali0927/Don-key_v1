@@ -104,7 +104,7 @@ export default function Dashboard({ tokens }: { tokens: IStrapiToken[] }) {
     <>
       <Root>
         <NavBar variant={"loggedin"} />
-        <RootWrapper className="pt-5 borderCollapse position-relative">
+        <RootWrapper className="pt-5 position-relative">
           <CustomizedContainer>
             <Row>
               <Ellipse1>
@@ -131,7 +131,7 @@ export default function Dashboard({ tokens }: { tokens: IStrapiToken[] }) {
           </CustomizedContainer>
         </RootWrapper>
       </Root>
-      <Body className="leaderbord-top pb-5">
+      <Body className="pt-5 pb-5">
         {tokens.length === 0 ? (
           <CustomizedContainer>
             <div className="container">

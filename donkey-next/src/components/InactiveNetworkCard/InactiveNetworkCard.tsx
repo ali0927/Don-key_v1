@@ -4,6 +4,7 @@ import { useSwitchNetwork } from "hooks";
 // import { LinkIcon, WalletIcon } from "icons";
 import { INetwork } from "interfaces";
 // import moment from "moment";
+import Image from "next/image";
 // import { StakingTimer } from "Pages/InvestmentsPage/StakingInfo/StakingInfo";
 import { Spinner } from "react-bootstrap";
 // import { useHistory } from "react-router";
@@ -121,10 +122,10 @@ export const InactiveNetworkCard = ({
           <DonButtonContained
             onClick={() => switchNetwork(correctNetwork.chainId)}
           >
-            <img
-              src="/assets/images/usericon.png"
+            <Image
+              src="/images/usericon.png"
               className="d-inline-block align-top mr-md-2"
-              alt="ImageNotFound"
+              alt="Metamask Icon"
             />{" "}
             Switch to {correctNetwork.symbol}
           </DonButtonContained>
@@ -150,8 +151,9 @@ export const InactiveNetworkCard = ({
         <DonButtonContained
           onClick={() => switchNetwork(correctNetwork.chainId)}
         >
-          <img
-            src="/assets/images/usericon.png"
+          <Image
+            placeholder="blur"
+            src="/images/usericon.png"
             className="d-inline-block align-top mr-md-2"
             alt="ImageNotFound"
           />{" "}
