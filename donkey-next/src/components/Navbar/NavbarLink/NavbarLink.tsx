@@ -61,6 +61,7 @@ const CustomizedLink = styled(Navigate)`
   ${styles};
   position: relative;
   :hover:after {
+    cursor: pointer;
     position: absolute;
     content: "";
     bottom: -6px;
@@ -86,6 +87,7 @@ const Customizeda = styled.a`
   ${styles}
   position: relative;
   :hover:after {
+    cursor: pointer;
     position: absolute;
     content: "";
     bottom: -6px;
@@ -121,7 +123,8 @@ export const NavbarLink = ({
   link?: boolean;
   target?: "openInNewTab" | "openInCurrentTab";
 }) => {
-  const { pathname } = useRouter();
+  const router = useRouter();
+  const { pathname } = router;
 
   const className = clsx("pr-md-5", {
     active: pathname === to,
@@ -129,11 +132,16 @@ export const NavbarLink = ({
     colorBlack: linkColor === "black",
     "text-white": linkColor === "white",
   });
+
+  const handleRoute = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    router.push(to)
+  };
+
   if (link) {
     return (
       <Customizeda
         className={className}
-        href={to}
         target={target === "openInCurrentTab" ? "_self" : "_blank"}
       >
         {children}
@@ -144,6 +152,7 @@ export const NavbarLink = ({
     <CustomizedLink
       className={className}
       to={to}
+      onClick={handleRoute}
       target={target === "openInCurrentTab" ? "_self" : "_blank"}
     >
       {children}

@@ -31,15 +31,6 @@ const NextImage = styled(Image)`
    object-position: top;
 `;
 
-// const Image = styled(Image)`
-//   border-radius: 50%;
-//   overflow: hidden;
-//   width: 174px;
-//   height: 174px;
-//   object-fit: cover;
-//   object-position: top;
-// `;
-
 const Heading3 = styled.h3`
   font-family: Poppins;
   font-size: 1.37rem;
