@@ -43,7 +43,7 @@ export const validate = (
   rules: { rule: string; errMessage: string }[]
 ): { rule: string; msg: string } | null => {
   let err: { rule: string; msg: string } | null = null;
-  rules.forEach((rule, index) => {
+  rules.forEach((rule) => {
     if (!err) {
       const finalRule = extractRule(rule.rule);
       if (typeof finalRule === "object") {

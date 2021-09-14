@@ -11,11 +11,6 @@ const Root = styled.div`
   background-color: ${theme.palette.background.yellow};
 `;
 
-const Paragraph = styled.p`
-  font-size: 20px;
-  text-align: center;
-`;
-
 
 const TeamHeading = styled.p`
   font-family: ObjectSans-Bold;

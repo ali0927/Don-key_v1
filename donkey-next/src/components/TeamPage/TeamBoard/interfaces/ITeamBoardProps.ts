@@ -3,5 +3,5 @@ export interface ITeamBoardProps {
   designation: string;
   twitterlink?: string;
   linkedLink?: string;
-  image: string;
+  image: StaticImageData;
 }

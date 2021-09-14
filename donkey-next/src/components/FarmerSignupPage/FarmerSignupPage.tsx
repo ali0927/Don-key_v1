@@ -9,7 +9,7 @@ import { DonKeyTextField } from "components/DonKeyTextField";
 import { FileUploadButton } from "components/FileUploadButton";
 import { IDonKeyFieldInfoState } from "components/DonKeyTextField/interfaces";
 import { validate } from "./helpers";
-import { ButtonWidget, ContainedButton } from "components/Button";
+import { ButtonWidget } from "components/Button";
 import { useSnackbar } from "notistack";
 import { ErrorSnackbar } from "components/Snackbars";
 import { captureException } from "helpers";
@@ -80,16 +80,16 @@ const CustomContainer = styled(Container)`
   margin-bottom: 9%;
 `;
 
-const MakeFarmerProfileBtn = styled(ContainedButton)`
-  width: fit-content;
-  border-radius: 5px;
-  padding: 12px 15px;
-  font-size: 16px;
-  line-height: 19px;
-  letter-spacing: 0.03em;
-  color: #070602;
-  font-weight: 500;
-`;
+// const MakeFarmerProfileBtn = styled(ContainedButton)`
+//   width: fit-content;
+//   border-radius: 5px;
+//   padding: 12px 15px;
+//   font-size: 16px;
+//   line-height: 19px;
+//   letter-spacing: 0.03em;
+//   color: #070602;
+//   font-weight: 500;
+// `;
 
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
@@ -180,7 +180,7 @@ export const FarmerSignupPage = () => {
         message = error.response.data["data"];
       }
       enqueueSnackbar(message, {
-        content: (key, msg) => <ErrorSnackbar message={msg as string} />,
+        content: (_, msg) => <ErrorSnackbar message={msg as string} />,
         autoHideDuration: 5000,
         persist: false,
       });

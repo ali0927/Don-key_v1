@@ -25,10 +25,10 @@ const CardContent = styled.div`
 `;
 
 const NextImage = styled(Image)`
-   border-radius: 50%;
-   overflow: hidden;
-   object-fit: cover;
-   object-position: top;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: top;
 `;
 
 const Heading3 = styled.h3`
@@ -63,7 +63,13 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
       <Column className="col-md-4 col-lg-3">
         <CardWarpper className="position-relative">
           <CardContent className="flex-column align-items-center">
-            <NextImage className="img-fluid" width="174px" height="174px" src={image} alt="ImageNotFound" />
+            <NextImage
+              className="img-fluid"
+              width="174px"
+              height="174px"
+              src={image}
+              alt={name}
+            />
             <Heading3 className="mt-4 text-center">{name}</Heading3>
             <SubTitle>{designation}</SubTitle>
             <IconsRoot className="d-flex justify-content-around">
