@@ -9,19 +9,21 @@ import { useInitialInvestment } from "hooks/useInitialInvestment";
 export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
   const { isReady } = useInvestedAmount(poolAddress);
   const [withdrawalValue, setWithdrawalValue] = useState("-");
-  const { web3 } = useWeb3Context();
+  const { web3, connected } = useWeb3Context();
 
   useEffect(() => {
     (async () => {
-      try {
-        const amount = await calculateWithdrawAmount(web3, poolAddress);
-        setWithdrawalValue(amount);
-      } catch (err) {
-        captureException(err, "MyInvestment");
+      if (connected) {
+        try {
+          const amount = await calculateWithdrawAmount(web3, poolAddress);
+          setWithdrawalValue(amount);
+        } catch (err) {
+          captureException(err, "MyInvestment");
+        }
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [connected]);
 
   if (!isReady) {
     return <>-</>;

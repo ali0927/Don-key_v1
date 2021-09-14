@@ -8,21 +8,19 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
-import styled from "styled-components";
 import { captureException } from "helpers";
-
 
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, poolVersion } = props;
 
   const [loading, setLoading] = React.useState(false);
-  const { holdingDons, refetch } = useStakingContract();
+  const { holdingDons, refetch, ...rest } = useStakingContract();
   const { doWithdraw } = useWithdraw();
   const [hasCheckedDons, setHasChecked] = React.useState(false);
 
   useEffectOnTabFocus(() => {
-    if(poolVersion === 3) {
+    if(poolVersion === 3 && refetch) {
       (async () => {
         setHasChecked(false);
         try {
@@ -34,8 +32,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         }
       })();
     }
-    
-  }, []);
+  }, [refetch]);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
   const handleWithDraw = async () => {
     doWithdraw(

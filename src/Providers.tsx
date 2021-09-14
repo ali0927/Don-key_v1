@@ -6,6 +6,7 @@ import { SnackbarProvider } from "notistack";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./apolloClient";
 import { Web3Provider } from "don-components";
+import { StakingContractProvider } from "components/StakingContractProvider";
 
 export const Providers: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -20,7 +21,9 @@ export const Providers: React.FC<{ children: React.ReactNode }> = ({
           }}
         >
           <Web3Provider>
-            <TooltipProvider>{children}</TooltipProvider>
+            <StakingContractProvider>
+              <TooltipProvider>{children}</TooltipProvider>
+            </StakingContractProvider>
           </Web3Provider>
         </SnackbarProvider>
       </NotificationProvider>

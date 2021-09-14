@@ -8,12 +8,13 @@ import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
 import { useTVL } from "hooks";
-import { getShareUrl, getUserReferralCode } from "helpers";
+import { getShareUrl, getUserReferralCode, signUpAsReferral } from "helpers";
 
 import html2canvas from "html2canvas";
 import { api, uuidv4, waitFor } from "don-utils";
 import { Spinner } from "react-bootstrap";
 import { useWeb3Context } from "don-components";
+import { useReferralContext } from "contexts/ReferralContext";
 const TextOnInput = styled.div`
   position: relative;
 `;
@@ -92,8 +93,8 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-  const {web3} = useWeb3Context();
-
+  const { web3 } = useWeb3Context();
+  const { checkSignUp } = useReferralContext();
   const [loading, setLoading] = useState(false);
 
   const handleImageGenerate = async (isUpdate?: string | null) => {
@@ -119,6 +120,12 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
       let result: any;
       if (!isUpdate) {
         let code = await getUserReferralCode(web3);
+        if (!code) {
+          code = uuidv4().slice(0, 7);
+          await signUpAsReferral(web3, code.toLowerCase());
+          checkSignUp();
+        }
+
         const urlToShorten =
           window.location.origin +
           window.location.pathname +
@@ -127,7 +134,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         formData.append("image", file);
         formData.append("pool_address", props.poolAddress);
         result = await api.post("/api/v2/shortener", formData);
-        setCode(result.data.code)
+        setCode(result.data.code);
       } else {
         formData.append("code", props.code);
         formData.append("image", file);
