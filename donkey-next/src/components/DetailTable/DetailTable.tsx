@@ -19,6 +19,7 @@ import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "components/InvestBlackCard";
 import {
+  ConnectToMetamaskCard,
   InactiveNetworkCard,
   WithdrawRequestedCard,
 } from "components/InactiveNetworkCard";
@@ -229,7 +230,7 @@ export const DetailTable = ({
 
   const { dominance } = useDominance(poolAddress, network.chainId);
   const web3 = getWeb3(network.chainId);
-  const { chainId: currentNetwork,  getConnectedWeb3, connected } = useWeb3Context();
+  const { chainId: currentNetwork, getConnectedWeb3, connected } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
@@ -245,11 +246,11 @@ export const DetailTable = ({
   const { symbol } = usePoolSymbol(poolAddress, web3);
 
   const isActiveNetwork = network?.chainId === currentNetwork;
-
+  const connectedWeb3 = getConnectedWeb3();
   useEffect(() => {
     (async () => {
       if (poolVersion > 2 && isActiveNetwork && connected) {
-        const connectedWeb3 = getConnectedWeb3();
+       
         const pool = await getPoolContract(connectedWeb3, poolAddress, poolVersion);
         const accounts = await connectedWeb3.eth.getAccounts();
         const isRequested = await pool.methods
@@ -317,18 +318,23 @@ export const DetailTable = ({
         )
       );
     } else {
-      if (isActiveNetwork) {
-        return (
-          <InvestBlackCard
-            poolAddress={poolAddress}
-            poolVersion={poolVersion}
-            network={network}
-            boostApy={boostApy}
-          />
-        );
-      } else {
-        return <InactiveNetworkCard correctNetwork={network} />;
+      if(connected){
+        if (isActiveNetwork) {
+          return (
+            <InvestBlackCard
+              poolAddress={poolAddress}
+              poolVersion={poolVersion}
+              network={network}
+              boostApy={boostApy}
+            />
+          );
+        } else {
+          return <InactiveNetworkCard correctNetwork={network} />;
+        }
+      }else {
+        return <ConnectToMetamaskCard network={network} />
       }
+   
     }
   };
 

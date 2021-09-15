@@ -56,10 +56,11 @@ const MyBalanceInBUSD = ({
   poolVersion: number;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
 
   const fetchBalance = async () => {
     try {
+      const web3 = getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
       //@ts-ignore
       const acceptedToken =

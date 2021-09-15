@@ -284,7 +284,7 @@ export const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
   const web3 = getWeb3(56);
-  const { web3: connectedWeb3, connected } = useWeb3Context();
+  const { getConnectedWeb3, connected } = useWeb3Context();
   const { isReady, transformedData, transformData } = useTransformedData();
 
   const totalDon = useMemo(() => {
@@ -305,6 +305,7 @@ export const MyReferrals = () => {
   const [rewardsEarned, setEarned] = useState("-");
   const fetchAvailableDon = async () => {
     setAvailable("-");
+    const connectedWeb3 = getConnectedWeb3();
     const rewardSystem = await getRewardSystemContract(connectedWeb3);
     const accounts = await connectedWeb3.eth.getAccounts();
     const user = await rewardSystem.methods.userInfo(accounts[0]).call();
@@ -320,6 +321,7 @@ export const MyReferrals = () => {
   const hasAvailable =
     availableDon !== "-" ? new BigNumber(availableDon).gt(0) : false;
   const handleWithdraw = async () => {
+    const connectedWeb3 = getConnectedWeb3();
     const rewardContract = await getRewardSystemContract(connectedWeb3);
     const accounts = await connectedWeb3.eth.getAccounts();
     await rewardContract.methods.harvestRewards().send({ from: accounts[0] });

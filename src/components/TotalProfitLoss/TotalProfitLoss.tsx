@@ -27,7 +27,7 @@ export const TotalProfitLoss = ({
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
   const {
-    web3: connectedWeb3,
+    getConnectedWeb3,
     connected,
     chainId: walletChainId,
   } = useWeb3Context();
@@ -39,6 +39,7 @@ export const TotalProfitLoss = ({
     (async () => {
       if (connected && walletChainId === chainId) {
         try {
+          const connectedWeb3 = getConnectedWeb3();
           const accounts = address ? [address] : await connectedWeb3.eth.getAccounts();
           const amountWithdraw = await getAmount(
             connectedWeb3,
