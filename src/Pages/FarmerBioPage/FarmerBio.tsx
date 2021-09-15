@@ -120,9 +120,9 @@ export const FarmerBio = ({
   const [shortLink, setShortLink] = useState<string | null>(null);
 
   const [code, setCode] = useState("");
-  const { connected, getWeb3Ref} = useWeb3Context();
+  const { connected, getConnectedWeb3} = useWeb3Context();
   const fetchInfoFromApi = async () => {
-    const web3 = getWeb3Ref().current as Web3;
+    const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     try {
       const response = await api.get(

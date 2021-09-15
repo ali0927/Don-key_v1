@@ -6,10 +6,11 @@ export const useIsInvested = (poolAddress: string) => {
   const [isReady, setIsReady] = useState(false);
   const [isInvested, setisInvested] = useState(false);
 
-  const { web3, address } = useWeb3Context();
+  const { getConnectedWeb3, address } = useWeb3Context();
 
   const getIsInvested = async () => {
     try {
+      const web3 = getConnectedWeb3();
       const contract = await getPoolContract(web3, poolAddress, 2);
 
       const isInvested = await contract.methods.isInvestor(address).call();

@@ -356,7 +356,7 @@ export const BridgePopup = ({
       }
     }
   };
-  const { chainId, web3 } = useWeb3Context();
+  const { chainId, getConnectedWeb3 } = useWeb3Context();
   const { switchNetwork } = useSwitchNetwork();
 
   const [input1Chain, setInput1Chain] = useState(SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1);
@@ -382,6 +382,7 @@ export const BridgePopup = ({
     if (step === "transferring") {
       return;
     }
+    const web3 = getConnectedWeb3();
 
     setStep("transferring");
     try {
@@ -416,6 +417,7 @@ export const BridgePopup = ({
   };
 
   const fetchDons = async () => {
+    const web3 = getConnectedWeb3();
     const dons = await getUserDons(web3, [1, 56]);
     setBalance({ 1: dons[0].balance, 56: dons[1].balance });
   };
@@ -423,6 +425,7 @@ export const BridgePopup = ({
   const checkDonsAreTransferred = async (don1: string, don2: string) => {
     let result = false;
     while (true) {
+      const web3 = getConnectedWeb3();
       const dons = await getUserDons(web3, [1, 56]);
       await waitFor(4000);
       if (dons[0].balance !== don1 && don2 !== dons[1].balance) {

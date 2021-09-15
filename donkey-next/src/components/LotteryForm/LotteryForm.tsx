@@ -153,17 +153,19 @@ const UniswapLink =
 
 const useTVL = () => {
   const [tvl, setTVL] = useState<string | null>(null);
-  const { web3 ,chainId } = useWeb3Context();
+  const { getConnectedWeb3 ,chainId, connected } = useWeb3Context();
  
   const { dependsOn } = useRefresh();
   useEffect(() => {
-    if (web3) {
+   
+    if (connected) {
       (async () => {
+        const web3 = getConnectedWeb3();
         const tvl = await calculateTVL(web3, chainId === BINANCE_CHAIN_ID);
         setTVL(tvl);
       })();
     }
-  }, [web3, dependsOn]);
+  }, [connected, dependsOn]);
 
   return { tvl };
 };
@@ -171,7 +173,7 @@ const useTVL = () => {
 export const LotteryForm = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const { web3, connected, chainId} = useWeb3Context();
+  const { getConnectedWeb3, connected, chainId} = useWeb3Context();
   const { lpTokens } = useAvailableLpTokens();
   const { lpTokens: stakedTokens } = useStakedLPTokens();
   const { rewards } = useEarnedRewards();
@@ -197,6 +199,7 @@ export const LotteryForm = () => {
   const [disableButtons, setDisableButtons] = useState(false);
 
   const handleUnstake = async () => {
+    const web3 = getConnectedWeb3();
     const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
     setDisableButtons(true);
     try {
@@ -221,6 +224,7 @@ export const LotteryForm = () => {
   }, [stakedTokens]);
 
   const handleHarvest = async () => {
+    const web3 = getConnectedWeb3();
     const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
     setDisableButtons(true);
     try {

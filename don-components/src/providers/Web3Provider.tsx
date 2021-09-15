@@ -26,8 +26,7 @@ interface IAppState {
 }
 
 type IAppContext = IAppState & {
-  web3: Web3;
-  getWeb3Ref: () => React.RefObject<Web3>;
+  getConnectedWeb3: () => Web3;
   connectDapp: () => Promise<void>;
   disconnectDapp: () => Promise<void>;
   switchNetwork: (chainId: number) => Promise<void>
@@ -200,10 +199,9 @@ export const Web3Provider: React.FC<{
   const context: IAppContext = useMemo(() => {
     return {
       ...state,
-      web3: web3Ref.current as Web3,
       connectDapp,
       disconnectDapp,
-      getWeb3Ref: () => web3Ref,
+      getConnectedWeb3: () => web3Ref.current as Web3,
       switchNetwork: (chainId: number) => switchNetwork(state.provider,chainId),
     };
   }, [state]);

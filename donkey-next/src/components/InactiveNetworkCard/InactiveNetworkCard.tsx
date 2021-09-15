@@ -1,12 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
 import { ButtonWidget } from "components/Button";
+import { signUser } from "components/Navbar";
 import { StakingTimer } from "components/StakingInfo";
+import { useWeb3Context } from "don-components";
 import { useSwitchNetwork } from "hooks";
 import { INetwork } from "interfaces";
 import moment from "moment";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
-
 
 const Text = styled.p`
   font-size: 15px;
@@ -159,6 +160,42 @@ export const InactiveNetworkCard = ({
         </DonButtonContained>
       </div>
     </CardWrapper>
+  );
+};
+
+export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
+  const { connectDapp, getConnectedWeb3, switchNetwork } = useWeb3Context();
+  const handleConnect =async  () => {
+    await connectDapp();
+    const web3 = getConnectedWeb3();
+    await signUser(web3);
+    await switchNetwork(network.chainId);
+  }
+  return (
+    <div className="text-center pt-5">
+      <h5>Connect your wallet to start using Don Key</h5>
+
+      <Text
+        className="d-flex align-items-center justify-content-center"
+        muted
+        pointer
+      >
+        Click on connect button below
+      </Text>
+      <div className="mt-5">
+        {/* <DonButtonOutlined className="mr-3">
+      <WalletIcon /> Disconnect
+    </DonButtonOutlined> */}
+        <DonButtonContained onClick={handleConnect}>
+          <img
+            src="/images/usericon.png"
+            className="d-inline-block align-top mr-md-2"
+            alt="Metamask Icon"
+          />{" "}
+          Connect Wallet
+        </DonButtonContained>
+      </div>
+    </div>
   );
 };
 

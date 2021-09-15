@@ -6,7 +6,7 @@ import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 
 export const useAvailableLpTokens = () => {
 
-  const { web3, connected, chainId } = useWeb3Context();
+  const { getConnectedWeb3, connected, chainId } = useWeb3Context();
   const {dependsOn} = useRefresh();
   const [availableLpToken, setAvailableLpTokens] =
     useState<string | null>(null);
@@ -14,6 +14,7 @@ export const useAvailableLpTokens = () => {
   useEffect(() => {
     if (connected) {
       (async () => {
+        const web3 = getConnectedWeb3();
         const accounts = await web3.eth.getAccounts();
         const lpTokenContract = await getLPTokenContract(web3, chainId === BINANCE_CHAIN_ID);
         const amount = await lpTokenContract.methods

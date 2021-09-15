@@ -278,6 +278,7 @@ export const TokenPage = () => {
             {sortedStrategies.map((item) => {
               return (
                 <FarmerBioShort
+                  key={item.strategy.id}
                   isShown={isOpen}
                   onShowLess={() => setIsOpen(false)}
                   onShowMore={() => setIsOpen(true)}

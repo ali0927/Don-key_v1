@@ -27,7 +27,7 @@ export const UpdatePoolDialog: React.FC<{
 
   const [new_pool, setnewPoolvalue] = useState("");
   const context = useWeb3Context();
-  const web3 = context.web3 as Web3;
+  const web3 = context.getConnectedWeb3() as Web3;
   const handleUpdate = async () => {
     setLoading(true);
     try {

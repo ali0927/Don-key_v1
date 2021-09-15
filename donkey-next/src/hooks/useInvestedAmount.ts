@@ -7,12 +7,13 @@ export const useInvestedAmount = (poolAddress:string) => {
   const [isReady, setIsReady] = useState(false)
   const [investedAmmount, setinvestedAmmount] = useState("-");
  
-  const {web3} = useWeb3Context()
+  const {getConnectedWeb3} = useWeb3Context()
 
   const getPoolValue = async () => {
     
    
     try {
+      const web3 = getConnectedWeb3();
       const num = await getInvestedAmount(web3, poolAddress);
       setinvestedAmmount(num.toFixed(2));
     }catch(e){

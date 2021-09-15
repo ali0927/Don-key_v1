@@ -28,10 +28,11 @@ export const AssignLpTokens: React.FC<{
   const [pool_value, setPoolvalue] = useState("");
 
   const [new_pool, setnewPoolvalue] = useState("");
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
   const handleUpdate = async () => {
     setLoading(true);
     try {
+      const web3 = getConnectedWeb3();
       const pool = await getPoolContract(web3, pool_address, poolVersion);
       const accounts = await web3.eth.getAccounts();
       const token = await getPoolToken(web3, pool_address);

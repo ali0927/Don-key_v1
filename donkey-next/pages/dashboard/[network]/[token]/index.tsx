@@ -140,7 +140,7 @@ const sortStrategies = (list: any[]) => {
 const emptryArr: any[] = [];
 
 export default function TokenPage({ data }: { data: any }) {
-  const { chainId } = useWeb3Context();
+  const { chainId, connected } = useWeb3Context();
   const tokenObj = data ? data.tokens[0] : null;
   const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
   const network = data ? data.tokens[0].network : { chainId: null };
@@ -196,7 +196,7 @@ export default function TokenPage({ data }: { data: any }) {
       </Section>
       <GridBackground className="py-5">
         <div className="container">
-          {!isActiveNetwork && (
+          {!isActiveNetwork && connected && (
             <div className="row mb-5">
               <div className="col-12">
                 <InactiveNetworkCard variant="white" correctNetwork={network} />

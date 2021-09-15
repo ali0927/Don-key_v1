@@ -57,8 +57,9 @@ export const Share: React.FC<IShareProps> = (props) => {
 
   const [tvl, setTvl] = useState("");
 
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
   const fetchTvl = async () => {
+    const web3 = getConnectedWeb3();
     const poolValue = await getTotalPoolValue(web3, pool_address);
     const tokenPrice = await getTokenPrice(
       web3,
@@ -74,6 +75,7 @@ export const Share: React.FC<IShareProps> = (props) => {
   const {checkSignUp} = useReferralContext();
   const handleCreateLink = async () => {
     setLoading(true);
+    const web3 = getConnectedWeb3();
     let code = await getUserReferralCode(web3);
     if (!code) {
       code = uuidv4().slice(0, 7);

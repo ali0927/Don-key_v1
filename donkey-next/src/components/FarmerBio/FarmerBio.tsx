@@ -12,9 +12,8 @@ import { theme } from "theme";
 
 import { fixUrl, getShareUrl } from "helpers";
 import { Share, ShareLink } from "components/ShareAndEarn";
-import { useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import { api } from "don-utils";
-import Web3 from "web3";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -101,9 +100,9 @@ export const FarmerBio = ({
   const [shortLink, setShortLink] = useState<string | null>(null);
 
   const [code, setCode] = useState("");
-  const { connected, getWeb3Ref} = useWeb3Context();
+  const { connected, getConnectedWeb3} = useWeb3Context();
   const fetchInfoFromApi = async () => {
-    const web3 = getWeb3Ref().current as Web3;
+    const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     try {
       const response = await api.get(
@@ -218,7 +217,7 @@ export const FarmerBio = ({
               lg={6}
               className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {pool_version === 3 && network.symbol === "BSC" ? (
+              {pool_version === 3 && network.chainId === BINANCE_CHAIN_ID ? (
                 <ShareButton onClick={handleShareClick}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn

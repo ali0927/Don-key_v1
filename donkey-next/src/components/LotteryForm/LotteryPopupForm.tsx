@@ -35,7 +35,7 @@ export const LotteryPopupForm = ({
 
   const [invalidAmount, setInvalidAmount] = useState(false);
   const { refresh } = useRefresh();
-  const { chainId, web3} = useWeb3Context();
+  const { chainId, getConnectedWeb3} = useWeb3Context();
   const handleChange =
     (name: keyof ILotteryParticipate) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +54,7 @@ export const LotteryPopupForm = ({
   const [loading, setLoading] = useState(false);
 
   const handleStake = async () => {
+    const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     setLoading(true);
     try {

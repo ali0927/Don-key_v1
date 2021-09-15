@@ -93,10 +93,10 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-  const { web3 } = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const { checkSignUp } = useReferralContext();
   const [loading, setLoading] = useState(false);
-
+  const web3 = getConnectedWeb3();
   const handleImageGenerate = async (isUpdate?: string | null) => {
     setLoading(true);
     await waitFor(2000);

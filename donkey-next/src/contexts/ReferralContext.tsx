@@ -17,9 +17,10 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     referralCount: 0,
   });
 
-  const { web3, chainId } = useWeb3Context();
+  const { getConnectedWeb3, chainId } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
+    const web3 = getConnectedWeb3();
     const referralContract = await getReferralSystemContract(web3);
     const accounts = await web3.eth.getAccounts();
     const userInfo = await referralContract.methods

@@ -60,13 +60,14 @@ export const TopThreeFarmers: React.FC<ITopThreeFarmerProps> = (props) => {
     setRefresh((old) => !old);
   };
 
-  const { web3 } = useWeb3Context();
-
+  const { getConnectedWeb3 } = useWeb3Context();
+  const web3 = getConnectedWeb3();
   const StrategyCard = (leader: IFarmer, index: number) => {
     const APY = leader.apy
       ? new BigNumber(leader.apy).multipliedBy(100).toFixed(1) + "%"
       : "143%";
     const getTokenImageAsync = async () => {
+      
       return await getTokenImage(web3, leader.poolAddress);
     };
     const getTokenSymbolAsync = async () => {

@@ -58,7 +58,8 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
   return null;
 };
 export const StakingContractProvider: React.FC = memo(({ children }) => {
-  const { chainId, web3, connected } = useWeb3Context();
+  const { chainId, getConnectedWeb3, connected } = useWeb3Context();
+  const web3 = getConnectedWeb3();
   const stakingContract = useMemo(() => {
     const newWeb3 = getWeb3(56);
     return connected

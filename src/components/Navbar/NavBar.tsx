@@ -108,7 +108,7 @@ export const getAuthToken = async (publicAddress: string, signature: string) => 
 };
 
 
-export const getAuthTokenForPublicAddress = async (web3: Web3) => {
+ const getAuthTokenForPublicAddress = async (web3: Web3) => {
   const [publicAddress] = await web3.eth.getAccounts();
   const nonce = await getNonce(publicAddress);
   //@ts-ignore
@@ -116,8 +116,15 @@ export const getAuthTokenForPublicAddress = async (web3: Web3) => {
 
   return await getAuthToken(publicAddress, signature);
 };
+
+export const signUser = async (web3: Web3) => {
+
+  const token = await getAuthTokenForPublicAddress(web3);
+  localStorage.setItem(AuthToken,token.token);
+}
+
 const ConnectWalletButton = () => {
-  const { connectDapp,getWeb3Ref } = useWeb3Context();
+  const { connectDapp,getConnectedWeb3 } = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
@@ -125,9 +132,8 @@ const ConnectWalletButton = () => {
     setIsDisabled(true);
 
     await connectDapp();
-    const web3 = getWeb3Ref().current as Web3;
-    const token =await getAuthTokenForPublicAddress(web3);
-    localStorage.setItem(AuthToken,token.token);
+    const web3 = getConnectedWeb3();
+    await signUser(web3);
     
   };
   return (

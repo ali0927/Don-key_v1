@@ -32,11 +32,12 @@ export const SendWithdrawalsDialog: React.FC<{
   
   const [new_pool, setnewPoolvalue] = useState("");
   const [withdrawValue, setwithDrawvalue] = useState("");
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
   
   const handleUpdate = async () => {
     setLoading(true);
     try {
+      const web3 = getConnectedWeb3();
       if (poolVersion === 3) {
         const poolContract = await getPoolContract(
           web3,

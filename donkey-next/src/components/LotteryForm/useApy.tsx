@@ -7,12 +7,13 @@ import { useRefresh } from "./useRefresh";
 
 export const useApy = () => {
   const [apyPercent, setApyPercent] = useState<string | null>(null);
-  const { connected, web3, chainId } = useWeb3Context();
+  const { connected, getConnectedWeb3, chainId } = useWeb3Context();
   const { dependsOn } = useRefresh();
 
   useEffect(() => {
     if (connected) {
       (async () => {
+        const web3 = getConnectedWeb3();
         const apy = await calculateAPY(web3, chainId === BINANCE_CHAIN_ID);
 
         setApyPercent(apy.toFixed(0));

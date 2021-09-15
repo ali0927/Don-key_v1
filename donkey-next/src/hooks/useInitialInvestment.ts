@@ -14,10 +14,11 @@ export const useInitialInvestment = (
   const [initialInvestment, setinitialInvestment] = useState("-");
   const [initialInvestmentInUSD, setinitialInvestmentinUSD] = useState("-");
   const [isReady, setIsReady] = useState(false);
-  const { chainId, web3 } = useWeb3Context();
+  const { chainId, getConnectedWeb3 } = useWeb3Context();
   useEffect(() => {
     (async () => {
       try {
+        const web3 = getConnectedWeb3();
         const accounts = address ? [address] : await web3.eth.getAccounts();
         const amounts = [
           calculateInitialInvestment(web3, poolAddress, accounts[0]),

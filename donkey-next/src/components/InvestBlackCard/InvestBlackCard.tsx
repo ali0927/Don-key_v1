@@ -63,7 +63,7 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
-  const {web3: connectedWeb3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
@@ -124,7 +124,7 @@ export const InvestBlackCard = ({
     setShowWithdrawPopup(false);
     refresh();
   };
-
+  const connectedWeb3 = getConnectedWeb3();
   const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
     useROIAndInitialInvestment(
       connectedWeb3,

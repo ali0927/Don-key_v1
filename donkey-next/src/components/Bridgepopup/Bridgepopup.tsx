@@ -353,7 +353,7 @@ export const BridgePopup = ({
       }
     }
   };
-  const { chainId, web3 } = useWeb3Context();
+  const { chainId, getConnectedWeb3 } = useWeb3Context();
   const { switchNetwork } = useSwitchNetwork();
 
   const [input1Chain, setInput1Chain] = useState(SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1);
@@ -374,7 +374,7 @@ export const BridgePopup = ({
   const [step, setStep] = useState<
     "transferring" | "transfersuccess" | "initial"
   >("initial");
-
+  const web3 = getConnectedWeb3();
   const handleSwap = async () => {
     if (step === "transferring") {
       return;

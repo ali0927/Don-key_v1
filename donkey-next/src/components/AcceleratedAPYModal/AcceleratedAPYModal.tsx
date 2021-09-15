@@ -114,13 +114,14 @@ export const AcceleratedAPYModal = ({
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
 
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();
   const tiersListLength = Object.keys(tiersList).length;
 
   const fetchAvailableDon = async () => {
+    const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     const donContract = await getBSCDon(web3);
 

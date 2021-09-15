@@ -5,7 +5,6 @@ import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
 import { captureException, getPoolContract, getPoolToken, toWei } from "helpers";
 import {  useWeb3Context } from "don-components";
-import Web3 from "web3";
 
 
 const CancelButton = styled(ButtonWidget)`
@@ -27,7 +26,7 @@ export const UpdatePoolDialog: React.FC<{
 
   const [new_pool, setnewPoolvalue] = useState("");
   const context = useWeb3Context();
-  const web3 = context.web3 as Web3;
+  const web3 = context.getConnectedWeb3();
   const handleUpdate = async () => {
     setLoading(true);
     try {

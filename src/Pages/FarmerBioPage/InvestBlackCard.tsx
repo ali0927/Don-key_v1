@@ -65,7 +65,8 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
-  const {web3: connectedWeb3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
+  const connectedWeb3 = getConnectedWeb3();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(

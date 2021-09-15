@@ -51,7 +51,7 @@ export const useWithdraw = () => {
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
   const { refetch } = useStakingContract();
-  const { web3 } = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const doWithdraw = async (
     poolAddress: string,
     poolVersion: number,
@@ -61,6 +61,7 @@ export const useWithdraw = () => {
   ) => {
     try {
       onStart && onStart();
+      const web3 = getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
 
       const pool = await getPoolContract(web3, poolAddress, poolVersion);

@@ -56,10 +56,11 @@ const MyBalanceInBUSD = ({
   poolVersion: number;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
 
   const fetchBalance = async () => {
     try {
+      const web3 = getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
       //@ts-ignore
       const acceptedToken =
@@ -118,7 +119,7 @@ export const InvestmentPopup = ({
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
   });
@@ -129,6 +130,7 @@ export const InvestmentPopup = ({
   const [_, setChecking] = useState(false);
 
   const [applied, setApplied] = useState(false);
+  const web3 = getConnectedWeb3();
   const checkIfCodeisApplicable = async (code: string,) => {
     const userCode = await getUserReferralCode(web3);
 

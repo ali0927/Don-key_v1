@@ -231,7 +231,7 @@ export const DetailTable = ({
 
   const { dominance } = useDominance(poolAddress, network.chainId);
   const web3 = getWeb3(network.chainId);
-  const { chainId: currentNetwork, web3: connectedWeb3, connected } = useWeb3Context();
+  const { chainId: currentNetwork, getConnectedWeb3, connected } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
@@ -251,7 +251,7 @@ export const DetailTable = ({
   useEffect(() => {
     (async () => {
       if (poolVersion > 2 && isActiveNetwork && connected) {
-        console.log(connected, connectedWeb3, "Data");
+        const connectedWeb3 = getConnectedWeb3();
         const pool = await getPoolContract(connectedWeb3, poolAddress, poolVersion);
         const accounts = await connectedWeb3.eth.getAccounts();
         const isRequested = await pool.methods

@@ -7,7 +7,7 @@ import { useRefresh } from "./useRefresh";
 
 export const useEarnedRewards = () => {
 
-  const { connected, web3, chainId } = useWeb3Context();
+  const { connected, getConnectedWeb3, chainId } = useWeb3Context();
   const [earned, setEarned] = useState<string | null>(null);
   const {dependsOn} = useRefresh();
   const [updateRewards, setUpdateRewards] = useState(0);
@@ -25,6 +25,7 @@ export const useEarnedRewards = () => {
   useEffect(() => {
     if (connected) {
       (async () => {
+        const web3 = getConnectedWeb3();
         const accounts = await web3.eth.getAccounts();
         const stakingContract = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
         const rewards = await stakingContract.methods.earned(accounts[0]).call();

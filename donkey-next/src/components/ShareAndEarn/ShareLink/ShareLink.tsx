@@ -92,7 +92,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-  const {web3} = useWeb3Context();
+  const {getConnectedWeb3} = useWeb3Context();
 
   const [loading, setLoading] = useState(false);
 
@@ -118,6 +118,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
 
       let result: any;
       if (!isUpdate) {
+        const web3 = getConnectedWeb3();
         let code = await getUserReferralCode(web3);
         const urlToShorten =
           window.location.origin +
