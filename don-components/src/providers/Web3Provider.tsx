@@ -29,7 +29,7 @@ type IAppContext = IAppState & {
   getConnectedWeb3: () => Web3;
   connectDapp: () => Promise<void>;
   disconnectDapp: () => Promise<void>;
-  switchNetwork: (chainId: number) => Promise<void>
+  switchNetwork: (chainId: number) => Promise<void>;
 };
 
 const Web3Context = createContext<IAppContext | null>(null);
@@ -115,8 +115,7 @@ export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
 
 export const Web3Provider: React.FC<{
   children: React.ReactNode;
-  loader?: React.ReactElement;
-}> = ({ children, loader = <>Loading</> }) => {
+}> = ({ children, }) => {
   const [state, setState] = useState<IAppState>(INITIAL_STATE);
   const web3Ref = useRef<Web3 | null>(null);
   const updateState = useCallback((newState: Partial<IAppState>) => {
@@ -133,9 +132,11 @@ export const Web3Provider: React.FC<{
     });
   }, []);
 
+  const providerRef = useRef<any | null>(null);
+
   const connectDapp = useCallback(async () => {
     const provider = await web3ModalRef.current.connect();
-
+    providerRef.current = provider;
     await subscribeProvider(provider);
 
     const web3: Web3 = new Web3(provider);
@@ -152,7 +153,6 @@ export const Web3Provider: React.FC<{
       address,
       chainId: currentChainId,
     });
-
   }, []);
   const disconnectDapp = useCallback(async () => {
     await resetApp();
@@ -167,6 +167,7 @@ export const Web3Provider: React.FC<{
     }
     await web3ModalRef.current.clearCachedProvider();
     web3Ref.current = null;
+    providerRef.current = null;
     updateState(INITIAL_STATE);
   }, []);
 
@@ -185,8 +186,8 @@ export const Web3Provider: React.FC<{
         updateState({ address: accounts[0], connected: false });
       }
     });
-    provider.on("chainChanged", async (chainId: number) => {
-      updateState({ chainId });
+    provider.on("chainChanged", async (chainId: string) => {
+      updateState({ chainId: parseInt(chainId) });
     });
 
     // Subscribe to provider disconnection
@@ -195,14 +196,14 @@ export const Web3Provider: React.FC<{
     });
   }, []);
 
-
   const context: IAppContext = useMemo(() => {
     return {
       ...state,
       connectDapp,
       disconnectDapp,
       getConnectedWeb3: () => web3Ref.current as Web3,
-      switchNetwork: (chainId: number) => switchNetwork(state.provider,chainId),
+      switchNetwork: (chainId: number) =>
+        switchNetwork(providerRef.current, chainId),
     };
   }, [state]);
 

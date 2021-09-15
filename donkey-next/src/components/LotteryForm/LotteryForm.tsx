@@ -1,17 +1,28 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { ButtonWidget, ContainedButton } from "components/Button";
-import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, useWeb3Context } from "don-components";
-import { useEffect, useMemo, useState } from "react";
+import {
+  BINANCE_CHAIN_ID,
+  ETHEREUM_CHAIN_ID,
+  useWeb3Context,
+  getWeb3,
+} from "don-components";
+import { useState } from "react";
 import styled from "styled-components";
 import { LotteryPopupForm } from "./LotteryPopupForm";
 import BigNumber from "bignumber.js";
-import { useAvailableLpTokens } from "./useAvailableLpTokens";
-import { useStakedLPTokens } from "./useStakedLPTokens";
-import { calculateTVL, captureException, getStakingContract, toEther } from "helpers";
-import { useEarnedRewards } from "./useEarnedRewards";
+import {
+  calculateAPY,
+  calculateTVL,
+  captureException,
+  getLPTokenContract,
+  getStakingContract,
+  toEther,
+} from "helpers";
 import { useRefresh } from "./useRefresh";
-import { useApy } from "./useApy";
 import { useTransactionNotification } from "./useTransactionNotification";
+import Web3 from "web3";
+import { useIsomorphicEffect } from "hooks";
+import { signUser } from "components/Navbar";
 export const Label = styled.p`
   font-size: 14px;
   font-style: normal;
@@ -151,81 +162,46 @@ const PancakeSwapLink =
 const UniswapLink =
   "https://app.uniswap.org/#/add/v2/0xdAC17F958D2ee523a2206206994597C13D831ec7/0x217ddEad61a42369A266F1Fb754EB5d3EBadc88a";
 
-const useTVL = () => {
-  const [tvl, setTVL] = useState<string | null>(null);
-  const { getConnectedWeb3 ,chainId, connected } = useWeb3Context();
- 
-  const { dependsOn } = useRefresh();
-  useEffect(() => {
-   
-    if (connected) {
-      (async () => {
-        const web3 = getConnectedWeb3();
-        const tvl = await calculateTVL(web3, chainId === BINANCE_CHAIN_ID);
-        setTVL(tvl);
-      })();
-    }
-  }, [connected, dependsOn]);
-
-  return { tvl };
+type IStaking = {
+  availableLp: string;
+  stakedLp: string;
+  tvl: string;
+  apy: string;
+  rewards: string;
 };
 
-export const LotteryForm = () => {
+const StakingRow = ({
+  availableLp,
+  stakedLp,
+  tvl,
+  apy,
+  buyLink,
+  tokenSymbol,
+  chainId,
+  rewards,
+}: {
+  buyLink: string;
+  tokenSymbol: string;
+  chainId: number;
+} & IStaking) => {
+  const hasStakedAmount = new BigNumber(stakedLp).gt(0);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const { getConnectedWeb3, connected, chainId} = useWeb3Context();
-  const { lpTokens } = useAvailableLpTokens();
-  const { lpTokens: stakedTokens } = useStakedLPTokens();
-  const { rewards } = useEarnedRewards();
+  const {
+    getConnectedWeb3,
+    connectDapp,
+    connected,
+    chainId: connectedChainId,
+    switchNetwork,
+  } = useWeb3Context();
   const { refresh } = useRefresh();
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
-
-  const { tvl } = useTVL();
-  const tokenSymbol = chainId === ETHEREUM_CHAIN_ID ? "USDT/DON LP Tokens" : "WBNB/DON LP Tokens";
-
-  const availableTokensinEther = lpTokens
-    ? parseFloat(toEther(lpTokens)).toFixed(5)
-    : "-";
-
-  const stakedTokensInEther = stakedTokens
-    ? parseFloat(toEther(stakedTokens)).toFixed(5)
-    : "-";
-
-  const rewardsInEther = rewards
-    ? parseFloat(toEther(rewards)).toFixed(3)
-    : "-";
-
-  const [disableButtons, setDisableButtons] = useState(false);
-
-  const handleUnstake = async () => {
-    const web3 = getConnectedWeb3();
-    const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
-    setDisableButtons(true);
-    try {
-      showProgress("Unstaking Amount and Harvesting Rewards");
-      const accounts = await web3.eth.getAccounts();
-      await staking.methods.exit().send({ from: accounts[0] });
-      showSuccess("Transaction Successfull");
-    } catch (e) {
-      captureException(e, "handleUnstake");
-      showFailure("Transaction Failed");
-    } finally {
-      refresh();
-      setDisableButtons(false);
-    }
-  };
-
-  const hasStakedAmount = useMemo(() => {
-    if (stakedTokens) {
-      return new BigNumber(stakedTokens).gt(0);
-    }
-    return false;
-  }, [stakedTokens]);
-
   const handleHarvest = async () => {
     const web3 = getConnectedWeb3();
-    const staking = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
+    const staking = await getStakingContract(
+      web3,
+      chainId === BINANCE_CHAIN_ID
+    );
     setDisableButtons(true);
     try {
       showProgress("Harvesting Rewards");
@@ -241,66 +217,95 @@ export const LotteryForm = () => {
     }
   };
 
-  const { apyPercent } = useApy();
+  const [disableButtons, setDisableButtons] = useState(false);
+
+  const handleUnstake = async () => {
+    const web3 = getConnectedWeb3();
+    const staking = await getStakingContract(
+      web3,
+      chainId === BINANCE_CHAIN_ID
+    );
+    setDisableButtons(true);
+    try {
+      showProgress("Unstaking Amount and Harvesting Rewards");
+      const accounts = await web3.eth.getAccounts();
+      await staking.methods.exit().send({ from: accounts[0] });
+      showSuccess("Transaction Successfull");
+    } catch (e) {
+      captureException(e, "handleUnstake");
+      showFailure("Transaction Failed");
+    } finally {
+      refresh();
+      setDisableButtons(false);
+    }
+  };
+
+  const handleConnect = async () => {
+    await connectDapp();
+    const web3 = getConnectedWeb3();
+    await signUser(getConnectedWeb3());
+    const currentChainId = await web3.eth.getChainId();
+    if (currentChainId !== chainId) {
+      switchNetwork(chainId);
+    }
+  };
+
+  const handleSwitch = async () => {
+    switchNetwork(chainId);
+  };
 
   return (
-    <section style={{ backgroundColor: "#F4F4F4" }}>
-      <div className="container" style={{ maxWidth: 1250 }}>
-        <div className="row py-5">
-          <div className="col-md-9">
-            <WhiteCard className="h-100 d-flex flex-column justify-content-around">
-              <div className="row">
-                <CardItem className="col-2">
-                  <ItemHeading className="font-weight-bold">
-                    Network
-                  </ItemHeading>
-                  <ItemInfo> {connected ? chainId : "-"}</ItemInfo>
-                </CardItem>
-                <CardItem className="col-2">
-                  <ItemHeading className="font-weight-bold">
-                    Available LP Tokens
-                  </ItemHeading>
-                  <ItemInfo>
-                    {availableTokensinEther} {tokenSymbol}
-                  </ItemInfo>
-                  <a
-                    rel="noreferrer nofollow"
-                    target="_blank"
-                    href={chainId === ETHEREUM_CHAIN_ID ? UniswapLink : PancakeSwapLink}
-                  >
-                    Get More
-                  </a>
-                </CardItem>
-                <CardItem className="col-3">
-                  <ItemHeading className="font-weight-bold">
-                    Staked LP Tokens
-                  </ItemHeading>
-                  <ItemInfo>
-                    {" "}
-                    {stakedTokensInEther} {tokenSymbol}
-                  </ItemInfo>
-                </CardItem>
-                <CardItem className="col-3">
-                  <ItemHeading className="font-weight-bold">TVL</ItemHeading>
-                  <ItemInfo>
-                    {" "}
-                    {tvl
-                      ? new BigNumber(tvl).toNumber().toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                        })
-                      : "-"}
-                  </ItemInfo>
-                </CardItem>
+    <div className="row py-5">
+      <div className="col-md-9">
+        <WhiteCard className="h-100 d-flex flex-column justify-content-around">
+          <div className="row">
+            <CardItem className="col-2">
+              <ItemHeading className="font-weight-bold">Network</ItemHeading>
+              <ItemInfo> {chainId}</ItemInfo>
+            </CardItem>
+            <CardItem className="col-2">
+              <ItemHeading className="font-weight-bold">
+                Available LP Tokens
+              </ItemHeading>
+              <ItemInfo>
+                {availableLp} {tokenSymbol}
+              </ItemInfo>
+              <a rel="noreferrer nofollow" target="_blank" href={buyLink}>
+                Get More
+              </a>
+            </CardItem>
+            <CardItem className="col-3">
+              <ItemHeading className="font-weight-bold">
+                Staked LP Tokens
+              </ItemHeading>
+              <ItemInfo>
+                {" "}
+                {stakedLp} {tokenSymbol}
+              </ItemInfo>
+            </CardItem>
+            <CardItem className="col-3">
+              <ItemHeading className="font-weight-bold">TVL</ItemHeading>
+              <ItemInfo>
+                {" "}
+                {tvl !== "-"
+                  ? new BigNumber(tvl).toNumber().toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })
+                  : "-"}
+              </ItemInfo>
+            </CardItem>
 
-                <CardItem className="col-2">
-                  <ItemHeading className="font-weight-bold">APY</ItemHeading>
-                  <ItemInfo> {apyPercent}%</ItemInfo>
-                </CardItem>
-              </div>
+            <CardItem className="col-2">
+              <ItemHeading className="font-weight-bold">APY</ItemHeading>
+              <ItemInfo> {apy}%</ItemInfo>
+            </CardItem>
+          </div>
 
-              <div className="d-flex align-items-center justify-content-center">
-                <div className="d-flex">
+          <div className="d-flex align-items-center justify-content-center">
+            <div className="d-flex">
+              {connected ? (
+                chainId === connectedChainId ? (
                   <StakeButton
                     className="mr-3 mt-2"
                     disabled={disableButtons}
@@ -309,55 +314,168 @@ export const LotteryForm = () => {
                   >
                     Stake
                   </StakeButton>
-
-                  {hasStakedAmount && (
-                    <UnstakeButton
-                      disabled={disableButtons}
-                      onClick={handleUnstake}
-                      type="submit"
-                    >
-                      Unstake
-                    </UnstakeButton>
-                  )}
-                </div>
-              </div>
-            </WhiteCard>
-          </div>
-          <div className="col-md-3 mt-3 mt-md-0">
-            <WhiteCard className="h-100 d-flex flex-column justify-content-between">
-              <RewardsTitle className="text-center">Rewards</RewardsTitle>
-              <div className="mb-2 d-flex flex-column py-4 align-items-center ">
-                <RewardsAmount disabled={!hasStakedAmount}>
-                  {rewardsInEther}
-                </RewardsAmount>
-              </div>
-              <div className="mb-2 d-flex flex-column align-items-center ">
-                <StyledButton
-                  varaint="contained"
-                  containedVariantColor="lightYellow"
-                  height="41px"
-                  disabled={!hasStakedAmount || disableButtons}
-                  onClick={handleHarvest}
-                  style={{ maxWidth: 200 }}
+                ) : (
+                  <StakeButton
+                    className="mr-3 mt-2"
+                    disabled={disableButtons}
+                    onClick={handleSwitch}
+                    type="submit"
+                  >
+                    Switch Network
+                  </StakeButton>
+                )
+              ) : (
+                <StakeButton
+                  className="mr-3 mt-2"
+                  onClick={handleConnect}
+                  type="submit"
                 >
-                  Harvest
-                </StyledButton>
-              </div>
-            </WhiteCard>
+                  Connect
+                </StakeButton>
+              )}
+
+              {hasStakedAmount && (
+                <UnstakeButton
+                  disabled={disableButtons}
+                  onClick={handleUnstake}
+                  type="submit"
+                >
+                  Unstake
+                </UnstakeButton>
+              )}
+            </div>
           </div>
-          {isPopupOpen && (
-            <LotteryPopupForm
-              availableAmount={lpTokens ? toEther(lpTokens) : "0"}
-              isOpen={isPopupOpen}
-              onClose={() => {
-                setIsPopupOpen(false);
-              }}
-              onSuccess={() => {
-                setIsPopupOpen(false);
-              }}
-            />
-          )}
-        </div>
+        </WhiteCard>
+      </div>
+      <div className="col-md-3 mt-3 mt-md-0">
+        <WhiteCard className="h-100 d-flex flex-column justify-content-between">
+          <RewardsTitle className="text-center">Rewards</RewardsTitle>
+          <div className="mb-2 d-flex flex-column py-4 align-items-center ">
+            <RewardsAmount disabled={!hasStakedAmount}>{rewards}</RewardsAmount>
+          </div>
+          <div className="mb-2 d-flex flex-column align-items-center ">
+            {connected && chainId === connectedChainId && (
+              <StyledButton
+                varaint="contained"
+                containedVariantColor="lightYellow"
+                height="41px"
+                disabled={!hasStakedAmount || disableButtons}
+                onClick={handleHarvest}
+                style={{ maxWidth: 200 }}
+              >
+                Harvest
+              </StyledButton>
+            )}
+          </div>
+        </WhiteCard>
+      </div>
+      {isPopupOpen && (
+        <LotteryPopupForm
+          availableAmount={availableLp || "0"}
+          isOpen={isPopupOpen}
+          onClose={() => {
+            setIsPopupOpen(false);
+          }}
+          onSuccess={() => {
+            setIsPopupOpen(false);
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+const InitialState: IStaking = {
+  apy: "-",
+  availableLp: "-",
+  rewards: "-",
+  stakedLp: "-",
+  tvl: "-",
+};
+const fetchStakingInfo = async ({
+  connected,
+  address,
+  web3,
+  chainId,
+}: {
+  web3: Web3;
+  chainId: number;
+  address?: string;
+  connected: boolean;
+}): Promise<IStaking> => {
+  const defaultval: IStaking = {
+    ...InitialState,
+  };
+  const apy = await calculateAPY(web3, chainId === BINANCE_CHAIN_ID);
+  defaultval.apy = apy.toFixed(0);
+  const tvl = await calculateTVL(web3, chainId === BINANCE_CHAIN_ID);
+  defaultval.tvl = tvl;
+
+  if (connected) {
+    const stakingContract = await getStakingContract(
+      web3,
+      chainId === BINANCE_CHAIN_ID
+    );
+    const staked = await stakingContract.methods.balanceOf(address).call();
+    defaultval.stakedLp = toEther(staked);
+
+    const rewards = await stakingContract.methods.earned(address).call();
+    defaultval.rewards = toEther(rewards);
+    const lpTokenContract = await getLPTokenContract(
+      web3,
+      chainId === BINANCE_CHAIN_ID
+    );
+    const amount = await lpTokenContract.methods.balanceOf(address).call();
+    defaultval.availableLp = amount;
+  }
+
+  return defaultval;
+};
+
+export const LotteryForm = () => {
+  const { connected, address } = useWeb3Context();
+
+  const [ethStaking, setEthStaking] = useState(InitialState);
+  const [bnbStaking, setBNBStaking] = useState(InitialState);
+
+  const fethInfo = async () => {
+    const [EthData, BNBData] = await Promise.all([
+      fetchStakingInfo({
+        connected,
+        chainId: ETHEREUM_CHAIN_ID,
+        web3: getWeb3(ETHEREUM_CHAIN_ID),
+        address,
+      }),
+      fetchStakingInfo({
+        connected,
+        chainId: BINANCE_CHAIN_ID,
+        web3: getWeb3(BINANCE_CHAIN_ID),
+        address,
+      }),
+    ]);
+    setEthStaking(EthData);
+    setBNBStaking(BNBData);
+  };
+
+  useIsomorphicEffect(() => {
+    fethInfo();
+  }, [connected]);
+
+  return (
+    <section style={{ backgroundColor: "#F4F4F4" }}>
+      <div className="container" style={{ maxWidth: 1250 }}>
+        <StakingRow
+          tokenSymbol="USDT/DON LP Tokens"
+          {...ethStaking}
+          buyLink={UniswapLink}
+          chainId={ETHEREUM_CHAIN_ID}
+        />
+        <StakingRow
+          tokenSymbol="WBNB/DON LP Tokens"
+          {...bnbStaking}
+          buyLink={PancakeSwapLink}
+          chainId={BINANCE_CHAIN_ID}
+        />
       </div>
     </section>
   );
