@@ -18,6 +18,7 @@ import {
 import BigNumber from "bignumber.js";
 import { useReferralContext } from "contexts/ReferralContext";
 import { useWeb3Context } from "don-components";
+import { Step } from "./Step";
 
 const ReadMore = styled.a`
   font-size: 16px;
@@ -54,22 +55,21 @@ export const Share: React.FC<IShareProps> = (props) => {
 
   const [_, setTvl] = useState("");
 
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const fetchTvl = async () => {
     const web3 = getConnectedWeb3();
     const poolValue = await getTotalPoolValue(web3, pool_address);
-    const tokenPrice = await getTokenPrice(
-      web3,
-      pool_address
+    const tokenPrice = await getTokenPrice(web3, pool_address);
+
+    setTvl(
+      new BigNumber(toEther(poolValue)).multipliedBy(tokenPrice).toFixed(1)
     );
-    
-    setTvl(new BigNumber(toEther(poolValue)).multipliedBy(tokenPrice).toFixed(1));
   };
 
   useEffect(() => {
     fetchTvl();
   }, []);
-  const {checkSignUp} = useReferralContext();
+  const { checkSignUp } = useReferralContext();
   const handleCreateLink = async () => {
     setLoading(true);
     const web3 = getConnectedWeb3();
@@ -81,7 +81,7 @@ export const Share: React.FC<IShareProps> = (props) => {
     }
     setLoading(false);
     props.onCreateClick();
-    
+
     // const element = document.querySelector("#shareEarnImage") as HTMLElement;
     // if (element) {
     //   const canvas = await html2canvas(element, {
@@ -119,51 +119,37 @@ export const Share: React.FC<IShareProps> = (props) => {
     <>
       <DonCommonmodal
         isOpen={open}
-        title=""
+        title="Share"
         variant="common"
         onClose={props.onClose}
+        titleRightContent={<ReadMore href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read more</ReadMore>}
         size="md"
       >
-        <div className="d-flex justify-content-between align-items-center">
+        {/* <div className="d-flex justify-content-between align-items-center">
           <h2>Share</h2> <ReadMore href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read more</ReadMore>
-        </div>
-        <div className="row py-5">
-          <div className="col-lg-4 ">
-            <img
-              src={Star.src}
-              className="img-fluid d-block mx-auto"
-              alt="Image not found"
-            />
-            <p className="text-center mt-4 w-100">
-              {" "}
-              <b>Step 1.</b> Create a sharable link with a unique Don-key banner that you love!
-            </p>
-          </div>
-          <div className="col-lg-4 ">
-            <img
-              src={shareTelegram.src}
-              className="img-fluid d-block mx-auto"
-              alt="Image not found"
-            />
-            <p className="text-center mt-4 w-100">
-              <b>Step 2.</b> Share the link on any platform to bring more users to the DAPP
-            </p>
-          </div>
-          <div className="col-lg-4">
-            <img
-              src={earnings.src}
-              className="img-fluid d-block mx-auto"
-              alt="Image not found"
-            />
-            <p className="text-center mt-4 w-100">
-              <b>Step 3.</b> For each unique user who invests, you will earn the equivalent of 20% from their profit in DON tokens. 
-            </p>
-          </div>
+        </div> */}
+
+        <div className="row py-md-5">
+          <Step
+            title="Step 1"
+            content="Create a sharable link with a unique Don-key banner that you love!"
+            image={Star.src}
+          />
+          <Step
+            title="Step 2"
+            content="Share the link on any platform to bring more users to the DAPP"
+            image={shareTelegram.src}
+          />
+          <Step
+            title="Step 3"
+            content="For each unique user who invests, you will earn the equivalent of 20% from their profit in DON tokens"
+            image={earnings.src}
+          />
         </div>
 
-        <div className="row  mt-4 justify-content-center">
-          <div className="col-lg-3" />
-          <div className="col-lg-3 mb-2">
+        <div className="row  mt-3 mt-lg-1 justify-content-center">
+          <div className="col-md-1 col-lg-3" />
+          <div className="col-md-5 col-lg-3 mb-2">
             <ButtonWidget
               varaint="contained"
               disabled={loading}
@@ -179,7 +165,7 @@ export const Share: React.FC<IShareProps> = (props) => {
             </ButtonWidget>
           </div>
 
-          <div className="col-lg-3 mb-2">
+          <div className="col-md-5 col-lg-3 mb-2">
             <CancelButton
               varaint="outlined"
               height="41px"
@@ -188,7 +174,7 @@ export const Share: React.FC<IShareProps> = (props) => {
               Cancel
             </CancelButton>
           </div>
-          <div className="col-lg-3" />
+          <div className="col-md-1 col-lg-3" />
         </div>
       </DonCommonmodal>
     </>

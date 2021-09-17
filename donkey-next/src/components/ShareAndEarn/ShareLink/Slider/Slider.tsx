@@ -11,16 +11,19 @@ import clsx from "clsx";
 import SlickSlider from "react-slick";
 import { LeftSliderArrow, RightSliderArrow } from "icons";
 import { useDidUpdate } from "hooks";
-import {convertToInternationalCurrencySystem} from "helpers";
+import { convertToInternationalCurrencySystem } from "helpers";
+import { breakPoints } from "breakponts";
 
 const BannerRoot = styled.div`
   min-height: 227px;
   /* border-radius: 15px; */
   overflow: hidden;
+  border-radius: 10px;
 `;
 
 const BannerImage = styled.img`
   width: 100%;
+  overflow: hidden;
 `;
 
 const Heading = styled.h2`
@@ -52,7 +55,7 @@ const BannerContentRoot = styled.div`
   position: absolute;
   height: 101%;
   width: 100%;
-  
+
   /* border-radius: 15px; */
 `;
 
@@ -85,18 +88,27 @@ const Wordhighlight = styled.span`
 
 const CutomSlickSlider = styled(SlickSlider)`
   .selected {
-    border: 4px solid #fed700;
-    border-radius: 10px;
+    border: 2.5px solid #fed700;
+    border-radius: 5px;
+    @media only screen and (min-width: ${breakPoints.md}) {
+      border: 4px solid #fed700;
+      border-radius: 10px;
+    }
   }
 `;
 
 const ThumbDiv = styled.div`
-  width: 72px !important;
-  height: 72px;
+  width: 41px !important;
+  height: 41px;
   border: 1px solid #5c5c5c;
-  border-radius: 10px;
+  border-radius: 5px;
   cursor: pointer;
   overflow: hidden;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    width: 72px !important;
+    height: 72px;
+    border-radius: 10px;
+  }
 `;
 
 const LIImage = styled.img`
@@ -104,20 +116,12 @@ const LIImage = styled.img`
   object-fit: cover;
 `;
 
-const FooterText = styled.p`
-  font-family: Roboto;
-  font-size: 16px;
+const FooterText = styled.p<{fontSize?: string;}>`
+  font-family: 'Poppins';
+  font-size: ${props=> props.fontSize ? props.fontSize:"16px"};
   font-weight: 500;
 `;
-const banners = [
-  Banner1,
-  Banner2,
-  Banner3,
-  Banner4,
-  Banner5,
-  Banner6,
-  Banner7,
-];
+const banners = [Banner1, Banner2, Banner3, Banner4, Banner5, Banner6, Banner7];
 const settings = {
   dots: false,
   infinite: false,
@@ -126,8 +130,6 @@ const settings = {
   initialSlide: 0,
 };
 
-
-
 export const Slider: React.FC<{
   tvl: string;
   apy: string;
@@ -135,15 +137,12 @@ export const Slider: React.FC<{
   strategyName: string;
   onChange: () => void;
   onFirstRender: () => void;
-
 }> = (props) => {
   const { tvl, apy, farmerName, strategyName } = props;
 
- 
   const slickRef = React.useRef<SlickSlider | null>(null);
 
   const [selectedBanner, setSelectedBanner] = useState(0);
-
 
   const handleChangeImage = (index: number) => () => {
     setSelectedBanner(index);
@@ -161,7 +160,6 @@ export const Slider: React.FC<{
       }
     }
   };
-  
 
   const handlePrev = () => {
     if (slickRef.current) {
@@ -176,17 +174,15 @@ export const Slider: React.FC<{
     }
   };
 
-  React.useEffect(()=>{
-     props.onFirstRender();
-  },[])
+  React.useEffect(() => {
+    props.onFirstRender();
+  }, []);
 
   useDidUpdate(() => {
     props.onChange();
   }, [selectedBanner]);
 
-
-
-  const tvlUpdate = convertToInternationalCurrencySystem(tvl)
+  const tvlUpdate = convertToInternationalCurrencySystem(tvl);
 
   return (
     <>
@@ -199,7 +195,7 @@ export const Slider: React.FC<{
         <BannerContentRoot>
           <Heading>{farmerName}</Heading>
           <div className="row">
-            <div className="col-lg-5">
+            <div className="col-5">
               <BannerLeftFooter>
                 <SubHeading className="mb-3">{strategyName}</SubHeading>
 
@@ -220,7 +216,7 @@ export const Slider: React.FC<{
                 </div>
               </BannerLeftFooter>
             </div>
-            <div className="col-lg-7 d-flex align-items-end justify-content-center pl-0">
+            <div className="col-7 d-flex align-items-end justify-content-center pl-0">
               <Value>
                 Invest in <Wordhighlight>strategies</Wordhighlight> and make the
                 best yield
@@ -250,12 +246,17 @@ export const Slider: React.FC<{
         })}
       </CutomSlickSlider>
 
-      <div className="d-flex justify-content-center mt-2">
+      <div className="justify-content-center mt-2 d-none d-md-flex">
         <LeftSliderArrow role="button" className="mr-2" onClick={handlePrev} />
         <FooterText className="ml-2 mr-2">
           Select the background for the banner
         </FooterText>
         <RightSliderArrow role="button" className="ml-2" onClick={handleNext} />
+      </div>
+      <div className="justify-content-center mt-2 d-flex d-md-none">
+        <FooterText fontSize="11px" >
+        Switch and select the background for the banner
+        </FooterText>
       </div>
     </>
   );

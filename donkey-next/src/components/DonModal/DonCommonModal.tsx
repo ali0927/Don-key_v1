@@ -9,13 +9,17 @@ import {
 import styled from "styled-components";
 import { useDialogStyles } from "./styles/useDialogStyles";
 import clsx from "clsx";
+import { breakPoints } from "../../breakponts";
 
 const CutomizeModalHeading = styled.h4`
-  font-size: 25px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 800;
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 25px;
+  }
 `;
 
 const StyledDialog = withStyles({
@@ -23,6 +27,14 @@ const StyledDialog = withStyles({
     maxWidth: "761px",
   },
 })(Dialog);
+
+const Content = styled(ModalContent)`
+  padding: 3rem 1rem;
+  padding-bottom: 2rem;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    padding: 3rem 3rem;
+  }
+`;
 
 export const DonCommonmodal = ({
   isOpen,
@@ -37,7 +49,7 @@ export const DonCommonmodal = ({
   titleRightContent,
   contentStyle,
   subtitle,
-  disableBackdropClick
+  disableBackdropClick,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -60,14 +72,18 @@ export const DonCommonmodal = ({
       return (
         <>
           <div className="d-flex align-items-center justify-content-between">
-            <CutomizeModalHeading className={clsx({"mb-1": !!subtitle})}>{title}</CutomizeModalHeading>
+            <CutomizeModalHeading className={clsx({ "mb-1": !!subtitle })}>
+              {title}
+            </CutomizeModalHeading>
             {titleRightContent && (
               <p>
                 <small>{titleRightContent}</small>
               </p>
             )}
           </div>
-          <p style={{fontSize: 14, color: "#A3A3A3"}}>{subtitle}</p>
+          {subtitle && (
+            <p style={{ fontSize: 14, color: "#A3A3A3" }}>{subtitle}</p>
+          )}
         </>
       );
     }
@@ -97,11 +113,11 @@ export const DonCommonmodal = ({
       disableBackdropClick={disableBackdropClick}
     >
       <>
-        <ModalContent style={contentStyle}>
+        <Content style={contentStyle}>
           <StyledCloseIcon onClick={onClose} />
           {modalInnerContent()}
           {children}
-        </ModalContent>
+        </Content>
       </>
     </StyledDialog>
   );

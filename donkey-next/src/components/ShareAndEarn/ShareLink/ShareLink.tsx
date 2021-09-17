@@ -207,8 +207,8 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         </div>
 
         <div className="row justify-content-center mt-2">
-          <div className="col-lg-2" />
-          <div className="col-lg-4 mb-2">
+          <div className="col-lg-2 d-none d-md-block" />
+          <div className="col-6 col-md-4 mb-2">
             <TwitterShareButton
               className="w-100"
               url={copyLink}
@@ -224,7 +224,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             </TwitterShareButton>
           </div>
 
-          <div className="col-lg-4 mb-2">
+          <div className="col-6 col-md-4 mb-2">
             <TelegramShareButton
               className="w-100"
               url={copyLink}
@@ -240,7 +240,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             </TelegramShareButton>
           </div>
 
-          <div className="col-lg-2" />
+          <div className="col-lg-2 d-none d-md-block" />
         </div>
       </>
     );
