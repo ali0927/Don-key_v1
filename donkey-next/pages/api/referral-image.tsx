@@ -1,28 +1,15 @@
 import { NextApiHandler } from "next";
-import { ReferralImage } from "components/ShareAndEarn/ShareLink/ReferralImage";
-import { renderToStaticMarkup } from "react-dom/server";
-import { ServerStyleSheet, StyleSheetManager } from "styled-components";
 import axios from "axios";
 import { getWeb3 } from "don-components";
 import { getPoolValueInUSD } from "helpers";
-import nodeHtmlToImage from "node-html-to-image";
-import chrome from "chrome-aws-lambda";
 
-
-function convertToInternationalCurrencySystem(labelValue: string) {
-  // Nine Zeroes for Billions
-  return Math.abs(Number(labelValue)) >= 1.0e9
-    ? (Math.abs(Number(labelValue)) / 1.0e9).toFixed(2) + "B"
-    : // Six Zeroes for Millions
-    Math.abs(Number(labelValue)) >= 1.0e6
-    ? (Math.abs(Number(labelValue)) / 1.0e6).toFixed(2) + "M"
-    : // Three Zeroes for Thousands
-    Math.abs(Number(labelValue)) >= 1.0e3
-    ? (Math.abs(Number(labelValue)) / 1.0e3).toFixed(2) + "K"
-    : Math.abs(Number(labelValue));
-}
 const strapi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_STRAPI_URL,
+  validateStatus: (status) => status < 500 && status >= 200,
+});
+
+const api = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   validateStatus: (status) => status < 500 && status >= 200,
 });
 const GenerateImage: NextApiHandler = async (req, res) => {
@@ -35,67 +22,25 @@ const GenerateImage: NextApiHandler = async (req, res) => {
   const url = id ? "/farmers?guid=" + id : "/farmers?slug=" + slug;
 
   const result = await strapi.get(url);
-  const imageData = await strapi.get(`/referral-images/${image_id}`);
-  const farmerObj = result.data[0];
-  const imageUrl = imageData.data?.image?.url;
 
-  if (!imageUrl) {
-    return res.status(404).send({ msg: "Image Not Found" });
-  }
+  const farmerObj = result.data[0];
+
   if (!farmerObj) {
     return res.status(404).send({ msg: "Farmer Not Found" });
   }
-  const sheet = new ServerStyleSheet();
-  let html = ``;
-  let styles = ``;
+
   const web3 = getWeb3(farmerObj.network.chainId);
   const strategy = farmerObj.strategies[0];
 
   const tvl = await getPoolValueInUSD(web3, farmerObj.poolAddress);
 
-  try {
-    html = renderToStaticMarkup(
-      <StyleSheetManager sheet={sheet.instance}>
-        <ReferralImage
-          tvl={convertToInternationalCurrencySystem(tvl).toString()}
-          apy={strategy.apy}
-          bgImage={imageUrl as string}
-          farmerName={farmerObj.name}
-        />
-      </StyleSheetManager>
-    );
-    styles = sheet.getStyleTags();
-  } catch (error) {
-    // handle error
-    console.error(error);
-  } finally {
-    sheet.seal();
-  }
+  const resp = await api.get(
+    `/api/v2/referral-image?apy=${strategy.apy}&tvl=${tvl}&name=${farmerObj.name}&image_id=${image_id}`
+  );
 
-  const finalHtml = `
-  <html>
-  <head>
-  <link
-  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-  rel="stylesheet"
-/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  ${styles}
-  </head>
-  <body>
-  ${html}
-  </body>
-  </html>
-  `;
-  const generatedImage = await nodeHtmlToImage({
-    html: finalHtml,
-    selector: "#shareEarnImage",
-    puppeteerArgs: {
-      executablePath: await chrome.executablePath,
-    }
-  });
   res.setHeader("content-type", "image/png");
-  return res.send(generatedImage);
+  res.setHeader("cache-control", "max-age=7200, public");
+  return res.send(resp.data);
 };
 
 export default GenerateImage;
