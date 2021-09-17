@@ -13,78 +13,7 @@ import { LeftSliderArrow, RightSliderArrow } from "icons";
 import { useDidUpdate } from "hooks";
 import { convertToInternationalCurrencySystem } from "helpers";
 import { breakPoints } from "breakponts";
-
-const BannerRoot = styled.div`
-  min-height: 227px;
-  /* border-radius: 15px; */
-  overflow: hidden;
-  border-radius: 10px;
-`;
-
-const BannerImage = styled.img`
-  width: 100%;
-  overflow: hidden;
-`;
-
-const Heading = styled.h2`
-  color: #fff;
-  font-weight: 800;
-  margin-top: 26px;
-  margin-left: 28px;
-`;
-
-const SubHeading = styled.p`
-  font-family: Poppins;
-  font-size: 14px;
-  font-weight: 400;
-  color: #ffffff;
-  margin-bottom: 0px;
-`;
-
-const Value = styled(SubHeading)`
-  font-weight: 500;
-`;
-
-const BannerContentRoot = styled.div`
-  background-image: linear-gradient(
-    to left,
-    rgba(0, 0, 0, 0.1) 0,
-    #000000 100%
-  );
-  top: -1px;
-  position: absolute;
-  height: 101%;
-  width: 100%;
-
-  /* border-radius: 15px; */
-`;
-
-const BannerLeftFooter = styled.div`
-  margin-top: 32px;
-  padding: 28px 1px 0px 28px;
-`;
-
-const HighLight = styled.div`
-  width: 39px;
-  height: 22px;
-  background: #fdd700;
-  font-family: Poppins;
-  font-size: 12px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Divider = styled.div`
-  border-right: 2px solid #fff;
-  height: 33px;
-  margin-top: 10px;
-`;
-
-const Wordhighlight = styled.span`
-  background: #fdd700;
-`;
+import { ReferralImage } from "../ReferralImage/ReferralImage";
 
 const CutomSlickSlider = styled(SlickSlider)`
   .selected {
@@ -116,9 +45,9 @@ const LIImage = styled.img`
   object-fit: cover;
 `;
 
-const FooterText = styled.p<{fontSize?: string;}>`
-  font-family: 'Poppins';
-  font-size: ${props=> props.fontSize ? props.fontSize:"16px"};
+const FooterText = styled.p<{ fontSize?: string }>`
+  font-family: "Poppins";
+  font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
   font-weight: 500;
 `;
 const banners = [Banner1, Banner2, Banner3, Banner4, Banner5, Banner6, Banner7];
@@ -138,7 +67,7 @@ export const Slider: React.FC<{
   onChange: () => void;
   onFirstRender: () => void;
 }> = (props) => {
-  const { tvl, apy, farmerName, strategyName } = props;
+  const { tvl, apy, farmerName } = props;
 
   const slickRef = React.useRef<SlickSlider | null>(null);
 
@@ -186,46 +115,12 @@ export const Slider: React.FC<{
 
   return (
     <>
-      <BannerRoot id="shareEarnImage" className="position-relative">
-        <BannerImage
-          src={banners[selectedBanner].src}
-          alt="Banner image not found"
-        />
-
-        <BannerContentRoot>
-          <Heading>{farmerName}</Heading>
-          <div className="row">
-            <div className="col-5">
-              <BannerLeftFooter>
-                <SubHeading className="mb-3">{strategyName}</SubHeading>
-
-                <div className="row">
-                  <div className="col-5">
-                    <HighLight>TVL</HighLight>
-                    <Value className="mt-2">{"$" + tvlUpdate}</Value>
-                  </div>
-
-                  <div className="col-2 d-flex justify-content-center">
-                    <Divider />
-                  </div>
-
-                  <div className="col-5">
-                    <HighLight>APY</HighLight>
-                    <Value className="mt-2">{apy}</Value>
-                  </div>
-                </div>
-              </BannerLeftFooter>
-            </div>
-            <div className="col-7 d-flex align-items-end justify-content-center pl-0">
-              <Value>
-                Invest in <Wordhighlight>strategies</Wordhighlight> and make the
-                best yield
-              </Value>
-            </div>
-          </div>
-        </BannerContentRoot>
-      </BannerRoot>
-
+      <ReferralImage
+        bgImage={banners[selectedBanner].src}
+        apy={apy}
+        tvl={tvlUpdate}
+        farmerName={farmerName}
+      />
       <CutomSlickSlider ref={slickRef} className="mt-3" {...settings}>
         {banners.map((banner, index) => {
           return (
@@ -254,8 +149,8 @@ export const Slider: React.FC<{
         <RightSliderArrow role="button" className="ml-2" onClick={handleNext} />
       </div>
       <div className="justify-content-center mt-2 d-flex d-md-none">
-        <FooterText fontSize="11px" >
-        Switch and select the background for the banner
+        <FooterText fontSize="11px">
+          Switch and select the background for the banner
         </FooterText>
       </div>
     </>

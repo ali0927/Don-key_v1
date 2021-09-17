@@ -5,6 +5,7 @@ import crosschain from "images/CrossChain.png";
 import BigNumber from "bignumber.js";
 import { ArrowUpDOwn } from "icons";
 import { useRouter } from "next/router";
+import { useIsomorphicEffect } from "hooks";
 
 const InfoWrapper = styled.div`
   min-height: 226px;
@@ -29,20 +30,6 @@ const InfoWrapper = styled.div`
   }`}
   transition: transform 0.3s linear;
 `;
-
-// const GreenText = styled.p`
-//   font-weight: 500;
-//   font-size: 12px;
-//   color: #31c77f;
-//   margin-bottom: 0;
-// `;
-
-// const GreyText = styled.p`
-//   font-weight: 300;
-//   font-size: 12px;
-//   color: #b0b7c3;
-//   margin-bottom: 0.5rem;
-// `;
 
 const DONApy = styled.h6`
   color: #ffc406;
@@ -77,7 +64,7 @@ const SubText = styled.span({
 });
 
 export const TokenInfo = ({
-  token: { image, symbol, status, maxApy, network, slug,boostApy },
+  token: { image, symbol, status, maxApy, network, slug, boostApy },
 }: {
   token: IStrapiToken;
 }) => {
@@ -87,7 +74,10 @@ export const TokenInfo = ({
   let networkName = network.name;
   const words = networkName.split(" ");
   networkName = words[0];
-
+  const url = `/dashboard/${network.slug}/${slug.toLowerCase()}`;
+  useIsomorphicEffect(() => {
+    history.prefetch(url);
+  }, [])
   const NetworkElement = () => {
     if (network.type && network.type === "crosschain") {
       return (
@@ -108,38 +98,45 @@ export const TokenInfo = ({
   };
 
   const RenderFooter = () => {
-    if(boostApy){
-        return(
-          <>
-              <div className="col-5 d-flex flex-column  justify-content-end">
-                 <h5  style={{ fontSize: 18, fontWeight: 900, fontFamily: "Poppins", marginBottom: 12 }}>
-                     {maxApy}%
-                </h5>
-                <SubText>Up to APY</SubText>
-              </div>
-              <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
-                 <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
-                 <SubText>APY for DON stakers</SubText>
-              </div>
-          </>
-        )
+    if (boostApy) {
+      return (
+        <>
+          <div className="col-5 d-flex flex-column  justify-content-end">
+            <h5
+              style={{
+                fontSize: 18,
+                fontWeight: 900,
+                fontFamily: "Poppins",
+                marginBottom: 12,
+              }}
+            >
+              {maxApy}%
+            </h5>
+            <SubText>Up to APY</SubText>
+          </div>
+          <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
+            <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
+            <SubText>APY for DON stakers</SubText>
+          </div>
+        </>
+      );
     }
     return (
-        <>
-            <div className="col-12 d-flex flex-column align-items-end  justify-content-end">
-                 <DONApy>{maxApy}%</DONApy>
-                 <SubText>Up to APY</SubText>
-            </div>          
-        </>
-    )
-  }
+      <>
+        <div className="col-12 d-flex flex-column align-items-end  justify-content-end">
+          <DONApy>{maxApy}%</DONApy>
+          <SubText>Up to APY</SubText>
+        </div>
+      </>
+    );
+  };
 
   return (
     <InfoWrapper
       disabled={disabled}
       onClick={() => {
         if (!disabled) {
-          history.push(`/dashboard/${network.slug}/${slug.toLowerCase()}`);
+          history.push(url);
         }
       }}
     >
@@ -164,9 +161,7 @@ export const TokenInfo = ({
 
         <div className="col-6 d-flex align-items-center justify-content-end"></div>
       </div>
-      <div className="row">
-         {RenderFooter()}
-      </div>
+      <div className="row">{RenderFooter()}</div>
     </InfoWrapper>
   );
 };
