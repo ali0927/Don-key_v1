@@ -14,7 +14,9 @@ interface IButtonProps {
   disabled?: boolean;
   width?: string;
   containedVariantColor?: "black" | "yellow" | "lightYellow" | "gradient";
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseEnter?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onMouseLeave?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }
 
@@ -57,8 +59,8 @@ const OutlineVariant = styled.button`
   font-size: 14px;
   transition: background-color .40s;
   :hover {
-    /* background-color: ${theme.palette.common.black};
-    color: ${theme.palette.text.white}; */
+    background-color: ${theme.palette.common.black}; 
+    color: ${theme.palette.text.white};
   }
   :disabled {
     background-color: transparent;
@@ -80,7 +82,7 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
     disabled = false,
     containedVariantColor = "black",
     fontSize,
-    style
+    style,
   } = props;
 
   return (
@@ -94,7 +96,8 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
           height={height}
           style={style}
           color={containedVariantColor}
-          onClick={props.onClick}
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
         >
           {props.children}
         </CotainedVariant>
@@ -108,6 +111,8 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
           height={height}
           style={style}
           onClick={props.onClick}
+          onMouseEnter={props.onMouseEnter}
+          onMouseLeave={props.onMouseLeave}
         >
           {props.children}
         </OutlineVariant>

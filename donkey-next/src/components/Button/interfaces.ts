@@ -10,5 +10,5 @@ export interface IContainedButton {
 export interface IOutlinedButton {
     width?: string; 
     height?: string; 
-    fontSize?: string 
+    fontSize?: string;
 }

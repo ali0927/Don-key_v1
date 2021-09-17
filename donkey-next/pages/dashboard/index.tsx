@@ -15,14 +15,13 @@ import { strapi } from "strapi";
 const Root = styled.div`
   background-color: ${theme.palette.background.yellow};
 `;
-
 const FarmerTitle = styled.p({
   fontSize: "45px",
   fontStyle: "normal",
-  fontWeight: 800,
   letterSpacing: "0em",
   textAlign: "left",
   color: "#070602",
+  fontFamily: 'ObjectSans-Bold',
 });
 
 export const CustomizedContainer = styled.div`
@@ -51,10 +50,12 @@ const RootWrapper = styled.div`
   background-color: ${theme.palette.background.yellow};
   border-radius: 0px !important;
   clip-path: polygon(0 0, 225% 0%, 43% 119%, 0% 83%);
+  padding-bottom: 8rem;
 `;
 
 const Body = styled.div`
   background-color: #f4f4f4;
+  margin-top: -73px;
 `;
 
 const Ellipse1 = styled.div`
@@ -131,7 +132,7 @@ export default function Dashboard({ tokens }: { tokens: IStrapiToken[] }) {
           </CustomizedContainer>
         </RootWrapper>
       </Root>
-      <Body className="pt-5 pb-5">
+      <Body className="pb-5">
         {tokens.length === 0 ? (
           <CustomizedContainer>
             <div className="container">

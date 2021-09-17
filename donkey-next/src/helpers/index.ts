@@ -4,3 +4,4 @@ export * from "./getLibrary";
 export * from "./contractHelpers";
 export * from "./convertToInternationalCurrency";
 export * from "./captureException";
+export * from "./shortLargeAddress";

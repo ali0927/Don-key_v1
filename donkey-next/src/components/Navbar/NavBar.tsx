@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { Logo } from "./Logo";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-import { api, AuthToken, shortenAddress } from "don-utils";
+import { api, AuthToken } from "don-utils";
 import styled from "styled-components";
 import { theme } from "theme";
 // import { useReferralContext } from "contexts/ReferralContext";
@@ -17,6 +17,8 @@ import { ButtonWidget } from "components/Button";
 import { useWeb3Context } from "don-components";
 import Web3 from "web3";
 import { IUser } from "interfaces";
+import { Wallet } from "../Wallet";
+import { useWalletAddress } from "hooks";
 
 declare global {
   interface Window {
@@ -24,13 +26,7 @@ declare global {
   }
 }
 
-const useWalletAddress = ({ short = false }) => {
-  const { address } = useWeb3Context();
-  const walletAddress = address
-    ? address
-    : "0x1341133ba79815e04e008f7635212bf086e821301";
-  return short ? shortenAddress(walletAddress) : walletAddress;
-};
+
 
 const StyledNavBar = styled(Navbar)`
   background-color: ${theme.palette.background.yellow};
@@ -89,13 +85,15 @@ const ConnectWalletButton = () => {
     await signUser(web3);
   };
   return (
-    <ButtonComponent
+    <ButtonWidget
+       varaint="outlined"
       disabled={isDisabled}
+      height="40px"
+      width="160px"
       onClick={handleConnection}
-      variant="colorBlack btn-outline btnusername"
     >
       Connect wallet
-    </ButtonComponent>
+    </ButtonWidget>
   );
 };
 
@@ -224,14 +222,15 @@ function NavBar(props: INavBarProps) {
             {variant === "loggedin" && (
               <>
                 {isLoggedIn && !hideWallet ? (
-                  <ButtonWidget varaint="outlined" height="50px" width="157px">
-                    <img
-                      src="/assets/images/usericon.png"
-                      className="d-inline-block align-top mr-md-2"
-                      alt="ImageNotFound"
-                    />
-                    <span> {address}</span>
-                  </ButtonWidget>
+                  // <ButtonWidget varaint="outlined" height="50px" width="157px">
+                  //   <img
+                  //     src="/assets/images/usericon.png"
+                  //     className="d-inline-block align-top mr-md-2"
+                  //     alt="ImageNotFound"
+                  //   />
+                  //   <span> {address}</span>
+                  // </ButtonWidget>
+                  <Wallet />
                 ) : (
                   <ConnectWalletButton />
                 )}
