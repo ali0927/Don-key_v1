@@ -6,6 +6,8 @@ import axios from "axios";
 import { getWeb3 } from "don-components";
 import { getPoolValueInUSD } from "helpers";
 import nodeHtmlToImage from "node-html-to-image";
+import chrome from "chrome-aws-lambda";
+
 
 function convertToInternationalCurrencySystem(labelValue: string) {
   // Nine Zeroes for Billions
@@ -88,6 +90,9 @@ const GenerateImage: NextApiHandler = async (req, res) => {
   const generatedImage = await nodeHtmlToImage({
     html: finalHtml,
     selector: "#shareEarnImage",
+    puppeteerArgs: {
+      executablePath: await chrome.executablePath,
+    }
   });
   res.setHeader("content-type", "image/png");
   return res.send(generatedImage);
