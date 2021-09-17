@@ -9,8 +9,15 @@ import { GridBackground } from "components/GridBackground";
 import { FarmerStrategies } from "components/FarmerStrategies";
 import { FarmerBio } from "components/FarmerBio";
 import { IFarmerInter } from "interfaces";
+import { calcSumOfAllPoolValues } from "helpers";
 
-export default function Dashboard({data}: {data: {farmers: IFarmerInter[]}}) {
+export default function Dashboard({
+  data,
+  tvl,
+}: {
+  data: { farmers: IFarmerInter[] };
+  tvl: string;
+}) {
   const [isInUsd, setIsInUsd] = useState(false);
 
   const toggleCurrency = useCallback(() => {
@@ -27,7 +34,7 @@ export default function Dashboard({data}: {data: {farmers: IFarmerInter[]}}) {
       <RefreshProvider>
         <div style={{ background: "#F4F4F4" }}>
           <NavBar variant="loggedin" />
-          <FarmerBio farmer={data.farmers[0]} investorCount={0} />
+          <FarmerBio tvl={tvl} farmer={data.farmers[0]} investorCount={0} />
           <GridBackground>
             <FarmerStrategies isLoaded farmer={data.farmers[0]} />
           </GridBackground>
@@ -104,17 +111,19 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-
   const resp = await strapi.post("/graphql", {
     query: FARMER_QUERY,
     variables: {
       slug: context.params?.farmer,
     },
   });
-  
+  const tvl = await calcSumOfAllPoolValues();
+
   return {
     props: {
       data: resp.data.data,
+      tvl,
     },
+    revalidate: 60
   };
 };

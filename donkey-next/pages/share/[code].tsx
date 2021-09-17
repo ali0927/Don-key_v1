@@ -59,7 +59,7 @@ export default function SharePage({
   }
 
   const title = meta.title + " Strategy By " + meta.author;
-  const imagePath = `/api/referral-image?image_id${data.referral_image.id}&slug=${meta.slug}`;
+  const imagePath = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/referral-image?image_id${data.referral_image.id}&slug=${meta.slug}`;
   return (
     <div
       style={{

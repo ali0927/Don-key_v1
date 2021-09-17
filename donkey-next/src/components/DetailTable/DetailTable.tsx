@@ -25,7 +25,6 @@ import {
 } from "components/InactiveNetworkCard";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { Spinner } from "react-bootstrap";
-import { useDominance } from "hooks";
 import { DollarView } from "components/DollarView";
 
 export const CardWrapper = styled.div`
@@ -218,17 +217,19 @@ export const DetailTable = ({
   poolVersion,
   network,
   boostApy,
+  tvl
 }: {
   poolAddress: string;
   apy: string;
   network: IFarmerInter["network"];
   boostApy: boolean;
   poolVersion: number;
+  tvl: string;
   gasLimit?: string;
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
 
-  const { dominance } = useDominance(poolAddress, network.chainId);
+  
   const web3 = getWeb3(network.chainId);
   const { chainId: currentNetwork, getConnectedWeb3, connected } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
@@ -407,7 +408,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Dominance",
-              dominance + " %",
+              new BigNumber(totalPoolValue).dividedBy(tvl).multipliedBy(100) + " %",
               "black",
               <IconWrapper className="mr-2">
                 <AwardIcon />

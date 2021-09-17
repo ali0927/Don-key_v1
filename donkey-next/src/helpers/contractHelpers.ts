@@ -5,7 +5,9 @@ import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import { api, waitFor } from "don-utils";
-import { captureException } from "helpers";
+import { captureException, getPoolValueInUSD } from "helpers";
+import { strapi } from "strapi";
+import { getWeb3 } from "don-components";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
 const PancakeRouterAddress = "0x10ED43C718714eb63d5aA57B78B54704E256024E";
@@ -483,6 +485,45 @@ export const calculateUserClaimableAmount = async (
     return "0";
   }
 };
+
+const ALL_FARMERS_QUERY = `
+query allFarmerQuery {
+  farmers(
+    where: {
+      active_eq: true
+      status_in: ["active"]
+    }
+  ) {
+    name
+    description
+    farmerImage {
+      url
+    }
+    guid
+    active
+    twitter
+    telegram
+    poolAddress
+    poolVersion
+    network {
+      name
+      chainId
+      symbol
+    }
+  }
+}
+`;
+
+export const calcSumOfAllPoolValues = memoizeAsync(async () => {
+  let allPoolValues = new BigNumber(0);
+  const resp = await strapi.post("/graphql", {query: ALL_FARMERS_QUERY})
+  for (let farmer of resp.data.data.farmers) {
+    const web3 = getWeb3(farmer.network.chainId);
+    const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
+    allPoolValues = allPoolValues.plus(poolValue);
+  }
+  return allPoolValues.toFixed(2);
+});
 
 export const calculateInitialInvestment = async (
   web3: Web3,

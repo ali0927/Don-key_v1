@@ -76,10 +76,12 @@ const StrategyName = styled.h4`
 
 export const FarmerBio = ({
   farmer,
+  tvl
 }: {
   farmer: IFarmerInter;
   isInvestor?: boolean;
   investorCount?: number;
+  tvl: string;
   telegram?: string;
   twitter?: string;
 }) => {
@@ -230,6 +232,7 @@ export const FarmerBio = ({
             <DetailTable
               apy={apy}
               network={network}
+              tvl={tvl}
               poolVersion={pool_version}
               poolAddress={poolAddress}
               boostApy={boostApy}
