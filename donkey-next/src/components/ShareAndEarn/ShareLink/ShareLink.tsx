@@ -8,12 +8,8 @@ import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
 import { useTVL } from "hooks";
-import { getShareUrl, getUserReferralCode } from "helpers";
 
-import html2canvas from "html2canvas";
-import { api, uuidv4, waitFor } from "don-utils";
 import { Spinner } from "react-bootstrap";
-import { useWeb3Context } from "don-components";
 const TextOnInput = styled.div`
   position: relative;
 `;
@@ -75,8 +71,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
   const { tvl } = useTVL(props.poolAddress, props.chainId);
-  const [copyLink, setCopyLink] = React.useState(props.link || "");
-  const [_, setCode] = useState(props.code || "");
+
   React.useEffect(() => {
     if (openTooltip) {
       setTimeout(() => {
@@ -84,7 +79,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
       }, 1000);
     }
   }, [openTooltip]);
-
+  const copyLink = props.link as string;
   const handleCopy = () => {
     if (copyLink) {
       navigator.clipboard.writeText(copyLink);
@@ -92,59 +87,8 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-  const {getConnectedWeb3} = useWeb3Context();
 
-  const [loading, setLoading] = useState(false);
-
-  const handleImageGenerate = async (isUpdate?: string | null) => {
-    setLoading(true);
-    await waitFor(2000);
-    const element = document.querySelector("#shareEarnImage") as HTMLElement;
-    if (element) {
-      const canvas = await html2canvas(element, {
-        useCORS: true,
-        scrollY: 0,
-        logging: process.env.NODE_ENV === "development",
-        removeContainer: true,
-      });
-      const dataUrl = canvas.toDataURL("image/webp", 1);
-      const res: Response = await fetch(dataUrl);
-      const blob: Blob = await res.blob();
-
-      const file = new File([blob], "file-" + uuidv4() + ".png", {
-        type: "image/jpeg",
-      });
-      let formData = new FormData();
-
-      let result: any;
-      if (!isUpdate) {
-        const web3 = getConnectedWeb3();
-        let code = await getUserReferralCode(web3);
-        const urlToShorten =
-          window.location.origin +
-          window.location.pathname +
-          `?referral=${code}`;
-        formData.append("url", urlToShorten);
-        formData.append("image", file);
-        formData.append("pool_address", props.poolAddress);
-        result = await api.post("/api/v2/shortener", formData);
-        setCode(result.data.code)
-      } else {
-        formData.append("code", props.code);
-        formData.append("image", file);
-        result = await api.put("/api/v2/shortener", formData);
-      }
-
-      const shortUrl = getShareUrl(result.data.code);
-
-      setCopyLink(shortUrl);
-      setLoading(false);
-    }
-  };
-
-  const handleFirstRender = async () => {
-    await handleImageGenerate(copyLink);
-  };
+  const [loading] = useState(false);
 
   const renderSpinner = () => {
     return (
@@ -199,10 +143,6 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             apy={props.apy}
             farmerName={props.farmerName}
             strategyName={props.strategyName}
-            onChange={() => {
-              handleImageGenerate("yes");
-            }}
-            onFirstRender={handleFirstRender}
           />
         </div>
 
