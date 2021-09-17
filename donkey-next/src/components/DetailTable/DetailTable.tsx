@@ -408,7 +408,7 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Dominance",
-              new BigNumber(totalPoolValue).dividedBy(tvl).multipliedBy(100) + " %",
+              new BigNumber(totalPoolValue).dividedBy(tvl).multipliedBy(100).toFixed(2) + " %",
               "black",
               <IconWrapper className="mr-2">
                 <AwardIcon />

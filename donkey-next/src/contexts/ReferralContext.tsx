@@ -1,7 +1,8 @@
 import { getReferralSystemContract } from "helpers";
 import { createContext, useContext, useEffect, useState } from "react";
 
-import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
+import { connected } from "process";
 
 const ReferralContext = createContext({
   hasSignedUp: false,
@@ -17,15 +18,13 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     referralCount: 0,
   });
 
-  const { getConnectedWeb3, chainId } = useWeb3Context();
+  const { chainId, address } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
-    const web3 = getConnectedWeb3();
+    const web3 = getWeb3(BINANCE_CHAIN_ID);
     const referralContract = await getReferralSystemContract(web3);
-    const accounts = await web3.eth.getAccounts();
-    const userInfo = await referralContract.methods
-      .userInfo(accounts[0])
-      .call();
+
+    const userInfo = await referralContract.methods.userInfo(address).call();
 
     if (userInfo.exists) {
       setState({
@@ -39,10 +38,10 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   };
 
   useEffect(() => {
-    if (chainId === BINANCE_CHAIN_ID) {
+    if (connected) {
       checkhasSignedUp();
     }
-  }, [chainId]);
+  }, [chainId, connected]);
 
   return (
     <ReferralContext.Provider

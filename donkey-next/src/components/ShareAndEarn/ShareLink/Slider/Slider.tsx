@@ -1,19 +1,13 @@
-import React, { useState } from "react";
-import Banner2 from "./images/Banner2.png";
-import Banner3 from "./images/Banner3.png";
-import Banner4 from "./images/Banner4.png";
-import Banner6 from "./images/Banner6.png";
-import Banner7 from "./images/Banner7.png";
-import Banner1 from "./images/Banner1.jpeg";
-import Banner5 from "./images/Banner5.jpeg";
+import React, { useMemo, useState } from "react";
 import styled from "styled-components";
 import clsx from "clsx";
 import SlickSlider from "react-slick";
 import { LeftSliderArrow, RightSliderArrow } from "icons";
-import { useDidUpdate } from "hooks";
 import { convertToInternationalCurrencySystem } from "helpers";
 import { breakPoints } from "breakponts";
-import { ReferralImage } from "../ReferralImage/ReferralImage";
+import { ReferralImage } from "don-components";
+import { gql, useQuery } from "@apollo/client";
+import { Spinner } from "react-bootstrap";
 
 const CutomSlickSlider = styled(SlickSlider)`
   .selected {
@@ -50,7 +44,6 @@ const FooterText = styled.p<{ fontSize?: string }>`
   font-size: ${(props) => (props.fontSize ? props.fontSize : "16px")};
   font-weight: 500;
 `;
-const banners = [Banner1, Banner2, Banner3, Banner4, Banner5, Banner6, Banner7];
 const settings = {
   dots: false,
   infinite: false,
@@ -59,13 +52,22 @@ const settings = {
   initialSlide: 0,
 };
 
+const IMAGE_LIST_QUERY = gql`
+  query imageList {
+    referralImages {
+      image {
+        url
+      }
+    }
+  }
+`;
+
+type IBanner = {url: string; id: string;};
 export const Slider: React.FC<{
   tvl: string;
   apy: string;
   farmerName: string;
   strategyName: string;
-  onChange: () => void;
-  onFirstRender: () => void;
 }> = (props) => {
   const { tvl, apy, farmerName } = props;
 
@@ -76,6 +78,15 @@ export const Slider: React.FC<{
   const handleChangeImage = (index: number) => () => {
     setSelectedBanner(index);
   };
+
+  const { data, loading } = useQuery(IMAGE_LIST_QUERY);
+
+  const banners: IBanner[] = useMemo(() => {
+    if (data) {
+      return data.referralImages.map((item: any) => ({url: item.image.url, id: item.image.id}));
+    }
+    return [] ;
+  }, [data]);
 
   const handleNext = () => {
     if (slickRef.current) {
@@ -103,20 +114,16 @@ export const Slider: React.FC<{
     }
   };
 
-  React.useEffect(() => {
-    props.onFirstRender();
-  }, []);
 
-  useDidUpdate(() => {
-    props.onChange();
-  }, [selectedBanner]);
 
   const tvlUpdate = convertToInternationalCurrencySystem(tvl);
-
+  if(loading){
+    return <Spinner animation="border" size="sm" />
+  }
   return (
     <>
       <ReferralImage
-        bgImage={banners[selectedBanner].src}
+        bgImage={banners[selectedBanner].url}
         apy={apy}
         tvl={tvlUpdate}
         farmerName={farmerName}
@@ -131,7 +138,7 @@ export const Slider: React.FC<{
                 })}
               >
                 <LIImage
-                  src={banner.src}
+                  src={banner.url}
                   alt="Banner image not found"
                   onClick={handleChangeImage(index)}
                 />

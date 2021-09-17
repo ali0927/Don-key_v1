@@ -19,14 +19,13 @@ import Web3 from "web3";
 import { IUser } from "interfaces";
 import { Wallet } from "../Wallet";
 import { useWalletAddress } from "hooks";
+import { useReferralContext } from "contexts/ReferralContext";
 
 declare global {
   interface Window {
     ethereum: any;
   }
 }
-
-
 
 const StyledNavBar = styled(Navbar)`
   background-color: ${theme.palette.background.yellow};
@@ -86,7 +85,7 @@ const ConnectWalletButton = () => {
   };
   return (
     <ButtonWidget
-       varaint="outlined"
+      varaint="outlined"
       disabled={isDisabled}
       height="40px"
       width="160px"
@@ -97,21 +96,21 @@ const ConnectWalletButton = () => {
   );
 };
 
-// const MyReferralNavLink = ({ variant }: { variant: string }) => {
-//   const { hasSignedUp: isShown } = useReferralContext();
+const MyReferralNavLink = ({ variant }: { variant: string }) => {
+  const { hasSignedUp: isShown } = useReferralContext();
 
-//   if (isShown) {
-//     return (
-//       <NavbarLink
-//         to="/dashboard/referrals"
-//         linkColor={variant === "builder" ? "white" : "black"}
-//       >
-//         My Referrals
-//       </NavbarLink>
-//     );
-//   }
-//   return <></>;
-// };
+  if (isShown) {
+    return (
+      <NavbarLink
+        to="/dashboard/referrals"
+        linkColor={variant === "builder" ? "white" : "black"}
+      >
+        My Referrals
+      </NavbarLink>
+    );
+  }
+  return <></>;
+};
 
 function NavBar(props: INavBarProps) {
   const { variant = "landing", hideWallet = false } = props;
@@ -182,12 +181,15 @@ function NavBar(props: INavBarProps) {
                     >
                       Main
                     </NavbarLink>
-                    <NavbarLink
-                      to="/dashboard/investment"
-                      linkColor={variant === "builder" ? "white" : "black"}
-                    >
-                      My Investments
-                    </NavbarLink>
+                    {connected && (
+                      <NavbarLink
+                        to="/dashboard/investment"
+                        linkColor={variant === "builder" ? "white" : "black"}
+                      >
+                        My Investments
+                      </NavbarLink>
+                    )}
+                    {connected && <MyReferralNavLink variant={variant} />}
                     <NavbarLink to="#">
                       <div
                         onClick={(e: any) => {

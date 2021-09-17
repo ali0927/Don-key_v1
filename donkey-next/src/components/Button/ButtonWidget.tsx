@@ -95,6 +95,7 @@ export const ButtonWidget: React.FC<IButtonProps> = (props) => {
           width={width}
           height={height}
           style={style}
+          onClick={props.onClick}
           color={containedVariantColor}
           onMouseEnter={props.onMouseEnter}
           onMouseLeave={props.onMouseLeave}
