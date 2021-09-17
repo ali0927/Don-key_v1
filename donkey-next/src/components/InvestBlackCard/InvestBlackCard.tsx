@@ -5,9 +5,9 @@ import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import Dollars from "./images/dollars.png"
+import Dollars from "./images/dollars.png";
 import {
-  calculateWithdrawAmount,
+  getAmount,
   getPoolContract,
   getPoolToken,
   toEther,
@@ -32,7 +32,7 @@ import {
   CardInnerInfo,
   formatNum,
 } from "components/DetailTable";
-import {  LPShareIcon, ProfitIcon } from "icons";
+import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { getWeb3, useWeb3Context } from "don-components";
@@ -41,7 +41,7 @@ export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
   network,
-  boostApy
+  boostApy,
 }: {
   poolAddress: string;
   poolVersion: number;
@@ -63,7 +63,7 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3, address } = useWeb3Context();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
@@ -108,11 +108,14 @@ export const InvestBlackCard = ({
 
   useEffect(() => {
     async function apiCall() {
-      let withdrawAmount = await calculateWithdrawAmount(web3, poolAddress);
-      
-      setCurrentHoldings(withdrawAmount);
-      getIsInvested();
-      fetchRoi();
+      if (address) {
+        let withdrawAmount = await await getAmount(web3, poolAddress, address);
+
+        setCurrentHoldings(withdrawAmount);
+        getIsInvested();
+
+        fetchRoi();
+      }
     }
     apiCall();
     checkIsFarmer();
@@ -125,7 +128,7 @@ export const InvestBlackCard = ({
     refresh();
   };
   const connectedWeb3 = getConnectedWeb3();
-  const { initialInvestment, myShare, fetchRoi, initialInvestmentInUSD } =
+  const { initialInvestment, myShare, initialInvestmentInUSD, fetchRoi } =
     useROIAndInitialInvestment(
       connectedWeb3,
       finalPoolAddress,
@@ -137,10 +140,16 @@ export const InvestBlackCard = ({
     value: string | React.ReactNode,
     icon: React.ReactNode,
     color: "black" | "white",
-    col:number,
+    col: number
   ) => {
     return label === "Profit/Loss" ? (
-      <Columns className={"col-md-"+ col +" d-flex  flex-column align-items-center justify-content-between"}>
+      <Columns
+        className={
+          "col-md-" +
+          col +
+          " d-flex  flex-column align-items-center justify-content-between"
+        }
+      >
         <OverlayTrigger
           placement="right"
           delay={{ show: 250, hide: 400 }}
@@ -156,15 +165,21 @@ export const InvestBlackCard = ({
           }
         >
           <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-           {icon} {label}
+            {icon} {label}
           </ColumnsTitle1>
         </OverlayTrigger>
         <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
     ) : (
-      <Columns className={"col-md-"+col+" d-flex   flex-column align-items-center justify-content-between"}>
+      <Columns
+        className={
+          "col-md-" +
+          col +
+          " d-flex   flex-column align-items-center justify-content-between"
+        }
+      >
         <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-         {icon} {label}
+          {icon} {label}
         </ColumnsTitle1>
         <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
       </Columns>
@@ -207,7 +222,11 @@ export const InvestBlackCard = ({
             Tokens in Pool{" "}
           </CardLabel>
           <CardValue color="white">
-            <DollarView chainId={network.chainId} poolAddress={poolAddress} tokenAmount={tokenInPool} />
+            <DollarView
+              chainId={network.chainId}
+              poolAddress={poolAddress}
+              tokenAmount={tokenInPool}
+            />
           </CardValue>
           <CardLabel color="white" className="mt-5">
             {" "}
@@ -285,14 +304,14 @@ export const InvestBlackCard = ({
   };
   return (
     <>
-      <CardInnerInfo className="d-flex justify-content-center mb-3" >
+      <CardInnerInfo className="d-flex justify-content-center mb-3">
         <div style={{ marginTop: 30 }}>
           <>
-            <CardLabel style={{marginBottom: 20}} color="white">
+            <CardLabel style={{ marginBottom: 20 }} color="white">
               {" "}
               My Current Holdings{" "}
             </CardLabel>
-            <CardValue color="white" style={{marginBottom: 30}}>
+            <CardValue color="white" style={{ marginBottom: 30 }}>
               <DollarView
                 chainId={network.chainId}
                 poolAddress={poolAddress}
@@ -304,7 +323,7 @@ export const InvestBlackCard = ({
             <ButtonWidget
               varaint="contained"
               fontSize="14px"
-              className={clsx("mb-2",{"mr-3": isInvested})}
+              className={clsx("mb-2", { "mr-3": isInvested })}
               containedVariantColor="lightYellow"
               height="30px"
               width="132px"
@@ -312,8 +331,6 @@ export const InvestBlackCard = ({
             >
               Invest
             </ButtonWidget>
-
-            
 
             {isInvested && (
               <ButtonWidget
@@ -328,10 +345,7 @@ export const InvestBlackCard = ({
               </ButtonWidget>
             )}
 
-            {(network.symbol === "BSC" && boostApy) &&
-            <BoostButton />
-          
-           }
+            {network.symbol === "BSC" && boostApy && <BoostButton />}
           </div>
           {renderFarmerUI()}
         </div>
@@ -344,12 +358,16 @@ export const InvestBlackCard = ({
             `$${formatNum(initialInvestmentInUSD)}`
           ) : (
             <DollarView
-            chainId={network.chainId}
+              chainId={network.chainId}
               poolAddress={poolAddress}
               tokenAmount={initialInvestment}
             />
           ),
-          <img src={Dollars.src}  className="mr-1" alt="Dollar image not found"/>,
+          <img
+            src={Dollars.src}
+            className="mr-1"
+            alt="Dollar image not found"
+          />,
 
           "white",
           4
