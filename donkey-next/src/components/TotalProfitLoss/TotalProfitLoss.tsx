@@ -1,4 +1,4 @@
-import { getWeb3 } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 import { useEffect, useState } from "react";
 import {
   calculateInitialInvestment,
@@ -27,12 +27,15 @@ export const TotalProfitLoss = ({
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
   const web3 = getWeb3(chainId);
   const { symbol } = usePoolSymbol(poolAddress, web3);
-
+  const { address: connectedAddress} = useWeb3Context();
   const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
+      if(!address && !connectedAddress){
+        return;
+      }
       try {
-        const accounts = address ? [address] : await web3.eth.getAccounts();
+        const accounts = address ? [address] : [connectedAddress];
         const amountWithdraw = await getAmount(web3, poolAddress, accounts[0]);
         const amountInitial = await calculateInitialInvestment(
           web3,
@@ -65,7 +68,7 @@ export const TotalProfitLoss = ({
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refresh, isUSD]);
+  }, [refresh, isUSD, address, connectedAddress]);
   if (isUSD) {
     return <>${totalProfitLoss}</>;
   }

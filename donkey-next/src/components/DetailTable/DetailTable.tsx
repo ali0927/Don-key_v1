@@ -6,6 +6,7 @@ import { Switch, withStyles } from "@material-ui/core";
 import {
   getPoolContract,
   getPoolToken,
+  getTokenPrice,
   getTotalPoolValue,
   toEther,
 } from "helpers";
@@ -217,7 +218,7 @@ export const DetailTable = ({
   poolVersion,
   network,
   boostApy,
-  tvl
+  tvl,
 }: {
   poolAddress: string;
   apy: string;
@@ -228,10 +229,14 @@ export const DetailTable = ({
   gasLimit?: string;
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
+  const [totalPoolValueInUSD, setTotalPoolValueInUsd] = useState("0");
 
-  
   const web3 = getWeb3(network.chainId);
-  const { chainId: currentNetwork, getConnectedWeb3, connected } = useWeb3Context();
+  const {
+    chainId: currentNetwork,
+    getConnectedWeb3,
+    connected,
+  } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
@@ -251,8 +256,11 @@ export const DetailTable = ({
   useEffect(() => {
     (async () => {
       if (poolVersion > 2 && isActiveNetwork && connected) {
-       
-        const pool = await getPoolContract(connectedWeb3, poolAddress, poolVersion);
+        const pool = await getPoolContract(
+          connectedWeb3,
+          poolAddress,
+          poolVersion
+        );
         const accounts = await connectedWeb3.eth.getAccounts();
         const isRequested = await pool.methods
           .isWithdrawalRequested(accounts[0])
@@ -268,10 +276,18 @@ export const DetailTable = ({
 
   useEffect(() => {
     (async () => {
-      let poolValue = await getTotalPoolValue(web3, poolAddress);
+      let [poolValue, tokenPrice] = await Promise.all([
+        getTotalPoolValue(web3, poolAddress),
+        getTokenPrice(web3, poolAddress),
+      ]);
       const token = await getPoolToken(web3, poolAddress);
+
       const decimals = await token.methods.decimals().call();
-      setTotalPoolValue(toEther(poolValue, decimals));
+      const tokens = toEther(poolValue, decimals);
+      setTotalPoolValue(tokens);
+      setTotalPoolValueInUsd(
+        new BigNumber(tokens).multipliedBy(tokenPrice).toFixed(2)
+      );
     })();
   }, [dependsOn, currentNetwork]);
 
@@ -319,7 +335,7 @@ export const DetailTable = ({
         )
       );
     } else {
-      if(connected){
+      if (connected) {
         if (isActiveNetwork) {
           return (
             <InvestBlackCard
@@ -332,10 +348,9 @@ export const DetailTable = ({
         } else {
           return <InactiveNetworkCard correctNetwork={network} />;
         }
-      }else {
-        return <ConnectToMetamaskCard network={network} />
+      } else {
+        return <ConnectToMetamaskCard network={network} />;
       }
-   
     }
   };
 
@@ -408,7 +423,10 @@ export const DetailTable = ({
             )}
             {getFirstCardcolumns(
               "Dominance",
-              new BigNumber(totalPoolValue).dividedBy(tvl).multipliedBy(100).toFixed(2) + " %",
+              new BigNumber(totalPoolValueInUSD)
+                .dividedBy(tvl)
+                .multipliedBy(100)
+                .toFixed(2) + " %",
               "black",
               <IconWrapper className="mr-2">
                 <AwardIcon />
