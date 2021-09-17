@@ -17,6 +17,7 @@ import { useMemo, useState } from "react";
 import { useWeb3Context } from "don-components";
 import { strapi } from "strapi";
 import { sortBy } from "lodash";
+import { useIsomorphicEffect } from "hooks";
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -75,9 +76,13 @@ const FarmerBioShort = ({
   onShowLess: () => void;
   tokenObj?: any;
 }) => {
+  const url = `/dashboard/farmer/${item.strategy.farmer.slug}`;
+  useIsomorphicEffect(() => {
+    history.prefetch(url);
+  }, []);
   const history = useRouter();
-  const handleLeaderClick = (id: string) => () => {
-    history.push(`/dashboard/farmer/${id}`);
+  const handleLeaderClick = () => {
+    history.push(url);
   };
 
   return (
@@ -92,8 +97,8 @@ const FarmerBioShort = ({
         content={item.strategy.description}
         risk={item.strategy.risk.Title.toLowerCase()}
         imageRisk={item.strategy.risk.image.url}
-        onCardClick={handleLeaderClick(item.strategy.farmer.slug)}
-        onButtonClick={handleLeaderClick(item.strategy.farmer.slug)}
+        onCardClick={handleLeaderClick}
+        onButtonClick={handleLeaderClick}
         showOnRight={!tokenObj.boostApy}
         extraApy={
           tokenObj.boostApy &&
