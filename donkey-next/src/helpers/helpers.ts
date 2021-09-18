@@ -85,7 +85,7 @@ export const setReferralCode = (code: string) => {
 };
 
 export const getShareUrl = (code: string) => {
-  return "https://" + (process.env.NEXT_PUBLIC_VERCEL_URL|| "localhost:3000") + "/share/" + code;
+  return window.location.origin+ "/share/" + code;
 };
 
 export const getReferralCode = () => {
