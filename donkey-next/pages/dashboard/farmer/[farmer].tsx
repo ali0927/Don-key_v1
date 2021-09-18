@@ -118,7 +118,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   });
   const tvl = await calcSumOfAllPoolValues();
-
+  if(resp.data.data.farmers.length === 0){
+    return {
+      notFound: true
+    }
+  }
   return {
     props: {
       data: resp.data.data,
