@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { NextSeo } from "next-seo";
 import Head from "next/head";
 import { Loader } from "don-components";
@@ -53,6 +53,14 @@ export default function SharePage({
   origin: string;
 }) {
 
+  useEffect(() => {
+    if (!data || !meta) {
+      return;
+    }
+    setTimeout(() => {
+      window.location.assign(data.url);
+    }, 3000);
+  }, [data, meta]);
 
   if (!data || !meta) {
     return <div>Invalid Link</div>;

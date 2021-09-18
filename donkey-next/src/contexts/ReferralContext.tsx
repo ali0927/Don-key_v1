@@ -1,8 +1,9 @@
-import { getReferralSystemContract } from "helpers";
-import { createContext, useContext, useEffect, useState } from "react";
+import { getReferralSystemContract, setReferralCode } from "helpers";
+import { createContext, useContext, useState } from "react";
 
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { connected } from "process";
+import { useIsomorphicEffect } from "hooks";
 
 const ReferralContext = createContext({
   hasSignedUp: false,
@@ -37,9 +38,14 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     }
   };
 
-  useEffect(() => {
+  useIsomorphicEffect(() => {
     if (connected) {
       checkhasSignedUp();
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("referral");
+    if (code) {
+      setReferralCode(code);
     }
   }, [chainId, connected]);
 
