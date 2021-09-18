@@ -6,18 +6,19 @@ import { Navigate } from "components/Navigate";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { GridBackground } from "components/GridBackground";
 import { InactiveNetworkCard } from "components/InactiveNetworkCard";
-import { IFarmerInter, IStrategy } from "interfaces";
+import { IFarmerInter, IStrapiToken, IStrategy } from "interfaces";
 import { useRouter } from "next/router";
 import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import { fixUrl } from "helpers";
 import BigNumber from "bignumber.js";
 import { PoolAmount } from "components/PoolAmount";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useWeb3Context } from "don-components";
 import { strapi } from "strapi";
 import { sortBy } from "lodash";
 import { useIsomorphicEffect } from "hooks";
+import { GetStaticProps } from "next";
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -63,6 +64,8 @@ const Image = styled.img`
   height: 45px;
   border-radius: 5px;
 `;
+
+type IFarmerBio = IStrategy & { farmer: IFarmerInter };
 const FarmerBioShort = ({
   item,
   isShown,
@@ -70,13 +73,13 @@ const FarmerBioShort = ({
   onShowMore,
   tokenObj,
 }: {
-  item: { strategy: IStrategy & { farmer: IFarmerInter } };
+  item: IFarmerBio;
   isShown: boolean;
   onShowMore: () => void;
   onShowLess: () => void;
   tokenObj?: any;
 }) => {
-  const url = `/dashboard/farmer/${item.strategy.farmer.slug}`;
+  const url = `/dashboard/farmer/${item.farmer.slug}`;
   useIsomorphicEffect(() => {
     history.prefetch(url);
   }, []);
@@ -88,26 +91,25 @@ const FarmerBioShort = ({
   return (
     <div className="col-md-4 py-3">
       <PopularStrategy
-        apy={item.strategy.apy + "%"}
-        isCardComingsoon={item.strategy.farmer.status === "comingsoon"}
-        comingsoon={item.strategy.farmer.status === "comingsoon"}
-        icon={<Image src={fixUrl(item.strategy?.farmer?.farmerImage?.url)} />}
-        contentTitle={item.strategy.name}
-        title={item.strategy.farmer.name}
-        content={item.strategy.description}
-        risk={item.strategy.risk.Title.toLowerCase()}
-        imageRisk={item.strategy.risk.image.url}
+        apy={item.apy + "%"}
+        isCardComingsoon={item.farmer.status === "comingsoon"}
+        comingsoon={item.farmer.status === "comingsoon"}
+        icon={<Image src={fixUrl(item?.farmer?.farmerImage?.url)} />}
+        contentTitle={item.name}
+        title={item.farmer.name}
+        content={item.description}
+        risk={item.risk.Title.toLowerCase()}
+        imageRisk={item.risk.image.url}
         onCardClick={handleLeaderClick}
         onButtonClick={handleLeaderClick}
         showOnRight={!tokenObj.boostApy}
         extraApy={
-          tokenObj.boostApy &&
-          new BigNumber(item.strategy.apy).plus(100).toFixed() + "%"
+          tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
         }
         totalValue={
           <PoolAmount
-            chainId={item.strategy.farmer.network.chainId}
-            poolAddress={item.strategy.farmer.poolAddress}
+            chainId={item.farmer.network.chainId}
+            poolAddress={item.farmer.poolAddress}
           />
         }
         onShowLessClick={onShowLess}
@@ -115,15 +117,15 @@ const FarmerBioShort = ({
         showAllContent={isShown}
         investers={
           <InvestorCountContract
-            chainId={item.strategy.farmer.network.chainId}
-            poolAddresses={[item.strategy.farmer.poolAddress]}
+            chainId={item.farmer.network.chainId}
+            poolAddresses={[item.farmer.poolAddress]}
           />
         }
-        strategyImage={item.strategy.strategyImage.url}
+        strategyImage={item.strategyImage.url}
         network={{
-          chainId: item.strategy.farmer.network.chainId,
-          networkName: item.strategy.farmer.network.name,
-          networkSymbol: item.strategy.farmer.network.symbol,
+          chainId: item.farmer.network.chainId,
+          networkName: item.farmer.network.name,
+          networkSymbol: item.farmer.network.symbol,
         }}
       />
     </div>
@@ -132,7 +134,7 @@ const FarmerBioShort = ({
 
 const sortStrategies = (list: any[]) => {
   return sortBy(list, (item) => {
-    const risk = item.strategy.risk.Title.toLowerCase();
+    const risk = item.risk.Title.toLowerCase();
     if (risk === "low") {
       return -1;
     }
@@ -142,31 +144,22 @@ const sortStrategies = (list: any[]) => {
     return 0;
   });
 };
-const emptryArr: any[] = [];
 
-export default function TokenPage({ data }: { data: any }) {
+export default function TokenPage({
+  tokens,
+  strategies,
+}: {
+  tokens: IStrapiToken[]
+  strategies: IFarmerBio[];
+}) {
+
+  // return <div />
   const { chainId, connected } = useWeb3Context();
-  const tokenObj = data ? data.tokens[0] : null;
-  const strategies = data ? data.tokens[0].RiskStrategy : emptryArr;
-  const network = data ? data.tokens[0].network : { chainId: null };
-  const subtitle = data ? data.tokens[0].subtitle : null;
-  const description = data ? data.tokens[0].description : null;
+  const tokenObj = tokens[0];
+  const network = tokenObj.network;
+  const subtitle = tokenObj.subtitle;
+  const description = tokenObj.description;
   const isActiveNetwork = network.chainId === chainId;
-
-  const sortedStrategies: { strategy: IStrategy & { farmer: IFarmerInter } }[] =
-    useMemo(() => {
-      return sortStrategies(strategies).filter((item) => {
-        const farmer = item.strategy.farmer as IFarmerInter;
-        if (
-          farmer.active &&
-          (farmer.status === "active" || farmer.status === "comingsoon")
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      });
-    }, [strategies]);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -209,10 +202,10 @@ export default function TokenPage({ data }: { data: any }) {
             </div>
           )}
           <div className="row">
-            {sortedStrategies.map((item) => {
+            {strategies.map((item) => {
               return (
                 <FarmerBioShort
-                  key={item.strategy.id}
+                  key={item.id}
                   isShown={isOpen}
                   onShowLess={() => setIsOpen(false)}
                   onShowMore={() => setIsOpen(true)}
@@ -269,38 +262,36 @@ query tokenInfo($slug: String!, $network: String!) {
       boostApy
       subtitle
       description
-      RiskStrategy {
-        strategy {
-          risk {
-            Title
-            image {
-              url
-            }
-          }
-          strategyImage {
+      strategies {
+        risk {
+          Title
+          image {
             url
           }
+        }
+        strategyImage {
+          url
+        }
+        name
+        apy
+        active
+        description
+        farmer {
+          status
           name
-          apy
-          active
-          description
-          farmer {
-            status
-            name
-            farmerImage {
-              url
-            }
-            network {
-              chainId
-              name
-              symbol
-            }
-            slug
-            active
-            guid
-            poolVersion
-            poolAddress
+          farmerImage {
+            url
           }
+          network {
+            chainId
+            name
+            symbol
+          }
+          slug
+          active
+          guid
+          poolVersion
+          poolAddress
         }
       }
     }
@@ -323,7 +314,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps(context: any) {
+export const getStaticProps: GetStaticProps = async (context: any) => {
   const { network, token } = context.params;
   const resp = await strapi.post("/graphql", {
     query: TOKEN_INFO_QUERY,
@@ -332,8 +323,26 @@ export async function getStaticProps(context: any) {
       network: network,
     },
   });
+  const data = resp.data.data;
 
+  const strategies = sortStrategies(
+    data?.tokens[0]?.strategies.filter(
+      (item: any) =>
+        item.farmer.status === "active" || item.farmer.status === "comingsoon"
+    )
+  );
+  if (!strategies) {
+    return {
+      notFound: true,
+    };
+  }
+  if (!(strategies.length > 0)) {
+    return {
+      notFound: true,
+    };
+  }
+  console.log(data.tokens);
   return {
-    props: resp.data,
+    props: { ...data, strategies },
   };
-}
+};

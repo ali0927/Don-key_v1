@@ -165,6 +165,8 @@ export type IStrapiToken = {
   id: number;
   name: string;
   symbol: string;
+  subtitle: string;
+  description: string;
   boostApy: boolean;
   status: "commingsoon" | "active" | "disabled" | "hidden"
   tokenAddress: string;
