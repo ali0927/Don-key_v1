@@ -10,7 +10,7 @@ import BigNumber from "bignumber.js";
 import { api } from "don-utils";
 import moment from "moment";
 
-const DonStakingAddress = "0x7eD3526d1C1bC42756B31b097761dd0E1f7EABE4";
+const DonStakingAddress = process.env.NEXT_PUBLIC_STAKING_CONTRACT;
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
 const tierInfo: {
@@ -265,7 +265,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         return tierInfo.data;
       },
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
-      stakingAddress: DonStakingAddress,
+      stakingAddress: DonStakingAddress as string,
       stake,
       unstake,
       harvest,
