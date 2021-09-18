@@ -1,11 +1,14 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
+const StrapiURI = process.env.NEXT_PUBLIC_STRAPI_URL;
 export const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_URL || 'https://don-strapi-g36tg.ondigitalocean.app/graphql',
+  uri: StrapiURI
+    ? `${StrapiURI}/graphql`
+    : "https://don-strapi-g36tg.ondigitalocean.app/graphql",
   cache: new InMemoryCache(),
 });
 
 export const uniswapClient = new ApolloClient({
-  uri: 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2',
+  uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
   cache: new InMemoryCache(),
-})
+});
