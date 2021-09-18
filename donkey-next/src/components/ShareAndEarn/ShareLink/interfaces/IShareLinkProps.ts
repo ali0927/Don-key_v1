@@ -7,6 +7,8 @@ export interface IShareLinkProps {
     poolAddress: string;
     apy: string;
     chainId: number;
-    code: string;
+    image_id: string;
+    shortcode: string;
+    fetchData: () => void;
     onClose: ()=> void;
 }

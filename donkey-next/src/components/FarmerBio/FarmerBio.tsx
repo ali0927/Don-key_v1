@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "react-bootstrap";
-import {  ShareandEarnIcon } from "icons";
+import { ShareandEarnIcon } from "icons";
 import { DetailTable } from "components/DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
@@ -13,7 +13,8 @@ import { theme } from "theme";
 import { fixUrl, getShareUrl } from "helpers";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
-import { api } from "don-utils";
+import { gql, useLazyQuery } from "@apollo/client";
+import { useIsomorphicEffect } from "hooks";
 
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
@@ -74,9 +75,22 @@ const StrategyName = styled.h4`
   font-size: 20px;
 `;
 
+const SHORT_LINKS_QUERY = gql`
+  query shortLinks($walletAddress: String!, $poolAddress: String!) {
+    shortLinks(
+      where: { poolAddress_eq: $poolAddress, walletAddress_eq: $walletAddress }
+    ) {
+      shortcode
+      referral_image {
+        id
+      }
+    }
+  }
+`;
+
 export const FarmerBio = ({
   farmer,
-  tvl
+  tvl,
 }: {
   farmer: IFarmerInter;
   isInvestor?: boolean;
@@ -98,45 +112,39 @@ export const FarmerBio = ({
 
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [shortLink, setShortLink] = useState<string | null>(null);
 
-  const [code, setCode] = useState("");
-  const { connected, getConnectedWeb3} = useWeb3Context();
+  const [shortCode, setShortCode] = useState<{
+    referral_image: { id: string };
+    shortcode: string;
+  } | null>(null);
+  const { connected, address } = useWeb3Context();
+
+  const [fetchData, { loading, data: shortLink }] =
+    useLazyQuery(SHORT_LINKS_QUERY, {fetchPolicy: "no-cache"});
+
   const fetchInfoFromApi = async () => {
-    const web3 = getConnectedWeb3();
-    const accounts = await web3.eth.getAccounts();
     try {
-      const response = await api.get(
-        "/api/v2/shortener?" +
-          new URLSearchParams({
-            pool_address: poolAddress,
-            wallet_address: accounts[0],
-          }).toString()
-      );
-      if (response.data) {
-        setShortLink(getShareUrl(response.data.code));
-        setCode(response.data.code);
-        setImageUrl(response.data.image);
-      }
-    } catch(e){
-
-    }
-
+      fetchData({ variables: { poolAddress, walletAddress: address } });
+    } catch (e) {}
   };
 
   useEffect(() => {
-    if(connected){
+    if (connected) {
       fetchInfoFromApi();
     }
-  
   }, [connected]);
 
+  useIsomorphicEffect(() => {
+    if (shortLink && shortLink.shortLinks.length > 0) {
+      setShortCode(shortLink.shortLinks[0]);
+    }
+  }, [loading]);
+
   const handleShareClick = async () => {
-    if(!connected){
+    if (!connected) {
       return alert("Connect Wallet");
     }
-    if (shortLink && imageUrl) {
+    if (shortLink && shortLink.shortLinks.length > 0) {
       setShareLink(true);
     } else {
       setSharePopup(true);
@@ -246,21 +254,25 @@ export const FarmerBio = ({
           open={openSharePopup}
           pool_address={poolAddress}
           apy={apy}
-          onCreateClick={handleCreateLink}
+          onCreateLink={handleCreateLink}
           onClose={() => setSharePopup(false)}
         />
       )}
 
-      {openShareLink && (
+      {openShareLink && shortCode && (
         <ShareLink
           chainId={network.chainId}
-          link={shortLink}
+          link={getShareUrl(shortCode.shortcode)}
           open={openShareLink}
+          image_id={shortCode.referral_image.id.toString()}
           farmerName={name}
           strategyName={strategyName}
           poolAddress={poolAddress}
+          fetchData={() =>
+            fetchData({ variables: { poolAddress, walletAddress: address } })
+          }
           apy={apy}
-          code={code}
+          shortcode={shortCode.shortcode}
           onClose={() => setShareLink(false)}
         />
       )}

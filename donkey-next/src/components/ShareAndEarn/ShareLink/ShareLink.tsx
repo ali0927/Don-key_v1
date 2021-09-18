@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { DonCommonmodal } from "components/DonModal";
 import { IShareLinkProps } from "./interfaces/IShareLinkProps";
 import styled from "styled-components";
@@ -8,8 +8,6 @@ import { Tooltip } from "@material-ui/core";
 import { TwitterShareButton, TelegramShareButton } from "react-share";
 import { Slider } from "./Slider/Slider";
 import { useTVL } from "hooks";
-
-import { Spinner } from "react-bootstrap";
 const TextOnInput = styled.div`
   position: relative;
 `;
@@ -87,9 +85,6 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
     }
   };
 
-
-  const [loading] = useState(false);
-
   const renderSpinner = () => {
     return (
       <>
@@ -123,14 +118,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
                   containedVariantColor="lightYellow"
                   onClick={handleCopy}
                 >
-                  {loading ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    <>
-                      {" "}
-                      <HyperLinkIcon /> Copy Link
-                    </>
-                  )}
+                  <HyperLinkIcon /> Copy Link
                 </ButtonWidget>
               </span>
             </Tooltip>
@@ -140,9 +128,12 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         <div className="mt-4">
           <Slider
             tvl={tvl}
+            image_id={props.image_id}
             apy={props.apy}
             farmerName={props.farmerName}
             strategyName={props.strategyName}
+            short_code={props.shortcode}
+            refetch={async () => props.fetchData()}
           />
         </div>
 

@@ -86,9 +86,9 @@ export const setReferralCode = (_: string) => {
 
 export const getShareUrl = (code: string) => {
   return (
-    (process.env.REACT_APP_SHARE_LINK?.endsWith("/")
-      ? process.env.REACT_APP_SHARE_LINK
-      : process.env.REACT_APP_SHARE_LINK + "/") + code
+    (process.env.NEXT_PUBLIC_APP_SHARE_LINK?.endsWith("/")
+      ? process.env.NEXT_PUBLIC_APP_SHARE_LINK
+      : process.env.NEXT_PUBLIC_APP_SHARE_LINK + "/") + code
   );
 };
 
