@@ -517,11 +517,12 @@ query allFarmerQuery {
 export const calcSumOfAllPoolValues = memoizeAsync(async () => {
   let allPoolValues = new BigNumber(0);
   const resp = await strapi.post("/graphql", {query: ALL_FARMERS_QUERY})
-  for (let farmer of resp.data.data.farmers) {
+  const list = resp.data.data.farmers.map(async (farmer: any) => {
     const web3 = getWeb3(farmer.network.chainId);
     const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
     allPoolValues = allPoolValues.plus(poolValue);
-  }
+  })
+  await Promise.all(list);
   return allPoolValues.toFixed(2);
 });
 
