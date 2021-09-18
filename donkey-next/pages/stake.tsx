@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { NavBar } from "components/Navbar";
 import { LotteryForm, RefreshProvider } from "components/LotteryForm";
-
 import { theme } from "theme";
 
 const Header = styled.div`

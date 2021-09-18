@@ -123,6 +123,11 @@ export const getStaticProps: GetStaticProps = async (context) => {
       notFound: true
     }
   }
+  if(resp.data.data.farmers[0].strategies.length === 0){
+    return {
+      notFound: true
+    }
+  }
   return {
     props: {
       data: resp.data.data,
