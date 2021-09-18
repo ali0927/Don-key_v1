@@ -67,7 +67,7 @@ export const getPoolValue = async (web3: Web3, poolAddress: string) => {
     const bn = new BigNumber(toEther(amount, decimals)).toFixed(2);
     return bn.toString();
   } catch (e) {
-    captureException(e, "getPoolValue: "+ poolAddress);
+    captureException(e, "getPoolValue: " + poolAddress);
     return "0";
   }
 };
@@ -85,11 +85,7 @@ export const setReferralCode = (_: string) => {
 };
 
 export const getShareUrl = (code: string) => {
-  return (
-    (process.env.NEXT_PUBLIC_APP_SHARE_LINK?.endsWith("/")
-      ? process.env.NEXT_PUBLIC_APP_SHARE_LINK
-      : process.env.NEXT_PUBLIC_APP_SHARE_LINK + "/") + code
-  );
+  return "https://" + (process.env.VERCEL_URL|| "localhost:3000") + "/share/" + code;
 };
 
 export const getReferralCode = () => {
@@ -97,11 +93,11 @@ export const getReferralCode = () => {
 };
 
 export const fixUrl = (url?: string) => {
-  if(!url){
+  if (!url) {
     return url;
   }
-  if(url.includes("http")){
+  if (url.includes("http")) {
     return url;
   }
   return `https://${url}`;
-}
+};

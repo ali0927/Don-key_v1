@@ -152,6 +152,7 @@ export const FarmerBio = ({
   };
 
   const handleCreateLink = () => {
+    fetchData();
     setShareLink(true);
     setSharePopup(false);
   };
