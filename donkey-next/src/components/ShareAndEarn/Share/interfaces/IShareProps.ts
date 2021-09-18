@@ -4,6 +4,6 @@ export interface IShareProps {
     open: boolean;
     pool_address: string;
     apy: string;
-    onCreateClick: () => void;
+    onCreateLink: (url:string) => void;
     onClose: () => void;
 }

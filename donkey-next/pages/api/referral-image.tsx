@@ -34,13 +34,14 @@ const GenerateImage: NextApiHandler = async (req, res) => {
 
   const tvl = await getPoolValueInUSD(web3, farmerObj.poolAddress);
 
+  const urlR = `/api/v2/referral-image?apy=${strategy.apy}&tvl=${tvl}&name=${farmerObj.name}&image_id=${image_id}`;
   const resp = await api.get(
-    `/api/v2/referral-image?apy=${strategy.apy}&tvl=${tvl}&name=${farmerObj.name}&image_id=${image_id}`
+    urlR,
+    {responseType: "stream"}
   );
-
   res.setHeader("content-type", "image/png");
   res.setHeader("cache-control", "max-age=7200, public");
-  return res.send(resp.data);
+  return resp.data.pipe(res);
 };
 
 export default GenerateImage;

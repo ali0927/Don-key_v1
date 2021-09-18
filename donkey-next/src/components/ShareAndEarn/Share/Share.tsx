@@ -1,21 +1,18 @@
 import { DonCommonmodal } from "components/DonModal";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IShareProps } from "./interfaces/IShareProps";
 import styled from "styled-components";
 import Star from "../images/star.png";
 import shareTelegram from "../images/shareTelegram.png";
 import earnings from "../images/earnings.png";
 import { ButtonWidget } from "components/Button";
-import { uuidv4 } from "don-utils";
+import { api, uuidv4 } from "don-utils";
 import { Spinner } from "react-bootstrap";
 import {
-  getTokenPrice,
-  getTotalPoolValue,
+  getShareUrl,
   getUserReferralCode,
   signUpAsReferral,
-  toEther,
 } from "helpers";
-import BigNumber from "bignumber.js";
 import { useReferralContext } from "contexts/ReferralContext";
 import { useWeb3Context } from "don-components";
 import { Step } from "./Step";
@@ -41,34 +38,13 @@ const CancelButton = styled(ButtonWidget)`
   }
 `;
 
-// const setShareUrl = (
-//   poolAddress: string,
-//   data: { imageUrl: string; shortUrl: string }
-// ) => {
-//   localStorage.setItem(poolAddress, JSON.stringify(data));
-// };
-
 export const Share: React.FC<IShareProps> = (props) => {
   const { open, pool_address } = props;
 
   const [loading, setLoading] = React.useState(false);
 
-  const [_, setTvl] = useState("");
-
   const { getConnectedWeb3 } = useWeb3Context();
-  const fetchTvl = async () => {
-    const web3 = getConnectedWeb3();
-    const poolValue = await getTotalPoolValue(web3, pool_address);
-    const tokenPrice = await getTokenPrice(web3, pool_address);
 
-    setTvl(
-      new BigNumber(toEther(poolValue)).multipliedBy(tokenPrice).toFixed(1)
-    );
-  };
-
-  useEffect(() => {
-    fetchTvl();
-  }, []);
   const { checkSignUp } = useReferralContext();
   const handleCreateLink = async () => {
     setLoading(true);
@@ -80,39 +56,16 @@ export const Share: React.FC<IShareProps> = (props) => {
       checkSignUp();
     }
     setLoading(false);
-    props.onCreateClick();
-
-    // const element = document.querySelector("#shareEarnImage") as HTMLElement;
-    // if (element) {
-    //   const canvas = await html2canvas(element, {
-    //     useCORS: true,
-    //     scrollY: 0,
-    //     logging: process.env.NODE_ENV === "development",
-    //     removeContainer: true,
-    //   });
-    //   const dataUrl = canvas.toDataURL("image/jpeg");
-    //   const res: Response = await fetch(dataUrl);
-    //   const blob: Blob = await res.blob();
-
-    //   //Use this file in api call
-    //   const file = new File([blob], "file-" + uuidv4() + ".png", {
-    //     type: "image/jpeg",
-    //   });
-    //   const formData = new FormData();
-    //   const urlToShorten =
-    //     window.location.origin + window.location.pathname + `?referral=${code}`;
-    //   formData.append("url", urlToShorten);
-    //   formData.append("image", file);
-    //   formData.append("pool_address", props.pool_address);
-    //   const result = await api.post("/api/v2/shortener", formData);
-    //   const shortUrl = getShareUrl(result.data.code);
-    //   setShareUrl(props.pool_address, {
-    //     shortUrl,
-    //     imageUrl: result.data.image,
-    //   });
-    //   setLoading(false);
-    //   props.onCreateLink(result.data.image, shortUrl);
-    // }
+    const urlToShorten =
+      window.location.origin + window.location.pathname + `?referral=${code}`;
+    const result = await api.post("/api/v2/shortener", {
+      pool_address,
+      url: urlToShorten,
+      referralcode: code,
+      image: 1,
+    });
+    const shortUrl = getShareUrl(result.data.shortcode);
+    props.onCreateLink(shortUrl);
   };
 
   return (
@@ -122,7 +75,14 @@ export const Share: React.FC<IShareProps> = (props) => {
         title="Share"
         variant="common"
         onClose={props.onClose}
-        titleRightContent={<ReadMore href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read more</ReadMore>}
+        titleRightContent={
+          <ReadMore
+            href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb"
+            target="_blank"
+          >
+            Read more
+          </ReadMore>
+        }
         size="md"
       >
         {/* <div className="d-flex justify-content-between align-items-center">
