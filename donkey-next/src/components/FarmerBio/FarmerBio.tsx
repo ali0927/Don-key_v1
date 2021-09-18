@@ -152,7 +152,7 @@ export const FarmerBio = ({
   };
 
   const handleCreateLink = () => {
-    fetchData();
+    fetchInfoFromApi();
     setShareLink(true);
     setSharePopup(false);
   };
@@ -270,7 +270,7 @@ export const FarmerBio = ({
           strategyName={strategyName}
           poolAddress={poolAddress}
           fetchData={() =>
-            fetchData({ variables: { poolAddress, walletAddress: address } })
+            fetchInfoFromApi()
           }
           apy={apy}
           shortcode={shortCode.shortcode}
