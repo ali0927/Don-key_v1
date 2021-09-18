@@ -4,7 +4,6 @@ import { NavBar } from "components/Navbar/NavBar";
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
-import "./InvestmentsPage.scss";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, withStyles } from "@material-ui/core";
 import { yellow } from "@material-ui/core/colors";
@@ -29,9 +28,6 @@ import { MyInitialInvestment } from "components/MyInvestment";
 import {
   getPoolContract,
   calculateInitialInvestmentInUSD,
-  calculateInitialInvestment,
-  getTokenPrice,
-  getTokenAddress,
   getDonPrice,
   fixUrl,
   captureException,
@@ -40,16 +36,13 @@ import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
 import { IFarmerInter } from "interfaces";
-import { formatNum } from "../../Pages/FarmerBioPage/DetailTable";
-
-import { NetworkButton } from "Pages/DashboardPage/DashboardPage";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
 
-import { chain, uniqBy } from "lodash";
+import {  uniqBy } from "lodash";
 import {
   AVAX_CHAIN_ID,
   BINANCE_CHAIN_ID,
@@ -58,6 +51,8 @@ import {
   useWeb3Context,
 } from "don-components";
 import { DonAccordion } from "./DonAccordion/DonAccordion";
+import { formatNum } from "components/DetailTable";
+import { NetworkButton } from "../../../pages/dashboard";
 
 const HeadingTitle = styled.div`
   font-family: ObjectSans-Bold;
@@ -142,7 +137,7 @@ const CustomTableHeading = styled(TableHeading)`
 
 const CustomTableData = styled(TableData)`
   font-size: 16px;
-  font-family: Roboto;
+  font-family: 'Poppins';
   cursor: ${(props: { cursor?: string }) =>
     props.cursor ? props.cursor : "auto"};
 `;
@@ -267,7 +262,7 @@ export const InvestmentsPage = () => {
         )) {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 3);
-            const accounts = await web3.eth.getAccounts();
+            // const accounts = await web3.eth.getAccounts();
             const isInvested = await contract.methods
               .isInvestor(address)
               .call();
@@ -322,7 +317,6 @@ export const InvestmentsPage = () => {
     }
   }, [data, refresh, network, address]);
 
-  console.log("MY investments----", myInvestments);
 
   const filteredInvestMents = useMemo(() => {
     return myInvestments.filter((item) => {

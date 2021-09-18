@@ -68,5 +68,6 @@ export * from "./EthereumIcon";
 export * from "./BinanceIcon";
 export * from "./DonKeyIcon";
 export * from "./CoingKoIcon";
+export * from "./BoostApyWhiteIcon";
 export * from "./WalletDarkIcon";
 export * from "./DisconnectIcon";

@@ -1,4 +1,4 @@
-import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
+
 import { ButtonWidget } from "components/Button";
 import { useStakingContract } from "hooks";
 import { useEffect, useState } from "react";
@@ -12,6 +12,7 @@ import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
 import { getDonPriceWeb3 } from "helpers";
 import { getWeb3 } from "don-components";
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 
 const StakingCard = styled.div`
   background-color: #fff;

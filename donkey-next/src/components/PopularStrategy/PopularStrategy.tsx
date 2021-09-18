@@ -243,7 +243,7 @@ export const PopularStrategy = ({
   const renderContent = () => {
     return (
       <div className="p-4">
-        <div className="d-flex justify-content-beteen">
+        <div className="d-flex justify-content-between">
           <div>
             <p className="mb-0">Total Value</p>
             <h5>{totalValue}</h5>

@@ -20,7 +20,12 @@ const CardBanner = styled.div`
 const Heading = styled(Heading3)`
     font-size: 38px;
     color: #070602;
-`
+`;
+
+const Content = styled(LandingParagraph)`
+    font-size: 16px;
+    width: 67%;
+`;
 
 
 const CardBannerAdvantage = styled.div`
@@ -76,15 +81,10 @@ const CardBannerAdvantage = styled.div`
   }
 `;
 
-const ImageCommingSoon = styled.img`
-  position: absolute;
-  top: -25px;
-  right: 3%;
-`;
 
 const ImageIcon = styled.img`
-width: 60px;
-height: 60px;
+   width: 60px;
+   height: 60px;
 `;
 
 const Graph1 = () => {
@@ -218,11 +218,11 @@ export const CardsSection: React.FC = () => {
                 <Heading className="mb-3 mt-3">
                   Come discover our Don-key farmers and follow the best
                 </Heading>
-                <LandingParagraph className="mt-4">
+                <Content className="mt-4">
                   Discover and follow the best yield farmers with just one
                   click. Historical APY, farming philosophy, risk appetite; You
                   can see it all.
-                </LandingParagraph>
+                </Content>
                 <div className="position-relative d-inline-block mt-4">
                   <ButtonWidget
                     varaint="outlined"

@@ -35,9 +35,11 @@ export const MyInvestment = ({ poolAddress }: { poolAddress: string }) => {
 export const MyInitialInvestment = ({
   poolAddress,
   chainId,
+  hideSymbol=false,
 }: {
   poolAddress: string;
   chainId: number;
+  hideSymbol?: boolean;
 }) => {
   const { initialInvestment, isReady } = useInitialInvestment(poolAddress);
   const web3 = getWeb3(chainId);
@@ -48,7 +50,7 @@ export const MyInitialInvestment = ({
   }
   return (
     <>
-      {parseFloat(initialInvestment).toFixed(2)} {symbol}{" "}
+      {parseFloat(initialInvestment).toFixed(2)} {!hideSymbol ? symbol: ""}{" "}
     </>
   );
 };
