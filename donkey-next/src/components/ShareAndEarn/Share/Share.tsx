@@ -6,7 +6,7 @@ import Star from "../images/star.png";
 import shareTelegram from "../images/shareTelegram.png";
 import earnings from "../images/earnings.png";
 import { ButtonWidget } from "components/Button";
-import { api, uuidv4 } from "don-utils";
+import { uuidv4 } from "don-utils";
 import { Spinner } from "react-bootstrap";
 import {
   getShareUrl,
@@ -16,6 +16,7 @@ import {
 import { useReferralContext } from "contexts/ReferralContext";
 import { useWeb3Context } from "don-components";
 import { Step } from "./Step";
+import { api } from "strapi";
 
 const ReadMore = styled.a`
   font-size: 16px;

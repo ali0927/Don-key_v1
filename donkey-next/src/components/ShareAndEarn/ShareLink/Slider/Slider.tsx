@@ -10,7 +10,8 @@ import { gql, useQuery } from "@apollo/client";
 import { Spinner } from "react-bootstrap";
 import { DonCommonmodal } from "components/DonModal";
 import { ButtonWidget } from "components/Button";
-import { api } from "don-utils";
+import { api } from "strapi";
+
 
 const CutomSlickSlider = styled(SlickSlider)`
   .selected {

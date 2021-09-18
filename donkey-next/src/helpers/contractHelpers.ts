@@ -4,9 +4,9 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
-import { api, waitFor } from "don-utils";
+import {  waitFor } from "don-utils";
 import { captureException, getPoolValueInUSD } from "helpers";
-import { strapi } from "strapi";
+import { api, strapi } from "strapi";
 import { getWeb3 } from "don-components";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 

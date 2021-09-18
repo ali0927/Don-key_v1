@@ -8,7 +8,7 @@ import clsx from "clsx";
 import { Logo } from "./Logo";
 import { INavBarProps } from "./interfaces/INavBarProps";
 import { NavbarLink } from "./NavbarLink";
-import { api, AuthToken } from "don-utils";
+import { AuthToken } from "don-utils";
 import styled from "styled-components";
 import { theme } from "theme";
 // import { useReferralContext } from "contexts/ReferralContext";
@@ -20,6 +20,7 @@ import { IUser } from "interfaces";
 import { Wallet } from "../Wallet";
 import { useWalletAddress } from "hooks";
 import { useReferralContext } from "contexts/ReferralContext";
+import { api } from "strapi";
 
 declare global {
   interface Window {

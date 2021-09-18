@@ -7,8 +7,9 @@ import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { captureException, getBSCDon, toEther } from "helpers";
 import BigNumber from "bignumber.js";
-import { api } from "don-utils";
 import moment from "moment";
+import { api } from "strapi";
+
 
 const DonStakingAddress = process.env.NEXT_PUBLIC_STAKING_CONTRACT;
 export type ITier = { apy: number; donRequired: string; tier: number };

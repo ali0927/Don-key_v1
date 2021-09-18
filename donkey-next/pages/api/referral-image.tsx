@@ -1,17 +1,9 @@
 import { NextApiHandler } from "next";
-import axios from "axios";
 import { getWeb3 } from "don-components";
 import { getPoolValueInUSD } from "helpers";
+import { api, strapi } from "strapi";
 
-const strapi = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_STRAPI_URL,
-  validateStatus: (status) => status < 500 && status >= 200,
-});
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  validateStatus: (status) => status < 500 && status >= 200,
-});
 const GenerateImage: NextApiHandler = async (req, res) => {
   const { image_id, slug, id } = req.query;
 
