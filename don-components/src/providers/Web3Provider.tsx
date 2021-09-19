@@ -16,6 +16,7 @@ import {
   NetworkConfigs,
   POLYGON_CHAIN_ID,
 } from "../Constants";
+import WalletConnectProvider from "@walletconnect/web3-provider";
 
 interface IAppState {
   address: string;
@@ -115,7 +116,7 @@ export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
 
 export const Web3Provider: React.FC<{
   children: React.ReactNode;
-}> = ({ children, }) => {
+}> = ({ children }) => {
   const [state, setState] = useState<IAppState>(INITIAL_STATE);
   const web3Ref = useRef<Web3 | null>(null);
   const updateState = useCallback((newState: Partial<IAppState>) => {
@@ -125,9 +126,18 @@ export const Web3Provider: React.FC<{
 
   useEffect(() => {
     import("web3modal").then((Modal) => {
+      console.log("Loaded");
       web3ModalRef.current = new Modal.default({
         network: "mainnet", // optional
         cacheProvider: true,
+        providerOptions: {
+          walletconnect: {
+            package: WalletConnectProvider,
+            options: {
+              infuraId: "81deb6226d18463389c82d7f16b0a47f",
+            },
+          },
+        },
       });
     });
   }, []);
