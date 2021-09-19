@@ -20,7 +20,7 @@ const FarmerTitle = styled.p({
   letterSpacing: "0em",
   textAlign: "left",
   color: "#070602",
-  fontFamily: 'ObjectSans-Bold',
+  fontFamily: "ObjectSans-Bold",
 });
 
 export const CustomizedContainer = styled.div`
@@ -82,10 +82,9 @@ const Ellipse4 = styled.div`
   position: absolute;
 `;
 
-
-
 export default function Dashboard({ tokens }: { tokens: IStrapiToken[] }) {
   useAddDonTokenonLoad();
+
   return (
     <>
       <Root>
@@ -169,6 +168,7 @@ const LIST_OF_TOKENS = `
       maxApy
       symbol
       slug
+      status
       network {
         chainId
         type
@@ -176,12 +176,10 @@ const LIST_OF_TOKENS = `
         name
         slug
       }
-      status
-      RiskStrategy {
-        strategy {
-          farmer {
-            poolAddress
-          }
+      strategies {
+        farmer {
+          status
+          poolAddress
         }
       }
     }
@@ -189,10 +187,20 @@ const LIST_OF_TOKENS = `
 `;
 export const getStaticProps: GetStaticProps = async () => {
   const resp = await strapi.post("/graphql", { query: LIST_OF_TOKENS });
-  const tokens = resp.data.data.tokens.filter(
-    (item: any) => item.status === "active"
-  );
+  const tokens = resp.data.data.tokens.filter((item: any) => {
+    const isActive = item.status === "active";
+    if (!isActive) {
+      return isActive;
+    } else {
+      const strategies = item.strategies.filter(
+        (item: any) => item.farmer.status === "active"
+      );
+
+      return strategies.length > 0;
+    }
+  });
+
   return {
-    props: { tokens },
+    props: { tokens }
   };
 };
