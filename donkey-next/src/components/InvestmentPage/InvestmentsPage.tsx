@@ -19,7 +19,6 @@ import {
   TableResponsive,
   TableRow,
 } from "components/Table";
-
 import { ButtonWidget, LightGrayButton } from "components/Button";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import { useHistory } from "react-router";
@@ -31,6 +30,7 @@ import {
   getDonPrice,
   fixUrl,
   captureException,
+  formatNum,
 } from "helpers";
 import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
@@ -51,8 +51,7 @@ import {
   useWeb3Context,
 } from "don-components";
 import { DonAccordion } from "./DonAccordion/DonAccordion";
-import { formatNum } from "components/DetailTable";
-import { NetworkButton } from "../../../pages/dashboard";
+import { NetworkButton } from "components/NetworkButton";
 
 const HeadingTitle = styled.div`
   font-family: ObjectSans-Bold;
@@ -180,6 +179,7 @@ const ALL_FARMER_QUERY = gql`
       farmerImage {
         url
       }
+      slug
       guid
       active
       twitter
@@ -532,7 +532,7 @@ export const InvestmentsPage = () => {
                         </CustomTableData>
                         <CustomTableData
                           cursor="pointer"
-                          onClick={RedirectToFarmerProfile(investment.guid)}
+                          onClick={RedirectToFarmerProfile(investment.slug)}
                           style={{ fontWeight: 500 }}
                         >
                           {investment.name}
