@@ -55,7 +55,7 @@ const FARMER_QUERY_LIST = `
 
 const FARMER_QUERY = `
   query farmerInfo($slug: String!) {
-    farmers(where: { slug_eq: $slug, status_in: ["active"] }) {
+    farmers(where: { slug_eq: $slug, status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {

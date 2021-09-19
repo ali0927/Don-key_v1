@@ -165,7 +165,7 @@ const CustomTableData = styled(TableData)`
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery {
-    farmers(where: { status_in: ["active"] }) {
+    farmers(where: {   status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {

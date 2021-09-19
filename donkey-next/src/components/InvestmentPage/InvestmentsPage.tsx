@@ -41,8 +41,6 @@ import { gql, useQuery } from "@apollo/client";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
-
-import {  uniqBy } from "lodash";
 import {
   AVAX_CHAIN_ID,
   BINANCE_CHAIN_ID,
@@ -136,7 +134,7 @@ const CustomTableHeading = styled(TableHeading)`
 
 const CustomTableData = styled(TableData)`
   font-size: 16px;
-  font-family: 'Poppins';
+  font-family: "Poppins";
   cursor: ${(props: { cursor?: string }) =>
     props.cursor ? props.cursor : "auto"};
 `;
@@ -169,7 +167,7 @@ const ALL_FARMER_QUERY = gql`
   query allFarmerQuery($chainId: Int!) {
     farmers(
       where: {
-        status_in: ["active"]
+        status_in: ["active", "deprecated"]
         network: { chainId: $chainId }
       }
     ) {
@@ -255,10 +253,7 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        for (let invest of uniqBy(
-          data.farmers as IFarmerInter[],
-          (item) => item.poolAddress
-        )) {
+        const responses = (data.farmers as IFarmerInter[]).map(async invest => {
           try {
             const contract = await getPoolContract(web3, invest.poolAddress, 3);
             // const accounts = await web3.eth.getAccounts();
@@ -305,7 +300,10 @@ export const InvestmentsPage = () => {
           } catch (e) {
             captureException(e, "CalInvestments");
           }
-        }
+        })
+
+        await Promise.all(responses);
+     
         setPoolAddresses(arr);
         setLoading(false);
         setMyInvestments(finalInvestments);
@@ -315,7 +313,6 @@ export const InvestmentsPage = () => {
       CalInvestments();
     }
   }, [data, refresh, network, address]);
-
 
   const filteredInvestMents = useMemo(() => {
     return myInvestments.filter((item) => {
