@@ -7,6 +7,7 @@ import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import Dollars from "./images/dollars.png";
 import {
+  formatNum,
   getAmount,
   getPoolContract,
   getPoolToken,
@@ -30,7 +31,6 @@ import {
   CardLabel,
   CardValue,
   CardInnerInfo,
-  formatNum,
 } from "components/DetailTable";
 import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";

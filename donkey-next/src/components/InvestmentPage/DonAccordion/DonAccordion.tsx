@@ -15,7 +15,7 @@ import {
 } from "./AccordionComponents";
 import { IDonAccordionProps } from "./interfaces/IDonAccordionProps";
 import { ButtonWidget } from "components/Button";
-import { fixUrl } from "helpers";
+import { fixUrl, formatNum } from "helpers";
 import { MyInitialInvestment } from "components/MyInvestment";
 import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import moment from "moment";
@@ -27,7 +27,6 @@ import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedA
 import styled from "styled-components";
 import { Switch } from "./Switch";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { formatNum } from "components/DetailTable";
 
 const StyledApyIcon = styled(BoostApyWhiteIcon)`
   margin-right: 6px;

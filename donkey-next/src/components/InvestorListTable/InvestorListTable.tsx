@@ -12,6 +12,7 @@ import {
   calculateInitialInvestment,
   calculateInitialInvestmentInUSD,
   captureException,
+  formatNum,
   getAmount,
   getPoolContract,
   getTokenPrice,
@@ -24,7 +25,6 @@ import { useUSDViewBool } from "contexts/USDViewContext";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { sortBy } from "lodash";
 import moment from "moment";
-import { formatNum } from "components/DollarView/DollarView";
 
 const ShowAmount = ({
   amount,
