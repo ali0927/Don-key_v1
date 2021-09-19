@@ -1,5 +1,6 @@
 import { makeUseAxios } from "axios-hooks";
-import { api } from "don-utils";
+import { api } from "strapi";
+
 
 export const useAxios = makeUseAxios({
   axios: api,

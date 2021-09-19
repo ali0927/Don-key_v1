@@ -32,10 +32,10 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import { theme } from "theme";
-import { api } from "don-utils";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
+import { api } from "don-utils";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
@@ -242,12 +242,17 @@ export const InvestmentPopup = ({
             web3,
             referralCode.toLowerCase()
           );
-          await api.post("/api/v2/referrer", {
-            code: referralCode.toLowerCase(),
-            txHash: tx.transactionHash,
-            pool_address: poolAddress,
-            referred_address,
-          });
+          try {
+            await api.post("/api/v2/referrer", {
+              code: referralCode.toLowerCase(),
+              txHash: tx.transactionHash,
+              pool_address: poolAddress,
+              referred_address,
+            });
+          } catch(e){
+            captureException(e, "Posting Referrer");
+          }
+         
         } else {
           await pool.methods.depositLiquidity(inputAmount).send({
             from: accounts[0],

@@ -165,7 +165,7 @@ const CustomTableData = styled(TableData)`
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery {
-    farmers(where: { active_eq: true, status_in: ["active"] }) {
+    farmers(where: { status_in: ["active"] }) {
       name
       description
       farmerImage {
@@ -188,7 +188,7 @@ const ALL_FARMER_QUERY = gql`
 
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
-  const [{ data }] = useAxios("/api/v2/referrer");
+  const [{ data }] = useAxios("/api/v2/referrer", {ssr: false});
   const web3 = getWeb3(56);
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
     []

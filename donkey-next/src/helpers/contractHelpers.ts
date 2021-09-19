@@ -490,7 +490,6 @@ const ALL_FARMERS_QUERY = `
 query allFarmerQuery {
   farmers(
     where: {
-      active_eq: true
       status_in: ["active"]
     }
   ) {
@@ -523,6 +522,7 @@ export const calcSumOfAllPoolValues = memoizeAsync(async () => {
     allPoolValues = allPoolValues.plus(poolValue);
   })
   await Promise.all(list);
+  console.log(allPoolValues.toFixed(2), "TVL");
   return allPoolValues.toFixed(2);
 });
 

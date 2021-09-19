@@ -9,7 +9,6 @@ const ALL_FARMER_QUERY = gql`
   query allFarmerQuery($chainId: Int!) {
     farmers(
       where: {
-        active_eq: true
         status_in: ["active"]
         network: { chainId: $chainId }
       }
