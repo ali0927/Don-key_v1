@@ -50,6 +50,7 @@
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
+    "patch-package": "^6.4.7",
     "react-hook-form": "^7.1.1",
     "react-icons": "^4.1.0",
     "react-input-switch": "^2.2.2",
@@ -76,7 +77,7 @@
     "start": " react-scripts start",
     "build": "cross-env CI=false react-scripts build",
     "test": "react-scripts test",
-    "postinstall": "yarn workspaces run compile",
+    "postinstall": "patch-package && yarn workspaces run compile",
     "eject": "react-scripts eject",
     "analyze": "source-map-explorer 'build/static/js/*.js'"
   },

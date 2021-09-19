@@ -6,7 +6,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "postinstall": "cd ../ && yarn workspaces run compile",
+    "postinstall": "cd ../ && yarn postinstall",
     "postbuild": "next-sitemap --config next-sitemap.config.js",
     "compile": "node -v"
   },
