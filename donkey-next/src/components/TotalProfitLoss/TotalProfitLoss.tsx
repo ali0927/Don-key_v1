@@ -48,7 +48,7 @@ export const TotalProfitLoss = ({
           accounts[0]
         );
         const digits =
-          process.env.REACT_APP_ENV === "development" || fromOverlay ? 6 : 2;
+          process.env.NEXT_PUBLIC_APP_ENV === "development" || fromOverlay ? 6 : 2;
         if (!isUSD) {
           setTotalProfitLoss(
             new BigNumber(amountWithdraw).minus(amountInitial).toFixed(digits)

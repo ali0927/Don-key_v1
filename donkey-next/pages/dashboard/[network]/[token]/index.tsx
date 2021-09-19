@@ -341,7 +341,6 @@ export const getStaticProps: GetStaticProps = async (context: any) => {
       notFound: true,
     };
   }
-  console.log(data.tokens);
   return {
     props: { ...data, strategies },
   };

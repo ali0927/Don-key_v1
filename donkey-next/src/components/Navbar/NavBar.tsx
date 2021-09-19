@@ -11,7 +11,6 @@ import { NavbarLink } from "./NavbarLink";
 import { AuthToken } from "don-utils";
 import styled from "styled-components";
 import { theme } from "theme";
-// import { useReferralContext } from "contexts/ReferralContext";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ButtonWidget } from "components/Button";
 import { useWeb3Context } from "don-components";

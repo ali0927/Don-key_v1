@@ -278,7 +278,7 @@ const ReferralCol = styled.div`
   border-right: 1px solid #dedee0;
 `;
 
-export const MyReferrals = () => {
+ const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
  
@@ -502,3 +502,5 @@ export const MyReferrals = () => {
     </div>
   );
 };
+
+export default MyReferrals;
