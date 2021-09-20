@@ -126,7 +126,6 @@ export const Web3Provider: React.FC<{
 
   useEffect(() => {
     import("web3modal").then((Modal) => {
-      console.log("Loaded");
       web3ModalRef.current = new Modal.default({
         network: "mainnet", // optional
         cacheProvider: true,
