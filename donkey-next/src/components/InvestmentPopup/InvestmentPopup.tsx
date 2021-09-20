@@ -35,7 +35,7 @@ import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
-import { api } from "don-utils";
+import { api, AuthToken } from "don-utils";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
@@ -184,7 +184,11 @@ export const InvestmentPopup = ({
       return;
     }
     enable();
-
+    const token = localStorage.getItem(AuthToken);
+    if(!token){
+      alert("Refresh Page And Start Again");
+      return;
+    }
     try {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
@@ -243,6 +247,7 @@ export const InvestmentPopup = ({
             referralCode.toLowerCase()
           );
           try {
+           
             await api.post("/api/v2/referrer", {
               code: referralCode.toLowerCase(),
               txHash: tx.transactionHash,

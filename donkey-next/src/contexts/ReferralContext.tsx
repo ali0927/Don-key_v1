@@ -2,6 +2,8 @@ import { getReferralSystemContract, setReferralCode } from "helpers";
 import { createContext, useContext, useState } from "react";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { useIsomorphicEffect } from "hooks";
+import { signUser } from "components/Navbar";
+import { AuthToken } from "don-utils";
 
 const ReferralContext = createContext({
   hasSignedUp: false,
@@ -19,7 +21,7 @@ const INITIAL_STATE = {
 export const ReferralStateProvider: React.FC = ({ children }) => {
   const [state, setState] = useState(INITIAL_STATE);
 
-  const { chainId, address, connected } = useWeb3Context();
+  const { chainId, address, connected, getConnectedWeb3 } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
     const web3 = getWeb3(BINANCE_CHAIN_ID);
@@ -39,10 +41,15 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   };
 
   const resetState = () => setState(INITIAL_STATE);
-
+  useIsomorphicEffect(() => {
+    if(connected){
+      signUser(getConnectedWeb3());
+    } else {
+      localStorage.removeItem(AuthToken);
+    }
+  }, [connected, address])
   useIsomorphicEffect(() => {
     if(chainId === BINANCE_CHAIN_ID){
-    
       if (connected) {
         checkhasSignedUp();
       }

@@ -3,10 +3,10 @@ import { NavBar } from "components/Navbar";
 import { useReferralContext } from "contexts/ReferralContext";
 import {
   calculateInitialInvestment,
-  calculateUserClaimableAmount,
   captureException,
   fixUrl,
   formatNum,
+  getAmount,
   getDonPriceWeb3,
   getReferralSystemContract,
   getRewardSystemContract,
@@ -31,15 +31,18 @@ import {
   TableResponsive,
   TableRow,
 } from "components/Table";
-import { useHistory } from "react-router-dom";
 import { hideAddress } from "components/InvestorListTable/InvestorListTable";
 import { gql, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
 import { StyledButton } from "components/StakingInfo";
-import { getWeb3, useWeb3Context } from "don-components";
+import { useWeb3Context } from "don-components";
 import { NetworkButton } from "components/NetworkButton";
-import { ZeroInvestmentBox, ZeroInvestmentContent, ZeroInvestmentInnerBox } from "components/InvestmentPage/InvestmentsPage";
-
+import {
+  ZeroInvestmentBox,
+  ZeroInvestmentContent,
+  ZeroInvestmentInnerBox,
+} from "components/InvestmentPage/InvestmentsPage";
+import { useRouter } from "next/router";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -111,11 +114,8 @@ const calcDonRewards = async (
     };
   }
   const poolAddress = referrerInfo.poolAddress;
-  const amountWithdraw = await calculateUserClaimableAmount(
-    web3,
-    poolAddress,
-    wallet_address
-  );
+  const amountWithdraw = await getAmount(web3, poolAddress, wallet_address);
+
   const amountInitial = await calculateInitialInvestment(
     web3,
     poolAddress,
@@ -165,7 +165,7 @@ const CustomTableData = styled(TableData)`
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery {
-    farmers(where: {   status_in: ["active", "deprecated"] }) {
+    farmers(where: { status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {
@@ -188,11 +188,20 @@ const ALL_FARMER_QUERY = gql`
 
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
-  const [{ data }] = useAxios("/api/v2/referrer", {ssr: false});
-  const web3 = getWeb3(56);
+  const [{ data, error }, fetch] = useAxios("/api/v2/referrer", {
+    ssr: false,
+    manual: true,
+  });
+  const { getConnectedWeb3, connected, address } = useWeb3Context();
+  const web3 = getConnectedWeb3();
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
     []
   );
+  useEffect(() => {
+    if (connected) {
+      fetch({ params: { walletAddress: address } });
+    }
+  }, [connected, address]);
   const { data: farmersData } = useQuery(ALL_FARMER_QUERY);
 
   const { chainId: network } = useWeb3Context();
@@ -256,10 +265,12 @@ const useTransformedData = () => {
   };
 
   useEffect(() => {
-    if (farmers.length > 0 && data) {
-      transformData();
+    if (farmers.length > 0 && data && !error) {
+      if (connected) {
+        transformData();
+      }
     }
-  }, [farmers.length, data ? data.length : 0]);
+  }, [farmers.length, data ? data.length : 0, connected, address]);
 
   return { transformedData, isReady, transformData };
 };
@@ -278,11 +289,10 @@ const ReferralCol = styled.div`
   border-right: 1px solid #dedee0;
 `;
 
- const MyReferrals = () => {
+const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
- 
-  const { getConnectedWeb3, connected } = useWeb3Context();
+  const { getConnectedWeb3, connected, address } = useWeb3Context();
   const { isReady, transformedData, transformData } = useTransformedData();
 
   const totalDon = useMemo(() => {
@@ -314,7 +324,7 @@ const ReferralCol = styled.div`
     if (connected) {
       fetchAvailableDon();
     }
-  }, [transformedData, connected]);
+  }, [transformedData, connected, address]);
 
   const hasAvailable =
     availableDon !== "-" ? new BigNumber(availableDon).gt(0) : false;
@@ -325,7 +335,7 @@ const ReferralCol = styled.div`
     await rewardContract.methods.harvestRewards().send({ from: accounts[0] });
     transformData();
   };
-  const history = useHistory();
+  const history = useRouter();
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
     history.push("/dashboard/farmer/" + poolAddress);
   };

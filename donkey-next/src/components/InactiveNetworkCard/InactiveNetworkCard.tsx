@@ -1,6 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
 import { ButtonWidget } from "components/Button";
-import { signUser } from "components/Navbar";
 import { StakingTimer } from "components/StakingInfo";
 import { useWeb3Context } from "don-components";
 import { useSwitchNetwork } from "hooks";
@@ -164,11 +163,9 @@ export const InactiveNetworkCard = ({
 };
 
 export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
-  const { connectDapp, getConnectedWeb3, switchNetwork } = useWeb3Context();
+  const { connectDapp, switchNetwork } = useWeb3Context();
   const handleConnect =async  () => {
     await connectDapp();
-    const web3 = getConnectedWeb3();
-    await signUser(web3);
     await switchNetwork(network.chainId);
   }
   return (

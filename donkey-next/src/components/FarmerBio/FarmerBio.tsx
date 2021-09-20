@@ -132,7 +132,7 @@ export const FarmerBio = ({
     if (connected) {
       fetchInfoFromApi();
     }
-  }, [connected]);
+  }, [connected, address]);
 
   useIsomorphicEffect(() => {
     if (shortLink && shortLink.shortLinks.length > 0) {

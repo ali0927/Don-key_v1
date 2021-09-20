@@ -22,7 +22,7 @@ import { useRefresh } from "./useRefresh";
 import { useTransactionNotification } from "./useTransactionNotification";
 import Web3 from "web3";
 import { useIsomorphicEffect } from "hooks";
-import { signUser } from "components/Navbar";
+
 export const Label = styled.p`
   font-size: 14px;
   font-style: normal;
@@ -243,7 +243,6 @@ const StakingRow = ({
   const handleConnect = async () => {
     await connectDapp();
     const web3 = getConnectedWeb3();
-    await signUser(getConnectedWeb3());
     const currentChainId = await web3.eth.getChainId();
     if (currentChainId !== chainId) {
       switchNetwork(chainId);

@@ -73,15 +73,13 @@ export const signUser = async (web3: Web3) => {
 };
 
 const ConnectWalletButton = () => {
-  const { connectDapp, getConnectedWeb3 } = useWeb3Context();
+  const { connectDapp } = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handleConnection = async () => {
     setIsDisabled(true);
     await connectDapp();
-    const web3 = getConnectedWeb3();
-    await signUser(web3);
   };
   return (
     <ButtonWidget

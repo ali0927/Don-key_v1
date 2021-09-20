@@ -474,6 +474,7 @@ export const calculateUserClaimableAmount = async (
 ) => {
   const accounts = account ? [account] : await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress, 2);
+ 
   try {
     const claimableAmount = await poolContract.methods
       .getInvestorClaimableAmount(accounts[0])
@@ -481,6 +482,7 @@ export const calculateUserClaimableAmount = async (
 
     return toEther(claimableAmount);
   } catch (e) {
+    console.log(account, poolAddress)
     captureException(e, "calculateUserClaimableAmount");
     return "0";
   }

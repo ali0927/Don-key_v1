@@ -224,6 +224,7 @@ export const DetailTable = ({
     chainId: currentNetwork,
     getConnectedWeb3,
     connected,
+    address
   } = useWeb3Context();
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
@@ -260,7 +261,7 @@ export const DetailTable = ({
         setWithdrawRequested(false);
       }
     })();
-  }, [dependsOn, currentNetwork, connected]);
+  }, [dependsOn, currentNetwork, connected, address]);
 
   useEffect(() => {
     (async () => {
@@ -277,7 +278,7 @@ export const DetailTable = ({
         new BigNumber(tokens).multipliedBy(tokenPrice).toFixed(2)
       );
     })();
-  }, [dependsOn, currentNetwork]);
+  }, [dependsOn, currentNetwork, address]);
 
   const getFirstCardcolumns = (
     label: string,
@@ -359,7 +360,7 @@ export const DetailTable = ({
                   <a
                     href={
                       `${
-                        NetworkConfigs.find((item) => item.chainId)?.scan
+                        NetworkConfigs.find((item) => item.chainId === network.chainId)?.scan
                       }/address/` + poolAddress
                     }
                     target="_blank"
