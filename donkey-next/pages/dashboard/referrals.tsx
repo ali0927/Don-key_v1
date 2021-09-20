@@ -43,6 +43,7 @@ import {
   ZeroInvestmentInnerBox,
 } from "components/InvestmentPage/InvestmentsPage";
 import { useRouter } from "next/router";
+import { thegraphClient } from "apolloClient";
 
 const HeadingTitle = styled.p({
   fontFamily: "ObjectSans-Bold",
@@ -196,7 +197,9 @@ const REFERRERS_INFO = gql`
 
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
-  const [fetch, { data, error }] = useLazyQuery(REFERRERS_INFO);
+  const [fetch, { data, error }] = useLazyQuery(REFERRERS_INFO, {
+    client: thegraphClient
+  });
   const { getConnectedWeb3, connected, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
