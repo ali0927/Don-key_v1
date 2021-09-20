@@ -12,12 +12,14 @@ const ReferralContext = createContext({
   checkSignUp: () => {},
 });
 
+const INITIAL_STATE = {
+  hasSignedUp: false,
+  code: "",
+  referralCount: 0,
+}
+
 export const ReferralStateProvider: React.FC = ({ children }) => {
-  const [state, setState] = useState({
-    hasSignedUp: false,
-    code: "",
-    referralCount: 0,
-  });
+  const [state, setState] = useState(INITIAL_STATE);
 
   const { chainId, address } = useWeb3Context();
 
@@ -38,16 +40,22 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     }
   };
 
+  const resetState = () => setState(INITIAL_STATE);
+
   useIsomorphicEffect(() => {
-    if (connected) {
-      checkhasSignedUp();
+    if(chainId === BINANCE_CHAIN_ID){
+      if (connected) {
+        checkhasSignedUp();
+      }
+    }else {
+      resetState()
     }
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("referral");
     if (code) {
       setReferralCode(code);
     }
-  }, [chainId, connected]);
+  }, [chainId, connected, address]);
 
   return (
     <ReferralContext.Provider
