@@ -3,7 +3,7 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useToggle } from "don-hooks";
 import { useAxios } from "hooks/useAxios";
-import {  useWeb3Context } from "don-components";
+import { useWeb3Context } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
   captureException,
@@ -13,7 +13,6 @@ import {
   getReferralCode,
   getReferralSystemContract,
   getTokenPrice,
-  getUserAddressFromCode,
   getUserReferralCode,
   isValidReferralCode,
   toWei,
@@ -35,8 +34,7 @@ import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
-import {  AuthToken } from "don-utils";
-import { api } from "strapi";
+import { AuthToken } from "don-utils";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
@@ -57,7 +55,7 @@ const MyBalanceInBUSD = ({
   poolVersion: number;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
 
   const fetchBalance = async () => {
     try {
@@ -120,7 +118,7 @@ export const InvestmentPopup = ({
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
   );
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
   });
@@ -132,7 +130,7 @@ export const InvestmentPopup = ({
 
   const [applied, setApplied] = useState(false);
   const web3 = getConnectedWeb3();
-  const checkIfCodeisApplicable = async (code: string,) => {
+  const checkIfCodeisApplicable = async (code: string) => {
     const userCode = await getUserReferralCode(web3);
 
     if (userCode === code.toLowerCase()) {
@@ -186,7 +184,7 @@ export const InvestmentPopup = ({
     }
     enable();
     const token = localStorage.getItem(AuthToken);
-    if(!token){
+    if (!token) {
       alert("Refresh Page And Start Again");
       return;
     }
@@ -236,29 +234,12 @@ export const InvestmentPopup = ({
       }
       if (poolVersion === 3) {
         if (referralCode && applied) {
-          const tx = await pool.methods
+          await pool.methods
             .depositLiquidityWithCode(inputAmount, referralCode.toLowerCase())
             .send({
               from: accounts[0],
               gas: gasLimit,
             });
-
-          const referred_address = await getUserAddressFromCode(
-            web3,
-            referralCode.toLowerCase()
-          );
-          try {
-           
-            await api.post("/api/v2/referrer", {
-              code: referralCode.toLowerCase(),
-              txHash: tx.transactionHash,
-              pool_address: poolAddress,
-              referred_address,
-            });
-          } catch(e){
-            captureException(e, "Posting Referrer");
-          }
-         
         } else {
           await pool.methods.depositLiquidity(inputAmount).send({
             from: accounts[0],

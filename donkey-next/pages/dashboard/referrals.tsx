@@ -14,7 +14,7 @@ import {
   getTokenSymbol,
   toEther,
 } from "helpers";
-import { useAxios } from "hooks/useAxios";
+
 import { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
@@ -32,7 +32,7 @@ import {
   TableRow,
 } from "components/Table";
 import { hideAddress } from "components/InvestorListTable/InvestorListTable";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
 import { StyledButton } from "components/StakingInfo";
 import { useWeb3Context } from "don-components";
@@ -186,12 +186,17 @@ const ALL_FARMER_QUERY = gql`
   }
 `;
 
+const REFERRERS_INFO = gql`
+  query fetchReferrers($walletAddress: String!) {
+    referrerAddeds(where: { to: $walletAddress }) {
+      from
+    }
+  }
+`;
+
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
-  const [{ data, error }, fetch] = useAxios("/api/v2/referrer", {
-    ssr: false,
-    manual: true,
-  });
+  const [fetch, { data, error }] = useLazyQuery(REFERRERS_INFO);
   const { getConnectedWeb3, connected, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const [transformedData, setTransformedData] = useState<ReferralTableState[]>(
@@ -199,7 +204,7 @@ const useTransformedData = () => {
   );
   useEffect(() => {
     if (connected) {
-      fetch({ params: { walletAddress: address } });
+      fetch({ variables: { walletAddress: address } });
     }
   }, [connected, address]);
   const { data: farmersData } = useQuery(ALL_FARMER_QUERY);
@@ -221,7 +226,7 @@ const useTransformedData = () => {
     setIsReady(false);
     const donPrice = await getDonPriceWeb3(web3);
 
-    const promises = data.map(async ({ wallet_address }: any) => {
+    const promises = data.referrerAddeds.map(async ({ from: wallet_address }: any) => {
       try {
         const referralContract = await getReferralSystemContract(web3);
         const referrerInfo: ReferrerInfo = await referralContract.methods
@@ -270,7 +275,7 @@ const useTransformedData = () => {
         transformData();
       }
     }
-  }, [farmers.length, data ? data.length : 0, connected, address]);
+  }, [farmers.length, data, connected, address]);
 
   return { transformedData, isReady, transformData };
 };

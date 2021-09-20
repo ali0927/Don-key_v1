@@ -12,3 +12,8 @@ export const uniswapClient = new ApolloClient({
   uri: "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
   cache: new InMemoryCache(),
 });
+
+export const thegraphClient = new ApolloClient({
+  uri: "https://api.thegraph.com/subgraphs/name/adeee11/referral",
+  cache: new InMemoryCache(),
+});
