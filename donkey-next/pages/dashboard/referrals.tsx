@@ -36,6 +36,7 @@ import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
 import { StyledButton } from "components/StakingInfo";
 import { useWeb3Context } from "don-components";
+import { useStakingContract } from "hooks";
 import { NetworkButton } from "components/NetworkButton";
 import {
   ZeroInvestmentBox,
@@ -101,10 +102,13 @@ type ReferrerInfo = {
   investedAmount: string;
   hasReferred: boolean;
 };
+
+const apyList = [5, 10, 20, 30, 50, 100];
 const calcDonRewards = async (
   web3: Web3,
   referrerInfo: ReferrerInfo,
   wallet_address: string,
+  tier: number,
   donPrice: string
 ) => {
   if (referrerInfo.expired) {
@@ -132,7 +136,10 @@ const calcDonRewards = async (
   }
   const tokenPrice = await getTokenPrice(web3, poolAddress);
 
-  const tokenValueInUsd = profit.multipliedBy(tokenPrice).multipliedBy(0.02);
+  const tokenValueInUsd = profit
+    .multipliedBy(tokenPrice)
+    .multipliedBy(apyList[tier])
+    .dividedBy(100);
   return {
     profit: profit.toFixed(6),
     don: tokenValueInUsd.dividedBy(donPrice).toFixed(6),
@@ -198,7 +205,7 @@ const REFERRERS_INFO = gql`
 const useTransformedData = () => {
   const [isReady, setIsReady] = useState(false);
   const [fetch, { data, error }] = useLazyQuery(REFERRERS_INFO, {
-    client: thegraphClient
+    client: thegraphClient,
   });
   const { getConnectedWeb3, connected, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
@@ -225,60 +232,65 @@ const useTransformedData = () => {
     }
     return [];
   }, [farmersData, network]);
+  const { tier } = useStakingContract();
   const transformData = async () => {
     setIsReady(false);
     const donPrice = await getDonPriceWeb3(web3);
 
-    const promises = data.referrerAddeds.map(async ({ from: wallet_address }: any) => {
-      try {
-        const referralContract = await getReferralSystemContract(web3);
-        const referrerInfo: ReferrerInfo = await referralContract.methods
-          .referrerInfo(wallet_address)
-          .call();
-        const symbol = await getTokenSymbol(web3, referrerInfo.poolAddress);
-        const { profit, don, investedAmount } = await calcDonRewards(
-          web3,
-          referrerInfo,
-          wallet_address,
-          donPrice
-        );
-        const farmer = farmers.find(
-          (item) => item.poolAddress === referrerInfo.poolAddress
-        );
-        if (farmer) {
-          const referralState: ReferralTableState = {
-            expired: referrerInfo.expired,
-            farmerImage: fixUrl(farmer?.farmerImage?.url) || "",
-            poolSymbol: symbol,
-            pool_address: referrerInfo.poolAddress,
-            farmerName: farmer.name,
-            referralInvestment: investedAmount,
-            referralProfit: profit,
-            rewards: don,
-            slug: farmer.slug,
+    const promises = data.referrerAddeds.map(
+      async ({ from: wallet_address }: any) => {
+        try {
+          const referralContract = await getReferralSystemContract(web3);
+          const referrerInfo: ReferrerInfo = await referralContract.methods
+            .referrerInfo(wallet_address)
+            .call();
+
+          const symbol = await getTokenSymbol(web3, referrerInfo.poolAddress);
+          const { profit, don, investedAmount } = await calcDonRewards(
+            web3,
+            referrerInfo,
             wallet_address,
-            GUID: farmer.guid,
-          };
-          return referralState;
+            tier.tier,
+            donPrice
+          );
+          const farmer = farmers.find(
+            (item) => item.poolAddress === referrerInfo.poolAddress
+          );
+          if (farmer) {
+            const referralState: ReferralTableState = {
+              expired: referrerInfo.expired,
+              farmerImage: fixUrl(farmer?.farmerImage?.url) || "",
+              poolSymbol: symbol,
+              pool_address: referrerInfo.poolAddress,
+              farmerName: farmer.name,
+              referralInvestment: investedAmount,
+              referralProfit: profit,
+              rewards: don,
+              slug: farmer.slug,
+              wallet_address,
+              GUID: farmer.guid,
+            };
+            return referralState;
+          }
+          return null;
+        } catch (e) {
+          captureException(e, "My Referrals");
+          return null;
         }
-        return null;
-      } catch (e) {
-        captureException(e, "My Referrals");
-        return null;
       }
-    });
+    );
     const result = await Promise.all(promises);
     setTransformedData(result.filter((item) => !!item) as ReferralTableState[]);
     setIsReady(true);
   };
 
   useEffect(() => {
-    if (farmers.length > 0 && data && !error) {
+    if (farmers.length > 0 && data && !error && tier) {
       if (connected) {
         transformData();
       }
     }
-  }, [farmers.length, data, connected, address]);
+  }, [farmers.length, data, connected, address, tier]);
 
   return { transformedData, isReady, transformData };
 };
