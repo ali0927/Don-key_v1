@@ -35,7 +35,7 @@ import {
 import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
-import { getWeb3, useWeb3Context } from "don-components";
+import { useWeb3Context } from "don-components";
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -54,7 +54,7 @@ export const InvestBlackCard = ({
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
   const { getIsInvested, isInvested } = useIsInvested(poolAddress);
   const [currentHoldings, setCurrentHoldings] = useState("0");
-  const web3 = getWeb3(network.chainId);
+
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
 
   const { isUSD } = useUSDViewBool();
@@ -64,6 +64,7 @@ export const InvestBlackCard = ({
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
   const { getConnectedWeb3, address } = useWeb3Context();
+  const web3 = getConnectedWeb3();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       const poolContract = await getPoolContract(
