@@ -35,7 +35,8 @@ import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
-import { api, AuthToken } from "don-utils";
+import {  AuthToken } from "don-utils";
+import { api } from "strapi";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
