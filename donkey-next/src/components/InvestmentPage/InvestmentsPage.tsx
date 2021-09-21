@@ -38,7 +38,7 @@ import { GridBackground } from "components/GridBackground";
 import { IFarmerInter } from "interfaces";
 import { StakingInfo } from "./StakingInfo/StakingInfo";
 import { gql, useQuery } from "@apollo/client";
-import { useStakingContract, useSwitchNetwork } from "hooks";
+import { useStakingContract } from "hooks";
 import BigNumber from "bignumber.js";
 import { breakPoints } from "breakponts";
 import {
@@ -391,7 +391,7 @@ export const InvestmentsPage = () => {
   const toggleCurrency = useCallback(() => {
     setIsInUsd((val) => !val);
   }, []);
-  const { chainId } = useWeb3Context();
+  const { chainId, switchNetwork } = useWeb3Context();
   const [donPrice, setDonPrice] = useState({ isReady: false, price: "-" });
   useEffect(() => {
     (async () => {
@@ -423,7 +423,6 @@ export const InvestmentsPage = () => {
     }
   };
 
-  const { switchNetwork } = useSwitchNetwork();
   const renderNoInvestmentsFound = () => {
     if (
       !loading &&
