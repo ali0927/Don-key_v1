@@ -138,6 +138,11 @@ export const Web3Provider: React.FC<{
           },
         },
       });
+      if (window.ethereum && window.ethereum.isConnected()) {
+        if (web3ModalRef.current.cachedProvider) {
+          connectDapp();
+        }
+      }
     });
   }, []);
 
