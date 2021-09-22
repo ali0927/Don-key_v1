@@ -107,6 +107,7 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
+    slug,
     farmerImage: { url: picture },
   } = farmer;
 
@@ -119,8 +120,10 @@ export const FarmerBio = ({
   } | null>(null);
   const { connected, address } = useWeb3Context();
 
-  const [fetchData, { loading, data: shortLink }] =
-    useLazyQuery(SHORT_LINKS_QUERY, {fetchPolicy: "no-cache"});
+  const [fetchData, { loading, data: shortLink }] = useLazyQuery(
+    SHORT_LINKS_QUERY,
+    { fetchPolicy: "no-cache" }
+  );
 
   const fetchInfoFromApi = async () => {
     try {
@@ -267,11 +270,10 @@ export const FarmerBio = ({
           open={openShareLink}
           image_id={shortCode.referral_image.id.toString()}
           farmerName={name}
+          slug={slug}
           strategyName={strategyName}
           poolAddress={poolAddress}
-          fetchData={() =>
-            fetchInfoFromApi()
-          }
+          fetchData={() => fetchInfoFromApi()}
           apy={apy}
           shortcode={shortCode.shortcode}
           onClose={() => setShareLink(false)}

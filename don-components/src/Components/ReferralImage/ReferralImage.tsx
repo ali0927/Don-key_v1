@@ -1,11 +1,11 @@
+import { breakPoints } from "../../breakponts";
 import styled from "styled-components";
 
 const BannerRoot = styled.div`
-  min-height: 227px;
-  /* border-radius: 15px; */
   overflow: hidden;
-  /* border-radius: 10px; */
-  max-width: 500px;
+  border-radius: 10px;
+  width: 100%;
+
 `;
 
 const BannerImage = styled.img`
@@ -16,14 +16,21 @@ const BannerImage = styled.img`
 const Heading = styled.h2`
   color: #fff;
   font-weight: 800;
+  font-size: 16px;
+  @media only screen and (min-width: ${breakPoints.sm}) {
+    font-size: 2rem;
+  }
 `;
 
 const SubHeading = styled.p`
   font-family: Poppins;
-  font-size: 14px;
+  font-size: 9px;
   font-weight: 400;
   color: #ffffff;
   margin-bottom: 0px;
+  @media only screen and (min-width: ${breakPoints.sm}) {
+    font-size: 14px;
+  }
 `;
 
 const Value = styled(SubHeading)`
@@ -38,27 +45,27 @@ const BannerContentRoot = styled.div`
   );
   top: -1px;
   position: absolute;
-  height: 101%;
+  height: 100%;
   width: 100%;
-
   /* border-radius: 15px; */
 `;
 
-const BannerLeftFooter = styled.div`
-  /* margin-top: 32px;
-  padding: 28px 1px 0px 28px; */
-`;
 
 const HighLight = styled.div`
-  width: 39px;
-  height: 22px;
+  width: 22px;
+  height: 12px;
   background: #fdd700;
   font-family: Poppins;
-  font-size: 12px;
+  font-size: 8px;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
+  @media only screen and (min-width: ${breakPoints.sm}) {
+    font-size: 12px;
+    width: 39px;
+    height: 22px;
+  }
 `;
 
 const Divider = styled.div`
@@ -88,37 +95,31 @@ export const ReferralImage = ({
 }) => {
   return (
     <BannerRoot id="shareEarnImage" className="position-relative">
-      <BannerImage src={bgImage} alt="Banner image not found" />
-
-      <BannerContentRoot className="p-4 d-flex flex-column justify-content-between">
+      <BannerContentRoot className="p-3 p-md-4 d-flex flex-column justify-content-between">
         <Heading>Don-Key</Heading>
         <div>
           <div className="row">
-            <StyledSubHeading className="col mt-4">
-              <SubHeading className="mb-3">Don - {farmerName}</SubHeading>
+            <StyledSubHeading className="col mt-3 mt-md-4">
+              <SubHeading className="mb-2 mb-md-3">
+                Don - {farmerName}
+              </SubHeading>
             </StyledSubHeading>
           </div>
-          <div className="row">
-            <div className="col-5">
-              <BannerLeftFooter>
-                <div className="row">
-                  <div className="col-5">
-                    <HighLight>TVL</HighLight>
-                    <Value className="mt-2">{"$" + tvl}</Value>
-                  </div>
 
-                  <div className="col-2 d-flex justify-content-center">
-                    <Divider />
-                  </div>
-
-                  <div className="col-5">
-                    <HighLight>APY</HighLight>
-                    <Value className="mt-2">{apy}%</Value>
-                  </div>
-                </div>
-              </BannerLeftFooter>
+          <div className="d-flex">
+            <div className="d-flex align-items-end">
+              <div>
+                <HighLight>TVL</HighLight>
+                <Value className="mt-2">{"$" + tvl}</Value>
+              </div>
+              <Divider className="ml-3 mr-3" />
+              <div>
+                <HighLight>APY</HighLight>
+                <Value className="mt-2">{apy}</Value>
+              </div>
             </div>
-            <div className="col-7 d-flex align-items-end justify-content-center pl-0">
+
+            <div className="d-flex align-items-end ml-3 ml-md-5">
               <Value>
                 Invest in <Wordhighlight>strategies</Wordhighlight> and make the
                 best yield
@@ -127,6 +128,7 @@ export const ReferralImage = ({
           </div>
         </div>
       </BannerContentRoot>
+      <BannerImage src={bgImage} alt="Banner image not found" />
     </BannerRoot>
   );
 };

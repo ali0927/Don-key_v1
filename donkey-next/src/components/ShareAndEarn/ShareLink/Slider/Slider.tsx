@@ -12,8 +12,8 @@ import { DonCommonmodal } from "components/DonModal";
 import { ButtonWidget } from "components/Button";
 import { api } from "strapi";
 
-
 const CutomSlickSlider = styled(SlickSlider)`
+  overflow: hidden;
   .selected {
     border: 2.5px solid #fed700;
     border-radius: 5px;
@@ -67,13 +67,39 @@ const IMAGE_LIST_QUERY = gql`
   }
 `;
 
-
 const StyledLink = styled.span`
-cursor: pointer;
-text-decoration: underline;
-&:hover {
-  text-decoration: none;
-}
+  cursor: pointer;
+  text-decoration: underline;
+  color: #909090;
+  &:hover {
+    text-decoration: none;
+  }
+`;
+
+const DisplayImage = styled.img`
+  border-radius: 10px;
+`;
+
+const SaveButton = styled(ButtonWidget)`
+  height: 40px !important;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    height: 50px !important;
+  }
+`;
+
+
+const LoaderRoot = styled.div`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+`;
+
+const ImageRoot = styled.div`
+  min-height: 100px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    min-height: 150px;
+  }
 `;
 
 type IBanner = { url: string; id: string };
@@ -84,11 +110,13 @@ export const Slider: React.FC<{
   strategyName: string;
   image_id: string;
   short_code: string;
+  slug: string;
   refetch: () => Promise<void>;
 }> = (props) => {
-  const { tvl, apy, farmerName, image_id, short_code, refetch } = props;
+  const { tvl, apy, farmerName, image_id, short_code, refetch, slug } = props;
 
   const [selectedBanner, setSelectedBanner] = useState(image_id);
+  const [imageLoading, setImageLoading] = useState(false);
 
   const slickRef = useRef<SlickSlider | null>(null);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -104,6 +132,10 @@ export const Slider: React.FC<{
     }
     return [];
   }, [data]);
+
+  React.useEffect(() => {
+    setImageLoading(true);
+  }, [image_id, slug]);
 
   const handleChangeImage = (id: string) => () => {
     const banner = banners.find((item) => item.id === id);
@@ -139,11 +171,12 @@ export const Slider: React.FC<{
     }
   };
 
-  const bgImage = useMemo(() => {
-    const banner = banners.find((item) => item.id === image_id);
-
-    return banner?.url as string;
-  }, [banners, image_id]);
+  const bgImage =
+    window.location.origin +
+    "/api/referral-image?image_id=" +
+    image_id +
+    "&slug=" +
+    slug;
 
   const selectedImage = useMemo(() => {
     const banner = banners.find((item) => item.id === selectedBanner);
@@ -164,7 +197,7 @@ export const Slider: React.FC<{
       console.log(e);
     } finally {
       await refetch();
-      setIsLoading(false); 
+      setIsLoading(false);
       setIsEditOpen(false);
     }
   };
@@ -174,15 +207,31 @@ export const Slider: React.FC<{
   }
   return (
     <>
-      <ReferralImage
+      {/* <ReferralImage
         bgImage={bgImage}
         apy={apy}
         tvl={tvlUpdate}
         farmerName={farmerName}
-      />
+      /> */}
+
+      <ImageRoot className="position-relative">
+        <DisplayImage
+          className={"img-fluid"}
+          src={bgImage}
+          alt="Image not found"
+          onLoad={() => setImageLoading(false)}
+        />
+        {imageLoading && (
+          <LoaderRoot className="d-flex align-items-center justify-content-center">
+             <Spinner animation="border" />
+          </LoaderRoot>
+        )}
+      </ImageRoot>
       <p className="text-center py-3">
         {" "}
-        <StyledLink  onClick={() => setIsEditOpen(true)}>Edit Background</StyledLink>
+        <StyledLink onClick={() => setIsEditOpen(true)}>
+          Edit Background
+        </StyledLink>
       </p>
       {isEditOpen && (
         <DonCommonmodal
@@ -209,7 +258,7 @@ export const Slider: React.FC<{
                   >
                     <LIImage
                       src={banner.url}
-                      style={{objectFit: "cover", width: "100%" }}
+                      style={{ objectFit: "cover", width: "100%" }}
                       alt="Banner image not found"
                       onClick={handleChangeImage(banner.id)}
                     />
@@ -234,9 +283,10 @@ export const Slider: React.FC<{
               onClick={handleNext}
             />
           </div>
-          <ButtonWidget
+          <SaveButton
             varaint="contained"
             height={"50px"}
+            className="mt-3"
             disabled={selectedBanner === image_id}
             containedVariantColor="lightYellow"
             onClick={handleSave}
@@ -246,7 +296,7 @@ export const Slider: React.FC<{
             ) : (
               <> Save Changes</>
             )}
-          </ButtonWidget>
+          </SaveButton>
         </DonCommonmodal>
       )}
     </>

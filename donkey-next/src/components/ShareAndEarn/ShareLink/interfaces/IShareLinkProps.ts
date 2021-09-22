@@ -9,6 +9,7 @@ export interface IShareLinkProps {
     chainId: number;
     image_id: string;
     shortcode: string;
+    slug: string;
     fetchData: () => void;
     onClose: ()=> void;
 }

@@ -68,6 +68,7 @@ const TelegramButton = styled(ButtonWidget)`
 export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
 
+
   const { tvl } = useTVL(props.poolAddress, props.chainId);
 
   React.useEffect(() => {
@@ -133,6 +134,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
             farmerName={props.farmerName}
             strategyName={props.strategyName}
             short_code={props.shortcode}
+            slug={props.slug}
             refetch={async () => props.fetchData()}
           />
         </div>
