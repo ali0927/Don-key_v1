@@ -188,16 +188,13 @@ function NavBar(props: INavBarProps) {
                       </NavbarLink>
                     )}
                     {connected && <MyReferralNavLink variant={variant} />}
-                    <NavbarLink to="#">
-                      <div
-                        onClick={(e: any) => {
-                          e.preventDefault();
-                          handleOpen();
-                        }}
-                      >
-                        {" "}
-                        Bridge
-                      </div>
+                    <NavbarLink
+                      onClick={() => {
+                        handleOpen();
+                      }}
+                      to="#"
+                    >
+                      Bridge
                     </NavbarLink>
                     {/* <MyReferralNavLink variant={variant} /> */}
                   </>

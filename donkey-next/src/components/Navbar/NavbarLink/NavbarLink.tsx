@@ -39,9 +39,6 @@ const styles = `
   &:hover {
     color: #070602;
   }
-  
-
-  
 
   @media (min-width: 800px) {
     padding-right: 3rem !important;
@@ -101,16 +98,18 @@ const Customizeda = styled.a`
 `;
 
 export const NavbarLink = ({
-  to,
+  to = "#",
   children,
   linkColor = "black",
   target = "openInCurrentTab",
   link,
+  onClick,
 }: {
-  to: string;
+  to?: string;
   children: React.ReactNode;
   linkColor?: "white" | "black";
   link?: boolean;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   target?: "openInNewTab" | "openInCurrentTab";
 }) => {
   const router = useRouter();
@@ -125,13 +124,14 @@ export const NavbarLink = ({
 
   const handleRoute = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     e.preventDefault();
-    if(link){
-      window.open(to,target === "openInCurrentTab" ? "_self" : "_blank" );
+    if (link) {
+      window.open(to, target === "openInCurrentTab" ? "_self" : "_blank");
+    } else {
+      router.push(to);
     }
-    else{
-      router.push(to)
+    if (onClick) {
+      onClick(e);
     }
-
   };
 
   if (link) {
@@ -140,7 +140,6 @@ export const NavbarLink = ({
         className={className}
         onClick={handleRoute}
         target={target === "openInCurrentTab" ? "_self" : "_blank"}
-        // onClick={handleRoute}
       >
         {children}
       </Customizeda>
