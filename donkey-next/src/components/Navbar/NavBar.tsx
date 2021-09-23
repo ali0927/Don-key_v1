@@ -21,6 +21,11 @@ import { useWalletAddress } from "hooks";
 import { useReferralContext } from "contexts/ReferralContext";
 import { api } from "strapi";
 
+const ConnectButton = styled(ButtonWidget)`
+  border: 2px solid #222222;
+  font-size: 13px; 
+`;
+
 declare global {
   interface Window {
     ethereum: any;
@@ -82,15 +87,15 @@ const ConnectWalletButton = () => {
     await connectDapp();
   };
   return (
-    <ButtonWidget
+    <ConnectButton
       varaint="outlined"
       disabled={isDisabled}
       height="40px"
       width="160px"
       onClick={handleConnection}
     >
-      Connect wallet
-    </ButtonWidget>
+      Connect Wallet
+    </ConnectButton>
   );
 };
 

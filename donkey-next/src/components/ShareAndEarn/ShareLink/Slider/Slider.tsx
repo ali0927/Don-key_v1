@@ -76,8 +76,9 @@ const StyledLink = styled.span`
   }
 `;
 
-const DisplayImage = styled.img`
+const DisplayImage = styled.div<{image: any}>`
   border-radius: 10px;
+  background-image: url(${props=>props.image});
 `;
 
 const SaveButton = styled(ButtonWidget)`
@@ -177,6 +178,7 @@ export const Slider: React.FC<{
     image_id +
     "&slug=" +
     slug;
+    
 
   const selectedImage = useMemo(() => {
     const banner = banners.find((item) => item.id === selectedBanner);
@@ -217,8 +219,7 @@ export const Slider: React.FC<{
       <ImageRoot className="position-relative">
         <DisplayImage
           className={"img-fluid"}
-          src={bgImage}
-          alt="Image not found"
+          image={bgImage}
           onLoad={() => setImageLoading(false)}
         />
         {imageLoading && (

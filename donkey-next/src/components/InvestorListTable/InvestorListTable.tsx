@@ -59,6 +59,14 @@ export const hideAddress = (item: string) => {
   );
 };
 
+export const hideAddressForMobile = (item: string) => {
+  return (
+    item.slice(0, 4) +
+    "xxxxx" +
+    item.slice(item.length - 4, item.length)
+  );
+};
+
 type InvestorList = {
   address: string;
   initialInvestment: string;

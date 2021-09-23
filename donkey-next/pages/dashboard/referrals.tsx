@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import { NavBar } from "components/Navbar";
 import { useReferralContext } from "contexts/ReferralContext";
+import { Switch } from "don-components";
 import {
   calculateInitialInvestment,
   captureException,
@@ -15,7 +16,7 @@ import {
   toEther,
 } from "helpers";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { theme } from "theme";
@@ -34,23 +35,30 @@ import {
 import { hideAddress } from "components/InvestorListTable/InvestorListTable";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { Footer } from "components/Footer";
-import { StyledButton } from "components/StakingInfo";
 import { useWeb3Context } from "don-components";
 import { useStakingContract } from "hooks";
 import { NetworkButton } from "components/NetworkButton";
 import {
   ZeroInvestmentBox,
-  ZeroInvestmentContent,
   ZeroInvestmentInnerBox,
 } from "components/InvestmentPage/InvestmentsPage";
 import { useRouter } from "next/router";
 import { thegraphClient } from "apolloClient";
+import { ButtonWidget } from "components/Button";
+import { breakPoints } from "breakponts";
+import { USDViewProvider } from "contexts/USDViewContext";
+import { ReferalAccordion } from "components/ReferalMobile/ReferalAccordion";
+import { ShowAmount } from "components/ReferalMobile/ShowAmount";
 
-const HeadingTitle = styled.p({
-  fontFamily: "ObjectSans-Bold",
-  fontSize: 42,
-  color: "#070602",
-});
+const HeadingTitle = styled.p`
+  font-family: "ObjectSans-Bold";
+  font-size: 24px;
+  color: "#070602";
+  margin: 0px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 42px;
+  }
+`;
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -61,29 +69,47 @@ const Head = styled.section`
 `;
 
 const Card = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #fff;
   border-radius: 15px;
-  padding: 30px 20px;
-  height: 100%;
+  padding: 20px 20px;
+  min-height: 134px;
   ${({ color = "white" }: { color?: "black" | "white" }) => {
     if (color === "black") {
       return ` background-color: #171717;`;
     }
     return "";
   }}
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    padding: 30px 20px;
+  }
+`;
+
+const TotalReferalCard = styled(Card)`
+  padding: 15px 20px;
+  width: 100%;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    padding: 30px 20px;
+    width: 237px;
+  }
 `;
 
 const Title = styled.p`
-  font-size: 12px;
+  font-family: "Poppins";
+  font-size: 14px;
   font-weight: 500;
+  margin-top: 7px;
+  margin-bottom: 12px;
   text-align: center;
-  ${(props: { variant?: "light" }) => {
+  ${(props: { variant?: "light" | string }) => {
     return props.variant && `color: rgba(255,255,255,0.7)`;
   }}
 `;
 
 const Subtitle = styled.p`
-  font-size: 18px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 700;
   text-align: center;
@@ -91,6 +117,38 @@ const Subtitle = styled.p`
   ${(props: { variant?: "light" }) => {
     return props.variant && `color: rgba(255,255,255,1)`;
   }}
+`;
+
+const ZeroInvestmentContent = styled.div`
+  font-style: normal;
+  font-weight: 800;
+  text-align: center;
+  font-size: 30px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 50px;
+  }
+`;
+
+export const StyledButton = styled(ButtonWidget)`
+  height: 40px;
+  width: 100%;
+  font-size: 12px;
+  border-radius: 10px !important;
+  margin-top: 20px;
+  &:disabled {
+    ${(props) => {
+      if (
+        props.varaint === "contained" &&
+        props.containedVariantColor === "lightYellow"
+      ) {
+        return `background-color: rgba(255, 236, 92, 0.5);`;
+      }
+    }}
+  }
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    width: 159px;
+    margin-top: 0px;
+  }
 `;
 
 type ReferrerInfo = {
@@ -147,7 +205,7 @@ const calcDonRewards = async (
   };
 };
 
-type ReferralTableState = {
+export type ReferralTableState = {
   pool_address: string;
   wallet_address: string;
   expired: boolean;
@@ -306,7 +364,49 @@ const EmptyTableHeading = styled(TableHeading)`
 `;
 
 const ReferralCol = styled.div`
-  border-right: 1px solid #dedee0;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    :after {
+      content: "";
+      height: 82%;
+      position: absolute;
+      border: 0.1px solid #dedee0;
+      top: 0;
+      right: 0;
+      opacity: 0.4;
+    }
+  }
+`;
+
+const HrLine = styled.hr`
+  border-top: 1px solid #ededf2;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 0px !important;
+`;
+
+export const Heading = styled.div`
+  font-family: "ObjectSans-Bold";
+  font-weight: 500;
+  font-size: 20x;
+  color: #000000;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 42px;
+  }
+`;
+
+export const SubHeading = styled(Heading)`
+  font-size: 18px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 16px;
+  }
+`;
+
+export const Column = styled.div<{ width: string }>`
+  width: 100%;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    width: ${(props) => props.width};
+    padding-right: 15px;
+  }
 `;
 
 const MyReferrals = () => {
@@ -331,6 +431,12 @@ const MyReferrals = () => {
 
   const [availableDon, setAvailable] = useState("-");
   const [rewardsEarned, setEarned] = useState("-");
+  const [isInUsd, setIsInUsd] = useState(false);
+
+  const toggleCurrency = useCallback(() => {
+    setIsInUsd((val) => !val);
+  }, []);
+
   const fetchAvailableDon = async () => {
     setAvailable("-");
     const connectedWeb3 = getConnectedWeb3();
@@ -369,16 +475,16 @@ const MyReferrals = () => {
             <Row>
               <Col lg={12}>
                 <div className="row align-items-center">
-                  <div className="col-md-9">
+                  <div className="col-8">
                     {" "}
                     <HeadingTitle>My Referrals</HeadingTitle>
                   </div>
-                  <div className="col-md">
+                  <div className="col-4">
                     <div className="d-flex justify-content-end">
                       <NetworkButton
                         varaint="outlined"
                         height="50px"
-                        width="40%"
+                        width="92px"
                         active
                       >
                         BSC
@@ -387,15 +493,16 @@ const MyReferrals = () => {
                   </div>
                 </div>
 
-                <div className="row mt-5">
-                  <div className="col-md-9">
+                <div className="row mt-5 justify-content-between">
+                  <Column width="78%" className="mb-4 mb-lg-0">
                     <Card>
-                      <div className="row h-100 align-items-center justify-content-center">
-                        <ReferralCol className="col-md">
+                      <div className="row h-100 w-100 align-items-center justify-content-center">
+                        <ReferralCol className="col-lg">
                           <Title>Rewards Accumulated</Title>
                           <Subtitle>{totalDon}</Subtitle>
+                          <HrLine className="d-block d-lg-none" />
                         </ReferralCol>
-                        <ReferralCol className="col-md">
+                        <ReferralCol className="col-lg">
                           <Title>DON Rewards Available</Title>
                           <Subtitle>
                             {" "}
@@ -403,8 +510,9 @@ const MyReferrals = () => {
                               ? "-"
                               : `${formatNum(availableDon)} DON`}
                           </Subtitle>
+                          <HrLine className="d-block d-lg-none" />
                         </ReferralCol>
-                        <div className="col-md">
+                        <div className="col-lg">
                           <Title>Rewards Earned</Title>
                           <Subtitle>
                             {rewardsEarned === "-" || !isReady
@@ -412,7 +520,7 @@ const MyReferrals = () => {
                               : `${formatNum(rewardsEarned)} DON`}
                           </Subtitle>
                         </div>
-                        <div className="col-md">
+                        <div className="col-lg d-flex justify-content-center">
                           <StyledButton
                             varaint="contained"
                             className="py-2 px-5"
@@ -426,17 +534,19 @@ const MyReferrals = () => {
                         </div>
                       </div>
                     </Card>
-                  </div>
-                  <div className="col-md-3">
-                    <Card color="black">
+                  </Column>
+                  <Column width="21%" className="d-flex justify-content-center">
+                    <TotalReferalCard color="black">
                       <div className="row h-100 align-items-center">
                         <div className="col-md">
-                          <Title variant="light">Total Referrals</Title>
+                          <Title style={{ color: "#fff" }}>
+                            Total Referrals
+                          </Title>
                           <Subtitle variant="light">{referralCount}</Subtitle>
                         </div>
                       </div>
-                    </Card>
-                  </div>
+                    </TotalReferalCard>
+                  </Column>
                 </div>
               </Col>
             </Row>
@@ -455,62 +565,96 @@ const MyReferrals = () => {
             )}
             {isReady && transformedData.length > 0 && (
               <>
-                <TableResponsive>
-                  <Table>
-                    <TableHead>
-                      <TableRow isHoverOnRow={false}>
-                        <CustomTableHeading className="py-4">
-                          #
-                        </CustomTableHeading>
-                        <EmptyTableHeading></EmptyTableHeading>
-                        <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                        <CustomTableHeading>
-                          Referral Address
-                        </CustomTableHeading>
-                        <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
-                        <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
-                        <CustomTableHeading>Rewards</CustomTableHeading>
-                        <CustomTableHeading>Earned</CustomTableHeading>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {transformedData.map((investment, index) => {
-                        return (
-                          <TableRow key={investment.GUID}>
-                            <CustomTableData>{index + 1}</CustomTableData>
-                            <CustomTableData>
-                              <StyledImage src={investment.farmerImage} />
-                            </CustomTableData>
-                            <CustomTableData
-                              cursor="pointer"
-                              onClick={RedirectToFarmerProfile(investment.slug)}
-                              className="font-weight-bold"
-                            >
-                              {investment.farmerName}
-                            </CustomTableData>
-                            <CustomTableData>
-                              {hideAddress(investment.wallet_address)}
-                            </CustomTableData>
-                            <CustomTableData>
-                              {investment.referralInvestment}{" "}
-                              {investment.poolSymbol}
-                            </CustomTableData>
-                            <CustomTableData className="bold">
-                              {investment.referralProfit}{" "}
-                              {investment.poolSymbol}
-                            </CustomTableData>
-                            <CustomTableData>
-                              {formatNum(investment.rewards)} DON
-                            </CustomTableData>
-                            <CustomTableData>
-                              {investment.expired ? "Yes" : "No"}
-                            </CustomTableData>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableResponsive>
+                <USDViewProvider
+                  value={{
+                    isUSD: isInUsd,
+                    toggle: toggleCurrency,
+                  }}
+                >
+                  <div className="d-flex align-items-center justify-content-between mb-4">
+                    <Heading>Farmer`s list</Heading>
+
+                    <div className="d-flex align-items-center">
+                      <SubHeading className="mr-3">Show in USD</SubHeading>
+                      <Switch
+                        checked={isInUsd}
+                        onChange={() => setIsInUsd(!isInUsd)}
+                      />
+                    </div>
+                  </div>
+                  <TableResponsive className="d-none d-lg-block">
+                    <Table>
+                      <TableHead>
+                        <TableRow isHoverOnRow={false}>
+                          <CustomTableHeading className="py-4">
+                            #
+                          </CustomTableHeading>
+                          <EmptyTableHeading></EmptyTableHeading>
+                          <CustomTableHeading>FARMER NAME</CustomTableHeading>
+                          <CustomTableHeading>
+                            Referral Address
+                          </CustomTableHeading>
+                          <CustomTableHeading>
+                            INVESTED AMOUNT
+                          </CustomTableHeading>
+                          <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                          <CustomTableHeading>Rewards</CustomTableHeading>
+                          <CustomTableHeading>Earned</CustomTableHeading>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {transformedData.map((investment, index) => {
+                          return (
+                            <TableRow key={investment.GUID}>
+                              <CustomTableData>{index + 1}</CustomTableData>
+                              <CustomTableData>
+                                <StyledImage src={investment.farmerImage} />
+                              </CustomTableData>
+                              <CustomTableData
+                                cursor="pointer"
+                                onClick={RedirectToFarmerProfile(
+                                  investment.slug
+                                )}
+                                className="font-weight-bold"
+                              >
+                                {investment.farmerName}
+                              </CustomTableData>
+                              <CustomTableData>
+                                {hideAddress(investment.wallet_address)}
+                              </CustomTableData>
+                              <CustomTableData>
+                                <ShowAmount
+                                  amount={investment.referralInvestment}
+                                  poolAddress={investment.pool_address}
+                                  poolSymbol={investment.poolSymbol}
+                                />
+                              </CustomTableData>
+                              <CustomTableData className="bold">
+                                <ShowAmount
+                                  amount={investment.referralProfit}
+                                  poolAddress={investment.pool_address}
+                                  poolSymbol={investment.poolSymbol}
+                                />
+                              </CustomTableData>
+                              <CustomTableData>
+                                <ShowAmount
+                                  amount={investment.rewards}
+                                  poolAddress={investment.pool_address}
+                                  poolSymbol={"DON"}
+                                  isDon
+                                />
+                              </CustomTableData>
+                              <CustomTableData>
+                                {investment.expired ? "Yes" : "No"}
+                              </CustomTableData>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableResponsive>
+                  <ReferalAccordion referalState={transformedData} />
+                </USDViewProvider>
               </>
             )}
 

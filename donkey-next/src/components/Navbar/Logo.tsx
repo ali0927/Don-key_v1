@@ -3,7 +3,7 @@ import { Navbar } from "react-bootstrap";
 import Img from "next/image";
 import styled from "styled-components";
 import { Navigate } from "components/Navigate";
-import donkeylogo from "./donkeylogo-black.svg";
+import Logo2 from "./Logo2.png";
 
 const Image = styled(Img)`
   position: relative;
@@ -21,7 +21,7 @@ export const Logo = () => {
         className="d-flex align-items-center inherit-color no-underline"
         to="/"
       >
-        <Image loading="eager" width={130} height={30} src={donkeylogo} alt="Don key Logo" />
+        <Image loading="eager" width="85px" height="25px" src={Logo2} alt="Don key Logo" />
       </Navigate>
     </Navbar.Brand>
   );

@@ -9,7 +9,6 @@ import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
-
 import { fixUrl, getShareUrl } from "helpers";
 import { Share, ShareLink } from "components/ShareAndEarn";
 import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
