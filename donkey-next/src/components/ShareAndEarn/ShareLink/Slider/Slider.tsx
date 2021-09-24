@@ -173,8 +173,8 @@ export const Slider: React.FC<{
   };
 
   const bgImage =
-    window.location.origin +
-    "/api/referral-image?image_id=" +
+    process.env.NEXT_PUBLIC_API_URL +
+    "/api/v2/referral-image?image_id=" +
     image_id +
     "&slug=" +
     slug;
