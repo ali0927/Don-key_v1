@@ -13,9 +13,8 @@
   environment = { GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/"}
   
 [[redirects]]
-	from = "/shared/:code"
-	to = "/.netlify/functions/share?code=:code"
-	query = { code = ":code" }
+	from = "/share/*"
+	to = "/.netlify/functions/share?code=:splat"
 	status = 200
 
 [functions]
