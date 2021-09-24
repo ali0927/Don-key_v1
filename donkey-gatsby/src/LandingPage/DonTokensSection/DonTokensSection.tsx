@@ -12,7 +12,7 @@ const Root = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-family: Poppins;
+  
   font-size: 23px;
   font-style: normal;
   font-weight: 700;
@@ -23,7 +23,7 @@ const Heading = styled.h1`
 `;
 
 const Content = styled.p`
-  font-family: Poppins;
+  
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

@@ -40,7 +40,7 @@ const DONApy = styled.h6`
 const Heading = styled.h5`
   font-size: 18px;
   font-weight: 900;
-  font-family: Poppins;
+  
 `;
 
 const CrossChainImage = styled.img`

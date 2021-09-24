@@ -16,7 +16,7 @@ const Info = styled.p`
   color: #222222;
   margin-bottom: 0;
   font-size: 15px;
-  font-family: Poppins;
+  
   font-weight: 400;
 `;
 

@@ -31,13 +31,13 @@ const NextImage = styled.img`
 `;
 
 const Heading3 = styled.h3`
-  font-family: Poppins;
+  
   font-size: 1.37rem;
   margin-bottom: 8px;
 `;
 
 const SubTitle = styled.p`
-  font-family: Poppins;
+  
   font-size: 0.88rem;
   color: #8b8b8b;
   margin-bottom: 5px;

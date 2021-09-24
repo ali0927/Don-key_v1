@@ -49,7 +49,7 @@ const FrequentRoot = styled.div`
 `;
 
 const Question = styled.h3`
-  font-family: 'ObjectSans-Bold';
+  font-family: '"Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"';
   font-style: normal;
   font-size: 16px;
   color: #333;

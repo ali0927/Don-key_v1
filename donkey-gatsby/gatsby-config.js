@@ -1,10 +1,9 @@
 const path = require(`path`);
-const dotenv = require('dotenv');
-
+const dotenv = require("dotenv");
 
 dotenv.config({
-  path: `.env.${process.env.NODE_ENV}`
-})
+  path: `.env.${process.env.NODE_ENV}`,
+});
 /**
  * This is the place where you can tell Gatsby which plugins to use
  * and set them up the way you want.
@@ -26,6 +25,14 @@ module.exports = {
       options: {
         path: path.join(__dirname, `src`, `images`),
         name: `images`,
+      },
+    },
+    {
+      resolve: "gatsby-plugin-web-font-loader",
+      options: {
+        google: {
+          families: ["Poppins", "Work Sans"],
+        },
       },
     },
     `gatsby-plugin-sharp`,

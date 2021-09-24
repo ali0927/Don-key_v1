@@ -6,7 +6,7 @@ import { LandingParagraph } from "../components";
 
 const BannerWrapper = styled.div`
   & h1 {
-    font-family: ObjectSans-Bold;
+    font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-weight: bold;
     font-size: 90px;
     line-height: 96.5%;

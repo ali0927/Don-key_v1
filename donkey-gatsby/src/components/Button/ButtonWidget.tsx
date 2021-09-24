@@ -21,7 +21,7 @@ interface IButtonProps {
 }
 
 const CotainedVariant = styled.button`
-  font-family: Poppins;
+  
   font-style: normal;
   
   text-align: center;
@@ -55,7 +55,7 @@ const OutlineVariant = styled.button`
   height: ${(props: IOutlinedButton) => (props.height ? props.height : "100%")};
   border: 1px solid ${theme.palette.border.main};
   border-radius: 10px;
-  font-family: Poppins;
+  
   font-size: 14px;
   transition: background-color .40s;
   :hover {

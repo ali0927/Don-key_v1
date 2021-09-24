@@ -17,7 +17,7 @@ const moveInAnimation = keyframes`
 
 const styles = `
   font-weight: 500;
-  font-family: Poppins;
+  
   font-size: 14px;
   line-height: 19px;
   display: -webkit-flex;

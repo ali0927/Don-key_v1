@@ -29,7 +29,7 @@ import { DonTokenIcon } from "icons/DonTokenIcon";
 import { useWeb3Context } from "don-components";
 
 const Heading = styled.div`
-    font-family: Poppins;
+    
    font-size: 23px;
    font-style: normal;
    font-weight: 600;
@@ -48,7 +48,7 @@ const IconRoot = styled.div`
 `;
 
 const Caption = styled.div`
-   font-family: Poppins;
+   
    font-size: 14px;
    font-style: normal;
    font-weight: 600;

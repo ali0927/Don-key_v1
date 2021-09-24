@@ -26,7 +26,7 @@ const Heading = styled.h2`
 `;
 
 const SubHeading = styled.p`
-  font-family: Poppins;
+  
   font-size: 14px;
   font-weight: 500;
   text-align: left;
@@ -40,7 +40,7 @@ const TierRoot = styled.div`
   & .tierButton {
     width: 52px;
     height: 37px;
-    font-family: Poppins;
+    
     font-size: 12px;
     font-weight: 600;
     color: #000;

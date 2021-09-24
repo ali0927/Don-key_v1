@@ -51,7 +51,7 @@ import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { NetworkButton } from "components/NetworkButton";
 
 export const Heading = styled.div`
-  font-family: "ObjectSans-Bold";
+  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
   font-weight: 500;
   font-size: 20x;
   color: #000000;
@@ -68,7 +68,7 @@ export const SubHeading = styled(Heading)`
 `;
 
 const HeadingTitle = styled.div`
-  font-family: ObjectSans-Bold;
+  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   color: #070602;
@@ -106,7 +106,7 @@ const WithDrawButton = styled(LightGrayButton)`
   background: linear-gradient(0deg, #f2f4f7 0%, #f0f2f5 48.04%, #ffffff 100%);
   height: 34px;
   width: 114px;
-  font-family: Poppins;
+  
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -196,7 +196,7 @@ const ALL_FARMER_QUERY = gql`
 `;
 
 const TotalInvestedAmount = styled.span`
-  font-family: ObjectSans-Bold;
+  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-size: 50px;
   font-weight: 700;
   @media only screen and (max-width: ${breakPoints.sm}) {

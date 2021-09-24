@@ -19,7 +19,7 @@ const FarmerTitle = styled.p({
   letterSpacing: "0em",
   textAlign: "left",
   color: "#070602",
-  fontFamily: "ObjectSans-Bold",
+  fontFamily: `"Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`,
 });
 
 export const CustomizedContainer = styled.div`

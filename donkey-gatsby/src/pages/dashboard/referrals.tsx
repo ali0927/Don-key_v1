@@ -52,7 +52,7 @@ import { ShowAmount } from "components/ReferalMobile/ShowAmount";
 import { navigate } from "gatsby-link";
 
 const HeadingTitle = styled.p`
-  font-family: "ObjectSans-Bold";
+  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
   font-size: 24px;
   color: "#070602";
   margin: 0px;
@@ -386,7 +386,7 @@ const HrLine = styled.hr`
 `;
 
 export const Heading = styled.div`
-  font-family: "ObjectSans-Bold";
+  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
   font-weight: 500;
   font-size: 20x;
   color: #000000;

@@ -34,3 +34,7 @@ exports.onCreateWebpackConfig = ({
       },
    })
 }
+
+exports.onCreateNode = () => {
+   
+}

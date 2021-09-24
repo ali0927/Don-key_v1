@@ -11,7 +11,7 @@ const CommunityRoot = styled.div`
   align-items: center;
   justify-content: center;
   & h4 {
-    font-family: ObjectSans-Bold;
+    font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
     font-weight: bold;
     font-size: 45px;
     line-height: 48px;

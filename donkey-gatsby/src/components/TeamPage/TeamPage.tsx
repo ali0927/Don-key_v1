@@ -13,7 +13,7 @@ const Root = styled.div`
 
 
 const TeamHeading = styled.p`
-  font-family: ObjectSans-Bold;
+  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-size: 45px;
   font-style: normal;
   margin-bottom: 63px;

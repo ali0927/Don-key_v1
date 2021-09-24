@@ -2,14 +2,14 @@ import { breakPoints } from "breakponts";
 import styled from "styled-components";
 
 export const Typography = styled.div<{ fontSize: string; bold?: boolean }>`
-  font-family: Poppins;
+  
   font-weight: ${(props) => props.bold ? 600: 400};
   font-size: ${(props) => props.fontSize};
   color: #000000;
 `;
 
 export const MobileHeading = styled.div`
-  font-family: Poppins;
+  
   font-weight: 600;
   font-size: 14px;
   margin: 0px;
@@ -19,7 +19,7 @@ export const MobileHeading = styled.div`
 `;
 
 export const MobileCaption = styled.div`
-  font-family: Poppins;
+  
   font-size: 12px;
   font-weight: 600;
   color: #c4c4c4;

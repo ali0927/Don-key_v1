@@ -106,7 +106,7 @@ const ColumnsTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  font-family: Poppins;
+  
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
 `;
@@ -143,7 +143,7 @@ const ColumnsSubTitleColored = styled.p`
 
 export const ColumnsTitle1 = styled(ColumnsTitleColored)`
   font-size: 14px;
-  font-family: Poppins;
+  
   font-weight: 500;
 `;
 

@@ -26,7 +26,7 @@ const Section = styled.section`
 `;
 
 const Title = styled.h2`
-  font-family: "ObjectSans-Bold";
+  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
   font-weight: 900;
 `;
 

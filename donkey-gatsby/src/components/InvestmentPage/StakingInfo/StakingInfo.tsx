@@ -47,7 +47,7 @@ const StakingCol = styled.div`
 `;
 
 const StakingTitle = styled.h3`
-  font-family: Poppins;
+  
   font-size: 12px;
   color: #7e7e7e;
   text-align: center;

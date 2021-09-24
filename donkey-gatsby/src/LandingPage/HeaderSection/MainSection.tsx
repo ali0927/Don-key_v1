@@ -27,7 +27,7 @@ const Rounded = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-family: "ObjectSans-Bold";
+  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
   font-size: 50px;
   font-weight: 800;
   text-align: left;
@@ -35,7 +35,7 @@ const Heading = styled.h1`
 `;
 
 const Paragraph = styled.p`
-  font-family: Poppins;
+  
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -43,7 +43,7 @@ const Paragraph = styled.p`
 `;
 
 const FooterHeading = styled.div`
-  font-family: Poppins;
+  
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -51,7 +51,7 @@ const FooterHeading = styled.div`
 `;
 
 const FooterSubHeading = styled.h1`
-  font-family: ObjectSans-Bold;
+  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   text-align: center;
@@ -155,7 +155,7 @@ export const MainSection: React.FC = () => {
     <>
       <Root className="position-relative">
          <Rounded>
-          <img src={MainImage} alt="bg"  />
+          {/* <img src={MainImage} alt="bg"  /> */}
         </Rounded>
 
         <div className="container">
