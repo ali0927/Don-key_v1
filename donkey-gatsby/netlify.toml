@@ -1,5 +1,5 @@
 [build]
-  command = "NODE_ENV=production gatsby build"
+  command = "yarn build"
   publish = "public/"
 [context.master]
   environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://don-key-finance-backend-staging-fqpn6.ondigitalocean.app", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
