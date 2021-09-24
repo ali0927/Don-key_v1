@@ -20,6 +20,7 @@ module.exports = {
     `gatsby-plugin-styled-components`,
     `gatsby-plugin-sass`,
     `gatsby-plugin-tsconfig-paths`,
+    `gatsby-plugin-netlify`,
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -61,6 +62,7 @@ module.exports = {
         icon: `static/favicon.ico`, // This path is relative to the root of the site.
       },
     },
+    `gatsby-plugin-no-sourcemaps`,
     `gatsby-plugin-react-helmet`
     // `gatsby-plugin-offline`,
   ],

@@ -105,7 +105,7 @@ const sortStrategies = (list: any) => {
   });
 };
 export const createPages = async ({ graphql, actions }: any) => {
-  const { createPage } = actions;
+  const { createPage, createRedirect } = actions;
   const tokensdata = await graphql(`
     query {
       allStrapiTokens {
@@ -225,6 +225,13 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   const farmers = farmersResp.data.allStrapiFarmers.nodes;
   const tvl = await calcSumOfAllPoolValues();
+
+  createRedirect({
+    fromPath: "/share/*",
+    force: true,
+    toPath: `${process.env.GATSBY_API_URL}/api/v2/share/:splat`,
+    statusCode: 200,
+  })
   farmers.forEach((farmer: any) => {
    const strategies = farmer.strategies;
    if (strategies.length > 0 && farmer.farmerImage) {
