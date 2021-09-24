@@ -26,7 +26,10 @@ const Section = styled.section`
 `;
 
 const Title = styled.h2`
-  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
+  font-family: "" Work Sans ",-apple-system,BlinkMacSystemFont," Segoe UI
+    ",Roboto," Helvetica Neue ",Arial," Noto Sans "," Liberation Sans
+    ",sans-serif," Apple Color Emoji "," Segoe UI Emoji "," Segoe UI Symbol ","
+    Noto Color Emoji "";
   font-weight: 900;
 `;
 
@@ -81,9 +84,8 @@ const FarmerBioShort = ({
 }) => {
   const url = `/dashboard/farmer/${item.farmer.slug}`;
 
-
   const handleLeaderClick = () => {
-   navigate(url);
+    navigate(url);
   };
 
   return (
@@ -144,13 +146,10 @@ const sortStrategies = (list: any[]) => {
 };
 
 export default function TokenPage({
-  tokens,
-  strategies,
+  pageContext: { tokens, strategies },
 }: {
-  tokens: IStrapiToken[]
-  strategies: IFarmerBio[];
+  pageContext: { tokens: IStrapiToken[]; strategies: IFarmerBio[] };
 }) {
-
   // return <div />
   const { chainId, connected } = useWeb3Context();
   const tokenObj = tokens[0];

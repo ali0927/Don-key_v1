@@ -86,12 +86,7 @@ export default function Dashboard() {
 
   const data = useStaticQuery(graphql`
     query TokensList {
-      allStrapiFarmers {
-        nodes {
-          status
-          strapiId
-        }
-      }
+
       allStrapiTokens {
         nodes {
           id
@@ -112,13 +107,16 @@ export default function Dashboard() {
             slug
           }
           strategies {
-            farmer
+            farmer{
+              status
+              strapiId
+            }
           }
         }
       }
     }
   `);
-  const farmers = data.allStrapiFarmers.nodes;
+
   const tokens: IStrapiToken[] = data.allStrapiTokens.nodes.filter((item: any) => {
     const isActive = item.status === "active";
     if (!isActive) {
@@ -126,8 +124,8 @@ export default function Dashboard() {
     } else {
       const strategies = item.strategies.filter(
         (item: any) => {
-          const farmerId = item.farmer;
-          const farmer = farmers.find((item: any) => item.strapiId === farmerId);
+          const farmer = item.farmer;
+          // const farmer = farmers.find((item: any) => item.strapiId === farmerId);
           return farmer && farmer.status === "active"
         }
       );

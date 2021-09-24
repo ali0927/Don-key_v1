@@ -75,6 +75,7 @@ typings/
 public
 yarn-error.log
 .netlify/
+functions
 
 # Local Netlify folder
 .netlify

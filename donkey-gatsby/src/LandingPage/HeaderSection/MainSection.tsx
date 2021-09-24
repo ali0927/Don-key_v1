@@ -97,18 +97,6 @@ const ETH_PRICE = gql`
   }
 `;
 
-// const TOKEN_DATA = gql`
-//   query tokens($tokenAddress: Bytes!) {
-//     token(id: $tokenAddress) {
-//       name
-//       symbol
-//       decimals
-//       derivedETH
-//       tradeVolumeUSD
-//       totalLiquidity
-//     }
-//   }
-// `;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
@@ -118,12 +106,6 @@ export const MainSection: React.FC = () => {
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
 
-  // const { data } = useQuery(TOKEN_DATA, {
-  //   client: uniswapClient,
-  //   variables: {
-  //     tokenAddress: "0x217ddead61a42369a266f1fb754eb5d3ebadc88a",
-  //   },
-  // });
   const circulatingSupply = coingecko
     ? coingecko.market_data.circulating_supply
     : 0;

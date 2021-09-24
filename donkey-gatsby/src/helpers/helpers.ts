@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import { captureException, getPoolToken, toEther } from "helpers";
+import { captureException, getPoolToken, toEther } from "./";
 import Web3 from "web3";
 import {
   calculateInitialInvestment,

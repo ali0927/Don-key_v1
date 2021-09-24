@@ -13,7 +13,9 @@
     "dev": "gatsby develop",
     "clean": "gatsby clean",
     "lint": "eslint . --ext .js --cache",
-    "compile": "node -v",
+    "compile": "yarn compile:functions",
+    "postinstall": "cd .. && yarn postinstall",
+    "compile:functions": "tsc --watch -p ./tsconfig-functions.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
@@ -32,6 +34,7 @@
     "webpack": "5.52.0"
   },
   "dependencies": {
+    "@netlify/functions": "^0.7.2",
     "babel-plugin-styled-components": "^1.13.2",
     "bootstrap": "^4.5.3",
     "clsx": "^1.1.1",
@@ -52,6 +55,7 @@
     "gatsby-plugin-sass": "^4.14.0",
     "gatsby-plugin-sharp": "3.12.0",
     "gatsby-plugin-styled-components": "^4.14.0",
+    "gatsby-plugin-ts-config": "^2.1.2",
     "gatsby-plugin-web-font-loader": "^1.0.4",
     "gatsby-source-filesystem": "3.12.0",
     "gatsby-source-strapi": "^1.0.2",

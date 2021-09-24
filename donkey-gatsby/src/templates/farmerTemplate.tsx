@@ -12,11 +12,12 @@ import { IFarmerInter } from "interfaces";
 import { calcSumOfAllPoolValues } from "helpers";
 
 export default function Dashboard({
-  data,
-  tvl,
+  pageContext: { data, tvl },
 }: {
-  data: { farmers: IFarmerInter[] };
-  tvl: string;
+  pageContext: {
+    data: { farmers: IFarmerInter[] };
+    tvl: string;
+  };
 }) {
   const [isInUsd, setIsInUsd] = useState(false);
 
@@ -118,21 +119,21 @@ export const getStaticProps: GetStaticProps = async (context) => {
     },
   });
   const tvl = await calcSumOfAllPoolValues();
-  if(resp.data.data.farmers.length === 0){
+  if (resp.data.data.farmers.length === 0) {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
-  if(resp.data.data.farmers[0].strategies.length === 0){
+  if (resp.data.data.farmers[0].strategies.length === 0) {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
   return {
     props: {
       data: resp.data.data,
       tvl,
     },
-    revalidate: 60
+    revalidate: 60,
   };
 };

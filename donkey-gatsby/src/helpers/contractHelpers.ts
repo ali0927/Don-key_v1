@@ -5,8 +5,8 @@ import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import {  waitFor } from "don-utils";
-import { captureException, getPoolValueInUSD } from "helpers";
-import { api, strapi } from "strapi";
+import { captureException, getPoolValueInUSD } from "./";
+import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
@@ -29,7 +29,7 @@ let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
 
 export const getERCContract = async (web3: Web3, address: string) => {
-  const BUSDJson = await import("JsonData/BUSDToken.json");
+  const BUSDJson = await import("../JsonData/BUSDToken.json");
   const busdtoken = new web3.eth.Contract(BUSDJson.default as any, address);
   return busdtoken;
 };
@@ -61,7 +61,7 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
 };
 //get DON BSC bridge contract
 export const getDONBSCbridgeContract = async (web3: Web3) => {
-  const json = await import("JsonData/DONBSCbridge.json");
+  const json = await import("../JsonData/DONBSCbridge.json");
   return new web3.eth.Contract(json.abi as any, DONBSCbridge);
 };
 
@@ -93,12 +93,12 @@ export const getDonkeyPriceFeedContract = async (
   web3: Web3,
   feedsAddress = DonkeyPriceFeedAddress
 ) => {
-  const json = await import("JsonData/DonKeyPriceFeeds.json");
+  const json = await import("../JsonData/DonKeyPriceFeeds.json");
   return new web3.eth.Contract(json.abi as any, feedsAddress);
 };
 
 export const getReferralSystemContract = async (web3: Web3) => {
-  const json = await import("JsonData/ReferralSystem.json");
+  const json = await import("../JsonData/ReferralSystem.json");
   return new web3.eth.Contract(json.abi as any, ReferralSystemAddress);
 };
 
@@ -107,7 +107,7 @@ export const getRewardSystemContract = async (web3: Web3) => {
   const rewardSystemAddress = await referralContract.methods
     .getRewardSystem()
     .call();
-  const json = await import("JsonData/RewardSystem.json");
+  const json = await import("../JsonData/RewardSystem.json");
   return new web3.eth.Contract(json.abi as any, rewardSystemAddress);
 };
 
@@ -341,16 +341,16 @@ export const getTokenImage = async (web3: Web3, poolAddress: string) => {
 
 const getPoolJSON = async (version: number) => {
   if (version === 1 || !version) {
-    return await import("JsonData/pool2.json");
+    return await import("../JsonData/pool2.json");
   }
   if (version === 2) {
-    return await import("JsonData/advanced-pool.json");
+    return await import("../JsonData/advanced-pool.json");
   }
 
   if (version === 3 || version === 4) {
-    return await import("JsonData/pool-manual.json");
+    return await import("../JsonData/pool-manual.json");
   }
-  return await import("JsonData/pool2.json");
+  return await import("../JsonData/pool2.json");
 };
 
 export const getPoolContract = async (
@@ -367,7 +367,7 @@ export const getIBUSDContract = async (web3: Web3) => {
   if (ibusdContract) {
     return ibusdContract;
   }
-  const ibusdjson = await import("JsonData/IBUSDToken.json");
+  const ibusdjson = await import("../JsonData/IBUSDToken.json");
   ibusdContract = new web3.eth.Contract(ibusdjson.default as any, IBUSDAddress);
   return ibusdContract;
 };
@@ -376,7 +376,7 @@ export const getFairLaunchContract = async (web3: Web3) => {
   if (FairLaunchContract) {
     return FairLaunchContract;
   }
-  const fairLaunchJSON = await import("JsonData/FairLaunch.json");
+  const fairLaunchJSON = await import("../JsonData/FairLaunch.json");
   FairLaunchContract = new web3.eth.Contract(
     fairLaunchJSON.default as any,
     FairLaunchAddress
@@ -388,7 +388,7 @@ export const getStrategyContract = async (
   web3: Web3,
   strategyAddress: string
 ) => {
-  const StrategyJsn = await import("JsonData/strategy-abi.json");
+  const StrategyJsn = await import("../JsonData/strategy-abi.json");
 
   return new web3.eth.Contract(StrategyJsn.abi as any, strategyAddress);
 };
@@ -404,7 +404,7 @@ export const getInvestedAmount = async (web3: Web3, poolAddress: string) => {
 };
 
 export const getPancakeContract = async (web3: Web3) => {
-  const pancake = await import("JsonData/pancakeswap.json");
+  const pancake = await import("../JsonData/pancakeswap.json");
   return new web3.eth.Contract(pancake.default as any, PancakeRouterAddress);
 };
 
@@ -571,7 +571,7 @@ export const calculateInitialInvestmentInUSD = async (
 };
 
 export const getStakingContract = async (web3: Web3, isBSC = false) => {
-  const stakingJSON = await import("JsonData/KiraStaking.json");
+  const stakingJSON = await import("../JsonData/KiraStaking.json");
 
   const contract = new web3.eth.Contract(
     stakingJSON.abi as any,
@@ -582,7 +582,7 @@ export const getStakingContract = async (web3: Web3, isBSC = false) => {
 };
 
 export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
-  const lpJSON = await import("JsonData/BUSDToken.json");
+  const lpJSON = await import("../JsonData/BUSDToken.json");
 
   const contract = new web3.eth.Contract(
     lpJSON.default as any,

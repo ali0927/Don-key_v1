@@ -1,3 +1,22 @@
 [build]
   command = "NODE_ENV=production gatsby build"
   publish = "public/"
+[context.master]
+  environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://don-key-finance-backend-staging-fqpn6.ondigitalocean.app", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
+[context.staging]
+  environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
+[context."feature/*"]
+  environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
+[context.dev]
+  environment = { GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/" }
+[context.deploy-preview]
+  environment = { GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-donkey-fph57.ondigitalocean.app", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/"}
+  
+[[redirects]]
+	from = "/shared/:code"
+	to = "/.netlify/functions/share?code=:code"
+	query = { code = ":code" }
+	status = 200
+
+[functions]
+  directory = "functions"
