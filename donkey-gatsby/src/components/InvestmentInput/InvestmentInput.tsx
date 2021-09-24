@@ -1,0 +1,104 @@
+import BigNumber from "bignumber.js";
+import { useMemo } from "react";
+import styled from "styled-components";
+BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
+const InvestmentRoot = styled.div({
+  border: "1px solid #d9d9d9",
+  borderRadius: "10px",
+  display: "flex",
+});
+
+const InvestmentCurrency = styled.div({
+  fontWeight: "bold",
+  padding: "0.5rem 0.8rem",
+  borderRight: "1px solid #d9d9d9",
+  whiteSpace: "nowrap"
+});
+
+const InvestmentInputElement = styled.input`
+  border: none;
+  height: 100%;
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  text-align: right;
+  -moz-appearance: textfield;
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  ::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
+const InvestmentPrecentage = styled.div`
+  span {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 300;
+    &:not(:last-child) {
+      margin-right: 1.5rem;
+    }
+  }
+`;
+
+export const InvestmentInput = ({
+  value,
+  setValue,
+  max,
+  currencySymbol,
+  disabled,
+  hidePercent,
+}: {
+  value: string;
+  setValue: (val: string) => void;
+  max: string;
+  currencySymbol: string;
+  disabled?: boolean;
+  hidePercent?: boolean;
+}) => {
+  const maxNum = useMemo(() => {
+    return new BigNumber(max);
+  }, [max]);
+  return (
+    <div className="w-100">
+      <InvestmentRoot>
+        <InvestmentCurrency>{currencySymbol.toUpperCase()}</InvestmentCurrency>
+        <div className="w-100">
+          <InvestmentInputElement
+            type="number"
+            placeholder="0"
+            min={0}
+            value={value}
+            disabled={disabled}
+            onChange={(e) => setValue(e.target.value)}
+          />
+        </div>
+      </InvestmentRoot>
+      {!hidePercent && (
+        <InvestmentPrecentage>
+          {[0, 20, 50, 80, 100].map((val, index) => {
+            const updatedVal = maxNum
+              .multipliedBy(new BigNumber(val).dividedBy(new BigNumber(100)))
+              .toFixed(2);
+            return (
+              <span
+                key={index}
+                onClick={() => setValue(updatedVal)}
+                style={{ opacity: val / 100 + 0.2 }}
+              >
+                {val}%
+              </span>
+            );
+          })}
+        </InvestmentPrecentage>
+      )}
+    </div>
+  );
+};

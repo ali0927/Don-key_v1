@@ -6,14 +6,19 @@
     "don-utils",
     "don-hooks",
     "don-components",
-    "donkey-next"
+    "donkey-next",
+    "donkey-gatsby"
   ],
+  "resolutions": {
+    "webpack": "5.52.0"
+  },
   "dependencies": {
     "@apollo/client": "^3.3.18",
     "@ethersproject/providers": "^5.0.23",
     "@material-ui/core": "^4.11.3",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "@sentry/react": "^6.12.0",
+    "webpack": "5.52.0",
     "@sentry/tracing": "^6.12.0",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
