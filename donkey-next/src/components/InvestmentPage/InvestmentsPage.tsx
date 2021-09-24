@@ -5,8 +5,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { Switch, withStyles } from "@material-ui/core";
-import { yellow } from "@material-ui/core/colors";
+import { Switch } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
 import styled from "styled-components";
@@ -50,6 +49,23 @@ import {
 } from "don-components";
 import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { NetworkButton } from "components/NetworkButton";
+
+export const Heading = styled.div`
+  font-family: "ObjectSans-Bold";
+  font-weight: 500;
+  font-size: 20x;
+  color: #000000;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 42px;
+  }
+`;
+
+export const SubHeading = styled(Heading)`
+  font-size: 18px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 16px;
+  }
+`;
 
 const HeadingTitle = styled.div`
   font-family: ObjectSans-Bold;
@@ -147,21 +163,7 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-const YellowSwitch = withStyles({
-  switchBase: {
-    color: yellow[300],
-    "&$checked": {
-      color: yellow[500],
-    },
-    "&$checked + $track": {
-      backgroundColor: yellow[500],
-    },
-  },
-  checked: {},
-  track: {
-    backgroundColor: "#d9d9d9",
-  },
-})(Switch);
+
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery($chainId: Int!) {
@@ -253,57 +255,63 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        const responses = (data.farmers as IFarmerInter[]).map(async invest => {
-          try {
-            const contract = await getPoolContract(web3, invest.poolAddress, 3);
-            // const accounts = await web3.eth.getAccounts();
-            const isInvested = await contract.methods
-              .isInvestor(address)
-              .call();
-            if (isInvested) {
-              const amounts = [
-                calculateInitialInvestmentInUSD(
-                  web3,
-                  invest.poolAddress,
-                  address
-                ),
-                (async () => {
-                  try {
-                    if (invest.poolVersion > 2) {
-                      return await contract.methods
-                        .isWithdrawalRequested(address)
-                        .call();
-                    } else {
+        const responses = (data.farmers as IFarmerInter[]).map(
+          async (invest) => {
+            try {
+              const contract = await getPoolContract(
+                web3,
+                invest.poolAddress,
+                3
+              );
+              // const accounts = await web3.eth.getAccounts();
+              const isInvested = await contract.methods
+                .isInvestor(address)
+                .call();
+              if (isInvested) {
+                const amounts = [
+                  calculateInitialInvestmentInUSD(
+                    web3,
+                    invest.poolAddress,
+                    address
+                  ),
+                  (async () => {
+                    try {
+                      if (invest.poolVersion > 2) {
+                        return await contract.methods
+                          .isWithdrawalRequested(address)
+                          .call();
+                      } else {
+                        return false;
+                      }
+                    } catch (e) {
+                      captureException(e, "Withdraw Requested");
                       return false;
                     }
-                  } catch (e) {
-                    captureException(e, "Withdraw Requested");
-                    return false;
-                  }
-                })(),
-              ];
+                  })(),
+                ];
 
-              const results = await Promise.all(amounts);
-              investedAmount = investedAmount.plus(new BigNumber(results[0]));
-              arr.push({
-                name: invest.name,
-                poolAddress: invest.poolAddress,
-                initialInvestmentinUSD: results[0],
-                isWithdrawRequest: results[1],
-              });
-              if (invest.poolVersion > 2) {
-                finalInvestments.push(invest);
-              } else {
-                oldInvestments.push(invest);
+                const results = await Promise.all(amounts);
+                investedAmount = investedAmount.plus(new BigNumber(results[0]));
+                arr.push({
+                  name: invest.name,
+                  poolAddress: invest.poolAddress,
+                  initialInvestmentinUSD: results[0],
+                  isWithdrawRequest: results[1],
+                });
+                if (invest.poolVersion > 2) {
+                  finalInvestments.push(invest);
+                } else {
+                  oldInvestments.push(invest);
+                }
               }
+            } catch (e) {
+              captureException(e, "CalInvestments");
             }
-          } catch (e) {
-            captureException(e, "CalInvestments");
           }
-        })
+        );
 
         await Promise.all(responses);
-     
+
         setPoolAddresses(arr);
         setLoading(false);
         setMyInvestments(finalInvestments);
@@ -407,17 +415,13 @@ export const InvestmentsPage = () => {
       (filteredInvestMents.length > 0 || filteredOldInvestMents.length > 0)
     ) {
       return (
-        <div
-          className="align-items-center d-none d-lg-flex"
-          style={{ marginBottom: 20 }}
-        >
-          {"Base Token"}
-          <YellowSwitch
-            value={true}
-            onChange={handleToggle}
-            checked={initialCheck}
-          />{" "}
-          USD
+        <div className="d-flex align-items-center justify-content-between mb-4">
+          <Heading>Farmer`s list</Heading>
+
+          <div className="d-flex align-items-center">
+            <SubHeading className="mr-3">Show in USD</SubHeading>
+            <Switch checked={isInUsd} onChange={handleToggle} />
+          </div>
         </div>
       );
     }
@@ -542,26 +546,6 @@ export const InvestmentsPage = () => {
                             />
                           )}
                         </CustomTableData>
-                        <>
-                          {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
-                            <CustomTableData>
-                              {(() => {
-                                const dons = new BigNumber(pendingReward)
-                                  .multipliedBy(initialInvestmentinUSD)
-                                  .dividedBy(investAmount);
-                                if (isInUsd) {
-                                  return donPrice.isReady
-                                    ? `$${dons
-                                        .multipliedBy(donPrice.price)
-                                        .toFixed(2)}`
-                                    : "-";
-                                } else {
-                                  return `${dons.toFixed(2)} DON`;
-                                }
-                              })()}
-                            </CustomTableData>
-                          )}
-                        </>
                         <CustomTableData className="bold">
                           <TotalProfitLoss
                             chainId={network}
@@ -584,13 +568,20 @@ export const InvestmentsPage = () => {
                                 const dons = new BigNumber(pendingReward)
                                   .multipliedBy(initialInvestmentinUSD)
                                   .dividedBy(investAmount);
+
                                 if (isInUsd) {
-                                  return donPrice.isReady
-                                    ? `$${dons
-                                        .multipliedBy(donPrice.price)
-                                        .toFixed(2)}`
-                                    : "-";
+                                  if (!dons.isNaN()) {
+                                    return donPrice.isReady
+                                      ? `$${dons
+                                          .multipliedBy(donPrice.price)
+                                          .toFixed(2)}`
+                                      : "-";
+                                  }
+                                  return "$ 0";
                                 } else {
+                                  if (dons.isNaN()) {
+                                    return "0 DON";
+                                  }
                                   return `${dons.toFixed(2)} DON`;
                                 }
                               })()}

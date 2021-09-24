@@ -1,4 +1,3 @@
-
 import { ButtonWidget } from "components/Button";
 import { useStakingContract } from "hooks";
 import { useEffect, useState } from "react";
@@ -386,7 +385,7 @@ export const StakingInfo = () => {
             disabled={isInCoolOffPeriod}
             className="py-1 px-3 mb-lg-3"
           >
-            Stake DON
+            {tier.tier > 0 ? "Upgrade Tier" : "Stake DON"}
           </StyledButton>
 
           <StyledButton
