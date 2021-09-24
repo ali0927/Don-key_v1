@@ -1,1 +1,0 @@
-export {DevelopersPage as default } from "./DevelopersPage";

@@ -1,1 +1,0 @@
-export {FarmerSignupPage as default } from "./FarmerSignupPage";
