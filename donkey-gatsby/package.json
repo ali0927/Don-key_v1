@@ -10,7 +10,7 @@
   "scripts": {
     "serve": "gatsby build && NODE_ENV=production gatsby serve",
     "build": "yarn compile:functions && gatsby build",
-    "compile:functions": "tsc --watch -p ./tsconfig-functions.json",
+    "compile:functions": "tsc -p ./tsconfig-functions.json",
     "dev": "gatsby develop",
     "clean": "gatsby clean",
     "lint": "eslint . --ext .js --cache",
