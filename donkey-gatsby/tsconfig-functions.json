@@ -4,7 +4,7 @@
     "target": "ESNext",
     "noImplicitAny": false,
     "noUnusedLocals": false,
-    "module": "CommonJS",
+    "module": "ES2020",
     "declaration": false,
     "sourceMap": false,
     "jsx": "react",

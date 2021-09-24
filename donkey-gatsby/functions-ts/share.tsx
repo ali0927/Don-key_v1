@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Loader } from "don-components";
 import { Handler } from "@netlify/functions";
 import { renderToString } from "react-dom/server";
 import { ServerStyleSheet, StyleSheetManager } from "styled-components";
@@ -108,7 +107,7 @@ function SharePage({ data, meta }: { data?: Data; meta?: Meta }) {
         <meta name="twitter:url" content={canonical} />
       </Helmet>
 
-      <Loader />
+      {/* <Loader /> */}
     </div>
   );
 }
