@@ -5,7 +5,7 @@ import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import {  waitFor } from "don-utils";
-import { captureException, getPoolValueInUSD } from "./";
+import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -127,6 +127,24 @@ export const isValidReferralCode = async (web3: Web3, code: string) => {
   return userInfo.referral.exists;
 };
 
+export const getPoolValue = async (web3: Web3, poolAddress: string) => {
+  try {
+    const amount = await getTotalPoolValue(web3, poolAddress);
+    const token = await getPoolToken(web3, poolAddress);
+    const decimals = await token.methods.decimals().call();
+    const bn = new BigNumber(toEther(amount, decimals)).toFixed(2);
+    return bn.toString();
+  } catch (e) {
+    captureException(e, "getPoolValue: " + poolAddress);
+    return "0";
+  }
+};
+export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
+  const totalPoolValue = await getPoolValue(web3, poolAddress);
+  const tokenPrice = await getTokenPrice(web3, poolAddress);
+
+  return new BigNumber(totalPoolValue).multipliedBy(tokenPrice).toString();
+};
 export const getUserAddressFromCode = async (web3: Web3, code: string) => {
   const referralContract = await getReferralSystemContract(web3);
   const userInfo = await referralContract.methods.userInfoFromCode(code).call();

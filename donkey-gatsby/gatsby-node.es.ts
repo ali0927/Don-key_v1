@@ -85,7 +85,7 @@ export const onCreateWebpackConfig = ({ actions }: any) => {
         util: false,
         http: require.resolve("http-browserify"),
         https: require.resolve("https-browserify"),
-        "web3-bzz": require.resolve("stream-browserify"),
+        "web3-bzz": false,
         os: false,
       },
     },
