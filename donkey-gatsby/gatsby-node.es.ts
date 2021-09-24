@@ -2,7 +2,6 @@ import path from "path"
 import webpack from "webpack";
 import _ from "lodash";
 import {calcSumOfAllPoolValues} from "./src/helpers/contractHelpers";
-import { IFarmerInter } from "interfaces";
 /**
  * Here is the place where Gatsby creates the URLs for all the
  * posts, tags, pages and authors that we fetched from the Ghost site.
@@ -226,7 +225,7 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   const farmers = farmersResp.data.allStrapiFarmers.nodes;
   const tvl = await calcSumOfAllPoolValues();
-  farmers.forEach((farmer: IFarmerInter) => {
+  farmers.forEach((farmer: any) => {
    const strategies = farmer.strategies;
    if (strategies.length > 0 && farmer.farmerImage) {
      createPage({
