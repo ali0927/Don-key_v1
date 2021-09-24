@@ -76,9 +76,8 @@ const StyledLink = styled.span`
   }
 `;
 
-const DisplayImage = styled.div<{image: any}>`
+const DisplayImage = styled.img`
   border-radius: 10px;
-  background-image: url(${props=>props.image});
 `;
 
 const SaveButton = styled(ButtonWidget)`
@@ -91,9 +90,12 @@ const SaveButton = styled(ButtonWidget)`
 
 const LoaderRoot = styled.div`
   position: absolute;
-  top: 0;
-  height: 100%;
-  width: 100%;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background-color: #fff;
+  z-index: 1;
 `;
 
 const ImageRoot = styled.div`
@@ -190,6 +192,7 @@ export const Slider: React.FC<{
 
   const handleSave = async () => {
     setIsLoading(true);
+    
     try {
       await api.put("/api/v2/shortener", {
         image: selectedBanner,
@@ -200,13 +203,12 @@ export const Slider: React.FC<{
     } finally {
       await refetch();
       setIsLoading(false);
+      setImageLoading(true);
       setIsEditOpen(false);
     }
   };
 
-  if (loading) {
-    return <Spinner animation="border" size="sm" />;
-  }
+
   return (
     <>
       {/* <ReferralImage
@@ -218,11 +220,11 @@ export const Slider: React.FC<{
 
       <ImageRoot className="position-relative">
         <DisplayImage
-          className={"img-fluid"}
-          image={bgImage}
+          className={clsx("img-fluid", {"d-non": imageLoading})}
+          src={bgImage}
           onLoad={() => setImageLoading(false)}
         />
-        {imageLoading && (
+        {(loading || imageLoading) && (
           <LoaderRoot className="d-flex align-items-center justify-content-center">
              <Spinner animation="border" />
           </LoaderRoot>
