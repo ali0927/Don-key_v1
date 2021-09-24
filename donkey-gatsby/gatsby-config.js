@@ -61,7 +61,6 @@ module.exports = {
         icon: `static/favicon.ico`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-catch-links`,
     `gatsby-plugin-react-helmet`
     // `gatsby-plugin-offline`,
   ],
