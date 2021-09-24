@@ -1,1 +1,1 @@
-/shared/:code  /.netlify/functions/share?code=:code  200
+/shared/:code  /.netlify/functions/share  200
