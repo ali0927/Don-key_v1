@@ -114,12 +114,14 @@ function SharePage({ data, meta }: { data?: Data; meta?: Meta }) {
 
 const handler: Handler = async (event) => {
   const params = event.queryStringParameters;
+  console.log(params);
   if (!params || !params.code) {
     return {
       statusCode: 404,
       body: "Not Found",
     };
   }
+
   const data = await fetchUrlFromCode(params.code);
   if (!data) {
     return {
