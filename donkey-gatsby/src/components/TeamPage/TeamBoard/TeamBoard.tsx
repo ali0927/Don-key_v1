@@ -28,6 +28,8 @@ const NextImage = styled.img`
   overflow: hidden;
   object-fit: cover;
   object-position: top;
+  width: 174px;
+  height: 174px;
 `;
 
 const Heading3 = styled.h3`
@@ -64,8 +66,6 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
           <CardContent className="flex-column align-items-center">
             <NextImage
               className="img-fluid"
-              width="174px"
-              height="174px"
               src={image}
               alt={name}
             />

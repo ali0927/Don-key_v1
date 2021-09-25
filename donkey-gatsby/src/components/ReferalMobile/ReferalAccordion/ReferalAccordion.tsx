@@ -126,7 +126,7 @@ export const ReferalAccordion: React.FC<IReferalAccordionProps> = (props) => {
                       </MobileHeading>
                     </div>
                     <div className="d-flex align-items-center justify-content-between  mb-2">
-                      <MobileCaption>Earned</MobileCaption>
+                      <MobileCaption>Materialized </MobileCaption>
                       <MobileHeading>
                         {investment.expired ? "Yes" : "No"}
                       </MobileHeading>

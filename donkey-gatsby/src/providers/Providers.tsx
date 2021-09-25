@@ -20,6 +20,18 @@ export const Providers: React.FC = ({ children }) => {
         image="https://don-key.finance/images/donkey-icon.png"
       />
       <Helmet>
+       {/** Slick slider cdns */}
+      <link
+            rel="stylesheet"
+            type="text/css"
+            charSet="UTF-8"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+          />
         <script
           async
           src="https://www.googletagmanager.com/gtag/js?id=G-92MQHF1VSY"

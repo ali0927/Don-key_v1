@@ -600,7 +600,7 @@ const MyReferrals = () => {
                           </CustomTableHeading>
                           <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
                           <CustomTableHeading>Rewards</CustomTableHeading>
-                          <CustomTableHeading>Earned</CustomTableHeading>
+                          <CustomTableHeading>Materialized </CustomTableHeading>
                         </TableRow>
                       </TableHead>
                       <TableBody>
