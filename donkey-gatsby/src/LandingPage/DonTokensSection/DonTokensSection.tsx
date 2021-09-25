@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Heading3 } from "../components";
-import Lines from "./images/img.png";
 import styled from "styled-components";
-import Donkey from "./images/donkey.png";
 import { breakPoints } from "breakponts";
+import { StaticImage } from 'gatsby-plugin-image'
 
 const Root = styled.div`
   margin-top: 120px;
@@ -52,18 +51,14 @@ export const DonTokenSection: React.FC = () => {
           <Row className="mt-5 mb-5 justify-content-between">
             <Col lg={4} className="d-flex align-items-center mb-3 mb-lg-0">
               <div>
-                <img
-                  src={Donkey}
-                  className="d-inline-block"
-                  alt="ImageNotFound"
-                />
+              <StaticImage className="d-inline-block" src="./images/donkey.png" alt="ImageNotFound" />
               </div>
             </Col>
             <Col lg={8}>
               <div>
                 <div className="d-flex">
                   <LineRoot className="d-flex justify-content-lg-end mr-5 mt-2">
-                    <img src={Lines} alt="Image not found" />
+                    <StaticImage src="./images/img.png" alt="Image not found" />
                   </LineRoot>
                   <div className="d-flex flex-column justify-content-between">
                     <div>

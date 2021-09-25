@@ -1,5 +1,5 @@
-import roadmap from "./images/banner.png"
+import { StaticImage } from 'gatsby-plugin-image'
 import React from "react";
 export const RoadMap = () => {
-  return <img src={roadmap} className="w-100" />
+  return <StaticImage src="./images/banner.png" alt="roadmap" />
 }

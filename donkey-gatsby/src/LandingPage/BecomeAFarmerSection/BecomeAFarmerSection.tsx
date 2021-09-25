@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
-import buildStrategy from "../build-strategy.png";
-import getLiquidity from "../get-liquidity.png";
-import boostyield from "../boost-yield.png";
+import { StaticImage } from 'gatsby-plugin-image'
 import styled from "styled-components";
 import { Heading3 } from "../components";
 
@@ -55,8 +53,8 @@ const CardFooter = styled.div`
 
 const Icons = styled.div`
   height: 265px;
-  display: block;
-  margin: 0 auto;
+  display: grid;
+  place-items: center;
   margin-bottom: 75px !important;
 `;
 
@@ -83,7 +81,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 <Card className="h-100">
                   <Card.Body>
                     <Icons>
-                      <img src={buildStrategy} />
+                    <StaticImage src="../build-strategy.png" alt="Build your strategy" />
                     </Icons>
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-4 text-center">
@@ -98,7 +96,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 <Card className="h-100">
                   <Card.Body>
                     <Icons>
-                      <img src={getLiquidity} />
+                    <StaticImage src="../get-liquidity.png" alt="Get liquidity" />
                     </Icons>
                     <Card.Title>Get liquidity</Card.Title>
                     <Card.Text className="mt-4 text-center">
@@ -112,7 +110,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 <Card className="h-100">
                   <Card.Body>
                     <Icons>
-                      <img src={boostyield} />
+                    <StaticImage src="../boost-yield.png" alt="Boost your yield" />
                     </Icons>
 
                     <Card.Title>Boost your yield</Card.Title>
