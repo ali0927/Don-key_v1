@@ -20,6 +20,7 @@ import { useWalletAddress } from "hooks";
 import { useReferralContext } from "contexts/ReferralContext";
 import { api } from "strapi";
 import { navigate } from "gatsby-link";
+import { captureException } from "helpers";
 
 const ConnectButton = styled(ButtonWidget)`
   border: 2px solid #222222;
@@ -72,9 +73,16 @@ export const getAuthTokenForPublicAddress = async (web3: Web3) => {
   return await getAuthToken(publicAddress, signature);
 };
 
+
+
 export const signUser = async (web3: Web3) => {
-  const token = await getAuthTokenForPublicAddress(web3);
-  localStorage.setItem(AuthToken, token.token);
+  try {
+    const token = await getAuthTokenForPublicAddress(web3);
+    localStorage.setItem(AuthToken, token.token);
+  } catch(e){
+    captureException(e, "Sign User Error")
+  }
+  
 };
 
 const ConnectWalletButton = () => {
