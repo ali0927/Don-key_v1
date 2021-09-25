@@ -10,3 +10,4 @@ export * from "./api";
 export * from "./shortenAddress";
 export * from "./timeSince";
 export * from "./waitFor";
+export * from "./nextTick";

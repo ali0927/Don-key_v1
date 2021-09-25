@@ -122,7 +122,7 @@ export const InactiveNetworkCard = ({
             onClick={() => switchNetwork(correctNetwork.chainId)}
           >
             <img
-              src="/images/usericon.png"
+              src="/assets/images/usericon.png"
               className="d-inline-block align-top mr-md-2"
               alt="Metamask Icon"
             />{" "}
@@ -185,7 +185,7 @@ export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
     </DonButtonOutlined> */}
         <DonButtonContained onClick={handleConnect}>
           <img
-            src="/images/usericon.png"
+            src="/assets/images/usericon.png"
             className="d-inline-block align-top mr-md-2"
             alt="Metamask Icon"
           />{" "}

@@ -1,7 +1,7 @@
-import path from "path"
+import path from "path";
 import webpack from "webpack";
 import _ from "lodash";
-import {calcSumOfAllPoolValues} from "./src/helpers/contractHelpers";
+import { calcSumOfAllPoolValues } from "./src/helpers/contractHelpers";
 /**
  * Here is the place where Gatsby creates the URLs for all the
  * posts, tags, pages and authors that we fetched from the Ghost site.
@@ -18,7 +18,7 @@ export const onCreateNode = async ({
     const allNodes = getNodes();
 
     node.strategies.map((item: any) => {
-      let associatedFarmer:any = null;
+      let associatedFarmer: any = null;
       let associatedRisk: any = null;
 
       allNodes.forEach((farmerNode: any) => {
@@ -75,7 +75,11 @@ export const onCreateWebpackConfig = ({ actions }: any) => {
     plugins: [
       new webpack.ProvidePlugin({
         Buffer: [require.resolve("buffer/"), "Buffer"],
+        'process.nextTick': ['don-utils', 'nextTick']
       }),
+      new webpack.IgnorePlugin({
+        resourceRegExp: /^electron$/,
+      })
     ],
     resolve: {
       fallback: {
@@ -85,7 +89,6 @@ export const onCreateWebpackConfig = ({ actions }: any) => {
         util: false,
         http: require.resolve("http-browserify"),
         https: require.resolve("https-browserify"),
-        "web3-bzz": false,
         os: false,
       },
     },
@@ -231,20 +234,20 @@ export const createPages = async ({ graphql, actions }: any) => {
     force: true,
     toPath: `${process.env.GATSBY_API_URL}/api/v2/share/:splat`,
     statusCode: 200,
-  })
+  });
   farmers.forEach((farmer: any) => {
-   const strategies = farmer.strategies;
-   if (strategies.length > 0 && farmer.farmerImage) {
-     createPage({
-       path: `/dashboard/farmer/${farmer.slug}`,
-       component: path.resolve(`./src/templates/farmerTemplate.tsx`),
-       context: {
-         data: {
+    const strategies = farmer.strategies;
+    if (strategies.length > 0 && farmer.farmerImage) {
+      createPage({
+        path: `/dashboard/farmer/${farmer.slug}`,
+        component: path.resolve(`./src/templates/farmerTemplate.tsx`),
+        context: {
+          data: {
             farmers: [farmer],
-         },
-         tvl
-       },
-     });
-   }
- });
+          },
+          tvl,
+        },
+      });
+    }
+  });
 };
