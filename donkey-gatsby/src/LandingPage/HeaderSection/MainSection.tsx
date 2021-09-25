@@ -17,13 +17,13 @@ const Root = styled.div`
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
   }
-`;
 
-const Rounded = styled.div`
+  img.rounded-image {
     position: absolute;
-    bottom: 6.9%;
     height: 100%;
     width: 100%;
+    bottom: -7%;
+}
 `;
 
 const Heading = styled.h1`
@@ -35,7 +35,6 @@ const Heading = styled.h1`
 `;
 
 const Paragraph = styled.p`
-  
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -136,10 +135,8 @@ export const MainSection: React.FC = () => {
   return (
     <>
       <Root className="position-relative">
-         <Rounded>
-          {/* <img src={MainImage} alt="bg"  /> */}
-        </Rounded>
-
+        <img className="rounded-image" src={MainImage} alt="bg"  />
+        
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5">
@@ -185,10 +182,6 @@ export const MainSection: React.FC = () => {
             </FooterRow>
           </div>
         </div>
-    
-     
-    
-    
       </Root>
     </>
   );

@@ -3,6 +3,7 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import { StaticImage } from 'gatsby-plugin-image'
 import styled from "styled-components";
 import { Heading3 } from "../components";
+import line from './images/line.png'
 
 const CardBanner = styled.div`
   position: relative;
@@ -65,6 +66,10 @@ const LinesRoot = styled.div`
   z-index: 100;
   display: flex;
   justify-content: center;
+
+  img {
+    width: 73%;
+  }
 `;
 
 export const BecomeAFarmerSection: React.FC = () => {
@@ -122,7 +127,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                 </Card>
               </Col>
               <LinesRoot className="d-none d-lg-flex">
-                {/* <img src={line} alt="Lines" /> */}
+                <img src={line} alt="Lines" />
               </LinesRoot>
             </Row>
           </Container>
