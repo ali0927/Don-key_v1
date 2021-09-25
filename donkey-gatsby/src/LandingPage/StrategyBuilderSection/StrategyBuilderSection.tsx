@@ -1,12 +1,10 @@
-
+import { StaticImage } from 'gatsby-plugin-image'
 import * as React from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
-import BuilderImage from "../Strategy.png";
 import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
-
 
 const Root = styled.div`
   background:${theme.palette.background.yellow};
@@ -54,7 +52,7 @@ const TradingImageRoot = styled.div`
 
 const TradingImage = styled.div`
   top: -65px;
-  min-width: 610px;
+  min-width: 1000px;
   position: absolute;
   @media screen and (max-width: 800px) {
     position: relative;
@@ -92,7 +90,7 @@ export const StrategyBuilderSection: React.FC = () => {
                   className="position-relative mt-4"
                 >
                   <ImageCommingSoon >
-                    <img src={comingsoon} />
+                    <img src={comingsoon} alt="comming soon icon" />
                   </ImageCommingSoon>
                   Build strategy
                 </StyledButtonWidget>
@@ -100,8 +98,8 @@ export const StrategyBuilderSection: React.FC = () => {
             </Col>
             <Col lg={4}>
               <TradingImageRoot>
-                <TradingImage  >
-                  <img src={BuilderImage} />
+                <TradingImage>
+                <StaticImage src="../Strategy.png" alt="strategy cover" />
                 </TradingImage>
               </TradingImageRoot>
             </Col>

@@ -28,7 +28,14 @@ module.exports = {
         name: `images`,
       },
     },
-    `gatsby-plugin-sharp`,
+    {
+      resolve: `gatsby-plugin-sharp`,
+      options: {
+        defaults: {
+          placeholder: `tracedSVG`,
+        },
+      },
+    },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-provide-react`,
     {
