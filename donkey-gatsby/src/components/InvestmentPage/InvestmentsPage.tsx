@@ -51,7 +51,7 @@ import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { NetworkButton } from "components/NetworkButton";
 
 export const Heading = styled.div`
-  font-family: ""Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"";
+  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-weight: 500;
   font-size: 20x;
   color: #000000;

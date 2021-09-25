@@ -2195,6 +2195,16 @@
     "@ethersproject/properties" "^5.4.0"
     "@ethersproject/strings" "^5.4.0"
 
+"@fontsource/poppins@^4.5.0":
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/poppins/-/poppins-4.5.0.tgz#a419697b85864afbf8363f5c247b1e9d1f117564"
+  integrity sha512-RqgMIQqKHWNH3IUj+a0MAhlb4g5fftsXRTJ2bauefBmfM8Ja5q+qQZjKwyB/iCc+paJD320zFnLJ8G+y1ZyemQ==
+
+"@fontsource/work-sans@^4.5.1":
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/work-sans/-/work-sans-4.5.1.tgz#b5fdff3f62ca8ac23e7c91e424ec64464ebd4023"
+  integrity sha512-3mvsBxQtxlAyu4uzwKgtI38rZ5V5ZBSz3CgIwQsD1N3DmrT7T1NRLFgO34GxZiUpWSjE04IHPp4Y2GKUWpmFsg==
+
 "@gar/promisify@^1.0.1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.2.tgz#30aa825f11d438671d585bd44e7fd564535fc210"

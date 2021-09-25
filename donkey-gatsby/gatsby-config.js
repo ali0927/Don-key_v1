@@ -28,14 +28,6 @@ module.exports = {
         name: `images`,
       },
     },
-    {
-      resolve: "gatsby-plugin-web-font-loader",
-      options: {
-        google: {
-          families: ["Poppins", "Work Sans"],
-        },
-      },
-    },
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     `gatsby-plugin-provide-react`,
