@@ -2,11 +2,16 @@ import * as React from "react";
 import { ITeamBoardProps } from "./interfaces";
 import styled from "styled-components";
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { breakPoints } from "breakponts";
 
 const Column = styled.div`
   margin-bottom: 140px;
   padding-left: 18px;
   padding-right: 18px;
+  margin-bottom: 98px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    margin-bottom: 140px;
+  }
 `;
 
 const CardWarpper = styled.div`
@@ -27,20 +32,20 @@ const NextImage = styled.img`
   border-radius: 50%;
   overflow: hidden;
   object-fit: cover;
-  object-position: top;
+  object-position: center;
   width: 174px;
-  height: 174px;
+  height: 174px !important;
 `;
 
 const Heading3 = styled.h3`
-  
-  font-size: 1.37rem;
+  font-family: "Poppins";
+  font-size: 21px;
+  font-weight: 500;
   margin-bottom: 8px;
 `;
 
 const SubTitle = styled.p`
-  
-  font-size: 0.88rem;
+  font-size: 14px;
   color: #8b8b8b;
   margin-bottom: 5px;
   text-align: center;
@@ -64,11 +69,7 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
       <Column className="col-md-4 col-lg-3">
         <CardWarpper className="position-relative">
           <CardContent className="flex-column align-items-center">
-            <NextImage
-              className="img-fluid"
-              src={image}
-              alt={name}
-            />
+            <NextImage className="img-fluid" src={image} alt={name} />
             <Heading3 className="mt-4 text-center">{name}</Heading3>
             <SubTitle>{designation}</SubTitle>
             <IconsRoot className="d-flex justify-content-around">
@@ -89,28 +90,3 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
     </>
   );
 };
-
-{
-  /* <UserRoot className="shadow-sm d-flex flex-column">
-<div>
-    <Thumb>
-       <img className="img-fluid" src={image} alt="ImageNotFound" />
-    </Thumb>
-
-
-    <Heading3 className="mt-4 text-center">{name}</Heading3>
-    <SubTitle>{designation}</SubTitle>
-   
-</div>
-</UserRoot> */
-}
-
-{
-  /* <UserRoot className="shadow-sm py-5 p-3 d-flex">
-        
-<Heading3 className="mt-4 text-center">{name}</Heading3>
-<SubTitle>{designation}</SubTitle>
-
-
-</UserRoot> */
-}
