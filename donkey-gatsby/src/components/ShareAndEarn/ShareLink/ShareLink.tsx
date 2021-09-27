@@ -65,9 +65,18 @@ const TelegramButton = styled(ButtonWidget)`
   }
 `;
 
+const StyledLink = styled.a`
+  cursor: pointer;
+  text-decoration: underline;
+  color: #909090;
+  &:hover {
+    text-decoration: none;
+    color: #909090;
+  }
+`;
+
 export const ShareLink: React.FC<IShareLinkProps> = (props) => {
   const [openTooltip, setOpenTooltip] = React.useState(false);
-
 
   const { tvl } = useTVL(props.poolAddress, props.chainId);
 
@@ -174,6 +183,9 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           </div>
 
           <div className="col-lg-2 d-none d-md-block" />
+        </div>
+        <div className="d-flex justify-content-center mt-2">
+          <StyledLink href="#" target="_blank">Read More</StyledLink>
         </div>
       </>
     );
