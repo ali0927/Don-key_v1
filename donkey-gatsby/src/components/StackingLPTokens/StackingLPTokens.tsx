@@ -113,8 +113,7 @@ export const StackingLPTokens: React.FC = () => {
             <div className="col-lg-5 d-flex flex-column justify-content-center">
               <Heading className="my-1">Stake LP Tokens</Heading>
               <SubHeading>
-                Deposit DON LP token to gain Don rewards And participate in The
-                lottery{" "}
+                Deposit $DON LP token to gain $DON rewards and coming soon will gain you access to the Don-key DAPP tiers
               </SubHeading>
             </div>
             <div className="col-lg-7 d-lg-flex align-items-center justify-content-end d-none ">
@@ -130,7 +129,7 @@ export const StackingLPTokens: React.FC = () => {
           <StakingCard
             networkData={{
               chainId: ETHEREUM_CHAIN_ID,
-              networkName: "Ethereum Pool",
+              networkName: "ERC20 Pool",
               ...ethStaking,
               tokenSymbol: "LP",
               buttons: [
@@ -143,7 +142,7 @@ export const StackingLPTokens: React.FC = () => {
             <StakingCard
               networkData={{
                 chainId: BINANCE_CHAIN_ID,
-                networkName: "Binance",
+                networkName: "BEP20 Pool",
                 ...bnbStaking,
                 tokenSymbol: "LP",
                 buttons: [
