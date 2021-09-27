@@ -1,5 +1,4 @@
 import React from "react";
-import { ButtonWidget } from "../Button/ButtonWidget";
 import styled from "styled-components";
 
 import UserIcon from "../../images/usericon.png";
@@ -9,6 +8,8 @@ import { Popover } from "@material-ui/core";
 import { useWalletStyles } from "./styles/useWalletStyles";
 import { useWeb3Context } from "don-components";
 import { shortLargeAddress } from "helpers";
+import { NavButton } from "components/NavButton";
+import { NavWalletIcon } from "icons/NavWalletIcon";
 const AddressRoot = styled.div`
   background: #000000;
   min-height: 41px;
@@ -40,7 +41,7 @@ const Hr = styled.hr`
   margin: 0px;
 `;
 
-export const Wallet: React.FC = () => {
+export const Wallet = () => {
   const shortAddress = useWalletAddress({ short: true });
   let fullAddress = useWalletAddress({ short: false });
   fullAddress = shortLargeAddress(fullAddress, 12);
@@ -54,10 +55,10 @@ export const Wallet: React.FC = () => {
   const id = open ? "simple-popper" : undefined;
 
   const handleClick = (
-    event: React.MouseEvent<HTMLButtonElement | HTMLDivElement>
+    event: React.MouseEvent
   ) => {
     event.stopPropagation();
-    setAnchorEl(anchorEl ? null : event.currentTarget);
+    setAnchorEl(anchorEl ? null : event.currentTarget as any);
   };
 
   const handleClose = () => {
@@ -66,16 +67,13 @@ export const Wallet: React.FC = () => {
 
   return (
     <>
-      <ButtonWidget
+      <NavButton
         className="d-flex align-items-center justify-content-center"
-        varaint="outlined"
-        height="40px"
-        width="128px"
         onClick={handleClick}
       >
-        <img src={UserIcon} alt="UserIcon image not found" />
+        <NavWalletIcon />
         <span className="ml-2"> {shortAddress} </span>
-      </ButtonWidget>
+      </NavButton>
       <Popover
         id={id}
         classes={{ paper: classes.paper }}

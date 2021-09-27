@@ -24,6 +24,17 @@ interface IDonKeyTheme {
             yellow: string;
         };
     };
+    mediaQueries: {
+        sm: {
+            up: string;
+        }
+        md: {
+            up: string;
+        };
+        lg: {
+            up: string;
+        }
+    }
 };
 
 export const theme: IDonKeyTheme = {
@@ -51,5 +62,15 @@ export const theme: IDonKeyTheme = {
         }
 
     },
-    
+    mediaQueries: {
+        sm: {
+            up: `@media (min-width: 576px)`
+        },
+        md: {
+            up: `@media (min-width: 768px)`
+        },
+        lg: {
+            up:'@media (min-width: 992px)'
+        }
+    }
 }

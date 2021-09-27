@@ -1,4 +1,4 @@
 export interface INavBarProps {
-    variant?: "landing"  | "loggedin" | "builder";
+    variant?: "landing"  | "loggedin";
     hideWallet?: boolean;
 }

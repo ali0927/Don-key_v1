@@ -44,9 +44,9 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   const resetState = () => setState(INITIAL_STATE);
   useIsomorphicEffect(() => {
     if(connected){
-      signUser(getConnectedWeb3());
+      // signUser(getConnectedWeb3());
     } else {
-      localStorage.removeItem(AuthToken);
+      // localStorage.removeItem(AuthToken);
     }
   }, [connected, address])
   useIsomorphicEffect(() => {
