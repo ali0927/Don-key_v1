@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import { NavBar } from "components/Navbar";
 import { useReferralContext } from "contexts/ReferralContext";
-import { Switch } from "don-components";
+import { SwitchRow } from "don-components";
 import {
   calculateInitialInvestment,
   captureException,
@@ -52,7 +52,9 @@ import { ShowAmount } from "components/ReferalMobile/ShowAmount";
 import { navigate } from "gatsby-link";
 
 const HeadingTitle = styled.p`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 24px;
   color: "#070602";
   margin: 0px;
@@ -386,7 +388,9 @@ const HrLine = styled.hr`
 `;
 
 export const Heading = styled.div`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 500;
   font-size: 20x;
   color: #000000;
@@ -464,14 +468,14 @@ const MyReferrals = () => {
   };
 
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
-   navigate("/dashboard/farmer/" + poolAddress);
+    navigate("/dashboard/farmer/" + poolAddress);
   };
 
   return (
     <div className="bgColor investment_header_container">
       <NavBar variant="loggedin" />
       <Section>
-        <Head className="navbanHead rounded-0 pt-5 pb-5">
+        <Head className="navbanHead rounded-0 pt-3 pt-lg-5 pb-5">
           <Container>
             <Row>
               <Col lg={12}>
@@ -494,7 +498,7 @@ const MyReferrals = () => {
                   </div>
                 </div>
 
-                <div className="row mt-5 justify-content-between">
+                <div className="d-flex mt-4 mt-lg-5 justify-content-between flex-wrap">
                   <Column width="78%" className="mb-4 mb-lg-0">
                     <Card>
                       <div className="row h-100 w-100 align-items-center justify-content-center">
@@ -554,8 +558,8 @@ const MyReferrals = () => {
           </Container>
         </Head>
       </Section>
-      <GridBackground className="py-5">
-        <div className="mt-5 mb-5 tablebgHead">
+      <GridBackground className="py-3 py-lg-5">
+        <div className="mt-lg-5 mb-5 tablebgHead">
           <Container>
             {!isReady && (
               <>
@@ -572,17 +576,14 @@ const MyReferrals = () => {
                     toggle: toggleCurrency,
                   }}
                 >
-                  <div className="d-flex align-items-center justify-content-between mb-4">
-                    <Heading>Farmer`s list</Heading>
-
-                    <div className="d-flex align-items-center">
-                      <SubHeading className="mr-3">Show in USD</SubHeading>
-                      <Switch
-                        checked={isInUsd}
-                        onChange={() => setIsInUsd(!isInUsd)}
-                      />
-                    </div>
-                  </div>
+                  <SwitchRow
+                    className="mb-4"
+                    heading="Farmer`s list"
+                    subHeading={"Show in USD"}
+                    checked={isInUsd}
+                    onSwitchChange={() => setIsInUsd(!isInUsd)}
+                  />
+            
                   <TableResponsive className="d-none d-lg-block">
                     <Table>
                       <TableHead>
