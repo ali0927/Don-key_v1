@@ -167,6 +167,7 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
+
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery($chainId: Int!) {
     farmers(
@@ -620,6 +621,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
+          accordionId="new-investments"
             investments={filteredInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
@@ -722,6 +724,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
+            accordionId="old-investments"
             investments={filteredOldInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
@@ -747,7 +750,9 @@ export const InvestmentsPage = () => {
             <Container>
               <Row>
                 <Col lg={12}>
-                  <HeadingTitle className="mb-0 mb-lg-3">My Investments</HeadingTitle>
+                  <HeadingTitle className="mb-0 mb-lg-3">
+                    My Investments
+                  </HeadingTitle>
                   <div className="row align-items-center justify-content-between mb-4 mb-lg-5 flex-wrap">
                     <div className="col-12 col-md-8 col-lg-9 mb-1">
                       <TotalInvestedAmount>

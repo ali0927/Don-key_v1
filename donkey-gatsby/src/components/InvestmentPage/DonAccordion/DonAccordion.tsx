@@ -30,7 +30,7 @@ const StyledApyIcon = styled(BoostApyWhiteIcon)`
 `;
 
 export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
-  const { investments, poolAddresses, refresh, donPrice } = props;
+  const { accordionId,investments, poolAddresses, refresh, donPrice } = props;
   const { chainId: network } = useWeb3Context();
   const { isUSD: isInUsd } = useUSDViewBool();
   const {
@@ -69,7 +69,7 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
 
   return (
     <>
-      <Accordion id="accordion-investment" className=" d-md-block d-lg-none">
+      <Accordion id={accordionId} className=" d-md-block d-lg-none">
         {investments.map((investment, index) => {
           let poolAddressFinal = poolAddresses.find((item: any) => {
             return investment.name === item.name;
@@ -124,7 +124,7 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
                   </div>
                 </AccordionHeaderRow>
 
-                <AccordionDetails accordionId="accordion-referal" index={index}>
+                <AccordionDetails accordionId={accordionId} index={index}>
                   <div className="d-block w-100">
                     <div className="d-flex align-items-center justify-content-between mb-2">
                       <AccordionCaptionText>Last Cycle</AccordionCaptionText>

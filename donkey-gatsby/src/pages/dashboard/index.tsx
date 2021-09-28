@@ -10,17 +10,24 @@ import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { Col, Row } from "react-bootstrap";
 import { graphql, useStaticQuery } from "gatsby";
+import { breakPoints } from "breakponts";
 const Root = styled.div`
   background-color: ${theme.palette.background.yellow};
 `;
-const FarmerTitle = styled.p({
-  fontSize: "45px",
-  fontStyle: "normal",
-  letterSpacing: "0em",
-  textAlign: "left",
-  color: "#070602",
-  fontFamily: `"Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"`,
-});
+const FarmerTitle = styled.p`
+  font-size: 24px;
+  font-style: normal;
+  letter-spacing: 0em;
+  font-weight: 800;
+  text-align: left;
+  color: #070602;
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 45px;
+  }
+`;
 
 export const CustomizedContainer = styled.div`
   width: 100%;
@@ -48,7 +55,10 @@ const RootWrapper = styled.div`
   background-color: ${theme.palette.background.yellow};
   border-radius: 0px !important;
   clip-path: polygon(0 0, 225% 0%, 43% 119%, 0% 83%);
-  padding-bottom: 8rem;
+  padding-bottom: 5rem;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    padding-bottom: 8rem;
+  }
 `;
 
 const Body = styled.div`
@@ -86,7 +96,6 @@ export default function Dashboard() {
 
   const data = useStaticQuery(graphql`
     query TokensList {
-
       allStrapiTokens {
         nodes {
           id
@@ -107,7 +116,7 @@ export default function Dashboard() {
             slug
           }
           strategies {
-            farmer{
+            farmer {
               status
               strapiId
             }
@@ -117,29 +126,28 @@ export default function Dashboard() {
     }
   `);
 
-  const tokens: IStrapiToken[] = data.allStrapiTokens.nodes.filter((item: any) => {
-    const isActive = item.status === "active";
-    if (!isActive) {
-      return isActive;
-    } else {
-      const strategies = item.strategies.filter(
-        (item: any) => {
+  const tokens: IStrapiToken[] = data.allStrapiTokens.nodes.filter(
+    (item: any) => {
+      const isActive = item.status === "active";
+      if (!isActive) {
+        return isActive;
+      } else {
+        const strategies = item.strategies.filter((item: any) => {
           const farmer = item.farmer;
           // const farmer = farmers.find((item: any) => item.strapiId === farmerId);
-          return farmer && farmer.status === "active"
-        }
-      );
+          return farmer && farmer.status === "active";
+        });
 
-      return strategies.length > 0;
+        return strategies.length > 0;
+      }
     }
-  });
-
+  );
 
   return (
     <>
       <Root>
         <NavBar variant={"loggedin"} />
-        <RootWrapper className="pt-5 position-relative">
+        <RootWrapper className="pt-2 pt-lg-5 position-relative">
           <CustomizedContainer>
             <Row>
               <Ellipse1>
