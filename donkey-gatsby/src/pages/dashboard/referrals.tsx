@@ -825,7 +825,7 @@ const MyReferrals = () => {
                 <ZeroInvestmentBox>
                   <ZeroInvestmentInnerBox>
                     <ZeroInvestmentContent>
-                      You have no Referrals
+                      You have no referrals
                     </ZeroInvestmentContent>
                   </ZeroInvestmentInnerBox>
                 </ZeroInvestmentBox>
