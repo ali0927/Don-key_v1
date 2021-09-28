@@ -84,7 +84,7 @@ export const BecomeAFarmerSection: React.FC = () => {
         <CardFooter>
           <Container>
             <Heading3 className="mb-0 mb-md-5 px-4 text-md-center">
-              Become a <br/> Don-key farmer
+              Become a <br className="d-md-none"/> Don-key farmer
             </Heading3>
             <Row className="pt-5 position-relative">
               <Col lg={4}>
