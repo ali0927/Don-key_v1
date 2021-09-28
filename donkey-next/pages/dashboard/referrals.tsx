@@ -409,6 +409,35 @@ export const Column = styled.div<{ width: string }>`
   }
 `;
 
+const PAST_EARNINGS = gql`
+  query UserRewards($affiliateAddress: String!) {
+    userRewardeds(where: { to: $affiliateAddress }) {
+      from
+      to
+      pool
+      profitValue
+      timeStamp
+      rewardAmountInUSD
+      rewardAmountInDon
+    }
+  }
+`;
+
+const PastReferrals = () => {
+  const { data, loading } = useQuery(PAST_EARNINGS, {
+    client: thegraphClient,
+  });
+  if (loading) {
+    return (
+      <AnimationDiv className="d-flex align-items-center justify-content-center">
+        <Spinner animation="border" />
+      </AnimationDiv>
+    );
+  }
+  console.log(data);
+  return null;
+};
+
 const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
@@ -443,7 +472,10 @@ const MyReferrals = () => {
     const rewardSystem = await getRewardSystemContract(connectedWeb3);
     const accounts = await connectedWeb3.eth.getAccounts();
     const user = await rewardSystem.methods.userInfo(accounts[0]).call();
-    setEarned(toEther(user.totalRewards));
+    const totalRewards = toEther(user.totalRewards);
+    const rewardsDebt = toEther(user.rewardsDebt);
+    const earned = new BigNumber(totalRewards).minus(rewardsDebt);
+    setEarned(earned.toFixed(4));
     setAvailable(toEther(user.rewardsDebt));
   };
   useEffect(() => {
@@ -572,8 +604,6 @@ const MyReferrals = () => {
                   }}
                 >
                   <div className="d-flex align-items-center justify-content-between mb-4">
-                    <Heading>Farmer`s list</Heading>
-
                     <div className="d-flex align-items-center">
                       <SubHeading className="mr-3">Show in USD</SubHeading>
                       <Switch
@@ -599,7 +629,6 @@ const MyReferrals = () => {
                           </CustomTableHeading>
                           <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
                           <CustomTableHeading>Rewards</CustomTableHeading>
-                          <CustomTableHeading>Earned</CustomTableHeading>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -644,9 +673,6 @@ const MyReferrals = () => {
                                   isDon
                                 />
                               </CustomTableData>
-                              <CustomTableData>
-                                {investment.expired ? "Yes" : "No"}
-                              </CustomTableData>
                             </TableRow>
                           );
                         })}
@@ -657,7 +683,10 @@ const MyReferrals = () => {
                 </USDViewProvider>
               </>
             )}
-
+            <div className="d-flex align-items-center justify-content-between mb-4">
+              <Heading>Past Earnings</Heading>
+              <PastReferrals />
+            </div>
             {isReady && transformedData.length === 0 && (
               <>
                 <ZeroInvestmentBox>

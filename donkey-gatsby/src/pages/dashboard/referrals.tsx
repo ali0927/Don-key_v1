@@ -9,6 +9,7 @@ import {
   formatNum,
   getAmount,
   getDonPriceWeb3,
+  getPoolContract,
   getReferralSystemContract,
   getRewardSystemContract,
   getTokenPrice,
@@ -16,7 +17,7 @@ import {
   toEther,
 } from "helpers";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { Col, Container, Row, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { theme } from "theme";
@@ -180,6 +181,7 @@ const calcDonRewards = async (
     };
   }
   const poolAddress = referrerInfo.poolAddress;
+
   const amountWithdraw = await getAmount(web3, poolAddress, wallet_address);
 
   const amountInitial = await calculateInitialInvestment(
@@ -305,7 +307,18 @@ const useTransformedData = () => {
           const referrerInfo: ReferrerInfo = await referralContract.methods
             .referrerInfo(wallet_address)
             .call();
+          const contract = await getPoolContract(
+            web3,
+            referrerInfo.poolAddress,
+            2
+          );
 
+          const isInvested = await contract.methods
+            .isInvestor(wallet_address)
+            .call();
+          if (!isInvested) {
+            return null;
+          }
           const symbol = await getTokenSymbol(web3, referrerInfo.poolAddress);
           const { profit, don, investedAmount } = await calcDonRewards(
             web3,
@@ -414,6 +427,156 @@ export const Column = styled.div<{ width: string }>`
   }
 `;
 
+const PAST_EARNINGS = gql`
+  query UserRewards($affiliateAddress: String!) {
+    userRewardeds(where: { to: $affiliateAddress }) {
+      from
+      to
+      pool
+      profitValue
+      timeStamp
+      rewardAmountInUSD
+      tier
+      rewardAmountInDon
+    }
+  }
+`;
+type IUserRewards = {
+  from: string;
+  pool: string;
+  profitValue: string;
+  rewardAmountInDon: string;
+  rewardAmountInUSD: string;
+  timeStamp: string;
+  tier: string;
+};
+
+type IState = IUserRewards & {
+  farmerImage: string;
+  farmerName: string;
+  slug: string;
+};
+
+const RedirectToFarmerProfile = (poolAddress: string) => () => {
+  navigate("/dashboard/farmer/" + poolAddress);
+};
+const PastReferrals = memo(({ walletAddress }: { walletAddress: string }) => {
+  const { data, loading } = useQuery<{ userRewardeds: IUserRewards[] }>(
+    PAST_EARNINGS,
+    {
+      client: thegraphClient,
+      variables: {
+        affiliateAddress: walletAddress,
+      },
+    }
+  );
+
+  const [transformedData, setTransformedData] = useState<IState[]>([]);
+  const { data: farmersData } = useQuery(ALL_FARMER_QUERY);
+
+  const { chainId: network } = useWeb3Context();
+  const farmers: IFarmerInter[] = useMemo(() => {
+    if (farmersData) {
+      return farmersData.farmers
+        .filter((item: IFarmerInter) => {
+          return item?.network?.chainId === network;
+        })
+        .map((item: IFarmerInter) => {
+          return item;
+        });
+    }
+    return [];
+  }, [farmersData, network]);
+  const transformData = () => {
+    if (data?.userRewardeds) {
+      const result: IState[] = data.userRewardeds.map((reward) => {
+        const farmer = farmers.find(
+          (item) => item.poolAddress.toLowerCase() === reward.pool.toLowerCase()
+        );
+
+        return {
+          ...reward,
+          farmerImage: fixUrl(farmer?.farmerImage?.url) as string,
+          farmerName: farmer?.name as string,
+          slug: farmer?.slug as string,
+        };
+      });
+
+      setTransformedData(result);
+    }
+  };
+  useEffect(() => {
+    if (data && farmers.length > 0) {
+      transformData();
+    }
+  }, [loading, data, farmers]);
+  if (loading) {
+    return (
+      <AnimationDiv className="d-flex align-items-center justify-content-center">
+        <Spinner animation="border" />
+      </AnimationDiv>
+    );
+  }
+  if(data?.userRewardeds?.length === 0){
+    return null;
+  }
+  return (
+    <>
+    <h4>
+      Past Rewards
+    </h4>
+    <TableResponsive className="d-none d-lg-block">
+      <Table>
+        <TableHead>
+          <TableRow isHoverOnRow={false}>
+            <CustomTableHeading className="py-4">#</CustomTableHeading>
+            <EmptyTableHeading></EmptyTableHeading>
+            <CustomTableHeading>FARMER NAME</CustomTableHeading>
+            <CustomTableHeading>Referral Address</CustomTableHeading>
+            <CustomTableHeading>User Profit</CustomTableHeading>
+            <CustomTableHeading>Tier</CustomTableHeading>
+            <CustomTableHeading>Reward in DON</CustomTableHeading>
+            <CustomTableHeading>Reward in USD</CustomTableHeading>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {transformedData.map((investment, index) => {
+            return (
+              <TableRow key={investment.timeStamp}>
+                <CustomTableData>{index + 1}</CustomTableData>
+                <CustomTableData>
+                  <StyledImage src={investment.farmerImage} />
+                </CustomTableData>
+                <CustomTableData
+                  cursor="pointer"
+                  onClick={RedirectToFarmerProfile(investment.slug)}
+                  className="font-weight-bold"
+                >
+                  {investment.farmerName}
+                </CustomTableData>
+                <CustomTableData>
+                  {hideAddress(investment.from)}
+                </CustomTableData>
+                <CustomTableData>
+                  ${formatNum(toEther(investment.profitValue))}
+                </CustomTableData>
+                <CustomTableData>{investment.tier}</CustomTableData>
+                <CustomTableData className="bold">
+                  {formatNum(toEther(investment.rewardAmountInDon))} DON
+                </CustomTableData>
+                <CustomTableData>
+                  ${formatNum(toEther(investment.rewardAmountInUSD))}
+                </CustomTableData>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableResponsive>
+    </>
+  );
+});
+
 const MyReferrals = () => {
   const { referralCount } = useReferralContext();
 
@@ -465,10 +628,6 @@ const MyReferrals = () => {
     const accounts = await connectedWeb3.eth.getAccounts();
     await rewardContract.methods.harvestRewards().send({ from: accounts[0] });
     transformData();
-  };
-
-  const RedirectToFarmerProfile = (poolAddress: string) => () => {
-    navigate("/dashboard/farmer/" + poolAddress);
   };
 
   return (
@@ -578,12 +737,12 @@ const MyReferrals = () => {
                 >
                   <SwitchRow
                     className="mb-4"
-                    heading="Farmer`s list"
+                    heading=""
                     subHeading={"Show in USD"}
                     checked={isInUsd}
                     onSwitchChange={() => setIsInUsd(!isInUsd)}
                   />
-            
+
                   <TableResponsive className="d-none d-lg-block">
                     <Table>
                       <TableHead>
@@ -660,6 +819,7 @@ const MyReferrals = () => {
               </>
             )}
 
+            {address && <PastReferrals walletAddress={address} />}
             {isReady && transformedData.length === 0 && (
               <>
                 <ZeroInvestmentBox>
