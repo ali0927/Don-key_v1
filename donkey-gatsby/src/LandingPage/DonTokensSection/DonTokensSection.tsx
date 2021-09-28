@@ -3,15 +3,14 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Heading3 } from "../components";
 import styled from "styled-components";
 import { breakPoints } from "breakponts";
-import { StaticImage } from 'gatsby-plugin-image'
+import { StaticImage } from "gatsby-plugin-image";
 
 const Root = styled.div`
-  margin-top: 120px;
-  margin-bottom: 120px;
+  /* margin-top: 120px;
+  margin-bottom: 120px; */
 `;
 
 const Heading = styled.h1`
-  
   font-size: 23px;
   font-style: normal;
   font-weight: 700;
@@ -22,7 +21,6 @@ const Heading = styled.h1`
 `;
 
 const Content = styled.p`
-  
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -46,19 +44,23 @@ const LineRoot = styled.div`
 export const DonTokenSection: React.FC = () => {
   return (
     <>
-      <Root className="pt-5 pb-5">
+      <Root className="pt-md-5 pb-md-5">
         <Container>
           <Row className="mt-5 mb-5 justify-content-between">
             <Col lg={4} className="d-flex align-items-center mb-3 mb-lg-0">
               <div>
-              <StaticImage className="d-inline-block" src="./images/donkey.png" alt="ImageNotFound" />
+                <StaticImage
+                  className="d-inline-block"
+                  src="./images/donkey.png"
+                  alt="ImageNotFound"
+                />
               </div>
             </Col>
             <Col lg={8}>
               <div>
                 <div className="d-flex">
                   <LineRoot className="d-flex justify-content-lg-end mr-5 mt-2">
-                    <StaticImage src="./images/img.png" alt="Image not found" />
+                    <StaticImage layout="fixed" src="./images/img.png" alt="Image not found" />
                   </LineRoot>
                   <div className="d-flex flex-column justify-content-between">
                     <div>
