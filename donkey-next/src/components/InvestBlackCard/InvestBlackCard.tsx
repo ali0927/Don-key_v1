@@ -37,6 +37,16 @@ import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
 
+import styled from "styled-components";
+import { breakPoints } from '../../breakponts'
+
+const IMG = styled.img`
+  @media only screen and (max-width: ${breakPoints.md}) {
+    width:15px;
+    height:15px;
+  }
+`;
+
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
@@ -148,7 +158,7 @@ export const InvestBlackCard = ({
         className={
           "col-md-" +
           col +
-          " d-flex  flex-column align-items-center justify-content-between"
+          " col-4 d-flex  flex-column align-items-center justify-content-between"
         }
       >
         <OverlayTrigger
@@ -176,7 +186,7 @@ export const InvestBlackCard = ({
         className={
           "col-md-" +
           col +
-          " d-flex   flex-column align-items-center justify-content-between"
+          " col-4 d-flex   flex-column align-items-center justify-content-between"
         }
       >
         <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
@@ -352,7 +362,7 @@ export const InvestBlackCard = ({
         </div>
       </CardInnerInfo>
 
-      <div className="row mt-2 justify-content-center">
+      <div className="row mt-2 flex-nowrap justify-content-center no-gutters">
         {getSecondCardColumns(
           "Initial Investment",
           isUSD ? (
@@ -364,7 +374,7 @@ export const InvestBlackCard = ({
               tokenAmount={initialInvestment}
             />
           ),
-          <img
+          <IMG
             src={Dollars.src}
             className="mr-1"
             alt="Dollar image not found"

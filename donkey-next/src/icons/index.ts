@@ -71,3 +71,5 @@ export * from "./CoingKoIcon";
 export * from "./BoostApyWhiteIcon";
 export * from "./WalletDarkIcon";
 export * from "./DisconnectIcon";
+export * from "./PositiveIcon";
+export * from "./NegativeIcon";

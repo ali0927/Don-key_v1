@@ -28,6 +28,8 @@ import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { Spinner } from "react-bootstrap";
 import { DollarView } from "components/DollarView";
 
+import { breakPoints } from '../../breakponts'
+
 export const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
@@ -47,6 +49,11 @@ export const CardWrapper = styled.div`
     0.803153px 1.61088px 19.175px rgba(0, 0, 0, 0.025),
     0.327211px 0.656286px 9.61481px rgba(0, 0, 0, 0.0196296),
     0.0743661px 0.149156px 4.64352px rgba(0, 0, 0, 0.012037);
+    @media only screen and (max-width: ${breakPoints.md}) {
+      border-radius:10px;
+      padding-left:0;
+      padding-right:0;
+    }
 `;
 
 export const BlackCardWrapper = styled(CardWrapper)`
@@ -67,6 +74,9 @@ export const CardLabel = styled.p`
   width: 100%;
   text-decoration: underline;
   margin-bottom: 0;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 12px;
+  }
 `;
 
 const TotalPoolValueLabel = styled(CardLabel)`
@@ -80,6 +90,9 @@ const CardPoolAddress = styled.p`
   text-align: center;
   color: #000000;
   margin-bottom: 23px;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 24px;
+  }
 `;
 
 export const CardValue = styled.p`
@@ -89,6 +102,9 @@ export const CardValue = styled.p`
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
+    @media only screen and (max-width: ${breakPoints.md}) {
+      font-size: 24px;
+    }
 `;
 
 const FirstCardRow = styled.div``;
@@ -100,6 +116,9 @@ export const Columns = styled.div`
   :last-child {
     border-right: none;
   }
+  @media only screen and (max-width: ${breakPoints.md}) {
+    height: auto;
+    }
 `;
 
 const ColumnsTitle = styled.div`
@@ -109,6 +128,10 @@ const ColumnsTitle = styled.div`
   font-family: Poppins;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
+    @media only screen and (max-width: ${breakPoints.md}) {
+      font-size: 10px;
+      margin-top:-10px;
+    }
 `;
 
 const ColumnsTitleColored = styled.div`
@@ -130,6 +153,11 @@ export const ColumnsSubTitle = styled.p`
   text-align: center;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#070602" : "#fff"};
+    @media only screen and (max-width: ${breakPoints.md}) {
+      font-size: 14px;
+      margin-bottom: -10px;
+      padding-top: 15px;
+      }
 `;
 
 const ColumnsSubTitleColored = styled.p`
@@ -139,12 +167,22 @@ const ColumnsSubTitleColored = styled.p`
   text-align: center;
   margin-bottom: 0;
   color: ${(props: { color: string }) => props.color};
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 14px;
+    margin-bottom: -10px;
+    padding-top: 15px;
+    color:#070602;
+    }
 `;
 
 export const ColumnsTitle1 = styled(ColumnsTitleColored)`
-  font-size: 14px;
+  font-size: 13px;
   font-family: Poppins;
   font-weight: 500;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 10px;
+    margin-top:-10px;
+    }
 `;
 
 const Col = styled.div`
@@ -194,6 +232,9 @@ const TokenSwitchLabels = styled.div`
   font-weight: 500;
   font-size: 14px;
   color: #808080;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 12px;
+    }
 `;
 
 const IconWrapper = styled.div`
@@ -287,7 +328,7 @@ export const DetailTable = ({
     icon: React.ReactNode
   ) => {
     return (
-      <Columns className="col-md-4 d-flex justify-content-center">
+      <Columns className="col-md-4 col-4 d-flex justify-content-center">
         <div className="d-flex flex-column align-items-center justify-content-between">
           <ColumnsTitle
             className="d-flex align-items-center justify-content-center w-100"
@@ -345,7 +386,7 @@ export const DetailTable = ({
 
   return (
     <>
-      <Col className="mb-5" style={{ marginRight: 17 }}>
+      <Col className="mb-5 p-3 p-md-0 p-lg-0" style={{ marginRight: 17 }}>
         <CardWrapper color="white">
           <div style={{ marginTop: 30 }}>
             <CardInnerInfo className="d-flex justify-content-center mb-2">
@@ -389,7 +430,7 @@ export const DetailTable = ({
               </div>
             </CardInnerInfo>
           </div>
-          <FirstCardRow className="row mt-3">
+          <FirstCardRow className="row mt-3 flex-nowrap">
             {getFirstCardcolumns(
               "APY",
               apy,
@@ -424,7 +465,7 @@ export const DetailTable = ({
           </FirstCardRow>
         </CardWrapper>
       </Col>
-      <Col className="mb-5" style={{ marginLeft: 17 }}>
+      <Col className="mb-5 p-3 p-md-0 p-lg-0" style={{ marginLeft: 0 }}>
         <BlackCardWrapper className="position-relative" color="black">
           {renderCardData()}
         </BlackCardWrapper>

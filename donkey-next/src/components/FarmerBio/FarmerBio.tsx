@@ -15,26 +15,32 @@ import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useIsomorphicEffect } from "hooks";
 
+import { breakPoints } from '../../../src/breakponts'
+
 const StyledFarmerImage = styled.img`
   border-radius: 15px;
   object-fit: cover;
   width: 100px;
   height: 100px;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    width:56px;
+    height:56px;
+    }
 `;
 
 const Title = styled.h2`
   font-family: "ObjectSans-Bold";
   font-weight: 900;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 24px;
+    font-weight: 800;
+    }
 `;
 
 const ImageWrapper = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: center;
-  @media screen and (min-width: 400px) {
-    width: initial;
-    display: inline-flex;
-  }
+  justify-content: flex-start;
+ 
 `;
 
 const ShareButton = styled.button`
@@ -72,6 +78,15 @@ const StrategyName = styled.h4`
   font-style: normal;
   font-weight: 800;
   font-size: 20px;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 16px;
+    }
+`;
+const P = styled.p`
+  font-size:15px;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 12px;
+  }
 `;
 
 const SHORT_LINKS_QUERY = gql`
@@ -176,27 +191,36 @@ export const FarmerBio = ({
         <Container>
           <Row>
             <Col lg={12} className="mt-3">
-              <div className="d-flex flex-column flex-md-row align-items-center flex-wrap mb-3">
+              <div className="d-flex justify-content-between align-items-start align-items-lg-center flex-wrap mb-3">
                 <Title className="mb-2 mb-md-0">
                   DON - {capitalize(name || "")}
                 </Title>
+                <div className="d-block d-sm-none">
+                <div className="mr-3">
+                    {twitter && (
+                              <TwitterIcon
+                                fill={"#000"}
+                                handle={twitter || "#"}
+                              ></TwitterIcon>
+                    )}
+                </div>
+              </div>
               </div>
             </Col>
           </Row>
 
           <Row className="mt-0 mt-sm-5 mb-5">
             <div className="col-lg-6">
-              <div className="row">
-                <ImageWrapper className="pl-4">
+              <div className="row" style={{flexWrap : 'nowrap'}}>
+                <ImageWrapper className="pl-4" style={{width : 'auto'}}>
                   <StyledFarmerImage
                     src={fixUrl(picture)}
                     className="img-fluid "
                     alt="farmer"
-                    style={{ borderRadius: 0 }}
                   />{" "}
                 </ImageWrapper>
 
-                <Col lg={9} className="pl-4 mt-4 mt-md-0">
+                <Col lg={9} xs={9} className="pl-4 mt-0 mt-md-0">
                   {description.length > 0 && (
                     <>
                       <div className="d-flex justify-content-between">
@@ -205,7 +229,7 @@ export const FarmerBio = ({
                             ? strategies[0].name
                             : "Description"}
                         </StrategyName>
-                        <div className="d-flex">
+                        <div className="d-none d-lg-block">
                           <div className="mr-3">
                             {twitter && (
                               <TwitterIcon
@@ -217,9 +241,9 @@ export const FarmerBio = ({
                         </div>
                       </div>
 
-                      <p style={{ fontSize: 15 }}>
+                      <P>
                         <ShowMoreContent length={120} content={description} />
-                      </p>
+                      </P>
                     </>
                   )}
                 </Col>
@@ -228,7 +252,7 @@ export const FarmerBio = ({
 
             <Col
               lg={6}
-              className="d-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
+              className="d-none d-sm-none d-md-flex d-lg-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
               {pool_version === 3 && network.chainId === BINANCE_CHAIN_ID ? (
                 <ShareButton onClick={handleShareClick}>

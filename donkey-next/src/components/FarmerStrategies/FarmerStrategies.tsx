@@ -5,11 +5,27 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { InvestorListTable } from "components/InvestorListTable/InvestorListTable";
 import { IFarmerInter } from "interfaces";
 
+import { breakPoints } from "breakponts";
+
 const DescriptionTitle = styled.p`
   font-size: 20px;
   font-weight: 400;
   margin-bottom: 0;
   line-height: 35.44px;
+
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+`;
+
+const P = styled.p`
+  font-size: 15px;
+  @media only screen and (max-width: ${breakPoints.md}) {
+    font-size: 12px;
+    font-weight: 600;
+  }
 `;
 
 const StrategyTableRoot = styled.div`
@@ -49,7 +65,7 @@ export const FarmerStrategies = ({
                 <DescriptionTitle>
                   {farmer.strategies[0].name || "Description"}
                 </DescriptionTitle>
-                <p style={{ fontSize: 15 }}>
+                <P>
                   <ShowMoreContent
                     length={80}
                     content={
@@ -57,7 +73,7 @@ export const FarmerStrategies = ({
                       "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
                     }
                   />
-                </p>
+                </P>
               </TableHeaderRoot>
               <StrategyTableForInvestor
                  chainId={farmer.network.chainId}
