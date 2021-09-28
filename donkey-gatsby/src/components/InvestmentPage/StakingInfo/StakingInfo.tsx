@@ -19,7 +19,7 @@ const StakingCard = styled.div`
   padding: 30px 0px 30px 0px;
   min-height: 146px;
   @media only screen and (max-width: ${breakPoints.lg}) {
-    padding: 30px 0px 0px 0px;
+    padding: 20px 0px 0px 0px;
     margin-bottom: 25px;
   }
 `;
@@ -29,17 +29,27 @@ const StakingCol = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border-right: 1px solid #ededf2;
   @media only screen and (max-width: ${breakPoints.lg}) {
     width: 33% !important;
-    margin-bottom: 23px;
+    /* margin-bottom: 23px; */
     &:last-child {
       border-right: 0px;
       width: 100% !important;
     }
+  };
+  :after {
+    content: "";
+    height: 62%;
+    position: absolute;
+    border: 0.1px solid #dedee0;
+    top: 12;
+    right: 0;
+    opacity: 0.4;
   }
   &:last-child {
-    border-right: 0px;
+    :after {
+      border: 0px;
+    }
   }
   &.hide:after {
     display: none;
@@ -106,6 +116,7 @@ const HarvestCard = styled.div`
 
 const HarvestValue = styled(StakingSubtitle)`
   font-size: 12px;
+  font-weight: 500;
   @media only screen and (min-width: ${breakPoints.lg}) {
     font-size: 14px;
   }
@@ -392,7 +403,7 @@ export const StakingInfo = () => {
             varaint="outlined"
             disabled={!isStaked || isInCoolOffPeriod}
             onClick={openUnstake}
-            className="py-1 px-3 rounded"
+            className="py-1 px-3"
           >
             Unstake DON
           </StyledButton>
@@ -410,8 +421,8 @@ export const StakingInfo = () => {
         />
       )}
       {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
-      <div className="row mt-3">
-        <div className="col-lg-7 mb-5 mb-lg-2">
+      <div className="row mt-0 mt-lg-3">
+        <div className="col-lg-7 mb-3 mb-lg-2">
           <StakingCard className="d-flex h-100 flex-wrap justify-content-between">
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>

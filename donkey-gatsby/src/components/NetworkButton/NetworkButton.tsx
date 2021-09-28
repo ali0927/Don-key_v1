@@ -8,11 +8,13 @@ export const NetworkButton = styled(ButtonWidget)`
   font-size: 16px;
   border-radius: 10px;
   border: none;
-  height: 50px;
+  height: 40px;
+  border: 1px solid ${theme.palette.border.main};
   ${(props: { active?: boolean }) =>
     props.active &&
     `
-  border: 1px solid ${theme.palette.border.main};;
+    background: #000;
+    color:#fff;
   box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
 
   `}
