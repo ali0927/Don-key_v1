@@ -151,7 +151,7 @@ export const InactiveNetworkCard = ({
           onClick={() => switchNetwork(correctNetwork.chainId)}
         >
           <img
-            src="/images/usericon.png"
+            src="/assets/images/usericon.png"
             className="d-inline-block align-top mr-md-2"
             alt="ImageNotFound"
           />{" "}
