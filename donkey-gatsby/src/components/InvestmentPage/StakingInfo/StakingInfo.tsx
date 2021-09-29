@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useToggle } from "don-hooks";
 import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
 import BigNumber from "bignumber.js";
-import { Spinner,OverlayTrigger, Tooltip} from "react-bootstrap";
+import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
@@ -37,7 +37,7 @@ const StakingCol = styled.div`
       border-right: 0px;
       width: 100% !important;
     }
-  };
+  }
   :after {
     content: "";
     height: 62%;
@@ -58,13 +58,12 @@ const StakingCol = styled.div`
 `;
 
 const StakingTitle = styled.h3`
-  padding-top:5px;
+  padding-top: 5px;
   font-size: 12px;
   color: #7e7e7e;
   text-align: center;
   font-weight: 500;
-  font-family:Poppins;
-  line-height:18px;
+  line-height: 18px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     font-size: 14px;
     color: #000;
@@ -72,7 +71,6 @@ const StakingTitle = styled.h3`
     font-size: 14px;
     line-height: 21px;
   }
-  
 `;
 
 const StakingSubtitle = styled.p`
@@ -104,8 +102,6 @@ export const StyledButton = styled(ButtonWidget)`
     width: 100%;
     margin-left: 13px;
     margin-right: 13px;
-    
-   
   }
 `;
 
@@ -128,50 +124,45 @@ const HarvestCard = styled.div`
 const HarvestValue = styled(StakingSubtitle)`
   font-size: 15px;
   font-weight: 600;
-  line-height:22.5px;
+
   @media only screen and (min-width: ${breakPoints.lg}) {
-    font-family: Poppins;
-    font-style: normal;
     font-weight: bold;
     font-size: 23px;
-    line-height: 34px;
   }
 `;
 const Rewardpaid = styled.div`
-p{
-  font-size: 10px;
-  font-weight: 500;
-  line-height:18px;
-  color: #666666;
+  p {
+    font-size: 10px;
+    font-weight: 500;
 
-  @media only screen and (min-width: ${breakPoints.lg}) {
-    p{
-      
-      font-style: normal;
-      font-weight: 500;
-      font-size: 12px;
-      line-height: 18px;
+    color: #666666;
+
+    @media only screen and (min-width: ${breakPoints.lg}) {
+      p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+      }
     }
   }
-}
 `;
 const Rewardtime = styled.div`
 
 p{
+  
   font-size: 10px;
   font-weight: 500;
-  line-height:18px;
+  
   margin-top:0.3rem;
   
-  padding-left:0.7rem;
   color: #B3B6B5;
 }
 
   @media only screen and (min-width: ${breakPoints.lg}) {
     
+  p{ 
     font-weight: 500;
     font-size: 12px;
-    line-height: 18px;
     margin-top:0.9rem;
     display: flex;
     align-items: center;
@@ -181,18 +172,15 @@ p{
   
 `;
 
-const StyleTooltip= styled(Tooltip)`
-.tooltip-inner {
-  background-color: white;
-  color:black;  
-}
-.arrow::before {
-  border-right-color: white!important;
-  
-  
-}
-
-`
+const StyleTooltip = styled(Tooltip)`
+  .tooltip-inner {
+    background-color: white;
+    color: black;
+  }
+  .arrow::before {
+    border-right-color: white !important;
+  }
+`;
 
 const TimeCard = styled.div`
   height: 33px;
@@ -215,14 +203,12 @@ const TimeCard = styled.div`
 
 const TimerTime = styled.div`
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   color: #000000;
 `;
 
 const TimerLabel = styled.div`
   font-size: 4.25px;
-  font-style: normal;
   font-weight: 400;
   color: #000000;
 `;
@@ -245,10 +231,6 @@ const DotsWrraper = styled.div`
   margin-left: 2px;
   margin-right: 2px;
 `;
-
-
-
-
 
 const TimmerRoot = styled.div`
   margin-left: 12px;
@@ -393,22 +375,13 @@ export const StakingInfo = () => {
       disableLoading();
     }
   };
- 
-  
+
   const renderHarvestCard = () => {
-
     const renderTooltip = (props: any) => (
-   
-      <StyleTooltip id="button-tooltip" {...props} >
-        
-        <strong> {new BigNumber(pendingReward).toFixed(6)} DON{" "}</strong>
-        
+      <StyleTooltip id="button-tooltip" {...props}>
+        <strong> {new BigNumber(pendingReward).toFixed(6)} DON </strong>
       </StyleTooltip>
-      
     );
-
-
-    
 
     if (!isInCoolOffPeriod) {
       return (
@@ -416,8 +389,8 @@ export const StakingInfo = () => {
           {" "}
           <div className="row w-100 align-items-center ">
             <div className="col-6  h-100 d-flex flex-column align-items-start align-items-lg-center pt-2 ">
-              <StakingTitle  style={{ color: "#fff" }}>
-                 Rewards available
+              <StakingTitle style={{ color: "#fff" }}>
+                Rewards available
               </StakingTitle>
               <HarvestValue>
                 {donPrice &&
@@ -425,12 +398,10 @@ export const StakingInfo = () => {
                     .multipliedBy(donPrice)
                     .toFixed(2)}`}
               </HarvestValue>
-              <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between " >
+              <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between ">
                 <p>Rewards are paid in DON</p>
-                
-                 
-                 <OverlayTrigger
-                
+
+                <OverlayTrigger
                   placement="right"
                   delay={{ show: 250, hide: 400 }}
                   overlay={renderTooltip}
@@ -441,16 +412,15 @@ export const StakingInfo = () => {
                       paddingLeft: 3,
                     }}
                   >
-                    <Questionmark/>
+                    <Questionmark />
                   </div>
                 </OverlayTrigger>
-                
-               
-                
               </Rewardpaid>
-              
             </div>
-            <div className="col-6 d-flex justify-content-center flex-column" style={{paddingTop:"1.8rem"}}>
+            <div
+              className="col-6 d-flex justify-content-center flex-column"
+              style={{ paddingTop: "1.8rem" }}
+            >
               <StyledButton
                 varaint="contained"
                 disabled={new BigNumber(pendingReward).isEqualTo(0)}
@@ -458,22 +428,16 @@ export const StakingInfo = () => {
                 className="py-1 m-0"
                 onClick={harvestDon}
               >
-                 
-                
                 {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
               </StyledButton>
-              <Rewardtime>
-                  
-                  {!new BigNumber(lastRewardTime).isEqualTo(0) && (
-                    <p >
-                      harvested{" "}
-                      {moment
-                        .duration(moment().diff(moment.unix(lastRewardTime)))
-                        .humanize() + " ago"}
-                        
-                    </p>
-                  )}
-                  
+              <Rewardtime className="text-center">
+                {!new BigNumber(1).isEqualTo(0) && (
+                  <p>
+                    harvested{" "}
+                    {moment.duration(moment().diff(moment.unix(1))).humanize() +
+                      " ago"}
+                  </p>
+                )}
               </Rewardtime>
             </div>{" "}
           </div>
