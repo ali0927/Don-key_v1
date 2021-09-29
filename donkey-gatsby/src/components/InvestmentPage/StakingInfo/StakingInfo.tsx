@@ -102,6 +102,9 @@ export const StyledButton = styled(ButtonWidget)`
   @media only screen and (max-width: ${breakPoints.lg}) {
     height: 33px;
     width: 100%;
+    margin-left: 13px;
+    margin-right: 13px;
+    
    
   }
 `;
@@ -143,7 +146,7 @@ p{
 
   @media only screen and (min-width: ${breakPoints.lg}) {
     p{
-      font-family: Poppins;
+      
       font-style: normal;
       font-weight: 500;
       font-size: 12px;
@@ -158,19 +161,18 @@ p{
   font-size: 10px;
   font-weight: 500;
   line-height:18px;
-  margin-top:0.7rem;
-  font-style:normal;
+  margin-top:0.3rem;
+  
   padding-left:0.7rem;
   color: #B3B6B5;
 }
 
   @media only screen and (min-width: ${breakPoints.lg}) {
-    font-family: Poppins;
-    font-style: normal;
+    
     font-weight: 500;
     font-size: 12px;
     line-height: 18px;
-    
+    margin-top:0.9rem;
     display: flex;
     align-items: center;
     text-align: center;
@@ -178,6 +180,19 @@ p{
 
   
 `;
+
+const StyleTooltip= styled(Tooltip)`
+.tooltip-inner {
+  background-color: white;
+  color:black;  
+}
+.arrow::before {
+  border-right-color: white!important;
+  
+  
+}
+
+`
 
 const TimeCard = styled.div`
   height: 33px;
@@ -230,6 +245,10 @@ const DotsWrraper = styled.div`
   margin-left: 2px;
   margin-right: 2px;
 `;
+
+
+
+
 
 const TimmerRoot = styled.div`
   margin-left: 12px;
@@ -374,15 +393,23 @@ export const StakingInfo = () => {
       disableLoading();
     }
   };
-  const renderTooltip = (props: any) => (
-    <Tooltip id="button-tooltip" {...props} className="mytooltip " >
-      
-      <strong> {new BigNumber(pendingReward).toFixed(6)} DON{" "}</strong>
-      
-    </Tooltip>
-  );
+ 
   
   const renderHarvestCard = () => {
+
+    const renderTooltip = (props: any) => (
+   
+      <StyleTooltip id="button-tooltip" {...props} >
+        
+        <strong> {new BigNumber(pendingReward).toFixed(6)} DON{" "}</strong>
+        
+      </StyleTooltip>
+      
+    );
+
+
+    
+
     if (!isInCoolOffPeriod) {
       return (
         <>
@@ -398,11 +425,12 @@ export const StakingInfo = () => {
                     .multipliedBy(donPrice)
                     .toFixed(2)}`}
               </HarvestValue>
-              <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between ">
+              <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between " >
                 <p>Rewards are paid in DON</p>
                 
                  
                  <OverlayTrigger
+                
                   placement="right"
                   delay={{ show: 250, hide: 400 }}
                   overlay={renderTooltip}
@@ -416,19 +444,13 @@ export const StakingInfo = () => {
                     <Questionmark/>
                   </div>
                 </OverlayTrigger>
+                
                
                 
               </Rewardpaid>
-              {!new BigNumber(lastRewardTime).isEqualTo(0) && (
-                <div style={{ fontSize: 12 }}>
-                  harvested{" "}
-                  {moment
-                    .duration(moment().diff(moment.unix(lastRewardTime)))
-                    .humanize() + " ago"}
-                </div>
-              )}
+              
             </div>
-            <div className="col-6 d-flex justify-content-center flex-column pt-3">
+            <div className="col-6 d-flex justify-content-center flex-column" style={{paddingTop:"1.8rem"}}>
               <StyledButton
                 varaint="contained"
                 disabled={new BigNumber(pendingReward).isEqualTo(0)}
@@ -441,9 +463,17 @@ export const StakingInfo = () => {
                 {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
               </StyledButton>
               <Rewardtime>
-                  <p >
-                  Harvested 4 hours ago
-                  </p>
+                  
+                  {!new BigNumber(lastRewardTime).isEqualTo(0) && (
+                    <p >
+                      harvested{" "}
+                      {moment
+                        .duration(moment().diff(moment.unix(lastRewardTime)))
+                        .humanize() + " ago"}
+                        
+                    </p>
+                  )}
+                  
               </Rewardtime>
             </div>{" "}
           </div>
