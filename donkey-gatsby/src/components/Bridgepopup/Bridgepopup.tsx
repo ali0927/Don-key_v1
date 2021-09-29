@@ -27,33 +27,65 @@ import BgImage from "images/success-bg.png";
 import { waitFor } from "don-utils";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { useWeb3Context } from "don-components";
+import { breakPoints } from "breakponts";
 
 const Heading = styled.div`
-    
-   font-size: 23px;
-   font-style: normal;
-   font-weight: 600;
-   text-align: center;
-   color: #070602;
+  font-size: 23px;
+  font-style: normal;
+  font-weight: 600;
+  text-align: center;
+  color: #070602;
 `;
 
 const Root = styled.div`
-   svg {
+  svg {
     transform: translate3d(0px, 7px, 0px) !important;
-   }
+  }
+`;
+
+const RootDiv = styled.div`
+  position: relative;
+  z-index: 1;
+  margin-top: 6px;
+  text-align: center;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    margin-top: 80px;
+  }
+`;
+
+const TransferHeading = styled.h4`
+  font-size: 16px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 1.5rem;
+  }
+`;
+
+const TransferContent = styled.p`
+  font-size: 12px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 16px;
+  }
 `;
 
 const IconRoot = styled.div`
-   height: 252px;
+  height: 252px;
 `;
 
 const Caption = styled.div`
-   
-   font-size: 14px;
-   font-style: normal;
-   font-weight: 600;
-   color:#A3A3A3;
-   text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  color: #a3a3a3;
+  text-align: center;
+`;
+
+const StyleImage = styled.img`
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
 `;
 
 export const Transfer = (props: { chainId: number }) => {
@@ -67,27 +99,21 @@ export const Transfer = (props: { chainId: number }) => {
   };
   return (
     <Root className="">
-       <IconRoot>
-           <Lottie
-               width={400}
-               style={{ maxWidth: "100%", pointerEvents: "none" }}
-                isClickToPauseDisabled
-                options={defaultOptions}
-           />
+      <IconRoot>
+        <Lottie
+          width={400}
+          style={{ maxWidth: "100%", pointerEvents: "none" }}
+          isClickToPauseDisabled
+          options={defaultOptions}
+        />
       </IconRoot>
-       <div className="mb-4">
-         <Heading>We’re Transfering Tokens!</Heading>
-         <Caption className="mt-1">It may take up to 5 minutes...</Caption>
-       </div>
+      <div className="mb-4">
+        <Heading>We’re Transfering Tokens!</Heading>
+        <Caption className="mt-1">It may take up to 5 minutes...</Caption>
+      </div>
     </Root>
   );
 };
-
-// const ButtonWrapper = styled.div({
-//   marginRight: "10%",
-//   width: "40%",
-// });
-
 
 const InputBox = styled.div`
   border: 1px solid #ececec;
@@ -309,10 +335,7 @@ const InfoLabel = styled.span`
   ${(props: { dark?: boolean }) => props.dark && `color: #A8A8A8;`}
 `;
 
-
-
-
-const SupportedChainIds = [1,56];
+const SupportedChainIds = [1, 56];
 
 export const BridgePopup = ({
   onClose,
@@ -356,7 +379,9 @@ export const BridgePopup = ({
   const { chainId, getConnectedWeb3 } = useWeb3Context();
   const { switchNetwork } = useSwitchNetwork();
 
-  const [input1Chain, setInput1Chain] = useState(SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1);
+  const [input1Chain, setInput1Chain] = useState(
+    SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1
+  );
   const [input2Chain, setInput2Chain] = useState(
     chainId ? (chainId === 1 ? 56 : 1) : 56
   );
@@ -364,8 +389,6 @@ export const BridgePopup = ({
   const [input2, setInput2] = useState("");
 
   const [balance, setBalance] = useState<null | { [x: number]: string }>(null);
-
-
 
   const [bridgeInfo, setBridgeInfo] = useState<null | typeof ExampleObject>(
     null
@@ -566,35 +589,18 @@ export const BridgePopup = ({
     if (step === "transfersuccess") {
       return (
         <>
-          <img
-            src={BgImage}
-            style={{
-              position: "absolute",
-              zIndex: 0,
-              top: 0,
-              left: 0,
-              right: 0,
-            }}
-          />
+          <StyleImage src={BgImage} alt="Bridgepopup image not found" />
 
-          <div
-            style={{
-              position: "relative",
-              zIndex: 1,
-              marginTop: 80,
-
-              textAlign: "center",
-            }}
-          >
+          <RootDiv>
             <DonTokenIcon style={{ marginBottom: 40 }} />
-            <h4>Your Transfer is Complete!</h4>
-            <p>
+            <TransferHeading>Your Transfer is Complete!</TransferHeading>
+            <TransferContent>
               Transferred {input1} DON{" "}
               {input1Chain === 1 ? <EthereumIcon /> : <BinanceIcon />} to{" "}
               {input2} DON{" "}
               {input2Chain !== 56 ? <EthereumIcon /> : <BinanceIcon />}
-            </p>
-          </div>
+            </TransferContent>
+          </RootDiv>
         </>
       );
     }
@@ -604,7 +610,9 @@ export const BridgePopup = ({
           <div className="mt-4">
             <div className="d-flex align-items-center justify-content-between">
               <InputLabel>From</InputLabel>
-              <InputMaxButton onClick={() => handleChange(balance![input1Chain!])}>
+              <InputMaxButton
+                onClick={() => handleChange(balance![input1Chain!])}
+              >
                 Use MAX
               </InputMaxButton>
             </div>

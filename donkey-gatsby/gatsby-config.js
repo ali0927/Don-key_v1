@@ -33,6 +33,9 @@ module.exports = {
     `gatsby-plugin-netlify`,
     `gatsby-plugin-sitemap`,
     {
+      resolve: `gatsby-plugin-loadable-components-ssr`,
+    },
+    {
       resolve: 'gatsby-plugin-robots-txt',
       options: {
         host: siteUrl,

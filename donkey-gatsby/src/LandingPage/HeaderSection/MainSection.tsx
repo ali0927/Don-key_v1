@@ -1,7 +1,5 @@
-import { ButtonWidget } from "components/Button";
 import React from "react";
 import styled from "styled-components";
-import MainImage from "./images/Main.png";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
@@ -10,24 +8,37 @@ import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
+import { theme } from "theme";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
-  padding-top: 59px;
+  padding-top: 20px;
+
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
   }
+  position: relative;
 
-  img.rounded-image {
+  &:after {
     position: absolute;
-    height: 100%;
+    content: "";
     width: 100%;
-    bottom: -7%;
-}
+    height: 150px;
+    border-radius: 50%;
+    bottom: -75px;
+    display: none;
+    z-index: 0;
+    background-color: ${theme.palette.background.yellow};
+    ${theme.mediaQueries.md.up} {
+      display: block;
+    }
+  }
 `;
 
 const Heading = styled.h1`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 50px;
   font-weight: 800;
   text-align: left;
@@ -39,10 +50,10 @@ const Paragraph = styled.p`
   font-style: normal;
   font-weight: 400;
   text-align: left;
+  word-break: break-word;
 `;
 
 const FooterHeading = styled.div`
-  
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -50,21 +61,13 @@ const FooterHeading = styled.div`
 `;
 
 const FooterSubHeading = styled.h1`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   text-align: center;
   margin-top: 13px;
-`;
-
-const Button = styled(ButtonWidget)`
-  background: linear-gradient(146.14deg, #0b0e12 50%, #35424b 100%);
-  font-size: 14px;
-  transition: all 0.5s;
-  :hover {
-    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
-      4px 4px 18px rgba(0, 0, 0, 0.5);
-  }
 `;
 
 const FooterRow = styled.div`
@@ -96,6 +99,19 @@ const ETH_PRICE = gql`
   }
 `;
 
+const StakeButton = styled.button`
+  background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
+  padding: 1rem 2rem;
+  color: #fff;
+  font-weight: 500;
+  border: 0;
+  font-size: 12px;
+  border-radius: 10px;
+  :hover {
+    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
+      4px 4px 18px rgba(0, 0, 0, 0.5);
+  }
+`;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
@@ -130,30 +146,19 @@ export const MainSection: React.FC = () => {
     navigate("/stake");
   };
 
-
-
   return (
     <>
       <Root className="position-relative">
-        <img className="rounded-image" src={MainImage} alt="bg"  />
-        
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-5">
               <Heading>Beta DAPP is now live and open for the public</Heading>
-              <Paragraph className="mt-4 w-50">
+              <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph>
-              <Button
-                className="mt-5"
-                varaint="contained"
-                containedVariantColor="black"
-                width="30%"
-                height="50px"
-                onClick={handleTakePart}
-              >
+              <StakeButton className="mt-3 mt-sm-5" onClick={handleTakePart}>
                 Stake LP token
-              </Button>
+              </StakeButton>
             </div>
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
@@ -161,7 +166,7 @@ export const MainSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="d-flex mt-4 pb-5 justify-content-start">
+          <div className="d-flex pb-5 justify-content-start">
             <FooterRow className="row position-relative">
               <GrayBorder className="d-none d-md-block" />
               <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">

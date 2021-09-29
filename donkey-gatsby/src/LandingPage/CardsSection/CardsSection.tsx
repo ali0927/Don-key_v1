@@ -16,18 +16,19 @@ const CardBanner = styled.div`
 `;
 
 const Heading = styled(Heading3)`
-    font-size: 38px;
-    color: #070602;
-`
-
+  font-size: 38px;
+  color: #070602;
+`;
 
 const CardBannerAdvantage = styled.div`
   position: relative;
   width: 100%;
-  background:${theme.palette.common.white};
-  margin-top: 160px;
-  margin-bottom: 160px;
-  padding: 0% 0%;
+  background: ${theme.palette.common.white};
+  margin-top: 20px;
+  margin-bottom: 10px;
+  ${theme.mediaQueries.lg.up}{
+    margin-top: 120px;
+  }
   padding-bottom: 20px;
 
   & .card {
@@ -74,10 +75,9 @@ const CardBannerAdvantage = styled.div`
   }
 `;
 
-
 const ImageIcon = styled.img`
-width: 60px;
-height: 60px;
+  width: 60px;
+  height: 60px;
 `;
 
 const Graph1 = () => {
@@ -85,7 +85,7 @@ const Graph1 = () => {
     <svg
       width={251}
       height={114}
-      className="mt-3"      
+      className="mt-3"
       viewBox="0 0 251 114"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@ const Graph2 = () => {
     <svg
       width="250"
       height="111"
-      className="mt-3"   
+      className="mt-3"
       viewBox="0 0 250 111"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -163,7 +163,7 @@ const Graph3 = () => {
     <svg
       width={250}
       height={116}
-      className="mt-3"   
+      className="mt-3"
       viewBox="0 0 250 116"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -198,8 +198,6 @@ const Graph3 = () => {
 };
 
 export const CardsSection: React.FC = () => {
-
-
   return (
     <>
       <CardBanner className="mt-0">
@@ -222,9 +220,8 @@ export const CardsSection: React.FC = () => {
                     height="50px"
                     onClick={() => navigate("/dashboard")}
                   >
-                     Discover best farmers
+                    Discover best farmers
                   </ButtonWidget>
-          
                 </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
@@ -244,7 +241,7 @@ export const CardsSection: React.FC = () => {
                 </div>
               </Col>
 
-              <Col md={5}  className="pt-5">
+              <Col md={5} className="pt-5">
                 <div className="col-lg-11">
                   <div className="mt-4">
                     <PopularStrategy
@@ -257,10 +254,9 @@ export const CardsSection: React.FC = () => {
                       apy="134%"
                       comingsoon
                       totalValue="$1,354,560"
-                      
                     />
                   </div>
-                  <div style={{marginTop: 69}}>
+                  <div style={{ marginTop: 69 }}>
                     <PopularStrategy
                       icon={<ImageIcon src={image3} alt="ImageNotFound" />}
                       contentTitle="STRATEGY all or nothing here  "
@@ -271,7 +267,6 @@ export const CardsSection: React.FC = () => {
                       content="I’ll bring you to the well of new and show you the harvest looking for crazy APY’s sometimes Rek"
                       apy="167%"
                       totalValue="$870,650"
-                   
                     />
                   </div>
                 </div>
