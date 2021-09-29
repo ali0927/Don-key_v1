@@ -13,11 +13,39 @@ import React, { useMemo } from "react";
 import { IStrategy } from "interfaces";
 
 import BigNumber from "bignumber.js";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import {  OverlayTrigger, Tooltip } from "react-bootstrap";
 import { InfoIcon } from "icons/InfoIcon";
 import { useTVL } from "hooks";
-import {isNull} from "lodash";
+import { isNull } from "lodash";
 import { DollarView } from "components/DollarView/DollarView";
+import styled from "styled-components";
+
+const Table1 = styled.table`
+  border-Collapse: separate;
+  borderRadius: 10px;
+  text-align: center; 
+`;
+
+const TableData1 = styled.td`
+  font-size:14px;
+ font-weight:600;
+ text-align:left;
+ padding-top:0 !important;
+ padding-bottom:0 !importan;
+`;
+
+const TableHead1 =  styled.thead`
+font-size:12px;
+font-weight:500;
+text-align:left;
+`;
+
+const TableHeading1 =  styled.th`
+padding-top:6px !important;
+padding-bottom:6px !important;
+font-weight:500;
+color:#C4C4C4;
+`;
 
 const formatDate = (
   date: string | null | undefined,
@@ -38,7 +66,7 @@ export const StrategyTableForInvestor = ({
   poolAddress,
   farmerfee,
   performancefee,
-  chainId
+  chainId,
 }: {
   strategies: IStrategy[];
   poolAddress: string;
@@ -48,7 +76,6 @@ export const StrategyTableForInvestor = ({
 }) => {
   const { tvl } = useTVL(poolAddress, chainId);
 
-  
   const getFee = (key: keyof IStrategy) => {
     const item = strategies[0];
     if (item) {
@@ -99,81 +126,136 @@ export const StrategyTableForInvestor = ({
           <br />
         </React.Fragment>
       )}
-      <strong>Farmer performance fee: {isNull(farmerfee) ? "10": farmerfee}%</strong>
+      <strong>
+        Farmer performance fee: {isNull(farmerfee) ? "10" : farmerfee}%
+      </strong>
       <br />{" "}
       <strong>
-        Don-key Performance fee: {isNull(performancefee) ? "5": performancefee}%
+        Don-key Performance fee: {isNull(performancefee) ? "5" : performancefee}
+        %
         <br />
       </strong>{" "}
     </Tooltip>
   );
-
+  
   return (
-    <TableResponsive>
-      <Table>
-        <colgroup></colgroup>
-        <TableHead>
-          <TableRow>
-            <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
-            {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
-            <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "baseline",
-                  justifyContent: "center",
-                }}
-              >
-                Fees
-                <OverlayTrigger
-                  placement="right"
-                  delay={{ show: 250, hide: 400 }}
-                  overlay={renderTooltipFees}
-                >
-                  <div
-                    style={{
-                      textAlign: "right",
-                      paddingLeft: 10,
-                    }}
-                  >
-                    <InfoIcon />
-                  </div>
-                </OverlayTrigger>
-              </div>
-            </TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>Status</TableHeading>
-            <TableHeading style={{ textAlign: "center" }}>
-              Created On
-            </TableHeading>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {strategies.map((item) => {
-            return (
-              <TableRow key={item.id}>
-                <TableData style={{ textAlign: "center" }}>
-                  {item.name}
-                </TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  <DollarView chainId={chainId} poolAddress={poolAddress} tokenAmount={tvl} />
-                </TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  {totalFee}%
-                </TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  {new BigNumber(item.apy).toFixed(2) + "%"}
-                </TableData>
-                <TableData style={{ textAlign: "center" }}>Active</TableData>
-                <TableData style={{ textAlign: "center" }}>
-                  {formatDate(item.created_at)}
-                </TableData>
+    <>
+      {strategies.map((item, index) => (
+        <>
+          <Table1
+            className="mobile-table table table-borderless table-light d-md-none d-lg-none d-xl-none"
+            style={{ borderRadius: "10px" }}
+          >
+            <TableHead1  style={{ borderBottomStyle: "none" }}>
+              <TableRow>
+                  <TableHeading1 style={{ textAlign: "left", borderRadius: "10px" }}>Name</TableHeading1>
+                  <TableHeading1 style={{ textAlign: "left" }}>TVL</TableHeading1>
+                  <TableHeading1 style={{ textAlign: "left" , borderRadius: "10px"}}>Fees</TableHeading1>
               </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </TableResponsive>
+            </TableHead1>
+            <TableBody>
+              <TableRow>
+                <TableData1>{item.name}</TableData1>
+                <TableData1>
+                  <DollarView
+                    chainId={chainId}
+                    poolAddress={poolAddress}
+                    tokenAmount={tvl}
+                  />
+                </TableData1>
+                <TableData1 style={{ textAlign: "left" }}>{new BigNumber(item.apy).toFixed(2) + "%"}</TableData1>
+              </TableRow>
+            </TableBody>
+            <TableHead1  style={{ borderBottomStyle: "none" }}>
+              <TableRow>
+                <TableHeading1 style={{ textAlign: "left" }}>Created</TableHeading1>
+                <TableHeading1 style={{ textAlign: "left" }}>Status</TableHeading1>
+                <TableHeading1 style={{ textAlign: "left" }}>APY</TableHeading1>
+              </TableRow>
+            </TableHead1>
+            <TableBody>
+              <TableRow>
+                <TableData1 style={{ borderRadius: "10px" }}>{formatDate(item.created_at)}</TableData1>
+                <TableData1>Active</TableData1>
+                <TableData1 style={{ borderRadius: "10px" }}>{item.apy}</TableData1>
+              </TableRow>
+            </TableBody>
+          </Table1>
+        </>
+      ))}
+
+      <TableResponsive className='d-none d-md-block d-lg-block d-xl-block'>
+        <Table>
+          {/* <colgroup></colgroup> */}
+          <TableHead>
+            <TableRow>
+              <TableHeading style={{ textAlign: "center" }}>Name</TableHeading>
+              {/* <TableHeading style={{ textAlign: "center" }}>Profit</TableHeading> */}
+              <TableHeading style={{ textAlign: "center" }}>TVL</TableHeading>
+              <TableHeading style={{ textAlign: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "center",
+                  }}
+                >
+                  Fees
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltipFees}
+                  >
+                    <div
+                      style={{
+                        textAlign: "right",
+                        paddingLeft: 10,
+                      }}
+                    >
+                      <InfoIcon />
+                    </div>
+                  </OverlayTrigger>
+                </div>
+              </TableHeading>
+              <TableHeading style={{ textAlign: "center" }}>APY</TableHeading>
+              <TableHeading style={{ textAlign: "center" }}>
+                Status
+              </TableHeading>
+              <TableHeading style={{ textAlign: "center" }}>
+                Created On
+              </TableHeading>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {strategies.map((item) => {
+              return (
+                <TableRow key={item.id}>
+                  <TableData style={{ textAlign: "center" }}>
+                    {item.name}
+                  </TableData>
+                  <TableData style={{ textAlign: "center" }}>
+                    <DollarView
+                      chainId={chainId}
+                      poolAddress={poolAddress}
+                      tokenAmount={tvl}
+                    />
+                  </TableData>
+                  <TableData style={{ textAlign: "center" }}>
+                    {totalFee}%
+                  </TableData>
+                  <TableData style={{ textAlign: "center" }}>
+                    {new BigNumber(item.apy).toFixed(2) + "%"}
+                  </TableData>
+                  <TableData style={{ textAlign: "center" }}>Active</TableData>
+                  <TableData style={{ textAlign: "center" }}>
+                    {formatDate(item.created_at)}
+                  </TableData>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </TableResponsive>
+    </>
   );
 };

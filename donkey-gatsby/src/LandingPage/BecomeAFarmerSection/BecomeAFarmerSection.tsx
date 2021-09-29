@@ -4,6 +4,7 @@ import { StaticImage } from 'gatsby-plugin-image'
 import styled from "styled-components";
 import { Heading3 } from "../components";
 import line from './images/line.png'
+import { theme } from "theme";
 
 const CardBanner = styled.div`
   position: relative;
@@ -45,8 +46,12 @@ const CardBanner = styled.div`
 `;
 
 const CardFooter = styled.div`
-  padding-top: 180px;
-  padding-bottom: 180px;
+padding-top: 50px;
+padding-bottom: 50px;
+  ${theme.mediaQueries.lg.up} {
+    padding-top: 100px;
+  padding-bottom: 100px;
+  }
   .card {
     background: #f5f5f5;
   }
@@ -78,8 +83,8 @@ export const BecomeAFarmerSection: React.FC = () => {
       <CardBanner>
         <CardFooter>
           <Container>
-            <Heading3 className="mb-5 text-center">
-              Become a Don-key farmer
+            <Heading3 className="mb-0 mb-md-5 px-4 text-md-center">
+              Become a <br className="d-md-none"/> Don-key farmer
             </Heading3>
             <Row className="pt-5 position-relative">
               <Col lg={4}>

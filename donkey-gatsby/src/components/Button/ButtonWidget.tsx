@@ -21,9 +21,7 @@ interface IButtonProps {
 }
 
 const CotainedVariant = styled.button`
-  
   font-style: normal;
-  
   text-align: center;
   border: 0px;
   border-radius: 10px;
@@ -54,7 +52,7 @@ const OutlineVariant = styled.button`
   width: ${(props: IOutlinedButton) => (props.width ? props.width : "100%")};
   height: ${(props: IOutlinedButton) => (props.height ? props.height : "100%")};
   border: 1px solid ${theme.palette.border.main};
-  border-radius: 10px;
+  border-radius: 10px; 
   
   font-size: 14px;
   transition: background-color .40s;

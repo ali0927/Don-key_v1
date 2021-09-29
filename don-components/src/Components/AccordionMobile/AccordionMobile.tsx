@@ -5,6 +5,8 @@ import { breakPoints } from "../../breakponts";
 
 const StyledAccordionItem = styled.div`
   padding: 5px;
+  border: 0px !important;
+  margin-bottom: 1px;
 
   :first-child {
     border-top-left-radius: 10px !important;
@@ -48,7 +50,7 @@ export const AccordionHeadingText = styled.div<{
   mdFontSize?: string;
   color?: string;
 }>`
-  font-family: Poppins;
+  font-family: 'Poppins';
   font-weight: 600;
   font-size: ${(props) => (props.smFontSize ? props.smFontSize : "14px")};
   margin: 0px;
@@ -59,7 +61,7 @@ export const AccordionHeadingText = styled.div<{
 `;
 
 export const AccordionCaptionText = styled.div`
-  font-family: Poppins;
+  font-family: 'Poppins';
   font-size: 12px;
   font-weight: 600;
   color: #c4c4c4;
@@ -123,7 +125,7 @@ export const AccordionDetails: React.FC<{
       aria-labelledby={`heading-` + props.index}
       data-parent={"#accordion-" + accordionId}
     >
-      <AccordionBody className="card-body">
+      <AccordionBody className="card-body pt-0">
         <div className="d-block w-100">{props.children}</div>
       </AccordionBody>
     </div>

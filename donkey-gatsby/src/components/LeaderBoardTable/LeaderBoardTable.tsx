@@ -16,6 +16,7 @@ import { InvestmentPopup } from "components/InvestmentPopup/InvestmentPopup";
 import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
 import { leaderBoardData } from "./leaderboardjson";
+import { breakPoints } from "breakponts";
 
 const StyledImage = styled.img`
   width: 45px;
@@ -31,22 +32,38 @@ const HeadingWrapper = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
   font-weight: 700;
-  font-size: 30px;
+  font-size: 24px;
   line-height: 116%;
   display: -webkit-flex;
   display: flex;
   -webkit-align-items: center;
   align-items: center;
   color: #070602;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-size: 30px;
+  }
+`;
+
+const JoinButton = styled(ButtonWidget)`
+  height: 40px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    height: 50px;
+  }
 `;
 
 const CommingSoon = styled.img`
   position: absolute;
-  top: -5px;
-  right: -53%;
+  top: -10px;
+  right: -65%;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    top: -5px;
+    right: -53%;
+  }
 `;
 
 const BlurTable = styled(TableResponsive)`
@@ -60,14 +77,13 @@ const JoinUsWrapper = styled.div`
   position: absolute;
   left: 0;
   right: 0;
-  background-color: #F4F4F4;
+  background-color: #f4f4f4;
   top: 50%;
   align-items: center;
   transform: translateY(-50%);
   justify-content: center;
   z-index: 3;
 `;
-
 
 const Overlay = styled.div`
   position: absolute;
@@ -77,12 +93,12 @@ const Overlay = styled.div`
 `;
 
 export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
-  const {  isDisable = false } = props;
+  const { isDisable = false } = props;
   const [openInvestment, setOpenInvestment] = useState(false);
   const [state, setState] = useState({
     farmerName: "",
     poolAddress: "",
-    poolVersion: 1
+    poolVersion: 1,
   });
   const history = useHistory();
 
@@ -119,31 +135,34 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     setOpenInvestment(false);
   };
 
-
-
   return (
     <>
-      <HeadingWrapper className="position-relative mt-5 mb-5">
+      <HeadingWrapper className="position-relative mt-2 mt-lg-5 mb-3 mb-lg-5">
         <Heading>Leaderboard</Heading>
         <CommingSoon src={comingsoon} />
       </HeadingWrapper>
       <div className="position-relative">
         {isDisable && (
           <>
-          <Overlay/>
-          <JoinUsWrapper className="row pt-4 pb-4">
-            <div className="col d-flex flex-column  justify-content-center  flex-md-row justify-content-center align-items-center">
-               <div className="mr-md-3">
-                   <Heading>Join our farmers team</Heading>
-              </div>
-              <div className="ml-md-3">
-                <ButtonWidget varaint="contained" containedVariantColor="yellow" height="50px" width="206px" onClick={handleJoinUseClick}>
+            <Overlay />
+            <JoinUsWrapper className="row pt-4 pb-4">
+              <div className="col d-flex flex-column  justify-content-center  flex-md-row justify-content-center align-items-center">
+                <div className="mr-md-3">
+                  <Heading>Join our farmers team</Heading>
+                </div>
+                <div className="ml-md-3">
+                  <JoinButton
+                    varaint="contained"
+                    containedVariantColor="yellow"
+                    height="50px"
+                    width="206px"
+                    onClick={handleJoinUseClick}
+                  >
                     Become a farmer
-                </ButtonWidget>
+                  </JoinButton>
+                </div>
               </div>
-          </div>
-          </JoinUsWrapper>
-         
+            </JoinUsWrapper>
           </>
         )}
         <BlurTable disable={isDisable}>
@@ -183,11 +202,12 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
                       <TableData>{item.profit7days}</TableData>
                       <TableData>{item.profit}</TableData>
                       <TableData>
-                        - {/* <MyInvestment poolAddress={item.poolAddress} /> */}
+                        -{" "}
+                        {/* <MyInvestment poolAddress={item.poolAddress} /> */}
                       </TableData>
                       <TableData>
                         <ButtonWidget varaint="outlined" disabled>
-                           Invest
+                          Invest
                         </ButtonWidget>
                       </TableData>
                     </TableRow>

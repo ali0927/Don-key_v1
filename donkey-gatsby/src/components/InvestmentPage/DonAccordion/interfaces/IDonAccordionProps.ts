@@ -2,6 +2,7 @@ import { IFarmerInter } from "interfaces";
 import { IPoolAddress } from "components/InvestmentPage/interfaces";
 
 export interface IDonAccordionProps {
+  accordionId: string;
   investments: IFarmerInter[];
   poolAddresses: IPoolAddress;
   refresh: boolean;

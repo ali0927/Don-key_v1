@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { Switch } from "don-components";
+import { Switch, SwitchRow } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
 import styled from "styled-components";
@@ -51,7 +51,9 @@ import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { NetworkButton } from "components/NetworkButton";
 
 export const Heading = styled.div`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: 500;
   font-size: 20x;
   color: #000000;
@@ -68,7 +70,9 @@ export const SubHeading = styled(Heading)`
 `;
 
 const HeadingTitle = styled.div`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   color: #070602;
@@ -106,7 +110,7 @@ const WithDrawButton = styled(LightGrayButton)`
   background: linear-gradient(0deg, #f2f4f7 0%, #f0f2f5 48.04%, #ffffff 100%);
   height: 34px;
   width: 114px;
-  
+
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -163,16 +167,9 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-
-
 const ALL_FARMER_QUERY = gql`
-  query allFarmerQuery($chainId: Int!) {
-    farmers(
-      where: {
-        status_in: ["active", "deprecated"]
-        network: { chainId: $chainId }
-      }
-    ) {
+  query allFarmerQuery {
+    farmers(where: { status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {
@@ -196,11 +193,13 @@ const ALL_FARMER_QUERY = gql`
 `;
 
 const TotalInvestedAmount = styled.span`
-  font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 50px;
   font-weight: 700;
   @media only screen and (max-width: ${breakPoints.sm}) {
-    font-size: 36px;
+    font-size: 30px;
   }
 `;
 
@@ -229,9 +228,7 @@ export const InvestmentsPage = () => {
     poolAddress: "",
     pool_version: 1,
   });
-  const { data } = useQuery(ALL_FARMER_QUERY, {
-    variables: { chainId: network },
-  });
+  const { data } = useQuery(ALL_FARMER_QUERY);
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
@@ -255,8 +252,9 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        const responses = (data.farmers as IFarmerInter[]).map(
-          async (invest) => {
+        const responses = (data.farmers as IFarmerInter[])
+          .filter((item) => item.network.chainId === parseInt(network))
+          .map(async (invest) => {
             try {
               const contract = await getPoolContract(
                 web3,
@@ -307,8 +305,7 @@ export const InvestmentsPage = () => {
             } catch (e) {
               captureException(e, "CalInvestments");
             }
-          }
-        );
+          });
 
         await Promise.all(responses);
 
@@ -415,14 +412,13 @@ export const InvestmentsPage = () => {
       (filteredInvestMents.length > 0 || filteredOldInvestMents.length > 0)
     ) {
       return (
-        <div className="d-flex align-items-center justify-content-between mb-4">
-          <Heading>Farmer`s list</Heading>
-
-          <div className="d-flex align-items-center">
-            <SubHeading className="mr-3">Show in USD</SubHeading>
-            <Switch checked={isInUsd} onChange={handleToggle} />
-          </div>
-        </div>
+        <SwitchRow
+          className="mb-4"
+          heading="Farmer`s list"
+          subHeading={"Show in USD"}
+          checked={isInUsd}
+          onSwitchChange={handleToggle}
+        />
       );
     }
   };
@@ -617,6 +613,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
+            accordionId="new-investments"
             investments={filteredInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
@@ -719,6 +716,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
+            accordionId="old-investments"
             investments={filteredOldInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
@@ -740,20 +738,24 @@ export const InvestmentsPage = () => {
       <div className="bgColor investment_header_container">
         <NavBar variant="loggedin" />
         <Section>
-          <Head className="navbanHead rounded-0 pt-5 pb-5">
+          <Head className="navbanHead rounded-0 pt-2 pt-lg-5 pb-3">
             <Container>
               <Row>
                 <Col lg={12}>
-                  <HeadingTitle>My Investments</HeadingTitle>
-                  <div className="row align-items-center justify-content-between mb-5 flex-wrap">
+                  <HeadingTitle className="mb-0 mb-lg-3">
+                    My Investments
+                  </HeadingTitle>
+                  <div className="row align-items-center justify-content-between mb-4 mb-lg-5 flex-wrap">
                     <div className="col-12 col-md-8 col-lg-9 mb-1">
                       <TotalInvestedAmount>
                         {loading ? "-" : `$${investedAmount}`}
                       </TotalInvestedAmount>
                     </div>
-                    <div className="col-12 col-md-4 col-lg-3 d-flex px-2">
+                    <div className="col-12 col-md-4 col-lg-3 d-flex  justify-content-between mt-2 mt-lg-0">
                       <NetworkButton
                         varaint="outlined"
+                        width="77px"
+                        height="40px"
                         className="mr-1"
                         active={strategyNetworkFilter === BINANCE_CHAIN_ID}
                         onClick={() =>
@@ -763,8 +765,10 @@ export const InvestmentsPage = () => {
                         BSC
                       </NetworkButton>
                       <NetworkButton
+                        height="40px"
+                        width="103px"
                         varaint="outlined"
-                        className="ml-1"
+                        className="ml-1 mr-1"
                         active={strategyNetworkFilter === POLYGON_CHAIN_ID}
                         onClick={() =>
                           setStrategyNetworkFilter(POLYGON_CHAIN_ID)
@@ -774,6 +778,8 @@ export const InvestmentsPage = () => {
                       </NetworkButton>
                       <NetworkButton
                         varaint="outlined"
+                        height="40px"
+                        width="87px"
                         className="ml-1"
                         active={strategyNetworkFilter === AVAX_CHAIN_ID}
                         onClick={() => setStrategyNetworkFilter(AVAX_CHAIN_ID)}
@@ -788,8 +794,8 @@ export const InvestmentsPage = () => {
             </Container>
           </Head>
         </Section>
-        <GridBackground className="py-5">
-          <div className="mt-5 mb-5 tablebgHead">
+        <GridBackground className="py-4 py-lg-5">
+          <div className="mt-0 mt-lg-5 mb-5 tablebgHead">
             <Container>
               {loading && (
                 <>
