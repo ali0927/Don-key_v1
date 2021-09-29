@@ -167,15 +167,9 @@ const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
 
-
 const ALL_FARMER_QUERY = gql`
-  query allFarmerQuery($chainId: Int!) {
-    farmers(
-      where: {
-        status_in: ["active", "deprecated"]
-        network: { chainId: $chainId }
-      }
-    ) {
+  query allFarmerQuery {
+    farmers(where: { status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {
@@ -234,9 +228,7 @@ export const InvestmentsPage = () => {
     poolAddress: "",
     pool_version: 1,
   });
-  const { data } = useQuery(ALL_FARMER_QUERY, {
-    variables: { chainId: network },
-  });
+  const { data } = useQuery(ALL_FARMER_QUERY);
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
@@ -260,8 +252,9 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        const responses = (data.farmers as IFarmerInter[]).map(
-          async (invest) => {
+        const responses = (data.farmers as IFarmerInter[])
+          .filter((item) => item.network.chainId === parseInt(network))
+          .map(async (invest) => {
             try {
               const contract = await getPoolContract(
                 web3,
@@ -312,8 +305,7 @@ export const InvestmentsPage = () => {
             } catch (e) {
               captureException(e, "CalInvestments");
             }
-          }
-        );
+          });
 
         await Promise.all(responses);
 
@@ -621,7 +613,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
-          accordionId="new-investments"
+            accordionId="new-investments"
             investments={filteredInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
