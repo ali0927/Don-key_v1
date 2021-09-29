@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { breakPoints } from "breakponts";
 import { StaticImage } from "gatsby-plugin-image";
 
+
 const Root = styled.div`
   /* margin-top: 120px;
   margin-bottom: 120px; */
@@ -47,7 +48,7 @@ export const DonTokenSection: React.FC = () => {
       <Root className="pt-md-5 pb-md-5">
         <Container>
           <Row className="mt-5 mb-5 justify-content-between">
-            <Col lg={4} className="d-flex align-items-center mb-3 mb-lg-0">
+            <Col lg={4} className="d-flex align-items-center justify-content-center mb-5 mb-lg-0">
               <div>
                 <StaticImage
                   className="d-inline-block"
@@ -60,10 +61,11 @@ export const DonTokenSection: React.FC = () => {
               <div>
                 <div className="d-flex">
                   <LineRoot className="d-flex justify-content-lg-end mr-5 mt-2">
-                    <StaticImage layout="fixed" src="./images/img.png" alt="Image not found" />
+                    <StaticImage className="d-none d-md-block" layout="fixed" src="./images/img.png" alt="Image not found" />
+                    <StaticImage className="d-block d-md-none"  layout="fixed" src="./images/mobilebullets.png" alt="Image not found" />
                   </LineRoot>
                   <div className="d-flex flex-column justify-content-between">
-                    <div>
+                    <div className="mb-md-4">
                       <Heading3 className="mb-3">DON Token</Heading3>
                       <Content>
                         DON tokens are the full utility token for the Don-key
@@ -72,7 +74,7 @@ export const DonTokenSection: React.FC = () => {
                         wallet.
                       </Content>
                     </div>
-                    <div className="mt-5">
+                    <div className="mt-3 mt-md-5">
                       <Heading>Tiers and benefits</Heading>
                       <Content>
                         Stake $DON and climb up the tier ladder to get more and

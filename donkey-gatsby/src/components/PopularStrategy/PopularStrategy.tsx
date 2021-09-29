@@ -18,6 +18,7 @@ import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 import { IFarmer } from "interfaces";
 import React from "react";
+import { breakPoints } from "breakponts";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -67,6 +68,10 @@ const PapperInner = styled.div`
 
 const DescriptionContent = styled.p`
   min-height: 36px;
+  font-size: 12px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 16px;
+  }
 `;
 
 const GraphWrapper = styled.div`
@@ -104,6 +109,32 @@ const TokenImage = styled.img`
   height: 14px;
   margin-left: 6px;
   margin-right: 6px;
+`;
+
+const Title = styled.h5<{ fontSize: string }>`
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: ${(props) => props.fontSize};
+  }
+`;
+
+const TotalValue = styled.p`
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 400;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 16px;
+  }
+`;
+
+const DescriptionTitle = styled.h5`
+  font-size: 14px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 1.25rem;
+  }
 `;
 
 export const PopularStrategy = ({
@@ -186,9 +217,9 @@ export const PopularStrategy = ({
   }, [title]);
 
   const heading = (
-    <h5 style={{ fontSize }} className="ml-3 mb-0">
+    <Title fontSize={fontSize} className="ml-3 mb-0">
       {title}
-    </h5>
+    </Title>
   );
 
   const [riskImage, setRiskImage] = useState<string | null>(null);
@@ -246,7 +277,7 @@ export const PopularStrategy = ({
       <div className="p-4">
         <div className="d-flex justify-content-between">
           <div>
-            <p className="mb-0">Total Value</p>
+            <TotalValue className="mb-1">Total Value</TotalValue>
             <h5>{totalValue}</h5>
           </div>
 
@@ -303,8 +334,10 @@ export const PopularStrategy = ({
             {!showOnRight && (
               <>
                 {" "}
-                <p className="mb-0">APY</p>
-                <h5 className="primary-text">{apy}</h5>
+                <TotalValue className="mb-1">APY</TotalValue>
+                <h5 className="primary-text" style={{ color: "#FFC406" }}>
+                  {apy}
+                </h5>
               </>
             )}
           </div>
@@ -339,7 +372,9 @@ export const PopularStrategy = ({
             )}
           </div>
         )}
-        <h5 className="popularstrategy__content__title">{contentTitle}</h5>
+        <DescriptionTitle className="popularstrategy__content__title">
+          {contentTitle}
+        </DescriptionTitle>
         <div className="d-flex flex-column justify-content-between ">
           <DescriptionContent className="popularstrategy__content__text">
             <ShowMoreContent
@@ -357,7 +392,10 @@ export const PopularStrategy = ({
                 <ButtonWidget varaint="outlined" height="40px" disabled>
                   Invest
                 </ButtonWidget>
-                <div style={{top: -25, right: 10}} className="position-absolute">
+                <div
+                  style={{ top: -25, right: 10 }}
+                  className="position-absolute"
+                >
                   <img src={comingsoon} alt="ImageNotFound" />
                 </div>
               </div>
@@ -418,7 +456,11 @@ export const PopularStrategy = ({
             graph
           ) : (
             <div>
-              <img src={strategyImage} style={{maxWidth:`100%`}} alt="graph" />
+              <img
+                src={strategyImage}
+                style={{ maxWidth: `100%` }}
+                alt="graph"
+              />
             </div>
           )}
         </GraphWrapper>

@@ -5,10 +5,11 @@ import { PopularStrategy } from "components/PopularStrategy/PopularStrategy";
 import farmerCard1 from "../gabriel.svg";
 import image2 from "../popeye.svg";
 import image3 from "../image.svg";
-import { Heading3, LandingParagraph } from "../components";
+import { Heading3 } from "../components";
 import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
 import { navigate } from "gatsby-link";
+import { breakPoints } from "breakponts";
 
 const CardBanner = styled.div`
   position: relative;
@@ -16,8 +17,32 @@ const CardBanner = styled.div`
 `;
 
 const Heading = styled(Heading3)`
-  font-size: 38px;
+  font-size: 29px;
   color: #070602;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 38px;
+  }
+`;
+
+const StrategyDiv = styled.div`
+  margin-top: 2rem;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    margin-top: 69px;
+  }
+`;
+
+const LandingParagraph = styled.p`
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  color: #222222;
+
+  font-style: normal;
+  font-weight: 400;
+  text-align: left;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 20px;
+  }
 `;
 
 const CardBannerAdvantage = styled.div`
@@ -26,7 +51,7 @@ const CardBannerAdvantage = styled.div`
   background: ${theme.palette.common.white};
   margin-top: 20px;
   margin-bottom: 10px;
-  ${theme.mediaQueries.lg.up}{
+  ${theme.mediaQueries.lg.up} {
     margin-top: 120px;
   }
   padding-bottom: 20px;
@@ -78,6 +103,14 @@ const CardBannerAdvantage = styled.div`
 const ImageIcon = styled.img`
   width: 60px;
   height: 60px;
+`;
+
+const CardCol = styled.div`
+  padding: 0;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
 `;
 
 const Graph1 = () => {
@@ -203,8 +236,8 @@ export const CardsSection: React.FC = () => {
       <CardBanner className="mt-0">
         <CardBannerAdvantage>
           <Container>
-            <Row className="mt-md-5 mb-5 mt-1">
-              <Col md={7} className="pt-5">
+            <Row className="mt-md-5 mb-3 mb-md-5 mt-1">
+              <Col md={7} className="pt-3 pt-md-5">
                 <Heading className="mb-3 mt-3">
                   Come discover our Don-key farmers and follow the best
                 </Heading>
@@ -225,7 +258,7 @@ export const CardsSection: React.FC = () => {
                 </div>
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
-                  <div className="col-lg-8 mt-5">
+                  <CardCol className=" col-lg-8 mt-5">
                     <PopularStrategy
                       icon={<ImageIcon src={farmerCard1} alt="ImageNotFound" />}
                       investers={568}
@@ -237,12 +270,12 @@ export const CardsSection: React.FC = () => {
                       comingsoon
                       totalValue="$178,890"
                     />
-                  </div>
+                  </CardCol>
                 </div>
               </Col>
 
-              <Col md={5} className="pt-5">
-                <div className="col-lg-11">
+              <Col md={5} className="pt-2 pt-md-5">
+                <CardCol className="col-lg-11">
                   <div className="mt-4">
                     <PopularStrategy
                       icon={<ImageIcon src={image2} alt="ImageNotFound" />}
@@ -256,7 +289,7 @@ export const CardsSection: React.FC = () => {
                       totalValue="$1,354,560"
                     />
                   </div>
-                  <div style={{ marginTop: 69 }}>
+                  <StrategyDiv>
                     <PopularStrategy
                       icon={<ImageIcon src={image3} alt="ImageNotFound" />}
                       contentTitle="STRATEGY all or nothing here  "
@@ -268,8 +301,8 @@ export const CardsSection: React.FC = () => {
                       apy="167%"
                       totalValue="$870,650"
                     />
-                  </div>
-                </div>
+                  </StrategyDiv>
+                </CardCol>
               </Col>
             </Row>
           </Container>

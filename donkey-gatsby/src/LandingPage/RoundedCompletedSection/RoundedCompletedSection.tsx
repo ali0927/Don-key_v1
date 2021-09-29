@@ -8,15 +8,23 @@ import au21 from "./investorlogos/au21.svg";
 import blackEdage from "./investorlogos/blackedge.svg";
 import moonwhale from "./investorlogos/moonwhile.svg";
 import gbv from "./investorlogos/gbv.svg";
+import { breakPoints } from "breakponts";
 
 const StyledP = styled.p`
   border-left: 3px solid #070602;
-  font-size: 25px;
-  font-weight: 300;
+  font-size: 24px;
   padding: 0;
   line-height: 1.3;
   padding-left: 10px;
   margin: 0;
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-style: normal;
+  font-weight: 800;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 25px;
+  }
 `;
 
 const images = [
@@ -28,10 +36,13 @@ const images = [
 
 const InvestorSection = styled.section`
   background: #f3f3f3;
-  padding: 6rem 0;
+  padding: 3rem 0;
   min-height: 559px;
   display: flex;
   align-items: center;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    padding: 6rem 0;
+  }
 `;
 
 const ImageWrapper = styled.div`
