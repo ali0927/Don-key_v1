@@ -1,6 +1,6 @@
 import React from "react";
 import { BoostApyWhiteIcon } from "icons";
-import { useHistory } from "react-router";
+import { navigate } from "gatsby-link";
 import { IDonAccordionProps } from "./interfaces/IDonAccordionProps";
 import { ButtonWidget } from "components/Button";
 import { fixUrl, formatNum } from "helpers";
@@ -30,7 +30,7 @@ const StyledApyIcon = styled(BoostApyWhiteIcon)`
 `;
 
 export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
-  const { accordionId,investments, poolAddresses, refresh, donPrice } = props;
+  const { accordionId, investments, poolAddresses, refresh, donPrice } = props;
   const { chainId: network } = useWeb3Context();
   const { isUSD: isInUsd } = useUSDViewBool();
   const {
@@ -39,11 +39,12 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
     investedAmount: investAmount,
   } = useStakingContract();
   const [openBoast, setBoast] = React.useState(false);
-  const history = useHistory();
 
-  const RedirectToFarmerProfile = (poolAddress: string) => () => {
-    history.push("/dashboard/farmer/" + poolAddress);
-  };
+  const RedirectToFarmerProfile =
+    (poolAddress: string) => (e: React.MouseEvent<HTMLDivElement>) => {
+      e.stopPropagation();
+      navigate("/dashboard/farmer/" + poolAddress);
+    };
 
   const getRewards = (initialInvestmentinUSD: any) => {
     const dons = new BigNumber(pendingReward)
@@ -83,10 +84,12 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
             <>
               <AccordionCard>
                 <AccordionCardHeader index={index}>
-                  <div className="d-flex">
+                  <div
+                    className="d-flex"
+                    onClick={RedirectToFarmerProfile(investment.slug)}
+                  >
                     <div className="d-flex align-items-center">
                       <StyledMobileImage
-                        onClick={RedirectToFarmerProfile(investment.guid)}
                         src={fixUrl(investment?.farmerImage?.url)}
                       />
                     </div>

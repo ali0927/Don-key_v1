@@ -5,9 +5,10 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Container, Row, Col, Spinner } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { Switch, SwitchRow } from "don-components";
+import { SwitchRow } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
+import { navigate } from "gatsby-link";
 import styled from "styled-components";
 import {
   Table,
@@ -20,7 +21,6 @@ import {
 } from "components/Table";
 import { ButtonWidget, LightGrayButton } from "components/Button";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInitialInvestment } from "components/MyInvestment";
 import {
@@ -216,7 +216,6 @@ export const InvestmentsPage = () => {
 
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
-  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [oldInvestments, setOldInvestments] = useState<IFarmerInter[]>([]);
   const { chainId: network, address } = useWeb3Context();
@@ -386,11 +385,11 @@ export const InvestmentsPage = () => {
   };
 
   const handleFindd = () => {
-    history.push("/dashboard");
+    navigate("/dashboard");
   };
 
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
-    history.push("/dashboard/farmer/" + poolAddress);
+    navigate("/dashboard/farmer/" + poolAddress);
   };
 
   const toggleCurrency = useCallback(() => {
@@ -520,7 +519,10 @@ export const InvestmentsPage = () => {
                         <CustomTableData style={{ color: "#9B9B9B" }}>
                           {index + 1}
                         </CustomTableData>
-                        <CustomTableData>
+                        <CustomTableData
+                          cursor="pointer"
+                          onClick={RedirectToFarmerProfile(investment.slug)}
+                        >
                           <StyledImage
                             src={fixUrl(investment?.farmerImage?.url)}
                           />
