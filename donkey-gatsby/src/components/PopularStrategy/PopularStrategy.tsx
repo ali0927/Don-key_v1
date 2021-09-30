@@ -116,6 +116,7 @@ const Title = styled.h5<{ fontSize: string }>`
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
+  cursor: pointer;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: ${(props) => props.fontSize};
   }
