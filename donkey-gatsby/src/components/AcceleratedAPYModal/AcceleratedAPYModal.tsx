@@ -13,12 +13,18 @@ import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
 import { useWeb3Context } from "don-components";
+import tier1 from "./images/tier1.png";
+import tier2 from "./images/tier2.png";
+import tier3 from "./images/tier3.png";
+import tier4 from "./images/tier4.png";
+import tier5 from "./images/tier5.png";
 
 const Heading = styled.h2`
   font-weight: bold;
   font-size: ${(props: { fontSize: string; mobileFontSize: string }) =>
     props.mobileFontSize};
   color: #070602;
+  margin: 0px;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: ${(props: { fontSize: string; mobileFontSize: string }) =>
       props.fontSize};
@@ -26,56 +32,84 @@ const Heading = styled.h2`
 `;
 
 const SubHeading = styled.p`
-  
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
   text-align: left;
   color: #a3a3a3;
+  margin: 0;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 14px;
+  }
+`;
+
+const FooterText = styled(SubHeading)`
+  font-size: 12px;
 `;
 
 const TierRoot = styled.div`
-  border: 1px solid #ececec;
-  border-radius: 10px;
-  padding: 5px;
-  & .tierButton {
-    width: 52px;
-    height: 37px;
-    
-    font-size: 12px;
-    font-weight: 600;
-    color: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin-right: 5px;
-    :last-child {
-      margin-right: 0px;
+  & .tierSelected {
+    border: 1.67647px solid #000;
+    border-radius: 14px;
+    min-height: 60px;
+    min-width: 55px;
+    background-color: #fff037;
+    @media only screen and (min-width: ${breakPoints.md}) {
+      min-height: 90px;
+      min-width: 80px;
     }
   }
-  & .tierSelected {
-    width: 92px;
-    height: 37px;
-    background: #fceb74;
-    border: 1px solid #fed700;
-    box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
-    border-radius: 10px;
-    color: #081e3f;
+  & .tierCaptionSelected {
+    color: #000;
+    font-weight: 600;
   }
-  & .tierDisabled {
-    color: #a2a2a2;
+`;
+
+const TierItem = styled.div<{ disabled: boolean }>`
+  height: 47px;
+  width: 47px;
+  border-radius: 7.21192px;
+  background: #f1f1f1;
+  cursor: ${(props) => (props.disabled ? "no-drop" : "pointer")};
+  @media only screen and (min-width: ${breakPoints.md}) {
+    height: 70px;
+    width: 70px;
+  }
+`;
+
+const TierCaption = styled.p`
+  margin: 0;
+  font-family: Poppins;
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 500;
+  text-align: center;
+  color: #a2a2a2;
+`;
+
+const StyledStaticImage = styled.img`
+  height: 37px;
+  width: 37px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    height: 62px;
+    width: 53px;
   }
 `;
 
 const DonInfoRoot = styled.div`
-  margin-top: 38px;
+  margin-top: 24px;
 `;
 
 const DonAvaliableInput = styled.div`
-  height: 62px;
+  height: 48px;
   border: 1px solid #ececec;
   border-radius: 10px;
-  padding: 20px;
+  padding-right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    height: 70px;
+  }
 `;
 
 const HrLine = styled.hr`
@@ -113,7 +147,7 @@ export const AcceleratedAPYModal = ({
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
 
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();
@@ -131,6 +165,7 @@ export const AcceleratedAPYModal = ({
   const initialTier = tier.tier ? tier.tier + 1 : 1;
   const [selectedTier, setSelectedTier] = useState(initialTier);
   const [hasCompleted, setHasCompleted] = useState(false);
+  const tierImages = ["", tier1, tier2, tier3, tier4, tier5];
   useEffectOnTabFocus(() => {
     fetchAvailableDon();
   }, []);
@@ -254,7 +289,7 @@ export const AcceleratedAPYModal = ({
       return (
         <div style={{ marginTop: -30, marginBottom: -20 }}>
           <Header>
-            <Heading fontSize="23px" mobileFontSize="23px" className="mb-2">
+            <Heading fontSize="23px" mobileFontSize="18px" className="mb-2">
               Accelerated APY
             </Heading>
             <SubHeading>Stake DON tokens and get Accelerated APY</SubHeading>
@@ -262,35 +297,53 @@ export const AcceleratedAPYModal = ({
 
           <div className="d-flex justify-content-between align-items-center mt-4">
             <SubHeading>Your current Tier:</SubHeading>
-            <Heading fontSize="27px" mobileFontSize="23px">
+            <Heading fontSize="20px" mobileFontSize="16px">
               Tier {tier.tier}
             </Heading>
           </div>
 
           <div className="mt-2">
-            <SubHeading>Upgrade Tier</SubHeading>
+            <SubHeading style={{ color: "#000" }} className="mb-2">
+              Upgrade Tier
+            </SubHeading>
 
-            <TierRoot className="d-flex ml-0 mr-0 flex-wrap flex-lg-nowrap">
+            <TierRoot className="d-flex ml-0 mr-0 justify-content-between align-items-center flex-wrap flex-lg-nowrap">
               {Object.keys(tiersList).map((item, index) => {
                 const tierItem = tiersList[item];
                 const isSelected = selectedTier === tierItem.tier;
                 const isTierDisabled = initialTier > tierItem.tier;
                 const isAllDisabled = initialTier > tiersListLength;
+                const imageSrc = tierImages[index];
                 if (index !== 0) {
                   return (
-                    <div
-                      className={clsx("tierButton", {
-                        tierSelected: isSelected && !isAllDisabled,
-                        tierDisabled: isTierDisabled,
-                      })}
-                      onClick={() => {
-                        if (!isTierDisabled && !isAllDisabled) {
-                          setSelectedTier(tierItem.tier as number);
-                        }
-                      }}
-                    >
-                      {" "}
-                      Tier {tierItem.tier}
+                    <div>
+                      <TierItem
+                        disabled={isTierDisabled}
+                        className={clsx(
+                          "d-flex align-items-center justify-content-center",
+                          {
+                            tierSelected: isSelected && !isAllDisabled,
+                          }
+                        )}
+                        onClick={() => {
+                          if (!isTierDisabled && !isAllDisabled) {
+                            setSelectedTier(tierItem.tier as number);
+                          }
+                        }}
+                      >
+                        <StyledStaticImage
+                          src={imageSrc}
+                          alt="Tier image not found"
+                        />
+                      </TierItem>
+                      <TierCaption
+                        className={clsx("mt-1", {
+                          tierCaptionSelected: isSelected && !isAllDisabled,
+                        })}
+                      >
+                        {" "}
+                        Tier {tierItem.tier}
+                      </TierCaption>
                     </div>
                   );
                 }
@@ -301,20 +354,20 @@ export const AcceleratedAPYModal = ({
             <DonInfoRoot>
               {!hasDons && (
                 <Heading
-                  className="text-center mb-5"
+                  className="text-center mb-3"
                   fontSize="20px"
-                  mobileFontSize="15px"
+                  mobileFontSize="16px"
                 >
                   You don’t have DON available in your wallet
                 </Heading>
               )}
               {hasDons && (
                 <>
-                  <SubHeading>Available DON</SubHeading>
+                  <SubHeading className="mb-2">Available DON</SubHeading>
                   <DonAvaliableInput>
                     <Heading
                       className="m-0 text-right"
-                      fontSize="25px"
+                      fontSize="23px"
                       mobileFontSize="20px"
                     >
                       {new BigNumber(availableDon).toFixed(2)}
@@ -324,21 +377,21 @@ export const AcceleratedAPYModal = ({
               )}
             </DonInfoRoot>
 
-            <div className="d-flex justify-content-between align-items-center mt-3">
+            <div className="d-flex justify-content-between align-items-center mt-4">
               <SubHeading>Required DON Stake:</SubHeading>
-              <Heading fontSize="27px" mobileFontSize="20px">
+              <Heading fontSize="20px" mobileFontSize="16px">
                 {requiredDons}
               </Heading>
             </div>
 
-            <div className="d-flex align-items-center justify-content-between ">
+            <div className="d-flex align-items-center justify-content-between mt-2">
               <SubHeading>Extra APY will be</SubHeading>
-              <Heading fontSize="20px" mobileFontSize="18px">
+              <Heading fontSize="20px" mobileFontSize="16px">
                 +{predictedApy}%
               </Heading>
             </div>
 
-            <div className="d-flex align-items-center justify-content-center mt-3">
+            <div className="d-flex align-items-center justify-content-center mt-4">
               {showBuyButton ? (
                 <ButtonWidget
                   varaint="contained"
@@ -349,9 +402,10 @@ export const AcceleratedAPYModal = ({
                     );
                   }}
                   className="py-2 font-weight-bold"
+                  style={{ fontSize: 14 }}
                   containedVariantColor="lightYellow"
                   width="205px"
-                  height="40px"
+                  height="48px"
                 >
                   Buy DON
                 </ButtonWidget>
@@ -359,11 +413,12 @@ export const AcceleratedAPYModal = ({
                 <ButtonWidget
                   varaint="contained"
                   onClick={stakeDon}
+                  style={{ fontSize: 14 }}
                   disabled={initialTier >= tiersListLength}
-                  className="py-2 font-weight-bold"
+                  className="py-1 font-weight-bold"
                   containedVariantColor="lightYellow"
                   width="205px"
-                  height="40px"
+                  height="48px"
                 >
                   {btnLoading ? (
                     <Spinner animation="border" size="sm" />
@@ -374,9 +429,9 @@ export const AcceleratedAPYModal = ({
               )}
             </div>
 
-            <HrLine className="mt-4 mb-5" />
+            <HrLine className="mt-3 mt-md-4 mb-0" />
 
-            <SubHeading className="m-0">
+            <FooterText className="pt-3 ">
               Staked DON tokens will be locked for {coolOffDuration} after
               unstaking. DON rewards are claimable on the go.{" "}
               <a
@@ -387,7 +442,7 @@ export const AcceleratedAPYModal = ({
               >
                 Read more{" "}
               </a>
-            </SubHeading>
+            </FooterText>
           </div>
         </div>
       );
