@@ -32,7 +32,7 @@ const Content = styled(ModalContent)`
   padding: 3rem 1rem;
   padding-bottom: 2rem;
   @media only screen and (min-width: ${breakPoints.md}) {
-    padding: 3rem 3rem;
+    padding: 3rem 2rem;
   }
 `;
 

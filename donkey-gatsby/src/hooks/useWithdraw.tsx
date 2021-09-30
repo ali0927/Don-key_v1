@@ -8,7 +8,6 @@ import {
   captureException,
   getPoolContract,
 } from "helpers";
-import { useAxios } from "./useAxios";
 import { useStakingContract } from "./useStakingContract";
 
 const ADD_WITHDRAW_REQUEST = gql`
@@ -42,10 +41,6 @@ const ADD_WITHDRAW_REQUEST = gql`
 `;
 
 export const useWithdraw = () => {
-  const [{}, executeDelete] = useAxios(
-    { method: "DELETE", url: "/api/v2/investments" },
-    { manual: true }
-  );
 
   const [create] = useMutation(ADD_WITHDRAW_REQUEST);
   const { showFailure, showProgress, showSuccess } =
@@ -85,17 +80,17 @@ export const useWithdraw = () => {
           )
           .send({ from: accounts[0] });
       }
-      if (poolVersion < 3) {
-        await executeDelete({
-          data: {
-            poolAddress: poolAddress,
-          },
-        });
-      } else {
+      // if (poolVersion < 3) {
+      //   await executeDelete({
+      //     data: {
+      //       poolAddress: poolAddress,
+      //     },
+      //   });
+      // } else {
         await create({
           variables: { poolAddress, walletAddress: accounts[0] },
         });
-      }
+      // }
 
       showSuccess("Withdraw Request Created");
 

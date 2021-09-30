@@ -255,7 +255,7 @@ export const InvestmentPopup = ({
       }
 
       try {
-        await executePost({ data: { poolAddress } });
+        await executePost({ data: { poolAddress, walletAddress: accounts[0] } });
       } catch (e) {
         captureException(e, "Failed to post poolAddress");
       }

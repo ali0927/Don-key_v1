@@ -88,7 +88,7 @@ const DonKeyIconWrapper = styled.div`
 
 export const FAQSection = () => {
   return (
-    <Body id="faq" className="d-flex justify-content-center py-5">
+    <Body id="faq" className="d-flex justify-content-center py-lg-5">
       <div className="container">
         <HeadingTitle className="my-5">Frequently Asked Questions</HeadingTitle>
 

@@ -302,7 +302,7 @@ const DashboardDrawer = () => {
   const { connected } = useWeb3Context();
   return (
     <>
-      <DrawerItem icon={<MainIcon />} to="/">
+      <DrawerItem icon={<MainIcon />} to="/dashboard">
         Main
       </DrawerItem>
       {connected && (
