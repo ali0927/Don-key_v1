@@ -20,7 +20,7 @@ const INITIAL_STATE = {
 export const ReferralStateProvider: React.FC = ({ children }) => {
   const [state, setState] = useState(INITIAL_STATE);
 
-  const { chainId, address, connected, getConnectedWeb3 } = useWeb3Context();
+  const { chainId, address, connected } = useWeb3Context();
 
   const checkhasSignedUp = async () => {
     const web3 = getWeb3(BINANCE_CHAIN_ID);
