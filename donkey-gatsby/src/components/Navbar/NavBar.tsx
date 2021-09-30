@@ -246,7 +246,7 @@ const LandingDrawer = () => {
       <DrawerItem icon={<TeamIcon />} to="/team">
         Team
       </DrawerItem>
-      <DrawerItem icon={<FAQIcon />} to="/#faq">
+      <DrawerItem icon={<FAQIcon />} to="/faq">
         FAQ
       </DrawerItem>
     </>
