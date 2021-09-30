@@ -17,6 +17,8 @@ const Row = styled.div`
   position: relative;
   top: -60px;
   margin-bottom: 0 !important;
+  display: flex;
+  flex-wrap: wrap;
   @media( max-width: 1040px){
     justify-content: center !important;
   }
@@ -32,6 +34,14 @@ const FrequentRoot = styled.div`
   width: 550px;
   margin-bottom: 2rem;
   padding: 1.5rem;
+  display: flex;
+
+  @media( max-width: 1040px){
+    br{
+      display: none;
+    }
+  }
+
   @media (max-width: 600px) {
     width: 400px;
     padding: 1rem;
@@ -45,19 +55,23 @@ const FrequentRoot = styled.div`
 `;
 
 const Question = styled.h3`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
   font-size: 23px;
   color: #000;
   font-weight: 600;
-  width: 280px;
+  @media( max-width: 1040px ){
+    br{
+      display: none;
+    }
+  }
   @media (max-widht: 968px) {
     width: fit-content;
   }
+  @media( max-width: 600px ){
+    font-size:  18px;
+  }
   @media( max-width: 420px){
-    font-size: 18px;
+    font-size: 14px;
     width: fit-content;
   }
 `;
@@ -72,10 +86,11 @@ const QuestionNumber = styled.p`
   color: #000;
   background-color: #fff037;
   border-radius: 10px;
-  margin-right: 10px;
+  margin-right: 20px;
+
+
   @media( max-width: 420px){
     font-size: 12px;
-
     min-width: 30px;
     height: 30px;
     margin-right: 10px;
@@ -83,13 +98,12 @@ const QuestionNumber = styled.p`
 `;
 
 const Content = styled.p`
-  font-family: "Poppins";
   font-style: normal;
   font-size: 16px;
   color: #333;
   margin-top: 0px;
   @media( max-width: 420px){
-    font-size: 14px;
+    font-size: 12px;
     width: fit-content;
   }
 `;
@@ -109,12 +123,13 @@ const ImageWrapper = styled.div`
     width: 400px;
     height: 250px;
     bottom: 29.5px;
+    margin-top: -95px;
   }
   @media( max-width: 420px){
     width: 300px;
     height: 200px;
     bottom: 9.5px;
-    margin-top: -70px;
+    margin-top: -110px;
   }
 `;
 
@@ -122,78 +137,78 @@ export const CardSection = () => {
   return (
     <Body className="d-flex justify-content-center pb-0 mb-0">
       <div className="container position-relative d-flex flex-column align-items-center">
-        <Row className="row d-flex flex-wrap">
-          <FrequentRoot className=" d-flex">
+        <Row className="row">
+          <FrequentRoot>
             <QuestionNumber>01</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>What do I need to use the Don-key platform?</Question>
+                <Question>What do I need to use <br /> the Don-key platform?</Question>
                 <Content>Only 100 DON</Content>
               </div>
             </div>
           </FrequentRoot>
 
-          <FrequentRoot className=" d-flex">
+          <FrequentRoot>
             <QuestionNumber>02</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>Do I farm with the DON token?</Question>
+                <Question>Do I farm with <br />the DON token?</Question>
                 <Content>
-                  No, you farm with whatever token you want to earn APY on.
+                  No, you farm with whatever token you <br />want to earn APY on.
                 </Content>
               </div>
             </div>
           </FrequentRoot>
 
-          <FrequentRoot className=" d-flex">
+          <FrequentRoot>
             <QuestionNumber>03</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>Does Don-key offer staking?</Question>
+                <Question>Does Don-key <br /> offer staking?</Question>
                 <Content>
-                  Yes, but staking is only offered to users who farm on the
+                  Yes, but staking is only offered to users who <br /> farm on the
                   platform.
                 </Content>
               </div>
             </div>
           </FrequentRoot>
 
-          <FrequentRoot className=" d-flex">
+          <FrequentRoot>
             <QuestionNumber>04</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>What are the staking rewards?</Question>
+                <Question>What are the staking <br /> rewards?</Question>
                 <Content>
                   Rewards are determined by 5 DON tiers, outlined below. The
-                  higher your tier, the more additional APY in DON you can earn,
+                  higher your tier, the more additional<br /> APY in DON you can earn,
                   up to an extra 100% APY!
                 </Content>
               </div>
             </div>
           </FrequentRoot>
 
-          <FrequentRoot className=" d-flex">
+          <FrequentRoot>
             <QuestionNumber>05</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>How does Don-key collect fees?</Question>
+                <Question>How does Don-key <br /> collect fees?</Question>
                 <Content>
-                  At the time of withdrawal, Don-key only claims a percent fee
-                  on profits generated for the user - distributing 10% equally
-                  between platform maintenance and farmer rewards.
+                  At the time of withdrawal, Don-key only claims a <br /> percent fee
+                  on profits generated for the user -<br /> distributing 10% equally
+                  between platform <br />maintenance and farmer rewards.
                 </Content>
               </div>
             </div>
           </FrequentRoot>
 
-          <FrequentRoot className=" d-flex">
+          <FrequentRoot>
             <QuestionNumber>06</QuestionNumber>
             <div className="">
               <div className="mb-4">
-                <Question>What is Don-key’s unstaking policy?</Question>
+                <Question>What is Don-key’s unstaking <br /> policy?</Question>
                 <Content>
-                  Farming deposits and rewards are instantly claimable, while
-                  DON deposits have a 14 day cool off period after unstaking
+                  Farming deposits and rewards are instantly <br /> claimable, while
+                  DON deposits have a 14 day cool <br />off period after unstaking
                   (rewards are instantly claimable.)
                 </Content>
               </div>
@@ -205,12 +220,12 @@ export const CardSection = () => {
             <div className="">
               <div className="mb-4">
                 <Question>
-                  What strategies are DON staking rewards available for?
+                  What strategies are DON staking <br /> rewards available for?
                 </Question>
                 <Content>
-                  At the moment BSC and ETH based strategies offer DON staking
-                  rewards but the team is working on launching the token for
-                  MATIC, AVAX, and SOL as quickly as possible so that extra
+                  At the moment BSC and ETH based strategies <br />offer DON staking
+                  rewards but the team is <br /> working on launching the token for
+                  MATIC, AVAX, <br /> and SOL as quickly as possible so that extra<br />
                   rewards can be offered on these chains as well.
                 </Content>
               </div>

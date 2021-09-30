@@ -5,13 +5,14 @@ import { theme } from "theme";
 
 const Root = styled.div`
   background-color: #fff037;
-  min-height: 500px;
-  padding-top: 20px;
-  @media( max-width: 740px ){
-    min-height: 400px;
-  }
+  min-height: 450px;
+  padding-top: 4rem;
   @media( max-width: 740px ){
     min-height: 350px;
+  }
+  @media( max-width: 600px ){
+    padding: 0;
+    min-height: 300px;
   }
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
@@ -33,9 +34,6 @@ const Root = styled.div`
 `;
 
 const Heading = styled.h1`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 50px;
   font-weight: 800;
   text-align: left;
@@ -51,9 +49,6 @@ const Paragraph = styled.p`
 `;
 
 const FooterHeading = styled.div`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   text-align: center;
@@ -73,9 +68,6 @@ const FooterHeading = styled.div`
 `;
 
 const FooterSubHeading = styled.div`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 24px;
   font-weight: 800;
   text-align: center;
@@ -136,7 +128,7 @@ export const MainSection: React.FC = () => {
       <Root className="position-relative">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-7 mb-3 mb-sm-5">
+            <div className="col-lg-7 mb-0 mb-sm-5">
               <Heading>FAQ</Heading>
               <Paragraph className="mt-2 mt-sm-4 w-md-50">
                 Find answers to all most common questions our clients are faced
