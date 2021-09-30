@@ -85,3 +85,4 @@ export * from "./InvestmentIcon";
 export * from "./MainIcon";
 export * from "./ReferralsIcon";
 export * from "./BridgeIcon";
+

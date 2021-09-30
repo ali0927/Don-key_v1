@@ -2,7 +2,14 @@
 
 import { NavBar } from "components/Navbar/NavBar";
 import { useEffect, useMemo, useState, useCallback } from "react";
-import { Container, Row, Col, Spinner } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Spinner,
+  Tooltip,
+  OverlayTrigger,
+} from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
 import { Switch, SwitchRow } from "don-components";
@@ -49,6 +56,7 @@ import {
 } from "don-components";
 import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { NetworkButton } from "components/NetworkButton";
+import { AiOutlineInfoCircle } from 'react-icons/ai'
 
 export const Heading = styled.div`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -110,7 +118,6 @@ const WithDrawButton = styled(LightGrayButton)`
   background: linear-gradient(0deg, #f2f4f7 0%, #f0f2f5 48.04%, #ffffff 100%);
   height: 34px;
   width: 114px;
-
   font-style: normal;
   font-weight: normal;
   font-size: 14px;
@@ -166,7 +173,6 @@ const Section = styled.section`
 const Head = styled.section`
   background-color: ${theme.palette.background.yellow};
 `;
-
 
 const ALL_FARMER_QUERY = gql`
   query allFarmerQuery($chainId: Int!) {
@@ -414,6 +420,7 @@ export const InvestmentsPage = () => {
       }
     })();
   }, [network]);
+
   const renderSwitch = () => {
     if (
       !loading &&
@@ -492,7 +499,7 @@ export const InvestmentsPage = () => {
   };
 
   const renderNewInvestments = () => {
-    if (!loading && filteredInvestMents.length > 0) {
+    if (true) {
       return (
         <>
           <TableResponsive className="d-none d-lg-block">
@@ -502,11 +509,54 @@ export const InvestmentsPage = () => {
                   <CustomTableHeading className="py-4">#</CustomTableHeading>
                   <EmptyTableHeading></EmptyTableHeading>
                   <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                  <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
-                  <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                  <CustomTableHeading>
+                    INVESTED AMOUNT
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        (props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            {isInUsd ? "The amount of investment in USD value on the day of investment ( is that correct?)" : "The amount of native token you invested in total"}
+                          </Tooltip>
+                        )
+                      }
+                    >
+                      <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                  </CustomTableHeading>
+                  <CustomTableHeading>TOTAL PROFIT
+                  <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        (props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            {isInUsd ? " profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token" : " The amount of profit or loss in native token please consider fees and impairment loss"}
+                          </Tooltip>
+                        )
+                      }
+                    >
+                      <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                  </CustomTableHeading>
                   <CustomTableHeading>LAST CYCLE</CustomTableHeading>
                   {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
-                    <CustomTableHeading>DON REWARDS</CustomTableHeading>
+                    <CustomTableHeading>DON REWARDS
+                      <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        (props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            DON rewards are pegged to USD value, Therefore the USD value will always go up, but the DON quantity can vary based on the current price.
+                          </Tooltip>
+                        )
+                      }
+                    >
+                      <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                    </CustomTableHeading>
                   )}
                   <CustomTableHeading style={{ textAlign: "center" }}>
                     ACTION
@@ -621,7 +671,7 @@ export const InvestmentsPage = () => {
             </CustomTable>
           </TableResponsive>
           <DonAccordion
-          accordionId="new-investments"
+            accordionId="new-investments"
             investments={filteredInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
@@ -645,8 +695,36 @@ export const InvestmentsPage = () => {
                   <CustomTableHeading className="py-4">#</CustomTableHeading>
                   <EmptyTableHeading></EmptyTableHeading>
                   <CustomTableHeading>FARMER NAME</CustomTableHeading>
-                  <CustomTableHeading>INVESTED AMOUNT</CustomTableHeading>
-                  <CustomTableHeading>TOTAL PROFIT</CustomTableHeading>
+                  <CustomTableHeading>INVESTED AMOUNT
+                  <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        (props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            {isInUsd ? "The amount of investment in USD value on the day of investment ( is that correct?)" : "The amount of native token you invested in total"}
+                          </Tooltip>
+                        )
+                      }
+                    >
+                     <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                  </CustomTableHeading>
+                  <CustomTableHeading>TOTAL PROFIT
+                  <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        (props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            {isInUsd ? " profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token" : " The amount of profit or loss in native token please consider fees and impairment loss"}
+                          </Tooltip>
+                        )
+                      }
+                    >
+                      <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                  </CustomTableHeading>
 
                   <CustomTableHeading style={{ textAlign: "center" }}>
                     ACTION
