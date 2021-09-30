@@ -2,8 +2,6 @@ import { getReferralSystemContract, setReferralCode } from "helpers";
 import { createContext, useContext, useState } from "react";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { useIsomorphicEffect } from "hooks";
-import { signUser } from "components/Navbar";
-import { AuthToken } from "don-utils";
 import React from "react";
 
 const ReferralContext = createContext({
@@ -42,13 +40,16 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   };
 
   const resetState = () => setState(INITIAL_STATE);
-  useIsomorphicEffect(() => {
-    if(connected){
-      signUser(getConnectedWeb3());
-    } else {
-      localStorage.removeItem(AuthToken);
-    }
-  }, [connected, address])
+
+
+  // Removed Sign Message Functionality
+  // useIsomorphicEffect(() => {
+  //   if(connected){
+  //     signUser(getConnectedWeb3());
+  //   } else {
+  //     localStorage.removeItem(AuthToken);
+  //   }
+  // }, [connected, address])
   useIsomorphicEffect(() => {
     if(chainId === BINANCE_CHAIN_ID){
       if (connected) {
