@@ -1,5 +1,5 @@
 import { DonGatsbyLink, IDonGatsbyLinkProps } from "components/DonGatsbyLink";
-import styled, { keyframes } from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { theme } from "theme";
 
 export type IMenuItemProps = IDonGatsbyLinkProps;
@@ -35,16 +35,22 @@ export const MenuItem = styled(DonGatsbyLink)`
     padding-left: 1rem;
 
     padding-right: 3rem !important;
-    :hover:after {
-      cursor: pointer;
-      position: absolute;
-      content: "";
-      bottom: -6px;
-      background: #222222;
-      animation-name: ${moveInAnimation};
-      animation-duration: 1s;
-      animation-fill-mode: forwards;
-    }
+
+    ${({ enableHoverUnderLine=true }: { enableHoverUnderLine?: boolean }) =>
+      enableHoverUnderLine &&
+      css`
+        &:hover:after {
+          cursor: pointer;
+          position: absolute;
+          content: "";
+          bottom: -6px;
+          background: #222222;
+          animation-name: ${moveInAnimation};
+          animation-duration: 1s;
+          animation-fill-mode: forwards;
+        }
+      `}
+
     .active:before {
       border: 2px solid #222222;
       position: absolute;
@@ -53,6 +59,7 @@ export const MenuItem = styled(DonGatsbyLink)`
       width: 16px;
       background: #222222;
     }
+
     .active {
       font-weight: bold;
       position: relative;

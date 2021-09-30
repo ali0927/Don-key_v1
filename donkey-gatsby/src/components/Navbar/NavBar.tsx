@@ -36,6 +36,7 @@ import { InvestmentsIcon } from "icons/InvestmentsIcon";
 import { StakeIcon } from "icons/StakeIcon";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ClickAwayListener } from "@material-ui/core";
+import { MenuDropDown } from "components/MenuDropDown";
 
 declare global {
   interface Window {
@@ -261,9 +262,17 @@ const LandingMenu = () => {
       </MenuItem>
       <MenuItem to="/farmers">Farmers</MenuItem>
       <MenuItem to="/team">Team</MenuItem>
-      <MenuItem href={PancakeBuyURL}>$DON BEP20</MenuItem>
+      <MenuDropDown
+        label="BuyDON"
+        listItems={[
+          { text: "$DON BEP20", href: PancakeBuyURL, target: "_blank" },
+          { text: "$DON ERC20", href: UniSwapURL, target: "_blank" },
+        ]}
+      />
+      <MenuItem to="/#faq">FAQ</MenuItem>
+      {/* <MenuItem href={PancakeBuyURL}>$DON BEP20</MenuItem>
       <MenuItem href={UniSwapURL}>$DON ERC20</MenuItem>
-      <MenuItem href="/#faq">FAQ</MenuItem>
+      <MenuItem href="/#faq">FAQ</MenuItem> */}
     </>
   );
 };
@@ -333,18 +342,20 @@ function NavBar({ variant = "landing" }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
-    if(isOpen){
-      closeDrawer()
+    if (isOpen) {
+      closeDrawer();
     }
-  }
+  };
   return (
     <MenuWrapper>
       <StyledNav>
         <Logo className="d-none d-lg-flex align-items-center inherit-color no-underline" />
-        <IconWrapper onClick={(e) => {
-          e.stopPropagation();
-          openDrawer();
-        }}>
+        <IconWrapper
+          onClick={(e) => {
+            e.stopPropagation();
+            openDrawer();
+          }}
+        >
           <HamburgerIcon />
         </IconWrapper>
         <ClickAwayListener onClickAway={closeIfOpen}>
