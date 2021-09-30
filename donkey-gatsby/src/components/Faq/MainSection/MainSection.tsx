@@ -100,7 +100,7 @@ const FooterRow = styled.div`
   display: flex;
   @media( max-width: 768px){
     width: 700px;
-    oveflow: hidden;
+    overflow: hidden;
   }
 `;
 
