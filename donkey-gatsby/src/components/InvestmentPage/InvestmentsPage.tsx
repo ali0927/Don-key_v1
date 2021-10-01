@@ -493,7 +493,7 @@ export const InvestmentsPage = () => {
   };
 
   const renderNewInvestments = () => {
-    if (true) {
+    if (!loading && filteredInvestMents.length > 0) {
       return (
         <>
           <TableResponsive className="d-none d-lg-block">
