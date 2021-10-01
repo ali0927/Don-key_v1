@@ -119,7 +119,14 @@ const ConnectWalletButton = () => {
 
   const handleConnection = async () => {
     setIsDisabled(true);
-    await connectDapp();
+    try {
+      await connectDapp();
+    } catch(e){
+      console.log(e)
+    } finally {
+      setIsDisabled(false);
+    }
+  
   };
   if (connected) {
     return <Wallet />;
