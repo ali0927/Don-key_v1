@@ -204,6 +204,7 @@ const TotalInvestedAmount = styled.span`
 `;
 
 type ExtraInfo = {
+  guid: string;
   name: string;
   poolAddress: string;
   initialInvestmentinUSD: string;
@@ -252,7 +253,7 @@ export const InvestmentsPage = () => {
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
         const responses = (data.farmers as IFarmerInter[])
-          .filter((item) => item.network.chainId === parseInt(network))
+          .filter((item) => item.network.chainId === parseInt(network as any))
           .map(async (invest) => {
             try {
               const contract = await getPoolContract(
@@ -290,6 +291,7 @@ export const InvestmentsPage = () => {
                 const results = await Promise.all(amounts);
                 investedAmount = investedAmount.plus(new BigNumber(results[0]));
                 arr.push({
+                  guid: invest.guid,
                   name: invest.name,
                   poolAddress: invest.poolAddress,
                   initialInvestmentinUSD: results[0],
@@ -506,8 +508,8 @@ export const InvestmentsPage = () => {
               </TableHead>
               <TableBody>
                 {filteredInvestMents.map((investment, index) => {
-                  let poolAddressFinal = poolAddresses.find((item: any) => {
-                    return investment.name === item.name;
+                  let poolAddressFinal = poolAddresses.find((item) => {
+                    return investment.guid === item.guid;
                   });
                   let initialInvestmentinUSD =
                     poolAddressFinal?.initialInvestmentinUSD || "0";
