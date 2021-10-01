@@ -127,96 +127,19 @@ const ImageWrapper = styled.div`
   }
 `;
 
-const faqquestions = {
-  sections: [
-    {
-      title: "General Questions",
-      faq: [
-        {
-          ques: "What do I need to use the Don-key platform?",
-          ans: "Only 100 don",
-        },
-        {
-          ques: "Do I farm with the DON token?",
-          ans: "No, you farm with whatever token you want to earn APY on.",
-        },
-        {
-          ques: "Does Don-Key offer staking?",
-          ans: "Yes, but staking is only offered to users who farm on the platform.",
-        },
-        {
-          ques: "What are the staking rewards?",
-          ans: "Rewards are determined by 5 DON tiers, outlined below. The higher your tier, the more additional APY in DON you can earn,up to an extra 100% APY!",
-        },
-        {
-          ques: "What is Don-Key's unstaking policy?",
-          ans: "Farming deposits and rewards are instantly claimable, while DON deposits have a 14 day cool off period after unstaking (rewards are instantly claimable.)",
-        },
-        {
-          ques: "How does Don-key collect fees?",
-          ans: "At the time of withdrawal, Don-key only claims a percent fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards.",
-        },
-        {
-          ques: " What strategies are DON staking reward available for?",
-          ans: "At the moment BSC and ETH based strategies offer DON stakingrewards but the team is working on launching the token for MATIC, AVAX, and SOL as quickly as possible so that extra rewards can be offered on these chains as well.",
-        },
-      ],
-    },
-    {
-      title: "Section",
-      faq: [
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer.This is a sample answer.This is a sample answer.",
-        },
-      ],
-    },
-  ],
-};
-
-export const CardSection = (props: { value: number }) => {
-  useEffect(() => {
-    console.log("#####", props.value);
-  }, [props.value]);
+export const CardSection = ({
+  questions,
+}: {
+  questions: { ques: string; ans: string }[];
+}) => {
   return (
     <Body className="d-flex justify-content-center pb-0 mb-0">
       <div className="container position-relative d-flex flex-column align-items-center">
-        <Row className={props.value === 1 ? "row" : "d-none"}>
-          {faqquestions.sections[0].faq.map((QA, index) => {
+        <Row className={"row"}>
+          {questions.map((QA, index) => {
             return (
               <FrequentRoot key={index}>
-                <QuestionNumber>0{index+1}</QuestionNumber>
-                <div className="">
-                  <div className="mb-4">
-                    <Question>{QA.ques}</Question>
-                    <Content>{QA.ans}</Content>
-                  </div>
-                </div>
-              </FrequentRoot>
-            );
-          })}
-        </Row>
-        <Row className={(props.value !== 1 && props.value!== undefined) ? "row" : "d-none"}>
-          {faqquestions.sections[1].faq.map((QA, index) => {
-            return (
-              <FrequentRoot key={index}>
-                <QuestionNumber>0{index+1}</QuestionNumber>
+                <QuestionNumber>0{index + 1}</QuestionNumber>
                 <div className="">
                   <div className="mb-4">
                     <Question>{QA.ques}</Question>
@@ -228,7 +151,7 @@ export const CardSection = (props: { value: number }) => {
           })}
         </Row>
 
-        <ImageWrapper className={( props.value!== undefined) ? "" : "d-none"}>
+        <ImageWrapper className={props.value !== undefined ? "" : "d-none"}>
           <StaticImage
             className="d-inline-block"
             src="../../../images/donkeyImageFAQ.png"

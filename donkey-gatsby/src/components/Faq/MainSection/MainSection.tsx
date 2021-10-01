@@ -114,11 +114,72 @@ const DarkBorder = styled.div`
   background: #000;
 `;
 
-export const MainSection: React.FC = ( ) => {
-  const [active, setActive] = useState(1);
-
+const faqquestions = {
+  sections: [
+    {
+      title: "General Questions",
+      faq: [
+        {
+          ques: "What do I need to use the Don-key platform?",
+          ans: "Only 100 don",
+        },
+        {
+          ques: "Do I farm with the DON token?",
+          ans: "No, you farm with whatever token you want to earn APY on.",
+        },
+        {
+          ques: "Does Don-Key offer staking?",
+          ans: "Yes, but staking is only offered to users who farm on the platform.",
+        },
+        {
+          ques: "What are the staking rewards?",
+          ans: "Rewards are determined by 5 DON tiers, outlined below. The higher your tier, the more additional APY in DON you can earn,up to an extra 100% APY!",
+        },
+        {
+          ques: "What is Don-Key's unstaking policy?",
+          ans: "Farming deposits and rewards are instantly claimable, while DON deposits have a 14 day cool off period after unstaking (rewards are instantly claimable.)",
+        },
+        {
+          ques: "How does Don-key collect fees?",
+          ans: "At the time of withdrawal, Don-key only claims a percent fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards.",
+        },
+        {
+          ques: " What strategies are DON staking reward available for?",
+          ans: "At the moment BSC and ETH based strategies offer DON stakingrewards but the team is working on launching the token for MATIC, AVAX, and SOL as quickly as possible so that extra rewards can be offered on these chains as well.",
+        },
+      ],
+    },
+    {
+      title: "Section",
+      faq: [
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer.This is a sample answer.This is a sample answer.",
+        },
+      ],
+    },
+  ],
+};
+export const MainSection: React.FC = () => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const handleClick = (value: number) => {
-    setActive(value);
+    setSelectedIndex(value);
   };
   return (
     <>
@@ -137,47 +198,31 @@ export const MainSection: React.FC = ( ) => {
           <div className="d-flex pb-5 justify-content-start">
             <FooterRow className="position-relative">
               <GrayBorder className="d-block" />
-              <Col className="position-relative d-flex flex-column align-items-start">
-                <DarkBorder className={active === 1 ? "opacity-100" : "opacity-0"}/>
-                <FooterSubHeading
-                  onClick={() => handleClick(1)}
-                  className={active === 1 ? "active" : ""}
-                >
-                  General Questions
-                </FooterSubHeading>
-              </Col>
-              <Col className="position-relative d-flex flex-column  align-items-start">
-              <DarkBorder className={active === 2 ? "opacity-100" : "opacity-0"}/>
-                <FooterSubHeading
-                  onClick={() => handleClick(2)}
-                  className={active === 2 ? "active" : ""}
-                >
-                  Why buy Don-key?
-                </FooterSubHeading>
-              </Col>
-              <Col className="position-relative d-flex flex-column   align-items-start">
-              <DarkBorder className={active === 3 ? "opacity-100" : "opacity-0"}/>
-                <FooterSubHeading
-                  onClick={() => handleClick(3)}
-                  className={active === 3 ? "active" : ""}
-                >
-                  Section 3
-                </FooterSubHeading>
-              </Col>
-              <Col className="position-relative d-flex flex-column  align-items-start">
-              <DarkBorder className={active === 4 ? "opacity-100" : "opacity-0"}/>
-                <FooterSubHeading
-                  onClick={() => handleClick(4)}
-                  className={active === 4 ? "active" : ""}
-                >
-                  Section 4
-                </FooterSubHeading>
-              </Col>
+              {faqquestions.sections.map((item, index) => {
+                return (
+                  <Col
+                    key={item.title}
+                    className="position-relative d-flex flex-column align-items-start"
+                  >
+                    <DarkBorder
+                      className={
+                        selectedIndex === index ? "opacity-100" : "opacity-0"
+                      }
+                    />
+                    <FooterSubHeading
+                      onClick={() => handleClick(index)}
+                      className={selectedIndex === index ? "active" : ""}
+                    >
+                      {item.title}
+                    </FooterSubHeading>
+                  </Col>
+                );
+              })}
             </FooterRow>
           </div>
         </div>
       </Root>
-      <CardSection value={active} />
+      <CardSection questions={faqquestions.sections[selectedIndex].faq} />
     </>
   );
 };
