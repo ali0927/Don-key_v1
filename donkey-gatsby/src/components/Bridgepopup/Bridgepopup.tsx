@@ -478,7 +478,7 @@ export const BridgePopup = ({
   useEffect(() => {
     fetchBridgeInfo();
     fetchDons();
-  }, []);
+  }, [connected]);
 
   const classes = useStylesBootstrap();
 
