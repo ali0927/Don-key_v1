@@ -8,7 +8,7 @@ import { theme } from "theme";
 import { useWeb3Context } from "don-components";
 import Web3 from "web3";
 import { IUser } from "interfaces";
-import { useReferralContext } from "contexts/ReferralContext";
+// import { useReferralContext } from "contexts/ReferralContext";
 import { api } from "strapi";
 import { captureException } from "helpers";
 import { useToggle } from "don-hooks";
@@ -21,7 +21,7 @@ import {
   HamburgerIcon,
   LitePaperIcon,
   MainIcon,
-  ReferralsIcon,
+  // ReferralsIcon,
   TeamIcon,
   TwitterIconOutlined,
 } from "icons";
@@ -119,7 +119,14 @@ const ConnectWalletButton = () => {
 
   const handleConnection = async () => {
     setIsDisabled(true);
-    await connectDapp();
+    try {
+      await connectDapp();
+    } catch(e){
+      console.log(e)
+    } finally {
+      setIsDisabled(false);
+    }
+  
   };
   if (connected) {
     return <Wallet />;
@@ -261,8 +268,8 @@ const LandingMenu = () => {
       </MenuItem>
       <MenuItem to="/farmers">Farmers</MenuItem>
       <MenuItem to="/team">Team</MenuItem>
-      <MenuItem href={PancakeBuyURL}>$DON BEP20</MenuItem>
-      <MenuItem href={UniSwapURL}>$DON ERC20</MenuItem>
+      <MenuItem target="_blank" href={PancakeBuyURL}>$DON BEP20</MenuItem>
+      <MenuItem  target="_blank" href={UniSwapURL}>$DON ERC20</MenuItem>
       <MenuItem href="/faq">FAQ</MenuItem>
     </>
   );
@@ -276,13 +283,13 @@ const DashboardMenu = () => {
     openBridge();
   };
 
-  const { hasSignedUp: isShown } = useReferralContext();
+  // const { hasSignedUp: isShown } = useReferralContext();
   const { connected } = useWeb3Context();
   return (
     <>
       <MenuItem to="/dashboard">Main</MenuItem>
       {connected && <MenuItem to="/dashboard/investment">Investments</MenuItem>}
-      {isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>}
+      {/* {isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>} */}
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
       <MenuItem to="/faq">FAQ</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
@@ -298,11 +305,11 @@ const DashboardDrawer = () => {
     openBridge();
   };
 
-  const { hasSignedUp: isShown } = useReferralContext();
+  // const { hasSignedUp: isShown } = useReferralContext();
   const { connected } = useWeb3Context();
   return (
     <>
-      <DrawerItem icon={<MainIcon />} to="/">
+      <DrawerItem icon={<MainIcon />} to="/dashboard">
         Main
       </DrawerItem>
       {connected && (
@@ -310,11 +317,11 @@ const DashboardDrawer = () => {
           Investments
         </DrawerItem>
       )}
-      {isShown && (
+      {/* {isShown && (
         <DrawerItem icon={<ReferralsIcon />} to="/dashboard/referrals">
           Referrals
         </DrawerItem>
-      )}
+      )} */}
       <DrawerItem icon={<BridgeIcon />} onClick={handleOpen}>
         Bridge
       </DrawerItem>
@@ -369,11 +376,11 @@ function NavBar({ variant = "landing" }: INavBarProps) {
             </DrawerMiddle>
             <DrawerFooter>
               <div className="p-2 d-flex flex-column">
-                <BuyButton>
-                  <DonBinance href={PancakeBuyURL} /> Buy $DON BEP20
+                <BuyButton  target="_blank" href={PancakeBuyURL}>
+                  <DonBinance  /> Buy $DON BEP20
                 </BuyButton>
-                <BuyButton>
-                  <DonEthereum href={UniSwapURL} /> Buy $DON ERC20
+                <BuyButton target="_blank" href={UniSwapURL}>
+                  <DonEthereum  /> Buy $DON ERC20
                 </BuyButton>
               </div>
               {/* <DonPriceWrapper>

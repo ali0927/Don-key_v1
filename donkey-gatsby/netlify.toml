@@ -2,9 +2,9 @@
   command = "yarn build"
   publish = "public/"
 [context.master]
-  environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://don-key-finance-backend-staging-fqpn6.ondigitalocean.app", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
-[context.staging]
   environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
+[context.staging]
+  environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://staging-api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context."feature/*"]
   environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context.dev]

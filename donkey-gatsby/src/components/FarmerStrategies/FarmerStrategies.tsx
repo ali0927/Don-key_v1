@@ -17,7 +17,6 @@ const DescriptionTitle = styled.p`
     font-size: 14px;
     font-weight: 600;
   }
-
 `;
 
 const P = styled.p`
@@ -26,7 +25,7 @@ const P = styled.p`
     font-size: 12px;
     font-weight: normal;
     font-style: normal;
-    color:#666666;
+    color: #666666;
   }
 `;
 
@@ -89,7 +88,7 @@ export const FarmerStrategies = ({
                 </P>
               </TableHeaderRoot>
               <StrategyTableForInvestor
-                 chainId={farmer.network.chainId}
+                chainId={farmer.network.chainId}
                 farmerfee={farmer.farmerfee}
                 performancefee={farmer.performancefee}
                 poolAddress={farmer.poolAddress}
@@ -100,7 +99,6 @@ export const FarmerStrategies = ({
                   <Image
                     src={farmer.strategies[0].strategyImage.url}
                     className="img-fluid"
-                   
                     alt="strategy image"
                   />
                 </div>
@@ -108,7 +106,10 @@ export const FarmerStrategies = ({
                   <p style={{ fontSize: 15 }}>{farmer.strategies[0].info}</p>
                 )}
               </StrategyTableRoot>
-              <InvestorListTable chainId={farmer.network.chainId} poolAddress={farmer.poolAddress} />
+              <InvestorListTable
+                chainId={farmer.network.chainId}
+                poolAddress={farmer.poolAddress}
+              />
             </Col>
           </Row>
         </Container>

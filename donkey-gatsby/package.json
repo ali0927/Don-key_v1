@@ -72,6 +72,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
+    "react-virtualized": "^9.22.3",
     "sass": "^1.42.1",
     "styled-components": "^5.3.1"
   }

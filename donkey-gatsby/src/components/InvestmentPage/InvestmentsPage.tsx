@@ -12,9 +12,10 @@ import {
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { Switch, SwitchRow } from "don-components";
+import { SwitchRow } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
+import { navigate } from "gatsby-link";
 import styled from "styled-components";
 import {
   Table,
@@ -27,7 +28,6 @@ import {
 } from "components/Table";
 import { ButtonWidget, LightGrayButton } from "components/Button";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import { useHistory } from "react-router";
 import { AxiosResponse } from "axios";
 import { MyInitialInvestment } from "components/MyInvestment";
 import {
@@ -175,13 +175,8 @@ const Head = styled.section`
 `;
 
 const ALL_FARMER_QUERY = gql`
-  query allFarmerQuery($chainId: Int!) {
-    farmers(
-      where: {
-        status_in: ["active", "deprecated"]
-        network: { chainId: $chainId }
-      }
-    ) {
+  query allFarmerQuery {
+    farmers(where: { status_in: ["active", "deprecated"] }) {
       name
       description
       farmerImage {
@@ -216,6 +211,7 @@ const TotalInvestedAmount = styled.span`
 `;
 
 type ExtraInfo = {
+  guid: string;
   name: string;
   poolAddress: string;
   initialInvestmentinUSD: string;
@@ -228,7 +224,6 @@ export const InvestmentsPage = () => {
 
   const [initialCheck, setInitialCheck] = useState(true);
   const [isInUsd, setIsInUsd] = useState(true);
-  const history = useHistory();
   const [loading, setLoading] = useState(true);
   const [oldInvestments, setOldInvestments] = useState<IFarmerInter[]>([]);
   const { chainId: network, address } = useWeb3Context();
@@ -240,9 +235,7 @@ export const InvestmentsPage = () => {
     poolAddress: "",
     pool_version: 1,
   });
-  const { data } = useQuery(ALL_FARMER_QUERY, {
-    variables: { chainId: network },
-  });
+  const { data } = useQuery(ALL_FARMER_QUERY);
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
@@ -266,8 +259,9 @@ export const InvestmentsPage = () => {
         const finalInvestments: IFarmerInter[] = [];
         const oldInvestments: IFarmerInter[] = [];
         setLoading(true);
-        const responses = (data.farmers as IFarmerInter[]).map(
-          async (invest) => {
+        const responses = (data.farmers as IFarmerInter[])
+          .filter((item) => item.network.chainId === parseInt(network as any))
+          .map(async (invest) => {
             try {
               const contract = await getPoolContract(
                 web3,
@@ -304,6 +298,7 @@ export const InvestmentsPage = () => {
                 const results = await Promise.all(amounts);
                 investedAmount = investedAmount.plus(new BigNumber(results[0]));
                 arr.push({
+                  guid: invest.guid,
                   name: invest.name,
                   poolAddress: invest.poolAddress,
                   initialInvestmentinUSD: results[0],
@@ -318,8 +313,7 @@ export const InvestmentsPage = () => {
             } catch (e) {
               captureException(e, "CalInvestments");
             }
-          }
-        );
+          });
 
         await Promise.all(responses);
 
@@ -400,11 +394,11 @@ export const InvestmentsPage = () => {
   };
 
   const handleFindd = () => {
-    history.push("/dashboard");
+    navigate("/dashboard");
   };
 
   const RedirectToFarmerProfile = (poolAddress: string) => () => {
-    history.push("/dashboard/farmer/" + poolAddress);
+    navigate("/dashboard/farmer/" + poolAddress);
   };
 
   const toggleCurrency = useCallback(() => {
@@ -429,7 +423,7 @@ export const InvestmentsPage = () => {
       return (
         <SwitchRow
           className="mb-4"
-          heading="Farmer`s list"
+          heading="Farmer list"
           subHeading={"Show in USD"}
           checked={isInUsd}
           onSwitchChange={handleToggle}
@@ -453,7 +447,7 @@ export const InvestmentsPage = () => {
             <ZeroInvestmentBox>
               <ZeroInvestmentInnerBox>
                 <ZeroInvestmentContent>
-                  Switch Network to view These Investments
+                  Switch network to view these investments
                 </ZeroInvestmentContent>
                 <CenteredBox className="mb-5">
                   <ButtonWidget
@@ -565,8 +559,8 @@ export const InvestmentsPage = () => {
               </TableHead>
               <TableBody>
                 {filteredInvestMents.map((investment, index) => {
-                  let poolAddressFinal = poolAddresses.find((item: any) => {
-                    return investment.name === item.name;
+                  let poolAddressFinal = poolAddresses.find((item) => {
+                    return investment.guid === item.guid;
                   });
                   let initialInvestmentinUSD =
                     poolAddressFinal?.initialInvestmentinUSD || "0";
@@ -578,7 +572,10 @@ export const InvestmentsPage = () => {
                         <CustomTableData style={{ color: "#9B9B9B" }}>
                           {index + 1}
                         </CustomTableData>
-                        <CustomTableData>
+                        <CustomTableData
+                          cursor="pointer"
+                          onClick={RedirectToFarmerProfile(investment.slug)}
+                        >
                           <StyledImage
                             src={fixUrl(investment?.farmerImage?.url)}
                           />

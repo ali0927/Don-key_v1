@@ -18,6 +18,7 @@ import { ButtonWidget } from "components/Button";
 import { useIsomorphicEffect } from "hooks/useIsomorphicEffect";
 import { IFarmer } from "interfaces";
 import React from "react";
+import { breakPoints } from "breakponts";
 
 const StratIcon = ({ text, showDot }: { text: string; showDot?: boolean }) => {
   return (
@@ -67,6 +68,10 @@ const PapperInner = styled.div`
 
 const DescriptionContent = styled.p`
   min-height: 36px;
+  font-size: 12px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 16px;
+  }
 `;
 
 const GraphWrapper = styled.div`
@@ -104,6 +109,33 @@ const TokenImage = styled.img`
   height: 14px;
   margin-left: 6px;
   margin-right: 6px;
+`;
+
+const Title = styled.h5<{ fontSize: string }>`
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  cursor: pointer;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: ${(props) => props.fontSize};
+  }
+`;
+
+const TotalValue = styled.p`
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 400;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 16px;
+  }
+`;
+
+const DescriptionTitle = styled.h5`
+  font-size: 14px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 1.25rem;
+  }
 `;
 
 export const PopularStrategy = ({
@@ -186,9 +218,9 @@ export const PopularStrategy = ({
   }, [title]);
 
   const heading = (
-    <h5 style={{ fontSize }} className="ml-3 mb-0">
+    <Title fontSize={fontSize} className="ml-3 mb-0">
       {title}
-    </h5>
+    </Title>
   );
 
   const [riskImage, setRiskImage] = useState<string | null>(null);
@@ -243,134 +275,144 @@ export const PopularStrategy = ({
 
   const renderContent = () => {
     return (
-      <div className="p-4">
-        <div className="d-flex justify-content-between">
-          <div>
-            <p className="mb-0">Total Value</p>
-            <h5>{totalValue}</h5>
-          </div>
+      <div className="p-4 d-flex flex-column justify-content-between h-100">
+        <div>
+          <div className="d-flex justify-content-between">
+            <div>
+              <TotalValue className="mb-1">Total Value</TotalValue>
+              <h5>{totalValue}</h5>
+            </div>
 
-          {riskImage && (
-            <div className="text-right" style={{ minHeight: 80 }}>
-              {imageRisk ? (
-                <div
-                  style={{
-                    textAlign: "right",
-                    paddingLeft: 10,
-                  }}
-                >
-                  <img
-                    src={imageRisk}
-                    alt="ImageNotFound"
-                    style={{ fill: "green", width: 80 }}
-                  />
-                </div>
-              ) : (
-                riskImage && (
-                  <OverlayTrigger
-                    placement="top"
-                    delay={{ show: 250, hide: 400 }}
-                    overlay={
-                      <Tooltip id="button-tooltip" className="mytooltip">
-                        {riskDescriptionFinal && riskDescriptionFinal[0]} <br />
-                        <br />*{riskDescriptionFinal && riskDescriptionFinal[1]}
-                      </Tooltip>
-                    }
+            {riskImage && (
+              <div className="text-right" style={{ minHeight: 80 }}>
+                {imageRisk ? (
+                  <div
+                    style={{
+                      textAlign: "right",
+                      paddingLeft: 10,
+                    }}
                   >
-                    <div
-                      style={{
-                        textAlign: "right",
-                        paddingLeft: 10,
-                      }}
+                    <img
+                      src={imageRisk}
+                      alt="ImageNotFound"
+                      style={{ fill: "green", width: 80 }}
+                    />
+                  </div>
+                ) : (
+                  riskImage && (
+                    <OverlayTrigger
+                      placement="top"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={
+                        <Tooltip id="button-tooltip" className="mytooltip">
+                          {riskDescriptionFinal && riskDescriptionFinal[0]}{" "}
+                          <br />
+                          <br />*
+                          {riskDescriptionFinal && riskDescriptionFinal[1]}
+                        </Tooltip>
+                      }
                     >
-                      <img
-                        src={riskImage}
-                        alt="ImageNotFound"
-                        style={{ fill: "green", width: 80 }}
-                      />
-                    </div>
-                  </OverlayTrigger>
-                )
+                      <div
+                        style={{
+                          textAlign: "right",
+                          paddingLeft: 10,
+                        }}
+                      >
+                        <img
+                          src={riskImage}
+                          alt="ImageNotFound"
+                          style={{ fill: "green", width: 80 }}
+                        />
+                      </div>
+                    </OverlayTrigger>
+                  )
+                )}
+              </div>
+            )}
+          </div>
+          <div
+            className="d-flex justify-content-between"
+            // style={riskImage ? { marginTop: -22 } : {}}
+          >
+            <div className="mb-3">
+              {!showOnRight && (
+                <>
+                  {" "}
+                  <TotalValue className="mb-1">APY</TotalValue>
+                  <h5 className="primary-text" style={{ color: "#FFC406" }}>
+                    {apy}
+                  </h5>
+                </>
+              )}
+            </div>
+            {extraApy && (
+              <div>
+                <p className="mb-0 font-weight-bold">APY with DON</p>
+                <h5
+                  style={{ color: "#31c77f" }}
+                  className="primary-text text-right"
+                >
+                  +{extraApy}
+                </h5>
+              </div>
+            )}
+            {showOnRight && (
+              <div>
+                <p className="mb-0 font-weight-bold text-right">APY</p>
+                <h5
+                  style={{ color: "#31c77f" }}
+                  className="primary-text text-right"
+                >
+                  {apy}
+                </h5>
+              </div>
+            )}
+          </div>
+          {tokenImage && (
+            <div className="mb-3 mt-2 d-flex align-items-center">
+              Deposit in <TokenImage src={tokenImage} />{" "}
+              {tokenSymbol && (
+                <p className="font-weight-bold mb-0">{tokenSymbol}</p>
               )}
             </div>
           )}
-        </div>
-        <div
-          className="d-flex justify-content-between"
-          // style={riskImage ? { marginTop: -22 } : {}}
-        >
-          <div className="mb-3">
-            {!showOnRight && (
-              <>
-                {" "}
-                <p className="mb-0">APY</p>
-                <h5 className="primary-text">{apy}</h5>
-              </>
-            )}
+          <DescriptionTitle className="popularstrategy__content__title">
+            {contentTitle}
+          </DescriptionTitle>
+          <div className="d-flex flex-column justify-content-between">
+            <DescriptionContent className="popularstrategy__content__text">
+              <ShowMoreContent
+                content={content}
+                showAllContent={showAllContent}
+                onShowMoreClick={onShowMoreClick}
+                onShowLessClick={onShowLessClick}
+                length={100}
+              />
+            </DescriptionContent>
           </div>
-          {extraApy && (
-            <div>
-              <p className="mb-0 font-weight-bold">APY with DON</p>
-              <h5
-                style={{ color: "#31c77f" }}
-                className="primary-text text-right"
-              >
-                +{extraApy}
-              </h5>
-            </div>
-          )}
-          {showOnRight && (
-            <div>
-              <p className="mb-0 font-weight-bold text-right">APY</p>
-              <h5
-                style={{ color: "#31c77f" }}
-                className="primary-text text-right"
-              >
-                {apy}
-              </h5>
-            </div>
-          )}
         </div>
-        {tokenImage && (
-          <div className="mb-3 mt-2 d-flex align-items-center">
-            Deposit in <TokenImage src={tokenImage} />{" "}
-            {tokenSymbol && (
-              <p className="font-weight-bold mb-0">{tokenSymbol}</p>
-            )}
-          </div>
-        )}
-        <h5 className="popularstrategy__content__title">{contentTitle}</h5>
-        <div className="d-flex flex-column justify-content-between ">
-          <DescriptionContent className="popularstrategy__content__text">
-            <ShowMoreContent
-              content={content}
-              showAllContent={showAllContent}
-              onShowMoreClick={onShowMoreClick}
-              onShowLessClick={onShowLessClick}
-              length={100}
-            />
-          </DescriptionContent>
-
-          <div>
-            {comingSoonProp ? (
-              <div className="position-relative">
-                <ButtonWidget varaint="outlined" height="40px" disabled>
-                  Invest
-                </ButtonWidget>
-                <div style={{top: -25, right: 10}} className="position-absolute">
-                  <img src={comingsoon} alt="ImageNotFound" />
-                </div>
-              </div>
-            ) : (
-              <ButtonWidget
-                varaint="outlined"
-                height="40px"
-                onClick={ButtonClick}
-              >
+        <div>
+          {comingSoonProp ? (
+            <div className="position-relative">
+              <ButtonWidget varaint="outlined" height="40px" disabled>
                 Invest
               </ButtonWidget>
-            )}
-          </div>
+              <div
+                style={{ top: -25, right: 10 }}
+                className="position-absolute"
+              >
+                <img src={comingsoon} alt="ImageNotFound" />
+              </div>
+            </div>
+          ) : (
+            <ButtonWidget
+              varaint="outlined"
+              height="40px"
+              onClick={ButtonClick}
+            >
+              Invest
+            </ButtonWidget>
+          )}
         </div>
       </div>
     );
@@ -418,7 +460,11 @@ export const PopularStrategy = ({
             graph
           ) : (
             <div>
-              <img src={strategyImage} style={{maxWidth:`100%`}} alt="graph" />
+              <img
+                src={strategyImage}
+                style={{ maxWidth: `100%` }}
+                alt="graph"
+              />
             </div>
           )}
         </GraphWrapper>

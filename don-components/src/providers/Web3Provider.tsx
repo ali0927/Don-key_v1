@@ -205,10 +205,12 @@ export const Web3Provider: React.FC<{
     provider.on("chainChanged", async (chainId: string) => {
       updateState({ chainId: parseInt(chainId) });
     });
-
+    provider.on("connect",async (chainId: any)=> {
+      updateState({chainId: parseInt(chainId), connected: true})
+    })
     // Subscribe to provider disconnection
     provider.on("disconnect", (error: { code: number; message: string }) => {
-      resetApp();
+      updateState({connected: false,})
     });
   }, []);
 

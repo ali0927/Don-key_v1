@@ -14,15 +14,14 @@ import { IStrategy } from "interfaces";
 
 import BigNumber from "bignumber.js";
 import {  OverlayTrigger, Tooltip } from "react-bootstrap";
-import { InfoIcon } from "icons/InfoIcon";
 import { useTVL } from "hooks";
 import { isNull } from "lodash";
 import { DollarView } from "components/DollarView/DollarView";
 import styled from "styled-components";
-
+import {FiInfo} from "react-icons/fi"
 const Table1 = styled.table`
   border-Collapse: separate;
-  borderRadius: 10px;
+  border-radius: 10px;
   text-align: center; 
 `;
 
@@ -31,7 +30,7 @@ const TableData1 = styled.td`
  font-weight:600;
  text-align:left;
  padding-top:0 !important;
- padding-bottom:0 !importan;
+ padding-bottom:0 !important;
 `;
 
 const TableHead1 =  styled.thead`
@@ -140,7 +139,7 @@ export const StrategyTableForInvestor = ({
   
   return (
     <>
-      {strategies.map((item, index) => (
+      {strategies.map((item, ) => (
         <>
           <Table1
             className="mobile-table table table-borderless table-light d-md-none d-lg-none d-xl-none"
@@ -212,7 +211,7 @@ export const StrategyTableForInvestor = ({
                         paddingLeft: 10,
                       }}
                     >
-                      <InfoIcon />
+                      <FiInfo />
                     </div>
                   </OverlayTrigger>
                 </div>

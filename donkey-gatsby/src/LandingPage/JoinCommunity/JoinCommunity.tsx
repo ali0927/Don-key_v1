@@ -1,3 +1,4 @@
+import { breakPoints } from "breakponts";
 import { CoingKoIcon } from "icons";
 import * as React from "react";
 import { Container } from "react-bootstrap";
@@ -11,29 +12,35 @@ const CommunityRoot = styled.div`
   align-items: center;
   justify-content: center;
   & h4 {
-    font-family: "Work Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans",
+      sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+      "Noto Color Emoji";
     font-weight: bold;
     font-size: 45px;
     line-height: 48px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color:${theme.palette.background.yellow};
+    color: ${theme.palette.background.yellow};
 
     /* media queries */
-    @media (max-width: 767px) {
-      font-size: 26px;
+    @media (max-width: ${breakPoints.md}) {
+      font-size: 32px;
       line-height: 36px;
     }
   }
   & p {
     font-weight: normal;
-    font-size: 20px;
+    font-size: 16x;
     line-height: 31px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #a8a8a8;
+    @media (min-width: ${breakPoints.lg}) {
+      font-size: 20px;
+    }
   }
   & ul {
     display: flex;
@@ -42,7 +49,10 @@ const CommunityRoot = styled.div`
   }
   & ul li {
     list-style-type: none;
-    margin: 20px;
+    margin: 10px;
+    @media (min-width: ${breakPoints.lg}) {
+      margin: 20px;
+    }
   }
   .coinGeckocls-1 {
     fill: #8dc63f;
@@ -70,8 +80,8 @@ export const JoinCommunity: React.FC = () => {
       <CommunityRoot className="pt-5 pb-5 text-center">
         <Container>
           <h4 className="mt-4 pt-3">Join the Don-key Community</h4>
-          <p className="mt-5">Follow us on Social Media</p>
-          <ul className="pl-0 mt-3 pb-3">
+          <p className="mt-lg-5">Follow us on Social Media</p>
+          <ul className="pl-0 mt-lg-3 pb-3">
             <li>
               <a
                 href="https://don-key-finance.medium.com/"
@@ -140,7 +150,7 @@ export const JoinCommunity: React.FC = () => {
                 target="_blank"
                 rel="noreferrer"
               >
-                <CoingKoIcon/>
+                <CoingKoIcon />
               </a>
             </li>
             <li>

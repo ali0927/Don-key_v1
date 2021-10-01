@@ -9,6 +9,7 @@ import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
+import { breakPoints } from "breakponts";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -39,10 +40,13 @@ const Heading = styled.h1`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 50px;
+  font-size: 40px;
   font-weight: 800;
   text-align: left;
   color: #222222;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 50px;
+  }
 `;
 
 const Paragraph = styled.p`
@@ -51,6 +55,10 @@ const Paragraph = styled.p`
   font-weight: 400;
   text-align: left;
   word-break: break-word;
+  width: 80%;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    width: 100%;
+  }
 `;
 
 const FooterHeading = styled.div`
@@ -151,12 +159,12 @@ export const MainSection: React.FC = () => {
       <Root className="position-relative">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-7 mb-5">
+            <div className="col-lg-7 mb-3 mb-lg-5">
               <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph>
-              <StakeButton className="mt-3 mt-sm-5" onClick={handleTakePart}>
+              <StakeButton className="mt-3 mt-lg-5" onClick={handleTakePart}>
                 Stake LP token
               </StakeButton>
             </div>
@@ -166,7 +174,7 @@ export const MainSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="d-flex pb-5 justify-content-start">
+          <div className="d-flex pb-3 pb-md-5 justify-content-start">
             <FooterRow className="row position-relative">
               <GrayBorder className="d-none d-md-block" />
               <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">

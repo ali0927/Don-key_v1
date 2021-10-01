@@ -34,7 +34,6 @@ import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
-import { AuthToken } from "don-utils";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
@@ -183,11 +182,7 @@ export const InvestmentPopup = ({
       return;
     }
     enable();
-    const token = localStorage.getItem(AuthToken);
-    if (!token) {
-      alert("Refresh Page And Start Again");
-      return;
-    }
+
     try {
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
@@ -255,7 +250,7 @@ export const InvestmentPopup = ({
       }
 
       try {
-        await executePost({ data: { poolAddress } });
+        await executePost({ data: { poolAddress, walletAddress: accounts[0] } });
       } catch (e) {
         captureException(e, "Failed to post poolAddress");
       }

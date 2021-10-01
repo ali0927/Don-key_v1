@@ -1,4 +1,4 @@
-import { ReferralTableState } from "pages/dashboard/referrals";
+import { ReferralTableState } from "backupPages/referrals";
 
 export interface IReferalAccordionProps {
   referalState: ReferralTableState[];
