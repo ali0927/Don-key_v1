@@ -268,8 +268,8 @@ const LandingMenu = () => {
       </MenuItem>
       <MenuItem to="/farmers">Farmers</MenuItem>
       <MenuItem to="/team">Team</MenuItem>
-      <MenuItem href={PancakeBuyURL}>$DON BEP20</MenuItem>
-      <MenuItem href={UniSwapURL}>$DON ERC20</MenuItem>
+      <MenuItem target="_blank" href={PancakeBuyURL}>$DON BEP20</MenuItem>
+      <MenuItem  target="_blank" href={UniSwapURL}>$DON ERC20</MenuItem>
       <MenuItem href="/#faq">FAQ</MenuItem>
     </>
   );
@@ -376,11 +376,11 @@ function NavBar({ variant = "landing" }: INavBarProps) {
             </DrawerMiddle>
             <DrawerFooter>
               <div className="p-2 d-flex flex-column">
-                <BuyButton>
-                  <DonBinance href={PancakeBuyURL} /> Buy $DON BEP20
+                <BuyButton  target="_blank" href={PancakeBuyURL}>
+                  <DonBinance  /> Buy $DON BEP20
                 </BuyButton>
-                <BuyButton>
-                  <DonEthereum href={UniSwapURL} /> Buy $DON ERC20
+                <BuyButton target="_blank" href={UniSwapURL}>
+                  <DonEthereum  /> Buy $DON ERC20
                 </BuyButton>
               </div>
               {/* <DonPriceWrapper>
