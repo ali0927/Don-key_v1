@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
@@ -151,13 +151,11 @@ export const CardSection = ({
           })}
         </Row>
 
-        <ImageWrapper className={props.value !== undefined ? "" : "d-none"}>
-          <StaticImage
-            className="d-inline-block"
-            src="../../../images/donkeyImageFAQ.png"
-            alt="ImageNotFound"
-          />
-        </ImageWrapper>
+        <StaticImage
+          className="d-inline-block"
+          src="../../../images/donkeyImageFAQ.png"
+          alt="Donkey Reading"
+        />
       </div>
     </Body>
   );
