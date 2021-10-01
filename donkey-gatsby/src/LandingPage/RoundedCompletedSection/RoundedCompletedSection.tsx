@@ -1,14 +1,7 @@
 import * as React from "react";
 import styled from "styled-components";
-import banter from "./investorlogos/banter.svg";
-import spark from "./investorlogos/spark.svg";
-import morning from "./investorlogos/morningstar.svg";
-import solidity from "./investorlogos/solidity.svg";
-import au21 from "./investorlogos/au21.svg";
-import blackEdage from "./investorlogos/blackedge.svg";
-import moonwhale from "./investorlogos/moonwhile.svg";
-import gbv from "./investorlogos/gbv.svg";
 import { breakPoints } from "breakponts";
+import { StaticImage } from "gatsby-plugin-image";
 
 const StyledP = styled.p`
   border-left: 3px solid #070602;
@@ -27,13 +20,6 @@ const StyledP = styled.p`
   }
 `;
 
-const images = [
-  [banter, spark],
-  [morning, solidity],
-  [au21, blackEdage],
-  [moonwhale, gbv],
-];
-
 const InvestorSection = styled.section`
   background: #f3f3f3;
   padding: 3rem 0;
@@ -45,15 +31,7 @@ const InvestorSection = styled.section`
   }
 `;
 
-const ImageWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  img {
-    height: 60px;
-    object-fit: contain;
-  }
-`;
+
 
 export const RoundedCompletedSection: React.FC = () => {
   return (
@@ -66,27 +44,87 @@ export const RoundedCompletedSection: React.FC = () => {
                 Strategic Investment Round Completed
               </StyledP>
             </div>
-            <div className="col-md-9">
+            <div className="col-md-9 mt-5 mt-md-0">
               <div className="row">
-                {images.map((item, i) => {
-                  return (
-                    <div className="col-md-3" key={i}>
-                      {item.map((src, key) => {
-                        return (
-                          <ImageWrapper key={key} className="py-3">
-                            <img
-                              loading="eager"
-                              className="img-fluid"
-                              alt="ImageNotFound"
-                              key={key}
-                              src={src}
-                            />
-                          </ImageWrapper>
-                        );
-                      })}
-                    </div>
-                  );
-                })}
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                    src="./investorlogos/banter.png"
+                    height={60}
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/morningstar.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/au21.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/iangels.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/spark.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/solidity.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/blackedge.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                     height={60}
+                     className="mb-4"
+                    src="./investorlogos/gbv.png"
+                  />
+                </div>
               </div>
             </div>
           </div>
