@@ -270,7 +270,7 @@ const LandingMenu = () => {
       <MenuItem to="/team">Team</MenuItem>
       <MenuItem target="_blank" href={PancakeBuyURL}>$DON BEP20</MenuItem>
       <MenuItem  target="_blank" href={UniSwapURL}>$DON ERC20</MenuItem>
-      <MenuItem href="/faq">FAQ</MenuItem>
+      <MenuItem to="/faq">FAQ</MenuItem>
     </>
   );
 };

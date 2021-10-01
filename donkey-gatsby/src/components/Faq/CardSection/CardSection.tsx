@@ -151,11 +151,13 @@ export const CardSection = ({
           })}
         </Row>
 
-        <StaticImage
-          className="d-inline-block"
-          src="../../../images/donkeyImageFAQ.png"
-          alt="Donkey Reading"
-        />
+        <ImageWrapper>
+          <StaticImage
+            className="d-inline-block"
+            src="../../../images/donkeyImageFAQ.png"
+            alt="ImageNotFound"
+          />
+        </ImageWrapper>
       </div>
     </Body>
   );
