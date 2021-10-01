@@ -149,31 +149,6 @@ const faqquestions = {
         },
       ],
     },
-    {
-      title: "Section",
-      faq: [
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer",
-        },
-        {
-          ques: "This is a sample Question",
-          ans: "This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer.This is a sample answer.This is a sample answer.",
-        },
-      ],
-    },
   ],
 };
 export const MainSection: React.FC = () => {
