@@ -14,9 +14,8 @@ import { DonCommonmodal } from "components/DonModal";
 import styled from "styled-components";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { CircularProgress, makeStyles, Tooltip } from "@material-ui/core";
-import { useDidUpdate, useSwitchNetwork } from "hooks";
+import { useDidUpdate } from "hooks";
 import { BinanceIcon, DonBinance, DonEthereum, EthereumIcon } from "icons";
-
 import clsx from "clsx";
 import { InterchangeIcon } from "icons/InterchangeIcon";
 import axios from "axios";
@@ -345,39 +344,8 @@ export const BridgePopup = ({
   onClose: () => void;
 }) => {
   const { showFailure } = useTransactionNotification();
+  const { chainId, getConnectedWeb3, connected, connectDapp, switchNetwork } = useWeb3Context();
 
-  const renderButtonText = () => {
-    if (input1Chain === chainId) {
-      return (
-        <Button className="my-2" disabled={!isValid} onClick={handleSwap}>
-          {" "}
-          Transfer
-        </Button>
-      );
-    } else {
-      if (input1Chain === 1) {
-        return (
-          <DarkButton
-            className="my-2"
-            onClick={() => switchNetwork(input1Chain)}
-          >
-            Switch to Ethereum <EthereumIcon className="ml-1" />
-          </DarkButton>
-        );
-      } else {
-        return (
-          <DarkButton
-            className="my-2"
-            onClick={() => switchNetwork(input1Chain)}
-          >
-            Switch to Binance <BinanceIcon className="ml-1" />
-          </DarkButton>
-        );
-      }
-    }
-  };
-  const { chainId, getConnectedWeb3 } = useWeb3Context();
-  const { switchNetwork } = useSwitchNetwork();
 
   const [input1Chain, setInput1Chain] = useState(
     SupportedChainIds.indexOf(chainId || 1) > -1 ? chainId || 1 : 1
@@ -432,6 +400,44 @@ export const BridgePopup = ({
       setStep("initial");
     } finally {
       // refetch();
+    }
+  };
+
+  const renderButtonText = () => {
+    if (!connected) {
+      return (
+        <DarkButton className="my-2" onClick={connectDapp}>
+          Connect Wallet
+        </DarkButton>
+      );
+    }
+    if (input1Chain === chainId) {
+      return (
+        <Button className="my-2" disabled={!isValid} onClick={handleSwap}>
+          {" "}
+          Transfer
+        </Button>
+      );
+    } else {
+      if (input1Chain === 1) {
+        return (
+          <DarkButton
+            className="my-2"
+            onClick={() => switchNetwork(input1Chain)}
+          >
+            Switch to Ethereum <EthereumIcon className="ml-1" />
+          </DarkButton>
+        );
+      } else {
+        return (
+          <DarkButton
+            className="my-2"
+            onClick={() => switchNetwork(input1Chain)}
+          >
+            Switch to Binance <BinanceIcon className="ml-1" />
+          </DarkButton>
+        );
+      }
     }
   };
 
