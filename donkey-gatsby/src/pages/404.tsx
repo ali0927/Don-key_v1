@@ -6,6 +6,7 @@ import PageNotFoundImage from "../images/404page.png";
 import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
 import { Footer } from "components/Footer";
+import { navigate } from "gatsby-link";
 
 const Heading = styled.h1`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -83,41 +84,49 @@ const StyledImage = styled.img`
   }
 `;
 
-const NotFoundPage = () => (
-  <>
-    <NavBar />
-    <Body>
-      <div className="container d-flex justify-content-center">
-        <DesktopHeaderContent className="d-none  d-md-flex align-items-center justify-content-between">
-          <Heading>4</Heading>
-          <StyledImage
-            className="img-fluid"
-            src={PageNotFoundImage}
-            alt="Image not found"
-          />
-          <Heading>4</Heading>
-        </DesktopHeaderContent>
-        <div className="d-flex d-md-none mb-5">
-          <StyledImage
-            className="img-fluid"
-            src={PageNotFoundImage}
-            alt="Image not found"
-          />
+const NotFoundPage: React.FC = () => {
+  const handleGoToHome = () => {
+    navigate("/");
+  };
+
+  return (
+    <>
+      <NavBar />
+      <Body>
+        <div className="container d-flex justify-content-center">
+          <DesktopHeaderContent className="d-none  d-md-flex align-items-center justify-content-between">
+            <Heading>4</Heading>
+            <StyledImage
+              className="img-fluid"
+              src={PageNotFoundImage}
+              alt="Image not found"
+            />
+            <Heading>4</Heading>
+          </DesktopHeaderContent>
+          <div className="d-flex d-md-none mb-5">
+            <StyledImage
+              className="img-fluid"
+              src={PageNotFoundImage}
+              alt="Image not found"
+            />
+          </div>
         </div>
-      </div>
-      <div className="container">
-        <Heading className="d-block d-md-none text-center">404</Heading>
-        <Subheading className="mb-3">Oops, page not found!</Subheading>
-        <Paragraph className="mb-5">
-          Unfortunately this page has been moved or deleted
-        </Paragraph>
-        <div className="d-flex justify-content-center">
-          <StyledButton varaint="contained">Go to home</StyledButton>
+        <div className="container">
+          <Heading className="d-block d-md-none text-center">404</Heading>
+          <Subheading className="mb-3">Oops, page not found!</Subheading>
+          <Paragraph className="mb-5">
+            Unfortunately this page has been moved or deleted
+          </Paragraph>
+          <div className="d-flex justify-content-center">
+            <StyledButton varaint="contained" onClick={handleGoToHome}>
+              Go to home
+            </StyledButton>
+          </div>
         </div>
-      </div>
-    </Body>
-    <Footer />
-  </>
-);
+      </Body>
+      <Footer />
+    </>
+  );
+};
 
 export default NotFoundPage;
