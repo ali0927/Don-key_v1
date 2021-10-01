@@ -22,7 +22,7 @@ export default function Home() {
 
       <BecomeAFarmerSection />
       {/* Trading strategy builder */}
-      <FAQSection />
+      {/* <FAQSection /> */}
       <StrategyBuilderSection />
 
       {/* DON Tokens */}

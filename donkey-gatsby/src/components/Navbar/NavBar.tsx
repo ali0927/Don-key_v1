@@ -253,7 +253,7 @@ const LandingDrawer = () => {
       <DrawerItem icon={<TeamIcon />} to="/team">
         Team
       </DrawerItem>
-      <DrawerItem icon={<FAQIcon />} to="/#faq">
+      <DrawerItem icon={<FAQIcon />} to="/faq">
         FAQ
       </DrawerItem>
     </>
@@ -270,7 +270,7 @@ const LandingMenu = () => {
       <MenuItem to="/team">Team</MenuItem>
       <MenuItem target="_blank" href={PancakeBuyURL}>$DON BEP20</MenuItem>
       <MenuItem  target="_blank" href={UniSwapURL}>$DON ERC20</MenuItem>
-      <MenuItem href="/#faq">FAQ</MenuItem>
+      <MenuItem href="/faq">FAQ</MenuItem>
     </>
   );
 };
@@ -291,7 +291,7 @@ const DashboardMenu = () => {
       {connected && <MenuItem to="/dashboard/investment">Investments</MenuItem>}
       {/* {isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>} */}
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
-      <MenuItem to="/#faq">FAQ</MenuItem>
+      <MenuItem to="/faq">FAQ</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
     </>
   );
@@ -329,7 +329,7 @@ const DashboardDrawer = () => {
       <DrawerItem icon={<StakeIcon />} to="/stake">
         Stake LP
       </DrawerItem>
-      <DrawerItem icon={<FAQIcon />} to="/#faq">
+      <DrawerItem icon={<FAQIcon />} to="/faq">
         FAQ
       </DrawerItem>
     </>
