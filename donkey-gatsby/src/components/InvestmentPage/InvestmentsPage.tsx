@@ -415,7 +415,7 @@ export const InvestmentsPage = () => {
       return (
         <SwitchRow
           className="mb-4"
-          heading="Farmer`s list"
+          heading="Farmer list"
           subHeading={"Show in USD"}
           checked={isInUsd}
           onSwitchChange={handleToggle}
@@ -439,7 +439,7 @@ export const InvestmentsPage = () => {
             <ZeroInvestmentBox>
               <ZeroInvestmentInnerBox>
                 <ZeroInvestmentContent>
-                  Switch Network to view These Investments
+                  Switch network to view these investments
                 </ZeroInvestmentContent>
                 <CenteredBox className="mb-5">
                   <ButtonWidget
