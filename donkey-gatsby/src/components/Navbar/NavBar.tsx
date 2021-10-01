@@ -8,7 +8,7 @@ import { theme } from "theme";
 import { useWeb3Context } from "don-components";
 import Web3 from "web3";
 import { IUser } from "interfaces";
-import { useReferralContext } from "contexts/ReferralContext";
+// import { useReferralContext } from "contexts/ReferralContext";
 import { api } from "strapi";
 import { captureException } from "helpers";
 import { useToggle } from "don-hooks";
@@ -21,7 +21,7 @@ import {
   HamburgerIcon,
   LitePaperIcon,
   MainIcon,
-  ReferralsIcon,
+  // ReferralsIcon,
   TeamIcon,
   TwitterIconOutlined,
 } from "icons";
@@ -283,7 +283,7 @@ const DashboardMenu = () => {
     openBridge();
   };
 
-  const { hasSignedUp: isShown } = useReferralContext();
+  // const { hasSignedUp: isShown } = useReferralContext();
   const { connected } = useWeb3Context();
   return (
     <>
