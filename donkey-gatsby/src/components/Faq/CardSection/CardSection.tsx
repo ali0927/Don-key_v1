@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
@@ -6,7 +6,7 @@ import { StaticImage } from "gatsby-plugin-image";
 const Body = styled.div`
   z-index: 10;
   position: relative;
-  @media( max-width: 1040px){
+  @media (max-width: 1040px) {
     display: flex;
     justify-content: center;
   }
@@ -16,14 +16,14 @@ const Row = styled.div`
   justify-content: space-between;
   position: relative;
   top: -60px;
-  margin-bottom: 0 !important;
+  margin-bottom: 0px !important;
   display: flex;
   flex-wrap: wrap;
-  @media( max-width: 1040px){
+  @media (max-width: 1040px) {
     justify-content: center !important;
+    margin-bottom: 0px !important;
   }
-  @media( max-width: )
-`
+`;
 
 const FrequentRoot = styled.div`
   background: ${theme.palette.common.white};
@@ -36,8 +36,8 @@ const FrequentRoot = styled.div`
   padding: 1.5rem;
   display: flex;
 
-  @media( max-width: 1040px){
-    br{
+  @media (max-width: 1040px) {
+    br {
       display: none;
     }
   }
@@ -46,7 +46,7 @@ const FrequentRoot = styled.div`
     width: 400px;
     padding: 1rem;
   }
-  @media( max-width: 420px){
+  @media (max-width: 420px) {
     width: 340px;
     margin: 0 5px;
     margin-bottom: 2rem;
@@ -59,20 +59,16 @@ const Question = styled.h3`
   font-size: 23px;
   color: #000;
   font-weight: 600;
-  @media( max-width: 1040px ){
-    br{
-      display: none;
-    }
-  }
-  @media (max-widht: 968px) {
+  line-height: 34.5px;
+  width: 290px;
+  @media (max-width: 1040px) {
     width: fit-content;
   }
-  @media( max-width: 600px ){
-    font-size:  18px;
+  @media (max-width: 600px) {
+    font-size: 18px;
   }
-  @media( max-width: 420px){
+  @media (max-width: 420px) {
     font-size: 14px;
-    width: fit-content;
   }
 `;
 
@@ -88,8 +84,7 @@ const QuestionNumber = styled.p`
   border-radius: 10px;
   margin-right: 20px;
 
-
-  @media( max-width: 420px){
+  @media (max-width: 420px) {
     font-size: 12px;
     min-width: 30px;
     height: 30px;
@@ -102,9 +97,8 @@ const Content = styled.p`
   font-size: 16px;
   color: #333;
   margin-top: 0px;
-  @media( max-width: 420px){
+  @media (max-width: 420px) {
     font-size: 12px;
-    width: fit-content;
   }
 `;
 
@@ -115,17 +109,17 @@ const ImageWrapper = styled.div`
   width: 580px;
   height: 300px;
 
-  @media( max-width: 1040px) {
+  @media (max-width: 1040px) {
     position: relative;
     margin-top: 30px;
   }
-  @media( max-width: 610px){
+  @media (max-width: 610px) {
     width: 400px;
     height: 250px;
     bottom: 29.5px;
     margin-top: -95px;
   }
-  @media( max-width: 420px){
+  @media (max-width: 420px) {
     width: 300px;
     height: 200px;
     bottom: 9.5px;
@@ -133,106 +127,108 @@ const ImageWrapper = styled.div`
   }
 `;
 
-export const CardSection = () => {
+const faqquestions = {
+  sections: [
+    {
+      title: "General Questions",
+      faq: [
+        {
+          ques: "What do I need to use the Don-key platform?",
+          ans: "Only 100 don",
+        },
+        {
+          ques: "Do I farm with the DON token?",
+          ans: "No, you farm with whatever token you want to earn APY on.",
+        },
+        {
+          ques: "Does Don-Key offer staking?",
+          ans: "Yes, but staking is only offered to users who farm on the platform.",
+        },
+        {
+          ques: "What are the staking rewards?",
+          ans: "Rewards are determined by 5 DON tiers, outlined below. The higher your tier, the more additional APY in DON you can earn,up to an extra 100% APY!",
+        },
+        {
+          ques: "What is Don-Key's unstaking policy?",
+          ans: "Farming deposits and rewards are instantly claimable, while DON deposits have a 14 day cool off period after unstaking (rewards are instantly claimable.)",
+        },
+        {
+          ques: "How does Don-key collect fees?",
+          ans: "At the time of withdrawal, Don-key only claims a percent fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards.",
+        },
+        {
+          ques: " What strategies are DON staking reward available for?",
+          ans: "At the moment BSC and ETH based strategies offer DON stakingrewards but the team is working on launching the token for MATIC, AVAX, and SOL as quickly as possible so that extra rewards can be offered on these chains as well.",
+        },
+      ],
+    },
+    {
+      title: "Section",
+      faq: [
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer",
+        },
+        {
+          ques: "This is a sample Question",
+          ans: "This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer This is a sample answer.This is a sample answer.This is a sample answer.",
+        },
+      ],
+    },
+  ],
+};
+
+export const CardSection = (props: { value: number }) => {
+  useEffect(() => {
+    console.log("#####", props.value);
+  }, [props.value]);
   return (
     <Body className="d-flex justify-content-center pb-0 mb-0">
       <div className="container position-relative d-flex flex-column align-items-center">
-        <Row className="row">
-          <FrequentRoot>
-            <QuestionNumber>01</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>What do I need to use <br /> the Don-key platform?</Question>
-                <Content>Only 100 DON</Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot>
-            <QuestionNumber>02</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>Do I farm with <br />the DON token?</Question>
-                <Content>
-                  No, you farm with whatever token you <br />want to earn APY on.
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot>
-            <QuestionNumber>03</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>Does Don-key <br /> offer staking?</Question>
-                <Content>
-                  Yes, but staking is only offered to users who <br /> farm on the
-                  platform.
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot>
-            <QuestionNumber>04</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>What are the staking <br /> rewards?</Question>
-                <Content>
-                  Rewards are determined by 5 DON tiers, outlined below. The
-                  higher your tier, the more additional<br /> APY in DON you can earn,
-                  up to an extra 100% APY!
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot>
-            <QuestionNumber>05</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>How does Don-key <br /> collect fees?</Question>
-                <Content>
-                  At the time of withdrawal, Don-key only claims a <br /> percent fee
-                  on profits generated for the user -<br /> distributing 10% equally
-                  between platform <br />maintenance and farmer rewards.
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot>
-            <QuestionNumber>06</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>What is Don-key’s unstaking <br /> policy?</Question>
-                <Content>
-                  Farming deposits and rewards are instantly <br /> claimable, while
-                  DON deposits have a 14 day cool <br />off period after unstaking
-                  (rewards are instantly claimable.)
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
-
-          <FrequentRoot className="d-flex">
-            <QuestionNumber>07</QuestionNumber>
-            <div className="">
-              <div className="mb-4">
-                <Question>
-                  What strategies are DON staking <br /> rewards available for?
-                </Question>
-                <Content>
-                  At the moment BSC and ETH based strategies <br />offer DON staking
-                  rewards but the team is <br /> working on launching the token for
-                  MATIC, AVAX, <br /> and SOL as quickly as possible so that extra<br />
-                  rewards can be offered on these chains as well.
-                </Content>
-              </div>
-            </div>
-          </FrequentRoot>
+        <Row className={props.value === 1 ? "row" : "d-none"}>
+          {faqquestions.sections[0].faq.map((QA, index) => {
+            return (
+              <FrequentRoot key={index}>
+                <QuestionNumber>0{index+1}</QuestionNumber>
+                <div className="">
+                  <div className="mb-4">
+                    <Question>{QA.ques}</Question>
+                    <Content>{QA.ans}</Content>
+                  </div>
+                </div>
+              </FrequentRoot>
+            );
+          })}
         </Row>
-        <ImageWrapper className="">
+        <Row className={(props.value !== 1 && props.value!== undefined) ? "row" : "d-none"}>
+          {faqquestions.sections[1].faq.map((QA, index) => {
+            return (
+              <FrequentRoot key={index}>
+                <QuestionNumber>0{index+1}</QuestionNumber>
+                <div className="">
+                  <div className="mb-4">
+                    <Question>{QA.ques}</Question>
+                    <Content>{QA.ans}</Content>
+                  </div>
+                </div>
+              </FrequentRoot>
+            );
+          })}
+        </Row>
+
+        <ImageWrapper className={( props.value!== undefined) ? "" : "d-none"}>
           <StaticImage
             className="d-inline-block"
             src="../../../images/donkeyImageFAQ.png"

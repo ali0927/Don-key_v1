@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-
+import { CardSection } from "../CardSection/CardSection";
 
 const Root = styled.div`
   background-color: #fff037;
   min-height: 450px;
   padding-top: 4rem;
-  @media( max-width: 740px ){
+  @media (max-width: 740px) {
     min-height: 350px;
   }
-  @media( max-width: 600px ){
+  @media (max-width: 600px) {
     padding: 0;
     min-height: 300px;
   }
@@ -48,49 +48,33 @@ const Paragraph = styled.p`
   word-break: break-word;
 `;
 
-const FooterHeading = styled.div`
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  margin-top: 1.8rem;
-  @media( max-width:990px ){
-    font-size: 20px;
-  }
-  @media( max-width:780px ){
-    font-size: 16px;
-    width: 145px;
-  }
-  @media( max-width:580px ){
-    font-size: 12px;
-    width: 110px;
-    margin-top: .5rem !important;
-  }
-`;
-
 const FooterSubHeading = styled.div`
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
+  font-size: 23px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
   margin-top: 1.8rem;
   color: #8d8d8d;
-  @media( max-width:990px ){
+  @media (max-width: 990px) {
     font-size: 20px;
   }
-  @media( max-width:780px ){
+  @media (max-width: 780px) {
     font-size: 16px;
     width: 150px;
   }
-  @media( max-width:580px ){
-    font-size: 12px;
-    width: 112px;
-    margin-top: .8rem;
+  @media (max-width: 580px) {
+    font-size: 14px;
+    width: 115px;
+    margin-top: 0.8rem;
+    font-weight: 700;
+    line-height: 32px;
   }
 `;
 
 const FooterRow = styled.div`
   width: 100%;
   display: flex;
-  @media( max-width: 768px){
+  @media (max-width: 768px) {
     width: 700px;
     overflow: hidden;
   }
@@ -98,11 +82,21 @@ const FooterRow = styled.div`
 
 const Col = styled.div`
   margin-right: 2rem;
-  @media( max-width: 980px){
-     margin-right: 1rem;
+  .active {
+    color: #000;
+    font-weight: 700;
   }
-  @media( max-width: 780px ){
-    margin-right: .3rem;
+  .opacity-0 {
+    opacity: 0;
+  }
+  .opacity-100 {
+    opacity: 100;
+  }
+  @media (max-width: 980px) {
+    margin-right: 1rem;
+  }
+  @media (max-width: 780px) {
+    margin-right: 0.3rem;
   }
 `;
 
@@ -112,7 +106,6 @@ const GrayBorder = styled.hr`
   border-top: 1.8px dashed#000D09;
   top: 2px;
   margin: 0px;
-  margin-left: 15px;
 `;
 
 const DarkBorder = styled.div`
@@ -121,8 +114,12 @@ const DarkBorder = styled.div`
   background: #000;
 `;
 
+export const MainSection: React.FC = ( ) => {
+  const [active, setActive] = useState(1);
 
-export const MainSection: React.FC = () => {
+  const handleClick = (value: number) => {
+    setActive(value);
+  };
   return (
     <>
       <Root className="position-relative">
@@ -140,26 +137,47 @@ export const MainSection: React.FC = () => {
           <div className="d-flex pb-5 justify-content-start">
             <FooterRow className="position-relative">
               <GrayBorder className="d-block" />
-              <Col className=" mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading>
+              <Col className="position-relative d-flex flex-column align-items-start">
+                <DarkBorder className={active === 1 ? "opacity-100" : "opacity-0"}/>
+                <FooterSubHeading
+                  onClick={() => handleClick(1)}
+                  className={active === 1 ? "active" : ""}
+                >
                   General Questions
-                </FooterHeading>
+                </FooterSubHeading>
               </Col>
-              <Col className=" mb-4 position-relative d-flex flex-column  align-items-start">
-                <FooterSubHeading>Why buy Don-key?</FooterSubHeading>
+              <Col className="position-relative d-flex flex-column  align-items-start">
+              <DarkBorder className={active === 2 ? "opacity-100" : "opacity-0"}/>
+                <FooterSubHeading
+                  onClick={() => handleClick(2)}
+                  className={active === 2 ? "active" : ""}
+                >
+                  Why buy Don-key?
+                </FooterSubHeading>
               </Col>
-              <Col className=" mb-4 position-relative d-flex flex-column   align-items-start">
-                <FooterSubHeading>Section 3</FooterSubHeading>
+              <Col className="position-relative d-flex flex-column   align-items-start">
+              <DarkBorder className={active === 3 ? "opacity-100" : "opacity-0"}/>
+                <FooterSubHeading
+                  onClick={() => handleClick(3)}
+                  className={active === 3 ? "active" : ""}
+                >
+                  Section 3
+                </FooterSubHeading>
               </Col>
-              <Col className=" mb-4 position-relative d-flex flex-column  align-items-start">
-                <FooterSubHeading>Section 4</FooterSubHeading>
+              <Col className="position-relative d-flex flex-column  align-items-start">
+              <DarkBorder className={active === 4 ? "opacity-100" : "opacity-0"}/>
+                <FooterSubHeading
+                  onClick={() => handleClick(4)}
+                  className={active === 4 ? "active" : ""}
+                >
+                  Section 4
+                </FooterSubHeading>
               </Col>
             </FooterRow>
           </div>
         </div>
-
       </Root>
+      <CardSection value={active} />
     </>
   );
 };
