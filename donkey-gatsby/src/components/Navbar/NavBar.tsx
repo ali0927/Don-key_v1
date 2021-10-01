@@ -289,7 +289,7 @@ const DashboardMenu = () => {
     <>
       <MenuItem to="/dashboard">Main</MenuItem>
       {connected && <MenuItem to="/dashboard/investment">Investments</MenuItem>}
-      {isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>}
+      {/* {isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>} */}
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
       <MenuItem to="/#faq">FAQ</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
@@ -305,7 +305,7 @@ const DashboardDrawer = () => {
     openBridge();
   };
 
-  const { hasSignedUp: isShown } = useReferralContext();
+  // const { hasSignedUp: isShown } = useReferralContext();
   const { connected } = useWeb3Context();
   return (
     <>
@@ -317,11 +317,11 @@ const DashboardDrawer = () => {
           Investments
         </DrawerItem>
       )}
-      {isShown && (
+      {/* {isShown && (
         <DrawerItem icon={<ReferralsIcon />} to="/dashboard/referrals">
           Referrals
         </DrawerItem>
-      )}
+      )} */}
       <DrawerItem icon={<BridgeIcon />} onClick={handleOpen}>
         Bridge
       </DrawerItem>
