@@ -1,7 +1,7 @@
 import { NavBar } from "components/Navbar";
 import { CardsSection } from "LandingPage/CardsSection";
 import { BecomeAFarmerSection } from "LandingPage/BecomeAFarmerSection";
-import { FAQSection } from "components/FAQSection";
+// import { FAQSection } from "components/FAQSection";
 import { StrategyBuilderSection } from "LandingPage/StrategyBuilderSection";
 import { DonTokenSection } from "LandingPage/DonTokensSection";
 import { RoadMap } from "LandingPage/RoadMap/RoadMap";
