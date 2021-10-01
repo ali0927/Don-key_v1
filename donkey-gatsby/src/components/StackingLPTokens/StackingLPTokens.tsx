@@ -117,7 +117,7 @@ export const StackingLPTokens: React.FC = () => {
               </SubHeading>
             </div>
             <div className="col-lg-7 d-lg-flex align-items-center justify-content-end d-none ">
-              <img src={StackingLogo} alt="Stacking logo not found" />
+              {/* <img src={StackingLogo} alt="Stacking logo not found" /> */}
             </div>
           </div>
         </Container>
