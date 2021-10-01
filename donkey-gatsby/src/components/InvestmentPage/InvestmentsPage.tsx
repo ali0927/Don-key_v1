@@ -535,7 +535,22 @@ export const InvestmentsPage = () => {
                       <AiOutlineInfoCircle />
                     </OverlayTrigger>
                   </CustomTableHeading>
-                  <CustomTableHeading>LAST CYCLE</CustomTableHeading>
+                  <CustomTableHeading>
+                    <OverlayTrigger
+                      placement="right"
+                      delay={{ show: 250, hide: 400 }}
+                      overlay={(props) => (
+                        <Tooltip id="button-tooltip" {...props}>
+                          Don-key auto compounds the pool's funds in cycles to
+                          optimize the swap and minimize fees, slippage and
+                          price impact. A typical day will have 2 cycles.
+                        </Tooltip>
+                      )}
+                    >
+                      <AiOutlineInfoCircle />
+                    </OverlayTrigger>
+                    LAST CYCLE
+                  </CustomTableHeading>
                   {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                     <CustomTableHeading>
                       DON REWARDS
@@ -702,7 +717,7 @@ export const InvestmentsPage = () => {
                       overlay={(props) => (
                         <Tooltip id="button-tooltip" {...props}>
                           {isInUsd
-                            ? "The amount of investment in USD value on the day of investment ( is that correct?)"
+                            ? "The amount of investment in USD value on the day of investment"
                             : "The amount of native token you invested in total"}
                         </Tooltip>
                       )}
