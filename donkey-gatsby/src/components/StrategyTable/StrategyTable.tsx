@@ -13,37 +13,37 @@ import React, { useMemo } from "react";
 import { IStrategy } from "interfaces";
 
 import BigNumber from "bignumber.js";
-import {  OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useTVL } from "hooks";
 import { isNull } from "lodash";
 import { DollarView } from "components/DollarView/DollarView";
 import styled from "styled-components";
-import {FiInfo} from "react-icons/fi"
+import { FiInfo } from "react-icons/fi";
 const Table1 = styled.table`
-  border-Collapse: separate;
+  border-collapse: separate;
   border-radius: 10px;
-  text-align: center; 
+  text-align: center;
 `;
 
 const TableData1 = styled.td`
-  font-size:14px;
- font-weight:600;
- text-align:left;
- padding-top:0 !important;
- padding-bottom:0 !important;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 `;
 
-const TableHead1 =  styled.thead`
-font-size:12px;
-font-weight:500;
-text-align:left;
+const TableHead1 = styled.thead`
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
 `;
 
-const TableHeading1 =  styled.th`
-padding-top:6px !important;
-padding-bottom:6px !important;
-font-weight:500;
-color:#C4C4C4;
+const TableHeading1 = styled.th`
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+  font-weight: 500;
+  color: #c4c4c4;
 `;
 
 const formatDate = (
@@ -136,20 +136,28 @@ export const StrategyTableForInvestor = ({
       </strong>{" "}
     </Tooltip>
   );
-  
+
   return (
     <>
-      {strategies.map((item, ) => (
+      {strategies.map((item) => (
         <>
           <Table1
             className="mobile-table table table-borderless table-light d-md-none d-lg-none d-xl-none"
             style={{ borderRadius: "10px" }}
           >
-            <TableHead1  style={{ borderBottomStyle: "none" }}>
+            <TableHead1 style={{ borderBottomStyle: "none" }}>
               <TableRow>
-                  <TableHeading1 style={{ textAlign: "left", borderRadius: "10px" }}>Name</TableHeading1>
-                  <TableHeading1 style={{ textAlign: "left" }}>TVL</TableHeading1>
-                  <TableHeading1 style={{ textAlign: "left" , borderRadius: "10px"}}>Fees</TableHeading1>
+                <TableHeading1
+                  style={{ textAlign: "left", borderRadius: "10px" }}
+                >
+                  Name
+                </TableHeading1>
+                <TableHeading1 style={{ textAlign: "left" }}>TVL</TableHeading1>
+                <TableHeading1
+                  style={{ textAlign: "left", borderRadius: "10px" }}
+                >
+                  Fees
+                </TableHeading1>
               </TableRow>
             </TableHead1>
             <TableBody>
@@ -162,28 +170,38 @@ export const StrategyTableForInvestor = ({
                     tokenAmount={tvl}
                   />
                 </TableData1>
-                <TableData1 style={{ textAlign: "left" }}>{new BigNumber(item.apy).toFixed(2) + "%"}</TableData1>
+                <TableData1 style={{ textAlign: "left" }}>
+                  {new BigNumber(item.apy).toFixed(2) + "%"}
+                </TableData1>
               </TableRow>
             </TableBody>
-            <TableHead1  style={{ borderBottomStyle: "none" }}>
+            <TableHead1 style={{ borderBottomStyle: "none" }}>
               <TableRow>
-                <TableHeading1 style={{ textAlign: "left" }}>Created</TableHeading1>
-                <TableHeading1 style={{ textAlign: "left" }}>Status</TableHeading1>
+                <TableHeading1 style={{ textAlign: "left" }}>
+                  Created
+                </TableHeading1>
+                <TableHeading1 style={{ textAlign: "left" }}>
+                  Status
+                </TableHeading1>
                 <TableHeading1 style={{ textAlign: "left" }}>APY</TableHeading1>
               </TableRow>
             </TableHead1>
             <TableBody>
               <TableRow>
-                <TableData1 style={{ borderRadius: "10px" }}>{formatDate(item.created_at)}</TableData1>
+                <TableData1 style={{ borderRadius: "10px" }}>
+                  {formatDate(item.created_at)}
+                </TableData1>
                 <TableData1>Active</TableData1>
-                <TableData1 style={{ borderRadius: "10px" }}>{item.apy}</TableData1>
+                <TableData1 style={{ borderRadius: "10px" }}>
+                  {item.apy}
+                </TableData1>
               </TableRow>
             </TableBody>
           </Table1>
         </>
       ))}
 
-      <TableResponsive className='d-none d-md-block d-lg-block d-xl-block'>
+      <TableResponsive className="d-none d-md-block d-lg-block d-xl-block">
         <Table>
           {/* <colgroup></colgroup> */}
           <TableHead>

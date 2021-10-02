@@ -396,22 +396,18 @@ export const StakingInfo = () => {
                     .toFixed(2)}`}
               </HarvestValue>
               <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between ">
-                <p>Rewards are paid in DON</p>
-
-                <OverlayTrigger
-                  placement="right"
-                  delay={{ show: 250, hide: 400 }}
-                  overlay={renderTooltip}
-                >
-                  <div
-                    style={{
-                      textAlign: "right",
-                      paddingLeft: 3,
-                    }}
+                <p>
+                  Rewards are paid in DON
+                  <OverlayTrigger
+                    placement="right"
+                    delay={{ show: 250, hide: 400 }}
+                    overlay={renderTooltip}
                   >
-                    <Questionmark />
-                  </div>
-                </OverlayTrigger>
+                   <span className="ml-1">
+                   <Questionmark />
+                   </span>
+                  </OverlayTrigger>
+                </p>
               </Rewardpaid>
             </div>
             <div
@@ -431,8 +427,9 @@ export const StakingInfo = () => {
                 {!new BigNumber(lastRewardTime).isEqualTo(0) && (
                   <p>
                     harvested{" "}
-                    {moment.duration(moment().diff(moment.unix(lastRewardTime))).humanize() +
-                      " ago"}
+                    {moment
+                      .duration(moment().diff(moment.unix(lastRewardTime)))
+                      .humanize() + " ago"}
                   </p>
                 )}
               </Rewardtime>

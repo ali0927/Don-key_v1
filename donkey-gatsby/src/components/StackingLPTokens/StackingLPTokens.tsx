@@ -3,7 +3,7 @@ import { breakPoints } from "breakponts";
 import styled from "styled-components";
 import { theme } from "theme";
 import { NavBar } from "components/Navbar";
-import StackingLogo from "images/StackingLogo.png";
+// import StackingLogo from "images/StackingLogo.png";
 import { Footer } from "components/Footer";
 import Rectangle from "images/Rectangle.png";
 import { StakingCard } from "./StakingCard";
