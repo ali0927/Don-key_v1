@@ -52,9 +52,9 @@ const SubHeading = styled.p`
 `;
 
 const Container = styled.div`
-  min-height: 150px;
+  height: 150px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-    min-height: 480px;
+    height: 280px;
   }
 `;
 
@@ -109,7 +109,7 @@ export const StackingLPTokens: React.FC = () => {
       <NavBar />
       <Header>
         <Container className="container">
-          <div className="row">
+          <div className="row h-100" >
             <div className="col-lg-5 d-flex flex-column justify-content-center">
               <Heading className="my-1">Stake LP Tokens</Heading>
               <SubHeading>
