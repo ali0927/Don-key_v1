@@ -4,11 +4,16 @@ import comingsoon from "images/comingsoonupdated.svg";
 import crosschain from "images/CrossChain.png";
 import BigNumber from "bignumber.js";
 import { ArrowUpDOwn } from "icons";
-import { navigate } from "gatsby-link";
+import { Link } from "gatsby";
 
-const InfoWrapper = styled.div`
+const InfoWrapper = styled(Link)`
   min-height: 226px;
   display: flex;
+  color: #222;
+  &:hover{
+    text-decoration: none;
+    color: #222;
+  }
   flex-direction: column;
   justify-content: space-between;
   background: #ffffff;
@@ -40,7 +45,6 @@ const DONApy = styled.h6`
 const Heading = styled.h5`
   font-size: 18px;
   font-weight: 900;
-  
 `;
 
 const CrossChainImage = styled.img`
@@ -67,7 +71,6 @@ export const TokenInfo = ({
 }: {
   token: IStrapiToken;
 }) => {
- 
   const disabled = status === "commingsoon";
 
   let networkName = network.name;
@@ -129,14 +132,7 @@ export const TokenInfo = ({
   };
 
   return (
-    <InfoWrapper
-      disabled={disabled}
-      onClick={() => {
-        if (!disabled) {
-         navigate(url);
-        }
-      }}
-    >
+    <InfoWrapper to={url} disabled={disabled}>
       {disabled && (
         <img className="coming-soon" alt="coming" src={comingsoon} />
       )}

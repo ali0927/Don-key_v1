@@ -15,10 +15,8 @@ import { PoolAmount } from "components/PoolAmount";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { useState } from "react";
 import { useWeb3Context } from "don-components";
-import { strapi } from "strapi";
-import { sortBy } from "lodash";
-import { GetStaticProps } from "next";
 import { navigate } from "gatsby-link";
+import { Link } from "gatsby";
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -107,10 +105,12 @@ const FarmerBioShort = ({
           tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
         }
         totalValue={
+          <> <Link to={url} className="d-none" >Invest</Link>
           <PoolAmount
             chainId={item.farmer.network.chainId}
             poolAddress={item.farmer.poolAddress}
           />
+          </>
         }
         onShowLessClick={onShowLess}
         onShowMoreClick={onShowMore}
@@ -132,18 +132,7 @@ const FarmerBioShort = ({
   );
 };
 
-const sortStrategies = (list: any[]) => {
-  return sortBy(list, (item) => {
-    const risk = item.risk.Title.toLowerCase();
-    if (risk === "low") {
-      return -1;
-    }
-    if (risk === "high") {
-      return 1;
-    }
-    return 0;
-  });
-};
+
 
 export default function TokenPage({
   pageContext: { tokens, strategies },
@@ -218,127 +207,3 @@ export default function TokenPage({
     </div>
   );
 }
-
-const query = ` query tokensList {
-    tokens {
-      id
-      symbol
-      boostApy
-      image {
-        url
-      }
-      maxApy
-      symbol
-      slug
-      network {
-        chainId
-        type
-        destination
-        name
-        slug
-      }
-      status
-      RiskStrategy {
-        strategy {
-          farmer {
-            poolAddress
-          }
-        }
-      }
-    }
-  }`;
-
-const TOKEN_INFO_QUERY = `
-query tokenInfo($slug: String!, $network: String!) {
-    tokens(where: { slug: $slug, network: { slug: $network } }) {
-      network {
-        chainId
-        symbol
-        name
-      }
-      boostApy
-      subtitle
-      description
-      strategies {
-        risk {
-          Title
-          image {
-            url
-          }
-        }
-        strategyImage {
-          url
-        }
-        name
-        apy
-        active
-        description
-        farmer {
-          status
-          name
-          farmerImage {
-            url
-          }
-          network {
-            chainId
-            name
-            symbol
-          }
-          slug
-          active
-          guid
-          poolVersion
-          poolAddress
-        }
-      }
-    }
-  }
-`;
-
-export async function getStaticPaths() {
-  const results = await strapi.post("/graphql", { query });
-  return {
-    paths: results.data.data.tokens.map((item: any) => {
-      return {
-        params: {
-          network: item.network.slug,
-          token: item.slug,
-        },
-      };
-    }), // See the "paths" section below
-
-    fallback: "blocking", // See the "fallback" section below
-  };
-}
-
-export const getStaticProps: GetStaticProps = async (context: any) => {
-  const { network, token } = context.params;
-  const resp = await strapi.post("/graphql", {
-    query: TOKEN_INFO_QUERY,
-    variables: {
-      slug: token,
-      network: network,
-    },
-  });
-  const data = resp.data.data;
-
-  const strategies = sortStrategies(
-    data?.tokens[0]?.strategies.filter(
-      (item: any) =>
-        item.farmer.status === "active" || item.farmer.status === "comingsoon"
-    )
-  );
-  if (!strategies) {
-    return {
-      notFound: true,
-    };
-  }
-  if (!(strategies.length > 0)) {
-    return {
-      notFound: true,
-    };
-  }
-  return {
-    props: { ...data, strategies },
-  };
-};
