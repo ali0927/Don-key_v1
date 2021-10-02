@@ -1,4 +1,3 @@
-import { AcceleratedAPYModal } from "components/AcceleratedAPYModal/AcceleratedAPYModal";
 import { ButtonWidget } from "components/Button";
 import { useStakingContract } from "hooks";
 import { useEffect, useState } from "react";
@@ -6,12 +5,14 @@ import styled from "styled-components";
 import { useToggle } from "don-hooks";
 import { UnstakeDonModal } from "components/UnstakeDonModal/UnstakeDonModal";
 import BigNumber from "bignumber.js";
-import { Spinner } from "react-bootstrap";
+import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
 import { getDonPriceWeb3 } from "helpers";
 import { getWeb3 } from "don-components";
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
+import Questionmark from "components/Icons/Questionmark";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -19,7 +20,7 @@ const StakingCard = styled.div`
   padding: 30px 0px 30px 0px;
   min-height: 146px;
   @media only screen and (max-width: ${breakPoints.lg}) {
-    padding: 30px 0px 0px 0px;
+    padding: 20px 0px 0px 0px;
     margin-bottom: 25px;
   }
 `;
@@ -29,17 +30,27 @@ const StakingCol = styled.div`
   flex-direction: column;
   justify-content: center;
   position: relative;
-  border-right: 1px solid #ededf2;
   @media only screen and (max-width: ${breakPoints.lg}) {
     width: 33% !important;
-    margin-bottom: 23px;
+    /* margin-bottom: 23px; */
     &:last-child {
       border-right: 0px;
       width: 100% !important;
     }
   }
+  :after {
+    content: "";
+    height: 62%;
+    position: absolute;
+    border: 0.1px solid #dedee0;
+    top: 12;
+    right: 0;
+    opacity: 0.4;
+  }
   &:last-child {
-    border-right: 0px;
+    :after {
+      border: 0px;
+    }
   }
   &.hide:after {
     display: none;
@@ -47,14 +58,18 @@ const StakingCol = styled.div`
 `;
 
 const StakingTitle = styled.h3`
-  
+  padding-top: 5px;
   font-size: 12px;
   color: #7e7e7e;
   text-align: center;
   font-weight: 500;
+  line-height: 18px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     font-size: 14px;
     color: #000;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 21px;
   }
 `;
 
@@ -92,15 +107,74 @@ export const StyledButton = styled(ButtonWidget)`
 
 const HarvestCard = styled.div`
   background-color: #222;
-  border-radius: 20px;
-  padding: 40px 0;
+  border-radius: 10px;
+  padding: 30px 0;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-around;
-  height: 85px;
+  height: 68%;
   @media only screen and (min-width: ${breakPoints.lg}) {
     height: 100%;
+    padding: 0px 0;
+    border-radius: 20px;
+  }
+`;
+
+const HarvestValue = styled(StakingSubtitle)`
+  font-size: 15px;
+  font-weight: 600;
+
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    font-weight: bold;
+    font-size: 23px;
+  }
+`;
+const Rewardpaid = styled.div`
+  p {
+    font-size: 10px;
+    font-weight: 500;
+
+    color: #666666;
+
+    @media only screen and (min-width: ${breakPoints.lg}) {
+      p {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+      }
+    }
+  }
+`;
+const Rewardtime = styled.div`
+  p {
+    font-size: 10px;
+    font-weight: 500;
+
+    margin-top: 0.3rem;
+
+    color: #b3b6b5;
+  }
+
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    p {
+      font-weight: 500;
+      font-size: 12px;
+      margin-top: 0.9rem;
+      display: flex;
+      align-items: center;
+      text-align: center;
+    }
+  }
+`;
+
+const StyleTooltip = styled(Tooltip)`
+  .tooltip-inner {
+    background-color: white;
+    color: black;
+  }
+  .arrow::before {
+    border-right-color: white !important;
   }
 `;
 
@@ -125,14 +199,12 @@ const TimeCard = styled.div`
 
 const TimerTime = styled.div`
   font-size: 14px;
-  font-style: normal;
   font-weight: 400;
   color: #000000;
 `;
 
 const TimerLabel = styled.div`
   font-size: 4.25px;
-  font-style: normal;
   font-weight: 400;
   color: #000000;
 `;
@@ -301,41 +373,68 @@ export const StakingInfo = () => {
   };
 
   const renderHarvestCard = () => {
+    const renderTooltip = (props: any) => (
+      <StyleTooltip id="button-tooltip" {...props}>
+        <strong> {new BigNumber(pendingReward).toFixed(6)} DON </strong>
+      </StyleTooltip>
+    );
+
     if (!isInCoolOffPeriod) {
       return (
         <>
           {" "}
-          <div className="row w-100 align-items-center">
-            <div className="col-7 h-100 d-flex flex-column align-items-start align-items-lg-center">
+          <div className="row w-100 align-items-center ">
+            <div className="col-6  h-100 d-flex flex-column align-items-start align-items-lg-center pt-2 ">
               <StakingTitle style={{ color: "#fff" }}>
-                DON Rewards available
+                Rewards available
               </StakingTitle>
-              <StakingSubtitle>
-                {new BigNumber(pendingReward).toFixed(6)} DON{" "}
+              <HarvestValue>
                 {donPrice &&
-                  `($${new BigNumber(pendingReward)
+                  `$${new BigNumber(pendingReward)
                     .multipliedBy(donPrice)
-                    .toFixed(2)})`}
-              </StakingSubtitle>
-              {!new BigNumber(lastRewardTime).isEqualTo(0) && (
-                <div style={{ fontSize: 12 }}>
-                  harvested{" "}
-                  {moment
-                    .duration(moment().diff(moment.unix(lastRewardTime)))
-                    .humanize() + " ago"}
-                </div>
-              )}
+                    .toFixed(2)}`}
+              </HarvestValue>
+              <Rewardpaid className="d-flex align-items-baseline flex-row justify-content-between ">
+                <p>Rewards are paid in DON</p>
+
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={renderTooltip}
+                >
+                  <div
+                    style={{
+                      textAlign: "right",
+                      paddingLeft: 3,
+                    }}
+                  >
+                    <Questionmark />
+                  </div>
+                </OverlayTrigger>
+              </Rewardpaid>
             </div>
-            <div className="col-5 d-flex justify-content-center">
+            <div
+              className="col-6 d-flex justify-content-center flex-column"
+              style={{ paddingTop: "1.8rem" }}
+            >
               <StyledButton
                 varaint="contained"
                 disabled={new BigNumber(pendingReward).isEqualTo(0)}
                 containedVariantColor="lightYellow"
-                className="py-1 px-3 m-0"
+                className="py-1 m-0"
                 onClick={harvestDon}
               >
                 {loading ? <Spinner animation="border" size="sm" /> : "Harvest"}
               </StyledButton>
+              <Rewardtime className="text-center">
+                {!new BigNumber(lastRewardTime).isEqualTo(0) && (
+                  <p>
+                    harvested{" "}
+                    {moment.duration(moment().diff(moment.unix(lastRewardTime))).humanize() +
+                      " ago"}
+                  </p>
+                )}
+              </Rewardtime>
             </div>{" "}
           </div>
         </>
@@ -378,14 +477,14 @@ export const StakingInfo = () => {
             disabled={isInCoolOffPeriod}
             className="py-1 px-3 mb-lg-3"
           >
-            Stake DON
+            {tier.tier > 0 ? "Upgrade Tier" : "Stake DON"}
           </StyledButton>
 
           <StyledButton
             varaint="outlined"
             disabled={!isStaked || isInCoolOffPeriod}
             onClick={openUnstake}
-            className="py-1 px-3 rounded"
+            className="py-1 px-3"
           >
             Unstake DON
           </StyledButton>
@@ -403,8 +502,8 @@ export const StakingInfo = () => {
         />
       )}
       {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
-      <div className="row mt-3 mb-4">
-        <div className="col-lg-7 mb-2">
+      <div className="row mt-0 mt-lg-3">
+        <div className="col-lg-7 mb-3 mb-lg-2">
           <StakingCard className="d-flex h-100 flex-wrap justify-content-between">
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>
@@ -423,7 +522,7 @@ export const StakingInfo = () => {
             </StakingCol>
           </StakingCard>
         </div>
-        <div className="col-lg-5 mb-2">
+        <div className="col-lg-5 mb-0 mb-lg-2 ">
           <HarvestCard>{renderHarvestCard()}</HarvestCard>
         </div>
       </div>

@@ -42,7 +42,7 @@ import { theme } from "theme";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { GridBackground } from "components/GridBackground";
 import { IFarmerInter } from "interfaces";
-import { StakingInfo } from "./StakingInfo/StakingInfo";
+import { StakingInfo } from "components/StakingInfo";
 import { gql, useQuery } from "@apollo/client";
 import { useStakingContract } from "hooks";
 import BigNumber from "bignumber.js";
@@ -239,7 +239,9 @@ export const InvestmentsPage = () => {
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
-
+  useEffect(() => {
+    setStrategyNetworkFilter(network);
+  }, [network])
   const handleRefresh = () => {
     setRefresh((old) => !old);
   };
