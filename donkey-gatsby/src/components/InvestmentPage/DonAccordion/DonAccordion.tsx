@@ -30,7 +30,18 @@ const StyledApyIcon = styled(BoostApyWhiteIcon)`
 `;
 
 export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
-  const { accordionId, investments, poolAddresses, refresh, donPrice } = props;
+  const {
+    accordionId,
+    investments,
+    poolAddresses,
+    refresh,
+    donPrice,
+    investedAmountInfo = <></>,
+    lastCycleInfo = <></>,
+    profitInfo = <></>,
+    showLastCycle = false,
+    donRewardInfo = <></>,
+  } = props;
   const { chainId: network } = useWeb3Context();
   const { isUSD: isInUsd } = useUSDViewBool();
   const {
@@ -103,7 +114,10 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
                 </AccordionCardHeader>
                 <AccordionHeaderRow>
                   <div className="d-flex align-items-center justify-content-between mb-2">
-                    <AccordionCaptionText>Invested</AccordionCaptionText>
+                    <AccordionCaptionText>
+                      Invested
+                      {investedAmountInfo}
+                    </AccordionCaptionText>
                     <AccordionHeadingText>
                       {isInUsd && !!poolAddressFinal ? (
                         `$${formatNum(initialInvestmentinUSD)}`
@@ -116,7 +130,10 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
                     </AccordionHeadingText>
                   </div>
                   <div className="d-flex align-items-center justify-content-between  mb-2">
-                    <AccordionCaptionText>Total Profit</AccordionCaptionText>
+                    <AccordionCaptionText>
+                      Total Profit
+                      {profitInfo}
+                    </AccordionCaptionText>
                     <AccordionHeadingText>
                       <TotalProfitLoss
                         chainId={network}
@@ -129,8 +146,11 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
 
                 <AccordionDetails accordionId={accordionId} index={index}>
                   <div className="d-block w-100">
-                    <div className="d-flex align-items-center justify-content-between mb-2">
-                      <AccordionCaptionText>Last Cycle</AccordionCaptionText>
+                    {showLastCycle && <div className="d-flex align-items-center justify-content-between mb-2">
+                      <AccordionCaptionText>
+                        Last Cycle
+                        {lastCycleInfo}
+                      </AccordionCaptionText>
                       <AccordionHeadingText>
                         {moment
                           .duration(
@@ -139,10 +159,13 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
                           .humanize()}{" "}
                         ago
                       </AccordionHeadingText>
-                    </div>
+                    </div>}
                     {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                       <div className="d-flex align-items-center justify-content-between mb-2">
-                        <AccordionCaptionText>Don Rewards</AccordionCaptionText>
+                        <AccordionCaptionText>
+                          Don Rewards
+                          {donRewardInfo}
+                        </AccordionCaptionText>
                         <AccordionHeadingText>
                           {getRewards(initialInvestmentinUSD)}
                         </AccordionHeadingText>

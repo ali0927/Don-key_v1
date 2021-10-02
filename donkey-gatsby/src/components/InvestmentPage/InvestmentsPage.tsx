@@ -497,6 +497,67 @@ export const InvestmentsPage = () => {
     }
   };
 
+  const donrewardsInfo = (
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          DON rewards are pegged to USD value, Therefore the USD value will
+          always go up, but the DON quantity can vary based on the current
+          price.
+        </Tooltip>
+      )}
+    >
+      <AiOutlineInfoCircle className="ml-1" />
+    </OverlayTrigger>
+  );
+  const lastcycleInfo = (
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          Don-key auto compounds the pool's funds in cycles to optimize the swap
+          and minimize fees, slippage and price impact. A typical day will have
+          2 cycles.
+        </Tooltip>
+      )}
+    >
+      <AiOutlineInfoCircle className="ml-1" />
+    </OverlayTrigger>
+  );
+  const totalProfitInfo = (
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          {isInUsd
+            ? "Profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token"
+            : "The amount of profit or loss in native token "}
+        </Tooltip>
+      )}
+    >
+      <AiOutlineInfoCircle className="ml-1" />
+    </OverlayTrigger>
+  );
+
+  const investedAmountInfo = (
+    <OverlayTrigger
+      placement="right"
+      delay={{ show: 250, hide: 400 }}
+      overlay={(props) => (
+        <Tooltip id="button-tooltip" {...props}>
+          {isInUsd
+            ? "The amount of investment in USD value on the day of investment "
+            : "The amount of native token you invested in total"}
+        </Tooltip>
+      )}
+    >
+      <AiOutlineInfoCircle className="ml-1" />
+    </OverlayTrigger>
+  );
   const renderNewInvestments = () => {
     if (!loading && filteredInvestMents.length > 0) {
       return (
@@ -510,68 +571,20 @@ export const InvestmentsPage = () => {
                   <CustomTableHeading>FARMER NAME</CustomTableHeading>
                   <CustomTableHeading>
                     INVESTED AMOUNT
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={(props) => (
-                        <Tooltip id="button-tooltip" {...props}>
-                          {isInUsd
-                            ? "The amount of investment in USD value on the day of investment "
-                            : "The amount of native token you invested in total"}
-                        </Tooltip>
-                      )}
-                    >
-                      <AiOutlineInfoCircle className="ml-1" />
-                    </OverlayTrigger>
+                    {investedAmountInfo}
                   </CustomTableHeading>
                   <CustomTableHeading>
                     TOTAL PROFIT
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={(props) => (
-                        <Tooltip id="button-tooltip" {...props}>
-                          {isInUsd
-                            ? "Profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token"
-                            : "The amount of profit or loss in native token "}
-                        </Tooltip>
-                      )}
-                    >
-                      <AiOutlineInfoCircle className="ml-1" />
-                    </OverlayTrigger>
+                    {totalProfitInfo}
                   </CustomTableHeading>
                   <CustomTableHeading>
                     LAST CYCLE
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={(props) => (
-                        <Tooltip id="button-tooltip" {...props}>
-                          Don-key auto compounds the pool's funds in cycles to
-                          optimize the swap and minimize fees, slippage and
-                          price impact. A typical day will have 2 cycles.
-                        </Tooltip>
-                      )}
-                    >
-                      <AiOutlineInfoCircle className="ml-1" />
-                    </OverlayTrigger>
+                    {lastcycleInfo}
                   </CustomTableHeading>
                   {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                     <CustomTableHeading>
                       DON REWARDS
-                      <OverlayTrigger
-                        placement="right"
-                        delay={{ show: 250, hide: 400 }}
-                        overlay={(props) => (
-                          <Tooltip id="button-tooltip" {...props}>
-                            DON rewards are pegged to USD value, Therefore the
-                            USD value will always go up, but the DON quantity
-                            can vary based on the current price.
-                          </Tooltip>
-                        )}
-                      >
-                        <AiOutlineInfoCircle className="ml-1" />
-                      </OverlayTrigger>
+                      {donrewardsInfo}
                     </CustomTableHeading>
                   )}
                   <CustomTableHeading style={{ textAlign: "center" }}>
@@ -695,6 +708,11 @@ export const InvestmentsPage = () => {
             poolAddresses={poolAddresses}
             refresh={refresh}
             donPrice={donPrice}
+            investedAmountInfo={investedAmountInfo}
+            profitInfo={totalProfitInfo}
+            lastCycleInfo={lastcycleInfo}
+            donRewardInfo={donrewardsInfo}
+            showLastCycle
             onWithDrawClick={handleOpenWithDraw}
           />
         </>
@@ -716,35 +734,11 @@ export const InvestmentsPage = () => {
                   <CustomTableHeading>FARMER NAME</CustomTableHeading>
                   <CustomTableHeading>
                     INVESTED AMOUNT
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={(props) => (
-                        <Tooltip id="button-tooltip" {...props}>
-                          {isInUsd
-                            ? "The amount of investment in USD value on the day of investment"
-                            : "The amount of native token you invested in total"}
-                        </Tooltip>
-                      )}
-                    >
-                      <AiOutlineInfoCircle />
-                    </OverlayTrigger>
+                    {investedAmountInfo}
                   </CustomTableHeading>
                   <CustomTableHeading>
                     TOTAL PROFIT
-                    <OverlayTrigger
-                      placement="right"
-                      delay={{ show: 250, hide: 400 }}
-                      overlay={(props) => (
-                        <Tooltip id="button-tooltip" {...props}>
-                          {isInUsd
-                            ? " profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token"
-                            : " The amount of profit or loss in native token please consider fees and impairment loss"}
-                        </Tooltip>
-                      )}
-                    >
-                      <AiOutlineInfoCircle />
-                    </OverlayTrigger>
+                    {totalProfitInfo}
                   </CustomTableHeading>
 
                   <CustomTableHeading style={{ textAlign: "center" }}>
@@ -827,6 +821,8 @@ export const InvestmentsPage = () => {
             investments={filteredOldInvestMents}
             poolAddresses={poolAddresses}
             refresh={refresh}
+            profitInfo={totalProfitInfo}
+            investedAmountInfo={investedAmountInfo}
             donPrice={donPrice}
             onWithDrawClick={handleOpenWithDraw}
           />
