@@ -347,7 +347,7 @@ export const PopularStrategy = ({
             </div>
             {extraApy && (
               <div>
-                <p className="mb-0 font-weight-bold">APY with DON</p>
+                <TotalValue className="mb-1 font-weight-bold">APY with DON</TotalValue>
                 <h5
                   style={{ color: "#31c77f" }}
                   className="primary-text text-right"
