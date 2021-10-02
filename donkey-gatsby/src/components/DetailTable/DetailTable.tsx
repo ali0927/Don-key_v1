@@ -201,9 +201,10 @@ const BoostApyBox = styled.div`
   padding: 16px 20px;
   border-radius: 10px;
   color: #fff;
-  background-color: #000;
+  background: #171717;
   font-size: 16px;
   margin-top: -10px;
+  box-shadow: 0px 4px 10px rgb(0 0 0 / 35%);
 `;
 
 const YellowSwitch = withStyles((theme) => ({
@@ -508,8 +509,8 @@ export const DetailTable = ({
       <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0">
         <BoostApyBox className="d-md-none">
           <div className="row">
-            <div className="col-6 pr-0">Boost your APY up to 100%</div>
-            <div className="col-6 pl-0 d-flex flex-column justify-content-center">
+            <div className="col-6 pr-0">Up to 100% extra APY</div>
+            <div className="col-6 pl-0 d-flex flex-column justify-content-center align-items-end">
               <BoostButton />
             </div>
           </div>

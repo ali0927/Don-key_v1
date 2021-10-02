@@ -1,6 +1,4 @@
 import { useState } from "react";
-
-import { useHistory } from "react-router-dom";
 import { ILeaderBoardTableProps } from "./interfaces";
 import {
   Table,
@@ -17,6 +15,7 @@ import styled from "styled-components";
 import comingsoon from "images/comingsoon.svg";
 import { leaderBoardData } from "./leaderboardjson";
 import { breakPoints } from "breakponts";
+import { navigate } from "gatsby-link";
 
 const StyledImage = styled.img`
   width: 45px;
@@ -100,16 +99,16 @@ export const LeaderBoardTable: React.FC<ILeaderBoardTableProps> = (props) => {
     poolAddress: "",
     poolVersion: 1,
   });
-  const history = useHistory();
+
 
   const handleLeaderClick = (id: string) => () => {
     if (!isDisable) {
-      history.push(`/dashboard/farmer/${id}`);
+     navigate(`/dashboard/farmer/${id}`);
     }
   };
   const handleJoinUseClick = () => {
     if (isDisable) {
-      history.push("/farmers");
+     navigate("/farmers");
     }
   };
 

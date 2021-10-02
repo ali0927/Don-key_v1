@@ -3,10 +3,12 @@ import { ButtonWidget } from "components/Button";
 import { StakingTimer } from "components/StakingInfo";
 import { useWeb3Context } from "don-components";
 import { useSwitchNetwork } from "hooks";
+import { WalletIcon } from "icons";
 import { INetwork } from "interfaces";
 import moment from "moment";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
+import { theme } from "theme";
 
 const Text = styled.p`
   font-size: 15px;
@@ -61,9 +63,9 @@ const Text = styled.p`
 
 const DonButtonContained = styled.button`
   color: #000000;
-  border: 1px solid rgb(245, 242, 144);
+  border: 1px solid ${theme.palette.common.lightYellow};
   border-radius: 15px;
-  background-color: rgb(245, 242, 144);
+  background-color: ${theme.palette.common.lightYellow};
   padding: 8px 30px;
   transition: background-color 0.3s linear, transform 0.3s ease-in;
   &:hover {
@@ -169,7 +171,7 @@ export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
     await switchNetwork(network.chainId);
   }
   return (
-    <div className="text-center pt-5">
+    <div className="text-center pt-5 px-4">
       <h5>Connect your wallet to start using Don Key</h5>
 
       <Text
@@ -184,11 +186,7 @@ export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
       <WalletIcon /> Disconnect
     </DonButtonOutlined> */}
         <DonButtonContained onClick={handleConnect}>
-          <img
-            src="/assets/images/usericon.png"
-            className="d-inline-block align-top mr-md-2"
-            alt="Metamask Icon"
-          />{" "}
+          <WalletIcon className="mr-2" />
           Connect Wallet
         </DonButtonContained>
       </div>

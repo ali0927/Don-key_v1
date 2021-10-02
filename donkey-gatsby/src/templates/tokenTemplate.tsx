@@ -105,7 +105,7 @@ const FarmerBioShort = ({
           tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
         }
         totalValue={
-          <> <Link to={url} className="d-none" >Invest</Link>
+          <> <Link to={url} style={{opacity: "0", width: 0, height: 0, display: "inline-block"}} >Invest</Link>
           <PoolAmount
             chainId={item.farmer.network.chainId}
             poolAddress={item.farmer.poolAddress}
