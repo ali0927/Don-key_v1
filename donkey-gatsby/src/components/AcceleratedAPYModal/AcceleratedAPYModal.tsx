@@ -47,15 +47,26 @@ const FooterText = styled(SubHeading)`
 `;
 
 const TierRoot = styled.div`
+  border-radius: 5px;
   & .tierSelected {
-    border: 1.67647px solid #000;
-    border-radius: 14px;
-    min-height: 60px;
-    min-width: 55px;
+    border: 1.6px solid #000;
+    border-radius: 10px;
     background-color: #fff037;
+    width: 80px;
+    height: 80px;
+
+    img {
+      width: 65px;
+      height: 65px;
+    }
     @media only screen and (min-width: ${breakPoints.md}) {
-      min-height: 90px;
-      min-width: 80px;
+      width: 90px;
+      height: 90px;
+      border-radius: 14px;
+      img {
+        width: 75px;
+        height: 75px;
+      }
     }
   }
   & .tierCaptionSelected {
@@ -71,8 +82,8 @@ const TierItem = styled.div<{ disabled: boolean }>`
   background: #f1f1f1;
   cursor: ${(props) => (props.disabled ? "no-drop" : "pointer")};
   @media only screen and (min-width: ${breakPoints.md}) {
-    height: 70px;
-    width: 70px;
+    height: 62px;
+    width: 62px;
   }
 `;
 
@@ -89,9 +100,10 @@ const TierCaption = styled.p`
 const StyledStaticImage = styled.img`
   height: 37px;
   width: 37px;
+  object-fit: contain;
   @media only screen and (min-width: ${breakPoints.md}) {
-    height: 62px;
-    width: 53px;
+    height: 60px;
+    width: 60px;
   }
 `;
 
@@ -104,6 +116,7 @@ const DonAvaliableInput = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   padding-right: 12px;
+  margin: 0 -15px;
   display: flex;
   align-items: center;
   justify-content: end;
@@ -456,7 +469,7 @@ export const AcceleratedAPYModal = ({
       title=""
       variant="common"
       onClose={onClose}
-      size="xs"
+      size="sm"
     >
       {renderContent()}
     </DonCommonmodal>

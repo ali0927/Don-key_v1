@@ -14,3 +14,18 @@ body {
     text-decoration: none !important;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: #dfdfdf;
+  border-radius: 100px;
+}
+
+*::-webkit-scrollbar-thumb {
+
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 100px;
+}

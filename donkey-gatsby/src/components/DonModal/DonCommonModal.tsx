@@ -26,11 +26,18 @@ const StyledDialog = withStyles({
   paperWidthMd: {
     maxWidth: "761px",
   },
+  paperWidthSm: {
+    maxWidth: 430,
+    overflow: "hidden",
+    margin: 0
+  },
 })(Dialog);
 
 const Content = styled(ModalContent)`
   padding: 3rem 1rem;
   padding-bottom: 2rem;
+  height: 100%;
+  overflow-y: auto;
   @media only screen and (min-width: ${breakPoints.md}) {
     padding: 3rem 2rem;
   }
