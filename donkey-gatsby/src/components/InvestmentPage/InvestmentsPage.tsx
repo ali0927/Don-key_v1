@@ -157,6 +157,9 @@ const StyledImage = styled.img`
 
 const CustomTableHeading = styled(TableHeading)`
   text-align: center;
+  svg {
+    margin-top: -2px;
+  }
 `;
 
 const CustomTableData = styled(TableData)`
@@ -241,7 +244,7 @@ export const InvestmentsPage = () => {
   const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     setStrategyNetworkFilter(network);
-  }, [network])
+  }, [network]);
   const handleRefresh = () => {
     setRefresh((old) => !old);
   };
@@ -518,7 +521,7 @@ export const InvestmentsPage = () => {
                         </Tooltip>
                       )}
                     >
-                      <AiOutlineInfoCircle />
+                      <AiOutlineInfoCircle className="ml-1" />
                     </OverlayTrigger>
                   </CustomTableHeading>
                   <CustomTableHeading>
@@ -529,15 +532,16 @@ export const InvestmentsPage = () => {
                       overlay={(props) => (
                         <Tooltip id="button-tooltip" {...props}>
                           {isInUsd
-                            ? " profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token"
-                            : " The amount of profit or loss in native token "}
+                            ? "Profit is equal current price of native token * claimable native token - price of native token at the time of investment * invested native token"
+                            : "The amount of profit or loss in native token "}
                         </Tooltip>
                       )}
                     >
-                      <AiOutlineInfoCircle />
+                      <AiOutlineInfoCircle className="ml-1" />
                     </OverlayTrigger>
                   </CustomTableHeading>
                   <CustomTableHeading>
+                    LAST CYCLE
                     <OverlayTrigger
                       placement="right"
                       delay={{ show: 250, hide: 400 }}
@@ -549,9 +553,8 @@ export const InvestmentsPage = () => {
                         </Tooltip>
                       )}
                     >
-                      <AiOutlineInfoCircle />
+                      <AiOutlineInfoCircle className="ml-1" />
                     </OverlayTrigger>
-                    LAST CYCLE
                   </CustomTableHeading>
                   {BINANCE_CHAIN_ID === network && tier.tier > 0 && (
                     <CustomTableHeading>
@@ -567,7 +570,7 @@ export const InvestmentsPage = () => {
                           </Tooltip>
                         )}
                       >
-                        <AiOutlineInfoCircle />
+                        <AiOutlineInfoCircle className="ml-1" />
                       </OverlayTrigger>
                     </CustomTableHeading>
                   )}
