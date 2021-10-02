@@ -268,7 +268,7 @@ export const AcceleratedAPYModal = ({
                 zIndex: 0,
                 top: 0,
                 left: 0,
-                right: 0,
+                width: "100%",
               }}
             />
             <div
@@ -276,7 +276,6 @@ export const AcceleratedAPYModal = ({
                 position: "relative",
                 zIndex: 1,
                 marginTop: 80,
-
                 textAlign: "center",
               }}
             >
