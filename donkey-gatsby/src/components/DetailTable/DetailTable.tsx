@@ -1,5 +1,5 @@
 //eslint-disable
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { Switch, withStyles } from "@material-ui/core";
@@ -11,7 +11,7 @@ import {
   toEther,
 } from "helpers";
 import { getWeb3, useWeb3Context, NetworkConfigs } from "don-components";
-import { AwardIcon, FollowersIcon, LinkIcon, StatisticIcon } from "icons";
+import { LinkIcon } from "icons";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useRefresh } from "components/LotteryForm/useRefresh";
@@ -27,11 +27,11 @@ import {
 import { InvestorCountContract } from "components/InvestorCountGraphql";
 import { Spinner } from "react-bootstrap";
 import { DollarView } from "components/DollarView";
-
-import { breakPoints } from '../../breakponts'
+import { BoostButton } from "components/BoostButton";
+import { breakPoints } from "../../breakponts";
 import Statistics from "images/statistics.png";
-import followers from  "images/followers.png";
-import dominance  from "images/dominance.png";
+import followers from "images/followers.png";
+import dominance from "images/dominance.png";
 
 export const CardWrapper = styled.div`
   min-height: 280px;
@@ -195,6 +195,15 @@ const Col = styled.div`
   @media only screen and (min-width: ${breakPoints.lg}) {
     width: 49%;
   }
+`;
+
+const BoostApyBox = styled.div`
+  padding: 16px 20px;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #000;
+  font-size: 16px;
+  margin-top: -10px;
 `;
 
 const YellowSwitch = withStyles((theme) => ({
@@ -445,11 +454,12 @@ export const DetailTable = ({
               "black",
               <IconWrapper className="mr-2">
                 <img
-                 src={Statistics}
-                 style={{
-                  width: 15,
-                  height:15,
-                }} />
+                  src={Statistics}
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                />
               </IconWrapper>
             )}
             {getFirstCardcolumns(
@@ -462,11 +472,12 @@ export const DetailTable = ({
               "black",
               <IconWrapper className="mr-2">
                 <img
-                 src={followers}
-                 style={{
-                  width: 15,
-                  height:15,
-                }} />
+                  src={followers}
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                />
               </IconWrapper>
             )}
             {getFirstCardcolumns(
@@ -478,11 +489,12 @@ export const DetailTable = ({
               "black",
               <IconWrapper className="mr-2">
                 <img
-                 src={dominance}
-                 style={{
-                  width: 15,
-                  height:15,
-                }} />
+                  src={dominance}
+                  style={{
+                    width: 15,
+                    height: 15,
+                  }}
+                />
               </IconWrapper>
             )}
           </FirstCardRow>
@@ -492,6 +504,16 @@ export const DetailTable = ({
         <BlackCardWrapper className="position-relative" color="black">
           {renderCardData()}
         </BlackCardWrapper>
+      </Col>
+      <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0">
+        <BoostApyBox className="d-md-none">
+          <div className="row">
+            <div className="col-6 pr-0">Boost your APY up to 100%</div>
+            <div className="col-6 pl-0 d-flex flex-column justify-content-center">
+              <BoostButton />
+            </div>
+          </div>
+        </BoostApyBox>
       </Col>
     </>
   );

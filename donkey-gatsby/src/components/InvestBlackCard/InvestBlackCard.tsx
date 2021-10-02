@@ -356,7 +356,7 @@ export const InvestBlackCard = ({
               </ButtonWidget>
             )}
 
-            {network.symbol === "BSC" && boostApy && <BoostButton />}
+            {network.symbol === "BSC" && boostApy && <BoostButton className="ml-3 d-none d-md-block " />}
           </div>
           {renderFarmerUI()}
         </div>

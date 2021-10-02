@@ -121,12 +121,11 @@ const ConnectWalletButton = () => {
     setIsDisabled(true);
     try {
       await connectDapp();
-    } catch(e){
-      console.log(e)
+    } catch (e) {
+      console.log(e);
     } finally {
       setIsDisabled(false);
     }
-  
   };
   if (connected) {
     return <Wallet />;
@@ -268,8 +267,12 @@ const LandingMenu = () => {
       </MenuItem>
       <MenuItem to="/farmers">Farmers</MenuItem>
       <MenuItem to="/team">Team</MenuItem>
-      <MenuItem target="_blank" href={PancakeBuyURL}>$DON BEP20</MenuItem>
-      <MenuItem  target="_blank" href={UniSwapURL}>$DON ERC20</MenuItem>
+      <MenuItem target="_blank" href={PancakeBuyURL}>
+        $DON BEP20
+      </MenuItem>
+      <MenuItem target="_blank" href={UniSwapURL}>
+        $DON ERC20
+      </MenuItem>
       <MenuItem to="/faq">FAQ</MenuItem>
     </>
   );
@@ -310,7 +313,7 @@ const DashboardDrawer = () => {
   return (
     <>
       <DrawerItem icon={<MainIcon />} to="/dashboard">
-        Main
+        Explore Farmers
       </DrawerItem>
       {connected && (
         <DrawerItem icon={<InvestmentsIcon />} to="/dashboard/investment">
@@ -340,18 +343,20 @@ function NavBar({ variant = "landing" }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
-    if(isOpen){
-      closeDrawer()
+    if (isOpen) {
+      closeDrawer();
     }
-  }
+  };
   return (
     <MenuWrapper>
       <StyledNav>
         <Logo className="d-none d-lg-flex align-items-center inherit-color no-underline" />
-        <IconWrapper onClick={(e) => {
-          e.stopPropagation();
-          openDrawer();
-        }}>
+        <IconWrapper
+          onClick={(e) => {
+            e.stopPropagation();
+            openDrawer();
+          }}
+        >
           <HamburgerIcon />
         </IconWrapper>
         <ClickAwayListener onClickAway={closeIfOpen}>
@@ -376,11 +381,11 @@ function NavBar({ variant = "landing" }: INavBarProps) {
             </DrawerMiddle>
             <DrawerFooter>
               <div className="p-2 d-flex flex-column">
-                <BuyButton  target="_blank" href={PancakeBuyURL}>
-                  <DonBinance  /> Buy $DON BEP20
+                <BuyButton target="_blank" href={PancakeBuyURL}>
+                  <DonBinance /> Buy $DON BEP20
                 </BuyButton>
                 <BuyButton target="_blank" href={UniSwapURL}>
-                  <DonEthereum  /> Buy $DON ERC20
+                  <DonEthereum /> Buy $DON ERC20
                 </BuyButton>
               </div>
               {/* <DonPriceWrapper>

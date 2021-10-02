@@ -15,16 +15,16 @@ import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useIsomorphicEffect } from "hooks";
 
-import { breakPoints } from '../../../src/breakponts';
+import { breakPoints } from "../../../src/breakponts";
 
 const StyledFarmerImage = styled.img`
   object-fit: cover;
   width: 100px;
   height: 100px;
   @media only screen and (max-width: ${breakPoints.md}) {
-    width:56px;
-    height:56px!important;
-    }
+    width: 56px;
+    height: 56px !important;
+  }
 `;
 
 const Title = styled.h2`
@@ -34,13 +34,12 @@ const Title = styled.h2`
   @media only screen and (max-width: ${breakPoints.md}) {
     font-size: 24px;
     font-weight: 800;
-    }
+  }
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
   justify-content: flex-start;
- 
 `;
 
 const ShareButton = styled.button`
@@ -80,10 +79,10 @@ const StrategyName = styled.h4`
   font-size: 20px;
   @media only screen and (max-width: ${breakPoints.md}) {
     font-size: 16px;
-    }
+  }
 `;
 const P = styled.p`
-  font-size:15px;
+  font-size: 15px;
   @media only screen and (max-width: ${breakPoints.md}) {
     font-size: 12px;
   }
@@ -168,11 +167,11 @@ export const FarmerBio = ({
     }
   };
 
-  const handleCreateLink = () => {
-    fetchInfoFromApi();
-    setShareLink(true);
-    setSharePopup(false);
-  };
+  // const handleCreateLink = () => {
+  //   fetchInfoFromApi();
+  //   setShareLink(true);
+  //   setSharePopup(false);
+  // };
 
   const apy =
     strategies && strategies.length > 0
@@ -196,23 +195,23 @@ export const FarmerBio = ({
                   DON - {capitalize(name || "")}
                 </Title>
                 <div className="d-block d-sm-none">
-                <div className="mr-3">
+                  <div className="mr-3">
                     {twitter && (
-                              <TwitterIcon
-                                fill={"#000"}
-                                handle={twitter || "#"}
-                              ></TwitterIcon>
+                      <TwitterIcon
+                        fill={"#000"}
+                        handle={twitter || "#"}
+                      ></TwitterIcon>
                     )}
+                  </div>
                 </div>
-              </div>
               </div>
             </Col>
           </Row>
 
           <Row className="mt-0 mt-2 mt-lg-5">
             <div className="col-lg-6">
-              <div className="row" style={{flexWrap : 'nowrap'}}>
-                <ImageWrapper className="pl-4" style={{width : 'auto'}}>
+              <div className="row" style={{ flexWrap: "nowrap" }}>
+                <ImageWrapper className="pl-4" style={{ width: "auto" }}>
                   <StyledFarmerImage
                     src={fixUrl(picture)}
                     className="img-fluid "
@@ -242,7 +241,7 @@ export const FarmerBio = ({
                       </div>
 
                       <P>
-                            <ShowMoreContent length={120} content={description} />
+                        <ShowMoreContent length={120} content={description} />
                       </P>
                     </>
                   )}
@@ -276,7 +275,7 @@ export const FarmerBio = ({
         </Container>
       </Section>
 
-      {openSharePopup && (
+      {/* {openSharePopup && (
         <Share
           open={openSharePopup}
           pool_address={poolAddress}
@@ -284,9 +283,9 @@ export const FarmerBio = ({
           onCreateLink={handleCreateLink}
           onClose={() => setSharePopup(false)}
         />
-      )}
+      )} */}
 
-      {openShareLink && shortCode && (
+      {/* {openShareLink && shortCode && (
         <ShareLink
           chainId={network.chainId}
           link={getShareUrl(shortCode.shortcode)}
@@ -301,7 +300,7 @@ export const FarmerBio = ({
           shortcode={shortCode.shortcode}
           onClose={() => setShareLink(false)}
         />
-      )}
+      )} */}
     </>
   );
 };

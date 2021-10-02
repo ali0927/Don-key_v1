@@ -29,7 +29,8 @@ const StyledDialog = withStyles({
   paperWidthSm: {
     maxWidth: 430,
     overflow: "hidden",
-    margin: 0
+    margin: 0,
+    width: `calc(100% - 28px)`,
   },
 })(Dialog);
 
