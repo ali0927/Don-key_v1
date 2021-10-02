@@ -29,9 +29,9 @@ import { Spinner } from "react-bootstrap";
 import { DollarView } from "components/DollarView";
 import { BoostButton } from "components/BoostButton";
 import { breakPoints } from "../../breakponts";
-import Statistics from "images/statistics.png";
-import followers from "images/followers.png";
-import dominance from "images/dominance.png";
+import Statistics from "./Statistics.svg";
+import followers from "./Followers.svg";
+import dominance from "./Cup.svg";
 
 export const CardWrapper = styled.div`
   min-height: 280px;
@@ -128,12 +128,15 @@ const ColumnsTitle = styled.div`
   font-size: 14px;
   font-weight: 500;
   text-align: center;
-  font-family: Poppins;
   color: ${(props: { color: "white" | "black" }) =>
     props.color === "black" ? "#000000" : "#fff"};
   @media only screen and (max-width: ${breakPoints.md}) {
     font-size: 10px;
     margin-top: -10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #7e7e7e;
   }
 `;
 
@@ -185,6 +188,12 @@ export const ColumnsTitle1 = styled(ColumnsTitleColored)`
   @media only screen and (max-width: ${breakPoints.md}) {
     font-size: 10px;
     margin-top: -10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    /* color: #7e7e7e; */
+    height: 40px;
   }
 `;
 
@@ -222,8 +231,8 @@ const YellowSwitch = withStyles((theme) => ({
       color: theme.palette.common.white,
       "& + $track": {
         opacity: 1,
-        backgroundColor: yellow[300],
-        borderColor: yellow[500],
+        backgroundColor: "#F8C400",
+        borderColor: "#F8C400",
       },
     },
   },
@@ -236,7 +245,7 @@ const YellowSwitch = withStyles((theme) => ({
     border: `1px solid #fff`,
     borderRadius: 16 / 2,
     opacity: 1,
-    backgroundColor: yellow[500],
+    backgroundColor: "#F8C400",
   },
   checked: {},
 }))(Switch);
@@ -251,7 +260,7 @@ const TokenSwitchLabels = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  transform: scale(0.7);
+  transform: scale(1);
 `;
 
 export const DetailTable = ({
@@ -348,8 +357,8 @@ export const DetailTable = ({
             color={color}
           >
             <>
-              {icon}
-              {label}
+              <span>{icon}</span>
+              <span>{label}</span>
             </>
           </ColumnsTitle>
           <ColumnsSubTitleColored color={"#808080"}>
@@ -453,7 +462,7 @@ export const DetailTable = ({
               "APY",
               apy,
               "black",
-              <IconWrapper className="mr-2">
+              <IconWrapper className="mr-md-2">
                 <img
                   src={Statistics}
                   style={{
@@ -471,7 +480,7 @@ export const DetailTable = ({
                 poolAddresses={[poolAddress]}
               />,
               "black",
-              <IconWrapper className="mr-2">
+              <IconWrapper className="mr-md-2">
                 <img
                   src={followers}
                   style={{
@@ -488,7 +497,7 @@ export const DetailTable = ({
                 .multipliedBy(100)
                 .toFixed(2) + " %",
               "black",
-              <IconWrapper className="mr-2">
+              <IconWrapper className="mr-md-2">
                 <img
                   src={dominance}
                   style={{

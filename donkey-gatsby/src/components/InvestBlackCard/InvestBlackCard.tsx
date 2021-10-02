@@ -5,7 +5,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import Dollars from "./images/dollars.png";
+import Dollars from "./images/dollars.svg";
 import {
   formatNum,
   getAmount,
@@ -36,14 +36,13 @@ import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
-
 import styled from "styled-components";
-import { breakPoints } from '../../breakponts'
+import { breakPoints } from "../../breakponts";
 
 const IMG = styled.img`
   @media only screen and (max-width: ${breakPoints.md}) {
-    width:15px;
-    height:15px;
+    width: 15px;
+    height: 15px;
   }
 `;
 
@@ -176,7 +175,7 @@ export const InvestBlackCard = ({
           }
         >
           <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-            {icon} {label}
+            <span> {icon}</span> <span>{label}</span>
           </ColumnsTitle1>
         </OverlayTrigger>
         <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
@@ -356,7 +355,9 @@ export const InvestBlackCard = ({
               </ButtonWidget>
             )}
 
-            {network.symbol === "BSC" && boostApy && <BoostButton className="ml-3 d-none d-md-block " />}
+            {network.symbol === "BSC" && boostApy && (
+              <BoostButton className="ml-3 d-none d-md-block " />
+            )}
           </div>
           {renderFarmerUI()}
         </div>
@@ -374,11 +375,21 @@ export const InvestBlackCard = ({
               tokenAmount={initialInvestment}
             />
           ),
-          <IMG
-            src={Dollars}
-            className="mr-1"
-            alt="Dollar image not found"
-          />,
+          <svg
+            width={17}
+            height={17}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <g clipPath="url(#prefix__clip0_invest)" fill="#B9B9B9">
+              <path d="M8.752 11.49v-.067a13.67 13.67 0 01-.975-.048c-.17.438-.409.846-.707 1.21.563.093 1.133.144 1.704.151l-.022-1.247zM7.26 9.054A3.694 3.694 0 004.751 6.29a3.7 3.7 0 00-3.554.791 3.67 3.67 0 00-.243 5.18A3.669 3.669 0 007.26 9.055zM3.666 9.3a1.39 1.39 0 01.375 2.726v.324a.369.369 0 01-.368.368.369.369 0 01-.368-.368v-.32a1.398 1.398 0 01-1.03-1.343c0-.202.166-.368.368-.368.202 0 .368.166.368.368a.653.653 0 10.651-.655c-.629 0-1.177-.423-1.34-1.03a1.396 1.396 0 01.987-1.7v-.158c0-.202.165-.368.368-.368.202 0 .368.166.368.368v.166c.6.169 1.012.717 1.012 1.339a.369.369 0 01-.368.368.369.369 0 01-.368-.368.656.656 0 00-.655-.655.653.653 0 100 1.306zM8.74 10.684L8.718 9.38a12.762 12.762 0 01-.666-.026 4.524 4.524 0 01-.066 1.295 8.4 8.4 0 00.754.034zM12.77 4.595c-.255.132-.523.239-.8.32-.827.25-1.913.386-3.046.386-1.085 0-2.119-.125-2.917-.357a4.077 4.077 0 01-.795-.305l.026 1.037c.415.155.802.376 1.151.652.011.003.019.003.03.007.706.18 1.597.276 2.505.276 1.053 0 2.087-.133 2.833-.357.799-.243.975-.497.975-.545 0-.051-.003-.099.037-.15v-.964zM11.755 3.134c-.747-.228-1.78-.357-2.833-.357-1.06 0-2.053.129-2.796.357-.776.235-.946.467-.95.54 0 0 .004 0 .004.008.019.08.24.331 1.03.56.733.213 1.697.33 2.712.33 1.053 0 2.083-.128 2.83-.353.798-.24.978-.493.978-.544 0-.048-.176-.298-.975-.541zM16.992 13.314V12.21a4.719 4.719 0 01-.773.313c-.824.25-1.902.386-3.039.386-1.008 0-1.99-.114-2.763-.316a4.79 4.79 0 01-.916-.335l.019 1.067v.008c0 .055.161.301.938.54.736.225 1.729.35 2.792.35 1.06 0 2.057-.129 2.8-.36.777-.243.946-.497.946-.549h-.004zM12.761 6.647a4.647 4.647 0 01-.795.317c-.828.25-1.913.386-3.05.386-.56 0-1.115-.037-1.667-.107.298.412.52.876.659 1.37.316.021.659.036 1.012.036h.037c.603-.662 2.225-.994 3.804-1.038v-.964zM16.194 10.488c-.821.243-1.888.376-3.006.376-1.086 0-2.12-.125-2.918-.357a4.514 4.514 0 01-.802-.31l.014.847.004.309c.287.357 1.66.817 3.698.817 1.063 0 2.068-.125 2.822-.353.795-.243.968-.493.968-.545 0-.04.022-.085.022-.121h.003v-.975c-.257.128-.526.239-.805.312zM16.022 8.704c-.75-.228-1.78-.35-2.833-.35h-.062c-.98 0-1.91.11-2.624.313-.761.213-1.023.456-1.056.556-.003.007-.003.01-.003.014l.007.015c.022.077.24.327 1.03.56.732.209 1.696.327 2.712.327 1.048 0 2.042-.122 2.796-.346.817-.243 1-.497 1.005-.552v-.004c-.004-.055-.188-.298-.972-.533z" />
+            </g>
+            <defs>
+              <clipPath id="prefix__clip0_invest">
+                <path fill="#fff" d="M0 0h17v17H0z" />
+              </clipPath>
+            </defs>
+          </svg>,
 
           "white",
           4
@@ -391,14 +402,14 @@ export const InvestBlackCard = ({
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
           />,
-          <ProfitIcon className="mr-1" />,
+          <ProfitIcon className="mr-md-1" />,
           "white",
           4
         )}
         {getSecondCardColumns(
           "My share",
           Number(myShare).toFixed(2) + " %",
-          <LPShareIcon className="mr-1" />,
+          <LPShareIcon className="mr-md-1" />,
           "white",
           4
         )}
