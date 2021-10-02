@@ -15,7 +15,6 @@ import { LinkIcon } from "icons";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useRefresh } from "components/LotteryForm/useRefresh";
-import { yellow } from "@material-ui/core/colors";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "components/InvestBlackCard";

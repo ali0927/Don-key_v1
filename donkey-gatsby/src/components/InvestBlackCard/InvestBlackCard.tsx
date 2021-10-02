@@ -5,7 +5,6 @@ import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
-import Dollars from "./images/dollars.svg";
 import {
   formatNum,
   getAmount,
@@ -36,15 +35,7 @@ import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
-import styled from "styled-components";
-import { breakPoints } from "../../breakponts";
 
-const IMG = styled.img`
-  @media only screen and (max-width: ${breakPoints.md}) {
-    width: 15px;
-    height: 15px;
-  }
-`;
 
 export const InvestBlackCard = ({
   poolAddress,
