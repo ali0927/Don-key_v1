@@ -148,13 +148,23 @@ export const StrategyTableForInvestor = ({
             <TableHead1 style={{ borderBottomStyle: "none" }}>
               <TableRow>
                 <TableHeading1
-                  style={{ textAlign: "left", borderRadius: "10px", width: "40%" }}
+                  style={{
+                    textAlign: "left",
+                    borderRadius: "10px",
+                    width: "40%",
+                  }}
                 >
                   Name
                 </TableHeading1>
-                <TableHeading1 style={{ textAlign: "left", width: "40%"  }}>TVL</TableHeading1>
+                <TableHeading1 style={{ textAlign: "left", width: "40%" }}>
+                  TVL
+                </TableHeading1>
                 <TableHeading1
-                  style={{ textAlign: "center", borderRadius: "10px" ,  width: "20%" }}
+                  style={{
+                    textAlign: "center",
+                    borderRadius: "10px",
+                    width: "20%",
+                  }}
                 >
                   Fees
                 </TableHeading1>
@@ -194,13 +204,15 @@ export const StrategyTableForInvestor = ({
             </TableBody>
             <TableHead1 style={{ borderBottomStyle: "none" }}>
               <TableRow>
-                <TableHeading1 style={{ textAlign: "left",  width: "40%"  }}>
+                <TableHeading1 style={{ textAlign: "left", width: "40%" }}>
                   Created
                 </TableHeading1>
-                <TableHeading1 style={{ textAlign: "left" , width: "40%" }}>
+                <TableHeading1 style={{ textAlign: "left", width: "40%" }}>
                   Status
                 </TableHeading1>
-                <TableHeading1 style={{  width: "20%", textAlign:"center"  }}>APY</TableHeading1>
+                <TableHeading1 style={{ width: "20%", textAlign: "center" }}>
+                  APY
+                </TableHeading1>
               </TableRow>
             </TableHead1>
             <TableBody>
