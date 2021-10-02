@@ -8,6 +8,6 @@
 [context."feature/*"]
   environment = { GATSBY_GRAPHQL_URL = "https://cms.don-key.finance/graphql", GATSBY_API_URL = "https://api.don-key.finance", GATSBY_ENV = "production", GATSBY_SHARE_LINK = "https://next.don-key.finance/share/"}
 [context.dev]
-  environment = { GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-api.don-key.finance", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/" }
+  environment = { GATSBY_STRAPI_URL = "https://dev-cms.don-key.finance", GATSBY_STAKING_CONTRACT = "0x7eD3526d1C1bC42756B31b097761dd0E1f7EABE4", GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-api.don-key.finance", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/" }
 [context.deploy-preview]
   environment = { GATSBY_GRAPHQL_URL = "https://dev-cms.don-key.finance/graphql", GATSBY_API_URL = "https://dev-api.don-key.finance", GATSBY_ENV = "development", GATSBY_SHARE_LINK = "https://don-next-dev.vercel.app/share/"}
