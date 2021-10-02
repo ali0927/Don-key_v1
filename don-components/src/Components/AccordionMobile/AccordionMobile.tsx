@@ -23,6 +23,7 @@ const StyledAccordionItem = styled.div`
 
 const StyledCardHeader = styled.div`
   background: #fff !important;
+  padding: 0.7rem 0 0.7rem 0.7rem !important;
   border: 0 !important;
   & div[aria-expanded="false"] {
     svg {
@@ -45,11 +46,12 @@ const AccordionBody = styled.div`
   padding-top: 0;
 `;
 
-export const AccordionHeadingText = styled.div<{
+type Props = {
   smFontSize?: string;
   mdFontSize?: string;
   color?: string;
-}>`
+}
+export const AccordionHeadingText = styled.div<Props>`
   font-family: 'Poppins';
   font-weight: 600;
   font-size: ${(props) => (props.smFontSize ? props.smFontSize : "14px")};
@@ -61,7 +63,6 @@ export const AccordionHeadingText = styled.div<{
 `;
 
 export const AccordionCaptionText = styled.div`
-  font-family: 'Poppins';
   font-size: 12px;
   font-weight: 600;
   color: #c4c4c4;
@@ -100,7 +101,7 @@ export const AccordionCardHeader: React.FC<{ index: number }> = (props) => {
   return (
     <StyledCardHeader className="card-header" id={`heading-` + props.index}>
       <div
-        className="d-flex justify-content-between align-items-center mb-2"
+        className="d-flex justify-content-between align-items-center"
         data-toggle="collapse"
         data-target={"#collapse" + props.index}
         aria-expanded="false"

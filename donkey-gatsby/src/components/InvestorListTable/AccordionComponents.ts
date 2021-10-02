@@ -11,7 +11,7 @@ export const Typography = styled.div<{ fontSize: string; bold?: boolean }>`
 export const MobileHeading = styled.div`
   font-family: Poppins;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   margin: 0px;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: 16px;

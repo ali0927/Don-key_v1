@@ -17,10 +17,7 @@ import {
   getPoolContract,
   getTokenPrice,
 } from "helpers";
-import {
-  MobileHeading,
-  MobileCaption,
-} from "./AccordionComponents";
+import { MobileHeading, MobileCaption } from "./AccordionComponents";
 import {
   Accordion,
   AccordionDetails,
@@ -39,52 +36,72 @@ import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { sortBy } from "lodash";
 import moment from "moment";
 
-import PositiveIcon from  "images/positiveicon.png";
-import NegativeIcon  from "images/negativeicon.png";
+import PositiveIcon from "images/positiveicon.png";
+import NegativeIcon from "images/negativeicon.png";
 
-const usdAmount = ( amount:number ) => {
-  if(amount > 0) {
-     return(
-      <> <img
-      src={PositiveIcon}
-      style={{
-       width: 10,
-       height:10,
-      }} />  {amount} </>
-     ) 
- }
-else {
-  return <> <img
-  src={NegativeIcon}
-  style={{
-   width: 10,
-   height:10,
-  }} /> {amount} </>
+const usdAmount = (amount: number) => {
+  if (amount > 0) {
+    return (
+      <>
+        {" "}
+        <img
+          src={PositiveIcon}
+          style={{
+            width: 10,
+            height: 10,
+          }}
+        />{" "}
+        {amount}{" "}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {" "}
+        <img
+          src={NegativeIcon}
+          style={{
+            width: 10,
+            height: 10,
+          }}
+        />{" "}
+        {amount}{" "}
+      </>
+    );
   }
-}
+};
 
-const busdAmount = ( amount:number , symbol:string ) => {
-  if(amount > 0) {
-    return(
-      <>  <img
-      src={PositiveIcon}
-      style={{
-       width: 10,
-       height:10,
-      }} /> {amount} {symbol}</>
-     )
- }
-else {
-  return(
-    <>  <img
-    src={NegativeIcon}
-    style={{
-     width: 10,
-     height:10,
-    }} /> {amount} {symbol}</>
-   )
+const busdAmount = (amount: number, symbol: string) => {
+  if (amount > 0) {
+    return (
+      <>
+        {" "}
+        <img
+          src={PositiveIcon}
+          style={{
+            width: 10,
+            height: 10,
+          }}
+        />{" "}
+        {amount} {symbol}
+      </>
+    );
+  } else {
+    return (
+      <>
+        {" "}
+        <img
+          src={NegativeIcon}
+          style={{
+            width: 10,
+            height: 10,
+          }}
+        />{" "}
+        {amount} {symbol}
+      </>
+    );
   }
-}
+};
 
 const ShowAmount = ({
   amount,
@@ -106,15 +123,15 @@ const ShowAmount = ({
     return <>-</>;
   }
 
-  return (
-    icon
-    ?
+  return icon ? (
     <>
-    { isUSD ? usdAmount(Number(formatNum(amountInUSD))) : busdAmount(Number(formatNum(amount)), symbol) }
+      {isUSD
+        ? usdAmount(Number(formatNum(amountInUSD)))
+        : busdAmount(Number(formatNum(amount)), symbol)}
     </>
-    :
+  ) : (
     <>
-    {isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}
+      {isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}
     </>
   );
 };
@@ -128,11 +145,7 @@ export const hideAddress = (item: string) => {
 };
 
 export const hideAddressForMobile = (item: string) => {
-  return (
-    item.slice(0, 4) +
-    "xxxxx" +
-    item.slice(item.length - 4, item.length)
-  );
+  return item.slice(0, 4) + "xxxxx" + item.slice(item.length - 4, item.length);
 };
 
 type InvestorList = {
@@ -239,69 +252,74 @@ export const InvestorListTable = ({
 
   return (
     <>
-     <div
-      className="d-md-block d-lg-none"
-      id="accordionExample">
+      <div className="d-md-block d-lg-none" id="accordionExample">
         <Accordion id="InvestmentListaccordion">
-        {sortedInvestments.map((item, index) => (
-          <>
-           <AccordionCard>
-              <AccordionCardHeader index={index}>
-                <AccordionHeadingText>
+          {sortedInvestments.map((item, index) => (
+            <>
+              <AccordionCard>
+                <AccordionCardHeader index={index}>
+                  <AccordionHeadingText>
                     <MobileCaption>Investor</MobileCaption>
-                    <MobileHeading>{hideAddress(item.address).slice(0,10)}...</MobileHeading>
-                </AccordionHeadingText>
-                <AccordionHeadingText>
-                <MobileCaption>Profit/Loss</MobileCaption>
                     <MobileHeading>
-                    <ShowAmount
-                              chainId={chainId}
-                              amount={item.profitLoss}
-                              amountInUSD={item.profitLossInUSD}
-                              poolAddress={poolAddress}
-                              icon={true}
-                    />
-                  </MobileHeading>
-                </AccordionHeadingText>
-                <AccordionHeadingText>
-                <MobileCaption>Duration</MobileCaption>
+                      {hideAddress(item.address).slice(0, 10)}...
+                    </MobileHeading>
+                  </AccordionHeadingText>
+                  <AccordionHeadingText>
+                    <MobileCaption>Profit/Loss</MobileCaption>
+                    <MobileHeading>
+                      <ShowAmount
+                        chainId={chainId}
+                        amount={item.profitLoss}
+                        amountInUSD={item.profitLossInUSD}
+                        poolAddress={poolAddress}
+                        icon={true}
+                      />
+                    </MobileHeading>
+                  </AccordionHeadingText>
+                  <AccordionHeadingText>
+                    <MobileCaption>Duration</MobileCaption>
                     <MobileHeading>{item.duration} ago</MobileHeading>
-                </AccordionHeadingText>
-              </AccordionCardHeader>
-              <AccordionDetails accordionId="InvestmentListaccordion" index={index}>
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <AccordionCaptionText>Invested Amount</AccordionCaptionText>
-                <div className="d-flex">
-                <AccordionHeadingText>
-                          <ShowAmount
-                            chainId={chainId}
-                            amount={item.initialInvestment}
-                            amountInUSD={item.initialInvestmentInUSD}
-                            poolAddress={poolAddress}
-                          />
                   </AccordionHeadingText>
-                </div>
-              </div>
-              <div className="d-flex align-items-center justify-content-between mb-2">
-                <AccordionCaptionText>Claimable Amount</AccordionCaptionText>
-                <div className="d-flex">
-                <AccordionHeadingText>
-                            <ShowAmount
-                            chainId={chainId}
-                            amount={item.claimableAmount}
-                            amountInUSD={item.claimableAmountInUSD}
-                            poolAddress={poolAddress}
-                          />
-                  </AccordionHeadingText>
-                </div>
-              </div>
-              </AccordionDetails>
+                </AccordionCardHeader>
+                <AccordionDetails
+                  accordionId="InvestmentListaccordion"
+                  index={index}
+                >
+                  <div className="d-flex align-items-center justify-content-between mb-2">
+                    <AccordionCaptionText>Invested Amount</AccordionCaptionText>
+                    <div className="d-flex">
+                      <AccordionHeadingText>
+                        <ShowAmount
+                          chainId={chainId}
+                          amount={item.initialInvestment}
+                          amountInUSD={item.initialInvestmentInUSD}
+                          poolAddress={poolAddress}
+                        />
+                      </AccordionHeadingText>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-between mb-2">
+                    <AccordionCaptionText>
+                      Claimable Amount
+                    </AccordionCaptionText>
+                    <div className="d-flex">
+                      <AccordionHeadingText>
+                        <ShowAmount
+                          chainId={chainId}
+                          amount={item.claimableAmount}
+                          amountInUSD={item.claimableAmountInUSD}
+                          poolAddress={poolAddress}
+                        />
+                      </AccordionHeadingText>
+                    </div>
+                  </div>
+                </AccordionDetails>
               </AccordionCard>
-          </>
-        ))}
-    </Accordion>
-    </div>
-      <TableResponsive className='d-none d-lg-block d-xl-block'>
+            </>
+          ))}
+        </Accordion>
+      </div>
+      <TableResponsive className="d-none d-lg-block d-xl-block">
         <Table>
           <TableHead>
             <TableRow>
