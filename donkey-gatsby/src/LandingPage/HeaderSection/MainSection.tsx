@@ -10,6 +10,7 @@ import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
+import { Skeleton } from "@material-ui/lab";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -122,7 +123,9 @@ const StakeButton = styled.button`
 `;
 
 export const MainSection: React.FC = () => {
-  const { data: ethPriceInfo } = useQuery(ETH_PRICE, { client: uniswapClient });
+  const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
+    client: uniswapClient,
+  });
 
   const [{ data: coingecko }] = useAxios({
     method: "GET",
@@ -180,17 +183,35 @@ export const MainSection: React.FC = () => {
               <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">DON price</FooterHeading>
-                <FooterSubHeading>${finalDerivedEth}</FooterSubHeading>
+                <FooterSubHeading>
+                  {loading ? (
+                    <Skeleton width={100} variant="text" />
+                  ) : (
+                    `$${finalDerivedEth}`
+                  )}
+                </FooterSubHeading>
               </Col>
               <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">24-hour volume</FooterHeading>
-                <FooterSubHeading>${volume24hrs}</FooterSubHeading>
+                <FooterSubHeading>
+                  {loading ? (
+                    <Skeleton variant="text" width={100} />
+                  ) : (
+                    `$${volume24hrs}`
+                  )}
+                </FooterSubHeading>
               </Col>
               <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
                 <DarkBorder />
                 <FooterHeading className="mt-4">Market Cap</FooterHeading>
-                <FooterSubHeading>${marketCap}</FooterSubHeading>
+                <FooterSubHeading>
+                  {loading ? (
+                    <Skeleton variant="text" width={100} />
+                  ) : (
+                    `$${marketCap}`
+                  )}
+                </FooterSubHeading>
               </Col>
             </FooterRow>
           </div>
