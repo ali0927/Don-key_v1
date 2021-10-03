@@ -441,7 +441,7 @@ export const StakingInfo = () => {
       return (
         <>
           {" "}
-          <div className="h-100">
+          <div className="h-100 d-flex flex-column justify-content-center">
             <StakingTitle style={{ color: "#fff" }}>DON Tokens</StakingTitle>
             <StakingSubtitle>{coolOffAmount} DON</StakingSubtitle>
           </div>
