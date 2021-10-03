@@ -9,9 +9,9 @@ const {
   NODE_ENV,
   URL: NETLIFY_SITE_URL = "https://don-key.finance",
   DEPLOY_PRIME_URL: NETLIFY_DEPLOY_URL = NETLIFY_SITE_URL,
-  CONTEXT: NETLIFY_ENV = NODE_ENV
+  CONTEXT: NETLIFY_ENV = NODE_ENV,
 } = process.env;
-const isNetlifyProduction = NETLIFY_ENV === 'production';
+const isNetlifyProduction = NETLIFY_ENV === "production";
 const siteUrl = isNetlifyProduction ? NETLIFY_SITE_URL : NETLIFY_DEPLOY_URL;
 
 /**
@@ -23,7 +23,7 @@ const siteUrl = isNetlifyProduction ? NETLIFY_SITE_URL : NETLIFY_DEPLOY_URL;
  */
 module.exports = {
   siteMetadata: {
-    siteUrl,
+    siteUrl: "https://don-key.finance",
   },
   plugins: [
     `gatsby-plugin-image`,
@@ -31,32 +31,32 @@ module.exports = {
     `gatsby-plugin-sass`,
     `gatsby-plugin-tsconfig-paths`,
     `gatsby-plugin-netlify`,
-    `gatsby-plugin-sitemap`,
+    { resolve: `gatsby-plugin-sitemap` },
     {
       resolve: `gatsby-plugin-loadable-components-ssr`,
     },
     {
-      resolve: 'gatsby-plugin-robots-txt',
+      resolve: "gatsby-plugin-robots-txt",
       options: {
         host: siteUrl,
         sitemap: `${siteUrl}/sitemap.xml`,
         resolveEnv: () => NETLIFY_ENV,
         env: {
           production: {
-            policy: [{ userAgent: '*' }]
+            policy: [{ userAgent: "*" }],
           },
-          'branch-deploy': {
-            policy: [{ userAgent: '*', disallow: ['/'] }],
+          "branch-deploy": {
+            policy: [{ userAgent: "*", disallow: ["/"] }],
             sitemap: null,
-            host: null
+            host: null,
           },
-          'deploy-preview': {
-            policy: [{ userAgent: '*', disallow: ['/'] }],
+          "deploy-preview": {
+            policy: [{ userAgent: "*", disallow: ["/"] }],
             sitemap: null,
-            host: null
-          }
-        }
-      }
+            host: null,
+          },
+        },
+      },
     },
     {
       resolve: `gatsby-source-filesystem`,
@@ -80,7 +80,7 @@ module.exports = {
       options: {
         apiURL: process.env.GATSBY_STRAPI_URL,
         queryLimit: 1000, // Defaults to 100
-        collectionTypes: [`tokens`, `strategies`, `farmers`, 'risks'],
+        collectionTypes: [`tokens`, `strategies`, `farmers`, "risks"],
         // singleTypes: [`home-page`, `contact`],
       },
     },
@@ -99,7 +99,7 @@ module.exports = {
       },
     },
     `gatsby-plugin-no-sourcemaps`,
-    `gatsby-plugin-react-helmet`
+    `gatsby-plugin-react-helmet`,
     // `gatsby-plugin-offline`,
   ],
 };
