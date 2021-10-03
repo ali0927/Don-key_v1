@@ -36,7 +36,6 @@ import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
 
-
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
@@ -363,6 +362,7 @@ export const InvestBlackCard = ({
             <DollarView
               chainId={network.chainId}
               poolAddress={poolAddress}
+              variant="multiline"
               tokenAmount={initialInvestment}
             />
           ),
@@ -392,6 +392,7 @@ export const InvestBlackCard = ({
             chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
+            variant="multiline"
           />,
           <ProfitIcon className="mr-md-1" />,
           "white",
@@ -399,7 +400,10 @@ export const InvestBlackCard = ({
         )}
         {getSecondCardColumns(
           "My share",
-          Number(myShare).toFixed(2) + " %",
+          <span className="d-flex flex-column d-md-block align-items-center">
+            <span>{Number(myShare).toFixed(2) + " %"}</span>
+            <span className="d-md-none" style={{ opacity: 0 }}>%</span>
+          </span>,
           <LPShareIcon className="mr-md-1" />,
           "white",
           4

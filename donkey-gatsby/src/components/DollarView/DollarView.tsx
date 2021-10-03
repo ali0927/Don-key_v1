@@ -13,11 +13,13 @@ import { useUSDViewBool } from "contexts/USDViewContext";
 export const DollarView = ({
   tokenAmount,
   poolAddress,
-  chainId
+  chainId,
+  variant = "default"
 }: {
   tokenAmount: string;
   poolAddress: string;
   chainId: number;
+  variant?: "default" | "multiline"
 }) => {
   const [price, setPrice] = useState("-");
   const [isReady, setIsReady] = useState(false);
@@ -46,6 +48,12 @@ export const DollarView = ({
         ${formatNum(new BigNumber(tokenAmount).multipliedBy(price).toString())}
       </>
     );
+  }
+  if(variant === "multiline"){
+    return   <span className="d-flex d-md-block flex-column align-items-center">
+    <span>{formatNum(tokenAmount)}</span> 
+    <span>{" "}{symbol.toUpperCase()}</span>
+  </span>
   }
   return (
     <>

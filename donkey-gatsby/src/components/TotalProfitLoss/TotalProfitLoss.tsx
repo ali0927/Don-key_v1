@@ -17,21 +17,23 @@ export const TotalProfitLoss = ({
   fromOverlay,
   address,
   chainId,
+  variant = "default",
 }: {
   poolAddress: string;
   refresh?: boolean;
   fromOverlay?: boolean;
   chainId: number;
   address?: string;
+  variant?: "default" | "multiline";
 }) => {
   const [totalProfitLoss, setTotalProfitLoss] = useState("-");
   const web3 = getWeb3(chainId);
   const { symbol } = usePoolSymbol(poolAddress, web3);
-  const { address: connectedAddress} = useWeb3Context();
+  const { address: connectedAddress } = useWeb3Context();
   const { isUSD } = useUSDViewBool();
   useEffect(() => {
     (async () => {
-      if(!address && !connectedAddress){
+      if (!address && !connectedAddress) {
         return;
       }
       try {
@@ -71,6 +73,14 @@ export const TotalProfitLoss = ({
   }, [refresh, isUSD, address, connectedAddress]);
   if (isUSD) {
     return <>${totalProfitLoss}</>;
+  }
+  if (variant === "multiline") {
+    return (
+      <span className="d-flex d-md-block flex-column align-items-center">
+        <span>{totalProfitLoss} </span>
+        <span>{symbol}</span>
+      </span>
+    );
   }
   return (
     <>
