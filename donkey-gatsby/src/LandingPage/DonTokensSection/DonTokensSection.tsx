@@ -62,7 +62,7 @@ export const DonTokenSection: React.FC = () => {
                 <div className="d-flex">
                   <LineRoot className="d-flex justify-content-lg-end mr-5 mt-2">
                     <StaticImage className="d-none d-md-block" layout="fixed" src="./images/img.png" alt="Image not found" />
-                    <StaticImage className="d-block d-md-none"  layout="fixed" src="./images/mobilebullets.png" alt="Bullets" />
+                    <StaticImage className="d-block d-md-none"  layout="fixed" src="./images/mobilebullets.png" alt="Image not found" />
                   </LineRoot>
                   <div className="d-flex flex-column justify-content-between">
                     <div className="mb-md-4">
