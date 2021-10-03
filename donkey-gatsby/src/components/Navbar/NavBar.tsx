@@ -372,10 +372,10 @@ function NavBar({ variant = "landing" }: INavBarProps) {
               {variant === "loggedin" && <DashboardDrawer />}
             </DrawerMenu>
             <DrawerMiddle>
-              <DrawerSmallItem icon={<TwitterIconOutlined />}>
+              <DrawerSmallItem target="_blank" href="https://twitter.com/Don_key_finance" icon={<TwitterIconOutlined />}>
                 Twitter
               </DrawerSmallItem>
-              <DrawerSmallItem icon={<TelegramIconOutlined />}>
+              <DrawerSmallItem target="_blank" href="https://t.me/don_key_finance" icon={<TelegramIconOutlined />}>
                 Telegram
               </DrawerSmallItem>
             </DrawerMiddle>

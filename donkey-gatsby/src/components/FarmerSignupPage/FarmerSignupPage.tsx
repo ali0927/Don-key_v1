@@ -80,17 +80,6 @@ const CustomContainer = styled(Container)`
   margin-bottom: 9%;
 `;
 
-// const MakeFarmerProfileBtn = styled(ContainedButton)`
-//   width: fit-content;
-//   border-radius: 5px;
-//   padding: 12px 15px;
-//   font-size: 16px;
-//   line-height: 19px;
-//   letter-spacing: 0.03em;
-//   color: #070602;
-//   font-weight: 500;
-// `;
-
 export const FarmerSignupPage = () => {
   const [name, setName] = useState("");
   const [telegram, setTelegram] = useState("");
