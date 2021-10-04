@@ -7,5 +7,5 @@ export interface IStakingCardProps {
     tokenSymbol: string;
     buttons: {label: string; imageSrc: string;}[];
   } & IStaking;
-
+  buyLink: string;
 }

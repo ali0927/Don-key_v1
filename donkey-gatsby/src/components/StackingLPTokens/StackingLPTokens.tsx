@@ -19,6 +19,7 @@ import {
 import { InitialState } from "./InitialState";
 import { fetchStakingInfo } from "./helpers";
 import { useIsomorphicEffect } from "hooks";
+import { useRefresh } from "components/LotteryForm";
 
 const Header = styled.div`
   width: 100%;
@@ -75,45 +76,55 @@ const Body = styled.div`
   } */
 `;
 
+const PancakeSwapLink =
+  "https://exchange.pancakeswap.finance/add/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c/0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255";
+const UniswapLink =
+  "https://app.uniswap.org/#/add/v2/0xdAC17F958D2ee523a2206206994597C13D831ec7/0x217ddEad61a42369A266F1Fb754EB5d3EBadc88a";
+
 export const StackingLPTokens: React.FC = () => {
   const { connected, address } = useWeb3Context();
 
   const [ethStaking, setEthStaking] = React.useState(InitialState);
   const [bnbStaking, setBNBStaking] = React.useState(InitialState);
-
+  const {dependsOn} = useRefresh();
   const fethInfo = async () => {
-    const [EthData, BNBData] = await Promise.all([
-      fetchStakingInfo({
-        connected,
-        chainId: ETHEREUM_CHAIN_ID,
-        web3: getWeb3(ETHEREUM_CHAIN_ID),
-        address,
-      }),
-      fetchStakingInfo({
-        connected,
-        chainId: BINANCE_CHAIN_ID,
-        web3: getWeb3(BINANCE_CHAIN_ID),
-        address,
-      }),
-    ]);
-    setEthStaking(EthData);
-    setBNBStaking(BNBData);
+    try {
+      const [EthData, BNBData] = await Promise.all([
+        fetchStakingInfo({
+          connected,
+          chainId: ETHEREUM_CHAIN_ID,
+          web3: getWeb3(ETHEREUM_CHAIN_ID),
+          address,
+        }),
+        fetchStakingInfo({
+          connected,
+          chainId: BINANCE_CHAIN_ID,
+          web3: getWeb3(BINANCE_CHAIN_ID),
+          address,
+        }),
+      ]);
+      setEthStaking(EthData);
+      setBNBStaking(BNBData);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useIsomorphicEffect(() => {
     fethInfo();
-  }, [connected]);
+  }, [connected, dependsOn]);
 
   return (
     <>
       <NavBar />
       <Header>
         <Container className="container">
-          <div className="row h-100" >
+          <div className="row h-100">
             <div className="col-lg-5 d-flex flex-column justify-content-center">
               <Heading className="my-1">Stake LP Tokens</Heading>
               <SubHeading>
-                Deposit $DON LP token to gain $DON rewards and coming soon will gain you access to the Don-key DAPP tiers
+                Deposit $DON LP token to gain $DON rewards and coming soon will
+                gain you access to the Don-key DAPP tiers
               </SubHeading>
             </div>
             <div className="col-lg-7 d-lg-flex align-items-center justify-content-end d-none ">
@@ -127,6 +138,7 @@ export const StackingLPTokens: React.FC = () => {
         <StyledImage src={Rectangle} alt="Stacking logo not found" />
         <div className="container pt-5">
           <StakingCard
+            buyLink={UniswapLink}
             networkData={{
               chainId: ETHEREUM_CHAIN_ID,
               networkName: "ERC20 Pool",
@@ -140,6 +152,7 @@ export const StackingLPTokens: React.FC = () => {
           />
           <div className="mt-3 mt-lg-5">
             <StakingCard
+              buyLink={PancakeSwapLink}
               networkData={{
                 chainId: BINANCE_CHAIN_ID,
                 networkName: "BEP20 Pool",

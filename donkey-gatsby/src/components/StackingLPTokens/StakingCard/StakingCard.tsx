@@ -17,7 +17,7 @@ import { IStakingCardProps } from "./interfaces";
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-import { captureException, getStakingContract } from "helpers";
+import { captureException, formatNum, getStakingContract } from "helpers";
 import { useRefresh } from "components/LotteryForm";
 import { LotteryPopupForm } from "components/LotteryForm/LotteryPopupForm";
 
@@ -217,11 +217,11 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
                   </Typography>
 
                   <Typography fontSize="15px" alignCenter>
-                    {networkData.availableLp} {networkData.tokenSymbol}
+                    {formatNum(networkData.availableLp)} {networkData.tokenSymbol}
                   </Typography>
                   <GetMoreLink
                     className="d-none d-lg-block"
-                    href="https://app.uniswap.org/#/add/v2/0xdAC17F958D2ee523a2206206994597C13D831ec7/0x217ddEad61a42369A266F1Fb754EB5d3EBadc88a"
+                    href={props.buyLink}
                     target="_blank"
                   >
                     Get more
@@ -240,7 +240,7 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
                   </Typography>
 
                   <Typography fontSize="15px" alignCenter>
-                    {networkData.stakedLp} {networkData.tokenSymbol}
+                    {formatNum(networkData.stakedLp)} {networkData.tokenSymbol}
                   </Typography>
                 </Col>
                 <ColWithBorder
@@ -338,7 +338,7 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
             Rewards
           </Typography>
           <Typography fontSize="42px" color="#fff">
-            {networkData.rewards}
+            {new BigNumber(networkData.rewards).toFixed(4)}
           </Typography>
           {connected && chainId === connectedChainId && (
             <HarvestButton
@@ -385,13 +385,13 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
               <div className="d-flex align-items-center justify-content-between mb-4">
                 <AccordionCaptionText>Available LP Tokens</AccordionCaptionText>
                 <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
-                  {networkData.availableLp} {networkData.tokenSymbol}
+                  {formatNum(networkData.availableLp)} {networkData.tokenSymbol}
                 </AccordionHeadingText>
               </div>
               <div className="d-flex align-items-center justify-content-between mb-4">
                 <AccordionCaptionText> Staked LP Tokens</AccordionCaptionText>
                 <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
-                  {networkData.stakedLp} {networkData.tokenSymbol}
+                  {formatNum(networkData.stakedLp)} {networkData.tokenSymbol}
                 </AccordionHeadingText>
               </div>
               <div className="d-flex align-items-center justify-content-between mb-4">
@@ -413,7 +413,7 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
               <div className="d-flex align-items-center justify-content-between mb-4">
                 <AccordionCaptionText>Rewards</AccordionCaptionText>
                 <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
-                  {networkData.rewards}
+                  {new BigNumber(networkData.rewards).toFixed(4)}
                 </AccordionHeadingText>
               </div>
             </AccordionHeaderRow>
