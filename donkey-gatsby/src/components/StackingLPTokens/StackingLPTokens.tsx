@@ -107,6 +107,7 @@ export const StackingLPTokens: React.FC = () => {
       setBNBStaking(BNBData);
     } catch (e) {
       console.log(e);
+      
     }
   };
 
