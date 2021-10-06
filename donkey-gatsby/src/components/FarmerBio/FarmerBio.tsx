@@ -16,6 +16,7 @@ import { gql, useLazyQuery } from "@apollo/client";
 import { useIsomorphicEffect } from "hooks";
 
 import { breakPoints } from "../../../src/breakponts";
+import { BackArrowButton } from "components/BackArrowButton";
 
 const StyledFarmerImage = styled.img`
   object-fit: cover;
@@ -184,12 +185,17 @@ export const FarmerBio = ({
   const strategyName =
     strategies && strategies.length > 0 ? strategies[0].name : "Description";
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <>
       <Section>
         <Container>
           <Row>
             <Col lg={12} className="mt-3">
+              <BackArrowButton to={"#"} onClick={handleBack} />
               <div className="d-flex justify-content-between align-items-start align-items-lg-center flex-wrap mb-3">
                 <Title className="mb-0 mb-lg-3">
                   DON - {capitalize(name || "")}

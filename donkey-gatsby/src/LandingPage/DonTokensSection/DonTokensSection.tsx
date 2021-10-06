@@ -53,7 +53,7 @@ export const DonTokenSection: React.FC = () => {
                 <StaticImage
                   className="d-inline-block"
                   src="./images/donkey.png"
-                  alt="ImageNotFound"
+                  alt="Donkey Token Picture"
                 />
               </div>
             </Col>

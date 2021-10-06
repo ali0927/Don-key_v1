@@ -17,7 +17,7 @@ import { useState } from "react";
 import { useWeb3Context } from "don-components";
 import { navigate } from "gatsby-link";
 import { Link } from "gatsby";
-
+import { BackArrowButton } from "components/BackArrowButton";
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
   padding-bottom: 3rem;
@@ -29,35 +29,6 @@ const Title = styled.h2`
     ",sans-serif," Apple Color Emoji "," Segoe UI Emoji "," Segoe UI Symbol ","
     Noto Color Emoji "";
   font-weight: 900;
-`;
-
-const BackArrow = (props: any) => {
-  return (
-    <svg
-      width={21}
-      height={10}
-      viewBox="0 0 21 10"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        d="M.117 5.16a.688.688 0 01.086-.87L4.328.165a.688.688 0 01.97.97L2.347 4.09h17.59a.687.687 0 010 1.375H2.348l2.95 2.953a.687.687 0 11-.97.97L.203 5.262a.615.615 0 01-.086-.103z"
-        fill="#222"
-      />
-    </svg>
-  );
-};
-
-const StyledLink = styled(Navigate)`
-  color: rgba(34, 34, 34, 1);
-  display: inline-block;
-  margin-bottom: 4rem;
-  &:hover {
-    color: rgba(34, 34, 34, 1);
-    opacity: 0.8;
-    text-decoration: none;
-  }
 `;
 
 const Image = styled.img`
@@ -101,15 +72,28 @@ const FarmerBioShort = ({
         onCardClick={handleLeaderClick}
         onButtonClick={handleLeaderClick}
         showOnRight={!tokenObj.boostApy}
+        buttonLabel="Open"
         extraApy={
           tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
         }
         totalValue={
-          <> <Link to={url} style={{opacity: "0", width: 0, height: 0, display: "inline-block"}} >Invest</Link>
-          <PoolAmount
-            chainId={item.farmer.network.chainId}
-            poolAddress={item.farmer.poolAddress}
-          />
+          <>
+            {" "}
+            <Link
+              to={url}
+              style={{
+                opacity: "0",
+                width: 0,
+                height: 0,
+                display: "inline-block",
+              }}
+            >
+              Invest
+            </Link>
+            <PoolAmount
+              chainId={item.farmer.network.chainId}
+              poolAddress={item.farmer.poolAddress}
+            />
           </>
         }
         onShowLessClick={onShowLess}
@@ -131,8 +115,6 @@ const FarmerBioShort = ({
     </div>
   );
 };
-
-
 
 export default function TokenPage({
   pageContext: { tokens, strategies },
@@ -156,9 +138,7 @@ export default function TokenPage({
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <StyledLink to="/dashboard">
-                <BackArrow /> <span className="ml-2">Back</span>
-              </StyledLink>
+              <BackArrowButton to="/dashboard" />
               <Title className="mb-5">{subtitle || "Description"}</Title>
               <div className="row">
                 <div className="col-md-8">
