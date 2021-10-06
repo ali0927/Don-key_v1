@@ -11,6 +11,7 @@ import BigNumber from "bignumber.js";
 import { Modules } from "web3";
 import moment from "moment";
 import { IInvestment, IInvestorsAPIData } from "../interfaces/IInvestors";
+import { orderBy } from "lodash";
 
 export const useInvestments = (data: {
   investors: IInvestorsAPIData[];
@@ -31,18 +32,22 @@ export const useInvestments = (data: {
     rowsLimit,
   } = data;
 
-  const [investmentsList, setInvestmentsList] = useState<IInvestment[]>([]);
+  const [investmentsList, setInvestmentsList] = useState<
+    (IInvestment & { date_created: string })[]
+  >([]);
   const [loading, setLoading] = React.useState(true);
   const rowSize = rowsLimit;
   const start = (currentPageNumber - 1) * rowSize;
   const end = (currentPageNumber - 1) * rowSize + rowSize;
+  // const { isUSD } = useUSDViewBool();
 
   const web3 = getWeb3(chainId);
   React.useEffect(() => {
     (async () => {
       try {
         setLoading(true);
-        const finalInvestmentsList: IInvestment[] = [];
+        const finalInvestmentsList: (IInvestment & { date_created: string })[] =
+          [];
         const finalInvestors = investors.slice(start, end);
         await Promise.all(
           finalInvestors.map(async (investor: any) => {
@@ -66,6 +71,8 @@ export const useInvestments = (data: {
               const profit = claimableAmountBN.minus(initiailInvestmentBN);
               const profitInUSD = claimableAmountInUSD.minus(investmentInUSD);
 
+              console.log(investor.date_created);
+
               finalInvestmentsList.push({
                 address,
                 claimableAmount: claimableAmount,
@@ -74,6 +81,7 @@ export const useInvestments = (data: {
                 initialInvestmentInUSD: investmentInUSD.toFixed(),
                 profitLoss: profit.toFixed(),
                 profitLossInUSD: profitInUSD.toFixed(),
+                date_created: investor.date_created,
                 duration: moment
                   .duration(moment().diff(moment(investor.date_created)))
                   .humanize(),
@@ -81,7 +89,9 @@ export const useInvestments = (data: {
             }
           })
         );
-        setInvestmentsList(finalInvestmentsList);
+        setInvestmentsList(
+          orderBy(finalInvestmentsList, ["date_created"], ["desc"])
+        );
       } catch (e) {
         captureException(e, "InvestorListTable");
       } finally {
