@@ -19,7 +19,6 @@ const ALL_FARMER_QUERY = gql`
         url
       }
       guid
-      active
       twitter
       telegram
       poolAddress
