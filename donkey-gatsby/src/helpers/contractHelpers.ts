@@ -519,7 +519,6 @@ query allFarmerQuery {
       url
     }
     guid
-    active
     twitter
     telegram
     poolAddress

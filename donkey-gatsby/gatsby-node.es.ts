@@ -149,7 +149,6 @@ export const createPages = async ({ graphql, actions }: any) => {
                 symbol
               }
               slug
-              active
               guid
               poolVersion
               poolAddress
