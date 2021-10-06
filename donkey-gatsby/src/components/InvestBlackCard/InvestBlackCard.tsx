@@ -147,7 +147,7 @@ export const InvestBlackCard = ({
         className={
           "col-md-" +
           col +
-          " col-4 d-flex  flex-column align-items-center justify-content-between"
+          " col-4 d-flex  flex-column align-items-center  justify-content-between"
         }
       >
         <OverlayTrigger
@@ -165,10 +165,10 @@ export const InvestBlackCard = ({
           }
         >
           <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-            <span> {icon}</span> <span>{label}</span>
+            <span> {icon}</span> <span >{label}</span>
           </ColumnsTitle1>
         </OverlayTrigger>
-        <ColumnsSubTitle color={color}>{value}</ColumnsSubTitle>
+        <ColumnsSubTitle className="text-uppercase" color={color}>{value}</ColumnsSubTitle>
       </Columns>
     ) : (
       <Columns
@@ -388,7 +388,7 @@ export const InvestBlackCard = ({
 
         {getSecondCardColumns(
           "Profit/Loss",
-          <TotalProfitLoss
+          <TotalProfitLoss 
             chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}

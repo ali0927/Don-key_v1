@@ -282,7 +282,7 @@ export const PopularStrategy = ({
           <div className="d-flex justify-content-between">
             <div>
               <TotalValue className="mb-1">Total Value</TotalValue>
-              <h5>{totalValue}</h5>
+              <h5 className="text-uppercase">{totalValue}</h5>
             </div>
 
             {riskImage && (
