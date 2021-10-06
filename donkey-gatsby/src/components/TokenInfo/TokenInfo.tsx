@@ -78,6 +78,7 @@ export const TokenInfo = ({
   networkName = words[0];
   const url = `/dashboard/${network.slug}/${slug.toLowerCase()}`;
 
+
   const NetworkElement = () => {
     if (network.type && network.type === "crosschain") {
       return (

@@ -166,6 +166,7 @@ export const PopularStrategy = ({
   getTokenSymbol,
   extraApy,
   imageRisk,
+  buttonLabel = "Invest",
 }: {
   graph?: React.ReactNode;
   title?: string;
@@ -197,6 +198,7 @@ export const PopularStrategy = ({
   onShowMoreClick?: () => void;
   onShowLessClick?: () => void;
   extraApy?: string;
+  buttonLabel?: string;
 }) => {
   const handleCardClick = () => {
     if (!comingSoonProp && onCardClick) {
@@ -347,7 +349,9 @@ export const PopularStrategy = ({
             </div>
             {extraApy && (
               <div>
-                <TotalValue className="mb-1 font-weight-bold">APY with DON</TotalValue>
+                <TotalValue className="mb-1 font-weight-bold">
+                  APY with DON
+                </TotalValue>
                 <h5
                   style={{ color: "#31c77f" }}
                   className="primary-text text-right"
@@ -395,7 +399,7 @@ export const PopularStrategy = ({
           {comingSoonProp ? (
             <div className="position-relative">
               <ButtonWidget varaint="outlined" height="40px" disabled>
-                Invest
+                {buttonLabel}
               </ButtonWidget>
               <div
                 style={{ top: -25, right: 10 }}
@@ -410,7 +414,7 @@ export const PopularStrategy = ({
               height="40px"
               onClick={ButtonClick}
             >
-              Invest
+              {buttonLabel}
             </ButtonWidget>
           )}
         </div>

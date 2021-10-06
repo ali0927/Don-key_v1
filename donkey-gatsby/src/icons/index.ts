@@ -85,6 +85,7 @@ export * from "./InvestmentIcon";
 export * from "./MainIcon";
 export * from "./ReferralsIcon";
 export * from "./BridgeIcon";
+export * from "./BackArrow";
 export * from "./PaginateLeftArrow";
 export * from "./PaginateRightArrow";
 
