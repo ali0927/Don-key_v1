@@ -73,7 +73,7 @@ export const InvestmentInput = ({
         <div className="w-100">
           <InvestmentInputElement
             type="number"
-            placeholder="0"
+            placeholder="0.0"
             min={0}
             value={value}
             disabled={disabled}
