@@ -272,7 +272,7 @@ export const InvestmentsPage = () => {
                 invest.poolAddress,
                 3
               );
-              // const accounts = await web3.eth.getAccounts();
+              const accounts = await web3.eth.getAccounts();
               const isInvested = await contract.methods
                 .isInvestor(address)
                 .call();

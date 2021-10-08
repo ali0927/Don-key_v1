@@ -112,6 +112,12 @@ export type IStrategy = {
   };
 };
 
+export type IStrategyPool = {
+  poolAddress: string;
+  version: number;
+  status: "active" | "deprecated"
+}
+
 export type CallBackorVal<T> = T | ((val: T) => T);
 
 

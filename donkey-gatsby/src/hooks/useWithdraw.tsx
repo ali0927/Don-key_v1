@@ -41,7 +41,6 @@ const ADD_WITHDRAW_REQUEST = gql`
 `;
 
 export const useWithdraw = () => {
-
   const [create] = useMutation(ADD_WITHDRAW_REQUEST);
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
@@ -65,7 +64,7 @@ export const useWithdraw = () => {
         poolAddress
       );
       showProgress("Withdraw is in Progress");
-      if (poolVersion === 1 || poolVersion === 4 || poolVersion === 3) {
+      if (poolVersion === 1 || poolVersion === 3) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
       if (poolVersion === 2) {
@@ -80,17 +79,10 @@ export const useWithdraw = () => {
           )
           .send({ from: accounts[0] });
       }
-      // if (poolVersion < 3) {
-      //   await executeDelete({
-      //     data: {
-      //       poolAddress: poolAddress,
-      //     },
-      //   });
-      // } else {
-        await create({
-          variables: { poolAddress, walletAddress: accounts[0] },
-        });
-      // }
+
+      await create({
+        variables: { poolAddress, walletAddress: accounts[0] },
+      });
 
       showSuccess("Withdraw Request Created");
 
@@ -104,5 +96,38 @@ export const useWithdraw = () => {
     }
   };
 
-  return { doWithdraw };
+  const doPartialWithdraw = async (
+    poolAddress: string,
+    share: string,
+    isGreyWithdraw: boolean = false,
+    onStart?: () => void,
+    onSuccess?: () => void,
+    onError?: (arg: any) => void
+  ) => {
+    try {
+      onStart && onStart();
+      const web3 = getConnectedWeb3();
+      const accounts = await web3.eth.getAccounts();
+      const pool = await getPoolContract(web3, poolAddress, 4);
+      const withdraw = isGreyWithdraw
+        ? pool.methods.withdrawGreyLiquidity
+        : pool.methods.withdrawLiquidity;
+      withdraw(new BigNumber(share).multipliedBy(100).toFixed()).send({
+        from: accounts[0],
+      });
+      await create({
+        variables: { poolAddress, walletAddress: accounts[0] },
+      });
+      showSuccess("Withdraw Request Created");
+      onSuccess && onSuccess();
+    } catch (err) {
+      captureException(err, "Withdraw Failed");
+      showFailure("Withdraw Failed");
+      onError && onError(err);
+    } finally {
+      refetch();
+    }
+  };
+
+  return { doWithdraw, doPartialWithdraw };
 };
