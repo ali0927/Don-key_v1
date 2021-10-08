@@ -388,12 +388,25 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
                   {formatNum(networkData.availableLp)} {networkData.tokenSymbol}
                 </AccordionHeadingText>
               </div>
-              <div className="d-flex align-items-center justify-content-between mb-4">
+              <div className="d-flex align-items-center justify-content-between mb-3">
                 <AccordionCaptionText> Staked LP Tokens</AccordionCaptionText>
                 <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
                   {formatNum(networkData.stakedLp)} {networkData.tokenSymbol}
                 </AccordionHeadingText>
               </div>
+              <div className="d-flex align-items-center justify-content-between mb-3">
+                <AccordionCaptionText></AccordionCaptionText>
+                <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
+                <GetMoreLink
+                className="d-block d-lg-none "
+                    href={props.buyLink}
+                    target="_blank"
+                  >
+                    Get more
+                  </GetMoreLink>
+                </AccordionHeadingText>
+              </div>
+              
               <div className="d-flex align-items-center justify-content-between mb-4">
                 <AccordionCaptionText>Total liquidity</AccordionCaptionText>
                 <AccordionHeadingText smFontSize="16px" mdFontSize="16px">
@@ -457,7 +470,7 @@ export const StakingCard: React.FC<IStakingCardProps> = (props) => {
 
               {hasStakedAmount && (
                 <ButtonWidget
-                  className="mb-."
+                  className="mb-3"
                   varaint="outlined"
                   disabled={disableButtons}
                   onClick={handleUnstake}
