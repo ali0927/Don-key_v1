@@ -106,6 +106,7 @@ export const InvestBlackCard = ({
       setWithdrawLp(new BigNumber(toEther(withdrawLp.LPAmount)));
     }
   };
+  
 
   useEffect(() => {
     async function apiCall() {
