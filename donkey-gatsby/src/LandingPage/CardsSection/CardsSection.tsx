@@ -10,6 +10,11 @@ import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
 import { navigate } from "gatsby-link";
 import { breakPoints } from "breakponts";
+import { graphql, useStaticQuery } from "gatsby";
+import { sampleSize, map, flatten } from "lodash";
+import { IFarmerInter, IStrategy } from "interfaces";
+import { Link } from "react-router-dom";
+import { PoolAmount } from "components/PoolAmount";
 
 const CardBanner = styled.div`
   position: relative;
@@ -230,7 +235,61 @@ const Graph3 = () => {
   );
 };
 
+type IFarmerBio = IStrategy[];
 export const CardsSection: React.FC = () => {
+  const farmers = useStaticQuery(
+    graphql`
+      query fetchFarmers {
+        allStrapiFarmers(filter: { status: { in: ["active", "deprecated"] } }) {
+          nodes {
+            name
+            description
+            farmerImage {
+              url
+            }
+            active
+            twitter
+            telegram
+            guid
+            slug
+            farmerfee
+            performancefee
+            poolAddress
+            poolVersion
+            network {
+              name
+              chainId
+              symbol
+            }
+            strategies {
+              name
+              apy
+              created_at
+              id
+              entranceFees
+              exitFees
+              swapInFees
+              swapOutFees
+              description
+              strategyImage {
+                url
+              }
+              token {
+                boostApy
+              }
+            }
+          }
+        }
+      }
+    `
+  );
+
+  const strateges = flatten(map(farmers.allStrapiFarmers.nodes));
+
+  const finalStrateges: IFarmerBio = sampleSize(strateges, 3);
+
+  console.log('-----------',finalStrateges)
+
   return (
     <>
       <CardBanner className="mt-0">
@@ -259,17 +318,7 @@ export const CardsSection: React.FC = () => {
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <CardCol className=" col-lg-8 mt-5">
-                    <PopularStrategy
-                      icon={<ImageIcon src={farmerCard1} alt="ImageNotFound" />}
-                      investers={568}
-                      graph={<Graph1 />}
-                      contentTitle="STRATEGY BSC only here pay min gas"
-                      title="Don – next_door_neighbor "
-                      content="missed the first farming craze, Binance Smart Chain is where it is happening "
-                      apy="40%"
-                      comingsoon
-                      totalValue="$178,890"
-                    />
+            
                   </CardCol>
                 </div>
               </Col>
