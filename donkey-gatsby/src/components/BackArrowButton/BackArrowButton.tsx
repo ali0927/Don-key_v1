@@ -23,6 +23,7 @@ const NormalBackButton = styled.div`
     color: rgba(34, 34, 34, 1);
     opacity: 0.8;
     text-decoration: none;
+    cursor:pointer;
   }
 `;
 
