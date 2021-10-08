@@ -82,7 +82,8 @@ export const InvestBlackCard = ({
       const poolTokenAmount = await poolToken.methods
         .balanceOf(poolAddress)
         .call();
-      setTokeninPool(toEther(poolTokenAmount));
+      const decimals = await poolToken.methods.decimals().call();
+      setTokeninPool(toEther(poolTokenAmount,decimals));
     }
   };
 
