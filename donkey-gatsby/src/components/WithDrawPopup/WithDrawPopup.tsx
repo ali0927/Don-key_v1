@@ -19,6 +19,8 @@ import {
 } from "helpers";
 import BigNumber from "bignumber.js";
 import { useWeb3Context } from "don-components";
+import styled, { css } from "styled-components";
+import { Spinner } from "react-bootstrap";
 
 const OldWithdrawPopup = ({
   onWithdraw,
@@ -54,22 +56,149 @@ const OldWithdrawPopup = ({
   );
 };
 
-const SelectableWithdrawComponent = ({title, available, currency, price, value, onChange}: {
+const BoxWrapper = styled.div`
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  padding: 12px;
+  text-align: right;
+  margin-top: 5px;
+`;
+
+const BoxInput = styled.div`
+  font-size: 28px;
+  font-weight: 700;
+`;
+
+const BoxUsd = styled.div`
+  font-size: 12px;
+  font-weight: 500;
+  color: #a3a3a3;
+`;
+
+const SelectedPillCss = css`
+  box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
+  border-radius: 10px;
+  background: #fceb74;
+  border: 1px solid #fed700;
+`;
+
+const Pill = styled.div`
+  width: 70px;
+  height: 36px;
+  border-radius: 10px;
+  color: #081e3f;
+  display: flex;
+  cursor: pointer;
+  transition: all 0.3s linear;
+  background: #f8f8f8;
+  font-size: 12px;
+  font-weight: 600;
+  align-items: center;
+  justify-content: center;
+  ${(props: { selected?: boolean }) => {
+    return props.selected && SelectedPillCss;
+  }}
+  &:hover {
+    ${SelectedPillCss}
+  }
+`;
+
+const defaultPercents = [10, 20, 30, 50, 100];
+
+const WithdrawButton = styled.button`
+  display: block;
+  background: linear-gradient(
+      94.22deg,
+      rgba(255, 255, 255, 0.2) 7.77%,
+      rgba(255, 255, 255, 0) 93.41%
+    ),
+    #fff037;
+  border: 1px solid #fbe492;
+  color: #000;
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 15px;
+  width: 100%;
+  &:hover {
+    background: #fff037;
+  }
+`;
+
+const CancelButton = styled.button`
+  display: block;
+  color: #000;
+  font-size: 14px;
+  font-weight: 500;
+  background: transparent;
+  border-radius: 10px;
+  padding: 15px;
+  border: 1px solid #000000;
+  width: 100%;
+  transition: all 0.3s linear;
+  &:hover {
+    color: #fff;
+    background: #000;
+  }
+`;
+
+const SelectableWithdrawComponent = ({
+  title,
+  available,
+  currency,
+  price,
+  percent,
+  setPercent,
+}: {
   title: string;
   available: string;
   currency: string;
   price: string;
-  value: string;
-  onChange: (val: string) => void;
+  percent: string;
+  setPercent: (val: string) => void;
 }) => {
-  return <div>
-    <div >
-      <span>{title}</span>
-      <span>Available: {available} {price}</span>
+  const amount = new BigNumber(available).multipliedBy(percent).dividedBy(100);
+
+  return (
+    <div>
+      <div className="d-flex align-items-center justify-content-between">
+        <span style={{ fontSize: 14, fontWeight: 600 }}>{title}</span>
+        <span style={{ fontSize: 13, fontWeight: 500, color: "#A3A3A3" }}>
+          Available: {available} {currency}
+        </span>
+      </div>
+      <BoxWrapper>
+        <BoxInput>
+          {amount.toFixed(4)} {currency}
+        </BoxInput>
+        <BoxUsd>≈ ${amount.multipliedBy(price).toFixed(2)}</BoxUsd>
+      </BoxWrapper>
+      <div className="mt-3 mb-4 d-flex align-items-center justify-content-between">
+        {defaultPercents.map((num) => {
+          return (
+            <Pill
+              key={num}
+              onClick={() => setPercent(num.toFixed())}
+              selected={num === parseInt(percent)}
+            >
+              {num}%
+            </Pill>
+          );
+        })}
+      </div>
     </div>
-  </div>;
+  );
 };
 
+const WithdrawFooter = styled.div`
+  padding-top: 15px;
+  padding-bottom: 25px;
+  border-top: 1px solid #ececec;
+  text-align: center;
+  color: #a3a3a3;
+  font-size: 12px;
+`;
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { open, poolAddress, poolVersion } = props;
 
@@ -99,7 +228,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           .call();
         const token = await getPoolToken(web3, poolAddress);
         const currency = await getTokenSymbol(web3, poolAddress);
-        const decimals = token.methods.decimals().call();
+        const decimals = await token.methods.decimals().call();
         const greyAmount = toEther(result.amountInToken, decimals);
 
         const finalAmount = await getAmount(
@@ -112,7 +241,6 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         const investedAmount = new BigNumber(finalAmount)
           .minus(greyAmount)
           .toFixed(8);
-
         setGreyAmount(greyAmount);
         setInvestedAmount(investedAmount);
         setTokenPrice(tokenPrice);
@@ -124,7 +252,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   React.useEffect(() => {
     fetchAllInfo();
-  }, [])
+  }, []);
 
   useEffectOnTabFocus(() => {
     if (poolVersion > 2) {
@@ -187,26 +315,72 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     }
   };
 
+  const greyInputMarkup = (
+    <SelectableWithdrawComponent
+      available={greyAmount}
+      price={tokenPrice}
+      currency={currency}
+      title={
+        hasGreyAmount && hasInvestedAmount
+          ? "Just invested"
+          : "Choose withdraw percent"
+      }
+      percent={selectedgreyShare}
+      setPercent={setGreyShare}
+    />
+  );
+  const investinputMarkup = (
+    <SelectableWithdrawComponent
+      available={investedAmount}
+      price={tokenPrice}
+      currency={currency}
+      title={
+        hasGreyAmount && hasInvestedAmount
+          ? "Previously invested"
+          : "Choose withdraw percent"
+      }
+      percent={selectedinvestedShare}
+      setPercent={setInvestedShare}
+    />
+  );
   const renderPopupContent = () => {
-    if (hasGreyAmount && !hasInvestedAmount) {
+    if (hasGreyAmount && hasInvestedAmount) {
       return (
-        <div>
-          <SelectableWithdrawComponent
-            available={greyAmount}
-            price={tokenPrice}
-            currency={currency}
-            title="Choose withdraw percent"
-            value={selectedgreyShare}
-            onChange={setGreyShare}
-          />
-        </div>
+        <>
+          {greyInputMarkup}
+          {investinputMarkup}
+        </>
       );
     }
+
+    if (hasGreyAmount && !hasInvestedAmount) {
+      return <>{greyInputMarkup}</>;
+    }
+    if (hasInvestedAmount && !hasGreyAmount) {
+      return <>{investinputMarkup}</>;
+    }
+    return null;
+  };
+
+  const renderFooter = () => {
+    if (!hasDons) {
+      return null;
+    }
+    if (hasGreyAmount && !hasInvestedAmount) {
+      return (
+        <WithdrawFooter>Money hasn’t been invested in protocol!</WithdrawFooter>
+      );
+    }
+    if (!hasGreyAmount && hasInvestedAmount) {
+      return (
+        <WithdrawFooter>The withdrawal will take up to 24 hrs</WithdrawFooter>
+      );
+    }
+    return null;
   };
 
   const renderContent = () => {
-    return renderPopupContent();
-    if (poolVersion < 3) {
+    if (poolVersion < 4) {
       return (
         <OldWithdrawPopup
           loading={loading}
@@ -217,7 +391,21 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     }
     if (hasCheckedDons) {
       if (hasDons) {
-        // return renderPopupContent();
+        return (
+          <>
+            <div className="mt-4">
+              {renderPopupContent()}
+              <div className="d-flex align-items-center">
+                <WithdrawButton onClick={handleWithDraw} className="mr-3">
+                  {" "}
+                  {loading && <Spinner animation={"border"} size="sm"  />}
+                  {!loading && <>Withdraw</>}
+                </WithdrawButton>
+                <CancelButton onClick={props.onClose}>Cancel</CancelButton>
+              </div>
+            </div>
+          </>
+        );
       } else {
         return <BuyDonContent />;
       }
@@ -237,10 +425,20 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     <>
       <DonCommonmodal
         isOpen={open}
-        title={hasDons ? "Withdraw" : ""}
+        title={
+          hasDons ? (
+            <div style={{ color: "#070602", marginTop: "15px" }}>
+              Withdrawal
+            </div>
+          ) : (
+            ""
+          )
+        }
         variant="common"
         size="xs"
         onClose={props.onClose}
+        contentStyle={poolVersion === 4 ? { padding: "1rem" } : {}}
+        footer={renderFooter()}
       >
         {renderContent()}
       </DonCommonmodal>

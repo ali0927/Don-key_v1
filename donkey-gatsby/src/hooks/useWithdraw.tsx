@@ -112,13 +112,17 @@ export const useWithdraw = () => {
       const withdraw = isGreyWithdraw
         ? pool.methods.withdrawGreyLiquidity
         : pool.methods.withdrawLiquidity;
-      withdraw(new BigNumber(share).multipliedBy(100).toFixed()).send({
+      await withdraw(new BigNumber(share).multipliedBy(100).toFixed()).send({
         from: accounts[0],
       });
       await create({
         variables: { poolAddress, walletAddress: accounts[0] },
       });
-      showSuccess("Withdraw Request Created");
+      if(isGreyWithdraw){
+        showSuccess("Withdraw Successful");
+      }else {
+        showSuccess("Withdraw Request Created");
+      }
       onSuccess && onSuccess();
     } catch (err) {
       captureException(err, "Withdraw Failed");
