@@ -11,10 +11,18 @@ import { ButtonWidget } from "components/Button";
 import { navigate } from "gatsby-link";
 import { breakPoints } from "breakponts";
 import { graphql, useStaticQuery } from "gatsby";
-import { sampleSize, map, flatten } from "lodash";
+import { sampleSize, map, filter } from "lodash";
 import { IFarmerInter, IStrategy } from "interfaces";
 import { Link } from "react-router-dom";
+import { fixUrl } from "helpers";
 import { PoolAmount } from "components/PoolAmount";
+import { InvestorCountContract } from "components/InvestorCountGraphql";
+
+const Image = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 5px;
+`;
 
 const CardBanner = styled.div`
   position: relative;
@@ -235,8 +243,59 @@ const Graph3 = () => {
   );
 };
 
-type IFarmerBio = IStrategy[];
 export const CardsSection: React.FC = () => {
+  // const tokensdata = useStaticQuery(graphql`
+  //   query {
+  //     allStrapiTokens {
+  //       nodes {
+  //         network {
+  //           chainId
+  //           symbol
+  //           name
+  //           slug
+  //         }
+  //         slug
+  //         boostApy
+  //         subtitle
+  //         description
+  //         strategies {
+  //           risk {
+  //             Title
+  //             image {
+  //               url
+  //             }
+  //           }
+  //           strategyImage {
+  //             url
+  //           }
+  //           name
+  //           apy
+  //           active
+  //           description
+  //           farmer {
+  //             status
+  //             name
+  //             farmerImage {
+  //               url
+  //             }
+  //             network {
+  //               chainId
+  //               name
+  //               symbol
+  //             }
+  //             slug
+  //             guid
+  //             poolVersion
+  //             poolAddress
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // `);
+
+  // console.log(tokensdata);
+
   const farmers = useStaticQuery(
     graphql`
       query fetchFarmers {
@@ -284,11 +343,22 @@ export const CardsSection: React.FC = () => {
     `
   );
 
-  const strateges = flatten(map(farmers.allStrapiFarmers.nodes));
+  const handleLeaderClick = (url: string) => () => {
+    navigate(url);
+  };
 
-  const finalStrateges: IFarmerBio = sampleSize(strateges, 3);
+  const farmersList: IFarmerInter[] = farmers.allStrapiFarmers.nodes;
 
-  console.log('-----------',finalStrateges)
+  const finalFarmersList: IFarmerInter[] = filter(farmersList, (item) => {
+    if (item.strategies.length > 0 && item.farmerImage && item.active) {
+      return true;
+    }
+    return false;
+  });
+
+  const farmersData = sampleSize(finalFarmersList, 3);
+
+  console.log(farmersData);
 
   return (
     <>
@@ -318,7 +388,72 @@ export const CardsSection: React.FC = () => {
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <CardCol className=" col-lg-8 mt-5">
-            
+                    {farmersData[0] && (
+                      <PopularStrategy
+                        apy={farmersData[0].strategies[0].apy + "%"}
+                        isCardComingsoon={!farmersData[0].active}
+                        comingsoon={!farmersData[0].active}
+                        contentTitle={farmersData[0].strategies[0].name}
+                        content={farmersData[0].strategies[0].description}
+                        title={farmersData[0].name}
+                        icon={
+                          <Image src={fixUrl(farmersData[0].farmerImage.url)} />
+                        }
+                        // risk={}
+                        // imageRisk={}
+                        onCardClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[0].slug}`
+                        )}
+                        onButtonClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[0].slug}`
+                        )}
+                        // showOnRight={}
+                        buttonLabel="Open"
+                        // imageRisk={farmersData[0].risk.image.url}
+                        // extraApy={
+                        //  // tokenObj.boostApy &&
+                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
+                        // }
+
+                        totalValue={
+                          <>
+                            {" "}
+                            {/* <Link
+                              to={"reirect"}
+                              style={{
+                                opacity: "0",
+                                width: 0,
+                                height: 0,
+                                display: "inline-block",
+                              }}
+                            >
+                              Invest
+                            </Link> */}
+                            <PoolAmount
+                              chainId={farmersData[0].network.chainId}
+                              poolAddress={farmersData[0].poolAddress}
+                            />
+                          </>
+                        }
+                        // onShowLessClick={onShowLess}
+                        // onShowMoreClick={onShowMore}
+                        showAllContent={false}
+                        investers={
+                          <InvestorCountContract
+                            chainId={farmersData[0].network.chainId}
+                            poolAddresses={[farmersData[0].poolAddress]}
+                          />
+                        }
+                        strategyImage={
+                          farmersData[0].strategies[0].strategyImage.url
+                        }
+                        network={{
+                          chainId: farmersData[0].network.chainId,
+                          networkName: farmersData[0].network.name,
+                          networkSymbol: farmersData[0].network.symbol,
+                        }}
+                      />
+                    )}
                   </CardCol>
                 </div>
               </Col>
@@ -326,30 +461,139 @@ export const CardsSection: React.FC = () => {
               <Col md={5} className="pt-2 pt-md-5">
                 <CardCol className="col-lg-11">
                   <div className="mt-4">
-                    <PopularStrategy
-                      icon={<ImageIcon src={image2} alt="ImageNotFound" />}
-                      contentTitle="STRATEGY The no stress only yield way"
-                      title="Don - Popeye"
-                      investers={5874}
-                      graph={<Graph2 />}
-                      content="I look for lucrative farming strategies using only stable coins and farms with over 50M TVL"
-                      apy="134%"
-                      comingsoon
-                      totalValue="$1,354,560"
-                    />
+                    {farmersData[1] && (
+                      <PopularStrategy
+                        apy={farmersData[1].strategies[0].apy + "%"}
+                        isCardComingsoon={!farmersData[1].active}
+                        comingsoon={!farmersData[1].active}
+                        title={farmersData[1].name}
+                        content={farmersData[1].strategies[0].description}
+                        // risk={}
+                        // imageRisk={}
+                        icon={
+                          <Image src={fixUrl(farmersData[1].farmerImage.url)} />
+                        }
+                        // risk={}
+                        // imageRisk={}
+                        onCardClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[1].slug}`
+                        )}
+                        onButtonClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[1].slug}`
+                        )}
+                        // showOnRight={}
+                        buttonLabel="Open"
+                        // extraApy={
+                        //  // tokenObj.boostApy &&
+                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
+                        // }
+                        totalValue={
+                          <>
+                            {" "}
+                            {/* <Link
+                              to={"reirect"}
+                              style={{
+                                opacity: "0",
+                                width: 0,
+                                height: 0,
+                                display: "inline-block",
+                              }}
+                            >
+                              Invest
+                            </Link> */}
+                            <PoolAmount
+                              chainId={farmersData[1].network.chainId}
+                              poolAddress={farmersData[1].poolAddress}
+                            />
+                          </>
+                        }
+                        // onShowLessClick={onShowLess}
+                        // onShowMoreClick={onShowMore}
+                        showAllContent={false}
+                        investers={
+                          <InvestorCountContract
+                            chainId={farmersData[1].network.chainId}
+                            poolAddresses={[farmersData[1].poolAddress]}
+                          />
+                        }
+                        strategyImage={
+                          farmersData[1].strategies[0].strategyImage.url
+                        }
+                        network={{
+                          chainId: farmersData[1].network.chainId,
+                          networkName: farmersData[1].network.name,
+                          networkSymbol: farmersData[1].network.symbol,
+                        }}
+                      />
+                    )}
                   </div>
                   <StrategyDiv>
-                    <PopularStrategy
-                      icon={<ImageIcon src={image3} alt="ImageNotFound" />}
-                      contentTitle="STRATEGY all or nothing here  "
-                      title="Don – Unblinding"
-                      graph={<Graph3 />}
-                      investers={3568}
-                      comingsoon
-                      content="I’ll bring you to the well of new and show you the harvest looking for crazy APY’s sometimes Rek"
-                      apy="167%"
-                      totalValue="$870,650"
-                    />
+                    {farmersData[2] && (
+                      <PopularStrategy
+                        apy={farmersData[2].strategies[0].apy + "%"}
+                        isCardComingsoon={!farmersData[2].active}
+                        comingsoon={!farmersData[2].active}
+                        title={farmersData[2].name}
+                        contentTitle={farmersData[2].strategies[0].name}
+                        content={farmersData[2].strategies[0].description}
+                        // risk={}
+                        // imageRisk={}
+                        icon={
+                          <Image src={fixUrl(farmersData[2].farmerImage.url)} />
+                        }
+                        // risk={}
+                        // imageRisk={}
+                        onCardClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[2].slug}`
+                        )}
+                        onButtonClick={handleLeaderClick(
+                          `/dashboard/farmer/${farmersData[2].slug}`
+                        )}
+                        // showOnRight={}
+                        buttonLabel="Open"
+                        // extraApy={
+                        //  // tokenObj.boostApy &&
+                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
+                        // }
+                        totalValue={
+                          <>
+                            {" "}
+                            {/* <Link
+                              to={"reirect"}
+                              style={{
+                                opacity: "0",
+                                width: 0,
+                                height: 0,
+                                display: "inline-block",
+                              }}
+                            >
+                              Invest
+                            </Link> */}
+                            <PoolAmount
+                              chainId={farmersData[2].network.chainId}
+                              poolAddress={farmersData[2].poolAddress}
+                            />
+                          </>
+                        }
+                        // onShowLessClick={onShowLess}
+                        // onShowMoreClick={onShowMore}
+                        showAllContent={false}
+                        investers={
+                          <InvestorCountContract
+                            chainId={farmersData[2].network.chainId}
+                            poolAddresses={[farmersData[2].poolAddress]}
+                          />
+                        }
+                        strategyImage={
+                          farmersData[2].strategies[0].strategyImage.url
+                        }
+                        network={{
+                          chainId: farmersData[2].network.chainId,
+                          networkName: farmersData[2].network.name,
+                          networkSymbol: farmersData[2].network.symbol,
+                        }}
+                      />
+                    )}
                   </StrategyDiv>
                 </CardCol>
               </Col>
