@@ -1,7 +1,18 @@
 {
 	"abi": [
 		{
-			"inputs": [],
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_farmer",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_admin",
+					"type": "address"
+				}
+			],
 			"stateMutability": "nonpayable",
 			"type": "constructor"
 		},
@@ -991,29 +1002,6 @@
 				}
 			],
 			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_owner",
-					"type": "address"
-				},
-				{
-					"internalType": "address",
-					"name": "_farmer",
-					"type": "address"
-				},
-				{
-					"internalType": "address",
-					"name": "_admin",
-					"type": "address"
-				}
-			],
-			"name": "initialize",
-			"outputs": [],
-			"stateMutability": "nonpayable",
 			"type": "function"
 		},
 		{

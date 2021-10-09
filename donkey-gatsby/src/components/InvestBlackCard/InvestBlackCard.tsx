@@ -109,8 +109,8 @@ export const InvestBlackCard = ({
   useEffect(() => {
     async function apiCall() {
       if (address) {
-        let withdrawAmount = await await getAmount(web3, poolAddress, address);
-
+        let withdrawAmount =  await getAmount(web3, poolAddress, address, poolVersion);
+        console.log(withdrawAmount);
         setCurrentHoldings(withdrawAmount);
         getIsInvested();
 
@@ -159,6 +159,7 @@ export const InvestBlackCard = ({
                 chainId={network.chainId}
                 refresh={dependsOn % 2 == 0}
                 poolAddress={poolAddress}
+                poolVersion={poolVersion}
                 fromOverlay={true}
               />
             </Tooltip>
@@ -392,6 +393,7 @@ export const InvestBlackCard = ({
             chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
+            poolVersion={poolVersion}
             variant="multiline"
           />,
           <ProfitIcon className="mr-md-1" />,

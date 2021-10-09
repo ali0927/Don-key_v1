@@ -8,8 +8,17 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { useWithdraw } from "hooks/useWithdraw";
 import * as React from "react";
 import { IWithDrawPopupProps } from "./interfaces";
-import { captureException } from "helpers";
+import {
+  captureException,
+  getAmount,
+  getPoolContract,
+  getPoolToken,
+  getTokenPrice,
+  getTokenSymbol,
+  toEther,
+} from "helpers";
 import BigNumber from "bignumber.js";
+import { useWeb3Context } from "don-components";
 
 const OldWithdrawPopup = ({
   onWithdraw,
@@ -45,16 +54,20 @@ const OldWithdrawPopup = ({
   );
 };
 
-const ImmediateWithdraw = ({
-  loading,
-  onWithdraw,
-  onClose,
-}: {
-  loading?: boolean;
-  onWithdraw: () => void;
-  onClose: () => void;
+const SelectableWithdrawComponent = ({title, available, currency, price, value, onChange}: {
+  title: string;
+  available: string;
+  currency: string;
+  price: string;
+  value: string;
+  onChange: (val: string) => void;
 }) => {
-  return;
+  return <div>
+    <div >
+      <span>{title}</span>
+      <span>Available: {available} {price}</span>
+    </div>
+  </div>;
 };
 
 export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
@@ -65,8 +78,56 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   const { doWithdraw, doPartialWithdraw } = useWithdraw();
   const [hasCheckedDons, setHasChecked] = React.useState(false);
 
+  const { getConnectedWeb3 } = useWeb3Context();
+
+  const [greyAmount, setGreyAmount] = React.useState("0");
+  const [investedAmount, setInvestedAmount] = React.useState("0");
+  const [selectedgreyShare, setGreyShare] = React.useState("0");
+  const [currency, setCurrency] = React.useState("-");
+  const [tokenPrice, setTokenPrice] = React.useState("-");
+  const [selectedinvestedShare, setInvestedShare] = React.useState("0");
+  const [isReady, setIsReady] = React.useState(false);
+  const fetchAllInfo = async () => {
+    const web3 = getConnectedWeb3();
+    if (poolVersion === 4) {
+      try {
+        const tokenPrice = await getTokenPrice(web3, poolAddress);
+        const pool = await getPoolContract(web3, poolAddress, poolVersion);
+        const accounts = await web3.eth.getAccounts();
+        const result = await pool.methods
+          .getUserGreyInvestedAmount(accounts[0])
+          .call();
+        const token = await getPoolToken(web3, poolAddress);
+        const currency = await getTokenSymbol(web3, poolAddress);
+        const decimals = token.methods.decimals().call();
+        const greyAmount = toEther(result.amountInToken, decimals);
+
+        const finalAmount = await getAmount(
+          web3,
+          poolAddress,
+          accounts[0],
+          poolVersion
+        );
+
+        const investedAmount = new BigNumber(finalAmount)
+          .minus(greyAmount)
+          .toFixed(8);
+
+        setGreyAmount(greyAmount);
+        setInvestedAmount(investedAmount);
+        setTokenPrice(tokenPrice);
+        setCurrency(currency);
+        setIsReady(true);
+      } catch (e) {}
+    }
+  };
+
+  React.useEffect(() => {
+    fetchAllInfo();
+  }, [])
+
   useEffectOnTabFocus(() => {
-    if (poolVersion === 3) {
+    if (poolVersion > 2) {
       (async () => {
         setHasChecked(false);
         try {
@@ -81,17 +142,15 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
-  const [greyShare, setGreyShare] = React.useState("0");
-  const [investedShare, setInvestedShare] = React.useState("0");
-  const [hasGreyAmount, setHasGreyAmount] = React.useState(false);
-  const [hasInvestedAmount, setHasInvestedAmount] = React.useState(false);
+  const hasGreyAmount = new BigNumber(greyAmount).gt(0);
+  const hasInvestedAmount = new BigNumber(investedAmount).gt(0);
 
   const handleWithDraw = async () => {
     if (poolVersion === 4) {
-      if (new BigNumber(greyShare).gt(0)) {
+      if (new BigNumber(selectedgreyShare).gt(0)) {
         doPartialWithdraw(
           poolAddress,
-          greyShare,
+          selectedgreyShare,
           true,
           () => {
             setLoading(true);
@@ -101,10 +160,10 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           props.onError
         );
       }
-      if (new BigNumber(investedShare).gt(0)) {
+      if (new BigNumber(selectedinvestedShare).gt(0)) {
         doPartialWithdraw(
           poolAddress,
-          investedShare,
+          selectedinvestedShare,
           false,
           () => {
             setLoading(true);
@@ -129,10 +188,24 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   };
 
   const renderPopupContent = () => {
-    return <ImmediateWithdraw />;
+    if (hasGreyAmount && !hasInvestedAmount) {
+      return (
+        <div>
+          <SelectableWithdrawComponent
+            available={greyAmount}
+            price={tokenPrice}
+            currency={currency}
+            title="Choose withdraw percent"
+            value={selectedgreyShare}
+            onChange={setGreyShare}
+          />
+        </div>
+      );
+    }
   };
 
   const renderContent = () => {
+    return renderPopupContent();
     if (poolVersion < 3) {
       return (
         <OldWithdrawPopup
@@ -144,7 +217,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     }
     if (hasCheckedDons) {
       if (hasDons) {
-        return renderPopupContent();
+        // return renderPopupContent();
       } else {
         return <BuyDonContent />;
       }
