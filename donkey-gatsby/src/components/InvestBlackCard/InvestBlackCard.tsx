@@ -41,11 +41,13 @@ export const InvestBlackCard = ({
   poolVersion,
   network,
   boostApy,
+  isWithdrawRequested
 }: {
   poolAddress: string;
   poolVersion: number;
   network: INetwork;
   boostApy: boolean;
+  isWithdrawRequested?: boolean;
 }) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
@@ -66,24 +68,29 @@ export const InvestBlackCard = ({
   const web3 = getConnectedWeb3();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
-      const poolContract = await getPoolContract(
-        web3,
-        poolAddress,
-        poolVersion
-      );
-      const farmerAddress = await poolContract.methods
-        .getFarmerAddress()
-        .call();
-      const accounts = await web3.eth.getAccounts();
-      if (farmerAddress === accounts[0]) {
-        setIsFarmer(true);
+      try {
+        const poolContract = await getPoolContract(
+          web3,
+          poolAddress,
+          poolVersion
+        );
+        const farmerAddress =
+          poolVersion === 4
+            ? await poolContract.methods.adminAddress().call()
+            : await poolContract.methods.getFarmerAddress().call();
+        const accounts = await web3.eth.getAccounts();
+        if (farmerAddress === accounts[0]) {
+          setIsFarmer(true);
+        }
+        const poolToken = await getPoolToken(web3, poolAddress);
+        const poolTokenAmount = await poolToken.methods
+          .balanceOf(poolAddress)
+          .call();
+        const decimals = await poolToken.methods.decimals().call();
+        setTokeninPool(toEther(poolTokenAmount, decimals));
+      } catch (e: any) {
+        console.log(e.message, "Error In Farmer");
       }
-      const poolToken = await getPoolToken(web3, poolAddress);
-      const poolTokenAmount = await poolToken.methods
-        .balanceOf(poolAddress)
-        .call();
-      const decimals = await poolToken.methods.decimals().call();
-      setTokeninPool(toEther(poolTokenAmount, decimals));
     }
   };
 
@@ -110,8 +117,13 @@ export const InvestBlackCard = ({
   useEffect(() => {
     async function apiCall() {
       if (address) {
-        let withdrawAmount =  await getAmount(web3, poolAddress, address, poolVersion);
-        console.log(withdrawAmount);
+        let withdrawAmount = await getAmount(
+          web3,
+          poolAddress,
+          address,
+          poolVersion
+        );
+        console.log(withdrawAmount, "withdraw")
         setCurrentHoldings(withdrawAmount);
         getIsInvested();
 
@@ -376,7 +388,7 @@ export const InvestBlackCard = ({
               Invest
             </ButtonWidget>
 
-            {isInvested && (
+            {isInvested && !isWithdrawRequested && (
               <ButtonWidget
                 fontSize="14px"
                 varaint="contained"

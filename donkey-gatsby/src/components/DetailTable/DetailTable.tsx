@@ -376,32 +376,23 @@ export const DetailTable = ({
         </div>
       );
     }
-    if (isWithdrawRequested) {
-      return (
-        walletAddress && (
-          <WithdrawRequestedCard
-            walletAddress={walletAddress}
+
+    if (connected) {
+      if (isActiveNetwork) {
+        return (
+          <InvestBlackCard
             poolAddress={poolAddress}
+            poolVersion={poolVersion}
+            network={network}
+            isWithdrawRequested={isWithdrawRequested}
+            boostApy={boostApy}
           />
-        )
-      );
-    } else {
-      if (connected) {
-        if (isActiveNetwork) {
-          return (
-            <InvestBlackCard
-              poolAddress={poolAddress}
-              poolVersion={poolVersion}
-              network={network}
-              boostApy={boostApy}
-            />
-          );
-        } else {
-          return <InactiveNetworkCard correctNetwork={network} />;
-        }
+        );
       } else {
-        return <ConnectToMetamaskCard network={network} />;
+        return <InactiveNetworkCard correctNetwork={network} />;
       }
+    } else {
+      return <ConnectToMetamaskCard network={network} />;
     }
   };
 
@@ -517,7 +508,9 @@ export const DetailTable = ({
       <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0">
         <BoostApyBox className="d-md-none">
           <div className="row">
-            <div className="col-6 pr-0 d-flex flex-column justify-content-center  ">Up to 100% extra APY</div>
+            <div className="col-6 pr-0 d-flex flex-column justify-content-center  ">
+              Up to 100% extra APY
+            </div>
             <div className="col-6 pl-0 d-flex flex-column justify-content-center align-items-end">
               <BoostButton />
             </div>

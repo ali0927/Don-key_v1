@@ -51,7 +51,7 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
     ).methods
-      .getTokenAddress()
+      .getToken()
       .call();
     return tokenAddress;
   } catch (e) {
@@ -477,7 +477,7 @@ export const getAmount = async (
     } else {
       console.log("Called New")
       claimableAmount = await poolContract.methods
-        .getFinalClaimableAmount(address, 5000)
+        .getFinalClaimableAmount(address, 10000)
         .call();
     }
 

@@ -246,7 +246,9 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         setTokenPrice(tokenPrice);
         setCurrency(currency);
         setIsReady(true);
-      } catch (e) {}
+      } catch (e) {
+        
+      }
     }
   };
 
