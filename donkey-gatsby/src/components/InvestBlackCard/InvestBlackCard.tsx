@@ -106,7 +106,6 @@ export const InvestBlackCard = ({
       setWithdrawLp(new BigNumber(toEther(withdrawLp.LPAmount)));
     }
   };
-  
 
   useEffect(() => {
     async function apiCall() {
@@ -120,7 +119,7 @@ export const InvestBlackCard = ({
       }
     }
     apiCall();
-    if(process.env.GATSBY_SHOW_ADMIN){
+    if (process.env.GATSBY_SHOW_ADMIN) {
       checkIsFarmer();
       fetchWithdrawShare();
     }
@@ -224,24 +223,6 @@ export const InvestBlackCard = ({
       if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
         return (
           <>
-            {showInvestmentPopup && (
-              <InvestmentPopup
-                poolVersion={poolVersion}
-                poolAddress={poolAddress}
-                onClose={() => setShowInvestmentPopup(false)}
-                onSuccess={onSuccess}
-              />
-            )}
-            {showWithdrawPopup && (
-              <WithDrawPopup
-                open
-                poolVersion={poolVersion}
-                onClose={() => setShowWithdrawPopup(false)}
-                onError={() => {}}
-                onSuccess={onSuccess}
-                poolAddress={poolAddress}
-              />
-            )}
             {isUpdatePoolOpen && (
               <UpdatePoolDialog
                 open={isUpdatePoolOpen}
@@ -473,6 +454,24 @@ export const InvestBlackCard = ({
           4
         )}
       </div>
+      {showInvestmentPopup && (
+        <InvestmentPopup
+          poolVersion={poolVersion}
+          poolAddress={poolAddress}
+          onClose={() => setShowInvestmentPopup(false)}
+          onSuccess={onSuccess}
+        />
+      )}
+      {showWithdrawPopup && (
+        <WithDrawPopup
+          open
+          poolVersion={poolVersion}
+          onClose={() => setShowWithdrawPopup(false)}
+          onError={() => {}}
+          onSuccess={onSuccess}
+          poolAddress={poolAddress}
+        />
+      )}
     </>
   );
 };
