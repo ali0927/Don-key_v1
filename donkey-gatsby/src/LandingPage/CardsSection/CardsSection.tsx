@@ -14,6 +14,7 @@ import { graphql, useStaticQuery } from "gatsby";
 import { sampleSize, map, filter } from "lodash";
 import { IFarmerInter, IStrategy } from "interfaces";
 import { Link } from "react-router-dom";
+import BigNumber from "bignumber.js"
 import { fixUrl } from "helpers";
 import { PoolAmount } from "components/PoolAmount";
 import { InvestorCountContract } from "components/InvestorCountGraphql";
@@ -244,7 +245,6 @@ const Graph3 = () => {
 };
 
 export const CardsSection: React.FC = () => {
-
   const farmers = useStaticQuery(
     graphql`
       query fetchFarmers {
@@ -285,6 +285,9 @@ export const CardsSection: React.FC = () => {
               token {
                 boostApy
               }
+              // risk {
+              //   Title
+              // }
             }
           }
         }
@@ -337,8 +340,6 @@ export const CardsSection: React.FC = () => {
     `
   );
 
-  console.log("FARMERS------",farmers)
-
   const handleLeaderClick = (url: string) => () => {
     navigate(url);
   };
@@ -346,13 +347,17 @@ export const CardsSection: React.FC = () => {
   const farmersList: IFarmerInter[] = farmers.allStrapiFarmers.nodes;
 
   const finalFarmersList: IFarmerInter[] = filter(farmersList, (item) => {
-    if (item.strategies.length > 0 && item.farmerImage && item.active) {
+    if (item.strategies.length > 0 && item.farmerImage) {
       return true;
     }
     return false;
   });
 
+  console.log("-------------------------", farmers);
+
   const farmersData = sampleSize(finalFarmersList, 3);
+
+  console.log(farmersData);
 
   return (
     <>
@@ -385,7 +390,6 @@ export const CardsSection: React.FC = () => {
                     {farmersData[0] && (
                       <PopularStrategy
                         apy={farmersData[0].strategies[0].apy + "%"}
-                        isCardComingsoon={!farmersData[0].active}
                         contentTitle={farmersData[0].strategies[0].name}
                         content={farmersData[0].strategies[0].description}
                         title={farmersData[0].name}
@@ -403,11 +407,12 @@ export const CardsSection: React.FC = () => {
                         // showOnRight={}
                         buttonLabel="Open"
                         // imageRisk={farmersData[0].risk.image.url}
-                        // extraApy={
-                        //  // tokenObj.boostApy &&
-                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
-                        // }
-
+                        extraApy={
+                          farmersData[0].strategies[0].token.boostApy &&
+                          new BigNumber(farmersData[0].strategies[0].apy)
+                            .plus(100)
+                            .toFixed() + "%"
+                        }
                         totalValue={
                           <>
                             {" "}
@@ -457,8 +462,6 @@ export const CardsSection: React.FC = () => {
                     {farmersData[1] && (
                       <PopularStrategy
                         apy={farmersData[1].strategies[0].apy + "%"}
-                        isCardComingsoon={!farmersData[1].active}
-                        comingsoon={!farmersData[1].active}
                         title={farmersData[1].name}
                         content={farmersData[1].strategies[0].description}
                         // risk={}
@@ -476,10 +479,12 @@ export const CardsSection: React.FC = () => {
                         )}
                         // showOnRight={}
                         buttonLabel="Open"
-                        // extraApy={
-                        //  // tokenObj.boostApy &&
-                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
-                        // }
+                        extraApy={
+                          farmersData[1].strategies[0].token.boostApy &&
+                          new BigNumber(farmersData[1].strategies[0].apy)
+                            .plus(100)
+                            .toFixed() + "%"
+                        }
                         totalValue={
                           <>
                             {" "}
@@ -544,10 +549,12 @@ export const CardsSection: React.FC = () => {
                         )}
                         // showOnRight={}
                         buttonLabel="Open"
-                        // extraApy={
-                        //  // tokenObj.boostApy &&
-                        //   //new BigNumber(item.apy).plus(100).toFixed() + "%"
-                        // }
+                        extraApy={
+                          farmersData[2].strategies[0].token.boostApy &&
+                          new BigNumber(farmersData[2].strategies[0].apy)
+                            .plus(100)
+                            .toFixed() + "%"
+                        }
                         totalValue={
                           <>
                             {" "}
