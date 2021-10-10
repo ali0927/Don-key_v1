@@ -121,8 +121,6 @@ export default function TokenPage({
 }: {
   pageContext: { tokens: IStrapiToken[]; strategies: IFarmerBio[] };
 }) {
-
-  console.log("-PAGE-CONTEXT--", tokens, strategies)
   // return <div />
   const { chainId, connected } = useWeb3Context();
   const tokenObj = tokens[0];

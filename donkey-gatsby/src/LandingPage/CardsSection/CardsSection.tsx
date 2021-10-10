@@ -288,9 +288,56 @@ export const CardsSection: React.FC = () => {
             }
           }
         }
+        allStrapiTokens {
+          nodes {
+            network {
+              chainId
+              symbol
+              name
+              slug
+            }
+            slug
+            boostApy
+            subtitle
+            description
+            strategies {
+              risk {
+                Title
+                image {
+                  url
+                }
+              }
+              strategyImage {
+                url
+              }
+              name
+              apy
+              active
+              description
+              farmer {
+                status
+                name
+                farmerImage {
+                  url
+                }
+                network {
+                  chainId
+                  name
+                  symbol
+                }
+                slug
+                guid
+                poolVersion
+                poolAddress
+              }
+            }
+          }
+        }
       }
     `
   );
+
+  console.log("FARMERS------",farmers)
 
   const handleLeaderClick = (url: string) => () => {
     navigate(url);
