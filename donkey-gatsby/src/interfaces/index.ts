@@ -83,6 +83,8 @@ export interface IFarmerInter {
   telegram: string;
   poolAddress: string;
   poolVersion: number;
+  oldPoolVersion: number;
+  oldPoolAddress: string;
   network: INetwork;
   strategies:IStrategy[];
 }

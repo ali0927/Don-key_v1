@@ -476,7 +476,6 @@ export const getAmount = async (
         .getFinalClaimableAmount(address)
         .call();
     } else {
-      console.log("Called New")
       claimableAmount = await poolContract.methods
         .getFinalClaimableAmount(address, percent * 100)
         .call();
