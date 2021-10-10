@@ -158,8 +158,11 @@ export const createPages = async ({ graphql, actions }: any) => {
       }
     }
   `);
+  
+ 
 
   const tokens = tokensdata.data.allStrapiTokens.nodes;
+
 
   tokens.forEach((token: any) => {
     const strategies = sortStrategies(

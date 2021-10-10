@@ -244,57 +244,6 @@ const Graph3 = () => {
 };
 
 export const CardsSection: React.FC = () => {
-  // const tokensdata = useStaticQuery(graphql`
-  //   query {
-  //     allStrapiTokens {
-  //       nodes {
-  //         network {
-  //           chainId
-  //           symbol
-  //           name
-  //           slug
-  //         }
-  //         slug
-  //         boostApy
-  //         subtitle
-  //         description
-  //         strategies {
-  //           risk {
-  //             Title
-  //             image {
-  //               url
-  //             }
-  //           }
-  //           strategyImage {
-  //             url
-  //           }
-  //           name
-  //           apy
-  //           active
-  //           description
-  //           farmer {
-  //             status
-  //             name
-  //             farmerImage {
-  //               url
-  //             }
-  //             network {
-  //               chainId
-  //               name
-  //               symbol
-  //             }
-  //             slug
-  //             guid
-  //             poolVersion
-  //             poolAddress
-  //           }
-  //         }
-  //       }
-  //     }
-  //   }
-  // `);
-
-  // console.log(tokensdata);
 
   const farmers = useStaticQuery(
     graphql`
@@ -358,8 +307,6 @@ export const CardsSection: React.FC = () => {
 
   const farmersData = sampleSize(finalFarmersList, 3);
 
-  console.log(farmersData);
-
   return (
     <>
       <CardBanner className="mt-0">
@@ -392,7 +339,6 @@ export const CardsSection: React.FC = () => {
                       <PopularStrategy
                         apy={farmersData[0].strategies[0].apy + "%"}
                         isCardComingsoon={!farmersData[0].active}
-                        comingsoon={!farmersData[0].active}
                         contentTitle={farmersData[0].strategies[0].name}
                         content={farmersData[0].strategies[0].description}
                         title={farmersData[0].name}
