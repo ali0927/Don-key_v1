@@ -465,7 +465,8 @@ export const getAmount = async (
   web3: Web3,
   poolAddress: string,
   address: string,
-  version = 2
+  version = 2,
+  percent = 100
 ) => {
   const poolContract = await getPoolContract(web3, poolAddress, version);
   try {
@@ -477,7 +478,7 @@ export const getAmount = async (
     } else {
       console.log("Called New")
       claimableAmount = await poolContract.methods
-        .getFinalClaimableAmount(address, 10000)
+        .getFinalClaimableAmount(address, percent * 100)
         .call();
     }
 

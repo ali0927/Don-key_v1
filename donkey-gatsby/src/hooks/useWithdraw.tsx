@@ -6,7 +6,10 @@ import { useWeb3Context } from "don-components";
 import {
   calculateUserClaimableAmount,
   captureException,
+  getAmount,
   getPoolContract,
+  getPoolToken,
+  toEther,
 } from "helpers";
 import { useStakingContract } from "./useStakingContract";
 
@@ -14,22 +17,18 @@ const ADD_WITHDRAW_REQUEST = gql`
   mutation allFarmerQuery(
     $poolAddress: String!
     $walletAddress: String!
-    $investedAmountinUSD: String
-    $investedAmount: String
     $profit: String
     $lpTokens: String
-    $currentHoldings: String
+    $amountInToken: String
   ) {
     createWithdrawRequest(
       input: {
         data: {
           walletAddress: $walletAddress
           poolAddress: $poolAddress
-          investedAmountinUSD: $investedAmountinUSD
-          investedAmount: $investedAmount
           profit: $profit
           lpTokens: $lpTokens
-          currentHoldings: $currentHoldings
+          amountInToken: $amountInToken
         }
       }
     ) {
@@ -115,12 +114,30 @@ export const useWithdraw = () => {
       await withdraw(new BigNumber(share).multipliedBy(100).toFixed()).send({
         from: accounts[0],
       });
-      await create({
-        variables: { poolAddress, walletAddress: accounts[0] },
-      });
-      if(isGreyWithdraw){
+
+      if (isGreyWithdraw) {
         showSuccess("Withdraw Successful");
-      }else {
+      } else {
+        const withdrawAmount = await getAmount(
+          web3,
+          poolAddress,
+          accounts[0],
+          4,
+          new BigNumber(share).toNumber()
+        );
+        const tokens = await pool.methods.balanceOf(accounts[0]).call();
+        const token = await getPoolToken(web3, poolAddress);
+        const decimals = await token.methods.decimals().call();
+        await create({
+          variables: {
+            poolAddress,
+            walletAddress: accounts[0],
+            amountInToken: withdrawAmount,
+            lpTokens: new BigNumber(toEther(tokens, decimals))
+              .multipliedBy(share)
+              .dividedBy(100),
+          },
+        });
         showSuccess("Withdraw Request Created");
       }
       onSuccess && onSuccess();

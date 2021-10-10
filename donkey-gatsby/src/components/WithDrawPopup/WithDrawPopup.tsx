@@ -246,9 +246,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         setTokenPrice(tokenPrice);
         setCurrency(currency);
         setIsReady(true);
-      } catch (e) {
-        
-      }
+      } catch (e) {}
     }
   };
 
@@ -380,62 +378,73 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     }
     return null;
   };
+  const loader = (
+    <div
+      style={{ minHeight: 200 }}
+      className="d-flex justify-content-center align-items-center"
+    >
+      <CircularProgress color="inherit" />
+    </div>
+  );
 
   const renderContent = () => {
-    if (poolVersion < 4) {
-      return (
-        <OldWithdrawPopup
-          loading={loading}
-          onWithdraw={handleWithDraw}
-          onClose={props.onClose}
-        />
-      );
-    }
     if (hasCheckedDons) {
       if (hasDons) {
-        return (
-          <>
-            <div className="mt-4">
-              {renderPopupContent()}
-              <div className="d-flex align-items-center">
-                <WithdrawButton onClick={handleWithDraw} className="mr-3">
-                  {" "}
-                  {loading && <Spinner animation={"border"} size="sm"  />}
-                  {!loading && <>Withdraw</>}
-                </WithdrawButton>
-                <CancelButton onClick={props.onClose}>Cancel</CancelButton>
-              </div>
-            </div>
-          </>
-        );
+        if (poolVersion < 4) {
+          return (
+            <OldWithdrawPopup
+              loading={loading}
+              onWithdraw={handleWithDraw}
+              onClose={props.onClose}
+            />
+          );
+        } else {
+          if (isReady) {
+            return (
+              <>
+                <div className="mt-4">
+                  {renderPopupContent()}
+                  <div className="d-flex align-items-center">
+                    <WithdrawButton onClick={handleWithDraw} className="mr-3">
+                      {" "}
+                      {loading && <Spinner animation={"border"} size="sm" />}
+                      {!loading && <>Withdraw</>}
+                    </WithdrawButton>
+                    <CancelButton onClick={props.onClose}>Cancel</CancelButton>
+                  </div>
+                </div>
+              </>
+            );
+          }
+        }
       } else {
         return <BuyDonContent />;
       }
     } else {
-      return (
-        <div
-          style={{ minHeight: 200 }}
-          className="d-flex justify-content-center align-items-center"
-        >
-          <CircularProgress color="inherit" />
-        </div>
-      );
+      return loader;
     }
   };
+  const title = (
+    <div style={{ color: "#070602", marginTop: "15px" }}>Withdrawal</div>
+  );
 
+  const renderTitle = () => {
+    if (hasCheckedDons && hasDons) {
+      if (poolVersion < 4) {
+        return title;
+      } else {
+        if (isReady) {
+          return title;
+        }
+      }
+    }
+    return "";
+  };
   return (
     <>
       <DonCommonmodal
         isOpen={open}
-        title={
-          hasDons ? (
-            <div style={{ color: "#070602", marginTop: "15px" }}>
-              Withdrawal
-            </div>
-          ) : (
-            ""
-          )
-        }
+        title={renderTitle()}
         variant="common"
         size="xs"
         onClose={props.onClose}

@@ -230,9 +230,7 @@ export const FarmerBio = ({
                     <>
                       <div className="d-flex justify-content-between">
                         <StrategyName>
-                          {strategies && strategies.length > 0
-                            ? strategies[0].name
-                            : "Description"}
+                          {strategyName}
                         </StrategyName>
                         <div className="d-none d-lg-block">
                           <div className="mr-3">
@@ -280,6 +278,7 @@ export const FarmerBio = ({
           </Row>
         </Container>
       </Section>
+
 
       {/* {openSharePopup && (
         <Share

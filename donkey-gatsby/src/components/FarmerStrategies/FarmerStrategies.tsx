@@ -6,6 +6,12 @@ import { InvestorListTable } from "components/InvestorListTable/InvestorListTabl
 import { IFarmerInter } from "interfaces";
 
 import { breakPoints } from "breakponts";
+import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
+import { gql, useLazyQuery, useQuery } from "@apollo/client";
+import { useEffect, useRef, useState } from "react";
+import { useWeb3Context } from "don-components";
+import { getPoolContract } from "helpers";
+import { useRefresh } from "components/LotteryForm";
 
 const DescriptionTitle = styled.p`
   font-size: 20px;
@@ -49,6 +55,93 @@ const Image = styled.img`
   }
 `;
 
+const WITHDRAWALREQUESTS_QUERY = gql`
+  query withdrawRequestQuery($poolAddress: String!, $walletAddress: String!) {
+    withdrawRequests(
+      where: { poolAddress: $poolAddress, walletAddress: $walletAddress }
+      limit: 1
+      sort: "created_at:desc"
+    ) {
+      id
+      created_at
+      profit
+      amountInToken
+    }
+    farmers(where: { poolAddress: $poolAddress }) {
+      withdrawTimeFrame
+    }
+  }
+`;
+
+const Loader = (
+  <div
+    className="d-flex align-items-center justify-content-center"
+    style={{ minHeight: 400 }}
+  >
+    <Spinner animation="border" color="dark" />
+  </div>
+);
+
+const WithdrawRequest = ({
+  poolAddress,
+  poolVersion,
+}: {
+  poolAddress: string;
+  poolVersion: number;
+}) => {
+  const [fetch, { loading, data }] = useLazyQuery(WITHDRAWALREQUESTS_QUERY);
+
+  const { getConnectedWeb3, connected } = useWeb3Context();
+  const [isWithdrawRequested, setIsWithdrawRequested] = useState(false);
+  const { dependsOn } = useRefresh();
+  const fetchWithdrawInfo = async () => {
+    if (poolVersion === 4) {
+      const web3 = getConnectedWeb3();
+      const [walletAddress] = await web3.eth.getAccounts();
+      const pool = await getPoolContract(web3, poolAddress, poolVersion);
+      const isRequested = await pool.methods
+        .isWithdrawalRequested(walletAddress)
+        .call();
+      if (isRequested) {
+        fetch({ variables: { poolAddress, walletAddress } });
+      }
+      setIsWithdrawRequested(isRequested);
+    }
+  };
+
+  useEffect(() => {
+    if (connected) {
+      fetchWithdrawInfo();
+    }
+  }, [connected, dependsOn]);
+  if (!connected) {
+    return null;
+  }
+  if (!isWithdrawRequested) {
+    return null;
+  }
+
+  if (isWithdrawRequested) {
+    if (loading || !data) {
+      return Loader;
+    } else {
+      const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
+      const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
+      const amount = data.withdrawRequests[0]?.amountInToken;
+      const profit = data.withdrawRequests[0]?.profit;
+      return (
+        <WithdrawRequestInfo
+          amount={amount}
+          created_on={createTimer}
+          duration={timeframe}
+          profit={profit}
+        />
+      );
+    }
+  }
+  return null;
+};
+
 export const FarmerStrategies = ({
   farmer,
   isLoaded,
@@ -58,62 +151,61 @@ export const FarmerStrategies = ({
 }) => {
   const renderContent = () => {
     if (!isLoaded) {
-      return (
-        <div
-          className="d-flex align-items-center justify-content-center"
-          style={{ minHeight: 400 }}
-        >
-          <Spinner animation="border" color="dark" />
-        </div>
-      );
+      return Loader;
     }
 
     return (
-      <div className="my-4">
-        <Container>
-          <Row>
-            <Col sm={12}>
-              <TableHeaderRoot>
-                <DescriptionTitle>
-                  {farmer.strategies[0].name || "Description"}
-                </DescriptionTitle>
-                <P>
-                  <ShowMoreContent
-                    length={80}
-                    content={
-                      farmer.strategies[0].description ||
-                      "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
-                    }
-                  />
-                </P>
-              </TableHeaderRoot>
-              <StrategyTableForInvestor
-                chainId={farmer.network.chainId}
-                farmerfee={farmer.farmerfee}
-                performancefee={farmer.performancefee}
-                poolAddress={farmer.poolAddress}
-                strategies={farmer.strategies}
-              />
-              <StrategyTableRoot className="d-flex flex-column justify-content-center">
-                <div className="d-flex justify-content-center">
-                  <Image
-                    src={farmer.strategies[0].strategyImage.url}
-                    className="img-fluid"
-                    alt="strategy image"
-                  />
-                </div>
-                {farmer.strategies[0].info && (
-                  <p style={{ fontSize: 15 }}>{farmer.strategies[0].info}</p>
-                )}
-              </StrategyTableRoot>
-              <InvestorListTable
-                chainId={farmer.network.chainId}
-                poolAddress={farmer.poolAddress}
-              />
-            </Col>
-          </Row>
-        </Container>
-      </div>
+      <>
+        <WithdrawRequest
+          poolVersion={farmer.poolVersion}
+          poolAddress={farmer.poolAddress}
+        />
+        <div className="my-4">
+          <Container>
+            <Row>
+              <Col sm={12}>
+                <TableHeaderRoot>
+                  <DescriptionTitle>
+                    {farmer.strategies[0].name || "Description"}
+                  </DescriptionTitle>
+                  <P>
+                    <ShowMoreContent
+                      length={80}
+                      content={
+                        farmer.strategies[0].description ||
+                        "For my maiden strategy I am looking for high yields on BNB and ETH, as well as picking some BSC proj"
+                      }
+                    />
+                  </P>
+                </TableHeaderRoot>
+                <StrategyTableForInvestor
+                  chainId={farmer.network.chainId}
+                  farmerfee={farmer.farmerfee}
+                  performancefee={farmer.performancefee}
+                  poolAddress={farmer.poolAddress}
+                  strategies={farmer.strategies}
+                />
+                <StrategyTableRoot className="d-flex flex-column justify-content-center">
+                  <div className="d-flex justify-content-center">
+                    <Image
+                      src={farmer.strategies[0].strategyImage.url}
+                      className="img-fluid"
+                      alt="strategy image"
+                    />
+                  </div>
+                  {farmer.strategies[0].info && (
+                    <p style={{ fontSize: 15 }}>{farmer.strategies[0].info}</p>
+                  )}
+                </StrategyTableRoot>
+                <InvestorListTable
+                  chainId={farmer.network.chainId}
+                  poolAddress={farmer.poolAddress}
+                />
+              </Col>
+            </Row>
+          </Container>
+        </div>
+      </>
     );
   };
 
