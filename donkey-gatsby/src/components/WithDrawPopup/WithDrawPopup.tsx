@@ -420,9 +420,9 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       } else {
         return <BuyDonContent />;
       }
-    } else {
-      return loader;
     }
+
+    return loader;
   };
   const title = (
     <div style={{ color: "#070602", marginTop: "15px" }}>Withdrawal</div>

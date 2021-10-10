@@ -4,6 +4,7 @@ import { useTransactionNotification } from "components/LotteryForm/useTransactio
 import { useWeb3Context } from "don-components";
 // import { useWeb3 } from "don-components";
 import {
+  calculateInitialInvestment,
   calculateUserClaimableAmount,
   captureException,
   getAmount,
@@ -128,6 +129,13 @@ export const useWithdraw = () => {
         const tokens = await pool.methods.balanceOf(accounts[0]).call();
         const token = await getPoolToken(web3, poolAddress);
         const decimals = await token.methods.decimals().call();
+        const investAmount =  await calculateInitialInvestment(
+          web3,
+          poolAddress,
+          accounts[0]
+        );
+        const profit = new BigNumber(withdrawAmount).minus(investAmount).toFixed(6);
+  
         await create({
           variables: {
             poolAddress,
@@ -136,6 +144,7 @@ export const useWithdraw = () => {
             lpTokens: new BigNumber(toEther(tokens, decimals))
               .multipliedBy(share)
               .dividedBy(100),
+            profit: profit
           },
         });
         showSuccess("Withdraw Request Created");
