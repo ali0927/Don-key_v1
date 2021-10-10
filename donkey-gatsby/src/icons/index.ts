@@ -88,4 +88,4 @@ export * from "./BridgeIcon";
 export * from "./BackArrow";
 export * from "./PaginateLeftArrow";
 export * from "./PaginateRightArrow";
-
+export * from "./TickIcon";

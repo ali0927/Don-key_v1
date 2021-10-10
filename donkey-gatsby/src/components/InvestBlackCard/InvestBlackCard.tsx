@@ -82,7 +82,8 @@ export const InvestBlackCard = ({
       const poolTokenAmount = await poolToken.methods
         .balanceOf(poolAddress)
         .call();
-      setTokeninPool(toEther(poolTokenAmount));
+      const decimals = await poolToken.methods.decimals().call();
+      setTokeninPool(toEther(poolTokenAmount, decimals));
     }
   };
 
@@ -118,8 +119,10 @@ export const InvestBlackCard = ({
       }
     }
     apiCall();
-    // checkIsFarmer();
-    // fetchWithdrawShare();
+    if (process.env.GATSBY_SHOW_ADMIN) {
+      checkIsFarmer();
+      fetchWithdrawShare();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dependsOn]);
 
@@ -165,10 +168,12 @@ export const InvestBlackCard = ({
           }
         >
           <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-            <span> {icon}</span> <span >{label}</span>
+            <span> {icon}</span> <span>{label}</span>
           </ColumnsTitle1>
         </OverlayTrigger>
-        <ColumnsSubTitle className="text-uppercase" color={color}>{value}</ColumnsSubTitle>
+        <ColumnsSubTitle className="text-uppercase" color={color}>
+          {value}
+        </ColumnsSubTitle>
       </Columns>
     ) : (
       <Columns
@@ -186,122 +191,160 @@ export const InvestBlackCard = ({
     );
   };
 
-  // const takeMoney = async () => {
-  //   if (poolVersion === 3 || poolVersion === 4) {
-  //     const poolContract = await getPoolContract(
-  //       web3,
-  //       poolAddress,
-  //       poolVersion
-  //     );
-  //     const accounts = await web3.eth.getAccounts();
-  //     await poolContract.methods.getGreyAmount().send({ from: accounts[0] });
-  //     refresh();
-  //   }
-  // };
-  // const takeExtraMoney = async () => {
-  //   if (poolVersion === 3 || poolVersion === 4) {
-  //     const poolContract = await getPoolContract(
-  //       web3,
-  //       poolAddress,
-  //       poolVersion
-  //     );
-  //     const accounts = await web3.eth.getAccounts();
-  //     await poolContract.methods
-  //       .getInvestedAmount()
-  //       .send({ from: accounts[0] });
-  //     refresh();
-  //   }
-  // };
+  const takeMoney = async () => {
+    if (poolVersion === 3 || poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const accounts = await web3.eth.getAccounts();
+      await poolContract.methods.getGreyAmount().send({ from: accounts[0] });
+      refresh();
+    }
+  };
+  const takeExtraMoney = async () => {
+    if (poolVersion === 3 || poolVersion === 4) {
+      const poolContract = await getPoolContract(
+        web3,
+        poolAddress,
+        poolVersion
+      );
+      const accounts = await web3.eth.getAccounts();
+      await poolContract.methods
+        .getInvestedAmount()
+        .send({ from: accounts[0] });
+      refresh();
+    }
+  };
 
-  // const renderFarmerUI = () => {
-  //   if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
-  //     return (
-  //       <>
-  //         <CardLabel color="white" className="mt-5">
-  //           {" "}
-  //           Tokens in Pool{" "}
-  //         </CardLabel>
-  //         <CardValue color="white">
-  //           <DollarView
-  //             chainId={network.chainId}
-  //             poolAddress={poolAddress}
-  //             tokenAmount={tokenInPool}
-  //           />
-  //         </CardValue>
-  //         <CardLabel color="white" className="mt-5">
-  //           {" "}
-  //           Withdraw Requested
-  //         </CardLabel>
-  //         <CardValue color="white">
-  //           {totalLp.isEqualTo(0)
-  //             ? 0
-  //             : withdrawLp.dividedBy(totalLp).multipliedBy(100).toFixed(6)}{" "}
-  //           %
-  //         </CardValue>
-  //         <div className="d-flex mt-2 mb-2 justify-content-center">
-  //           <ButtonWidget
-  //             varaint="contained"
-  //             fontSize="14px"
-  //             className={"mr-3"}
-  //             containedVariantColor="lightYellow"
-  //             height="30px"
-  //             width="150px"
-  //             onClick={() => takeMoney()}
-  //           >
-  //             Take Tokens
-  //           </ButtonWidget>
-  //           <ButtonWidget
-  //             varaint="contained"
-  //             fontSize="14px"
-  //             containedVariantColor="lightYellow"
-  //             height="30px"
-  //             width="160px"
-  //             onClick={() => takeExtraMoney()}
-  //           >
-  //             Take Extra Tokens
-  //           </ButtonWidget>
-  //         </div>
-  //         <div className="d-flex mt-2 mb-2 justify-content-center">
-  //           <ButtonWidget
-  //             fontSize="14px"
-  //             varaint="contained"
-  //             height="30px"
-  //             containedVariantColor="lightYellow"
-  //             width="150px"
-  //             onClick={() => setIsAssignOpen(true)}
-  //             className="ml-3"
-  //           >
-  //             Assign Lp Tokens
-  //           </ButtonWidget>
-  //           <ButtonWidget
-  //             fontSize="14px"
-  //             varaint="contained"
-  //             height="30px"
-  //             containedVariantColor="lightYellow"
-  //             width="150px"
-  //             onClick={() => setIsSendWithdraw(true)}
-  //             className="ml-3"
-  //           >
-  //             Send Withdrawals
-  //           </ButtonWidget>
-  //         </div>
-  //         <div className="d-flex mt-2 mb-2 justify-content-center">
-  //           <ButtonWidget
-  //             fontSize="14px"
-  //             varaint="contained"
-  //             height="30px"
-  //             containedVariantColor="lightYellow"
-  //             width="150px"
-  //             onClick={() => setIsUpdateOpen(true)}
-  //             className="ml-3"
-  //           >
-  //             Update Pool Value
-  //           </ButtonWidget>
-  //         </div>
-  //       </>
-  //     );
-  //   }
-  // };
+  const renderFarmerUI = () => {
+    if (process.env.GATSBY_SHOW_ADMIN) {
+      if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
+        return (
+          <>
+            {isUpdatePoolOpen && (
+              <UpdatePoolDialog
+                open={isUpdatePoolOpen}
+                onClose={() => {
+                  setIsUpdateOpen(false);
+                  refresh();
+                }}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
+            {isAssignOpen && (
+              <AssignLpTokens
+                open={isAssignOpen}
+                onClose={() => {
+                  setIsAssignOpen(false);
+                  refresh();
+                }}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
+            {isSendWithdrawOpen && (
+              <SendWithdrawalsDialog
+                open={isSendWithdrawOpen}
+                onClose={() => {
+                  setIsSendWithdraw(false);
+                  refresh();
+                }}
+                pool_address={poolAddress}
+                poolVersion={poolVersion}
+              />
+            )}
+            <CardLabel color="white" className="mt-5">
+              {" "}
+              Tokens in Pool{" "}
+            </CardLabel>
+            <CardValue color="white">
+              <DollarView
+                chainId={network.chainId}
+                poolAddress={poolAddress}
+                tokenAmount={tokenInPool}
+              />
+            </CardValue>
+            <CardLabel color="white" className="mt-5">
+              {" "}
+              Withdraw Requested
+            </CardLabel>
+            <CardValue color="white">
+              {totalLp.isEqualTo(0)
+                ? 0
+                : withdrawLp
+                    .dividedBy(totalLp)
+                    .multipliedBy(100)
+                    .toFixed(6)}{" "}
+              %
+            </CardValue>
+            <div className="d-flex mt-2 mb-2 justify-content-center">
+              <ButtonWidget
+                varaint="contained"
+                fontSize="14px"
+                className={"mr-3"}
+                containedVariantColor="lightYellow"
+                height="30px"
+                width="150px"
+                onClick={() => takeMoney()}
+              >
+                Take Tokens
+              </ButtonWidget>
+              <ButtonWidget
+                varaint="contained"
+                fontSize="14px"
+                containedVariantColor="lightYellow"
+                height="30px"
+                width="160px"
+                onClick={() => takeExtraMoney()}
+              >
+                Take Extra Tokens
+              </ButtonWidget>
+            </div>
+            <div className="d-flex mt-2 mb-2 justify-content-center">
+              <ButtonWidget
+                fontSize="14px"
+                varaint="contained"
+                height="30px"
+                containedVariantColor="lightYellow"
+                width="150px"
+                onClick={() => setIsAssignOpen(true)}
+                className="ml-3"
+              >
+                Assign Lp Tokens
+              </ButtonWidget>
+              <ButtonWidget
+                fontSize="14px"
+                varaint="contained"
+                height="30px"
+                containedVariantColor="lightYellow"
+                width="150px"
+                onClick={() => setIsSendWithdraw(true)}
+                className="ml-3"
+              >
+                Send Withdrawals
+              </ButtonWidget>
+            </div>
+            <div className="d-flex mt-2 mb-2 justify-content-center">
+              <ButtonWidget
+                fontSize="14px"
+                varaint="contained"
+                height="30px"
+                containedVariantColor="lightYellow"
+                width="150px"
+                onClick={() => setIsUpdateOpen(true)}
+                className="ml-3"
+              >
+                Update Pool Value
+              </ButtonWidget>
+            </div>
+          </>
+        );
+      }
+    }
+  };
   return (
     <>
       <CardInnerInfo className="d-flex justify-content-center mb-3">
@@ -349,7 +392,7 @@ export const InvestBlackCard = ({
               <BoostButton className="ml-3 d-none d-md-block " />
             )}
           </div>
-          {/* {renderFarmerUI()} */}
+          {renderFarmerUI()}
         </div>
       </CardInnerInfo>
 
@@ -388,7 +431,7 @@ export const InvestBlackCard = ({
 
         {getSecondCardColumns(
           "Profit/Loss",
-          <TotalProfitLoss 
+          <TotalProfitLoss
             chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
@@ -402,7 +445,9 @@ export const InvestBlackCard = ({
           "My share",
           <span className="d-flex flex-column d-md-block align-items-center">
             <span>{Number(myShare).toFixed(2) + " %"}</span>
-            <span className="d-md-none" style={{ opacity: 0 }}>%</span>
+            <span className="d-md-none" style={{ opacity: 0 }}>
+              %
+            </span>
           </span>,
           <LPShareIcon className="mr-md-1" />,
           "white",
@@ -417,7 +462,6 @@ export const InvestBlackCard = ({
           onSuccess={onSuccess}
         />
       )}
-
       {showWithdrawPopup && (
         <WithDrawPopup
           open
@@ -428,39 +472,6 @@ export const InvestBlackCard = ({
           poolAddress={poolAddress}
         />
       )}
-      {/* {isUpdatePoolOpen && (
-        <UpdatePoolDialog
-          open={isUpdatePoolOpen}
-          onClose={() => {
-            setIsUpdateOpen(false);
-            refresh();
-          }}
-          pool_address={poolAddress}
-          poolVersion={poolVersion}
-        />
-      )}
-      {isAssignOpen && (
-        <AssignLpTokens
-          open={isAssignOpen}
-          onClose={() => {
-            setIsAssignOpen(false);
-            refresh();
-          }}
-          pool_address={poolAddress}
-          poolVersion={poolVersion}
-        />
-      )}
-      {isSendWithdrawOpen && (
-        <SendWithdrawalsDialog
-          open={isSendWithdrawOpen}
-          onClose={() => {
-            setIsSendWithdraw(false);
-            refresh();
-          }}
-          pool_address={poolAddress}
-          poolVersion={poolVersion}
-        />
-      )} */}
     </>
   );
 };
