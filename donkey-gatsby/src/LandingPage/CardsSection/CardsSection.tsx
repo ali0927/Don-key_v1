@@ -227,6 +227,8 @@ export const CardsSection: React.FC = () => {
     };
   }, [farmersFinalList.length]);
 
+  console.log("TESTING DATA--------",farmersData)
+
   const network0 = farmersData[0]
     ? networks.find((x) => x.strapiId === farmersData[0].network)
     : null;
