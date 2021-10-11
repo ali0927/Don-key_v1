@@ -232,8 +232,6 @@ export const CardsSection: React.FC = () => {
     };
   }, [farmersFinalList.length]);
 
-  console.log("---",farmersData)
-
 
   const network0 = farmersData[0]
     ? networks.find((x) => x.strapiId === farmersData[0].network)
@@ -372,7 +370,7 @@ export const CardsSection: React.FC = () => {
                             imageRisk={farmersData[1].risk.image.url}
                             buttonLabel="Open"
                             extraApy={
-                              farmersData[1].token.apy &&
+                              farmersData[1].apy &&
                               new BigNumber(farmersData[1].apy)
                                 .plus(100)
                                 .toFixed() + "%"
@@ -444,7 +442,7 @@ export const CardsSection: React.FC = () => {
                             )}
                             buttonLabel="Open"
                             extraApy={
-                              farmersData[2].token.apy &&
+                              farmersData[2].apy &&
                               new BigNumber(farmersData[2].apy)
                                 .plus(100)
                                 .toFixed() + "%"
