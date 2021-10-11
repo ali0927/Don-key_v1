@@ -202,6 +202,7 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
 
   React.useEffect(() => {
+    console.log("strategies--------",strategies)
     const finalFarmersList = filter(strategies, (item) => {
       if (item.farmer.farmerImage && item.network && item.strategyImage) {
         return true;
