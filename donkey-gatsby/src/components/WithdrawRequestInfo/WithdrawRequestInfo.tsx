@@ -1,11 +1,10 @@
 import { ButtonWidget } from "components/Button";
-import { StakingTimer } from "components/StakingInfo";
 import { useTimer } from "hooks";
 import moment from "moment";
 import { useMemo } from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-
+import {BigNumber} from "bignumber.js";
 const StyledHeading = styled.h4`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
@@ -116,7 +115,7 @@ export const WithdrawRequestInfo = ({
                 <div className="row">
                   <WithdrawColumn className="col-4">
                     <Title> Withdraw Amount</Title>
-                    <Subtitle>{amount}</Subtitle>
+                    <Subtitle>{new BigNumber(amount).toFixed(4)}</Subtitle>
                   </WithdrawColumn>
                   <WithdrawColumn className="col-4">
                     <Title> Profit </Title>

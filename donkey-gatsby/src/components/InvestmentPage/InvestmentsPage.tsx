@@ -377,7 +377,7 @@ export const InvestmentsPage = () => {
                 invest.poolVersion
               );
               const hasOldPool =
-                invest.oldPoolAddress && invest.oldPoolAddress.length > 4;
+                !!invest.oldPoolAddress && invest.oldPoolAddress.length > 4;
               let investedInOld = false;
               let isMigrated = false;
               const isInvested = await contract.methods
@@ -424,7 +424,7 @@ export const InvestmentsPage = () => {
                   guid: invest.guid,
                   name: invest.name,
                   poolAddress: invest.poolAddress,
-                  isOutdated: !isMigrated,
+                  isOutdated: !isMigrated && hasOldPool,
                   initialInvestmentinUSD: results[0],
                   isWithdrawRequest: results[1],
                 });

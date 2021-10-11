@@ -67,6 +67,8 @@ const BoxWrapper = styled.div`
 const BoxInput = styled.div`
   font-size: 28px;
   font-weight: 700;
+  display: flex;
+  align-items: center;
 `;
 
 const BoxUsd = styled.div`
@@ -143,6 +145,28 @@ const CancelButton = styled.button`
   }
 `;
 
+const StyledInput = styled.input`
+  text-align: right;
+  /* flex: 1; */
+  padding-right: 10px;
+  font-size: 28px;
+  font-weight: 700;
+  width: 100%;
+  border: 0;
+  &:focus {
+    outline: none;
+  }
+  &:focus-visible {
+    outline: none;
+  }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  -moz-appearance: textfield;
+`;
+
 const SelectableWithdrawComponent = ({
   title,
   available,
@@ -159,6 +183,7 @@ const SelectableWithdrawComponent = ({
   setPercent: (val: string) => void;
 }) => {
   const amount = new BigNumber(available).multipliedBy(percent).dividedBy(100);
+  const [input, setInput] = React.useState(amount.toFixed(4));
 
   return (
     <div>
@@ -170,16 +195,51 @@ const SelectableWithdrawComponent = ({
       </div>
       <BoxWrapper>
         <BoxInput>
-          {amount.toFixed(4)} {currency}
+          <div>
+            <StyledInput
+              type="number"
+              value={input}
+              placeholder="0.0000"
+              onChange={(e) => {
+                const result = e.target.value;
+
+                setInput(result);
+                if (result === "") {
+                  setPercent("0");
+                }
+                if (new BigNumber(result).gt(available)) {
+                  setPercent("0");
+                } else {
+                  setPercent(
+                    new BigNumber(result)
+                      .multipliedBy(100)
+                      .dividedBy(available)
+                      .toFixed()
+                  );
+                }
+              }}
+            />
+          </div>
+          <div>{currency}</div>
         </BoxInput>
-        <BoxUsd>≈ ${amount.multipliedBy(price).toFixed(2)}</BoxUsd>
+        <BoxUsd>
+          ≈ ${input === "" ? "0.00": new BigNumber(input).multipliedBy(price).toFixed(2)}
+        </BoxUsd>
       </BoxWrapper>
       <div className="mt-3 mb-4 d-flex align-items-center justify-content-between">
         {defaultPercents.map((num) => {
           return (
             <Pill
               key={num}
-              onClick={() => setPercent(num.toFixed())}
+              onClick={() => {
+                setPercent(num.toFixed());
+                setInput(
+                  new BigNumber(available)
+                    .multipliedBy(num)
+                    .dividedBy(100)
+                    .toFixed(4)
+                );
+              }}
               selected={num === parseInt(percent)}
             >
               {num}%
@@ -322,8 +382,8 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       currency={currency}
       title={
         hasGreyAmount && hasInvestedAmount
-          ? "Just invested"
-          : "Choose withdraw percent"
+          ? "In Pool"
+          : "Choose withdraw amount"
       }
       percent={selectedgreyShare}
       setPercent={setGreyShare}
@@ -336,8 +396,8 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       currency={currency}
       title={
         hasGreyAmount && hasInvestedAmount
-          ? "Previously invested"
-          : "Choose withdraw percent"
+          ? "Active in Strategy"
+          : "Choose withdraw amount"
       }
       percent={selectedinvestedShare}
       setPercent={setInvestedShare}
@@ -425,7 +485,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     return loader;
   };
   const title = (
-    <div style={{ color: "#070602", marginTop: "15px" }}>Withdrawal</div>
+    <div style={{ color: "#070602", marginTop: "15px" }}>Withdraw</div>
   );
 
   const renderTitle = () => {
