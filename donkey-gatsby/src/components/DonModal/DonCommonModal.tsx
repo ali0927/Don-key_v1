@@ -14,7 +14,6 @@ import { breakPoints } from "../../breakponts";
 const CutomizeModalHeading = styled.h4`
   font-size: 18px;
   font-weight: 800;
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   @media only screen and (min-width: ${breakPoints.md}) {
@@ -37,6 +36,7 @@ const StyledDialog = withStyles({
 const Content = styled(ModalContent)`
   padding: 3rem 1rem;
   padding-bottom: 2rem;
+  padding-top: 2rem;
   height: 100%;
   overflow-y: auto;
   @media only screen and (min-width: ${breakPoints.md}) {

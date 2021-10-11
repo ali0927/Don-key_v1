@@ -41,11 +41,13 @@ export const InvestBlackCard = ({
   poolVersion,
   network,
   boostApy,
+  apy,
 }: {
   poolAddress: string;
   poolVersion: number;
   network: INetwork;
   boostApy: boolean;
+  apy: string;
 }) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
@@ -165,10 +167,12 @@ export const InvestBlackCard = ({
           }
         >
           <ColumnsTitle1 className="w-100" color={"#B9B9B9"}>
-            <span> {icon}</span> <span >{label}</span>
+            <span> {icon}</span> <span>{label}</span>
           </ColumnsTitle1>
         </OverlayTrigger>
-        <ColumnsSubTitle className="text-uppercase" color={color}>{value}</ColumnsSubTitle>
+        <ColumnsSubTitle className="text-uppercase" color={color}>
+          {value}
+        </ColumnsSubTitle>
       </Columns>
     ) : (
       <Columns
@@ -388,7 +392,7 @@ export const InvestBlackCard = ({
 
         {getSecondCardColumns(
           "Profit/Loss",
-          <TotalProfitLoss 
+          <TotalProfitLoss
             chainId={network.chainId}
             refresh={dependsOn % 2 == 0}
             poolAddress={poolAddress}
@@ -402,7 +406,9 @@ export const InvestBlackCard = ({
           "My share",
           <span className="d-flex flex-column d-md-block align-items-center">
             <span>{Number(myShare).toFixed(2) + " %"}</span>
-            <span className="d-md-none" style={{ opacity: 0 }}>%</span>
+            <span className="d-md-none" style={{ opacity: 0 }}>
+              %
+            </span>
           </span>,
           <LPShareIcon className="mr-md-1" />,
           "white",
@@ -415,6 +421,7 @@ export const InvestBlackCard = ({
           poolAddress={poolAddress}
           onClose={() => setShowInvestmentPopup(false)}
           onSuccess={onSuccess}
+          apy={apy}
         />
       )}
 

@@ -34,10 +34,42 @@ import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery } from "@apollo/client";
+import Downarrow from "components/Icons/Downarrow";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
-
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  .widget {
+    margin-left: 0.5rem;
+  }
+  @media only screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    .widget {
+      margin-top: 0.5rem;
+      margin-left: 0rem;
+    }
+  }
+`;
+const MyBalancemobile = styled.div`
+  margin-top: 2rem;
+  margin-bottom: -3rem;
+  font-size: 14px;
+  @media only screen and (max-width: 600px) {
+    font-size: 12px;
+  }
+`;
+const Calculatermodel = styled.div`
+  display: flex;
+  direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+`;
 const themeM = createTheme({
   palette: {
     primary: { main: theme.palette.background.yellow },
@@ -102,8 +134,10 @@ export const InvestmentPopup = ({
   gasLimit,
   onClose,
   onSuccess,
+  apy,
 }: {
   poolAddress: string;
+  apy: string;
   poolVersion: number;
   gasLimit?: string;
   onSuccess?: () => void;
@@ -250,7 +284,9 @@ export const InvestmentPopup = ({
       }
 
       try {
-        await executePost({ data: { poolAddress, walletAddress: accounts[0] } });
+        await executePost({
+          data: { poolAddress, walletAddress: accounts[0] },
+        });
       } catch (e) {
         captureException(e, "Failed to post poolAddress");
       }
@@ -297,7 +333,7 @@ export const InvestmentPopup = ({
         return (
           <>
             <div>
-              <div className="mt-4">
+              <div>
                 <InvestmentInput
                   value={value}
                   disabled={isLoading}
@@ -327,8 +363,8 @@ export const InvestmentPopup = ({
                   </ThemeProvider>
                 )}
               </div>
-              <div className="d-flex justify-content-between mt-4">
-                <ButtonWrapper className="mr-2">
+              <ButtonWrap>
+                <ButtonWrapper>
                   <ButtonWidget
                     varaint="contained"
                     fontSize="14px"
@@ -342,7 +378,7 @@ export const InvestmentPopup = ({
                   </ButtonWidget>
                 </ButtonWrapper>
 
-                <ButtonWrapper className="mr-0 ml-2">
+                <ButtonWrapper className="widget">
                   <ButtonWidget
                     varaint="outlined"
                     fontSize="14px"
@@ -353,7 +389,7 @@ export const InvestmentPopup = ({
                     Cancel
                   </ButtonWidget>
                 </ButtonWrapper>
-              </div>
+              </ButtonWrap>
             </div>
             <p className="d-flex mt-4">
               <small> *</small>
@@ -363,6 +399,13 @@ export const InvestmentPopup = ({
                 the different pools.
               </small>
             </p>
+            <Calculatermodel>
+              <p>APY {apy}</p>
+              <p>
+                Calculator &ensp;
+                <Downarrow />
+              </p>
+            </Calculatermodel>
           </>
         );
       } else {
@@ -381,30 +424,34 @@ export const InvestmentPopup = ({
   };
 
   return (
-    <DonCommonmodal
-      title={hasDons ? "Invest" : ""}
-      variant="common"
-      isOpen={true}
-      size="xs"
-      rounded
-      titleRightContent={
-        hasDons ? (
-          <>
-            Balance:{" "}
-            {
-              <MyBalanceInBUSD
-                onDone={setBalance}
-                poolAddress={poolAddress}
-                poolVersion={poolVersion}
-              />
-            }{" "}
-            {symbol}
-          </>
-        ) : undefined
-      }
-      onClose={onClose}
-    >
-      {renderContent()}
-    </DonCommonmodal>
+    <>
+      <DonCommonmodal
+        title={hasDons ? "Investment" : ""}
+        variant="common"
+        isOpen={true}
+        size="xs"
+        rounded
+        onClose={onClose}
+      >
+        <MyBalancemobile>
+          {hasDons ? (
+            <>
+              Balance:{" "}
+              {
+                <MyBalanceInBUSD
+                  onDone={setBalance}
+                  poolAddress={poolAddress}
+                  poolVersion={poolVersion}
+                />
+              }{" "}
+              {symbol}(~ $
+              {new BigNumber(poolVersion || 0).multipliedBy(20.82).toFixed(1)})
+            </>
+          ) : undefined}
+        </MyBalancemobile>
+
+        {renderContent()}
+      </DonCommonmodal>
+    </>
   );
 };
