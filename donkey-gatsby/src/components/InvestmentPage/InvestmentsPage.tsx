@@ -576,7 +576,7 @@ export const InvestmentsPage = () => {
           <ZeroInvestmentBox>
             <ZeroInvestmentInnerBox>
               <ZeroInvestmentContent>
-                You’re not following any Farmers
+                You’re not following any farmers
               </ZeroInvestmentContent>
               <CenteredBox className="mb-5">
                 <ButtonWidget
