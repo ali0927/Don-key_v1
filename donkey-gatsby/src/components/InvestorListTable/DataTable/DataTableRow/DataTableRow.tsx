@@ -44,7 +44,7 @@ export const DataTableRow: React.FC<IDataTableRowProps> = (props) => {
         <TableData style={{ textAlign: "center" }}>
           {investment.duration} ago
         </TableData>
-      </TableRow>
+      </TableRow>      
     </>
   );
 };
