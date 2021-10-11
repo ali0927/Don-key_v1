@@ -204,7 +204,7 @@ export const CardsSection: React.FC = () => {
   React.useEffect(() => {
     const finalFarmersList = filter(strategies, (item) => {
       if (
-        item.famer &&
+        item.farmer &&
         item.farmer.farmerImage &&
         item.network &&
         item.strategyImage
