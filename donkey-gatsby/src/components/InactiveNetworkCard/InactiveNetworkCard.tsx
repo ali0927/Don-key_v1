@@ -9,6 +9,8 @@ import moment from "moment";
 import { Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { theme } from "theme";
+import WalletPopup from "components/WalletPopup/WalletPopup";
+import { useState } from "react";
 
 const Text = styled.p`
   font-size: 15px;
@@ -164,12 +166,16 @@ export const InactiveNetworkCard = ({
   );
 };
 
-export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
-  const { connectDapp, switchNetwork } = useWeb3Context();
-  const handleConnect =async  () => {
-    await connectDapp();
+export const ConnectToMetamaskCard = ({ network }: { network: INetwork }) => {
+  const { switchNetwork } = useWeb3Context();
+  const [show, setShow] = useState(false);
+  const handleClick = () => {
+    setShow(!show);
+  };
+  const handleConnect = async () => {
+    // await connectDapp();
     await switchNetwork(network.chainId);
-  }
+  };
   return (
     <div className="text-center pt-5 px-4">
       <h5>Connect your wallet to start using Don Key</h5>
@@ -185,10 +191,16 @@ export const ConnectToMetamaskCard = ({network}: {network: INetwork}) => {
         {/* <DonButtonOutlined className="mr-3">
       <WalletIcon /> Disconnect
     </DonButtonOutlined> */}
-        <DonButtonContained onClick={handleConnect}>
+        <DonButtonContained
+          onClick={() => {
+            handleConnect();
+            handleClick();
+          }}
+        >
           <WalletIcon className="mr-2" />
           Connect Wallet
         </DonButtonContained>
+        {show && <WalletPopup onClose={handleClick} />}
       </div>
     </div>
   );
