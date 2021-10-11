@@ -202,7 +202,6 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
 
   React.useEffect(() => {
-    console.log("--",strategies)
     const finalFarmersList = filter(strategies, (item) => {
       if (
         item.farmer &&
@@ -233,7 +232,6 @@ export const CardsSection: React.FC = () => {
     };
   }, [farmersFinalList.length]);
 
-  console.log(farmersData)
 
 
   const network0 = farmersData[0]
@@ -308,7 +306,7 @@ export const CardsSection: React.FC = () => {
                             )}
                             buttonLabel="Open"
                             extraApy={
-                              farmersData[0].token.boostApy &&
+                              farmersData[0].apy &&
                               new BigNumber(farmersData[0].apy)
                                 .plus(100)
                                 .toFixed() + "%"
@@ -373,7 +371,7 @@ export const CardsSection: React.FC = () => {
                             imageRisk={farmersData[1].risk.image.url}
                             buttonLabel="Open"
                             extraApy={
-                              farmersData[1].token.boostApy &&
+                              farmersData[1].token.apy &&
                               new BigNumber(farmersData[1].apy)
                                 .plus(100)
                                 .toFixed() + "%"
@@ -445,7 +443,7 @@ export const CardsSection: React.FC = () => {
                             )}
                             buttonLabel="Open"
                             extraApy={
-                              farmersData[2].token.boostApy &&
+                              farmersData[2].token.apy &&
                               new BigNumber(farmersData[2].apy)
                                 .plus(100)
                                 .toFixed() + "%"
