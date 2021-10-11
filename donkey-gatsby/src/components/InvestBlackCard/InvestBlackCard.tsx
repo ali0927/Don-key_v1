@@ -250,13 +250,26 @@ export const InvestBlackCard = ({
   const takeMoney = async () => {
     const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
     const accounts = await web3.eth.getAccounts();
-    await poolContract.methods.getGreyAmount().send({ from: accounts[0] });
+    if (poolVersion === 3) {
+      await poolContract.methods.getGreyAmount().send({ from: accounts[0] });
+    } else {
+      await poolContract.methods.sendToFarm().send({ from: accounts[0] });
+    }
     refresh();
   };
   const takeExtraMoney = async () => {
     const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
     const accounts = await web3.eth.getAccounts();
-    await poolContract.methods.getInvestedAmount().send({ from: accounts[0] });
+    if (poolVersion === 3) {
+      await poolContract.methods
+        .getInvestedAmount()
+        .send({ from: accounts[0] });
+    } else {
+      await poolContract.methods
+        .getStuckInvestedAmount()
+        .send({ from: accounts[0] });
+    }
+
     refresh();
   };
 

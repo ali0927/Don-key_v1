@@ -3,9 +3,13 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
-import { captureException, getPoolContract, getPoolToken, toWei } from "helpers";
+import {
+  captureException,
+  getPoolContract,
+  getPoolToken,
+  toWei,
+} from "helpers";
 import { useWeb3Context } from "don-components";
-
 
 const CancelButton = styled(ButtonWidget)`
   border-radius: 5px;
@@ -13,7 +17,6 @@ const CancelButton = styled(ButtonWidget)`
     background: #fff !important;
   }
 `;
-
 
 export const AssignLpTokens: React.FC<{
   open: boolean;
@@ -28,7 +31,7 @@ export const AssignLpTokens: React.FC<{
   const [pool_value, setPoolvalue] = useState("");
 
   const [new_pool, setnewPoolvalue] = useState("");
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const handleUpdate = async () => {
     setLoading(true);
     try {
@@ -37,14 +40,20 @@ export const AssignLpTokens: React.FC<{
       const accounts = await web3.eth.getAccounts();
       const token = await getPoolToken(web3, pool_address);
       const decimals = await token.methods.decimals().call();
-      await pool.methods
-        .invested(toWei(pool_value, decimals), toWei(new_pool,decimals))
-        .send({ from: accounts[0] });
-    }catch(e) {
+      if (poolVersion === 3) {
+        await pool.methods
+          .invested(toWei(pool_value, decimals), toWei(new_pool, decimals))
+          .send({ from: accounts[0] });
+      } else {
+        await pool.methods
+          .assignLp(toWei(pool_value, decimals), toWei(new_pool, decimals))
+          .send({ from: accounts[0] });
+      }
+    } catch (e) {
       captureException(e, "Assign Lp Tokens");
-    }finally {
+    } finally {
       setLoading(false);
-      onClose()
+      onClose();
     }
   };
 
