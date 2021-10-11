@@ -723,13 +723,14 @@ export const InvestmentsPage = () => {
 
                   const handleAction = async () => {
                     if (isWithdrawRequested || poolAddressFinal?.isOutdated) {
-                      RedirectToFarmerProfile(investment.guid);
+                      RedirectToFarmerProfile(investment.slug);
+                    } else {
+                      handleOpenWithDraw(
+                        investment.name,
+                        investment.poolAddress,
+                        investment.poolVersion ? investment.poolVersion : 1
+                      )();
                     }
-                    handleOpenWithDraw(
-                      investment.name,
-                      investment.poolAddress,
-                      investment.poolVersion ? investment.poolVersion : 1
-                    );
                   };
                   const getActionMessage = () => {
                     if (poolAddressFinal?.isOutdated) {
