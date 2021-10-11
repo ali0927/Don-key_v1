@@ -395,7 +395,7 @@ export const InvestmentsPage = () => {
                 isMigrated = investedInOld && isInvested;
               }
               let poolAddress = invest.poolAddress;
-              if (!isMigrated) {
+              if (!isMigrated && hasOldPool) {
                 poolAddress = invest.oldPoolAddress;
               }
 
