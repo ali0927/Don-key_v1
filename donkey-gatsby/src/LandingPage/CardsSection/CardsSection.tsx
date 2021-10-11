@@ -202,9 +202,13 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
 
   React.useEffect(() => {
-    console.log("strategies--------",strategies)
     const finalFarmersList = filter(strategies, (item) => {
-      if (item.farmer.farmerImage && item.network && item.strategyImage) {
+      if (
+        item.famer &&
+        item.farmer.farmerImage &&
+        item.network &&
+        item.strategyImage
+      ) {
         return true;
       }
       return false;
@@ -228,7 +232,6 @@ export const CardsSection: React.FC = () => {
     };
   }, [farmersFinalList.length]);
 
-  console.log("TESTING DATA--------",farmersData)
 
   const network0 = farmersData[0]
     ? networks.find((x) => x.strapiId === farmersData[0].network)
