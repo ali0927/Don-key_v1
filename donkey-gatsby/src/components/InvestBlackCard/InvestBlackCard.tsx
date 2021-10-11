@@ -127,6 +127,8 @@ export const InvestBlackCard = ({
     if (address) {
       const contract = await getPoolContract(web3, poolAddress, poolVersion);
       let investedInOldPool = false;
+      let isMigrated = false;
+      let isInvested = false;
       if (hasOldPool) {
         const oldPool = await getPoolContract(
           web3,
@@ -135,16 +137,16 @@ export const InvestBlackCard = ({
         );
 
         investedInOldPool = await oldPool.methods.isInvestor(address).call();
-        setInvestedInOldPool(investedInOldPool);
-        if (investedInOldPool) {
-          const isMigrated = await contract.methods.isInvestor(address).call();
-          if (isMigrated) {
-            setIsMigrated(true);
-          }
-        }
       }
-      const isInvested = await contract.methods.isInvestor(address).call();
+
+      isInvested = await contract.methods.isInvestor(address).call();
+      if (isInvested && investedInOldPool) {
+        isMigrated = true;
+      }
+
       setIsInvested(isInvested);
+      setInvestedInOldPool(investedInOldPool);
+      setIsMigrated(isMigrated);
       if (isInvested) {
         let withdrawAmount = await getAmount(
           web3,
@@ -154,7 +156,7 @@ export const InvestBlackCard = ({
         );
         setCurrentHoldings(withdrawAmount);
       }
-      if (investedInOldPool) {
+      if (investedInOldPool && !isMigrated) {
         let withdrawAmount = await getAmount(
           web3,
           oldPoolAddress,
@@ -520,13 +522,23 @@ export const InvestBlackCard = ({
 
         {getSecondCardColumns(
           "Profit/Loss",
-          <TotalProfitLoss
-            chainId={network.chainId}
-            refresh={dependsOn % 2 == 0}
-            poolAddress={poolAddress}
-            poolVersion={poolVersion}
-            variant="multiline"
-          />,
+          hasOldPool && investedInOldPool && !isMigrated ? (
+            <TotalProfitLoss
+              chainId={network.chainId}
+              refresh={dependsOn % 2 == 0}
+              poolAddress={oldPoolAddress}
+              poolVersion={oldPoolVersion}
+              variant="multiline"
+            />
+          ) : (
+            <TotalProfitLoss
+              chainId={network.chainId}
+              refresh={dependsOn % 2 == 0}
+              poolAddress={poolAddress}
+              poolVersion={poolVersion}
+              variant="multiline"
+            />
+          ),
           <ProfitIcon className="mr-md-1" />,
           "white",
           4
