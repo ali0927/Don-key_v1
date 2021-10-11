@@ -119,7 +119,7 @@ export const WithdrawRequestInfo = ({
                   </WithdrawColumn>
                   <WithdrawColumn className="col-4">
                     <Title> Profit </Title>
-                    <Subtitle>{profit}</Subtitle>
+                    <Subtitle>{new BigNumber(profit).toFixed(4)}</Subtitle>
                   </WithdrawColumn>
                   <WithdrawColumn className="col-4">
                     <Title>Date Created </Title>
