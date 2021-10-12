@@ -54,8 +54,6 @@ export const Paginate: React.FC<IPaginateProps> = (props) => {
       <nav className="mb-4">
         <UL className="pagination justify-content-center justify-content-lg-end">
           {items.map((item) => {
-            console.log(item);
-
             if (
               item.type === "start-ellipsis" ||
               item.type === "end-ellipsis"
