@@ -203,6 +203,7 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
   const [isFirstRender, setIsFirstRender] = React.useState(true);
 
+  console.log("STRATEGIES=====",strategies)
 
   React.useEffect(() => {
     const finalFarmersList = filter(strategies, (item) => {
