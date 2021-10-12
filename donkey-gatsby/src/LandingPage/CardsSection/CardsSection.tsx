@@ -10,19 +10,6 @@ import { theme } from "theme";
 import { ButtonWidget } from "components/Button";
 import { navigate } from "gatsby-link";
 import { breakPoints } from "breakponts";
-import { graphql, useStaticQuery } from "gatsby";
-import { sampleSize, map, filter } from "lodash";
-import { Link } from "react-router-dom";
-import BigNumber from "bignumber.js";
-import { fixUrl } from "helpers";
-import { PoolAmount } from "components/PoolAmount";
-import { InvestorCountContract } from "components/InvestorCountGraphql";
-
-const Image = styled.img`
-  width: 45px;
-  height: 45px;
-  border-radius: 5px;
-`;
 
 const CardBanner = styled.div`
   position: relative;
@@ -243,110 +230,7 @@ const Graph3 = () => {
   );
 };
 
-interface IStrategy {
-  apy: string;
-  description: string;
-  name: string;
-  slug: string;
-  network: number;
-  strategyImage: {
-    url: string;
-  };
-  risk: {
-    Title: string;
-    image: {
-      url: string;
-    };
-  };
-  token: {
-    boostApy: boolean;
-  };
-  farmer: {
-    name: string;
-    farmerImage: {
-      url: string;
-    };
-    poolAddress: string;
-    slug: string;
-  };
-}
-
-interface INetwork {
-  chainId: number;
-  id: number;
-  slug: string;
-  name: string;
-  symbol: string;
-  strapiId: number;
-}
-
 export const CardsSection: React.FC = () => {
-  const StrategiesData = useStaticQuery(
-    graphql`
-      query MyQuery {
-        allStrapiNetworks {
-          nodes {
-            chainId
-            id
-            slug
-            name
-            symbol
-            strapiId
-          }
-        }
-        allStrapiStrategies {
-          nodes {
-            apy
-            name
-            description
-            slug
-            network
-            strategyImage {
-              url
-            }
-            farmer {
-              name
-              farmerImage {
-                url
-              }
-              slug
-              poolAddress
-            }
-            token {
-              boostApy
-            }
-            risk {
-              Title
-              image {
-                url
-              }
-            }
-          }
-        }
-      }
-    `
-  );
-
-  const strategies: IStrategy[] = StrategiesData.allStrapiStrategies.nodes;
-  const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
-
-
-  const handleLeaderClick = (url: string) => () => {
-    navigate(url);
-  };
-
-  const finalFarmersList = filter(strategies, (item) => {
-    if (item.farmer.farmerImage && item.network && item.strategyImage) {
-      return true;
-    }
-    return false;
-  });
-
-  const farmersData = sampleSize(finalFarmersList, 3);
-  const network0 = networks.find((x) => x.strapiId === farmersData[0].network);
-  const network1 = networks.find((x) => x.strapiId === farmersData[1].network);
-  const network2 = networks.find((x) => x.strapiId === farmersData[2].network);
-
   return (
     <>
       <CardBanner className="mt-0">
@@ -375,56 +259,17 @@ export const CardsSection: React.FC = () => {
 
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <CardCol className=" col-lg-8 mt-5">
-                    {farmersData[0] && network0 && (
-                      <PopularStrategy
-                        apy={farmersData[0].apy + "%"}
-                        contentTitle={farmersData[0].name}
-                        content={farmersData[0].description}
-                        title={farmersData[0].farmer.name}
-                        icon={
-                          <Image
-                            src={fixUrl(farmersData[0].farmer.farmerImage.url)}
-                          />
-                        }
-                        risk={farmersData[0].risk.Title.toLowerCase()}
-                        imageRisk={farmersData[0].risk.image.url}
-                        onCardClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[0].farmer.slug}`
-                        )}
-                        onButtonClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[0].farmer.slug}`
-                        )}
-                        buttonLabel="Open"
-                        extraApy={
-                          farmersData[0].token.boostApy &&
-                          new BigNumber(farmersData[0].apy)
-                            .plus(100)
-                            .toFixed() + "%"
-                        }
-                        totalValue={
-                          <>
-                        
-                            <PoolAmount
-                              chainId={network0.chainId}
-                              poolAddress={farmersData[0].farmer.poolAddress}
-                            />
-                          </>
-                        }
-                        showAllContent={false}
-                        investers={
-                          <InvestorCountContract
-                            chainId={network0.chainId}
-                            poolAddresses={[farmersData[0].farmer.poolAddress]}
-                          />
-                        }
-                        strategyImage={farmersData[0].strategyImage.url}
-                        network={{
-                          chainId: network0.chainId,
-                          networkName: network0.name,
-                          networkSymbol: network0.symbol,
-                        }}
-                      />
-                    )}
+                    <PopularStrategy
+                      icon={<ImageIcon src={farmerCard1} alt="ImageNotFound" />}
+                      investers={568}
+                      graph={<Graph1 />}
+                      contentTitle="STRATEGY BSC only here pay min gas"
+                      title="Don – next_door_neighbor "
+                      content="missed the first farming craze, Binance Smart Chain is where it is happening "
+                      apy="40%"
+                      comingsoon
+                      totalValue="$178,890"
+                    />
                   </CardCol>
                 </div>
               </Col>
@@ -432,108 +277,30 @@ export const CardsSection: React.FC = () => {
               <Col md={5} className="pt-2 pt-md-5">
                 <CardCol className="col-lg-11">
                   <div className="mt-4">
-                    {farmersData[1] && network1 && (
-                      <PopularStrategy
-                        apy={farmersData[1].apy + "%"}
-                        contentTitle={farmersData[1].name}
-                        content={farmersData[1].description}
-                        title={farmersData[1].farmer.name}
-                        icon={
-                          <Image
-                            src={fixUrl(farmersData[1].farmer.farmerImage.url)}
-                          />
-                        }
-                        risk={farmersData[1].risk.Title.toLowerCase()}
-                        imageRisk={farmersData[1].risk.image.url}
-                        buttonLabel="Open"
-                        extraApy={
-                          farmersData[1].token.boostApy &&
-                          new BigNumber(farmersData[1].apy)
-                            .plus(100)
-                            .toFixed() + "%"
-                        }
-                        onCardClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[1].farmer.slug}`
-                        )}
-                        onButtonClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[1].farmer.slug}`
-                        )}
-                        totalValue={
-                          <>
-                    
-                            <PoolAmount
-                              chainId={network1.chainId}
-                              poolAddress={farmersData[1].farmer.poolAddress}
-                            />
-                          </>
-                        }
-                        showAllContent={false}
-                        investers={
-                          <InvestorCountContract
-                            chainId={network1.chainId}
-                            poolAddresses={[farmersData[1].farmer.poolAddress]}
-                          />
-                        }
-                        strategyImage={farmersData[1].strategyImage.url}
-                        network={{
-                          chainId: network1.chainId,
-                          networkName: network1.name,
-                          networkSymbol: network1.symbol,
-                        }}
-                      />
-                    )}
+                    <PopularStrategy
+                      icon={<ImageIcon src={image2} alt="ImageNotFound" />}
+                      contentTitle="STRATEGY The no stress only yield way"
+                      title="Don - Popeye"
+                      investers={5874}
+                      graph={<Graph2 />}
+                      content="I look for lucrative farming strategies using only stable coins and farms with over 50M TVL"
+                      apy="134%"
+                      comingsoon
+                      totalValue="$1,354,560"
+                    />
                   </div>
                   <StrategyDiv>
-                    {farmersData[2] && network2 && (
-                      <PopularStrategy
-                        apy={farmersData[2].apy + "%"}
-                        contentTitle={farmersData[2].name}
-                        content={farmersData[2].description}
-                        title={farmersData[2].farmer.name}
-                        icon={
-                          <Image
-                            src={fixUrl(farmersData[2].farmer.farmerImage.url)}
-                          />
-                        }
-                        risk={farmersData[2].risk.Title.toLowerCase()}
-                        imageRisk={farmersData[2].risk.image.url}
-                        onCardClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[2].farmer.slug}`
-                        )}
-                        onButtonClick={handleLeaderClick(
-                          `/dashboard/farmer/${farmersData[2].farmer.slug}`
-                        )}
-                        buttonLabel="Open"
-                        extraApy={
-                          farmersData[2].token.boostApy &&
-                          new BigNumber(farmersData[2].apy)
-                            .plus(100)
-                            .toFixed() + "%"
-                        }
-                        totalValue={
-                          <>
-                         
-                            <PoolAmount
-                              chainId={network2.chainId}
-                              poolAddress={farmersData[2].farmer.poolAddress}
-                            />
-                          </>
-                        }
-                        showAllContent={false}
-                        investers={
-                          <InvestorCountContract
-                            chainId={network2.chainId}
-                            poolAddresses={[farmersData[2].farmer.poolAddress]}
-                          />
-                        }
-                        strategyImage={farmersData[2].strategyImage.url}
-                        network={{
-                          chainId: network2.chainId,
-                          networkName: network2.name,
-                          networkSymbol: network2.symbol,
-                        }}
-                      />
-                    )}
+                    <PopularStrategy
+                      icon={<ImageIcon src={image3} alt="ImageNotFound" />}
+                      contentTitle="STRATEGY all or nothing here  "
+                      title="Don – Unblinding"
+                      graph={<Graph3 />}
+                      investers={3568}
+                      comingsoon
+                      content="I’ll bring you to the well of new and show you the harvest looking for crazy APY’s sometimes Rek"
+                      apy="167%"
+                      totalValue="$870,650"
+                    />
                   </StrategyDiv>
                 </CardCol>
               </Col>
