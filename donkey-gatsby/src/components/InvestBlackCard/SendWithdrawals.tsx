@@ -3,13 +3,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
-import {
-  getPoolContract, getPoolToken, toWei,
-} from "helpers";
+import { getPoolContract, getPoolToken, toWei } from "helpers";
 import { useWeb3Context } from "don-components";
-
-
-
 
 const CancelButton = styled(ButtonWidget)`
   border-radius: 5px;
@@ -17,7 +12,6 @@ const CancelButton = styled(ButtonWidget)`
     background: #fff !important;
   }
 `;
-
 
 export const SendWithdrawalsDialog: React.FC<{
   open: boolean;
@@ -29,30 +23,28 @@ export const SendWithdrawalsDialog: React.FC<{
 
   const [loading, setLoading] = React.useState(false);
 
-  
   const [new_pool, setnewPoolvalue] = useState("");
   const [withdrawValue, setwithDrawvalue] = useState("");
-  const {getConnectedWeb3} = useWeb3Context();
+  const { getConnectedWeb3 } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      if (poolVersion === 3) {
-        const poolContract = await getPoolContract(
-          web3,
-          pool_address,
-          poolVersion
-        );
-        const token = await getPoolToken(web3, pool_address);
-        const decimals = await token.methods.decimals().call();
-        const accounts = await web3.eth.getAccounts();
-         await poolContract.methods.withdraw(toWei(withdrawValue,decimals),toWei(new_pool, decimals)).send({from : accounts[0]});
-      }
+      const poolContract = await getPoolContract(
+        web3,
+        pool_address,
+        poolVersion
+      );
+      const token = await getPoolToken(web3, pool_address);
+      const decimals = await token.methods.decimals().call();
+      const accounts = await web3.eth.getAccounts();
+      await poolContract.methods
+        .withdraw(toWei(withdrawValue, decimals), toWei(new_pool, decimals))
+        .send({ from: accounts[0] });
     } finally {
       setLoading(false);
-      onClose()
+      onClose();
     }
-    
   };
 
   return (
@@ -64,7 +56,6 @@ export const SendWithdrawalsDialog: React.FC<{
         onClose={props.onClose}
         size="sm"
       >
-        
         <div>
           <p>Latest Pool Value</p>
           <input
@@ -73,7 +64,6 @@ export const SendWithdrawalsDialog: React.FC<{
             placeholder="Enter Pool Value"
             onChange={(e) => setnewPoolvalue(e.target.value)}
           />
-          
         </div>
         <div>
           <p>Withdraw Value</p>
@@ -83,7 +73,6 @@ export const SendWithdrawalsDialog: React.FC<{
             placeholder="Enter Withdraw Value"
             onChange={(e) => setwithDrawvalue(e.target.value)}
           />
-          
         </div>
 
         <div className="row  mt-4 justify-content-center">
