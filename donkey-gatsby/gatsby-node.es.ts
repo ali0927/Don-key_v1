@@ -192,7 +192,6 @@ export const createPages = async ({ graphql, actions }: any) => {
           farmerImage {
             url
           }
-          active
           twitter
           telegram
           guid
@@ -201,6 +200,8 @@ export const createPages = async ({ graphql, actions }: any) => {
           performancefee
           poolAddress
           poolVersion
+          oldPoolAddress
+          oldPoolVersion
           network {
             name
             chainId
