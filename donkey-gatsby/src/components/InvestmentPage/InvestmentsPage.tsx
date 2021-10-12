@@ -55,8 +55,8 @@ import {
   useWeb3Context,
 } from "don-components";
 import { DonAccordion } from "./DonAccordion/DonAccordion";
-import { NetworkButton } from "components/NetworkButton";
-import { AiOutlineInfoCircle } from "react-icons/ai";
+import { AiOutlineInfoCircle, AiFillCaretDown } from "react-icons/ai";
+import { TickIcon } from "icons";
 
 export const Heading = styled.div`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -212,6 +212,92 @@ const TotalInvestedAmount = styled.span`
   }
 `;
 
+const DropdownBtn = styled.div`
+  border: 2px solid #222222;
+  padding: 10px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+  ${(props: { active?: boolean }) =>
+    props.active &&
+    `
+      background: #000;
+      color:#fff;
+    `}
+  .icon {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+`;
+
+const DropDown = styled.ul`
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #000000;
+  padding: 24px 0px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  color: white;
+  border-radius: 24px;
+  h4 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  @media (max-width: 568px) {
+    position: fixed;
+    z-index: 1;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: -16px;
+    min-height: 34vh;
+    border-radius: 24px 24px 0 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+  }
+`;
+
+const DropDownItem = styled.li`
+  padding: 10px 32px;
+  padding-right: 54px;
+  cursor: pointer;
+  display: flex;
+  .tick-icon {
+    display: none;
+  }
+  &:hover {
+    background: #201f1f;
+  }
+  @media (max-width: 568px) {
+    &:hover {
+      .tick-icon {
+        display: block;
+      }
+    }
+  }
+`;
+
+const Overlay = styled.div`
+  @media (max-width: 568px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+  }
+`;
+
 type ExtraInfo = {
   guid: string;
   name: string;
@@ -241,6 +327,21 @@ export const InvestmentsPage = () => {
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
+  const [networkName, setNetworkName] = useState("BSC");
+  const [show, setShow] = useState(false);
+
+  const handleNameChange = (value: string) => {
+    if (value === "Polygon") {
+      setStrategyNetworkFilter(POLYGON_CHAIN_ID);
+    } else if (value === "AVAX") {
+      setStrategyNetworkFilter(AVAX_CHAIN_ID);
+    } else {
+      setStrategyNetworkFilter(BINANCE_CHAIN_ID);
+    }
+    setNetworkName(value);
+    setShow(false);
+  };
+
   useEffect(() => {
     setStrategyNetworkFilter(network);
   }, [network]);
@@ -475,7 +576,7 @@ export const InvestmentsPage = () => {
           <ZeroInvestmentBox>
             <ZeroInvestmentInnerBox>
               <ZeroInvestmentContent>
-                You’re not following any Farmers
+                You’re not following any farmers
               </ZeroInvestmentContent>
               <CenteredBox className="mb-5">
                 <ButtonWidget
@@ -830,6 +931,44 @@ export const InvestmentsPage = () => {
     }
   };
 
+  const DropDownMenu = () => {
+    return (
+      <Overlay
+        onClick={() => {
+          setShow(false);
+        }}
+      >
+        <DropDown>
+          <h5 className="d-sm-none text-center">Network</h5>
+          <DropDownItem
+            className="d-flex justify-content-between align-items-center"
+            onClick={() => {
+              handleNameChange("Polygon");
+            }}
+          >
+            <div>Polygon</div> <TickIcon className="tick-icon"/>
+          </DropDownItem>
+          <DropDownItem
+            className="d-flex justify-content-between align-items-center"
+            onClick={() => {
+              handleNameChange("AVAX");
+            }}
+          >
+            <div>AVAX</div> <TickIcon className="tick-icon"/>
+          </DropDownItem>
+          <DropDownItem
+            className="d-flex justify-content-between align-items-center"
+            onClick={() => {
+              handleNameChange("BSC");
+            }}
+          >
+            <div>BSC</div> <TickIcon className="tick-icon"/>
+          </DropDownItem>
+        </DropDown>
+      </Overlay>
+    );
+  };
+
   return (
     <USDViewProvider
       value={{
@@ -853,20 +992,13 @@ export const InvestmentsPage = () => {
                         {loading ? "-" : `$${investedAmount}`}
                       </TotalInvestedAmount>
                     </div>
-                    <div className="col-12 col-md-4 col-lg-3 d-flex  justify-content-between mt-2 mt-lg-0">
-                      <NetworkButton
-                        varaint="outlined"
-                        width="77px"
-                        height="40px"
-                        className="mr-1"
-                        active={strategyNetworkFilter === BINANCE_CHAIN_ID}
-                        onClick={() =>
-                          setStrategyNetworkFilter(BINANCE_CHAIN_ID)
-                        }
-                      >
-                        BSC
-                      </NetworkButton>
-                      <NetworkButton
+                    <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-end mt-2 mt-lg-0 positioin-static position-sm-relative">
+                      <DropdownBtn active={show} onClick={() => setShow(!show)}>
+                        {networkName}
+                        <AiFillCaretDown className="icon" />
+                      </DropdownBtn>
+                      {show && <DropDownMenu />}
+                      {/* <NetworkButton
                         height="40px"
                         width="103px"
                         varaint="outlined"
@@ -887,7 +1019,7 @@ export const InvestmentsPage = () => {
                         onClick={() => setStrategyNetworkFilter(AVAX_CHAIN_ID)}
                       >
                         AVAX
-                      </NetworkButton>
+                      </NetworkButton> */}
                     </div>
                   </div>
                   {chainId === BINANCE_CHAIN_ID && <StakingInfo />}
