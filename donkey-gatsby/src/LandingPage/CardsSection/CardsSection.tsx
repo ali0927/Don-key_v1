@@ -237,7 +237,7 @@ export const CardsSection: React.FC = () => {
     return () => {
       clearInterval(currentInerval);
     };
-  }, [farmersFinalList.length]);
+  }, [farmersFinalList]);
 
   const network0 = farmersData[0]
     ? networks.find((x) => x.strapiId === farmersData[0].farmer.network)
@@ -283,7 +283,7 @@ export const CardsSection: React.FC = () => {
                 <div className="d-flex flex-column align-items-center align-items-sm-end pr-sm-3 pr-0">
                   <CardCol className=" col-lg-8 mt-5">
                     {farmersData[0] && network0 && (
-                      <AnimationDiv>
+                      <AnimationDiv key={farmersData[0].name}>
                         <div
                           className={clsx({
                             fadeIn: isFadeIn && !isFirstRender,
@@ -354,7 +354,7 @@ export const CardsSection: React.FC = () => {
                 <CardCol className="col-lg-11">
                   <div className="mt-4">
                     {farmersData[1] && network1 && (
-                      <AnimationDiv>
+                      <AnimationDiv  key={farmersData[1].name}>
                         <div
                           className={clsx({
                             fadeIn: isFadeIn && !isFirstRender,
@@ -420,7 +420,7 @@ export const CardsSection: React.FC = () => {
                   </div>
                   <StrategyDiv>
                     {farmersData[2] && network2 && (
-                      <AnimationDiv>
+                      <AnimationDiv  key={farmersData[2].name}>
                         <div
                           className={clsx({
                             fadeIn: isFadeIn && !isFirstRender,
