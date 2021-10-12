@@ -18,6 +18,7 @@ export interface IStrategy {
   };
   farmer: {
     name: string;
+    status: "active" | "deprecated" | "disabled";
     farmerImage: {
       url: string;
     };

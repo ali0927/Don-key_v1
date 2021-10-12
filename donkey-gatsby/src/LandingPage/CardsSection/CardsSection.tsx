@@ -171,6 +171,7 @@ export const CardsSection: React.FC = () => {
             }
             farmer {
               name
+              status
               farmerImage {
                 url
               }
@@ -200,6 +201,8 @@ export const CardsSection: React.FC = () => {
 
   const strategies: IStrategy[] = StrategiesData.allStrapiStrategies.nodes;
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
+  const [isFirstRender, setIsFirstRender] = React.useState(true);
+
 
   React.useEffect(() => {
     const finalFarmersList = filter(strategies, (item) => {
@@ -209,7 +212,10 @@ export const CardsSection: React.FC = () => {
         item.network &&
         item.strategyImage
       ) {
-        return true;
+        if (item.farmer.status === "active") {
+          return true;
+        }
+        return false;
       }
       return false;
     });
@@ -221,6 +227,7 @@ export const CardsSection: React.FC = () => {
   React.useEffect(() => {
     const currentInerval = setInterval(() => {
       setIsFadeIn(false);
+      setIsFirstRender(false);
       setTimeout(() => {
         setFarmersData(sampleSize(farmersFinalList, 3));
         setIsFadeIn(true);
@@ -231,7 +238,6 @@ export const CardsSection: React.FC = () => {
       clearInterval(currentInerval);
     };
   }, [farmersFinalList.length]);
-
 
   const network0 = farmersData[0]
     ? networks.find((x) => x.strapiId === farmersData[0].network)
@@ -279,8 +285,8 @@ export const CardsSection: React.FC = () => {
                       <AnimationDiv>
                         <div
                           className={clsx({
-                            fadeIn: isFadeIn,
-                            fadeOut: !isFadeIn,
+                            fadeIn: isFadeIn && !isFirstRender,
+                            fadeOut: !isFadeIn && !isFirstRender,
                           })}
                         >
                           <PopularStrategy
@@ -350,8 +356,8 @@ export const CardsSection: React.FC = () => {
                       <AnimationDiv>
                         <div
                           className={clsx({
-                            fadeIn: isFadeIn,
-                            fadeOut: !isFadeIn,
+                            fadeIn: isFadeIn && !isFirstRender,
+                            fadeOut: !isFadeIn && !isFirstRender,
                           })}
                         >
                           <PopularStrategy
@@ -416,8 +422,8 @@ export const CardsSection: React.FC = () => {
                       <AnimationDiv>
                         <div
                           className={clsx({
-                            fadeIn: isFadeIn,
-                            fadeOut: !isFadeIn,
+                            fadeIn: isFadeIn && !isFirstRender,
+                            fadeOut: !isFadeIn && !isFirstRender,
                           })}
                         >
                           <PopularStrategy
