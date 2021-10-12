@@ -723,7 +723,7 @@ export const InvestmentsPage = () => {
 
                   const handleAction = async () => {
                     if (isWithdrawRequested || poolAddressFinal?.isOutdated) {
-                      RedirectToFarmerProfile(investment.slug);
+                      RedirectToFarmerProfile(investment.slug)();
                     } else {
                       handleOpenWithDraw(
                         investment.name,

@@ -10,7 +10,7 @@ import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import { useWeb3Context } from "don-components";
-import { getPoolContract } from "helpers";
+import { getPoolContract, getPoolToken, toEther } from "helpers";
 import { useRefresh } from "components/LotteryForm";
 
 const DescriptionTitle = styled.p`
@@ -93,19 +93,29 @@ const WithdrawRequest = ({
 
   const { getConnectedWeb3, connected } = useWeb3Context();
   const [isWithdrawRequested, setIsWithdrawRequested] = useState(false);
+  const [profit, setProfit] = useState("0");
+  const [amountInToken, setAmountInToken] = useState("0");
   const { dependsOn } = useRefresh();
+  const [currency, setCurrency] = useState("");
   const fetchWithdrawInfo = async () => {
     if (poolVersion === 4) {
       const web3 = getConnectedWeb3();
       const [walletAddress] = await web3.eth.getAccounts();
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
-      const isRequested = await pool.methods
-        .isWithdrawalRequested(walletAddress)
+      const details = await pool.methods
+        .getWithdrawalReqDetails(walletAddress)
         .call();
-      if (isRequested) {
+  
+      if (details.requested) {
+        const token = await getPoolToken(web3, poolAddress);
+        const decimals = await token.methods.decimals().call();
+        const currency =await token.methods.symbol().call()
         fetch({ variables: { poolAddress, walletAddress } });
+        setProfit(toEther(details.approxProfit, decimals));
+        setAmountInToken(toEther(details.amountInToken, decimals));
+        setCurrency(currency);
       }
-      setIsWithdrawRequested(isRequested);
+      setIsWithdrawRequested(details.requested);
     }
   };
 
@@ -127,14 +137,14 @@ const WithdrawRequest = ({
     } else {
       const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
       const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
-      const amount = data.withdrawRequests[0]?.amountInToken;
-      const profit = data.withdrawRequests[0]?.profit;
+
       return (
         <WithdrawRequestInfo
-          amount={amount}
+          amount={amountInToken}
           created_on={createTimer}
           duration={timeframe}
           profit={profit}
+          currency={currency}
         />
       );
     }

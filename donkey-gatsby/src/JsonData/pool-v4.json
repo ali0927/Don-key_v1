@@ -1,5 +1,5 @@
 {
-    "abi": [
+    "abi":[
         {
             "anonymous": false,
             "inputs": [
@@ -244,6 +244,12 @@
                     "indexed": false,
                     "internalType": "uint256",
                     "name": "tokenAmountInUSD",
+                    "type": "uint256"
+                },
+                {
+                    "indexed": false,
+                    "internalType": "uint256",
+                    "name": "profit",
                     "type": "uint256"
                 },
                 {
@@ -1361,6 +1367,52 @@
                     "type": "address"
                 }
             ],
+            "name": "getWithdrawalReqDetails",
+            "outputs": [
+                {
+                    "components": [
+                        {
+                            "internalType": "bool",
+                            "name": "requested",
+                            "type": "bool"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "amountInToken",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "amountInUSD",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "amountInLP",
+                            "type": "uint256"
+                        },
+                        {
+                            "internalType": "uint256",
+                            "name": "approxProfit",
+                            "type": "uint256"
+                        }
+                    ],
+                    "internalType": "struct Pool.WithdrawalDetails",
+                    "name": "details",
+                    "type": "tuple"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_investor",
+                    "type": "address"
+                }
+            ],
             "name": "isInvestor",
             "outputs": [
                 {
@@ -1375,6 +1427,25 @@
         {
             "inputs": [],
             "name": "isReferralEnabled",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "isUserMigrated",
             "outputs": [
                 {
                     "internalType": "bool",

@@ -93,11 +93,13 @@ export const WithdrawRequestInfo = ({
   profit,
   created_on,
   duration,
+  currency
 }: {
   amount: string;
   profit: string;
   created_on: string;
   duration: string;
+  currency: string;
 }) => {
   const endTime = useMemo(() => {
     return moment(created_on).add(duration, "hours").unix();
@@ -115,11 +117,11 @@ export const WithdrawRequestInfo = ({
                 <div className="row">
                   <WithdrawColumn className="col-4">
                     <Title> Withdraw Amount</Title>
-                    <Subtitle>{new BigNumber(amount).toFixed(4)}</Subtitle>
+                    <Subtitle>{new BigNumber(amount).toFixed(4)} {currency}</Subtitle>
                   </WithdrawColumn>
                   <WithdrawColumn className="col-4">
                     <Title> Profit </Title>
-                    <Subtitle>{new BigNumber(profit).toFixed(4)}</Subtitle>
+                    <Subtitle>{new BigNumber(profit).toFixed(4)} {currency}</Subtitle>
                   </WithdrawColumn>
                   <WithdrawColumn className="col-4">
                     <Title>Date Created </Title>
