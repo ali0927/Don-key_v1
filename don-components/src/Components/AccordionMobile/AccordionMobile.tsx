@@ -44,6 +44,9 @@ export const AccordionHeaderRow = styled.div`
 
 const AccordionBody = styled.div`
   padding-top: 0;
+  @media( max-width: 968px ){
+    padding: 0rem 0.8rem 0 !important;
+  }
 `;
 
 type Props = {

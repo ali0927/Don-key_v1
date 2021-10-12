@@ -2,6 +2,7 @@ import BigNumber from "bignumber.js";
 import {
   captureException,
   formatNum,
+  nFormatter,
   getPoolContract,
   getTokenPrice,
 } from "helpers";
@@ -101,6 +102,7 @@ export const ShowAmount = ({
   const { isUSD } = useUSDViewBool();
   const web3 = getWeb3(chainId);
   const { symbol, loading } = usePoolSymbol(poolAddress, web3);
+  
   if (loading) {
     return <>-</>;
   }
@@ -114,6 +116,39 @@ export const ShowAmount = ({
   ) : (
     <>
       {isUSD ? `$${formatNum(amountInUSD)}` : `${formatNum(amount)} ${symbol}`}
+    </>
+  );
+};
+
+export const ShowAmountMobile = ({
+  amount,
+  amountInUSD,
+  poolAddress,
+  chainId,
+  icon = false,
+}: {
+  poolAddress: string;
+  amount: string;
+  amountInUSD: string;
+  chainId: number;
+  icon?: boolean;
+}) => {
+  const { isUSD } = useUSDViewBool();
+  const web3 = getWeb3(chainId);
+  const { symbol, loading } = usePoolSymbol(poolAddress, web3);
+  if (loading) {
+    return <>-</>;
+  }
+
+  return icon ? (
+    <>
+      {isUSD
+        ? usdAmount(Number(nFormatter(formatNum(amountInUSD))))
+        : busdAmount(Number(nFormatter(formatNum(amount))), symbol)}
+    </>
+  ) : (
+    <>
+      {isUSD ? `$${nFormatter(formatNum(amountInUSD))}` : `${nFormatter(formatNum(amount))} ${symbol}`}
     </>
   );
 };
