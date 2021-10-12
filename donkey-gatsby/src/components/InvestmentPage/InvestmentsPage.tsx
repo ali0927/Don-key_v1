@@ -191,6 +191,8 @@ const ALL_FARMER_QUERY = gql`
       telegram
       poolAddress
       poolVersion
+      oldPoolAddress
+      oldPoolVersion
       network {
         name
         chainId
@@ -302,6 +304,7 @@ type ExtraInfo = {
   guid: string;
   name: string;
   poolAddress: string;
+  isOutdated?: boolean;
   initialInvestmentinUSD: string;
   isWithdrawRequest: boolean;
 }[];
@@ -371,19 +374,34 @@ export const InvestmentsPage = () => {
               const contract = await getPoolContract(
                 web3,
                 invest.poolAddress,
-                3
+                invest.poolVersion
               );
-              // const accounts = await web3.eth.getAccounts();
+              const hasOldPool =
+                !!invest.oldPoolAddress && invest.oldPoolAddress.length > 4;
+              let investedInOld = false;
+              let isMigrated = false;
               const isInvested = await contract.methods
                 .isInvestor(address)
                 .call();
-              if (isInvested) {
+              if (hasOldPool) {
+                const oldContract = await getPoolContract(
+                  web3,
+                  invest.oldPoolAddress,
+                  invest.oldPoolVersion
+                );
+                investedInOld = await oldContract.methods
+                  .isInvestor(address)
+                  .call();
+                isMigrated = investedInOld && isInvested;
+              }
+              let poolAddress = invest.poolAddress;
+              if (!isMigrated && hasOldPool) {
+                poolAddress = invest.oldPoolAddress;
+              }
+
+              if (isInvested || investedInOld) {
                 const amounts = [
-                  calculateInitialInvestmentInUSD(
-                    web3,
-                    invest.poolAddress,
-                    address
-                  ),
+                  calculateInitialInvestmentInUSD(web3, poolAddress, address),
                   (async () => {
                     try {
                       if (invest.poolVersion > 2) {
@@ -406,6 +424,7 @@ export const InvestmentsPage = () => {
                   guid: invest.guid,
                   name: invest.name,
                   poolAddress: invest.poolAddress,
+                  isOutdated: !isMigrated && hasOldPool,
                   initialInvestmentinUSD: results[0],
                   isWithdrawRequest: results[1],
                 });
@@ -701,6 +720,27 @@ export const InvestmentsPage = () => {
                     poolAddressFinal?.initialInvestmentinUSD || "0";
                   const isWithdrawRequested =
                     poolAddressFinal?.isWithdrawRequest;
+
+                  const handleAction = async () => {
+                    if (isWithdrawRequested || poolAddressFinal?.isOutdated) {
+                      RedirectToFarmerProfile(investment.slug)();
+                    } else {
+                      handleOpenWithDraw(
+                        investment.name,
+                        investment.poolAddress,
+                        investment.poolVersion ? investment.poolVersion : 1
+                      )();
+                    }
+                  };
+                  const getActionMessage = () => {
+                    if (poolAddressFinal?.isOutdated) {
+                      return "MIGRATE";
+                    }
+                    if (isWithdrawRequested) {
+                      return "PENDING";
+                    }
+                    return "WITHDRAW";
+                  };
                   return (
                     <>
                       <TableRow key={investment.guid}>
@@ -777,20 +817,8 @@ export const InvestmentsPage = () => {
                         <>
                           <CustomTableData>
                             <div className="d-flex justify-content-center">
-                              <WithDrawButton
-                                onClick={
-                                  !isWithdrawRequested
-                                    ? handleOpenWithDraw(
-                                        investment.name,
-                                        investment.poolAddress,
-                                        investment.poolVersion
-                                          ? investment.poolVersion
-                                          : 1
-                                      )
-                                    : RedirectToFarmerProfile(investment.guid)
-                                }
-                              >
-                                {isWithdrawRequested ? "PENDING" : "WITHDRAW"}
+                              <WithDrawButton onClick={handleAction}>
+                                {getActionMessage()}
                               </WithDrawButton>
                             </div>
                           </CustomTableData>
@@ -946,7 +974,7 @@ export const InvestmentsPage = () => {
               handleNameChange("Polygon");
             }}
           >
-            <div>Polygon</div> <TickIcon className="tick-icon"/>
+            <div>Polygon</div> <TickIcon className="tick-icon" />
           </DropDownItem>
           <DropDownItem
             className="d-flex justify-content-between align-items-center"
@@ -954,7 +982,7 @@ export const InvestmentsPage = () => {
               handleNameChange("AVAX");
             }}
           >
-            <div>AVAX</div> <TickIcon className="tick-icon"/>
+            <div>AVAX</div> <TickIcon className="tick-icon" />
           </DropDownItem>
           <DropDownItem
             className="d-flex justify-content-between align-items-center"
@@ -962,7 +990,7 @@ export const InvestmentsPage = () => {
               handleNameChange("BSC");
             }}
           >
-            <div>BSC</div> <TickIcon className="tick-icon"/>
+            <div>BSC</div> <TickIcon className="tick-icon" />
           </DropDownItem>
         </DropDown>
       </Overlay>

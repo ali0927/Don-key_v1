@@ -7,6 +7,7 @@ import { GridBackground } from "components/GridBackground";
 import { FarmerStrategies } from "components/FarmerStrategies";
 import { FarmerBio } from "components/FarmerBio";
 import { IFarmerInter } from "interfaces";
+import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
 
 export default function Dashboard({
   pageContext: { data, tvl },
@@ -34,6 +35,7 @@ export default function Dashboard({
           <NavBar variant="loggedin" />
           <FarmerBio tvl={tvl} farmer={data.farmers[0]} investorCount={0} />
           <GridBackground>
+           
             <FarmerStrategies isLoaded farmer={data.farmers[0]} />
           </GridBackground>
           <Footer />

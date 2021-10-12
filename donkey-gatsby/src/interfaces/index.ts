@@ -83,6 +83,8 @@ export interface IFarmerInter {
   telegram: string;
   poolAddress: string;
   poolVersion: number;
+  oldPoolVersion: number;
+  oldPoolAddress: string;
   network: INetwork;
   strategies:IStrategy[];
 }
@@ -111,6 +113,12 @@ export type IStrategy = {
     boostApy: boolean;
   };
 };
+
+export type IStrategyPool = {
+  poolAddress: string;
+  version: number;
+  status: "active" | "deprecated"
+}
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 
