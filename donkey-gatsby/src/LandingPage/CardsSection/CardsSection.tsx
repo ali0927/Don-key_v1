@@ -220,6 +220,7 @@ export const CardsSection: React.FC = () => {
       }
       return false;
     });
+    console.log("ACTIVES=====",finalFarmersList)
     setFarmersData(sampleSize(finalFarmersList, 3));
     setFarmersFinalList(finalFarmersList);
     setIsFadeIn(true);
@@ -253,6 +254,8 @@ export const CardsSection: React.FC = () => {
   const handleLeaderClick = (url: string) => () => {
     navigate(url);
   };
+
+  console.log("farmersData=====",farmersData)
 
   return (
     <>
