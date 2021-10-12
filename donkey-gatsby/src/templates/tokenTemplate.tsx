@@ -38,7 +38,7 @@ const Image = styled.img`
 `;
 
 type IFarmerBio = IStrategy & { farmer: IFarmerInter };
-export const FarmerBioShort = ({
+const FarmerBioShort = ({
   item,
   isShown,
   onShowLess,
