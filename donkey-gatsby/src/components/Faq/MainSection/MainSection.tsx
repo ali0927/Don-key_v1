@@ -55,6 +55,7 @@ const FooterSubHeading = styled.div`
   text-align: left;
   margin-top: 1.8rem;
   color: #8d8d8d;
+  width: 100% !important;
   @media (max-width: 990px) {
     font-size: 20px;
   }
@@ -121,7 +122,7 @@ const faqquestions = {
       faq: [
         {
           ques: "What do I need to use the Don-key platform?",
-          ans: "Only 100 don",
+          ans: "Only 100 $DON",
         },
         {
           ques: "Do I farm with the DON token?",
@@ -177,7 +178,7 @@ export const MainSection: React.FC = () => {
                 return (
                   <Col
                     key={item.title}
-                    className="position-relative d-flex flex-column align-items-start"
+                    className="position-relative d-flex flex-column align-items-start "
                   >
                     <DarkBorder
                       className={
