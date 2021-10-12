@@ -12,6 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useWeb3Context } from "don-components";
 import { getPoolContract, getPoolToken, toEther } from "helpers";
 import { useRefresh } from "components/LotteryForm";
+import BigNumber from "bignumber.js";
 
 const DescriptionTitle = styled.p`
   font-size: 20px;
@@ -111,8 +112,10 @@ const WithdrawRequest = ({
         const decimals = await token.methods.decimals().call();
         const currency =await token.methods.symbol().call()
         fetch({ variables: { poolAddress, walletAddress } });
-        setProfit(toEther(details.approxProfit, decimals));
-        setAmountInToken(toEther(details.amountInToken, decimals));
+        const profit = toEther(details.approxProfit, decimals);
+        setProfit(profit);
+        const investedAmount = toEther(details.amountInToken, decimals);
+        setAmountInToken(new BigNumber(investedAmount).plus(profit).toString());
         setCurrency(currency);
       }
       setIsWithdrawRequested(details.requested);
