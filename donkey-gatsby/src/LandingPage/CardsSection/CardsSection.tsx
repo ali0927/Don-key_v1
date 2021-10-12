@@ -203,7 +203,6 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
   const [isFirstRender, setIsFirstRender] = React.useState(true);
 
-  console.log("STRATEGIES=====", strategies);
 
   React.useEffect(() => {
     const finalFarmersList = filter(strategies, (item) => {
@@ -220,7 +219,6 @@ export const CardsSection: React.FC = () => {
       }
       return false;
     });
-    console.log("ACTIVES=====", finalFarmersList);
     setFarmersData(sampleSize(finalFarmersList, 3));
     setFarmersFinalList(finalFarmersList);
     setIsFadeIn(true);
@@ -255,7 +253,6 @@ export const CardsSection: React.FC = () => {
     navigate(url);
   };
 
-  console.log("farmersData=====", farmersData);
 
   return (
     <>
