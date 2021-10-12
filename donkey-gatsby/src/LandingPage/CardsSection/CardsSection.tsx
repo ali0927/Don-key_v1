@@ -165,12 +165,12 @@ export const CardsSection: React.FC = () => {
             name
             description
             slug
-            network
             strategyImage {
               url
             }
             farmer {
               name
+              network
               status
               farmerImage {
                 url
@@ -203,14 +203,14 @@ export const CardsSection: React.FC = () => {
   const networks: INetwork[] = StrategiesData.allStrapiNetworks.nodes;
   const [isFirstRender, setIsFirstRender] = React.useState(true);
 
-  console.log("STRATEGIES=====",strategies)
+  console.log("STRATEGIES=====", strategies);
 
   React.useEffect(() => {
     const finalFarmersList = filter(strategies, (item) => {
       if (
         item.farmer &&
         item.farmer.farmerImage &&
-        item.network &&
+        item.farmer.network &&
         item.strategyImage
       ) {
         if (item.farmer.status === "active") {
@@ -220,7 +220,7 @@ export const CardsSection: React.FC = () => {
       }
       return false;
     });
-    console.log("ACTIVES=====",finalFarmersList)
+    console.log("ACTIVES=====", finalFarmersList);
     setFarmersData(sampleSize(finalFarmersList, 3));
     setFarmersFinalList(finalFarmersList);
     setIsFadeIn(true);
@@ -242,20 +242,20 @@ export const CardsSection: React.FC = () => {
   }, [farmersFinalList.length]);
 
   const network0 = farmersData[0]
-    ? networks.find((x) => x.strapiId === farmersData[0].network)
+    ? networks.find((x) => x.strapiId === farmersData[0].farmer.network)
     : null;
   const network1 = farmersData[1]
-    ? networks.find((x) => x.strapiId === farmersData[1].network)
+    ? networks.find((x) => x.strapiId === farmersData[1].farmer.network)
     : null;
   const network2 = farmersData[2]
-    ? networks.find((x) => x.strapiId === farmersData[2].network)
+    ? networks.find((x) => x.strapiId === farmersData[2].farmer.network)
     : null;
 
   const handleLeaderClick = (url: string) => () => {
     navigate(url);
   };
 
-  console.log("farmersData=====",farmersData)
+  console.log("farmersData=====", farmersData);
 
   return (
     <>

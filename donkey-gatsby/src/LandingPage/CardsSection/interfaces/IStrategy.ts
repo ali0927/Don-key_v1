@@ -3,7 +3,6 @@ export interface IStrategy {
   description: string;
   name: string;
   slug: string;
-  network: number;
   strategyImage: {
     url: string;
   };
@@ -19,6 +18,7 @@ export interface IStrategy {
   farmer: {
     name: string;
     status: "active" | "deprecated" | "disabled";
+    network: number;
     farmerImage: {
       url: string;
     };
