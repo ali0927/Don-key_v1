@@ -118,7 +118,7 @@ const WithdrawButton = styled.button`
   border: 1px solid #fbe492;
   color: #000;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   box-shadow: 0px 7px 10px rgba(0, 0, 0, 0.05);
   border-radius: 10px;
   padding: 15px;
@@ -304,7 +304,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
         setGreyAmount(greyAmount);
         setInvestedAmount(investedAmount);
         setTokenPrice(tokenPrice);
-        setCurrency(currency);
+        setCurrency(currency.toUpperCase());
         setIsReady(true);
       } catch (e) {}
     }
@@ -428,7 +428,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
     }
     if (hasGreyAmount && !hasInvestedAmount) {
       return (
-        <WithdrawFooter>Money hasn’t been invested in protocol!</WithdrawFooter>
+        <WithdrawFooter>Withdraw is available immediately</WithdrawFooter>
       );
     }
     if (!hasGreyAmount && hasInvestedAmount) {
