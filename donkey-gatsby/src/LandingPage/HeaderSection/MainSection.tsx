@@ -11,6 +11,7 @@ import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { Skeleton } from "@material-ui/lab";
+import { Slide } from "./Slide";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -87,7 +88,7 @@ const Col = styled.div``;
 
 const GrayBorder = styled.hr`
   position: absolute;
-  width: 50%;
+  width: 85%;
   border-top: 1.8px dashed#000D09;
   top: 2px;
   margin: 0px;
@@ -180,39 +181,27 @@ export const MainSection: React.FC = () => {
           <div className="d-flex pb-3 pb-md-5 justify-content-start">
             <FooterRow className="row position-relative">
               <GrayBorder className="d-none d-md-block" />
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">DON price</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton width={100} variant="text" />
-                  ) : (
-                    `$${finalDerivedEth}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">24-hour volume</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${volume24hrs}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">Market Cap</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${marketCap}`
-                  )}
-                </FooterSubHeading>
-              </Col>
+              <Slide
+                label="DON price"
+                isLoading={loading}
+                value={finalDerivedEth}
+              />
+
+              <Slide
+                label="24-hour volume"
+                isLoading={loading}
+                value={volume24hrs.toString()}
+              />
+
+              <Slide label="Market Cap" isLoading={loading} value={marketCap} />
+
+              {/* <Slide label="TVL" isLoading={loading} value={marketCap} />
+              <Slide label="Users" isLoading={loading} value={marketCap} />
+
+              <Slide label="Strategies" isLoading={loading} value={marketCap} /> */}
+
+              
+         
             </FooterRow>
           </div>
         </div>
