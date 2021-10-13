@@ -10,7 +10,14 @@ import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useEffect, useRef, useState } from "react";
 import { useWeb3Context } from "don-components";
-import { getPoolContract, getPoolToken, toEther } from "helpers";
+import {
+  calculateInitialInvestment,
+  getAmount,
+  getInvestedAmount,
+  getPoolContract,
+  getPoolToken,
+  toEther,
+} from "helpers";
 import { useRefresh } from "components/LotteryForm";
 import BigNumber from "bignumber.js";
 
@@ -99,18 +106,43 @@ const WithdrawRequest = ({
   const { dependsOn } = useRefresh();
   const [currency, setCurrency] = useState("");
   const fetchWithdrawInfo = async () => {
+    const web3 = getConnectedWeb3();
+    const [walletAddress] = await web3.eth.getAccounts();
+    const pool = await getPoolContract(web3, poolAddress, poolVersion);
+    if (poolVersion === 3) {
+
+      const isRequested = await pool.methods
+        .isWithdrawalRequested(walletAddress)
+        .call();
+      if (isRequested) {
+        const token = await getPoolToken(web3, poolAddress);
+      
+        const currency = await token.methods.symbol().call();
+        const amount = await getAmount(
+          web3,
+          poolAddress,
+          walletAddress,
+          poolVersion
+        );
+        const investedAmount = await calculateInitialInvestment(web3, poolAddress, walletAddress);
+        fetch({ variables: { poolAddress, walletAddress } });
+        setCurrency(currency);
+        setIsWithdrawRequested(isRequested);
+        console.log(isRequested, amount)
+        setAmountInToken(amount);
+        setProfit(new BigNumber(amount).minus(investedAmount).toString());
+      }
+    }
     if (poolVersion === 4) {
-      const web3 = getConnectedWeb3();
-      const [walletAddress] = await web3.eth.getAccounts();
-      const pool = await getPoolContract(web3, poolAddress, poolVersion);
+     
       const details = await pool.methods
         .getWithdrawalReqDetails(walletAddress)
         .call();
-  
+
       if (details.requested) {
         const token = await getPoolToken(web3, poolAddress);
         const decimals = await token.methods.decimals().call();
-        const currency =await token.methods.symbol().call()
+        const currency = await token.methods.symbol().call();
         fetch({ variables: { poolAddress, walletAddress } });
         const profit = toEther(details.approxProfit, decimals);
         setProfit(profit);
@@ -136,9 +168,11 @@ const WithdrawRequest = ({
 
   if (isWithdrawRequested) {
     if (loading || !data) {
+      console.log(data, isWithdrawRequested, "some")
       return Loader;
     } else {
       const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
+     
       const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
 
       return (
