@@ -2,6 +2,9 @@ import { makeStyles } from "@material-ui/core";
 
 export const useDialogStyles = makeStyles({
   paper: {
-    borderRadius: 20,
+    borderRadius: 10,
+    ['@media (max-width:600px)']: {
+      borderRadius: 20,
+    }
   }
 });

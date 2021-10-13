@@ -12,12 +12,12 @@ import clsx from "clsx";
 import { breakPoints } from "../../breakponts";
 
 const CutomizeModalHeading = styled.h4`
-  font-size: 18px;
-  font-weight: 800;
+  font-size: 23px;
+  font-weight: bold;
   display: flex;
   align-items: center;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 25px;
+    font-size: 23px;
   }
 `;
 
@@ -34,13 +34,13 @@ const StyledDialog = withStyles({
 })(Dialog);
 
 const Content = styled(ModalContent)`
-  padding: 3rem 1rem;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
+  padding: 32px 25px;
+  padding-bottom: 21px;
   height: 100%;
   overflow-y: auto;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    padding: 3rem 2rem;
+  @media only screen and (max-width: 600px) {
+    padding: 30px 15px;
+    padding-bottom: 7px;
   }
 `;
 

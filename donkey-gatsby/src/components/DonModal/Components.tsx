@@ -24,10 +24,15 @@ const IconWrapper = styled.span`
 const StyledCloseIcon = styled(CloseIcon)`
   position: absolute;
   width: 18px;
-  height: 17px;
+  height: 18px;
   z-index: 10;
   right: 30px;
   cursor: pointer;
+  @media only screen and (max-width: 600px) {
+    right: 25px;
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 export { ModalContent, ModalHeading, IconWrapper, StyledCloseIcon };

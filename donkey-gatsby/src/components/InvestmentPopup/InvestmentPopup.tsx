@@ -6,6 +6,7 @@ import { useAxios } from "hooks/useAxios";
 import { useWeb3Context } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
+  getTokenAddress,
   captureException,
   getBUSDTokenContract,
   getPoolContract,
@@ -33,15 +34,15 @@ import {
 import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery,useLazyQuery } from "@apollo/client";
 import Downarrow from "components/Icons/Downarrow";
+import { Spinner } from "react-bootstrap";
 const ButtonWrapper = styled.div({
   width: "100%",
 });
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 1.5rem;
   .widget {
     margin-left: 0.5rem;
   }
@@ -53,13 +54,23 @@ const ButtonWrap = styled.div`
       margin-left: 0rem;
     }
   }
+  .Buttonwidget{
+    height:49px;
+    font-size:14px;
+    @media only screen and (max-width: 600px) {
+    height:40px;
+    font-size:12px;
+    }
+  }
 `;
 const MyBalancemobile = styled.div`
-  margin-top: 2rem;
-  margin-bottom: -3rem;
+  margin-top: 41px;
+  margin-bottom:-2.25rem;
   font-size: 14px;
+  font-weight:500;
   @media only screen and (max-width: 600px) {
     font-size: 12px;
+    margin-top: 35px;
   }
 `;
 const Calculatermodel = styled.div`
@@ -70,6 +81,23 @@ const Calculatermodel = styled.div`
   font-weight: 600;
   cursor: pointer;
 `;
+const Messagetimeframe=styled.div`
+color: #A3A3A3;
+font-weight: 500;
+font-size: 12px;
+margin-top:16px;
+@media only screen and (max-width: 600px) {
+    margin-bottom:10px;
+  }
+`
+const HrMessage=styled.hr`
+margin:0;
+width:100%;
+position:absolute;
+width:100%;
+right: 0;
+
+`
 const themeM = createTheme({
   palette: {
     primary: { main: theme.palette.background.yellow },
@@ -120,6 +148,9 @@ const MyBalanceInBUSD = ({
   return <>{state.balance} </>;
 };
 
+
+
+
 const FARMER_WITHDRAW_FRAME = gql`
   query farmersWithdrawFrame($poolAddress: String!) {
     farmers(where: { poolAddress: $poolAddress }) {
@@ -135,6 +166,7 @@ export const InvestmentPopup = ({
   onClose,
   onSuccess,
   apy,
+  
 }: {
   poolAddress: string;
   apy: string;
@@ -143,6 +175,7 @@ export const InvestmentPopup = ({
   onSuccess?: () => void;
   onClose: () => void;
 }) => {
+  const [tokenPrice, setTokenPrice] = useState("-");
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
@@ -155,6 +188,8 @@ export const InvestmentPopup = ({
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
   });
+  
+
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
   const { refetch, holdingDons } = useStakingContract();
@@ -184,7 +219,23 @@ export const InvestmentPopup = ({
 
     return true;
   };
+  const [fetch, { data: tokenData}] = useLazyQuery(gql`
+    query shortLinks($tokenAddress: String!) {
+      tokens(where: { tokenAddress: $tokenAddress }) {
+        image {
+          url
+        }
+      }
+    }
+  `);
 
+ 
+  const fetchTokenInfo = async () => {
+    const price = await getTokenPrice(web3,poolAddress);
+    setTokenPrice(price);
+    const tokenAddress = await getTokenAddress(web3, poolAddress);
+    fetch({variables: {tokenAddress}});
+  }
   const applyCode = async (code: string) => {
     try {
       setChecking(true);
@@ -326,8 +377,13 @@ export const InvestmentPopup = ({
     })();
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+  useEffect(() => {
+    fetchTokenInfo()
+  }, [])
 
+  
   const renderContent = () => {
+   
     if (hasCheckedDons) {
       if (hasDons) {
         return (
@@ -340,6 +396,8 @@ export const InvestmentPopup = ({
                   currencySymbol={symbol}
                   setValue={setValue}
                   max={balance}
+                  tokenPrice={tokenPrice}
+                  srcimg={tokenData.tokens[0].image.url}
                 />
                 {poolVersion < 3 && (
                   <ThemeProvider theme={themeM}>
@@ -366,10 +424,10 @@ export const InvestmentPopup = ({
               <ButtonWrap>
                 <ButtonWrapper>
                   <ButtonWidget
+                    className="Buttonwidget"
                     varaint="contained"
-                    fontSize="14px"
+                    
                     containedVariantColor="lightYellow"
-                    height="40px"
                     width="100%"
                     disabled={!value || isLoading}
                     onClick={handleInvest}
@@ -380,9 +438,9 @@ export const InvestmentPopup = ({
 
                 <ButtonWrapper className="widget">
                   <ButtonWidget
+                  className="Buttonwidget"
                     varaint="outlined"
-                    fontSize="14px"
-                    height="40px"
+                   
                     width="100%"
                     onClick={onClose}
                   >
@@ -391,21 +449,20 @@ export const InvestmentPopup = ({
                 </ButtonWrapper>
               </ButtonWrap>
             </div>
-            <p className="d-flex mt-4">
-              <small> *</small>
-              <small>
-                Withdraws are executed up to {timeframe} hours upon request in
-                order to minimize swap fees, price impact and slippage within
-                the different pools.
-              </small>
-            </p>
-            <Calculatermodel>
+            <Calculatermodel className=" mt-4">
               <p>APY {apy}</p>
               <p>
                 Calculator &ensp;
                 <Downarrow />
               </p>
             </Calculatermodel>
+            <HrMessage/>
+            <Messagetimeframe className="d-flex text-center">
+                Withdraws are executed up to {timeframe} hours upon request in
+                order to minimize swap fees, price impact and slippage within
+                the different pools.
+                
+            </Messagetimeframe>
           </>
         );
       } else {
@@ -445,7 +502,7 @@ export const InvestmentPopup = ({
                 />
               }{" "}
               {symbol}(~ $
-              {new BigNumber(poolVersion || 0).multipliedBy(20.82).toFixed(1)})
+              {new BigNumber(poolVersion || 0).multipliedBy(tokenPrice).toFixed(1)})
             </>
           ) : undefined}
         </MyBalancemobile>
