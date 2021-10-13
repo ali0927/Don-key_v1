@@ -53,15 +53,16 @@ export const DonCommonmodal = ({
   icon,
   variant,
   style,
-  PaperProps,
+  PaperProps = {},
   titleRightContent,
   contentStyle,
   subtitle,
   disableBackdropClick,
+  footer
 }: {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
+  title: React.ReactNode;
   style?: React.CSSProperties;
   PaperProps?: DialogProps["PaperProps"];
   variant: "common" | "v1";
@@ -72,6 +73,7 @@ export const DonCommonmodal = ({
   rounded?: boolean;
   contentStyle?: React.CSSProperties;
   subtitle?: string;
+  footer?: React.ReactNode;
   disableBackdropClick?: boolean;
 }) => {
   const classes = useDialogStyles();
@@ -112,13 +114,13 @@ export const DonCommonmodal = ({
       open={isOpen}
       style={style}
       onClose={onClose}
-      //@ts-ignore
-      classes={{ paper: classes.paper }}
+
       fullWidth={true}
-      PaperProps={PaperProps}
+      PaperProps={{classes: {root: classes.paper}, ...PaperProps}}
       maxWidth={size}
       disableEscapeKeyDown
       disableBackdropClick={disableBackdropClick}
+      
     >
       <>
         <Content style={contentStyle}>
@@ -127,6 +129,7 @@ export const DonCommonmodal = ({
           {children}
         </Content>
       </>
+      {footer && footer}
     </StyledDialog>
   );
 };

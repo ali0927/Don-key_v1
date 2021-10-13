@@ -13,7 +13,7 @@ export const useWalletStyles = makeStyles({
       position: "absolute",
       marginRight: "-0.71em",
       top: "-5%",
-      right: "80%",
+      right: "20%",
       width: 18,
       height: 12,
       backgroundColor: "#000",

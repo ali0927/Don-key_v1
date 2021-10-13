@@ -71,8 +71,6 @@ export const useInvestments = (data: {
               const profit = claimableAmountBN.minus(initiailInvestmentBN);
               const profitInUSD = claimableAmountInUSD.minus(investmentInUSD);
 
-              console.log(investor.date_created);
-
               finalInvestmentsList.push({
                 address,
                 claimableAmount: claimableAmount,

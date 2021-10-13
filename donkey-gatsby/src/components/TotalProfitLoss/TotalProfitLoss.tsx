@@ -14,12 +14,14 @@ import { useUSDViewBool } from "contexts/USDViewContext";
 export const TotalProfitLoss = ({
   poolAddress,
   refresh = false,
+  poolVersion = 2,
   fromOverlay,
   address,
   chainId,
   variant = "default",
 }: {
   poolAddress: string;
+  poolVersion?: number;
   refresh?: boolean;
   fromOverlay?: boolean;
   chainId: number;
@@ -38,7 +40,7 @@ export const TotalProfitLoss = ({
       }
       try {
         const accounts = address ? [address] : [connectedAddress];
-        const amountWithdraw = await getAmount(web3, poolAddress, accounts[0]);
+        const amountWithdraw = await getAmount(web3, poolAddress, accounts[0],poolVersion);
         const amountInitial = await calculateInitialInvestment(
           web3,
           poolAddress,

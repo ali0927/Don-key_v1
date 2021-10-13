@@ -8,7 +8,7 @@ import {
   AccordionCardHeader,
 } from "don-components";
 import { MobileCaption, MobileHeading } from "../AccordionComponents";
-import { hideAddress, ShowAmount } from "../InvestorListTable";
+import { hideAddress, ShowAmountMobile } from "../InvestorListTable";
 import { IInvestorAccordionProps } from "./interfaces";
 import React from "react";
 import { useInvestments } from "../hooks";
@@ -63,7 +63,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
                     <AccordionHeadingText>
                       <MobileCaption>Profit/Loss</MobileCaption>
                       <MobileHeading>
-                        <ShowAmount
+                        <ShowAmountMobile
                           chainId={chainId}
                           amount={item.profitLoss}
                           amountInUSD={item.profitLossInUSD}
@@ -87,7 +87,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
                       </AccordionCaptionText>
                       <div className="d-flex">
                         <AccordionHeadingText>
-                          <ShowAmount
+                          <ShowAmountMobile
                             chainId={chainId}
                             amount={item.initialInvestment}
                             amountInUSD={item.initialInvestmentInUSD}
@@ -102,7 +102,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
                       </AccordionCaptionText>
                       <div className="d-flex">
                         <AccordionHeadingText>
-                          <ShowAmount
+                          <ShowAmountMobile
                             chainId={chainId}
                             amount={item.claimableAmount}
                             amountInUSD={item.claimableAmountInUSD}

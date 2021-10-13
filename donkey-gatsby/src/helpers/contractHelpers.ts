@@ -4,7 +4,7 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
-import {  waitFor } from "don-utils";
+import { waitFor } from "don-utils";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
@@ -51,11 +51,11 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
     ).methods
-      .getTokenAddress()
+      .getToken()
       .call();
     return tokenAddress;
   } catch (e) {
-    captureException(e, "getTokenAddress:"+ poolAddress)
+    captureException(e, "getTokenAddress:" + poolAddress);
     return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
   }
 };
@@ -80,7 +80,7 @@ export const getUserDons = async (web3: Web3, chainIds: number[]) => {
     }
   });
 
-  return await Promise.all(promises) as {balance: string; }[];
+  return (await Promise.all(promises)) as { balance: string }[];
 };
 //you only need to transfer DON to ETH bridge contract
 
@@ -365,8 +365,11 @@ const getPoolJSON = async (version: number) => {
     return await import("../JsonData/advanced-pool.json");
   }
 
-  if (version === 3 || version === 4) {
+  if (version === 3 ) {
     return await import("../JsonData/pool-manual.json");
+  }
+  if(version === 4){
+    return await import("../JsonData/pool-v4.json");
   }
   return await import("../JsonData/pool2.json");
 };
@@ -461,18 +464,28 @@ export const getBUSDBalance = async (web3: Web3, address: string) => {
 export const getAmount = async (
   web3: Web3,
   poolAddress: string,
-  address: string
+  address: string,
+  version = 2,
+  percent = 100
 ) => {
-  const poolContract = await getPoolContract(web3, poolAddress, 2);
+  const poolContract = await getPoolContract(web3, poolAddress, version);
   try {
-    const claimableAmount = await poolContract.methods
-      .getFinalClaimableAmount(address)
-      .call();
+    let claimableAmount = "0";
+    if (version < 4) {
+      claimableAmount = await poolContract.methods
+        .getFinalClaimableAmount(address)
+        .call();
+    } else {
+      claimableAmount = await poolContract.methods
+        .getFinalClaimableAmount(address, percent * 100)
+        .call();
+    }
+
     const token = await getPoolToken(web3, poolAddress);
     const decimals = await token.methods.decimals().call();
     return toEther(claimableAmount, decimals);
   } catch (e) {
-    captureException(e, `getAmount: Pool: ${poolAddress}`)
+    captureException(e, `getAmount: Pool: ${poolAddress}`);
     return "0";
   }
 };
@@ -492,7 +505,7 @@ export const calculateUserClaimableAmount = async (
 ) => {
   const accounts = account ? [account] : await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress, 2);
- 
+
   try {
     const claimableAmount = await poolContract.methods
       .getInvestorClaimableAmount(accounts[0])
@@ -500,7 +513,7 @@ export const calculateUserClaimableAmount = async (
 
     return toEther(claimableAmount);
   } catch (e) {
-    console.log(account, poolAddress)
+    console.log(account, poolAddress);
     captureException(e, "calculateUserClaimableAmount");
     return "0";
   }
@@ -534,12 +547,12 @@ query allFarmerQuery {
 
 export const calcSumOfAllPoolValues = memoizeAsync(async () => {
   let allPoolValues = new BigNumber(0);
-  const resp = await strapi.post("/graphql", {query: ALL_FARMERS_QUERY})
+  const resp = await strapi.post("/graphql", { query: ALL_FARMERS_QUERY });
   const list = resp.data.data.farmers.map(async (farmer: any) => {
     const web3 = getWeb3(farmer.network.chainId);
     const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
     allPoolValues = allPoolValues.plus(poolValue);
-  })
+  });
   await Promise.all(list);
   console.log(allPoolValues.toFixed(2), "TVL");
   return allPoolValues.toFixed(2);
@@ -575,13 +588,13 @@ export const calculateInitialInvestmentInUSD = async (
     const amount = new BigNumber(toEther(initialAmount, decimals)).toString();
     return amount;
   } catch (e) {
-    captureException(e,"calculateUserClaimableAmount")
+    captureException(e, "calculateUserClaimableAmount");
     const initialInvestment = await calculateInitialInvestment(
       web3,
       poolAddress,
       address
     );
-   
+
     const tokenPrice = await getTokenPrice(web3, poolAddress);
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }

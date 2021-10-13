@@ -158,8 +158,11 @@ export const createPages = async ({ graphql, actions }: any) => {
       }
     }
   `);
+  
+ 
 
   const tokens = tokensdata.data.allStrapiTokens.nodes;
+
 
   tokens.forEach((token: any) => {
     const strategies = sortStrategies(
@@ -189,7 +192,6 @@ export const createPages = async ({ graphql, actions }: any) => {
           farmerImage {
             url
           }
-          active
           twitter
           telegram
           guid
@@ -198,6 +200,8 @@ export const createPages = async ({ graphql, actions }: any) => {
           performancefee
           poolAddress
           poolVersion
+          oldPoolAddress
+          oldPoolVersion
           network {
             name
             chainId
