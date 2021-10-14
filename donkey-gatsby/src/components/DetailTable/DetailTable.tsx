@@ -439,7 +439,7 @@ export const DetailTable = ({
                 </CardPoolAddress>
 
                 <TokenSwitchLabels className="d-flex align-items-center">
-                  {symbol}
+                  {symbol.toUpperCase()}
                   <YellowSwitch
                     className="mx-2"
                     value={true}
