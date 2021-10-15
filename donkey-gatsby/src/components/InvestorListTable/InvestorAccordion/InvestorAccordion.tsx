@@ -14,6 +14,12 @@ import React from "react";
 import { useInvestments } from "../hooks";
 import { Spinner } from "react-bootstrap";
 
+import styled from "styled-components";
+
+const EqualDiv = styled.div`
+  flex: 1;
+`;
+
 export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
   const { chainId, pool, poolAddress, tokenPrice } = props;
 
@@ -54,27 +60,32 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
               <>
                 <AccordionCard>
                   <AccordionCardHeader index={index}>
-                    <AccordionHeadingText>
-                      <MobileCaption>Investor</MobileCaption>
-                      <MobileHeading>
-                        {hideAddress(item.address).slice(0, 10)}...
-                      </MobileHeading>
-                    </AccordionHeadingText>
-                    <AccordionHeadingText>
-                      <MobileCaption>Profit/Loss</MobileCaption>
-                      <MobileHeading>
-                        <ShowAmountMobile
-                          chainId={chainId}
-                          amount={item.profitLoss}
-                          amountInUSD={item.profitLossInUSD}
-                          poolAddress={poolAddress}
-                          icon={true}
-                        />
-                      </MobileHeading>
-                    </AccordionHeadingText>
+                    <EqualDiv>
+                      <AccordionHeadingText>
+                        <MobileCaption>Investor</MobileCaption>
+                        <MobileHeading>
+                          {hideAddress(item.address).slice(0, 10)}...
+                        </MobileHeading>
+                      </AccordionHeadingText>
+                    </EqualDiv>
+                    <EqualDiv>
+                      <AccordionHeadingText>
+                        <MobileCaption>Profit/Loss</MobileCaption>
+                        <MobileHeading>
+                          <ShowAmountMobile
+                            chainId={chainId}
+                            amount={item.profitLoss}
+                            amountInUSD={item.profitLossInUSD}
+                            poolAddress={poolAddress}
+                            icon={true}
+                          />
+                        </MobileHeading>
+                      </AccordionHeadingText>
+                    </EqualDiv>
+
                     <AccordionHeadingText>
                       <MobileCaption>Duration</MobileCaption>
-                      <MobileHeading>{item.duration} ago</MobileHeading>
+                      <MobileHeading>{item.duration}</MobileHeading>
                     </AccordionHeadingText>
                   </AccordionCardHeader>
                   <AccordionDetails

@@ -38,6 +38,7 @@ import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
 import { api } from "strapi";
 
+
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
