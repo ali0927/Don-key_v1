@@ -22,8 +22,9 @@ import { DataTable } from "./DataTable/DataTable";
 import { theme } from "theme";
 import { InvestorAccordion } from "./InvestorAccordion";
 
-const usdAmount = (amount: number) => {
-  if (amount > 0) {
+const usdAmount = (amount: string, amountN:number) => {
+
+  if (amountN > 0) {
     return (
       <>
         {" "}
@@ -34,7 +35,7 @@ const usdAmount = (amount: number) => {
             height: 10,
           }}
         />{" "}
-        {amount}{" "}
+        ${amount}{" "}
       </>
     );
   } else {
@@ -48,14 +49,15 @@ const usdAmount = (amount: number) => {
             height: 10,
           }}
         />{" "}
-        {amount}{" "}
+        ${amount}{" "}
       </>
     );
   }
 };
 
-const busdAmount = (amount: number, symbol: string) => {
-  if (amount > 0) {
+const busdAmount = (amount: string, symbol: string,amountN:number) => {
+
+  if ( amountN > 0 ) {
     return (
       <>
         {" "}
@@ -102,7 +104,7 @@ export const ShowAmount = ({
   const { isUSD } = useUSDViewBool();
   const web3 = getWeb3(chainId);
   const { symbol, loading } = usePoolSymbol(poolAddress, web3);
-  
+
   if (loading) {
     return <>-</>;
   }
@@ -110,8 +112,8 @@ export const ShowAmount = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount(Number(formatNum(amountInUSD)))
-        : busdAmount(Number(formatNum(amount)), symbol)}
+        ? usdAmount(formatNum(amountInUSD),Number(formatNum(amountInUSD)))
+        : busdAmount(formatNum(amount), symbol,Number(formatNum(amount)))}
     </>
   ) : (
     <>
@@ -143,8 +145,8 @@ export const ShowAmountMobile = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount(Number(nFormatter(formatNum(amountInUSD))))
-        : busdAmount(Number(nFormatter(formatNum(amount))), symbol)}
+        ? usdAmount((nFormatter(formatNum(amountInUSD))).toString(),Number(formatNum(amountInUSD)))
+        : busdAmount((nFormatter(formatNum(amount))).toString(), symbol, Number(formatNum(amount)))}
     </>
   ) : (
     <>

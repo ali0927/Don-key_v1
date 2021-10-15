@@ -85,7 +85,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
 
                     <AccordionHeadingText>
                       <MobileCaption>Duration</MobileCaption>
-                      <MobileHeading>{item.duration} ago</MobileHeading>
+                      <MobileHeading>{item.duration}</MobileHeading>
                     </AccordionHeadingText>
                   </AccordionCardHeader>
                   <AccordionDetails

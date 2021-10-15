@@ -80,9 +80,7 @@ export const useInvestments = (data: {
                 profitLoss: profit.toFixed(),
                 profitLossInUSD: profitInUSD.toFixed(),
                 date_created: investor.date_created,
-                duration: moment
-                  .duration(moment().diff(moment(investor.date_created)))
-                  .humanize(),
+                duration: moment(investor.date_created).format("DD-MM-YYYY"),
               });
             }
           })
