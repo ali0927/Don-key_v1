@@ -9,13 +9,13 @@ const defaultOptions = {
     preserveAspectRatio: "xMidYMid slice",
   },
 };
-export default function RocketAnimation() {
+export const RocketAnimation = () => {
   return (
     <Lottie
-      style={{ maxWidth: "100%", pointerEvents: "none", height:50}}
-      speed={0.1}
+      style={{ width:'100%', height: 55,  pointerEvents: "none", }}
+       speed={0.2}
       isClickToPauseDisabled
       options={defaultOptions}
     />
   );
-}
+};
