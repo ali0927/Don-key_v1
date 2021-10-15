@@ -11,6 +11,7 @@ import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { Skeleton } from "@material-ui/lab";
+import RocketAnimation from "Animations/RocketAnimation/RocketAnimation";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -112,6 +113,10 @@ const StakeButton = styled.button`
   background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
   padding: 1rem 2rem;
   color: #fff;
+`;
+
+const LunchButton = styled.div`
+  background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
   font-weight: 500;
   border: 0;
   font-size: 12px;
@@ -167,6 +172,12 @@ export const MainSection: React.FC = () => {
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph>
+              <LunchButton className="mt-3 mt-lg-5" onClick={handleTakePart}>
+                <div className="d-flex">
+                  <RocketAnimation />
+                  <div> Lanuch APP</div>
+                </div>
+              </LunchButton>
               <StakeButton className="mt-3 mt-lg-5" onClick={handleTakePart}>
                 Stake LP token
               </StakeButton>
