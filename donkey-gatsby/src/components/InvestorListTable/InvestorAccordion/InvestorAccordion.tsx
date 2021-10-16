@@ -21,7 +21,7 @@ const EqualDiv = styled.div`
 `;
 
 export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
-  const { chainId, pool, poolAddress, tokenPrice } = props;
+  const { chainId, pool, poolAddress, tokenPrice, poolVersion } = props;
 
   const [pageNumber, setPageNumber] = React.useState<number>(1);
 
@@ -35,6 +35,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
     tokenPrice: tokenPrice,
     poolAddress: poolAddress,
     rowsLimit,
+    poolVersion,
   });
 
   const handlePageChange = (newPageNumber: number) => {

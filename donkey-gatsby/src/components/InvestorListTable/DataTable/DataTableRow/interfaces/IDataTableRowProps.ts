@@ -4,4 +4,5 @@ export interface IDataTableRowProps {
   investment: IInvestment;
   chainId: number;
   poolAddress: string;
+  poolVersion: number;
 }
