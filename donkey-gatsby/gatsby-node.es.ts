@@ -137,6 +137,9 @@ export const createPages = async ({ graphql, actions }: any) => {
             apy
             active
             description
+            blacklist {
+              address
+            }
             farmer {
               status
               name
@@ -218,6 +221,9 @@ export const createPages = async ({ graphql, actions }: any) => {
             swapInFees
             swapOutFees
             description
+            blacklist {
+              address
+            }
             strategyImage {
               url
             }
