@@ -127,10 +127,6 @@ export default function Dashboard() {
     }
   `);
 
-  useEffect(() => {
-    sendEvent({eventAction: "load", eventLabel: "Test", eventCategory: "Loading Events"})
-  }, [])
-
   const tokens: IStrapiToken[] = data.allStrapiTokens.nodes.filter(
     (item: any) => {
       const isActive = item.status === "active";
