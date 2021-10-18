@@ -10,34 +10,33 @@ const InvestmentRoot = styled.div({
 
 const InvestmentCurrencys = styled.div`
   font-weight: bold;
-  font-size:20px;
-  background-color:#F9FAFB;
-  border-radius:10px;
-  height:60px;
+  font-size: 20px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  height: 60px;
   padding: 0.4rem 0.8rem 0.5rem 0rem;
   display: flex;
   align-items: center;
   white-space: nowrap;
   @media only screen and (max-width: 600px) {
-    height:43px;
+    height: 43px;
     padding: 0.65rem 0.8rem 0.5rem 0rem;
   }
-  
-`
+`;
 
 const InvestmentInputElement = styled.input`
   border: none;
-  background-color:#F9FAFB;
+  background-color: #f9fafb;
   height: 100%;
   width: 100%;
   font-weight: bold;
-  padding: 0.5rem 0.02rem 0.5rem 0.5rem;
-  font-size:20px;
+  padding: 0.5rem 0.3rem 0.5rem 0.5rem;
+  font-size: 20px;
   text-align: right;
-  ::placeholder { 
-  color: #070602;
-  opacity: 1; 
-}
+  ::placeholder {
+    color: #606060;
+    opacity: 1;
+  }
   -moz-appearance: textfield;
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -53,18 +52,16 @@ const InvestmentInputElement = styled.input`
 `;
 const InvestmentCurrency = styled.div`
   font-weight: bold;
-  background-color:#F9FAFB;
-  border-radius:10px;
-  height:60px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  height: 60px;
   padding: 0.5rem 0.8rem;
   white-space: nowrap;
   display: flex;
   align-items: center;
   @media only screen and (max-width: 600px) {
-    height:43px;
+    height: 43px;
   }
-  
-  
 `;
 
 const InvestmentPrecentage = styled.div`
@@ -72,9 +69,9 @@ const InvestmentPrecentage = styled.div`
   font-weight: 600;
   padding-top: 15px;
   color: #a8a8a8;
-  padding-bottom:12px;
+  padding-bottom: 12px;
   @media only screen and (max-width: 600px) {
-    height:43px;
+    height: 43px;
     padding-top: 7px;
   }
 `;
@@ -96,15 +93,19 @@ const Buttonsection = styled.div`
 `;
 
 export const InvestmentInput = ({
-  value,
   tokenPrice,
-  setValue,
+  max,
   currencySymbol,
   disabled,
   srcimg,
+  value,
+  setValue,
+  loadingTokens,
 }: {
-  srcimg:string;
-  tokenPrice:string,
+  loadingTokens: boolean;
+
+  srcimg: string;
+  tokenPrice: string;
   value: string;
   setValue: (val: string) => void;
   max: string;
@@ -112,26 +113,41 @@ export const InvestmentInput = ({
   disabled?: boolean;
   hidePercent?: boolean;
 }) => {
+  const handleValue = (value: string) => {
+    setValue(value);
+  };
+
   return (
     <>
       <Buttonsection className="w-100 ">
-        <Investmentbutton className="btn ">
+        <Investmentbutton
+          className="btn "
+          onClick={() => {
+            handleValue(max);
+          }}
+        >
           <p>MAX</p>
         </Investmentbutton>
       </Buttonsection>
       <div className="w-100">
         <InvestmentRoot>
           <InvestmentCurrency>
-          <img style={{ width: 18 }} src={srcimg} alt="token" />{" "}
+            <img
+              style={{ width: 18 }}
+              src={loadingTokens ? " " : srcimg}
+              alt="token"
+            />{" "}
           </InvestmentCurrency>
           <div className="w-100">
             <InvestmentInputElement
               type="number"
-              placeholder="0.000000"
+              placeholder="0.00"
               min={0}
               value={value}
               disabled={disabled}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
             />
           </div>
           <InvestmentCurrencys>
@@ -140,7 +156,9 @@ export const InvestmentInput = ({
         </InvestmentRoot>
 
         <InvestmentPrecentage className="text-right ">
-          <p>~ ${new BigNumber(value || 0).multipliedBy(tokenPrice).toFixed(2)}</p>
+          <p>
+            ~ ${new BigNumber(value || 0).multipliedBy(tokenPrice).toFixed(2)}
+          </p>
         </InvestmentPrecentage>
       </div>
     </>
