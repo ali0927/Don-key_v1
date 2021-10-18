@@ -15,7 +15,6 @@ import { useInvestments } from "../hooks";
 import { Spinner } from "react-bootstrap";
 
 import styled from "styled-components";
-import { TableHeadingToolTip } from "../ToolTip";
 
 const EqualDiv = styled.div`
   flex: 1;
@@ -86,21 +85,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
                     </EqualDiv>
 
                     <AccordionHeadingText>
-                      <MobileCaption>
-                        {poolAddress ===
-                          "0x965534Bd90e2A2135756f60F97798B833E461739" && (
-                          <TableHeadingToolTip
-                            label="Duration"
-                            position="left"
-                            message="Pool contract has been updated to V2 on 18/10/2021. Investor list data
-is on-chain based."
-                          />
-                        )}
-                        {poolAddress !==
-                          "0x965534Bd90e2A2135756f60F97798B833E461739" && (
-                          <>Duration</>
-                        )}
-                      </MobileCaption>
+                      <MobileCaption>Duration</MobileCaption>
                       <MobileHeading>{item.duration}</MobileHeading>
                     </AccordionHeadingText>
                   </AccordionCardHeader>
