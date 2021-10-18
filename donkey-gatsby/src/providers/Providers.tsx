@@ -27,7 +27,7 @@ export const Providers: React.FC = ({ children }) => {
           charSet="UTF-8"
           href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
         />
-        
+
         <link
           rel="stylesheet"
           type="text/css"
@@ -39,21 +39,20 @@ export const Providers: React.FC = ({ children }) => {
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossOrigin="anonymous"
         /> */}
+
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-92MQHF1VSY"
-        />
+          src="https://www.googletagmanager.com/gtag/js?id=G-KWY1LD19HE"
+        ></script>
         <script>
-          {`  window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
+          {` window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
-      gtag("config", "G-92MQHF1VSY");`}
+  gtag('config', 'G-KWY1LD19HE');`}
         </script>
 
-        <script>
+        {/* <script>
           {`  (function (w, d, s, l, i) {
         w[l] = w[l] || [];
         w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -64,7 +63,7 @@ export const Providers: React.FC = ({ children }) => {
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
       })(window, document, "script", "dataLayer", "GTM-WFXZ83K");`}
-        </script>
+        </script> */}
         {/* <link
           rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
