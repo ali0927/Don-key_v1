@@ -10,8 +10,7 @@ import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
-import { Skeleton } from "@material-ui/lab";
-import { Slide } from "./Slide";
+import { SlideShow } from "./SlideShow";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -63,43 +62,12 @@ const Paragraph = styled.p`
   }
 `;
 
-const FooterHeading = styled.div`
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: center;
-`;
-
-const FooterSubHeading = styled.h1`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  margin-top: 13px;
-`;
-
 const FooterRow = styled.div`
-  width: 100%;
-`;
+   width: 100%;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    width: 60%;
+  }`;
 
-const Col = styled.div``;
-
-const GrayBorder = styled.hr`
-  position: absolute;
-  width: 85%;
-  border-top: 1.8px dashed#000D09;
-  top: 2px;
-  margin: 0px;
-  margin-left: 15px;
-`;
-
-const DarkBorder = styled.div`
-  width: 29px;
-  height: 5px;
-  background: #000;
-`;
 
 const ETH_PRICE = gql`
   query bundle {
@@ -178,31 +146,54 @@ export const MainSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="d-flex pb-3 pb-md-5 justify-content-start">
-            <FooterRow className="row position-relative">
-              <GrayBorder className="d-none d-md-block" />
-              <Slide
-                label="DON price"
-                isLoading={loading}
-                value={finalDerivedEth}
-              />
+          <div className=" pb-3 pb-md-5 ">
+            <FooterRow className="position-relative">
 
-              <Slide
-                label="24-hour volume"
-                isLoading={loading}
-                value={volume24hrs.toString()}
-              />
+            <SlideShow
+                slides={[
+                  {
+                    label: "DON price",
+                    value: finalDerivedEth,
+                    isLoading: loading,
+                  },
+                  {
+                    label: "24-hour volume",
+                    value: volume24hrs.toString(),
+                    isLoading: loading,
+                  },
+                  {
+                    label: "Market Cap",
+                    value: marketCap,
+                    isLoading: loading,
+                  },
 
-              <Slide label="Market Cap" isLoading={loading} value={marketCap} />
+                  {
+                    label: "TVL",
+                    value: finalDerivedEth,
+                    isLoading: loading,
+                  },
+                  {
+                    label: "Users",
+                    value: volume24hrs.toString(),
+                    isLoading: loading,
+                  },
+                  {
+                    label: "Strategies",
+                    value: marketCap,
+                    isLoading: loading,
+                  },
+                ]}
+              />
 
               {/* <Slide label="TVL" isLoading={loading} value={marketCap} />
               <Slide label="Users" isLoading={loading} value={marketCap} />
 
               <Slide label="Strategies" isLoading={loading} value={marketCap} /> */}
-
-              
-         
             </FooterRow>
+          </div>
+
+          <div>
+        
           </div>
         </div>
       </Root>

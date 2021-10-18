@@ -30,7 +30,7 @@ export const Slide: React.FC<ISlideProps> = (props) => {
   const { isLoading, label, value } = props;
 
   return (
-    <div className="col-md-2 mb-4 position-relative d-flex flex-column align-items-start">
+    <div className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
       <DarkBorder />
       <FooterHeading className="mt-4">{label}</FooterHeading>
       <FooterSubHeading>
