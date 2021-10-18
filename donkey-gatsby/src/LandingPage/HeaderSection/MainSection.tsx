@@ -11,7 +11,6 @@ import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { Skeleton } from "@material-ui/lab";
-import { RocketAnimation } from "../../Animations";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 const Root = styled.div`
@@ -112,7 +111,8 @@ const ETH_PRICE = gql`
 `;
 
 const LaunchButton = styled.button`
-  background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
+  background: #222222;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
   padding: 1rem 2rem;
   color: #fff;
   font-weight: 500;
