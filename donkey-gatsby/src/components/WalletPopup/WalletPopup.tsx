@@ -71,7 +71,7 @@ const WalletPopup = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <DonCommonmodal
-      title={"Connect Wallet"}
+      title={"Select a Wallet"}
       variant="common"
       subtitle={" "}
       contentStyle={{ padding: 30 }}
