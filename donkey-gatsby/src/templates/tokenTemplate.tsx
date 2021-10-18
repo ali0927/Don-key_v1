@@ -144,10 +144,11 @@ export default function TokenPage({
                 <div className="col-md-8">
                   <p className="mb-5">
                     <ShowMoreContent
+                      isShowLinks
                       content={
                         description ||
                         `We will run 2 main strategies:1) a long and short algo on BTC, w/ a Sortino of 5.5 (will post new backtest chart shortly, but it performs better).
-2) Active discretionary trading both long / short across all synthetic assets combining fundamental, technical`
+2) Active discretionary trading both long / short across all synthetic assets combining fundamental, technical `
                       }
                       length={150}
                     />
