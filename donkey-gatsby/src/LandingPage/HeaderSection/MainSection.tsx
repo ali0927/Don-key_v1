@@ -4,7 +4,11 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
-import { convertToInternationalCurrencySystem } from "helpers";
+import {
+  captureException,
+  convertToInternationalCurrencySystem,
+  getPoolContract,
+} from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
@@ -12,7 +16,7 @@ import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { SlideShow } from "./SlideShow";
 import { graphql, useStaticQuery } from "gatsby";
-import { useWeb3Context } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 import { forEach } from "lodash";
 const Root = styled.div`
   background-color: #fff037;
@@ -110,31 +114,63 @@ export const MainSection: React.FC = () => {
         allStrapiFarmers(filter: { active: { eq: true } }) {
           totalCount
           nodes {
-            name
-            farmer {
-              poolAddress
+            poolAddress
+            network {
+              chainId
             }
+            name
           }
         }
       }
     `
   );
 
+  const [usersCount, setUsersCount] = React.useState(0);
+  const [userLoading, setUserLoading] = React.useState(false);
+
   const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
 
-  console.log("------------",Strategies)
-  const { getConnectedWeb3, connected, address } = useWeb3Context();
+  const updateUsersCount = async () => {
+    let finalCount = 0;
+    setUserLoading(true);
+    for (let farmer of Strategies.allStrapiFarmers.nodes) {
+      const web3 = getWeb3(farmer.network.chainId);
+      const pool = await getPoolContract(web3, farmer.poolAddress, 2);
+      try {
+        const count = await pool.methods.getInvestorCount().call();
+        finalCount = finalCount + Number(count);
+      } catch (e) {
+        captureException(e, "InvestorCountContract");
+      }
+    }
+    localStorage.setItem(
+      "don-key-users",
+      JSON.stringify({ count: finalCount, dateOfSaved: new Date() })
+    );
+    setUsersCount(finalCount);
+    setUserLoading(false);
+  };
 
-  React.useEffect(()=>{
-    (async()=>{
-       const poolAddress: string[] =[];
-      forEach(Strategies.allStrapiFarmers.nodes,(item)=>{
-          poolAddress.push(item.farmer.poolAddress);
-      })
-      console.log(poolAddress)
-      const web3 = getConnectedWeb3();
-    })()
-  },[])
+  React.useEffect(() => {
+    (async () => {
+      const data = localStorage.getItem("don-key-users");
+      if (data) {
+        const users = JSON.parse(data);
+        const newDate = new Date().getTime();
+        const existingDate = new Date(users.dateOfSaved).getTime();
+        const diff = newDate - existingDate;
+        const diffMins = Math.round(diff / 60000);
+        if (diffMins > 10) {
+          await updateUsersCount();
+        } else {
+          const users = JSON.parse(data);
+          setUsersCount(users.count);
+        }
+      } else {
+        await updateUsersCount();
+      }
+    })();
+  }, []);
 
   const circulatingSupply = coingecko
     ? coingecko.market_data.circulating_supply
@@ -212,8 +248,8 @@ export const MainSection: React.FC = () => {
                   },
                   {
                     label: "Users",
-                    value: volume24hrs.toString(),
-                    isLoading: loading,
+                    value: usersCount,
+                    isLoading: userLoading,
                     symbol: "",
                   },
                   {
