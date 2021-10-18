@@ -121,9 +121,13 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
+    graphUrl,
     slug,
     farmerImage: { url: picture },
+    oldPoolAddress,
+    oldPoolVersion,
   } = farmer;
+
 
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);
@@ -229,11 +233,7 @@ export const FarmerBio = ({
                   {description.length > 0 && (
                     <>
                       <div className="d-flex justify-content-between">
-                        <StrategyName>
-                          {strategies && strategies.length > 0
-                            ? strategies[0].name
-                            : "Description"}
-                        </StrategyName>
+                        <StrategyName>{strategyName}</StrategyName>
                         <div className="d-none d-lg-block">
                           <div className="mr-3">
                             {twitter && (
@@ -273,6 +273,8 @@ export const FarmerBio = ({
               apy={apy}
               network={network}
               tvl={tvl}
+              oldPoolAddress={oldPoolAddress}
+              oldPoolVersion={oldPoolVersion}
               poolVersion={pool_version}
               poolAddress={poolAddress}
               boostApy={boostApy}

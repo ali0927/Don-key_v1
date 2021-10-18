@@ -6,18 +6,16 @@ import {
   TableRow,
   TableHeading,
   TableBody,
-  TableData,
 } from "components/Table";
 import { Paginate } from "components/Paginate";
 import { IDataTableProps } from "./interfaces";
 import { DataTableRow } from "./DataTableRow";
-import { IInvestment, IInvestorsAPIData } from "../interfaces/IInvestors";
 import { useInvestments } from "../hooks";
 import { Spinner } from "react-bootstrap";
 import clsx from "clsx";
 
 export const DataTable: React.FC<IDataTableProps> = (props) => {
-  const { poolAddress, chainId, pool, tokenPrice } = props;
+  const { poolAddress, chainId, pool, tokenPrice, poolVersion } = props;
 
   const [pageNumber, setPageNumber] = React.useState<number>(1);
 
@@ -31,6 +29,7 @@ export const DataTable: React.FC<IDataTableProps> = (props) => {
     tokenPrice: tokenPrice,
     poolAddress: poolAddress,
     rowsLimit,
+    poolVersion
   });
 
   const handlePageChange = (newPageNumber: number) => {
@@ -80,6 +79,7 @@ export const DataTable: React.FC<IDataTableProps> = (props) => {
                     investment={item}
                     chainId={chainId}
                     poolAddress={poolAddress}
+                    poolVersion={poolVersion}
                   />
                 );
               })}

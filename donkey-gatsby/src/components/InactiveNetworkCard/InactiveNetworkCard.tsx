@@ -143,7 +143,7 @@ export const InactiveNetworkCard = ({
           You’re connected to the wrong network! Change the network on your
           wallet to {correctNetwork.symbol}.
         </h6>
-        <Text className="mb-0" muted pointer>
+        <Text style={{cursor: 'context-menu'}} className="mb-0" muted>
           Click on switch to add or change network
         </Text>
       </div>

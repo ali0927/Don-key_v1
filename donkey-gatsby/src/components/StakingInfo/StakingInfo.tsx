@@ -13,6 +13,7 @@ import { getDonPriceWeb3 } from "helpers";
 import { getWeb3 } from "don-components";
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 import Questionmark from "components/Icons/Questionmark";
+import { useTimer } from "hooks/useTimer";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -248,6 +249,7 @@ const Root = styled.div`
   }
 `;
 
+
 export const StakingTimer = ({
   timerEnd,
   endMessage = <>Cool off period is over. Claim Tokens</>,
@@ -259,30 +261,7 @@ export const StakingTimer = ({
   title?: string;
   variant?: "light" | "dark";
 }) => {
-  const [days, setDays] = useState(0);
-  const [hrs, setHrs] = useState(0);
-  const [mins, setMins] = useState(0);
-  const [secs, setSecs] = useState(0);
-  const [hasEnded, setHasEnded] = useState(false);
-
-  const update = () => {
-    const endTime = moment.unix(timerEnd);
-    const duration = moment.duration(endTime.diff(moment()));
-    const isEnded = endTime.isBefore(moment());
-    setHasEnded(isEnded);
-    if (!isEnded) {
-      setHrs(duration.hours());
-      setMins(duration.minutes());
-      setSecs(duration.seconds());
-      setDays(duration.days());
-    }
-  };
-  useEffect(() => {
-    const interval = setInterval(update, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  const {days, hasEnded, hrs, mins, secs } = useTimer(timerEnd);
 
   if (hasEnded) {
     return <TimerHeading>{endMessage}</TimerHeading>;

@@ -42,9 +42,9 @@ export const DataTableRow: React.FC<IDataTableRowProps> = (props) => {
           {/* <TotalProfitLoss poolAddress={poolAddress} address={item} /> */}
         </TableData>
         <TableData style={{ textAlign: "center" }}>
-          {investment.duration} ago
+          {investment.duration}
         </TableData>
-      </TableRow>      
+      </TableRow>
     </>
   );
 };

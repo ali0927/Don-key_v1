@@ -158,8 +158,11 @@ export const createPages = async ({ graphql, actions }: any) => {
       }
     }
   `);
+  
+ 
 
   const tokens = tokensdata.data.allStrapiTokens.nodes;
+
 
   tokens.forEach((token: any) => {
     const strategies = sortStrategies(
@@ -186,10 +189,10 @@ export const createPages = async ({ graphql, actions }: any) => {
         nodes {
           name
           description
+          graphUrl
           farmerImage {
             url
           }
-          active
           twitter
           telegram
           guid
@@ -198,6 +201,8 @@ export const createPages = async ({ graphql, actions }: any) => {
           performancefee
           poolAddress
           poolVersion
+          oldPoolAddress
+          oldPoolVersion
           network {
             name
             chainId
@@ -227,7 +232,6 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   const farmers = farmersResp.data.allStrapiFarmers.nodes;
   const tvl = await calcSumOfAllPoolValues();
-
   
   farmers.forEach((farmer: any) => {
     const strategies = farmer.strategies;

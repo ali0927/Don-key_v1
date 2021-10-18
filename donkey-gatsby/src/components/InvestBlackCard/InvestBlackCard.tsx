@@ -6,6 +6,7 @@ import { TotalProfitLoss } from "components/TotalProfitLoss";
 import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import {
+  captureException,
   formatNum,
   getAmount,
   getPoolContract,
@@ -18,7 +19,7 @@ import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { DollarView } from "components/DollarView";
 import { useRefresh } from "components/LotteryForm/useRefresh";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { OverlayTrigger, Spinner, Tooltip } from "react-bootstrap";
 import clsx from "clsx";
 import { AssignLpTokens } from "./AssignLpTokens";
 import { UpdatePoolDialog } from "./UpdatePoolDialog";
@@ -35,23 +36,31 @@ import { LPShareIcon, ProfitIcon } from "icons";
 import { INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
+import { api } from "strapi";
+
 
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
   network,
   boostApy,
+  oldPoolAddress,
+  oldPoolVersion,
+  isWithdrawRequested,
 }: {
   poolAddress: string;
   poolVersion: number;
   network: INetwork;
+  oldPoolAddress: string;
+  oldPoolVersion: number;
   boostApy: boolean;
+  isWithdrawRequested?: boolean;
 }) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false);
-  const { getIsInvested, isInvested } = useIsInvested(poolAddress);
+  const [isInvested, setIsInvested] = useState(false);
   const [currentHoldings, setCurrentHoldings] = useState("0");
 
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
@@ -66,27 +75,35 @@ export const InvestBlackCard = ({
   const web3 = getConnectedWeb3();
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
-      const poolContract = await getPoolContract(
-        web3,
-        poolAddress,
-        poolVersion
-      );
-      const farmerAddress = await poolContract.methods
-        .getFarmerAddress()
-        .call();
-      const accounts = await web3.eth.getAccounts();
-      if (farmerAddress === accounts[0]) {
-        setIsFarmer(true);
+      try {
+        const poolContract = await getPoolContract(
+          web3,
+          poolAddress,
+          poolVersion
+        );
+        const farmerAddress =
+          poolVersion === 4
+            ? await poolContract.methods.adminAddress().call()
+            : await poolContract.methods.getFarmerAddress().call();
+        const accounts = await web3.eth.getAccounts();
+        if (farmerAddress === accounts[0]) {
+          setIsFarmer(true);
+        }
+        const poolToken = await getPoolToken(web3, poolAddress);
+        const poolTokenAmount = await poolToken.methods
+          .balanceOf(poolAddress)
+          .call();
+        const decimals = await poolToken.methods.decimals().call();
+        setTokeninPool(toEther(poolTokenAmount, decimals));
+      } catch (e: any) {
+        console.log(e.message, "Error In Farmer");
       }
-      const poolToken = await getPoolToken(web3, poolAddress);
-      const poolTokenAmount = await poolToken.methods
-        .balanceOf(poolAddress)
-        .call();
-      const decimals = await poolToken.methods.decimals().call();
-      setTokeninPool(toEther(poolTokenAmount, decimals));
     }
   };
-
+  const hasOldPool = oldPoolAddress && oldPoolAddress.length > 10;
+  const [isMigrated, setIsMigrated] = useState(false);
+  const [investedInOldPool, setInvestedInOldPool] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [withdrawLp, setWithdrawLp] = useState(new BigNumber("0"));
 
   const [totalLp, setTotalLp] = useState(new BigNumber("0"));
@@ -107,24 +124,63 @@ export const InvestBlackCard = ({
     }
   };
 
-  useEffect(() => {
-    async function apiCall() {
-      if (address) {
-        let withdrawAmount = await await getAmount(web3, poolAddress, address);
+  const getInvestorInfo = async () => {
+    if (address) {
+      const contract = await getPoolContract(web3, poolAddress, poolVersion);
+      let investedInOldPool = false;
+      let isMigrated = false;
+      let isInvested = false;
+      if (hasOldPool) {
+        const oldPool = await getPoolContract(
+          web3,
+          oldPoolAddress,
+          oldPoolVersion
+        );
 
-        setCurrentHoldings(withdrawAmount);
-        getIsInvested();
-
-        fetchRoi();
+        investedInOldPool = await oldPool.methods.isInvestor(address).call();
       }
+
+      isInvested = await contract.methods.isInvestor(address).call();
+      if (isInvested && investedInOldPool) {
+        isMigrated = true;
+      }
+
+      setIsInvested(isInvested);
+      setInvestedInOldPool(investedInOldPool);
+      setIsMigrated(isMigrated);
+      if (isInvested) {
+        let withdrawAmount = await getAmount(
+          web3,
+          poolAddress,
+          address,
+          poolVersion
+        );
+        setCurrentHoldings(withdrawAmount);
+      }
+      if (investedInOldPool && !isMigrated) {
+        let withdrawAmount = await getAmount(
+          web3,
+          oldPoolAddress,
+          address,
+          oldPoolVersion
+        );
+        setCurrentHoldings(withdrawAmount);
+      }
+
+      await fetchRoi();
+      if (process.env.GATSBY_SHOW_ADMIN) {
+        checkIsFarmer();
+        fetchWithdrawShare();
+      }
+      setIsReady(true);
     }
-    apiCall();
-    if (process.env.GATSBY_SHOW_ADMIN) {
-      checkIsFarmer();
-      fetchWithdrawShare();
-    }
+  };
+
+  useEffect(() => {
+    getInvestorInfo();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dependsOn]);
+  }, [dependsOn, address]);
 
   const onSuccess = () => {
     setShowWithdrawPopup(false);
@@ -162,6 +218,7 @@ export const InvestBlackCard = ({
                 chainId={network.chainId}
                 refresh={dependsOn % 2 == 0}
                 poolAddress={poolAddress}
+                poolVersion={poolVersion}
                 fromOverlay={true}
               />
             </Tooltip>
@@ -192,30 +249,29 @@ export const InvestBlackCard = ({
   };
 
   const takeMoney = async () => {
-    if (poolVersion === 3 || poolVersion === 4) {
-      const poolContract = await getPoolContract(
-        web3,
-        poolAddress,
-        poolVersion
-      );
-      const accounts = await web3.eth.getAccounts();
+    const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
+    const accounts = await web3.eth.getAccounts();
+    if (poolVersion === 3) {
       await poolContract.methods.getGreyAmount().send({ from: accounts[0] });
-      refresh();
+    } else {
+      await poolContract.methods.sendToFarm().send({ from: accounts[0] });
     }
+    refresh();
   };
   const takeExtraMoney = async () => {
-    if (poolVersion === 3 || poolVersion === 4) {
-      const poolContract = await getPoolContract(
-        web3,
-        poolAddress,
-        poolVersion
-      );
-      const accounts = await web3.eth.getAccounts();
+    const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
+    const accounts = await web3.eth.getAccounts();
+    if (poolVersion === 3) {
       await poolContract.methods
         .getInvestedAmount()
         .send({ from: accounts[0] });
-      refresh();
+    } else {
+      await poolContract.methods
+        .getStuckInvestedAmount()
+        .send({ from: accounts[0] });
     }
+
+    refresh();
   };
 
   const renderFarmerUI = () => {
@@ -345,6 +401,85 @@ export const InvestBlackCard = ({
       }
     }
   };
+
+  const migrateUser = async () => {
+    const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
+
+    await poolContract.methods
+      .migrateUser(oldPoolAddress)
+      .send({ from: address });
+    refresh();
+
+    await api.post("/api/v2/investments", {
+      poolAddress,
+      walletAddress: address,
+    });
+  };
+
+  const renderButtons = () => {
+    if (hasOldPool && investedInOldPool && !isMigrated) {
+      return (
+        <div className="row mt-2 mb-1 justify-content-center">
+          <div className="p-3 text-center">
+            The Pool has been upgraded in order to invest or withdraw you have
+            to migrate you previous holdings to new pool.
+          </div>
+          <ButtonWidget
+            varaint="contained"
+            fontSize="14px"
+            className={clsx("mb-2", { "mr-3": isInvested })}
+            containedVariantColor="lightYellow"
+            height="30px"
+            width="132px"
+            onClick={migrateUser}
+          >
+            Upgrade
+          </ButtonWidget>
+        </div>
+      );
+    }
+    return (
+      <div className="row mt-2 mb-1 justify-content-center">
+        {!isWithdrawRequested && (
+          <ButtonWidget
+            varaint="contained"
+            fontSize="14px"
+            className={clsx("mb-2", { "mr-3": isInvested })}
+            containedVariantColor="lightYellow"
+            height="30px"
+            width="132px"
+            onClick={() => setShowInvestmentPopup(true)}
+          >
+            Invest
+          </ButtonWidget>
+        )}
+
+        {isInvested && !isWithdrawRequested && (
+          <ButtonWidget
+            fontSize="14px"
+            varaint="contained"
+            height="30px"
+            containedVariantColor="lightYellow"
+            width="132px"
+            onClick={() => setShowWithdrawPopup(true)}
+          >
+            Withdraw
+          </ButtonWidget>
+        )}
+
+        {network.symbol === "BSC" && boostApy && (
+          <BoostButton className="ml-3 d-none d-md-block " />
+        )}
+      </div>
+    );
+  };
+  if (!isReady) {
+    return (
+      <div className="text-center h-100 pt-5 d-flex align-items-center justify-content-center">
+        <Spinner animation="border" />
+      </div>
+    );
+  }
   return (
     <>
       <CardInnerInfo className="d-flex justify-content-center mb-3">
@@ -352,7 +487,9 @@ export const InvestBlackCard = ({
           <>
             <CardLabel style={{ marginBottom: 20 }} color="white">
               {" "}
-              My Current Holdings{" "}
+              {hasOldPool && investedInOldPool && !isMigrated
+                ? "My Old Holdings"
+                : "My Current Holdings"}
             </CardLabel>
             <CardValue color="white" style={{ marginBottom: 30 }}>
               <DollarView
@@ -362,36 +499,7 @@ export const InvestBlackCard = ({
               />
             </CardValue>
           </>
-          <div className="row mt-2 mb-1 justify-content-center">
-            <ButtonWidget
-              varaint="contained"
-              fontSize="14px"
-              className={clsx("mb-2", { "mr-3": isInvested })}
-              containedVariantColor="lightYellow"
-              height="30px"
-              width="132px"
-              onClick={() => setShowInvestmentPopup(true)}
-            >
-              Invest
-            </ButtonWidget>
-
-            {isInvested && (
-              <ButtonWidget
-                fontSize="14px"
-                varaint="contained"
-                height="30px"
-                containedVariantColor="lightYellow"
-                width="132px"
-                onClick={() => setShowWithdrawPopup(true)}
-              >
-                Withdraw
-              </ButtonWidget>
-            )}
-
-            {network.symbol === "BSC" && boostApy && (
-              <BoostButton className="ml-3 d-none d-md-block " />
-            )}
-          </div>
+          {renderButtons()}
           {renderFarmerUI()}
         </div>
       </CardInnerInfo>
@@ -424,19 +532,29 @@ export const InvestBlackCard = ({
               </clipPath>
             </defs>
           </svg>,
-
           "white",
           4
         )}
 
         {getSecondCardColumns(
           "Profit/Loss",
-          <TotalProfitLoss
-            chainId={network.chainId}
-            refresh={dependsOn % 2 == 0}
-            poolAddress={poolAddress}
-            variant="multiline"
-          />,
+          hasOldPool && investedInOldPool && !isMigrated ? (
+            <TotalProfitLoss
+              chainId={network.chainId}
+              refresh={dependsOn % 2 == 0}
+              poolAddress={oldPoolAddress}
+              poolVersion={oldPoolVersion}
+              variant="multiline"
+            />
+          ) : (
+            <TotalProfitLoss
+              chainId={network.chainId}
+              refresh={dependsOn % 2 == 0}
+              poolAddress={poolAddress}
+              poolVersion={poolVersion}
+              variant="multiline"
+            />
+          ),
           <ProfitIcon className="mr-md-1" />,
           "white",
           4

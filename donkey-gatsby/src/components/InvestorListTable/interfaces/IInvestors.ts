@@ -15,3 +15,8 @@ export interface IInvestorsAPIData {
   to_pooladdress: string;
   date_created: string;
 }
+
+export interface IInvestorsFromGraph {
+  address: string;
+  timestamp: string;
+}

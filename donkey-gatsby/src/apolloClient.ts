@@ -30,3 +30,5 @@ export const thegraphClient = new ApolloClient({
  
   cache: new InMemoryCache(),
 });
+
+

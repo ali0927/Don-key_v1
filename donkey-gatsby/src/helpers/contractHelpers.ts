@@ -4,7 +4,6 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
-import {  waitFor } from "don-utils";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
@@ -46,19 +45,58 @@ export const getBSCDon = async (web3: Web3) => {
 export const getETHDon = async (web3: Web3) => {
   return await getERCContract(web3, DONTokenAddressEth);
 };
-export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
+
+const memoizeAsync = <T extends any[], V>(
+  func: (...args: T) => Promise<V>
+): ((...args: T) => Promise<V>) => {
+  const argsMap: {
+    [x: string]: { calledFunc: any; args: T; result: any };
+  } = {};
+  let count = 0;
+  const findIndex = (args: T) => {
+    let index = -1;
+    if (count === 0) {
+      return index;
+    }
+    for (let i = 1; i <= count; i++) {
+      if (isEqual(argsMap[i].args, args)) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  };
+  return async (...args: T) => {
+    let funcToCall = makeAsyncMultiCalled(func);
+    let index = -1;
+
+    index = findIndex(args);
+    if (index === -1) {
+      ++count;
+      argsMap[count] = { calledFunc: funcToCall, args, result: null };
+    } else {
+      funcToCall = argsMap[index].calledFunc;
+      if (argsMap[count].result) {
+        return argsMap[count].result;
+      }
+    }
+    const result = await funcToCall(...args);
+    return result;
+  };
+};
+export const getTokenAddress = memoizeAsync(async (web3: Web3, poolAddress: string) => {
   try {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
     ).methods
-      .getTokenAddress()
+      .getToken()
       .call();
     return tokenAddress;
   } catch (e) {
-    captureException(e, "getTokenAddress:"+ poolAddress)
+    captureException(e, "getTokenAddress:" + poolAddress);
     return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
   }
-};
+});
 //get DON BSC bridge contract
 export const getDONBSCbridgeContract = async (web3: Web3) => {
   const json = await import("../JsonData/DONBSCbridge.json");
@@ -80,7 +118,7 @@ export const getUserDons = async (web3: Web3, chainIds: number[]) => {
     }
   });
 
-  return await Promise.all(promises) as {balance: string; }[];
+  return (await Promise.all(promises)) as { balance: string }[];
 };
 //you only need to transfer DON to ETH bridge contract
 
@@ -268,44 +306,7 @@ const makeAsyncMultiCalled = <T extends any[], V>(
   };
 };
 
-const memoizeAsync = <T extends any[], V>(
-  func: (...args: T) => Promise<V>
-): ((...args: T) => Promise<V>) => {
-  const argsMap: {
-    [x: string]: { calledFunc: any; args: T; result: any };
-  } = {};
-  let count = 0;
-  const findIndex = (args: T) => {
-    let index = -1;
-    if (count === 0) {
-      return index;
-    }
-    for (let i = 1; i <= count; i++) {
-      if (isEqual(argsMap[i].args, args)) {
-        index = i;
-        break;
-      }
-    }
-    return index;
-  };
-  return async (...args: T) => {
-    let funcToCall = makeAsyncMultiCalled(func);
-    let index = -1;
 
-    index = findIndex(args);
-    if (index === -1) {
-      ++count;
-      argsMap[count] = { calledFunc: funcToCall, args, result: null };
-    } else {
-      funcToCall = argsMap[index].calledFunc;
-      if (argsMap[count].result) {
-        return argsMap[count].result;
-      }
-    }
-    const result = await funcToCall(...args);
-    return result;
-  };
-};
 
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
@@ -346,11 +347,11 @@ export const getTokenPrice = memoizeAsync(
   }
 );
 
-export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
+export const getTokenSymbol = memoizeAsync(async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
-  await waitFor(100);
+
   return (await token.methods.symbol().call()) as string;
-};
+});
 
 export const getTokenImage = async (web3: Web3, poolAddress: string) => {
   const tokenAddress = await getTokenAddress(web3, poolAddress);
@@ -365,21 +366,24 @@ const getPoolJSON = async (version: number) => {
     return await import("../JsonData/advanced-pool.json");
   }
 
-  if (version === 3 || version === 4) {
+  if (version === 3 ) {
     return await import("../JsonData/pool-manual.json");
+  }
+  if(version === 4){
+    return await import("../JsonData/pool-v4.json");
   }
   return await import("../JsonData/pool2.json");
 };
 
-export const getPoolContract = async (
+export const getPoolContract = memoizeAsync(async (
   web3: Web3,
   poolAddress: string,
   version: number
 ) => {
-  await waitFor(100);
+
   const POOLJson = await getPoolJSON(version);
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
-};
+});
 
 export const getIBUSDContract = async (web3: Web3) => {
   if (ibusdContract) {
@@ -461,18 +465,28 @@ export const getBUSDBalance = async (web3: Web3, address: string) => {
 export const getAmount = async (
   web3: Web3,
   poolAddress: string,
-  address: string
+  address: string,
+  version = 2,
+  percent = 100
 ) => {
-  const poolContract = await getPoolContract(web3, poolAddress, 2);
+  const poolContract = await getPoolContract(web3, poolAddress, version);
   try {
-    const claimableAmount = await poolContract.methods
-      .getFinalClaimableAmount(address)
-      .call();
+    let claimableAmount = "0";
+    if (version < 4) {
+      claimableAmount = await poolContract.methods
+        .getFinalClaimableAmount(address)
+        .call();
+    } else {
+      claimableAmount = await poolContract.methods
+        .getFinalClaimableAmount(address, percent * 100)
+        .call();
+    }
+
     const token = await getPoolToken(web3, poolAddress);
     const decimals = await token.methods.decimals().call();
     return toEther(claimableAmount, decimals);
   } catch (e) {
-    captureException(e, `getAmount: Pool: ${poolAddress}`)
+    captureException(e, `getAmount: Pool: ${poolAddress}`);
     return "0";
   }
 };
@@ -492,7 +506,7 @@ export const calculateUserClaimableAmount = async (
 ) => {
   const accounts = account ? [account] : await web3.eth.getAccounts();
   const poolContract = await getPoolContract(web3, poolAddress, 2);
- 
+
   try {
     const claimableAmount = await poolContract.methods
       .getInvestorClaimableAmount(accounts[0])
@@ -500,7 +514,7 @@ export const calculateUserClaimableAmount = async (
 
     return toEther(claimableAmount);
   } catch (e) {
-    console.log(account, poolAddress)
+    console.log(account, poolAddress);
     captureException(e, "calculateUserClaimableAmount");
     return "0";
   }
@@ -534,12 +548,12 @@ query allFarmerQuery {
 
 export const calcSumOfAllPoolValues = memoizeAsync(async () => {
   let allPoolValues = new BigNumber(0);
-  const resp = await strapi.post("/graphql", {query: ALL_FARMERS_QUERY})
+  const resp = await strapi.post("/graphql", { query: ALL_FARMERS_QUERY });
   const list = resp.data.data.farmers.map(async (farmer: any) => {
     const web3 = getWeb3(farmer.network.chainId);
     const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
     allPoolValues = allPoolValues.plus(poolValue);
-  })
+  });
   await Promise.all(list);
   console.log(allPoolValues.toFixed(2), "TVL");
   return allPoolValues.toFixed(2);
@@ -575,13 +589,13 @@ export const calculateInitialInvestmentInUSD = async (
     const amount = new BigNumber(toEther(initialAmount, decimals)).toString();
     return amount;
   } catch (e) {
-    captureException(e,"calculateUserClaimableAmount")
+    captureException(e, "calculateUserClaimableAmount");
     const initialInvestment = await calculateInitialInvestment(
       web3,
       poolAddress,
       address
     );
-   
+
     const tokenPrice = await getTokenPrice(web3, poolAddress);
     return new BigNumber(initialInvestment).multipliedBy(tokenPrice).toFixed(2);
   }
