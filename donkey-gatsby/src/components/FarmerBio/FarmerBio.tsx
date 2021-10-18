@@ -121,11 +121,13 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
+    graphUrl,
     slug,
     farmerImage: { url: picture },
     oldPoolAddress,
     oldPoolVersion,
   } = farmer;
+
 
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);

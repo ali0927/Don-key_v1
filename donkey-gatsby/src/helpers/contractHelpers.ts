@@ -4,7 +4,6 @@ import BigNumber from "bignumber.js";
 import Web3 from "web3";
 import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
-import { waitFor } from "don-utils";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
@@ -46,7 +45,46 @@ export const getBSCDon = async (web3: Web3) => {
 export const getETHDon = async (web3: Web3) => {
   return await getERCContract(web3, DONTokenAddressEth);
 };
-export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
+
+const memoizeAsync = <T extends any[], V>(
+  func: (...args: T) => Promise<V>
+): ((...args: T) => Promise<V>) => {
+  const argsMap: {
+    [x: string]: { calledFunc: any; args: T; result: any };
+  } = {};
+  let count = 0;
+  const findIndex = (args: T) => {
+    let index = -1;
+    if (count === 0) {
+      return index;
+    }
+    for (let i = 1; i <= count; i++) {
+      if (isEqual(argsMap[i].args, args)) {
+        index = i;
+        break;
+      }
+    }
+    return index;
+  };
+  return async (...args: T) => {
+    let funcToCall = makeAsyncMultiCalled(func);
+    let index = -1;
+
+    index = findIndex(args);
+    if (index === -1) {
+      ++count;
+      argsMap[count] = { calledFunc: funcToCall, args, result: null };
+    } else {
+      funcToCall = argsMap[index].calledFunc;
+      if (argsMap[count].result) {
+        return argsMap[count].result;
+      }
+    }
+    const result = await funcToCall(...args);
+    return result;
+  };
+};
+export const getTokenAddress = memoizeAsync(async (web3: Web3, poolAddress: string) => {
   try {
     const tokenAddress = await (
       await getPoolContract(web3, poolAddress, 2)
@@ -58,7 +96,7 @@ export const getTokenAddress = async (web3: Web3, poolAddress: string) => {
     captureException(e, "getTokenAddress:" + poolAddress);
     return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
   }
-};
+});
 //get DON BSC bridge contract
 export const getDONBSCbridgeContract = async (web3: Web3) => {
   const json = await import("../JsonData/DONBSCbridge.json");
@@ -268,44 +306,7 @@ const makeAsyncMultiCalled = <T extends any[], V>(
   };
 };
 
-const memoizeAsync = <T extends any[], V>(
-  func: (...args: T) => Promise<V>
-): ((...args: T) => Promise<V>) => {
-  const argsMap: {
-    [x: string]: { calledFunc: any; args: T; result: any };
-  } = {};
-  let count = 0;
-  const findIndex = (args: T) => {
-    let index = -1;
-    if (count === 0) {
-      return index;
-    }
-    for (let i = 1; i <= count; i++) {
-      if (isEqual(argsMap[i].args, args)) {
-        index = i;
-        break;
-      }
-    }
-    return index;
-  };
-  return async (...args: T) => {
-    let funcToCall = makeAsyncMultiCalled(func);
-    let index = -1;
 
-    index = findIndex(args);
-    if (index === -1) {
-      ++count;
-      argsMap[count] = { calledFunc: funcToCall, args, result: null };
-    } else {
-      funcToCall = argsMap[index].calledFunc;
-      if (argsMap[count].result) {
-        return argsMap[count].result;
-      }
-    }
-    const result = await funcToCall(...args);
-    return result;
-  };
-};
 
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
@@ -346,11 +347,11 @@ export const getTokenPrice = memoizeAsync(
   }
 );
 
-export const getTokenSymbol = async (web3: Web3, poolAddress: string) => {
+export const getTokenSymbol = memoizeAsync(async (web3: Web3, poolAddress: string) => {
   const token = await getPoolToken(web3, poolAddress);
-  await waitFor(100);
+
   return (await token.methods.symbol().call()) as string;
-};
+});
 
 export const getTokenImage = async (web3: Web3, poolAddress: string) => {
   const tokenAddress = await getTokenAddress(web3, poolAddress);
@@ -374,15 +375,15 @@ const getPoolJSON = async (version: number) => {
   return await import("../JsonData/pool2.json");
 };
 
-export const getPoolContract = async (
+export const getPoolContract = memoizeAsync(async (
   web3: Web3,
   poolAddress: string,
   version: number
 ) => {
-  await waitFor(100);
+
   const POOLJson = await getPoolJSON(version);
   return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
-};
+});
 
 export const getIBUSDContract = async (web3: Web3) => {
   if (ibusdContract) {

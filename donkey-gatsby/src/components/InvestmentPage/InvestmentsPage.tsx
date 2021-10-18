@@ -777,6 +777,7 @@ export const InvestmentsPage = () => {
                             chainId={network}
                             refresh={refresh}
                             poolAddress={investment.poolAddress}
+                            poolVersion={investment.poolVersion}
                           />
                         </CustomTableData>
                         <CustomTableData>

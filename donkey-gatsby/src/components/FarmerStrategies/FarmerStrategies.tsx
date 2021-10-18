@@ -7,13 +7,12 @@ import { IFarmerInter } from "interfaces";
 
 import { breakPoints } from "breakponts";
 import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
-import { gql, useLazyQuery, useQuery } from "@apollo/client";
-import { useEffect, useRef, useState } from "react";
+import { gql, useLazyQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
 import { useWeb3Context } from "don-components";
 import {
   calculateInitialInvestment,
   getAmount,
-  getInvestedAmount,
   getPoolContract,
   getPoolToken,
   toEther,
@@ -110,13 +109,12 @@ const WithdrawRequest = ({
     const [walletAddress] = await web3.eth.getAccounts();
     const pool = await getPoolContract(web3, poolAddress, poolVersion);
     if (poolVersion === 3) {
-
       const isRequested = await pool.methods
         .isWithdrawalRequested(walletAddress)
         .call();
       if (isRequested) {
         const token = await getPoolToken(web3, poolAddress);
-      
+
         const currency = await token.methods.symbol().call();
         const amount = await getAmount(
           web3,
@@ -124,17 +122,20 @@ const WithdrawRequest = ({
           walletAddress,
           poolVersion
         );
-        const investedAmount = await calculateInitialInvestment(web3, poolAddress, walletAddress);
+        const investedAmount = await calculateInitialInvestment(
+          web3,
+          poolAddress,
+          walletAddress
+        );
         fetch({ variables: { poolAddress, walletAddress } });
         setCurrency(currency);
         setIsWithdrawRequested(isRequested);
-        console.log(isRequested, amount)
+        console.log(isRequested, amount);
         setAmountInToken(amount);
         setProfit(new BigNumber(amount).minus(investedAmount).toString());
       }
     }
     if (poolVersion === 4) {
-     
       const details = await pool.methods
         .getWithdrawalReqDetails(walletAddress)
         .call();
@@ -168,11 +169,11 @@ const WithdrawRequest = ({
 
   if (isWithdrawRequested) {
     if (loading || !data) {
-      console.log(data, isWithdrawRequested, "some")
+      console.log(data, isWithdrawRequested, "some");
       return Loader;
     } else {
       const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
-     
+
       const timeframe = data.farmers[0]?.withdrawTimeFrame || "12";
 
       return (
@@ -244,10 +245,14 @@ export const FarmerStrategies = ({
                     <p style={{ fontSize: 15 }}>{farmer.strategies[0].info}</p>
                   )}
                 </StrategyTableRoot>
-                <InvestorListTable
-                  chainId={farmer.network.chainId}
-                  poolAddress={farmer.poolAddress}
-                />
+                {farmer.graphUrl && (
+                  <InvestorListTable
+                    chainId={farmer.network.chainId}
+                    poolAddress={farmer.poolAddress}
+                    graphUrl={farmer.graphUrl}
+                    poolVersion={farmer.poolVersion}
+                  />
+                )}
               </Col>
             </Row>
           </Container>

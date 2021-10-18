@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { FaReddit } from "react-icons/fa";
 import styled from "styled-components";
 import { theme } from "theme";
+import { SiTiktok } from "react-icons/si";
 
 const CommunityRoot = styled.div`
   background: #222222;
@@ -74,6 +75,15 @@ const CommunityRoot = styled.div`
   }
 `;
 
+const Anchor = styled.a`
+  :hover {
+    transition: transform 0.55s;
+    & svg {
+      transform: scale(1.2);
+    }
+  }
+`;
+
 export const JoinCommunity: React.FC = () => {
   return (
     <>
@@ -83,7 +93,7 @@ export const JoinCommunity: React.FC = () => {
           <p className="mt-lg-5">Follow us on Social Media</p>
           <ul className="pl-0 mt-lg-3 pb-3">
             <li>
-              <a
+              <Anchor
                 href="https://don-key-finance.medium.com/"
                 target="_blank"
                 rel="noreferrer"
@@ -111,10 +121,10 @@ export const JoinCommunity: React.FC = () => {
                     </clipPath>
                   </defs>
                 </svg>
-              </a>
+              </Anchor>
             </li>
             <li>
-              <a
+              <Anchor
                 href="https://t.me/don_key_finance"
                 target="_blank"
                 rel="noreferrer"
@@ -142,19 +152,19 @@ export const JoinCommunity: React.FC = () => {
                     </clipPath>
                   </defs>
                 </svg>
-              </a>
+              </Anchor>
             </li>
             <li>
-              <a
+              <Anchor
                 href="https://www.coingecko.com/en/coins/don-key"
                 target="_blank"
                 rel="noreferrer"
               >
                 <CoingKoIcon />
-              </a>
+              </Anchor>
             </li>
             <li>
-              <a
+              <Anchor
                 href="https://twitter.com/Don_key_finance"
                 target="_blank"
                 rel="noreferrer"
@@ -182,19 +192,19 @@ export const JoinCommunity: React.FC = () => {
                     </clipPath>
                   </defs>
                 </svg>
-              </a>
+              </Anchor>
             </li>
             <li>
-              <a
+              <Anchor
                 href="https://www.reddit.com/r/don_key_finance/"
                 target="_blank"
                 rel="noreferrer"
               >
                 <FaReddit size={24} color="#fff" />
-              </a>
+              </Anchor>
             </li>
             <li>
-              <a
+              <Anchor
                 href="https://coinmarketcap.com/currencies/don-key/ico/"
                 target="_blank"
                 rel="noreferrer"
@@ -210,7 +220,12 @@ export const JoinCommunity: React.FC = () => {
                     fill="#fff"
                   />
                 </svg>
-              </a>
+              </Anchor>
+            </li>
+            <li>
+              <Anchor href="https://www.tiktok.com/@don_key_finance" target="_blank" rel="noreferrer">
+                <SiTiktok size={22} color="#fff" />
+              </Anchor>
             </li>
           </ul>
         </Container>

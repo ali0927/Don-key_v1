@@ -69,6 +69,7 @@ export interface INetwork {
 export interface IFarmerInter {
   name: string
   description: string;
+  graphUrl: string;
   farmerImage: {
     url: string;
   }
