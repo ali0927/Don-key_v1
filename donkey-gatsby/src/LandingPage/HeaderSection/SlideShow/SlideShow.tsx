@@ -21,33 +21,26 @@ export const SlideShow: React.FC<ISlideShowProps> = (props) => {
 
   return (
     <>
-      <Carousel interval={3000} indicators={false} controls={false}> 
+      <Carousel interval={3000} indicators={false} controls={false}>
         {chunks.map((items) => {
           return (
             <Carousel.Item>
               <GrayBorder className="d-none d-md-block" />
               <div className="row justify-content-between">
                 {items.map((item, itemIndex) => {
-                  return (
-                    <Slide
-                      key={itemIndex}
-                      isLoading={item.isLoading}
-                      label={item.label}
-                      value={item.value}
-                    />
-                  );
+                  return <Slide key={itemIndex} {...item} />;
                 })}
               </div>
             </Carousel.Item>
           );
         })}
       </Carousel>
-
     </>
   );
 };
 
-     {/* <div
+{
+  /* <div
   id="myCarousel"
   className="carousel slide"
   data-ride="carousel"
@@ -101,4 +94,5 @@ export const SlideShow: React.FC<ISlideShowProps> = (props) => {
       <span className="sr-only">Next</span>
     </a>
   </div>
-</div> */}
+</div> */
+}

@@ -11,6 +11,9 @@ import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { SlideShow } from "./SlideShow";
+import { graphql, useStaticQuery } from "gatsby";
+import { useWeb3Context } from "don-components";
+import { forEach } from "lodash";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -63,11 +66,11 @@ const Paragraph = styled.p`
 `;
 
 const FooterRow = styled.div`
-   width: 100%;
+  width: 100%;
   @media only screen and (min-width: ${breakPoints.lg}) {
     width: 60%;
-  }`;
-
+  }
+`;
 
 const ETH_PRICE = gql`
   query bundle {
@@ -100,6 +103,38 @@ export const MainSection: React.FC = () => {
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
+
+  const Strategies = useStaticQuery(
+    graphql`
+      query StrapiFarmers {
+        allStrapiFarmers(filter: { active: { eq: true } }) {
+          totalCount
+          nodes {
+            name
+            farmer {
+              poolAddress
+            }
+          }
+        }
+      }
+    `
+  );
+
+  const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
+
+  console.log("------------",Strategies)
+  const { getConnectedWeb3, connected, address } = useWeb3Context();
+
+  React.useEffect(()=>{
+    (async()=>{
+       const poolAddress: string[] =[];
+      forEach(Strategies.allStrapiFarmers.nodes,(item)=>{
+          poolAddress.push(item.farmer.poolAddress);
+      })
+      console.log(poolAddress)
+      const web3 = getConnectedWeb3();
+    })()
+  },[])
 
   const circulatingSupply = coingecko
     ? coingecko.market_data.circulating_supply
@@ -148,39 +183,44 @@ export const MainSection: React.FC = () => {
 
           <div className=" pb-3 pb-md-5 ">
             <FooterRow className="position-relative">
-
-            <SlideShow
+              <SlideShow
                 slides={[
                   {
                     label: "DON price",
                     value: finalDerivedEth,
                     isLoading: loading,
+                    symbol: "$",
                   },
                   {
                     label: "24-hour volume",
                     value: volume24hrs.toString(),
                     isLoading: loading,
+                    symbol: "$",
                   },
                   {
                     label: "Market Cap",
                     value: marketCap,
                     isLoading: loading,
+                    symbol: "$",
                   },
 
                   {
                     label: "TVL",
                     value: finalDerivedEth,
                     isLoading: loading,
+                    symbol: "$",
                   },
                   {
                     label: "Users",
                     value: volume24hrs.toString(),
                     isLoading: loading,
+                    symbol: "",
                   },
                   {
                     label: "Strategies",
-                    value: marketCap,
+                    value: TotalStrategies,
                     isLoading: loading,
+                    symbol: "",
                   },
                 ]}
               />
@@ -192,9 +232,7 @@ export const MainSection: React.FC = () => {
             </FooterRow>
           </div>
 
-          <div>
-        
-          </div>
+          <div></div>
         </div>
       </Root>
     </>

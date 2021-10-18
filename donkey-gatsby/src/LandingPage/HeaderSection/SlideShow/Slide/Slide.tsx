@@ -2,6 +2,7 @@ import React from "react";
 import { ISlideProps } from "./interfaces";
 import styled from "styled-components";
 import { Skeleton } from "@material-ui/lab";
+import { ISlide } from "../interfaces";
 
 const DarkBorder = styled.div`
   width: 29px;
@@ -26,15 +27,15 @@ const FooterSubHeading = styled.h1`
   margin-top: 13px;
 `;
 
-export const Slide: React.FC<ISlideProps> = (props) => {
-  const { isLoading, label, value } = props;
+export const Slide: React.FC<ISlide> = (props) => {
+  const { isLoading, label, value,symbol } = props;
 
   return (
     <div className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
       <DarkBorder />
       <FooterHeading className="mt-4">{label}</FooterHeading>
       <FooterSubHeading>
-        {isLoading ? <Skeleton variant="text" width={100} /> : `$${value}`}
+        {isLoading ? <Skeleton variant="text" width={100} /> : `${symbol}${value}`}
       </FooterSubHeading>
     </div>
   );
