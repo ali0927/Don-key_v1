@@ -97,14 +97,12 @@ export const InvestmentInput = ({
   max,
   currencySymbol,
   disabled,
-  srcimg,
+  imageUrl,
   value,
   setValue,
-  loadingTokens,
+ 
 }: {
-  loadingTokens: boolean;
-
-  srcimg: string;
+  imageUrl: string | null;
   tokenPrice: string;
   value: string;
   setValue: (val: string) => void;
@@ -132,11 +130,14 @@ export const InvestmentInput = ({
       <div className="w-100">
         <InvestmentRoot>
           <InvestmentCurrency>
+            {imageUrl &&(
             <img
               style={{ width: 18 }}
-              src={loadingTokens ? " " : srcimg}
+              src={imageUrl}
               alt="token"
-            />{" "}
+            />
+            )}
+            {console.log(imageUrl)}
           </InvestmentCurrency>
           <div className="w-100">
             <InvestmentInputElement

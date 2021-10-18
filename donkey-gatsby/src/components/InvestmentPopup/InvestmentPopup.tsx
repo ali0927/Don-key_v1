@@ -114,6 +114,7 @@ const MyBalanceInBUSD = ({
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const { getConnectedWeb3 } = useWeb3Context();
+  
 
   const fetchBalance = async () => {
     try {
@@ -155,6 +156,7 @@ const FARMER_WITHDRAW_FRAME = gql`
   }
 `;
 
+
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
@@ -175,6 +177,7 @@ export const InvestmentPopup = ({
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
   const [slippage, setSlippage] = useState("5");
+  const [imageUrl, setImageUrl] = useState(null);
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -222,7 +225,13 @@ export const InvestmentPopup = ({
       }
     }
   `);
-
+  const handleImage = () => {
+    if (loadingToken) return;
+    if (tokenData && tokenData.tokens) {
+      setImageUrl(tokenData.tokens[0].image.url);
+    }
+  };
+console.log(imageUrl);
   const fetchTokenInfo = async () => {
     const price = await getTokenPrice(web3, poolAddress);
     setTokenPrice(price);
@@ -372,7 +381,8 @@ export const InvestmentPopup = ({
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
   useEffect(() => {
     fetchTokenInfo();
-  }, []);
+    handleImage();
+  }, [tokenData]);
 
   const renderContent = () => {
     if (hasCheckedDons) {
@@ -388,9 +398,9 @@ export const InvestmentPopup = ({
                   setValue={setValue}
                   max={balance}
                   tokenPrice={tokenPrice}
-                  srcimg={tokenData.tokens[0].image.url}
-                  loadingTokens={loadingToken}
+                  imageUrl={imageUrl}
                 />
+                
                 {poolVersion < 3 && (
                   <ThemeProvider theme={themeM}>
                     <p className="mb-2 mt-4">Slippage Tolerance</p>
