@@ -1,10 +1,11 @@
-import {  IInvestorsAPIData } from "components/InvestorListTable/interfaces/IInvestors";
+import {   IInvestorsFromGraph } from "components/InvestorListTable/interfaces/IInvestors";
 
 
 export interface IInvestorAccordionProps {
-    investorsList: IInvestorsAPIData[];
+    investorsList: IInvestorsFromGraph[];
     poolAddress: string;
     chainId: number;
     tokenPrice: string;
     pool: string;
+    poolVersion: number;
 }
