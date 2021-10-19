@@ -501,10 +501,11 @@ console.log(imageUrl);
                 />
               }{" "}
               {symbol}(~ $
-              {new BigNumber(poolVersion || 0)
+              {new BigNumber(balance || 0)
                 .multipliedBy(tokenPrice)
-                .toFixed(1)}
+                .toFixed(2)}
               )
+              
             </>
           ) : undefined}
         </MyBalancemobile>
