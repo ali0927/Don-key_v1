@@ -128,6 +128,8 @@ export const FarmerBio = ({
     oldPoolVersion,
   } = farmer;
 
+  console.log("FARMER-- BIO_---",farmer)
+
 
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);

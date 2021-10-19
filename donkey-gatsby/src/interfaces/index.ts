@@ -70,6 +70,7 @@ export interface IFarmerInter {
   name: string
   description: string;
   graphUrl: string;
+  isWrapped: boolean;
   farmerImage: {
     url: string;
   }
