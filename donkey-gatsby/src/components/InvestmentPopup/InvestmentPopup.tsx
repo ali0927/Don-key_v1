@@ -15,6 +15,7 @@ import {
   getTokenPrice,
   getUserReferralCode,
   isValidReferralCode,
+  sendEvent,
   toWei,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
@@ -247,10 +248,17 @@ export const InvestmentPopup = ({
           from: accounts[0],
           gas: gasLimit,
         });
+        sendEvent("Investment", {
+          poolAddress: poolAddress,
+          amount: value,
+          user: accounts[0],
+        });
       }
 
       try {
-        await executePost({ data: { poolAddress, walletAddress: accounts[0] } });
+        await executePost({
+          data: { poolAddress, walletAddress: accounts[0] },
+        });
       } catch (e) {
         captureException(e, "Failed to post poolAddress");
       }
