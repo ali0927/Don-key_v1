@@ -391,7 +391,7 @@ export const StakingInfo = () => {
             </div>
             <div
               className="col-6 d-flex justify-content-center flex-column"
-              style={{ paddingTop: "1.8rem" }}
+              // style={{ paddingTop: "1.8rem" }}
             >
               <StyledButton
                 varaint="contained"
