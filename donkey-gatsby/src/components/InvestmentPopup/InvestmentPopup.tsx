@@ -249,7 +249,7 @@ export const InvestmentPopup = ({
           gas: gasLimit,
         });
         sendEvent("Investment", {
-          farmerName: poolAddress,
+          poolAddress: poolAddress,
           amount: value,
           user: accounts[0],
         });

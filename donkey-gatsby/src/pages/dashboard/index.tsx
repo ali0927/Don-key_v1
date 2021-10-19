@@ -4,14 +4,13 @@ import styled from "styled-components";
 import { theme } from "theme";
 import { LeaderBoardTable } from "components/LeaderBoardTable";
 import { LargeEllipse, MeadiumEllipse, SmallEllipse } from "icons";
-import React, { useEffect } from "react";
+import React from "react";
 import { useAddDonTokenonLoad } from "hooks/useAddDonTokenonLoad";
 import { IStrapiToken } from "interfaces";
 import { TokenInfo } from "components/TokenInfo";
 import { Col, Row } from "react-bootstrap";
 import { graphql, useStaticQuery } from "gatsby";
 import { breakPoints } from "breakponts";
-import { sendEvent } from "helpers";
 const Root = styled.div`
   background-color: ${theme.palette.background.yellow};
 `;
