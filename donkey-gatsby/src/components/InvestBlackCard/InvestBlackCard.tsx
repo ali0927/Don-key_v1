@@ -38,7 +38,6 @@ import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
 import { api } from "strapi";
 
-
 export const InvestBlackCard = ({
   poolAddress,
   poolVersion,
@@ -48,6 +47,7 @@ export const InvestBlackCard = ({
   oldPoolAddress,
   oldPoolVersion,
   isWithdrawRequested,
+  isWrapped,
 }: {
   poolAddress: string;
   poolVersion: number;
@@ -56,6 +56,7 @@ export const InvestBlackCard = ({
   oldPoolVersion: number;
   boostApy: boolean;
   apy: string;
+  isWrapped: boolean;
   isWithdrawRequested?: boolean;
 }) => {
   const { refresh, dependsOn } = useRefresh();
@@ -581,6 +582,7 @@ export const InvestBlackCard = ({
           onClose={() => setShowInvestmentPopup(false)}
           onSuccess={onSuccess}
           apy={apy}
+          isWrapped={isWrapped}
         />
       )}
       {showWithdrawPopup && (

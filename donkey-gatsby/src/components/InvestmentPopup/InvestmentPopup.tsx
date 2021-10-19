@@ -80,7 +80,6 @@ const Calculatermodel = styled.div`
   justify-content: space-between;
   font-size: 14px;
   font-weight: 600;
-  cursor: pointer;
 `;
 const Messagetimeframe = styled.div`
   color: #a3a3a3;
@@ -91,6 +90,37 @@ const Messagetimeframe = styled.div`
     margin-bottom: 10px;
   }
 `;
+
+const NetworksButtonsRoot = styled.div`
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 3px 5px 3px 5px;
+  margin-bottom: 40px;
+`;
+
+const NetworkButton = styled.div`
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #a3a3a3;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+
+  ${({ selected }: { selected: boolean }) =>
+    selected &&
+    `
+    border: 1px solid #FED700;
+    box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
+    border-radius: 10px;
+    background: #FCEB74;
+    color: #000;
+  `}
+`;
+
 const HrMessage = styled.hr`
   margin: 0;
   width: 100%;
@@ -115,7 +145,6 @@ const MyBalanceInBUSD = ({
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const { getConnectedWeb3 } = useWeb3Context();
-  
 
   const fetchBalance = async () => {
     try {
@@ -157,7 +186,6 @@ const FARMER_WITHDRAW_FRAME = gql`
   }
 `;
 
-
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
@@ -165,6 +193,7 @@ export const InvestmentPopup = ({
   onClose,
   onSuccess,
   apy,
+  isWrapped = false,
 }: {
   poolAddress: string;
   apy: string;
@@ -172,6 +201,7 @@ export const InvestmentPopup = ({
   gasLimit?: string;
   onSuccess?: () => void;
   onClose: () => void;
+  isWrapped?: boolean;
 }) => {
   const [tokenPrice, setTokenPrice] = useState("-");
   const [value, setValue] = useState("");
@@ -232,7 +262,6 @@ export const InvestmentPopup = ({
       setImageUrl(tokenData.tokens[0].image.url);
     }
   };
-console.log(imageUrl);
   const fetchTokenInfo = async () => {
     const price = await getTokenPrice(web3, poolAddress);
     setTokenPrice(price);
@@ -406,7 +435,7 @@ console.log(imageUrl);
                   tokenPrice={tokenPrice}
                   imageUrl={imageUrl}
                 />
-                
+
                 {poolVersion < 3 && (
                   <ThemeProvider theme={themeM}>
                     <p className="mb-2 mt-4">Slippage Tolerance</p>
@@ -429,6 +458,13 @@ console.log(imageUrl);
                   </ThemeProvider>
                 )}
               </div>
+              {isWrapped && (
+                <NetworksButtonsRoot className="d-flex">
+                  <NetworkButton selected>{symbol.substring(1)}</NetworkButton>
+                  <NetworkButton selected={false}>{symbol}</NetworkButton>
+                </NetworksButtonsRoot>
+              )}
+
               <ButtonWrap>
                 <ButtonWrapper>
                   <ButtonWidget
@@ -436,7 +472,10 @@ console.log(imageUrl);
                     varaint="contained"
                     containedVariantColor="lightYellow"
                     width="100%"
-                    disabled={!(value <= balance && value!="0" && value!="") || isLoading}
+                    disabled={
+                      !(value <= balance && value != "0" && value != "") ||
+                      isLoading
+                    }
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
@@ -507,11 +546,7 @@ console.log(imageUrl);
                 />
               }{" "}
               {symbol}(~ $
-              {new BigNumber(balance || 0)
-                .multipliedBy(tokenPrice)
-                .toFixed(2)}
-              )
-              
+              {new BigNumber(balance || 0).multipliedBy(tokenPrice).toFixed(2)})
             </>
           ) : undefined}
         </MyBalancemobile>
