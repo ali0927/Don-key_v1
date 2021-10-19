@@ -23,6 +23,9 @@ import { SlideShow } from "./SlideShow";
 import { graphql, useStaticQuery } from "gatsby";
 import { getWeb3, useWeb3Context } from "don-components";
 import { forEach } from "lodash";
+import { getTVL, getUsersCount } from "./helpers";
+import { useWorker } from "@koale/useworker";
+import { workercode } from "./helpers/worker";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -132,65 +135,52 @@ export const MainSection: React.FC = () => {
 
   const [usersCount, setUsersCount] = React.useState(0);
   const [totalTVL, setTotalTVL] = React.useState("0");
-  const [web3Loading, setWeb3Loading] = React.useState(false);
+  const [usersLoading, setUsersLoading] = React.useState(false);
+  const [tvlLoading, setTVLLoading] = React.useState(false);
+
 
   const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
 
   const updateUsersCount = async () => {
-    let finalCount = 0;
-    let finalTVL: BigNumber = new BigNumber(0);
-    setWeb3Loading(true);
-    for (let farmer of Strategies.allStrapiFarmers.nodes) {
-      const web3 = getWeb3(farmer.network.chainId);
-      const pool = await getPoolContract(web3, farmer.poolAddress, 2);
-      try {
-        const token = await getPoolToken(web3, farmer.poolAddress);
-        const decimals = await token.methods.decimals().call();
-        let [poolValue, tokenPrice] = await Promise.all([
-          getTotalPoolValue(web3, farmer.poolAddress),
-          getTokenPrice(web3, farmer.poolAddress),
-        ]);
-        const tokens = toEther(poolValue, decimals);
-        const final = new BigNumber(tokens).multipliedBy(tokenPrice);
+    setUsersLoading(true);
 
-        const count = await pool.methods.getInvestorCount().call();
-        finalCount = finalCount + Number(count);
-        finalTVL = finalTVL.plus(final);
-      } catch (e) {
-        captureException(e, "InvestorCountContract");
-      }
-    }
-    localStorage.setItem(
-      "don-key-users",
-      JSON.stringify({
-        count: finalCount,
-        tvl: formatNum(finalTVL.toString()),
-        dateOfSaved: new Date(),
-      })
+    const totalUserCount = await getUsersCount(
+      Strategies.allStrapiFarmers.nodes
     );
-    setUsersCount(finalCount);
-    setTotalTVL(formatNum(finalTVL.toString()));
-    setWeb3Loading(false);
+    setUsersCount(totalUserCount);
+    setUsersLoading(false);
+    localStorage.setItem("don-key-users-count", totalUserCount.toString());
+  };
+
+  const updateTVL = async () => {
+    setTVLLoading(true);
+    const totalTVL = await getTVL(Strategies.allStrapiFarmers.nodes);
+    setTotalTVL(totalTVL);
+    setTVLLoading(false);
+    localStorage.setItem("don-key-tvl", totalTVL);
   };
 
   React.useEffect(() => {
     (async () => {
-      const data = localStorage.getItem("don-key-users");
-      if (data) {
-        const users = JSON.parse(data);
+      const dateOfSaved = localStorage.getItem("dateOfSaved");
+      const usersCount = localStorage.getItem("don-key-users-count");
+      const tvl = localStorage.getItem("don-key-tvl");
+      if (dateOfSaved && usersCount && tvl) {
         const newDate = new Date().getTime();
-        const existingDate = new Date(users.dateOfSaved).getTime();
+        const existingDate = new Date(dateOfSaved).getTime();
         const diff = newDate - existingDate;
         const diffMins = Math.round(diff / 60000);
         if (diffMins > 10) {
-          await updateUsersCount();
+          updateUsersCount();
+          updateTVL();
         } else {
-          const users = JSON.parse(data);
-          setUsersCount(users.count);
-          setTotalTVL(users.tvl);
+          setUsersCount(Number(usersCount));
+          setTotalTVL(tvl);
         }
       } else {
-        await updateUsersCount();
+        updateUsersCount();
+        updateTVL();
+        localStorage.setItem("dateOfSaved", new Date().toString());
       }
     })();
   }, []);
@@ -266,13 +256,13 @@ export const MainSection: React.FC = () => {
                   {
                     label: "TVL",
                     value: totalTVL,
-                    isLoading: web3Loading,
+                    isLoading: tvlLoading,
                     symbol: "$",
                   },
                   {
                     label: "Users",
                     value: usersCount,
-                    isLoading: web3Loading,
+                    isLoading: usersLoading,
                     symbol: "",
                   },
                   {
