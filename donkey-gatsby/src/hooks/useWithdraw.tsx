@@ -6,8 +6,11 @@ import { useWeb3Context } from "don-components";
 import {
   calculateUserClaimableAmount,
   captureException,
+  getAmount,
   getPoolContract,
+  sendEvent,
 } from "helpers";
+import Web3 from "web3";
 import { useStakingContract } from "./useStakingContract";
 
 const ADD_WITHDRAW_REQUEST = gql`
@@ -23,6 +26,15 @@ const ADD_WITHDRAW_REQUEST = gql`
     }
   }
 `;
+
+const getWithdrawAmount = async (web3: Web3,poolAddress: string, address: string, isGrey?: boolean, share: string = "100") => {
+  const pool = await getPoolContract(web3,poolAddress, 4);
+  if(isGrey){
+   const result = await pool.methods.getUserGreyInvestedAmount(address).call();
+   return new BigNumber(share).multipliedBy(result.amountInToken).dividedBy(100).toFixed(3);
+  }
+  return await getAmount(web3, poolAddress, address, 4,parseFloat(share));
+}
 
 export const useWithdraw = () => {
   const [create] = useMutation(ADD_WITHDRAW_REQUEST);
@@ -48,6 +60,7 @@ export const useWithdraw = () => {
         poolAddress
       );
       showProgress("Withdraw is in Progress");
+      const withdrawValue = await getAmount(web3, poolAddress, accounts[0]);
       if (poolVersion === 1 || poolVersion === 3) {
         await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
       }
@@ -67,6 +80,12 @@ export const useWithdraw = () => {
       await create({
         variables: { poolAddress, walletAddress: accounts[0] },
       });
+    
+      sendEvent("Withdraw", {
+        user: accounts[0],
+        poolAddress: poolAddress,
+        amount: withdrawValue,
+      })
 
       showSuccess("Withdraw Request Created");
 
@@ -99,8 +118,9 @@ export const useWithdraw = () => {
       await withdraw(new BigNumber(share).multipliedBy(100).toFixed(0)).send({
         from: accounts[0],
       });
-
+      const withdrawValue = await getWithdrawAmount(web3, poolAddress, accounts[0], isGreyWithdraw,share);
       if (isGreyWithdraw) {
+        
         showSuccess("Withdraw Successful");
       } else {
         await create({
@@ -111,6 +131,13 @@ export const useWithdraw = () => {
         });
         showSuccess("Withdraw Request Created");
       }
+
+      
+      sendEvent("Withdraw", {
+        user: accounts[0],
+        poolAddress: poolAddress,
+        amount: withdrawValue,
+      })
       onSuccess && onSuccess();
     } catch (err) {
       captureException(err, "Withdraw Failed");
