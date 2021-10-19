@@ -69,6 +69,7 @@ export interface INetwork {
 export interface IFarmerInter {
   name: string
   description: string;
+  graphUrl: string;
   farmerImage: {
     url: string;
   }
@@ -96,6 +97,9 @@ export type IStrategy = {
       url: string;
     }
   }
+  blacklist: {
+    address: string;
+  }[]
   created_at: string;
   id: string;
   info: string;
@@ -109,6 +113,7 @@ export type IStrategy = {
   strategyImage: {
     url: string;
   };
+
   token: {
     boostApy: boolean;
   };

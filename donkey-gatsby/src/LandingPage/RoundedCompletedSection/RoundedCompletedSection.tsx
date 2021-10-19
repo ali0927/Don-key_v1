@@ -81,8 +81,8 @@ export const RoundedCompletedSection: React.FC = () => {
                     alt="Investor"
                     quality={100}
                      height={60}
-                     className="mb-4"
-                    src="./investorlogos/iangels.png"
+                     className="mt-2"
+                    src="./investorlogos/iangles1.png"
                   />
                 </div>
                 <div className="col-md-3 d-flex flex-column align-items-center">

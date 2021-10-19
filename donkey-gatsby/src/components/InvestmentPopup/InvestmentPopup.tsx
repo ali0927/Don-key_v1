@@ -16,6 +16,7 @@ import {
   getTokenPrice,
   getUserReferralCode,
   isValidReferralCode,
+  sendEvent,
   toWei,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
@@ -333,6 +334,11 @@ console.log(imageUrl);
         await pool.methods.depositLiquidity(inputAmount).send({
           from: accounts[0],
           gas: gasLimit,
+        });
+        sendEvent("Investment", {
+          poolAddress: poolAddress,
+          amount: value,
+          user: accounts[0],
         });
       }
 

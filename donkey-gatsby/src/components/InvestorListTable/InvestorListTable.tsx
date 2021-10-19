@@ -1,4 +1,3 @@
-import BigNumber from "bignumber.js";
 import {
   captureException,
   formatNum,
@@ -6,24 +5,33 @@ import {
   getPoolContract,
   getTokenPrice,
 } from "helpers";
-
-import { useAxios } from "hooks/useAxios";
 import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { getWeb3 } from "don-components";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import { sortBy } from "lodash";
 import { useMediaQuery } from "@material-ui/core";
-
 import PositiveIcon from "images/positiveicon.png";
 import NegativeIcon from "images/negativeicon.png";
 import { DataTable } from "./DataTable/DataTable";
 import { theme } from "theme";
 import { InvestorAccordion } from "./InvestorAccordion";
+import { ApolloClient, InMemoryCache, useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import { filter } from "lodash";
 
-const usdAmount = (amount: number) => {
-  if (amount > 0) {
+const INVESTORS_QUERY_DATA = gql`
+  query AllInvestors {
+    investors(first: 1000, where: { isInvested: true }) {
+      address
+      isInvested
+      timestamp
+    }
+  }
+`;
+
+const usdAmount = (amount: string, amountN: number) => {
+  if (amountN > 0) {
     return (
       <>
         {" "}
@@ -34,7 +42,7 @@ const usdAmount = (amount: number) => {
             height: 10,
           }}
         />{" "}
-        {amount}{" "}
+        ${amount}{" "}
       </>
     );
   } else {
@@ -48,14 +56,14 @@ const usdAmount = (amount: number) => {
             height: 10,
           }}
         />{" "}
-        {amount}{" "}
+        ${amount}{" "}
       </>
     );
   }
 };
 
-const busdAmount = (amount: number, symbol: string) => {
-  if (amount > 0) {
+const busdAmount = (amount: string, symbol: string, amountN: number) => {
+  if (amountN > 0) {
     return (
       <>
         {" "}
@@ -102,7 +110,7 @@ export const ShowAmount = ({
   const { isUSD } = useUSDViewBool();
   const web3 = getWeb3(chainId);
   const { symbol, loading } = usePoolSymbol(poolAddress, web3);
-  
+
   if (loading) {
     return <>-</>;
   }
@@ -110,8 +118,8 @@ export const ShowAmount = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount(Number(formatNum(amountInUSD)))
-        : busdAmount(Number(formatNum(amount)), symbol)}
+        ? usdAmount(formatNum(amountInUSD), Number(formatNum(amountInUSD)))
+        : busdAmount(formatNum(amount), symbol, Number(formatNum(amount)))}
     </>
   ) : (
     <>
@@ -143,12 +151,21 @@ export const ShowAmountMobile = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount(Number(nFormatter(formatNum(amountInUSD))))
-        : busdAmount(Number(nFormatter(formatNum(amount))), symbol)}
+        ? usdAmount(
+            nFormatter(formatNum(amountInUSD)).toString(),
+            Number(formatNum(amountInUSD))
+          )
+        : busdAmount(
+            nFormatter(formatNum(amount)).toString(),
+            symbol,
+            Number(formatNum(amount))
+          )}
     </>
   ) : (
     <>
-      {isUSD ? `$${nFormatter(formatNum(amountInUSD))}` : `${nFormatter(formatNum(amount))} ${symbol}`}
+      {isUSD
+        ? `$${nFormatter(formatNum(amountInUSD))}`
+        : `${nFormatter(formatNum(amount))} ${symbol}`}
     </>
   );
 };
@@ -165,88 +182,41 @@ export const hideAddressForMobile = (item: string) => {
   return item.slice(0, 4) + "xxxxx" + item.slice(item.length - 4, item.length);
 };
 
-type InvestorList = {
+type Investors = {
   address: string;
-  initialInvestment: string;
-  initialInvestmentInUSD: string;
-  claimableAmount: string;
-  claimableAmountInUSD: string;
-  profitLoss: string;
-  profitLossInUSD: string;
-  duration: string;
-}[];
+  timestamp: string;
+};
 
 export const InvestorListTable = ({
   poolAddress,
   chainId,
+  graphUrl,
+  poolVersion,
+  blacklist,
 }: {
   poolAddress: string;
   chainId: number;
+  graphUrl: string;
+  poolVersion: number;
+  blacklist: { address: string }[];
 }) => {
+  const theGraphClient = useMemo(() => {
+    return new ApolloClient({
+      uri: graphUrl,
+      cache: new InMemoryCache(),
+    });
+  }, [graphUrl]);
+
   const [loading, setLoading] = useState(true);
-  const [investments, setInvestments] = useState<InvestorList>([]);
-  const [{ data }] = useAxios(`/api/v2/investments/${poolAddress}`);
+  const [investments, setInvestments] = useState<Investors[]>([]);
+
   const [tokenPrice, setTokenPrice] = useState<string | null>(null);
   const [pool, setPool] = useState<any | null>(null);
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
-
+  const { data } = useQuery(INVESTORS_QUERY_DATA, {
+    client: theGraphClient,
+  });
   const web3 = getWeb3(chainId);
-  const { isUSD } = useUSDViewBool();
-  // useEffect(() => {
-  //   (async () => {
-  //     if (data) {
-  //       setLoading(true);
-  //       const investmentList: InvestorList = [];
-  //       try {
-  //         const investors = data.data;
-  //         const tokenPrice = await getTokenPrice(web3, poolAddress);
-  //         const pool = await getPoolContract(web3, poolAddress, 2);
-  //         await Promise.all(
-  //           investors.map(async (investor: any) => {
-  //             const address = investor.from_walletaddress;
-  //             const isInvested = await pool.methods.isInvestor(address).call();
-  //             if (isInvested) {
-  //               const [
-  //                 initialInvestment,
-  //                 initialInvestmentInUSD,
-  //                 claimableAmount,
-  //               ] = await Promise.all([
-  //                 calculateInitialInvestment(web3, poolAddress, address),
-  //                 calculateInitialInvestmentInUSD(web3, poolAddress, address),
-  //                 getAmount(web3, poolAddress, address),
-  //               ]);
-  //               const initiailInvestmentBN = new BigNumber(initialInvestment);
-  //               const claimableAmountBN = new BigNumber(claimableAmount);
-  //               const investmentInUSD = new BigNumber(initialInvestmentInUSD);
-  //               const claimableAmountInUSD =
-  //                 claimableAmountBN.multipliedBy(tokenPrice);
-  //               const profit = claimableAmountBN.minus(initiailInvestmentBN);
-  //               const profitInUSD = claimableAmountInUSD.minus(investmentInUSD);
-
-  //               investmentList.push({
-  //                 address,
-  //                 claimableAmount: claimableAmount,
-  //                 claimableAmountInUSD: claimableAmountInUSD.toFixed(),
-  //                 initialInvestment: initialInvestment,
-  //                 initialInvestmentInUSD: investmentInUSD.toFixed(),
-  //                 profitLoss: profit.toFixed(),
-  //                 profitLossInUSD: profitInUSD.toFixed(),
-  //                 duration: moment
-  //                   .duration(moment().diff(moment(investor.date_created)))
-  //                   .humanize(),
-  //               });
-  //             }
-  //           })
-  //         );
-  //         setInvestments(investmentList);
-  //       } catch (e) {
-  //         captureException(e, "InvestorListTable");
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     }
-  //   })();
-  // }, [data, isUSD]);
 
   useEffect(() => {
     (async () => {
@@ -264,13 +234,24 @@ export const InvestorListTable = ({
     })();
   }, []);
 
-  // const sortedInvestments = useMemo(() => {
-  //   return sortBy(investments, (o) =>
-  //     new BigNumber(isUSD ? o.profitLossInUSD : o.profitLoss).toNumber()
-  //   ).reverse();
-  // }, [investments, isUSD]);
+  useEffect(() => {
+    if (data) {
+      if (data && data.investors.length > 0) {
+        if(blacklist.length > 0){
+          const filteredItems = filter(
+            data.investors,
+            (item) =>
+              blacklist.findIndex((bl) => bl.address.trim().toLowerCase() === item.address.trim().toLowerCase()) === -1
+          );
+          setInvestments(filteredItems);
+        }else {
+          setInvestments(data.investors);
+        }
+      }
+    }
+  }, [data]);
+
   if (poolAddress === "0x072a5DBa5A29ACD666C4B36ab453A5ed015589d2") {
-    // disabled vfat old pool
     return null;
   }
   if (loading) {
@@ -288,17 +269,19 @@ export const InvestorListTable = ({
     <>
       {!isDesktop && pool && tokenPrice && data && (
         <InvestorAccordion
-          investorsList={data.data}
+          investorsList={investments}
           poolAddress={poolAddress}
           chainId={chainId}
           tokenPrice={tokenPrice}
           pool={pool}
+          poolVersion={poolVersion}
         />
       )}
 
       {isDesktop && pool && tokenPrice && data && (
         <DataTable
-          investorsList={data.data}
+          poolVersion={poolVersion}
+          investorsList={investments}
           poolAddress={poolAddress}
           chainId={chainId}
           tokenPrice={tokenPrice}

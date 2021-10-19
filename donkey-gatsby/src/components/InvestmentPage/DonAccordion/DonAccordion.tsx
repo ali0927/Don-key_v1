@@ -139,6 +139,7 @@ export const DonAccordion: React.FC<IDonAccordionProps> = (props) => {
                         chainId={network}
                         refresh={refresh}
                         poolAddress={investment.poolAddress}
+                        poolVersion={investment.poolVersion}
                       />
                     </AccordionHeadingText>
                   </div>

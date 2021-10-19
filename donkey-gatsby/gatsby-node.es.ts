@@ -137,6 +137,9 @@ export const createPages = async ({ graphql, actions }: any) => {
             apy
             active
             description
+            blacklist {
+              address
+            }
             farmer {
               status
               name
@@ -189,6 +192,7 @@ export const createPages = async ({ graphql, actions }: any) => {
         nodes {
           name
           description
+          graphUrl
           farmerImage {
             url
           }
@@ -217,6 +221,9 @@ export const createPages = async ({ graphql, actions }: any) => {
             swapInFees
             swapOutFees
             description
+            blacklist {
+              address
+            }
             strategyImage {
               url
             }
@@ -231,7 +238,6 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   const farmers = farmersResp.data.allStrapiFarmers.nodes;
   const tvl = await calcSumOfAllPoolValues();
-
   
   farmers.forEach((farmer: any) => {
     const strategies = farmer.strategies;

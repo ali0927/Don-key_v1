@@ -14,8 +14,15 @@ import React from "react";
 import { useInvestments } from "../hooks";
 import { Spinner } from "react-bootstrap";
 
+import styled from "styled-components";
+import { TableHeadingToolTip } from "../ToolTip";
+
+const EqualDiv = styled.div`
+  flex: 1;
+`;
+
 export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
-  const { chainId, pool, poolAddress, tokenPrice } = props;
+  const { chainId, pool, poolAddress, tokenPrice, poolVersion } = props;
 
   const [pageNumber, setPageNumber] = React.useState<number>(1);
 
@@ -29,6 +36,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
     tokenPrice: tokenPrice,
     poolAddress: poolAddress,
     rowsLimit,
+    poolVersion,
   });
 
   const handlePageChange = (newPageNumber: number) => {
@@ -54,27 +62,46 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
               <>
                 <AccordionCard>
                   <AccordionCardHeader index={index}>
+                    <EqualDiv>
+                      <AccordionHeadingText>
+                        <MobileCaption>Investor</MobileCaption>
+                        <MobileHeading>
+                          {hideAddress(item.address).slice(0, 10)}...
+                        </MobileHeading>
+                      </AccordionHeadingText>
+                    </EqualDiv>
+                    <EqualDiv>
+                      <AccordionHeadingText>
+                        <MobileCaption>Profit/Loss</MobileCaption>
+                        <MobileHeading>
+                          <ShowAmountMobile
+                            chainId={chainId}
+                            amount={item.profitLoss}
+                            amountInUSD={item.profitLossInUSD}
+                            poolAddress={poolAddress}
+                            icon={true}
+                          />
+                        </MobileHeading>
+                      </AccordionHeadingText>
+                    </EqualDiv>
+
                     <AccordionHeadingText>
-                      <MobileCaption>Investor</MobileCaption>
-                      <MobileHeading>
-                        {hideAddress(item.address).slice(0, 10)}...
-                      </MobileHeading>
-                    </AccordionHeadingText>
-                    <AccordionHeadingText>
-                      <MobileCaption>Profit/Loss</MobileCaption>
-                      <MobileHeading>
-                        <ShowAmountMobile
-                          chainId={chainId}
-                          amount={item.profitLoss}
-                          amountInUSD={item.profitLossInUSD}
-                          poolAddress={poolAddress}
-                          icon={true}
-                        />
-                      </MobileHeading>
-                    </AccordionHeadingText>
-                    <AccordionHeadingText>
-                      <MobileCaption>Duration</MobileCaption>
-                      <MobileHeading>{item.duration} ago</MobileHeading>
+                      <MobileCaption>
+                        {poolAddress ===
+                          "0x965534Bd90e2A2135756f60F97798B833E461739" && (
+                          <TableHeadingToolTip
+                            label="Duration"
+                            position="left"
+                            message="Pool contract has been updated to V2 on 18/10/2021. Investor list data
+is on-chain based."
+                          />
+                        )}
+                        {poolAddress !==
+                          "0x965534Bd90e2A2135756f60F97798B833E461739" && (
+                          <>Duration</>
+                        )}
+                      </MobileCaption>
+                      <MobileHeading>{item.duration}</MobileHeading>
                     </AccordionHeadingText>
                   </AccordionCardHeader>
                   <AccordionDetails
