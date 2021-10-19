@@ -430,7 +430,7 @@ console.log(imageUrl);
                     varaint="contained"
                     containedVariantColor="lightYellow"
                     width="100%"
-                    disabled={!(value <= balance && value!="0") || isLoading}
+                    disabled={!(value <= balance && value!="0" && value!="") || isLoading}
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
