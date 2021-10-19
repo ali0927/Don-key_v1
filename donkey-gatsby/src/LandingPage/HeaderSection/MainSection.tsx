@@ -7,7 +7,12 @@ import { uniswapClient } from "apolloClient";
 import {
   captureException,
   convertToInternationalCurrencySystem,
+  formatNum,
   getPoolContract,
+  getPoolToken,
+  getTokenPrice,
+  getTotalPoolValue,
+  toEther,
 } from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
@@ -126,29 +131,46 @@ export const MainSection: React.FC = () => {
   );
 
   const [usersCount, setUsersCount] = React.useState(0);
-  const [userLoading, setUserLoading] = React.useState(false);
+  const [totalTVL, setTotalTVL] = React.useState("0");
+  const [web3Loading, setWeb3Loading] = React.useState(false);
 
   const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
 
   const updateUsersCount = async () => {
     let finalCount = 0;
-    setUserLoading(true);
+    let finalTVL: BigNumber = new BigNumber(0);
+    setWeb3Loading(true);
     for (let farmer of Strategies.allStrapiFarmers.nodes) {
       const web3 = getWeb3(farmer.network.chainId);
       const pool = await getPoolContract(web3, farmer.poolAddress, 2);
       try {
+        const token = await getPoolToken(web3, farmer.poolAddress);
+        const decimals = await token.methods.decimals().call();
+        let [poolValue, tokenPrice] = await Promise.all([
+          getTotalPoolValue(web3, farmer.poolAddress),
+          getTokenPrice(web3, farmer.poolAddress),
+        ]);
+        const tokens = toEther(poolValue, decimals);
+        const final = new BigNumber(tokens).multipliedBy(tokenPrice);
+
         const count = await pool.methods.getInvestorCount().call();
         finalCount = finalCount + Number(count);
+        finalTVL = finalTVL.plus(final);
       } catch (e) {
         captureException(e, "InvestorCountContract");
       }
     }
     localStorage.setItem(
       "don-key-users",
-      JSON.stringify({ count: finalCount, dateOfSaved: new Date() })
+      JSON.stringify({
+        count: finalCount,
+        tvl: formatNum(finalTVL.toString()),
+        dateOfSaved: new Date(),
+      })
     );
     setUsersCount(finalCount);
-    setUserLoading(false);
+    setTotalTVL(formatNum(finalTVL.toString()));
+    setWeb3Loading(false);
   };
 
   React.useEffect(() => {
@@ -165,6 +187,7 @@ export const MainSection: React.FC = () => {
         } else {
           const users = JSON.parse(data);
           setUsersCount(users.count);
+          setTotalTVL(users.tvl);
         }
       } else {
         await updateUsersCount();
@@ -242,14 +265,14 @@ export const MainSection: React.FC = () => {
 
                   {
                     label: "TVL",
-                    value: finalDerivedEth,
-                    isLoading: loading,
+                    value: totalTVL,
+                    isLoading: web3Loading,
                     symbol: "$",
                   },
                   {
                     label: "Users",
                     value: usersCount,
-                    isLoading: userLoading,
+                    isLoading: web3Loading,
                     symbol: "",
                   },
                   {
