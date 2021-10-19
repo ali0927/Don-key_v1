@@ -16,12 +16,9 @@ import NegativeIcon from "images/negativeicon.png";
 import { DataTable } from "./DataTable/DataTable";
 import { theme } from "theme";
 import { InvestorAccordion } from "./InvestorAccordion";
-import {
-  ApolloClient,
-  InMemoryCache,
-  useQuery,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
+import { filter } from "lodash";
 
 const INVESTORS_QUERY_DATA = gql`
   query AllInvestors {
@@ -33,8 +30,7 @@ const INVESTORS_QUERY_DATA = gql`
   }
 `;
 
-const usdAmount = (amount: string, amountN:number) => {
-
+const usdAmount = (amount: string, amountN: number) => {
   if (amountN > 0) {
     return (
       <>
@@ -66,9 +62,8 @@ const usdAmount = (amount: string, amountN:number) => {
   }
 };
 
-const busdAmount = (amount: string, symbol: string,amountN:number) => {
-
-  if ( amountN > 0 ) {
+const busdAmount = (amount: string, symbol: string, amountN: number) => {
+  if (amountN > 0) {
     return (
       <>
         {" "}
@@ -123,8 +118,8 @@ export const ShowAmount = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount(formatNum(amountInUSD),Number(formatNum(amountInUSD)))
-        : busdAmount(formatNum(amount), symbol,Number(formatNum(amount)))}
+        ? usdAmount(formatNum(amountInUSD), Number(formatNum(amountInUSD)))
+        : busdAmount(formatNum(amount), symbol, Number(formatNum(amount)))}
     </>
   ) : (
     <>
@@ -156,8 +151,15 @@ export const ShowAmountMobile = ({
   return icon ? (
     <>
       {isUSD
-        ? usdAmount((nFormatter(formatNum(amountInUSD))).toString(),Number(formatNum(amountInUSD)))
-        : busdAmount((nFormatter(formatNum(amount))).toString(), symbol, Number(formatNum(amount)))}
+        ? usdAmount(
+            nFormatter(formatNum(amountInUSD)).toString(),
+            Number(formatNum(amountInUSD))
+          )
+        : busdAmount(
+            nFormatter(formatNum(amount)).toString(),
+            symbol,
+            Number(formatNum(amount))
+          )}
     </>
   ) : (
     <>
@@ -180,8 +182,6 @@ export const hideAddressForMobile = (item: string) => {
   return item.slice(0, 4) + "xxxxx" + item.slice(item.length - 4, item.length);
 };
 
-
-
 type Investors = {
   address: string;
   timestamp: string;
@@ -192,11 +192,13 @@ export const InvestorListTable = ({
   chainId,
   graphUrl,
   poolVersion,
+  blacklist,
 }: {
   poolAddress: string;
   chainId: number;
   graphUrl: string;
   poolVersion: number;
+  blacklist: { address: string }[];
 }) => {
   const theGraphClient = useMemo(() => {
     return new ApolloClient({
@@ -204,7 +206,6 @@ export const InvestorListTable = ({
       cache: new InMemoryCache(),
     });
   }, [graphUrl]);
-
 
   const [loading, setLoading] = useState(true);
   const [investments, setInvestments] = useState<Investors[]>([]);
@@ -236,14 +237,21 @@ export const InvestorListTable = ({
   useEffect(() => {
     if (data) {
       if (data && data.investors.length > 0) {
-        console.log(data.investors);
-        setInvestments(data.investors);
+        if(blacklist.length > 0){
+          const filteredItems = filter(
+            data.investors,
+            (item) =>
+              blacklist.findIndex((bl) => bl.address.trim().toLowerCase() === item.address.trim().toLowerCase()) === -1
+          );
+          setInvestments(filteredItems);
+        }else {
+          setInvestments(data.investors);
+        }
       }
     }
   }, [data]);
 
   if (poolAddress === "0x072a5DBa5A29ACD666C4B36ab453A5ed015589d2") {
-
     return null;
   }
   if (loading) {

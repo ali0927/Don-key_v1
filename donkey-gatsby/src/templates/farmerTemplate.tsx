@@ -7,7 +7,6 @@ import { GridBackground } from "components/GridBackground";
 import { FarmerStrategies } from "components/FarmerStrategies";
 import { FarmerBio } from "components/FarmerBio";
 import { IFarmerInter } from "interfaces";
-import { WithdrawRequestInfo } from "components/WithdrawRequestInfo";
 
 export default function Dashboard({
   pageContext: { data, tvl },

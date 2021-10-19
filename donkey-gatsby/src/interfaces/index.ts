@@ -97,6 +97,9 @@ export type IStrategy = {
       url: string;
     }
   }
+  blacklist: {
+    address: string;
+  }[]
   created_at: string;
   id: string;
   info: string;
@@ -110,6 +113,7 @@ export type IStrategy = {
   strategyImage: {
     url: string;
   };
+
   token: {
     boostApy: boolean;
   };
