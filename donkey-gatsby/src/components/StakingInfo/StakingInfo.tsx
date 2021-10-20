@@ -249,7 +249,6 @@ const Root = styled.div`
   }
 `;
 
-
 export const StakingTimer = ({
   timerEnd,
   endMessage = <>Cool off period is over. Claim Tokens</>,
@@ -261,7 +260,7 @@ export const StakingTimer = ({
   title?: string;
   variant?: "light" | "dark";
 }) => {
-  const {days, hasEnded, hrs, mins, secs } = useTimer(timerEnd);
+  const { days, hasEnded, hrs, mins, secs } = useTimer(timerEnd);
 
   if (hasEnded) {
     return <TimerHeading>{endMessage}</TimerHeading>;
@@ -382,16 +381,16 @@ export const StakingInfo = () => {
                     delay={{ show: 250, hide: 400 }}
                     overlay={renderTooltip}
                   >
-                   <span className="ml-1">
-                   <Questionmark />
-                   </span>
+                    <span className="ml-1">
+                      <Questionmark />
+                    </span>
                   </OverlayTrigger>
                 </p>
               </Rewardpaid>
             </div>
             <div
-              className="col-6 d-flex justify-content-center flex-column"
-              style={{ paddingTop: "1.8rem" }}
+              className="col-6 d-flex justify-content-center align-items-center flex-column"
+              // style={{ paddingTop: "1.8rem" }}
             >
               <StyledButton
                 varaint="contained"
@@ -404,7 +403,7 @@ export const StakingInfo = () => {
               </StyledButton>
               <Rewardtime className="text-center">
                 {!new BigNumber(lastRewardTime).isEqualTo(0) && (
-                  <p>
+                  <p className="m-0 mt-2">
                     harvested{" "}
                     {moment
                       .duration(moment().diff(moment.unix(lastRewardTime)))
