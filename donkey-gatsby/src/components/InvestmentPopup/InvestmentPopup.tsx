@@ -38,14 +38,14 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import Downarrow from "components/Icons/Downarrow";
-import styled from "styled-components";
+import { useInvestmentPopupStyles } from "./styles/useInvestmentPopupStyles";
 
 const ButtonWrapper = styled.div({
   width: "100%",
 });
 
-const StyledButtonWidget= styled(ButtonWidget)`
-    border-radius: 15px;
+const StyledButtonWidget = styled(ButtonWidget)`
+  border-radius: 15px;
 `;
 
 const ButtonWrap = styled.div`
@@ -93,8 +93,10 @@ const Messagetimeframe = styled.div`
   font-weight: 500;
   font-size: 12px;
   margin-top: 16px;
+  padding: 0px 20px 0px 20px;
   @media only screen and (max-width: 600px) {
     margin-bottom: 10px;
+    padding: 0px;
   }
 `;
 
@@ -136,13 +138,12 @@ const HrMessage = styled.hr`
   width: 100%;
   right: 0;
 `;
+
 const themeM = createTheme({
   palette: {
     primary: { main: theme.palette.background.yellow },
   },
 });
-
-
 
 const MyBalanceInBUSD = ({
   onDone,
@@ -230,6 +231,7 @@ export const InvestmentPopup = ({
   const [balance, setBalance] = useState("0");
   const [slippage, setSlippage] = useState("5");
   const [imageUrl, setImageUrl] = useState(null);
+  const classes = useInvestmentPopupStyles();
 
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
@@ -531,7 +533,7 @@ export const InvestmentPopup = ({
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
-                  </ButtonWiStyledButtonWidgetdget>
+                  </StyledButtonWidget>
                 </ButtonWrapper>
 
                 <ButtonWrapper className="widget">
@@ -584,6 +586,7 @@ export const InvestmentPopup = ({
         isOpen={true}
         size="sm"
         rounded
+        className={classes.dialogWidth}
         onClose={onClose}
       >
         <MyBalancemobile>

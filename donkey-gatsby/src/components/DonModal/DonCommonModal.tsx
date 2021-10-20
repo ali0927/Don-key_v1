@@ -58,7 +58,8 @@ export const DonCommonmodal = ({
   contentStyle,
   subtitle,
   disableBackdropClick,
-  footer
+  footer,
+  className,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -75,6 +76,7 @@ export const DonCommonmodal = ({
   subtitle?: string;
   footer?: React.ReactNode;
   disableBackdropClick?: boolean;
+  className?: string;
 }) => {
   const classes = useDialogStyles();
   const modalInnerContent = () => {
@@ -114,13 +116,12 @@ export const DonCommonmodal = ({
       open={isOpen}
       style={style}
       onClose={onClose}
-
+      className={className}
       fullWidth={true}
-      PaperProps={{classes: {root: classes.paper}, ...PaperProps}}
+      PaperProps={{ classes: { root: classes.paper }, ...PaperProps }}
       maxWidth={size}
       disableEscapeKeyDown
       disableBackdropClick={disableBackdropClick}
-      
     >
       <>
         <Content style={contentStyle}>
