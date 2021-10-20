@@ -11,6 +11,8 @@ import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
 import { Skeleton } from "@material-ui/lab";
+import { RocketLaunchIcon } from "icons";
+import { ButtonWidget } from "components/Button";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -108,19 +110,41 @@ const ETH_PRICE = gql`
   }
 `;
 
-const StakeButton = styled.button`
-  background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
+const LaunchButton = styled.button`
+  background: #222222;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
   padding: 1rem 2rem;
   color: #fff;
   font-weight: 500;
   border: 0;
-  font-size: 12px;
+  font-size: 16px;
   border-radius: 10px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
   :hover {
     box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
       4px 4px 18px rgba(0, 0, 0, 0.5);
   }
 `;
+
+const StakeButton = styled(ButtonWidget)`
+  border: 2px solid #222222;
+  font-weight: 600;
+`;
+
+const Rocket = styled(RocketLaunchIcon)`
+  position: absolute;
+  left: 6%;
+  bottom: 5%;
+`;
+
+// const LunchRocketRoot = styled.div`
+//   position: absolute;
+//   width: 27%;
+//   bottom: 9px;
+//   left: 0;
+// `;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
@@ -153,6 +177,10 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
+  const handleDashboard = () => {
+    navigate("/dashboard");
+  };
+
   const handleTakePart = () => {
     navigate("/stake");
   };
@@ -167,9 +195,26 @@ export const MainSection: React.FC = () => {
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph>
-              <StakeButton className="mt-3 mt-lg-5" onClick={handleTakePart}>
-                Stake LP token
-              </StakeButton>
+              <div className="d-flex flex-wrap">
+                <LaunchButton
+                  className="mt-3 mt-lg-5 mr-3 position-relative d-flex justify-content-end"
+                  style={{ width: 221, height: 55 }}
+                  onClick={handleDashboard}
+                >
+                  <Rocket />
+                  LAUNCH APP
+                </LaunchButton>
+
+                <StakeButton
+                  varaint="outlined"
+                  className="mt-3 mt-lg-5"
+                  width="178px"
+                  height="55px"
+                  onClick={handleTakePart}
+                >
+                  STAKE LP DON
+                </StakeButton>
+              </div>
             </div>
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
