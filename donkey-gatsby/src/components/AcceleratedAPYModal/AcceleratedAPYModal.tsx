@@ -299,7 +299,7 @@ export const AcceleratedAPYModal = ({
               }}
             >
               <DonTokenIcon style={{ marginBottom: 40 }} />
-              <h4>Your now in Tier {tier.tier}</h4>
+              <h4>You're now in Tier {tier.tier}</h4>
             </div>
           </>
         );

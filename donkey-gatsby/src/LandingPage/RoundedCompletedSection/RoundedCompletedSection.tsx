@@ -31,8 +31,6 @@ const InvestorSection = styled.section`
   }
 `;
 
-
-
 export const RoundedCompletedSection: React.FC = () => {
   return (
     <>
@@ -46,7 +44,8 @@ export const RoundedCompletedSection: React.FC = () => {
             </div>
             <div className="col-md-9 mt-5 mt-md-0">
               <div className="row">
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
@@ -55,73 +54,70 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/morningstar.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/au21.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mt-2"
+                    height={60}
+                    className="mt-2"
                     src="./investorlogos/iangles1.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+               
+              </div>
+              <div className="row mt-4">
+              <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/spark.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/solidity.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/blackedge.png"
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
+                    height={60}
                     src="./investorlogos/gbv.png"
                   />
                 </div>
