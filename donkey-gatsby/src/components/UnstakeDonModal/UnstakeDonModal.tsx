@@ -4,6 +4,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useStakingContract } from "hooks";
 import { Spinner } from "react-bootstrap";
+import { sendEvent } from "helpers";
 
 const StyledH2 = styled.h2`
   font-weight: bold;
@@ -35,6 +36,7 @@ export const UnstakeDonModal = ({
     setBtnLoading(true);
     try {
       await unstake();
+
     } finally {
       setBtnLoading(false);
       onClose();

@@ -1,6 +1,6 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { captureException, getBSCDon, toEther, toWei } from "helpers";
+import { captureException, getBSCDon, sendEvent, toEther, toWei } from "helpers";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import BigNumber from "bignumber.js";
@@ -231,6 +231,12 @@ export const AcceleratedAPYModal = ({
           toWei(new BigNumber(donAmount).minus(stakedDon).toString())
         );
         setHasCompleted(true);
+        const web3 =  getConnectedWeb3();
+        const accounts = await web3.eth.getAccounts();
+        sendEvent("Tier Change", {
+          newTier: selectedTier.toFixed(),
+          user: accounts[0]
+        })
       } catch (e) {
         captureException(e, "StakeDon");
       } finally {
@@ -293,7 +299,7 @@ export const AcceleratedAPYModal = ({
               }}
             >
               <DonTokenIcon style={{ marginBottom: 40 }} />
-              <h4>Your now in Tier {tier.tier}</h4>
+              <h4>You're now in Tier {tier.tier}</h4>
             </div>
           </>
         );
