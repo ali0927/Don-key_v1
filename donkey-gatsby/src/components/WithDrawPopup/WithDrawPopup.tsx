@@ -128,6 +128,9 @@ const WithdrawButton = styled(ButtonWidget)`
   }
   &:disabled {
     font-weight: 500;
+    background: #f9fafb;
+    border: 1px solid #ececec;
+    color: #a2a2a2;
   }
 `;
 
