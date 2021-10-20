@@ -5,7 +5,7 @@ import {
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
-import { captureException, getBSCDon, toEther } from "helpers";
+import { captureException, getBSCDon, sendEvent, toEther } from "helpers";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import { api } from "strapi";
@@ -228,19 +228,23 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   const unstake = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.unstake().send({ from: accounts[0] });
+    
     await fetchState();
+    sendEvent("Unstake", {user: accounts[0], })
   };
 
   const harvest = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.claimReward().send({ from: accounts[0] });
     await fetchState();
+    sendEvent("Harvest", {user: accounts[0], rewards: pendingReward })
   };
 
   const claimTokens = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.claimStaked().send({ from: accounts[0] });
     await fetchState();
+    sendEvent("Claimed", {user: accounts[0], claimed: coolOffAmount })
   };
 
   const stakingObj: IStakingContractContext = useMemo(() => {
