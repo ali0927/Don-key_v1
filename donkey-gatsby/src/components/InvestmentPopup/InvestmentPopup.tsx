@@ -38,10 +38,16 @@ import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import Downarrow from "components/Icons/Downarrow";
+import styled from "styled-components";
 
 const ButtonWrapper = styled.div({
   width: "100%",
 });
+
+const StyledButtonWidget= styled(ButtonWidget)`
+    border-radius: 15px;
+`;
+
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: space-between;
@@ -135,6 +141,8 @@ const themeM = createTheme({
     primary: { main: theme.palette.background.yellow },
   },
 });
+
+
 
 const MyBalanceInBUSD = ({
   onDone,
@@ -271,7 +279,6 @@ export const InvestmentPopup = ({
       }
     }
   `);
-  console.log("--------------TOKENDATA---", tokenData);
   const handleImage = () => {
     if (loadingToken) return;
     if (tokenData && tokenData.tokens[0].tokens) {
@@ -512,7 +519,7 @@ export const InvestmentPopup = ({
 
               <ButtonWrap>
                 <ButtonWrapper>
-                  <ButtonWidget
+                  <StyledButtonWidget
                     className="Buttonwidget"
                     varaint="contained"
                     containedVariantColor="lightYellow"
@@ -524,18 +531,18 @@ export const InvestmentPopup = ({
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
-                  </ButtonWidget>
+                  </ButtonWiStyledButtonWidgetdget>
                 </ButtonWrapper>
 
                 <ButtonWrapper className="widget">
-                  <ButtonWidget
+                  <StyledButtonWidget
                     className="Buttonwidget"
                     varaint="outlined"
                     width="100%"
                     onClick={onClose}
                   >
                     Cancel
-                  </ButtonWidget>
+                  </StyledButtonWidget>
                 </ButtonWrapper>
               </ButtonWrap>
             </div>
@@ -575,7 +582,7 @@ export const InvestmentPopup = ({
         title={hasDons ? "Investment" : ""}
         variant="common"
         isOpen={true}
-        size="xs"
+        size="sm"
         rounded
         onClose={onClose}
       >
