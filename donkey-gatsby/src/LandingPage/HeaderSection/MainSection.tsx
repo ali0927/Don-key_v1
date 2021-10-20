@@ -139,7 +139,7 @@ export const MainSection: React.FC = () => {
   const Strategies = useStaticQuery(
     graphql`
       query StrapiFarmers {
-        allStrapiFarmers(filter: { active: { eq: true } }) {
+        allStrapiFarmers(filter: { status: { in: ["active"] } }) {
           totalCount
           nodes {
             poolAddress
