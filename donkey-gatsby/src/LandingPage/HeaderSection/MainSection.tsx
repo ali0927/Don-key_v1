@@ -197,7 +197,7 @@ export const MainSection: React.FC = () => {
               </Paragraph>
               <div className="d-flex flex-wrap">
                 <LaunchButton
-                  className="mt-3 mt-lg-5 mr-3 position-relative"
+                  className="mt-3 mt-lg-5 mr-3 position-relative d-flex justify-content-end"
                   style={{ width: 221, height: 55 }}
                   onClick={handleDashboard}
                 >
