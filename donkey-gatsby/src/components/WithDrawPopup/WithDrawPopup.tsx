@@ -107,14 +107,14 @@ const Pill = styled.div`
 
 const defaultPercents = [10, 20, 30, 50, 100];
 
-const WithdrawButton = styled.button`
+const WithdrawButton = styled(ButtonWidget)`
   display: block;
-  background: linear-gradient(
+  /* background: linear-gradient(
       94.22deg,
       rgba(255, 255, 255, 0.2) 7.77%,
       rgba(255, 255, 255, 0) 93.41%
     ),
-    #fff037;
+    #fff037; */
   border: 1px solid #fbe492;
   color: #000;
   font-size: 14px;
@@ -124,7 +124,13 @@ const WithdrawButton = styled.button`
   padding: 15px;
   width: 100%;
   &:hover {
-    background: #fff037;
+    /* background: #fff037; */
+  }
+  &:disabled {
+    font-weight: 500;
+    background: #f9fafb;
+    border: 1px solid #ececec;
+    color: #a2a2a2;
   }
 `;
 
@@ -223,7 +229,10 @@ const SelectableWithdrawComponent = ({
           <div>{currency}</div>
         </BoxInput>
         <BoxUsd>
-          ≈ ${input === "" ? "0.00": new BigNumber(input).multipliedBy(price).toFixed(2)}
+          ≈ $
+          {input === ""
+            ? "0.00"
+            : new BigNumber(input).multipliedBy(price).toFixed(2)}
         </BoxUsd>
       </BoxWrapper>
       <div className="mt-3 mb-4 d-flex align-items-center justify-content-between">
@@ -332,6 +341,9 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   const hasGreyAmount = new BigNumber(greyAmount).gt(0);
   const hasInvestedAmount = new BigNumber(investedAmount).gt(0);
+  const hasTypeAmountGreather =
+    new BigNumber(selectedgreyShare).gt(0) ||
+    new BigNumber(selectedinvestedShare).gt(0);
 
   const handleWithDraw = async () => {
     if (poolVersion === 4) {
@@ -427,9 +439,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       return null;
     }
     if (hasGreyAmount && !hasInvestedAmount) {
-      return (
-        <WithdrawFooter>Withdraw is available immediately</WithdrawFooter>
-      );
+      return <WithdrawFooter>Withdraw is available immediately</WithdrawFooter>;
     }
     if (!hasGreyAmount && hasInvestedAmount) {
       return (
@@ -465,7 +475,13 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
                 <div className="mt-4">
                   {renderPopupContent()}
                   <div className="d-flex align-items-center">
-                    <WithdrawButton onClick={handleWithDraw} className="mr-3">
+                    <WithdrawButton
+                      varaint="contained"
+                      containedVariantColor="lightYellow"
+                      disabled={!hasInvestedAmount || !hasTypeAmountGreather}
+                      onClick={handleWithDraw}
+                      className="mr-3"
+                    >
                       {" "}
                       {loading && <Spinner animation={"border"} size="sm" />}
                       {!loading && <>Withdraw</>}
