@@ -158,7 +158,6 @@ export const MainSection: React.FC = () => {
   const [usersLoading, setUsersLoading] = React.useState(false);
   const [tvlLoading, setTVLLoading] = React.useState(false);
 
-
   const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
 
   const updateUsersCount = async () => {
@@ -170,6 +169,35 @@ export const MainSection: React.FC = () => {
     setUsersCount(totalUserCount);
     setUsersLoading(false);
     localStorage.setItem("don-key-users-count", totalUserCount.toString());
+  };
+
+  const circulatingSupply = coingecko
+    ? coingecko.market_data.circulating_supply
+    : 0;
+
+  const volume24hrs = coingecko
+    ? convertToInternationalCurrencySystem(
+        new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
+      ).toString()
+    : 0;
+
+  const derivedETH = coingecko ? coingecko.market_data.current_price.eth : 0;
+  const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
+  const finalDerivedEth = (
+    parseFloat(derivedETH) * parseFloat(ethPriceInUSD)
+  ).toFixed(2);
+  // const totalLiquidity = data && data.token.totalLiquidity;
+
+  const marketCap = convertToInternationalCurrencySystem(
+    new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
+  ).toString();
+
+  const handleDashboard = () => {
+    navigate("/dashboard");
+  };
+
+  const handleTakePart = () => {
+    navigate("/stake");
   };
 
   const updateTVL = async () => {
@@ -204,35 +232,6 @@ export const MainSection: React.FC = () => {
       }
     })();
   }, []);
-
-  const circulatingSupply = coingecko
-    ? coingecko.market_data.circulating_supply
-    : 0;
-
-  const volume24hrs = coingecko
-    ? convertToInternationalCurrencySystem(
-        new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
-      ).toString()
-    : 0;
-
-  const derivedETH = coingecko ? coingecko.market_data.current_price.eth : 0;
-  const ethPriceInUSD = ethPriceInfo && ethPriceInfo.bundle.ethPrice;
-  const finalDerivedEth = (
-    parseFloat(derivedETH) * parseFloat(ethPriceInUSD)
-  ).toFixed(2);
-  // const totalLiquidity = data && data.token.totalLiquidity;
-
-  const marketCap = convertToInternationalCurrencySystem(
-    new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
-  ).toString();
-
-  const handleDashboard = () => {
-    navigate("/dashboard");
-  };
-
-  const handleTakePart = () => {
-    navigate("/stake");
-  };
 
   return (
     <>

@@ -3,12 +3,11 @@ import { Slide } from "./Slide";
 import styled from "styled-components";
 import { ISlideShowProps } from "./interfaces/ISlideShowProps";
 import { chunk } from "lodash";
-import clsx from "clsx";
 import { Carousel } from "react-bootstrap";
 
 const GrayBorder = styled.hr`
   position: absolute;
-  width: 85%;
+  width: 78%;
   border-top: 1.8px dashed#000D09;
   top: 2px;
   margin: 0px;

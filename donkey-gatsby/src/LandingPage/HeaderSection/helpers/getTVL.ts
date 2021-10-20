@@ -28,5 +28,5 @@ export const getTVL = async (farmers: any) => {
       captureException(e, "getTVL");
     }
   }
-  return formatNum(finalTVL.toString());
+  return formatNum(finalTVL.toFixed(0).toString());
 };
