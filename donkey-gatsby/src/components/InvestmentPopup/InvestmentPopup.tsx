@@ -18,6 +18,7 @@ import {
   isValidReferralCode,
   sendEvent,
   toWei,
+  getWrappedContract,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -109,6 +110,7 @@ const NetworkButton = styled.div`
   align-items: center;
   justify-content: center;
   width: 50%;
+  cursor: pointer;
 
   ${({ selected }: { selected: boolean }) =>
     selected &&
@@ -138,10 +140,12 @@ const MyBalanceInBUSD = ({
   onDone,
   poolAddress,
   poolVersion,
+  isUnWrapped,
 }: {
   onDone?: (val: string) => void;
   poolAddress: string;
   poolVersion: number;
+  isUnWrapped: boolean;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const { getConnectedWeb3 } = useWeb3Context();
@@ -150,6 +154,8 @@ const MyBalanceInBUSD = ({
     try {
       const web3 = getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
+      const unWrappedBalance = await web3.eth.getBalance(accounts[0]);
+
       //@ts-ignore
       const acceptedToken =
         poolVersion === 1
@@ -158,11 +164,18 @@ const MyBalanceInBUSD = ({
       const balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
       const decimals = await acceptedToken.methods.decimals().call();
       const balanceBN = new BigNumber(balance).dividedBy(10 ** decimals);
+      const finalBNB = new BigNumber(unWrappedBalance).dividedBy(
+        10 ** decimals
+      );
+      const finalbalance = isUnWrapped
+        ? finalBNB.toFixed(2)
+        : balanceBN.toFixed(2);
+      const finalBN = isUnWrapped ? finalBNB.toString() : balanceBN.toString();
       setState({
-        balance: balanceBN.toFixed(2),
+        balance: finalbalance,
         isReady: true,
       });
-      onDone && onDone(balanceBN.toString());
+      onDone && onDone(finalBN);
     } catch (err) {
       captureException(err, "fetchBalance");
     }
@@ -170,7 +183,7 @@ const MyBalanceInBUSD = ({
   useLayoutEffect(() => {
     fetchBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUnWrapped]);
 
   if (!state.isReady) {
     return <>-</>;
@@ -209,6 +222,7 @@ export const InvestmentPopup = ({
   const [balance, setBalance] = useState("0");
   const [slippage, setSlippage] = useState("5");
   const [imageUrl, setImageUrl] = useState(null);
+
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -253,12 +267,14 @@ export const InvestmentPopup = ({
         image {
           url
         }
+        tokenAddress
       }
     }
   `);
+  console.log("--------------TOKENDATA---", tokenData);
   const handleImage = () => {
     if (loadingToken) return;
-    if (tokenData && tokenData.tokens) {
+    if (tokenData && tokenData.tokens[0].tokens) {
       setImageUrl(tokenData.tokens[0].image.url);
     }
   };
@@ -301,6 +317,17 @@ export const InvestmentPopup = ({
     enable();
 
     try {
+      if (isUnWrapped && tokenData.tokens[0]) {
+        const wrappedTokenAddres = tokenData.tokens[0].tokenAddress;
+        const contract = await getWrappedContract(web3, wrappedTokenAddres);
+        const accounts = await web3.eth.getAccounts();
+        const decimalsLimit = await contract.methods.decimals().call();
+
+        const swapAmount = new BigNumber(toWei(value, decimalsLimit));
+        await contract.methods
+          .deposit()
+          .send({ from: accounts[0], value: swapAmount.toFixed(0) });
+      }
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
         poolVersion === 1 || !poolVersion
@@ -390,6 +417,14 @@ export const InvestmentPopup = ({
     }
   };
   const { symbol } = usePoolSymbol(poolAddress, web3);
+  const [currentCurrency, setCurrentCurrency] = useState(symbol);
+
+  useEffect(() => {
+    setCurrentCurrency(symbol);
+  }, [symbol]);
+
+  const unWrappedSymbol = symbol.substring(1);
+  const isUnWrapped = currentCurrency === unWrappedSymbol;
 
   const renderButtonText = () => {
     if (isLoading) {
@@ -429,7 +464,7 @@ export const InvestmentPopup = ({
                 <InvestmentInput
                   value={value}
                   disabled={isLoading}
-                  currencySymbol={symbol}
+                  currencySymbol={currentCurrency}
                   setValue={setValue}
                   max={balance}
                   tokenPrice={tokenPrice}
@@ -460,8 +495,18 @@ export const InvestmentPopup = ({
               </div>
               {isWrapped && (
                 <NetworksButtonsRoot className="d-flex">
-                  <NetworkButton selected>{symbol.substring(1)}</NetworkButton>
-                  <NetworkButton selected={false}>{symbol}</NetworkButton>
+                  <NetworkButton
+                    selected={currentCurrency === unWrappedSymbol}
+                    onClick={() => setCurrentCurrency(unWrappedSymbol)}
+                  >
+                    {unWrappedSymbol}
+                  </NetworkButton>
+                  <NetworkButton
+                    selected={currentCurrency === symbol}
+                    onClick={() => setCurrentCurrency(symbol)}
+                  >
+                    {symbol}
+                  </NetworkButton>
                 </NetworksButtonsRoot>
               )}
 
@@ -543,9 +588,10 @@ export const InvestmentPopup = ({
                   onDone={setBalance}
                   poolAddress={poolAddress}
                   poolVersion={poolVersion}
+                  isUnWrapped={isUnWrapped}
                 />
               }{" "}
-              {symbol}(~ $
+              {currentCurrency}(~ $
               {new BigNumber(balance || 0).multipliedBy(tokenPrice).toFixed(2)})
             </>
           ) : undefined}

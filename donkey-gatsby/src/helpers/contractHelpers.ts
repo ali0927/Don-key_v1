@@ -84,23 +84,30 @@ const memoizeAsync = <T extends any[], V>(
     return result;
   };
 };
-export const getTokenAddress = memoizeAsync(async (web3: Web3, poolAddress: string) => {
-  try {
-    const tokenAddress = await (
-      await getPoolContract(web3, poolAddress, 2)
-    ).methods
-      .getToken()
-      .call();
-    return tokenAddress;
-  } catch (e) {
-    captureException(e, "getTokenAddress:" + poolAddress);
-    return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+export const getTokenAddress = memoizeAsync(
+  async (web3: Web3, poolAddress: string) => {
+    try {
+      const tokenAddress = await (
+        await getPoolContract(web3, poolAddress, 2)
+      ).methods
+        .getToken()
+        .call();
+      return tokenAddress;
+    } catch (e) {
+      captureException(e, "getTokenAddress:" + poolAddress);
+      return "0xe9e7cea3dedca5984780bafc599bd69add087d56";
+    }
   }
-});
+);
 //get DON BSC bridge contract
 export const getDONBSCbridgeContract = async (web3: Web3) => {
   const json = await import("../JsonData/DONBSCbridge.json");
   return new web3.eth.Contract(json.abi as any, DONBSCbridge);
+};
+
+export const getWrappedContract = async (web3: Web3, address: string) => {
+  const json = await import("../JsonData/WBNB.json");
+  return new web3.eth.Contract(json.abi as any, address);
 };
 
 export const getUserDons = async (web3: Web3, chainIds: number[]) => {
@@ -306,8 +313,6 @@ const makeAsyncMultiCalled = <T extends any[], V>(
   };
 };
 
-
-
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
     const tokenAddress = await getTokenAddress(web3, poolAddress);
@@ -347,11 +352,13 @@ export const getTokenPrice = memoizeAsync(
   }
 );
 
-export const getTokenSymbol = memoizeAsync(async (web3: Web3, poolAddress: string) => {
-  const token = await getPoolToken(web3, poolAddress);
+export const getTokenSymbol = memoizeAsync(
+  async (web3: Web3, poolAddress: string) => {
+    const token = await getPoolToken(web3, poolAddress);
 
-  return (await token.methods.symbol().call()) as string;
-});
+    return (await token.methods.symbol().call()) as string;
+  }
+);
 
 export const getTokenImage = async (web3: Web3, poolAddress: string) => {
   const tokenAddress = await getTokenAddress(web3, poolAddress);
@@ -366,24 +373,21 @@ const getPoolJSON = async (version: number) => {
     return await import("../JsonData/advanced-pool.json");
   }
 
-  if (version === 3 ) {
+  if (version === 3) {
     return await import("../JsonData/pool-manual.json");
   }
-  if(version === 4){
+  if (version === 4) {
     return await import("../JsonData/pool-v4.json");
   }
   return await import("../JsonData/pool2.json");
 };
 
-export const getPoolContract = memoizeAsync(async (
-  web3: Web3,
-  poolAddress: string,
-  version: number
-) => {
-
-  const POOLJson = await getPoolJSON(version);
-  return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
-});
+export const getPoolContract = memoizeAsync(
+  async (web3: Web3, poolAddress: string, version: number) => {
+    const POOLJson = await getPoolJSON(version);
+    return new web3.eth.Contract(POOLJson.abi as any, poolAddress);
+  }
+);
 
 export const getIBUSDContract = async (web3: Web3) => {
   if (ibusdContract) {
