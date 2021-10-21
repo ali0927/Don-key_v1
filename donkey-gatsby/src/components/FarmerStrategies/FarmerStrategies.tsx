@@ -130,7 +130,6 @@ const WithdrawRequest = ({
         fetch({ variables: { poolAddress, walletAddress } });
         setCurrency(currency);
         setIsWithdrawRequested(isRequested);
-        console.log(isRequested, amount);
         setAmountInToken(amount);
         setProfit(new BigNumber(amount).minus(investedAmount).toString());
       }
@@ -169,7 +168,7 @@ const WithdrawRequest = ({
 
   if (isWithdrawRequested) {
     if (loading || !data) {
-      console.log(data, isWithdrawRequested, "some");
+
       return Loader;
     } else {
       const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
@@ -251,6 +250,7 @@ export const FarmerStrategies = ({
                     poolAddress={farmer.poolAddress}
                     graphUrl={farmer.graphUrl}
                     poolVersion={farmer.poolVersion}
+                    blacklist={farmer.strategies[0].blacklist}
                   />
                 )}
               </Col>

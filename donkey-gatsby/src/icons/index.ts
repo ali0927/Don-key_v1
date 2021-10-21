@@ -89,5 +89,9 @@ export * from "./BackArrow";
 export * from "./PaginateLeftArrow";
 export * from "./PaginateRightArrow";
 export * from "./TickIcon";
+<<<<<<< HEAD
 export * from './WalletConnectNewIcon'
 export * from './MetamaskIcon'
+=======
+export * from "./RocketLaunchIcon";
+>>>>>>> 3b5719ff3325e749e3e75d0397af27e49bed1350

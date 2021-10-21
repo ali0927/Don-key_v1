@@ -107,8 +107,8 @@ const WalletPopup = ({ onClose }: { onClose: () => void }) => {
               </div>
             </Button>
           </div>
-<!--           <p>Haven't got a crypto wallet yet?</p>
-          <Btn>Learn How to Create</Btn> -->
+           {/* <p>Haven't got a crypto wallet yet?</p>
+          <Btn>Learn How to Create</Btn>  */}
         </div>
       </Main>
     </DonCommonmodal>

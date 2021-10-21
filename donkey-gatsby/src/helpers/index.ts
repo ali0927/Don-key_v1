@@ -6,3 +6,4 @@ export * from "./convertToInternationalCurrency";
 export * from "./captureException";
 export * from "./shortLargeAddress";
 export * from "./addDots";
+export * from "./sendEvent";
