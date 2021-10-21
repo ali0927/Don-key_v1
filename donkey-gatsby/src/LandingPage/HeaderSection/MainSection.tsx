@@ -4,13 +4,26 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
-import { convertToInternationalCurrencySystem } from "helpers";
+import {
+  captureException,
+  convertToInternationalCurrencySystem,
+  formatNum,
+  getPoolContract,
+  getPoolToken,
+  getTokenPrice,
+  getTotalPoolValue,
+  toEther,
+} from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
-import { Skeleton } from "@material-ui/lab";
+import { SlideShow } from "./SlideShow";
+import { graphql, useStaticQuery } from "gatsby";
+import { getTVL, getUsersCount } from "./helpers";
+import { RocketLaunchIcon } from "icons";
+import { ButtonWidget } from "components/Button";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -62,42 +75,11 @@ const Paragraph = styled.p`
   }
 `;
 
-const FooterHeading = styled.div`
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: center;
-`;
-
-const FooterSubHeading = styled.h1`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  margin-top: 13px;
-`;
-
 const FooterRow = styled.div`
   width: 100%;
-`;
-
-const Col = styled.div``;
-
-const GrayBorder = styled.hr`
-  position: absolute;
-  width: 50%;
-  border-top: 1.8px dashed#000D09;
-  top: 2px;
-  margin: 0px;
-  margin-left: 15px;
-`;
-
-const DarkBorder = styled.div`
-  width: 29px;
-  height: 5px;
-  background: #000;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    width: 60%;
+  }
 `;
 
 const ETH_PRICE = gql`
@@ -108,19 +90,41 @@ const ETH_PRICE = gql`
   }
 `;
 
-const StakeButton = styled.button`
-  background: linear-gradient(270deg, #35424b 0%, #0b0e12 100%);
+const LaunchButton = styled.button`
+  background: #222222;
+  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
   padding: 1rem 2rem;
   color: #fff;
   font-weight: 500;
   border: 0;
-  font-size: 12px;
+  font-size: 16px;
   border-radius: 10px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
   :hover {
     box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
       4px 4px 18px rgba(0, 0, 0, 0.5);
   }
 `;
+
+const StakeButton = styled(ButtonWidget)`
+  border: 2px solid #222222;
+  font-weight: 600;
+`;
+
+const Rocket = styled(RocketLaunchIcon)`
+  position: absolute;
+  left: 6%;
+  bottom: 5%;
+`;
+
+// const LunchRocketRoot = styled.div`
+//   position: absolute;
+//   width: 27%;
+//   bottom: 9px;
+//   left: 0;
+// `;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
@@ -131,6 +135,41 @@ export const MainSection: React.FC = () => {
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
+
+  const Strategies = useStaticQuery(
+    graphql`
+      query StrapiFarmers {
+        allStrapiFarmers(filter: { status: { in: ["active"] } }) {
+          totalCount
+          nodes {
+            poolAddress
+            network {
+              chainId
+            }
+            name
+          }
+        }
+      }
+    `
+  );
+
+  const [usersCount, setUsersCount] = React.useState(0);
+  const [totalTVL, setTotalTVL] = React.useState("0");
+  const [usersLoading, setUsersLoading] = React.useState(false);
+  const [tvlLoading, setTVLLoading] = React.useState(false);
+
+  const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
+
+  const updateUsersCount = async () => {
+    setUsersLoading(true);
+
+    const totalUserCount = await getUsersCount(
+      Strategies.allStrapiFarmers.nodes
+    );
+    setUsersCount(totalUserCount);
+    setUsersLoading(false);
+    localStorage.setItem("don-key-users-count", totalUserCount.toString());
+  };
 
   const circulatingSupply = coingecko
     ? coingecko.market_data.circulating_supply
@@ -153,9 +192,46 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
+  const handleDashboard = () => {
+    navigate("/dashboard");
+  };
+
   const handleTakePart = () => {
     navigate("/stake");
   };
+
+  const updateTVL = async () => {
+    setTVLLoading(true);
+    const totalTVL = await getTVL(Strategies.allStrapiFarmers.nodes);
+    setTotalTVL(totalTVL);
+    setTVLLoading(false);
+    localStorage.setItem("don-key-tvl", totalTVL);
+  };
+
+  React.useEffect(() => {
+    (async () => {
+      const dateOfSaved = localStorage.getItem("dateOfSaved");
+      const usersCount = localStorage.getItem("don-key-users-count");
+      const tvl = localStorage.getItem("don-key-tvl");
+      if (dateOfSaved && usersCount && tvl) {
+        const newDate = new Date().getTime();
+        const existingDate = new Date(dateOfSaved).getTime();
+        const diff = newDate - existingDate;
+        const diffMins = Math.round(diff / 60000);
+        if (diffMins > 10) {
+          updateUsersCount();
+          updateTVL();
+        } else {
+          setUsersCount(Number(usersCount));
+          setTotalTVL(tvl);
+        }
+      } else {
+        updateUsersCount();
+        updateTVL();
+        localStorage.setItem("dateOfSaved", new Date().toString());
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -167,9 +243,26 @@ export const MainSection: React.FC = () => {
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph>
-              <StakeButton className="mt-3 mt-lg-5" onClick={handleTakePart}>
-                Stake LP token
-              </StakeButton>
+              <div className="d-flex flex-wrap">
+                <LaunchButton
+                  className="mt-3 mt-lg-5 mr-3 position-relative d-flex justify-content-end"
+                  style={{ width: 221, height: 55 }}
+                  onClick={handleDashboard}
+                >
+                  <Rocket />
+                  LAUNCH APP
+                </LaunchButton>
+
+                <StakeButton
+                  varaint="outlined"
+                  className="mt-3 mt-lg-5"
+                  width="178px"
+                  height="55px"
+                  onClick={handleTakePart}
+                >
+                  STAKE LP DON
+                </StakeButton>
+              </div>
             </div>
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
@@ -177,44 +270,58 @@ export const MainSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="d-flex pb-3 pb-md-5 justify-content-start">
-            <FooterRow className="row position-relative">
-              <GrayBorder className="d-none d-md-block" />
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">DON price</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton width={100} variant="text" />
-                  ) : (
-                    `$${finalDerivedEth}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">24-hour volume</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${volume24hrs}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">Market Cap</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${marketCap}`
-                  )}
-                </FooterSubHeading>
-              </Col>
+          <div className=" pb-3 pb-md-5 ">
+            <FooterRow className="position-relative">
+              <SlideShow
+                slides={[
+                  {
+                    label: "DON price",
+                    value: finalDerivedEth,
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "24-hour volume",
+                    value: volume24hrs.toString(),
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "Market Cap",
+                    value: marketCap,
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+
+                  {
+                    label: "TVL",
+                    value: totalTVL,
+                    isLoading: tvlLoading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "Users",
+                    value: usersCount,
+                    isLoading: usersLoading,
+                    symbol: "",
+                  },
+                  {
+                    label: "Strategies",
+                    value: TotalStrategies,
+                    isLoading: loading,
+                    symbol: "",
+                  },
+                ]}
+              />
+
+              {/* <Slide label="TVL" isLoading={loading} value={marketCap} />
+              <Slide label="Users" isLoading={loading} value={marketCap} />
+
+              <Slide label="Strategies" isLoading={loading} value={marketCap} /> */}
             </FooterRow>
           </div>
+
+          <div></div>
         </div>
       </Root>
     </>

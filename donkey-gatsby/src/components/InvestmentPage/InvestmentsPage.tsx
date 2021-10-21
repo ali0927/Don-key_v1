@@ -57,6 +57,8 @@ import {
 import { DonAccordion } from "./DonAccordion/DonAccordion";
 import { AiOutlineInfoCircle, AiFillCaretDown } from "react-icons/ai";
 import { TickIcon } from "icons";
+import clsx from "clsx";
+import { ClickAwayListener } from "@material-ui/core";
 
 export const Heading = styled.div`
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -254,6 +256,9 @@ const DropDown = styled.ul`
     padding-bottom: 15px;
     border-bottom: 1px solid #e5e5e5;
   }
+  .selected {
+    background: #201f1f;
+  }
   @media (max-width: 568px) {
     position: fixed;
     z-index: 1;
@@ -279,6 +284,7 @@ const DropDownItem = styled.li`
   &:hover {
     background: #201f1f;
   }
+
   @media (max-width: 568px) {
     &:hover {
       .tick-icon {
@@ -962,39 +968,50 @@ export const InvestmentsPage = () => {
 
   const DropDownMenu = () => {
     return (
-      <Overlay
-        onClick={() => {
-          setShow(false);
-        }}
-      >
-        <DropDown>
-          <h5 className="d-sm-none text-center">Network</h5>
-          <DropDownItem
-            className="d-flex justify-content-between align-items-center"
-            onClick={() => {
-              handleNameChange("Polygon");
-            }}
-          >
-            <div>Polygon</div> <TickIcon className="tick-icon" />
-          </DropDownItem>
-          <DropDownItem
-            className="d-flex justify-content-between align-items-center"
-            onClick={() => {
-              handleNameChange("AVAX");
-            }}
-          >
-            <div>AVAX</div> <TickIcon className="tick-icon" />
-          </DropDownItem>
-          <DropDownItem
-            className="d-flex justify-content-between align-items-center"
-            onClick={() => {
-              handleNameChange("BSC");
-            }}
-          >
-            <div>BSC</div> <TickIcon className="tick-icon" />
-          </DropDownItem>
-        </DropDown>
-      </Overlay>
+      <ClickAwayListener mouseEvent="onMouseDown" onClickAway={()=> setShow(false)}>
+        <Overlay
+          onClick={() => {
+            setShow(false);
+          }}
+        >
+          <DropDown>
+            <h5 className="d-sm-none text-center">Network</h5>
+            <DropDownItem
+              className={clsx(
+                "d-flex justify-content-between align-items-center",
+                { selected: networkName === "Polygon" }
+              )}
+              onClick={() => {
+                handleNameChange("Polygon");
+              }}
+            >
+              <div>Polygon</div> <TickIcon className="tick-icon" />
+            </DropDownItem>
+            <DropDownItem
+              className={clsx(
+                "d-flex justify-content-between align-items-center",
+                { selected: networkName === "AVAX" }
+              )}
+              onClick={() => {
+                handleNameChange("AVAX");
+              }}
+            >
+              <div>AVAX</div> <TickIcon className="tick-icon" />
+            </DropDownItem>
+            <DropDownItem
+              className={clsx(
+                "d-flex justify-content-between align-items-center",
+                { selected: networkName === "BSC" }
+              )}
+              onClick={() => {
+                handleNameChange("BSC");
+              }}
+            >
+              <div>BSC</div> <TickIcon className="tick-icon" />
+            </DropDownItem>
+          </DropDown>
+        </Overlay>
+      </ClickAwayListener>
     );
   };
 
