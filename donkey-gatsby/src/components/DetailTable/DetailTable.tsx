@@ -270,7 +270,6 @@ export const DetailTable = ({
   tvl,
   oldPoolAddress,
   oldPoolVersion,
-  isWrapped,
 }: {
   poolAddress: string;
   oldPoolAddress: string;
@@ -281,7 +280,6 @@ export const DetailTable = ({
   poolVersion: number;
   tvl: string;
   gasLimit?: string;
-  isWrapped: boolean;
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
   const [totalPoolValueInUSD, setTotalPoolValueInUsd] = useState("0");
@@ -391,7 +389,6 @@ export const DetailTable = ({
             oldPoolVersion={oldPoolVersion}
             isWithdrawRequested={isWithdrawRequested}
             boostApy={boostApy}
-            isWrapped={isWrapped}
             apy={apy}
           />
         );

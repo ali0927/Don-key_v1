@@ -215,7 +215,6 @@ export const InvestmentPopup = ({
   onClose,
   onSuccess,
   apy,
-  isWrapped = false,
 }: {
   poolAddress: string;
   apy: string;
@@ -223,7 +222,6 @@ export const InvestmentPopup = ({
   gasLimit?: string;
   onSuccess?: () => void;
   onClose: () => void;
-  isWrapped?: boolean;
 }) => {
   const [tokenPrice, setTokenPrice] = useState("-");
   const [value, setValue] = useState("");
@@ -278,9 +276,12 @@ export const InvestmentPopup = ({
           url
         }
         tokenAddress
+        isWrapped
+  
       }
     }
   `);
+  const isWrapped = ( tokenData && tokenData.tokens[0] && tokenData.tokens[0].isWrapped);
   const handleImage = () => {
     if (loadingToken) return;
     if (tokenData && tokenData.tokens[0].tokens) {

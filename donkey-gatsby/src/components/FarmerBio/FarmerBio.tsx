@@ -126,7 +126,6 @@ export const FarmerBio = ({
     farmerImage: { url: picture },
     oldPoolAddress,
     oldPoolVersion,
-    isWrapped = false,
   } = farmer;
 
   const [openSharePopup, setSharePopup] = useState(false);
@@ -278,7 +277,6 @@ export const FarmerBio = ({
               poolVersion={pool_version}
               poolAddress={poolAddress}
               boostApy={boostApy}
-              isWrapped={isWrapped}
             />
           </Row>
         </Container>
