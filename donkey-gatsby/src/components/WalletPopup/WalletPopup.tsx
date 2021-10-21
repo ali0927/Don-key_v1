@@ -40,15 +40,16 @@ const Button = styled.div`
     padding: 10px 4px;
   }
 `;
-const Btn = styled.div`
-  background: #f4e41c;
-  border-radius: 8px;
-  padding: 15px 40px;
-  cursor: pointer;
-  @media (max-width: 380px) {
-    padding: 15px 10px;
-  }
-`;
+
+// const Btn = styled.div`
+//   background: #f4e41c;
+//   border-radius: 8px;
+//   padding: 15px 40px;
+//   cursor: pointer;
+//   @media (max-width: 380px) {
+//     padding: 15px 10px;
+//   }
+// `;
 
 const Subtitle = styled.div`
   font-size: 14px;
@@ -106,8 +107,8 @@ const WalletPopup = ({ onClose }: { onClose: () => void }) => {
               </div>
             </Button>
           </div>
-          <p>Haven't got a crypto wallet yet?</p>
-          <Btn>Learn How to Create</Btn>
+<!--           <p>Haven't got a crypto wallet yet?</p>
+          <Btn>Learn How to Create</Btn> -->
         </div>
       </Main>
     </DonCommonmodal>
