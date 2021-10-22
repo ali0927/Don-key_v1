@@ -8,7 +8,7 @@ const InvestmentRoot = styled.div({
   display: "flex",
 });
 
-const InvestmentCurrencys = styled.div`
+const InvestmentCurrencys = styled.div<{disabled?: boolean;}>`
   font-weight: bold;
   font-size: 20px;
   background-color: #f9fafb;
@@ -18,6 +18,7 @@ const InvestmentCurrencys = styled.div`
   display: flex;
   align-items: center;
   white-space: nowrap;
+  color: ${(props)=> props.disabled ? "#606060": "#000"};
   @media only screen and (max-width: 600px) {
     height: 43px;
     padding: 0.65rem 0.8rem 0.5rem 0rem;
@@ -151,7 +152,7 @@ export const InvestmentInput = ({
               }}
             />
           </div>
-          <InvestmentCurrencys>
+          <InvestmentCurrencys disabled={disabled}>
             {currencySymbol.toUpperCase()}
           </InvestmentCurrencys>
         </InvestmentRoot>

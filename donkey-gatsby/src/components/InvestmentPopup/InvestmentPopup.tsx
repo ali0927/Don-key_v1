@@ -107,7 +107,7 @@ const NetworksButtonsRoot = styled.div`
   margin-bottom: 40px;
 `;
 
-const NetworkButton = styled.div`
+const NetworkButton = styled.div<{ disabled?: boolean; selected: boolean }>`
   font-family: Poppins;
   font-size: 12px;
   font-weight: 600;
@@ -118,7 +118,7 @@ const NetworkButton = styled.div`
   align-items: center;
   justify-content: center;
   width: 50%;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
 
   ${({ selected }: { selected: boolean }) =>
     selected &&
@@ -277,11 +277,11 @@ export const InvestmentPopup = ({
         }
         tokenAddress
         isWrapped
-  
       }
     }
   `);
-  const isWrapped = ( tokenData && tokenData.tokens[0] && tokenData.tokens[0].isWrapped);
+  const isWrapped =
+    tokenData && tokenData.tokens[0] && tokenData.tokens[0].isWrapped;
   const handleImage = () => {
     if (loadingToken) return;
     if (tokenData && tokenData.tokens[0].tokens) {
@@ -458,11 +458,18 @@ export const InvestmentPopup = ({
       }
     })();
   }, []);
+
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
   useEffect(() => {
     fetchTokenInfo();
     handleImage();
   }, [tokenData]);
+
+  const handleSymbolChange = (tokenSymbol: string) => () => {
+    if (!isLoading) {
+      setCurrentCurrency(tokenSymbol);
+    }
+  };
 
   const renderContent = () => {
     if (hasCheckedDons) {
@@ -506,14 +513,16 @@ export const InvestmentPopup = ({
               {isWrapped && (
                 <NetworksButtonsRoot className="d-flex">
                   <NetworkButton
+                    disabled={isLoading}
                     selected={currentCurrency === unWrappedSymbol}
-                    onClick={() => setCurrentCurrency(unWrappedSymbol)}
+                    onClick={handleSymbolChange(unWrappedSymbol)}
                   >
                     {unWrappedSymbol}
                   </NetworkButton>
                   <NetworkButton
+                    disabled={isLoading}
                     selected={currentCurrency === symbol}
-                    onClick={() => setCurrentCurrency(symbol)}
+                    onClick={handleSymbolChange(symbol)}
                   >
                     {symbol}
                   </NetworkButton>
