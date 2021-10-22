@@ -10,10 +10,11 @@ import { JoinCommunity } from "LandingPage/JoinCommunity";
 import { Footer } from "components/Footer";
 import { MainSection } from "LandingPage/HeaderSection";
 import React from "react";
+import { PartnerSection } from "LandingPage/PartnersSection";
 export default function Home() {
   return (
     <div>
-      <NavBar  />
+      <NavBar />
 
       <MainSection />
 
@@ -32,6 +33,7 @@ export default function Home() {
       {/** RoundedCompleted Section */}
       <RoadMap />
       <RoundedCompletedSection />
+      <PartnerSection />
 
       {/*  Join the Don-key Community */}
       <JoinCommunity />
