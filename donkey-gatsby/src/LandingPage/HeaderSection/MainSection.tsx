@@ -5,14 +5,7 @@ import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
 import {
-  captureException,
   convertToInternationalCurrencySystem,
-  formatNum,
-  getPoolContract,
-  getPoolToken,
-  getTokenPrice,
-  getTotalPoolValue,
-  toEther,
 } from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
@@ -111,6 +104,10 @@ const LaunchButton = styled.button`
 const StakeButton = styled(ButtonWidget)`
   border: 2px solid #222222;
   font-weight: 600;
+  width: 221px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+     width: 178px;
+  }
 `;
 
 const Rocket = styled(RocketLaunchIcon)`
