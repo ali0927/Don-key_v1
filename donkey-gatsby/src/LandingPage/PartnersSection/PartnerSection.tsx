@@ -2,17 +2,26 @@ import React from "react";
 import styled from "styled-components";
 import { breakPoints } from "breakponts";
 import { StaticImage } from "gatsby-plugin-image";
+import Certik from "./logos/certik.png";
+
+const Section = styled.div`
+  background: #ffff;
+`;
 
 const Root = styled.section`
-  background: #ffff;
-  padding: 3rem 0;
   padding-bottom: 1rem;
-  min-height: 450px;
   display: flex;
   align-items: center;
+  padding: 3rem 0;
+  padding-bottom: 0px;
   @media only screen and (min-width: ${breakPoints.md}) {
-    padding: 6rem 0;
+    padding: 5rem 0;
+    padding-bottom: 0px;
   }
+`;
+
+const Footer = styled.div`
+  padding-bottom: 3rem;
 `;
 
 const StyledP = styled.p`
@@ -27,15 +36,22 @@ const StyledP = styled.p`
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
   font-weight: 800;
-  color: #423F15;
+  color: #423f15;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: 25px;
   }
 `;
 
+const FooterText = styled.p`
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+`;
+
 export const PartnerSection: React.FC = () => {
   return (
-    <>
+    <Section>
       <Root>
         <div className="container">
           <div className="row align-items-center">
@@ -133,6 +149,12 @@ export const PartnerSection: React.FC = () => {
           </div>
         </div>
       </Root>
-    </>
+      <Footer className="container">
+        <div className="d-flex justify-content-end align-items-center">
+          <FooterText>Audited by</FooterText>
+          <img src={Certik} alt="Certik image not found" />
+        </div>
+      </Footer>
+    </Section>
   );
 };
