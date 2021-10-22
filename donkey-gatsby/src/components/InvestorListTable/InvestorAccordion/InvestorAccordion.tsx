@@ -53,7 +53,7 @@ export const InvestorAccordion: React.FC<IInvestorAccordionProps> = (props) => {
     const list = [
       {
         address: "0x66bf2E433c9B9aD56d952845F32201F727A8eD52",
-        date: "21/10/2021",
+        date: "22/10/2021",
       },
       {
         address: "0x965534Bd90e2A2135756f60F97798B833E461739",
