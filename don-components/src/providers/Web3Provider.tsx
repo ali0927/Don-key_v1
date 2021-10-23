@@ -105,6 +105,15 @@ const switchNetwork = async (provider: any, chainIdNum: number) => {
   }
 };
 
+
+const buildRpcConfig = () => {
+  const obj: {[x: number]: string} = {};
+  NetworkConfigs.map(item => {
+    obj[item.chainId] = getRandom(item.rpcs);
+  })
+  return obj;
+}
+
 export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
   const network = NetworkConfigs.find((item) => item.chainId === chainId);
   if (!network) {
@@ -133,7 +142,7 @@ export const Web3Provider: React.FC<{
           walletconnect: {
             package: WalletConnectProvider,
             options: {
-              infuraId: "81deb6226d18463389c82d7f16b0a47f",
+              rpc: buildRpcConfig()
             },
           },
         },
