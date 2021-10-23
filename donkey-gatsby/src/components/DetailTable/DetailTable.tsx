@@ -309,6 +309,7 @@ export const DetailTable = ({
   const connectedWeb3 = getConnectedWeb3();
   useEffect(() => {
     (async () => {
+      console.log(poolVersion, isActiveNetwork, connected)
       if (poolVersion > 2 && isActiveNetwork && connected) {
         const pool = await getPoolContract(
           connectedWeb3,
