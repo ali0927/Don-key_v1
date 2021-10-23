@@ -339,7 +339,7 @@ const DashboardDrawer = () => {
   );
 };
 
-function NavBar({ variant = "landing" }: INavBarProps) {
+function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
@@ -406,7 +406,7 @@ function NavBar({ variant = "landing" }: INavBarProps) {
           {variant === "landing" && <LandingMenu />}
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
-        {variant === "landing" && <NavButton to="/dashboard">DAPP</NavButton>}
+        {variant === "landing" && !hideDappButton && <NavButton to="/dashboard">DAPP</NavButton>}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
     </MenuWrapper>
