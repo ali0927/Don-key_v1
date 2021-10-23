@@ -324,7 +324,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
   }, []);
 
   useEffectOnTabFocus(() => {
-    if (poolVersion > 2) {
+    // if (poolVersion > 2) {
       (async () => {
         setHasChecked(false);
         try {
@@ -335,7 +335,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           setHasChecked(true);
         }
       })();
-    }
+    // }
   }, []);
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 

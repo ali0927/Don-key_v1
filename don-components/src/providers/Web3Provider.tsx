@@ -28,7 +28,7 @@ interface IAppState {
 
 type IAppContext = IAppState & {
   getConnectedWeb3: () => Web3;
-  connectDapp: () => Promise<void>;
+  connectDapp: (type?: "injected" | "walletconnect") => Promise<void>;
   disconnectDapp: () => Promise<void>;
   switchNetwork: (chainId: number) => Promise<void>;
 };
@@ -105,6 +105,15 @@ const switchNetwork = async (provider: any, chainIdNum: number) => {
   }
 };
 
+
+const buildRpcConfig = () => {
+  const obj: {[x: number]: string} = {};
+  NetworkConfigs.map(item => {
+    obj[item.chainId] = getRandom(item.rpcs);
+  })
+  return obj;
+}
+
 export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
   const network = NetworkConfigs.find((item) => item.chainId === chainId);
   if (!network) {
@@ -133,12 +142,12 @@ export const Web3Provider: React.FC<{
           walletconnect: {
             package: WalletConnectProvider,
             options: {
-              infuraId: "81deb6226d18463389c82d7f16b0a47f",
+              rpc: buildRpcConfig()
             },
           },
         },
       });
-      if(typeof window.ethereum !== "undefined") {
+      if (typeof window.ethereum !== "undefined") {
         if (window.ethereum.isConnected()) {
           if (web3ModalRef.current.cachedProvider) {
             connectDapp();
@@ -150,26 +159,35 @@ export const Web3Provider: React.FC<{
 
   const providerRef = useRef<any | null>(null);
 
-  const connectDapp = useCallback(async () => {
-    const provider = await web3ModalRef.current.connect();
-    providerRef.current = provider;
-    await subscribeProvider(provider);
+  const connectDapp = useCallback(
+    async (type?: "injected" | "walletconnect") => {
+      let provider: any = null;
+      if (type) {
+        provider = await web3ModalRef.current.connectTo(type);
+      } else {
+        provider = await web3ModalRef.current.connect();
+      }
+      providerRef.current = provider;
+      await subscribeProvider(provider);
 
-    const web3: Web3 = new Web3(provider);
+      const web3: Web3 = new Web3(provider);
 
-    const accounts = await web3.eth.getAccounts();
+      const accounts = await web3.eth.getAccounts();
 
-    const address = accounts[0];
+      const address = accounts[0];
 
-    const currentChainId = await web3.eth.getChainId();
-    web3Ref.current = web3;
-    updateState({
-      provider,
-      connected: true,
-      address,
-      chainId: currentChainId,
-    });
-  }, []);
+      const currentChainId = await web3.eth.getChainId();
+      web3Ref.current = web3;
+      updateState({
+        provider,
+        connected: true,
+        address,
+        chainId: currentChainId,
+      });
+    },
+    []
+  );
+
   const disconnectDapp = useCallback(async () => {
     await resetApp();
   }, []);
@@ -205,12 +223,12 @@ export const Web3Provider: React.FC<{
     provider.on("chainChanged", async (chainId: string) => {
       updateState({ chainId: parseInt(chainId) });
     });
-    provider.on("connect",async (chainId: any)=> {
-      updateState({chainId: parseInt(chainId), connected: true})
-    })
+    provider.on("connect", async (chainId: any) => {
+      updateState({ chainId: parseInt(chainId), connected: true });
+    });
     // Subscribe to provider disconnection
     provider.on("disconnect", (error: { code: number; message: string }) => {
-      updateState({connected: false,})
+      updateState({ connected: false });
     });
   }, []);
 

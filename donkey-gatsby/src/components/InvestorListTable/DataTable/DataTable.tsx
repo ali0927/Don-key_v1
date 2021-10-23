@@ -15,6 +15,22 @@ import { Spinner } from "react-bootstrap";
 import clsx from "clsx";
 import { TableHeadingToolTip } from "../ToolTip";
 
+
+export const NewPoolListUpdated = [
+  {
+    address: "0x66bf2E433c9B9aD56d952845F32201F727A8eD52",
+    date: "22/10/2021",
+  },
+  {
+    address: "0x965534Bd90e2A2135756f60F97798B833E461739",
+    date: "18/10/2021",
+  },
+  {
+    address: "0x57c1fEc5A17EaF4F0C8597e7be7E6CC32AA488d6",
+    date: "23/10/2021",
+  },
+];
+
 export const DataTable: React.FC<IDataTableProps> = (props) => {
   const { poolAddress, chainId, pool, tokenPrice, poolVersion } = props;
 
@@ -43,6 +59,24 @@ export const DataTable: React.FC<IDataTableProps> = (props) => {
     return null;
   }
 
+  const renderCaption = () => {
+    
+    const item = NewPoolListUpdated.find(
+      (item) => item.address.toLowerCase() === poolAddress.toLowerCase()
+    );
+    if (item) {
+      return (
+        <TableHeadingToolTip
+          label="Duration"
+          position="right"
+          message={`Pool contract has been updated to V2 on ${item.date}. Investor list data
+      is on-chain based.`}
+        />
+      );
+    }
+    return <>Duration</>;
+  };
+
   return (
     <>
       {props.investorsList.length > rowsLimit && (
@@ -66,18 +100,7 @@ export const DataTable: React.FC<IDataTableProps> = (props) => {
                 Profit/Loss
               </TableHeading>
               <TableHeading style={{ textAlign: "center" }}>
-                {poolAddress ===
-                  "0x965534Bd90e2A2135756f60F97798B833E461739" && (
-                  <TableHeadingToolTip
-                    label="Duration"
-                    position="right"
-                    message="Pool contract has been updated to V2 on 18/10/2021. Investor list data
-is on-chain based."
-                  />
-                )}
-                {poolAddress !== "0x965534Bd90e2A2135756f60F97798B833E461739" && <>Duration</>
-
-                }
+                {renderCaption()}
               </TableHeading>
             </TableRow>
           </TableHead>
