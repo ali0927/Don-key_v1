@@ -478,7 +478,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
                     <WithdrawButton
                       varaint="contained"
                       containedVariantColor="lightYellow"
-                      disabled={!hasInvestedAmount || !hasTypeAmountGreather}
+                      disabled={!hasInvestedAmount && !hasTypeAmountGreather}
                       onClick={handleWithDraw}
                       className="mr-3"
                     >
