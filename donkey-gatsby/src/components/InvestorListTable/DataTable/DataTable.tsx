@@ -15,7 +15,6 @@ import { Spinner } from "react-bootstrap";
 import clsx from "clsx";
 import { TableHeadingToolTip } from "../ToolTip";
 
-
 export const NewPoolListUpdated = [
   {
     address: "0x66bf2E433c9B9aD56d952845F32201F727A8eD52",
@@ -29,6 +28,8 @@ export const NewPoolListUpdated = [
     address: "0x57c1fEc5A17EaF4F0C8597e7be7E6CC32AA488d6",
     date: "23/10/2021",
   },
+  { address: "0x6E51C183116a1F44dCc51342A0aEeB712d4e0B81", date: "23/10/2021" },
+  { address: "0x1c372020776296afE0f584ac1F52F028e71f830c", date: "25/10/2021" },
 ];
 
 export const DataTable: React.FC<IDataTableProps> = (props) => {
@@ -60,7 +61,6 @@ export const DataTable: React.FC<IDataTableProps> = (props) => {
   }
 
   const renderCaption = () => {
-    
     const item = NewPoolListUpdated.find(
       (item) => item.address.toLowerCase() === poolAddress.toLowerCase()
     );
