@@ -41,7 +41,8 @@ export const NavButton = ({
   target,
   onClick,
   disabled,
-  className
+  className,
+  style
 }: {
   to?: string;
   children: React.ReactNode;
@@ -49,17 +50,18 @@ export const NavButton = ({
   onClick?: (e: React.MouseEvent) => void;
   disabled?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }) => {
   if (to) {
     return (
-      <StyledButtonLink className={className} target={target} onClick={onClick} to={to}>
+      <StyledButtonLink style={style} className={className} target={target} onClick={onClick} to={to}>
         {children}
       </StyledButtonLink>
     );
   }
 
   return (
-    <StyledButton className={className} disabled={disabled} onClick={onClick}>
+    <StyledButton style={style} className={className} disabled={disabled} onClick={onClick}>
       {children}
     </StyledButton>
   );
