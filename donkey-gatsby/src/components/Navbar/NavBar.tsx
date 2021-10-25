@@ -406,7 +406,7 @@ function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
           {variant === "landing" && <LandingMenu />}
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
-        {variant === "landing" && !hideDappButton && <NavButton to="/dashboard">DAPP</NavButton>}
+        {variant === "landing" &&  <NavButton style={hideDappButton ? {visibility: "hidden"}: {}}  to="/dashboard">DAPP</NavButton>}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
     </MenuWrapper>
