@@ -15,9 +15,9 @@ const StyledP = styled.p`
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-style: normal;
   font-weight: 800;
-  color: #423F15;
+  color: #423f15;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 25px;
+    font-size: 23px;
   }
 `;
 
@@ -32,8 +32,6 @@ const InvestorSection = styled.section`
   }
 `;
 
-
-
 export const RoundedCompletedSection: React.FC = () => {
   return (
     <>
@@ -41,89 +39,98 @@ export const RoundedCompletedSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3 ">
-              <StyledP className="mb-5 mb-sm-0 text-center text-sm-left">
+              <StyledP className="mb-0  mb-md-5 text-center text-sm-left">
                 Strategic Investment Round Completed
               </StyledP>
             </div>
             <div className="col-md-9 mt-5 mt-md-0">
               <div className="row">
-                <div className="col-md-3 d-flex flex-column align-items-center">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
                     src="./investorlogos/banter.png"
+                    className="mb-5"
                     height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/morningstar.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/au21.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mt-2"
                     src="./investorlogos/iangles1.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+              </div>
+              <div className="row mt-4">
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/spark.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/solidity.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/blackedge.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
-                <div className="col-md-3 d-flex flex-column align-items-center">
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                     height={60}
-                     className="mb-4"
                     src="./investorlogos/gbv.png"
+                    className="mb-5"
+                    height={60}
                   />
                 </div>
               </div>

@@ -56,7 +56,7 @@ export const PartnerSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3 ">
-              <StyledP className="mb-5 mb-sm-0 text-center text-sm-left">
+              <StyledP className="mb-0 mb-md-5 text-center text-sm-left">
                 Partners
               </StyledP>
             </div>
@@ -150,7 +150,7 @@ export const PartnerSection: React.FC = () => {
         </div>
       </Root>
       <Footer className="container">
-        <div className="d-flex justify-content-end align-items-center">
+        <div className="d-flex justify-content-center justify-content-md-end align-items-center">
           <FooterText>Audited by</FooterText>
           <img src={Certik} alt="Certik image not found" />
         </div>
