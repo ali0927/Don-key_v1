@@ -381,6 +381,7 @@ export const InvestmentPopup = ({
             gas: gasLimit,
           });
       }
+      
       if (poolVersion === 3) {
         if (referralCode && applied) {
           await pool.methods
