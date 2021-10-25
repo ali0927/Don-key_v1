@@ -36,6 +36,7 @@ import { InvestmentsIcon } from "icons/InvestmentsIcon";
 import { StakeIcon } from "icons/StakeIcon";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ClickAwayListener } from "@material-ui/core";
+import WalletPopup from "components/WalletPopup/WalletPopup";
 
 declare global {
   interface Window {
@@ -113,27 +114,26 @@ const UniSwapURL =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
 const ConnectWalletButton = () => {
-  const { connectDapp, connected } = useWeb3Context();
+  const { connected } = useWeb3Context();
 
   const [isDisabled, setIsDisabled] = useState(false);
+  const [isShow, setIsShow] = useState(false);
 
-  const handleConnection = async () => {
-    setIsDisabled(true);
-    try {
-      await connectDapp();
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setIsDisabled(false);
-    }
+  const handleClick = () => {
+    setIsDisabled(!isDisabled);
+    setIsShow(!isShow);
   };
+
   if (connected) {
     return <Wallet />;
   }
   return (
-    <NavButton disabled={isDisabled} onClick={handleConnection}>
-      Connect Wallet
-    </NavButton>
+    <>
+      <NavButton disabled={isDisabled} onClick={handleClick}>
+        Connect Wallet
+      </NavButton>
+      {isShow && <WalletPopup onClose={handleClick} />}
+    </>
   );
 };
 
@@ -339,7 +339,7 @@ const DashboardDrawer = () => {
   );
 };
 
-function NavBar({ variant = "landing" }: INavBarProps) {
+function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
@@ -372,10 +372,18 @@ function NavBar({ variant = "landing" }: INavBarProps) {
               {variant === "loggedin" && <DashboardDrawer />}
             </DrawerMenu>
             <DrawerMiddle>
-              <DrawerSmallItem target="_blank" href="https://twitter.com/Don_key_finance" icon={<TwitterIconOutlined />}>
+              <DrawerSmallItem
+                target="_blank"
+                href="https://twitter.com/Don_key_finance"
+                icon={<TwitterIconOutlined />}
+              >
                 Twitter
               </DrawerSmallItem>
-              <DrawerSmallItem target="_blank" href="https://t.me/don_key_finance" icon={<TelegramIconOutlined />}>
+              <DrawerSmallItem
+                target="_blank"
+                href="https://t.me/don_key_finance"
+                icon={<TelegramIconOutlined />}
+              >
                 Telegram
               </DrawerSmallItem>
             </DrawerMiddle>
@@ -398,7 +406,7 @@ function NavBar({ variant = "landing" }: INavBarProps) {
           {variant === "landing" && <LandingMenu />}
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
-        {variant === "landing" && <NavButton to="/dashboard">DAPP</NavButton>}
+        {variant === "landing" &&  <NavButton style={hideDappButton ? {visibility: "hidden"}: {}}  to="/dashboard">DAPP</NavButton>}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
     </MenuWrapper>

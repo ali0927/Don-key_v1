@@ -55,7 +55,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
@@ -66,7 +65,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
@@ -77,7 +75,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
@@ -100,7 +97,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
@@ -111,7 +107,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
@@ -122,7 +117,6 @@ export const RoundedCompletedSection: React.FC = () => {
                     height={60}
                   />
                 </div>
-
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"

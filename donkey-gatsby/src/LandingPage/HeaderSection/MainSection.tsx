@@ -4,13 +4,17 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
-import { convertToInternationalCurrencySystem } from "helpers";
+import {
+  convertToInternationalCurrencySystem,
+} from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
-import { Skeleton } from "@material-ui/lab";
+import { SlideShow } from "./SlideShow";
+import { graphql, useStaticQuery } from "gatsby";
+import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 const Root = styled.div`
@@ -64,42 +68,11 @@ const Paragraph = styled.p`
   }
 `;
 
-const FooterHeading = styled.div`
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: center;
-`;
-
-const FooterSubHeading = styled.h1`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 24px;
-  font-weight: 800;
-  text-align: center;
-  margin-top: 13px;
-`;
-
 const FooterRow = styled.div`
   width: 100%;
-`;
-
-const Col = styled.div``;
-
-const GrayBorder = styled.hr`
-  position: absolute;
-  width: 50%;
-  border-top: 1.8px dashed#000D09;
-  top: 2px;
-  margin: 0px;
-  margin-left: 15px;
-`;
-
-const DarkBorder = styled.div`
-  width: 29px;
-  height: 5px;
-  background: #000;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    width: 60%;
+  }
 `;
 
 const ETH_PRICE = gql`
@@ -131,6 +104,10 @@ const LaunchButton = styled.button`
 const StakeButton = styled(ButtonWidget)`
   border: 2px solid #222222;
   font-weight: 600;
+  width: 221px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+     width: 178px;
+  }
 `;
 
 const Rocket = styled(RocketLaunchIcon)`
@@ -155,6 +132,41 @@ export const MainSection: React.FC = () => {
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
+
+  const Strategies = useStaticQuery(
+    graphql`
+      query StrapiFarmers {
+        allStrapiFarmers(filter: { status: { in: ["active"] } }) {
+          totalCount
+          nodes {
+            poolAddress
+            network {
+              chainId
+            }
+            name
+          }
+        }
+      }
+    `
+  );
+
+  const [usersCount, setUsersCount] = React.useState(0);
+  const [totalTVL, setTotalTVL] = React.useState("0");
+  const [usersLoading, setUsersLoading] = React.useState(false);
+  const [tvlLoading, setTVLLoading] = React.useState(false);
+
+  const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
+
+  const updateUsersCount = async () => {
+    setUsersLoading(true);
+
+    const totalUserCount = await getUsersCount(
+      Strategies.allStrapiFarmers.nodes
+    );
+    setUsersCount(totalUserCount);
+    setUsersLoading(false);
+    localStorage.setItem("don-key-users-count", totalUserCount.toString());
+  };
 
   const circulatingSupply = coingecko
     ? coingecko.market_data.circulating_supply
@@ -184,6 +196,39 @@ export const MainSection: React.FC = () => {
   const handleTakePart = () => {
     navigate("/stake");
   };
+
+  const updateTVL = async () => {
+    setTVLLoading(true);
+    const totalTVL = await getTVL(Strategies.allStrapiFarmers.nodes);
+    setTotalTVL(totalTVL);
+    setTVLLoading(false);
+    localStorage.setItem("don-key-tvl", totalTVL);
+  };
+
+  React.useEffect(() => {
+    (async () => {
+      const dateOfSaved = localStorage.getItem("dateOfSaved");
+      const usersCount = localStorage.getItem("don-key-users-count");
+      const tvl = localStorage.getItem("don-key-tvl");
+      if (dateOfSaved && usersCount && tvl) {
+        const newDate = new Date().getTime();
+        const existingDate = new Date(dateOfSaved).getTime();
+        const diff = newDate - existingDate;
+        const diffMins = Math.round(diff / 60000);
+        if (diffMins > 10) {
+          updateUsersCount();
+          updateTVL();
+        } else {
+          setUsersCount(Number(usersCount));
+          setTotalTVL(tvl);
+        }
+      } else {
+        updateUsersCount();
+        updateTVL();
+        localStorage.setItem("dateOfSaved", new Date().toString());
+      }
+    })();
+  }, []);
 
   return (
     <>
@@ -222,44 +267,58 @@ export const MainSection: React.FC = () => {
             </div>
           </div>
 
-          <div className="d-flex pb-3 pb-md-5 justify-content-start">
-            <FooterRow className="row position-relative">
-              <GrayBorder className="d-none d-md-block" />
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">DON price</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton width={100} variant="text" />
-                  ) : (
-                    `$${finalDerivedEth}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">24-hour volume</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${volume24hrs}`
-                  )}
-                </FooterSubHeading>
-              </Col>
-              <Col className="col-md-3 mb-4 position-relative d-flex flex-column align-items-start">
-                <DarkBorder />
-                <FooterHeading className="mt-4">Market Cap</FooterHeading>
-                <FooterSubHeading>
-                  {loading ? (
-                    <Skeleton variant="text" width={100} />
-                  ) : (
-                    `$${marketCap}`
-                  )}
-                </FooterSubHeading>
-              </Col>
+          <div className=" pb-3 pb-md-5 ">
+            <FooterRow className="position-relative">
+              <SlideShow
+                slides={[
+                  {
+                    label: "DON price",
+                    value: finalDerivedEth,
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "24-hour volume",
+                    value: volume24hrs.toString(),
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "Market Cap",
+                    value: marketCap,
+                    isLoading: loading,
+                    symbol: "$",
+                  },
+
+                  {
+                    label: "TVL",
+                    value: totalTVL,
+                    isLoading: tvlLoading,
+                    symbol: "$",
+                  },
+                  {
+                    label: "Users",
+                    value: usersCount,
+                    isLoading: usersLoading,
+                    symbol: "",
+                  },
+                  {
+                    label: "Strategies",
+                    value: TotalStrategies,
+                    isLoading: loading,
+                    symbol: "",
+                  },
+                ]}
+              />
+
+              {/* <Slide label="TVL" isLoading={loading} value={marketCap} />
+              <Slide label="Users" isLoading={loading} value={marketCap} />
+
+              <Slide label="Strategies" isLoading={loading} value={marketCap} /> */}
             </FooterRow>
           </div>
+
+          <div></div>
         </div>
       </Root>
     </>

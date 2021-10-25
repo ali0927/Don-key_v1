@@ -14,7 +14,7 @@ import { PartnerSection } from "LandingPage/PartnersSection";
 export default function Home() {
   return (
     <div>
-      <NavBar />
+      <NavBar  hideDappButton />
 
       <MainSection />
 

@@ -553,7 +553,7 @@ export const InvestmentsPage = () => {
       return (
         <SwitchRow
           className="mb-4"
-          heading="Farmer list"
+          heading="farmers list"
           subHeading={"Show in USD"}
           checked={isInUsd}
           onSwitchChange={handleToggle}
@@ -1033,7 +1033,7 @@ export const InvestmentsPage = () => {
                     My Investments
                   </HeadingTitle>
                   <div className="row align-items-center justify-content-between mb-4 mb-lg-5 flex-wrap">
-                    <div className="col-12 col-md-8 col-lg-9 mb-1">
+                    <div className="col-12 col-md-8 col-lg-9 mb-1 mb-lg-0">
                       <TotalInvestedAmount>
                         {loading ? "-" : `$${investedAmount}`}
                       </TotalInvestedAmount>
