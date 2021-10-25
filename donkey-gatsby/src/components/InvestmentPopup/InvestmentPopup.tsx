@@ -553,7 +553,7 @@ export const InvestmentPopup = ({
               </ButtonWrap>
             </div>
             <Calculatermodel className=" mt-4">
-              <p>APY {apy}</p>
+              {/* <p>APY {apy}</p> */}
               <p className="d-none">
                 Calculator &ensp;
                 <Downarrow />
