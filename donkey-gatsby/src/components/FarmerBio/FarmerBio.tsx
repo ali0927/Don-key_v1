@@ -128,7 +128,6 @@ export const FarmerBio = ({
     oldPoolVersion,
   } = farmer;
 
-
   const [openSharePopup, setSharePopup] = useState(false);
   const [openShareLink, setShareLink] = useState(false);
 

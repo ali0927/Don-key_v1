@@ -6,6 +6,7 @@ import { useAxios } from "hooks/useAxios";
 import { useWeb3Context } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
+  getTokenAddress,
   captureException,
   getBUSDTokenContract,
   getPoolContract,
@@ -17,6 +18,7 @@ import {
   isValidReferralCode,
   sendEvent,
   toWei,
+  getWrappedContract,
 } from "helpers";
 import { DonKeySpinner } from "components/DonkeySpinner";
 import { DonCommonmodal } from "components/DonModal";
@@ -34,10 +36,108 @@ import {
 import { theme } from "theme";
 import { useEffectOnTabFocus, useStakingContract } from "hooks";
 import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
+import Downarrow from "components/Icons/Downarrow";
+import { useInvestmentPopupStyles } from "./styles/useInvestmentPopupStyles";
+
 const ButtonWrapper = styled.div({
   width: "100%",
 });
+
+const StyledButtonWidget = styled(ButtonWidget)`
+  border-radius: 15px;
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  .widget {
+    margin-left: 0.5rem;
+  }
+  @media only screen and (max-width: 600px) {
+    display: flex;
+    flex-direction: column;
+    .widget {
+      margin-top: 0.5rem;
+      margin-left: 0rem;
+    }
+  }
+  .Buttonwidget {
+    height: 49px;
+    font-size: 14px;
+    @media only screen and (max-width: 600px) {
+      height: 40px;
+      font-size: 12px;
+    }
+  }
+`;
+const MyBalancemobile = styled.div`
+  margin-top: 41px;
+  margin-bottom: -2.25rem;
+  font-size: 14px;
+  font-weight: 500;
+  @media only screen and (max-width: 600px) {
+    font-size: 12px;
+    margin-top: 35px;
+  }
+`;
+const Calculatermodel = styled.div`
+  display: flex;
+  direction: row;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+`;
+const Messagetimeframe = styled.div`
+  color: #a3a3a3;
+  font-weight: 500;
+  font-size: 12px;
+  margin-top: 16px;
+  padding: 0px 20px 0px 20px;
+  @media only screen and (max-width: 600px) {
+    margin-bottom: 10px;
+    padding: 0px;
+  }
+`;
+
+const NetworksButtonsRoot = styled.div`
+  border: 1px solid #ececec;
+  border-radius: 12px;
+  padding: 3px 5px 3px 5px;
+  margin-bottom: 40px;
+`;
+
+const NetworkButton = styled.div<{ disabled?: boolean; selected: boolean }>`
+  font-family: Poppins;
+  font-size: 12px;
+  font-weight: 600;
+  text-align: center;
+  color: #a3a3a3;
+  height: 29px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50%;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
+
+  ${({ selected }: { selected: boolean }) =>
+    selected &&
+    `
+    border: 1px solid #FED700;
+    box-shadow: 0px 2px 10px rgba(87, 16, 112, 0.08);
+    border-radius: 10px;
+    background: #FCEB74;
+    color: #000;
+  `}
+`;
+
+const HrMessage = styled.hr`
+  margin: 0;
+  width: 100%;
+  position: absolute;
+  width: 100%;
+  right: 0;
+`;
 
 const themeM = createTheme({
   palette: {
@@ -49,10 +149,12 @@ const MyBalanceInBUSD = ({
   onDone,
   poolAddress,
   poolVersion,
+  isUnWrapped,
 }: {
   onDone?: (val: string) => void;
   poolAddress: string;
   poolVersion: number;
+  isUnWrapped: boolean;
 }) => {
   const [state, setState] = useState({ balance: "", isReady: false });
   const { getConnectedWeb3 } = useWeb3Context();
@@ -61,6 +163,8 @@ const MyBalanceInBUSD = ({
     try {
       const web3 = getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
+      const unWrappedBalance = await web3.eth.getBalance(accounts[0]);
+
       //@ts-ignore
       const acceptedToken =
         poolVersion === 1
@@ -69,11 +173,18 @@ const MyBalanceInBUSD = ({
       const balance = await acceptedToken.methods.balanceOf(accounts[0]).call();
       const decimals = await acceptedToken.methods.decimals().call();
       const balanceBN = new BigNumber(balance).dividedBy(10 ** decimals);
+      const finalBNB = new BigNumber(unWrappedBalance).dividedBy(
+        10 ** decimals
+      );
+      const finalbalance = isUnWrapped
+        ? finalBNB.toFixed(2)
+        : balanceBN.toFixed(2);
+      const finalBN = isUnWrapped ? finalBNB.toString() : balanceBN.toString();
       setState({
-        balance: balanceBN.toFixed(2),
+        balance: finalbalance,
         isReady: true,
       });
-      onDone && onDone(balanceBN.toString());
+      onDone && onDone(finalBN);
     } catch (err) {
       captureException(err, "fetchBalance");
     }
@@ -81,7 +192,7 @@ const MyBalanceInBUSD = ({
   useLayoutEffect(() => {
     fetchBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isUnWrapped]);
 
   if (!state.isReady) {
     return <>-</>;
@@ -103,17 +214,23 @@ export const InvestmentPopup = ({
   gasLimit,
   onClose,
   onSuccess,
+  apy,
 }: {
   poolAddress: string;
+  apy: string;
   poolVersion: number;
   gasLimit?: string;
   onSuccess?: () => void;
   onClose: () => void;
 }) => {
+  const [tokenPrice, setTokenPrice] = useState("-");
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
   const [balance, setBalance] = useState("0");
   const [slippage, setSlippage] = useState("5");
+  const [imageUrl, setImageUrl] = useState(null);
+  const classes = useInvestmentPopupStyles();
+
   const [{}, executePost] = useAxios(
     { method: "POST", url: "/api/v2/investments" },
     { manual: true }
@@ -122,6 +239,7 @@ export const InvestmentPopup = ({
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
   });
+
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
   const { refetch, holdingDons } = useStakingContract();
@@ -151,7 +269,31 @@ export const InvestmentPopup = ({
 
     return true;
   };
-
+  const [fetch, { data: tokenData, loading: loadingToken }] = useLazyQuery(gql`
+    query shortLinks($tokenAddress: String!) {
+      tokens(where: { tokenAddress: $tokenAddress }) {
+        image {
+          url
+        }
+        tokenAddress
+        isWrapped
+      }
+    }
+  `);
+  const isWrapped =
+    tokenData && tokenData.tokens[0] && tokenData.tokens[0].isWrapped;
+  const handleImage = () => {
+    if (loadingToken) return;
+    if (tokenData && tokenData.tokens[0].tokens) {
+      setImageUrl(tokenData.tokens[0].image.url);
+    }
+  };
+  const fetchTokenInfo = async () => {
+    const price = await getTokenPrice(web3, poolAddress);
+    setTokenPrice(price);
+    const tokenAddress = await getTokenAddress(web3, poolAddress);
+    fetch({ variables: { tokenAddress } });
+  };
   const applyCode = async (code: string) => {
     try {
       setChecking(true);
@@ -185,6 +327,17 @@ export const InvestmentPopup = ({
     enable();
 
     try {
+      if (isUnWrapped && tokenData.tokens[0]) {
+        const wrappedTokenAddres = tokenData.tokens[0].tokenAddress;
+        const contract = await getWrappedContract(web3, wrappedTokenAddres);
+        const accounts = await web3.eth.getAccounts();
+        const decimalsLimit = await contract.methods.decimals().call();
+
+        const swapAmount = new BigNumber(toWei(value, decimalsLimit));
+        await contract.methods
+          .deposit()
+          .send({ from: accounts[0], value: swapAmount.toFixed(0) });
+      }
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
       const acceptedToken =
         poolVersion === 1 || !poolVersion
@@ -228,6 +381,7 @@ export const InvestmentPopup = ({
             gas: gasLimit,
           });
       }
+      
       if (poolVersion === 3) {
         if (referralCode && applied) {
           await pool.methods
@@ -267,6 +421,14 @@ export const InvestmentPopup = ({
     }
   };
   const { symbol } = usePoolSymbol(poolAddress, web3);
+  const [currentCurrency, setCurrentCurrency] = useState(symbol);
+
+  useEffect(() => {
+    setCurrentCurrency(symbol);
+  }, [symbol]);
+
+  const unWrappedSymbol = symbol.substring(1);
+  const isUnWrapped = currentCurrency === unWrappedSymbol;
 
   const renderButtonText = () => {
     if (isLoading) {
@@ -290,7 +452,18 @@ export const InvestmentPopup = ({
       }
     })();
   }, []);
+
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+  useEffect(() => {
+    fetchTokenInfo();
+    handleImage();
+  }, [tokenData]);
+
+  const handleSymbolChange = (tokenSymbol: string) => () => {
+    if (!isLoading) {
+      setCurrentCurrency(tokenSymbol);
+    }
+  };
 
   const renderContent = () => {
     if (hasCheckedDons) {
@@ -298,14 +471,17 @@ export const InvestmentPopup = ({
         return (
           <>
             <div>
-              <div className="mt-4">
+              <div>
                 <InvestmentInput
                   value={value}
                   disabled={isLoading}
-                  currencySymbol={symbol}
+                  currencySymbol={currentCurrency}
                   setValue={setValue}
                   max={balance}
+                  tokenPrice={tokenPrice}
+                  imageUrl={imageUrl}
                 />
+
                 {poolVersion < 3 && (
                   <ThemeProvider theme={themeM}>
                     <p className="mb-2 mt-4">Slippage Tolerance</p>
@@ -328,42 +504,67 @@ export const InvestmentPopup = ({
                   </ThemeProvider>
                 )}
               </div>
-              <div className="d-flex justify-content-between mt-4">
-                <ButtonWrapper className="mr-2">
-                  <ButtonWidget
+              {isWrapped && (
+                <NetworksButtonsRoot className="d-flex">
+                  <NetworkButton
+                    disabled={isLoading}
+                    selected={currentCurrency === unWrappedSymbol}
+                    onClick={handleSymbolChange(unWrappedSymbol)}
+                  >
+                    {unWrappedSymbol}
+                  </NetworkButton>
+                  <NetworkButton
+                    disabled={isLoading}
+                    selected={currentCurrency === symbol}
+                    onClick={handleSymbolChange(symbol)}
+                  >
+                    {symbol}
+                  </NetworkButton>
+                </NetworksButtonsRoot>
+              )}
+
+              <ButtonWrap>
+                <ButtonWrapper>
+                  <StyledButtonWidget
+                    className="Buttonwidget"
                     varaint="contained"
-                    fontSize="14px"
                     containedVariantColor="lightYellow"
-                    height="40px"
                     width="100%"
-                    disabled={!value || isLoading}
+                    disabled={
+                      !(value <= balance && value != "0" && value != "") ||
+                      isLoading
+                    }
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
-                  </ButtonWidget>
+                  </StyledButtonWidget>
                 </ButtonWrapper>
 
-                <ButtonWrapper className="mr-0 ml-2">
-                  <ButtonWidget
+                <ButtonWrapper className="widget">
+                  <StyledButtonWidget
+                    className="Buttonwidget"
                     varaint="outlined"
-                    fontSize="14px"
-                    height="40px"
                     width="100%"
                     onClick={onClose}
                   >
                     Cancel
-                  </ButtonWidget>
+                  </StyledButtonWidget>
                 </ButtonWrapper>
-              </div>
+              </ButtonWrap>
             </div>
-            <p className="d-flex mt-4">
-              <small> *</small>
-              <small>
-                Withdraws are executed up to {timeframe} hours upon request in
-                order to minimize swap fees, price impact and slippage within
-                the different pools.
-              </small>
-            </p>
+            <Calculatermodel className=" mt-4">
+              <p>APY {apy}</p>
+              <p className="d-none">
+                Calculator &ensp;
+                <Downarrow />
+              </p>
+            </Calculatermodel>
+            <HrMessage />
+            <Messagetimeframe className="d-flex text-center">
+              Withdraws are executed up to {timeframe} hours upon request in
+              order to minimize swap fees, price impact and slippage within the
+              different pools.
+            </Messagetimeframe>
           </>
         );
       } else {
@@ -382,30 +583,36 @@ export const InvestmentPopup = ({
   };
 
   return (
-    <DonCommonmodal
-      title={hasDons ? "Invest" : ""}
-      variant="common"
-      isOpen={true}
-      size="xs"
-      rounded
-      titleRightContent={
-        hasDons ? (
-          <>
-            Balance:{" "}
-            {
-              <MyBalanceInBUSD
-                onDone={setBalance}
-                poolAddress={poolAddress}
-                poolVersion={poolVersion}
-              />
-            }{" "}
-            {symbol}
-          </>
-        ) : undefined
-      }
-      onClose={onClose}
-    >
-      {renderContent()}
-    </DonCommonmodal>
+    <>
+      <DonCommonmodal
+        title={hasDons ? "Investment" : ""}
+        variant="common"
+        isOpen={true}
+        size="sm"
+        rounded
+        className={classes.dialogWidth}
+        onClose={onClose}
+      >
+        <MyBalancemobile>
+          {hasDons ? (
+            <>
+              Balance:{" "}
+              {
+                <MyBalanceInBUSD
+                  onDone={setBalance}
+                  poolAddress={poolAddress}
+                  poolVersion={poolVersion}
+                  isUnWrapped={isUnWrapped}
+                />
+              }{" "}
+              {currentCurrency}(~ $
+              {new BigNumber(balance || 0).multipliedBy(tokenPrice).toFixed(2)})
+            </>
+          ) : undefined}
+        </MyBalancemobile>
+
+        {renderContent()}
+      </DonCommonmodal>
+    </>
   );
 };

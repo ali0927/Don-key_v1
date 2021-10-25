@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
-import { useMemo } from "react";
 import styled from "styled-components";
+
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_FLOOR });
 const InvestmentRoot = styled.div({
   border: "1px solid #d9d9d9",
@@ -8,20 +8,36 @@ const InvestmentRoot = styled.div({
   display: "flex",
 });
 
-const InvestmentCurrency = styled.div({
-  fontWeight: "bold",
-  padding: "0.5rem 0.8rem",
-  borderRight: "1px solid #d9d9d9",
-  whiteSpace: "nowrap"
-});
+const InvestmentCurrencys = styled.div<{disabled?: boolean;}>`
+  font-weight: bold;
+  font-size: 20px;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  height: 60px;
+  padding: 0.4rem 0.8rem 0.5rem 0rem;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: ${(props)=> props.disabled ? "#606060": "#000"};
+  @media only screen and (max-width: 600px) {
+    height: 43px;
+    padding: 0.65rem 0.8rem 0.5rem 0rem;
+  }
+`;
 
 const InvestmentInputElement = styled.input`
   border: none;
+  background-color: #f9fafb;
   height: 100%;
   width: 100%;
-  padding: 0.5rem 0.8rem;
-  border-radius: 10px;
+  font-weight: bold;
+  padding: 0.5rem 0.3rem 0.5rem 0.5rem;
+  font-size: 20px;
   text-align: right;
+  ::placeholder {
+    color: #606060;
+    opacity: 1;
+  }
   -moz-appearance: textfield;
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -35,27 +51,60 @@ const InvestmentInputElement = styled.input`
     outline: none;
   }
 `;
-
-const InvestmentPrecentage = styled.div`
-  span {
-    display: inline-block;
-    cursor: pointer;
-    font-size: 10px;
-    font-weight: 300;
-    &:not(:last-child) {
-      margin-right: 1.5rem;
-    }
+const InvestmentCurrency = styled.div`
+  font-weight: bold;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  height: 60px;
+  padding: 0.5rem 0.8rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  @media only screen and (max-width: 600px) {
+    height: 43px;
   }
 `;
 
+const InvestmentPrecentage = styled.div`
+  font-size: 10px;
+  font-weight: 600;
+  padding-top: 15px;
+  color: #a8a8a8;
+  padding-bottom: 12px;
+  @media only screen and (max-width: 600px) {
+    height: 43px;
+    padding-top: 7px;
+  }
+`;
+const Investmentbutton = styled.div`
+  background-color: #fff9aa !important;
+  border-radius: 10px !important;
+  height: 35px;
+  width: 74px;
+  p {
+    font-size: 12px;
+    font-weight: 600;
+    color: #000000;
+  }
+`;
+const Buttonsection = styled.div`
+  margin-bottom: 0.5rem;
+  display: flex;
+  justify-content: end;
+`;
+
 export const InvestmentInput = ({
-  value,
-  setValue,
+  tokenPrice,
   max,
   currencySymbol,
   disabled,
-  hidePercent,
+  imageUrl,
+  value,
+  setValue,
+ 
 }: {
+  imageUrl: string | null;
+  tokenPrice: string;
   value: string;
   setValue: (val: string) => void;
   max: string;
@@ -63,42 +112,57 @@ export const InvestmentInput = ({
   disabled?: boolean;
   hidePercent?: boolean;
 }) => {
-  const maxNum = useMemo(() => {
-    return new BigNumber(max);
-  }, [max]);
+  const handleValue = (value: string) => {
+    setValue(value);
+  };
+
   return (
-    <div className="w-100">
-      <InvestmentRoot>
-        <InvestmentCurrency>{currencySymbol.toUpperCase()}</InvestmentCurrency>
-        <div className="w-100">
-          <InvestmentInputElement
-            type="number"
-            placeholder="0.0"
-            min={0}
-            value={value}
-            disabled={disabled}
-            onChange={(e) => setValue(e.target.value)}
-          />
-        </div>
-      </InvestmentRoot>
-      {!hidePercent && (
-        <InvestmentPrecentage>
-          {[0, 20, 50, 80, 100].map((val, index) => {
-            const updatedVal = maxNum
-              .multipliedBy(new BigNumber(val).dividedBy(new BigNumber(100)))
-              .toFixed(2);
-            return (
-              <span
-                key={index}
-                onClick={() => setValue(updatedVal)}
-                style={{ opacity: val / 100 + 0.2 }}
-              >
-                {val}%
-              </span>
-            );
-          })}
+    <>
+      <Buttonsection className="w-100 ">
+        <Investmentbutton
+          className="btn "
+          onClick={() => {
+            handleValue(max);
+          }}
+        >
+          <p>MAX</p>
+        </Investmentbutton>
+      </Buttonsection>
+      <div className="w-100">
+        <InvestmentRoot>
+          <InvestmentCurrency>
+            {imageUrl &&(
+            <img
+              style={{ width: 18 }}
+              src={imageUrl}
+              alt="token"
+            />
+            )}
+            {console.log(imageUrl)}
+          </InvestmentCurrency>
+          <div className="w-100">
+            <InvestmentInputElement
+              type="number"
+              placeholder="0.00"
+              min={0}
+              value={value}
+              disabled={disabled}
+              onChange={(e) => {
+                setValue(e.target.value);
+              }}
+            />
+          </div>
+          <InvestmentCurrencys disabled={disabled}>
+            {currencySymbol.toUpperCase()}
+          </InvestmentCurrencys>
+        </InvestmentRoot>
+
+        <InvestmentPrecentage className="text-right ">
+          <p>
+            ~ ${new BigNumber(value || 0).multipliedBy(tokenPrice).toFixed(2)}
+          </p>
         </InvestmentPrecentage>
-      )}
-    </div>
+      </div>
+    </>
   );
 };

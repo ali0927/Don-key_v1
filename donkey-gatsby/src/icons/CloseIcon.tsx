@@ -11,7 +11,7 @@ export function CloseIcon(props: React.SVGProps<SVGSVGElement>) {
       <path
         d="M1 1l5 5m0 0l5 5M6 6l5-5M6 6l-5 5"
         stroke={props.stroke || "#2D2900"}
-        strokeWidth={1.5}
+        strokeWidth={0.6}
         strokeLinecap="round"
       />
     </svg>

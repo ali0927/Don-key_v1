@@ -390,6 +390,7 @@ export const DetailTable = ({
             oldPoolVersion={oldPoolVersion}
             isWithdrawRequested={isWithdrawRequested}
             boostApy={boostApy}
+            apy={apy}
           />
         );
       } else {
