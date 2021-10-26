@@ -1,7 +1,28 @@
-import * as React from "react";
+import React from "react";
 import styled from "styled-components";
 import { breakPoints } from "breakponts";
 import { StaticImage } from "gatsby-plugin-image";
+import Certik from "./logos/certik.png";
+
+const Section = styled.div`
+  background: #ffff;
+`;
+
+const Root = styled.section`
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 3rem 0;
+  padding-bottom: 0px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    padding: 5rem 0;
+    padding-bottom: 0px;
+  }
+`;
+
+const Footer = styled.div`
+  padding-bottom: 3rem;
+`;
 
 const StyledP = styled.p`
   border-left: 3px solid #070602;
@@ -17,30 +38,26 @@ const StyledP = styled.p`
   font-weight: 800;
   color: #423f15;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 23px;
+    font-size: 25px;
   }
 `;
 
-const InvestorSection = styled.section`
-  background: #f3f3f3;
-  padding: 3rem 0;
-  min-height: 559px;
-  display: flex;
-  align-items: center;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    padding: 6rem 0;
-  }
+const FooterText = styled.p`
+  font-family: Poppins;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
 `;
 
-export const RoundedCompletedSection: React.FC = () => {
+export const PartnerSection: React.FC = () => {
   return (
-    <>
-      <InvestorSection>
+    <Section>
+      <Root>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-3 ">
-              <StyledP className="mb-0  mb-md-5 text-center text-sm-left">
-                Strategic Investment Round Completed
+              <StyledP className="mb-0 mb-md-5 text-center text-sm-left">
+                Partners
               </StyledP>
             </div>
             <div className="col-md-9 mt-5 mt-md-0">
@@ -50,7 +67,7 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/banter.png"
+                    src="./logos/RIDOTTO.png"
                     className="mb-5"
                     height={60}
                   />
@@ -60,9 +77,9 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/morningstar.png"
-                    className="mb-5"
                     height={60}
+                    className="mb-5"
+                    src="./logos/BakerySwap.png"
                   />
                 </div>
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -70,9 +87,8 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/au21.png"
                     className="mb-5"
-                    height={60}
+                    src="./logos/Moonpot.png"
                   />
                 </div>
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -80,21 +96,21 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/iangles1.png"
-                    className="mb-5"
                     height={60}
+                    className="mb-5"
+                    src="./logos/Poolz.png"
                   />
                 </div>
               </div>
-              <div className="row mt-4">
+              <div className="row">
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
                   <StaticImage
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/spark.png"
-                    className="mb-5"
                     height={60}
+                    className="mb-5"
+                    src="./logos/MARKET_ACROSS.png"
                   />
                 </div>
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -102,9 +118,20 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/solidity.png"
-                    className="mb-5"
                     height={60}
+                    className="mb-5"
+                    src="./logos/Gero_Wallet.png"
+                  />
+                </div>
+
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                    height={60}
+                    className="mb-5"
+                    src="./logos/Super_Farm.png"
                   />
                 </div>
                 <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
@@ -112,26 +139,22 @@ export const RoundedCompletedSection: React.FC = () => {
                     layout="constrained"
                     alt="Investor"
                     quality={100}
-                    src="./investorlogos/blackedge.png"
-                    className="mb-5"
                     height={60}
-                  />
-                </div>
-                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
-                  <StaticImage
-                    layout="constrained"
-                    alt="Investor"
-                    quality={100}
-                    src="./investorlogos/gbv.png"
                     className="mb-5"
-                    height={60}
+                    src="./logos/CYBERFI.png"
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </InvestorSection>
-    </>
+      </Root>
+      <Footer className="container">
+        <div className="d-flex justify-content-center justify-content-md-end align-items-center">
+          <FooterText>Audited by</FooterText>
+          <img src={Certik} alt="Certik image not found" />
+        </div>
+      </Footer>
+    </Section>
   );
 };
