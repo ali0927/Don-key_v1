@@ -1,8 +1,7 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { useToggle } from "don-hooks";
-import { useAxios } from "hooks/useAxios";
 import { useWeb3Context } from "don-components";
 import { BigNumber } from "bignumber.js";
 import {
@@ -214,7 +213,6 @@ export const InvestmentPopup = ({
   gasLimit,
   onClose,
   onSuccess,
-  apy,
 }: {
   poolAddress: string;
   apy: string;
@@ -231,10 +229,6 @@ export const InvestmentPopup = ({
   const [imageUrl, setImageUrl] = useState(null);
   const classes = useInvestmentPopupStyles();
 
-  const [{}, executePost] = useAxios(
-    { method: "POST", url: "/api/v2/investments" },
-    { manual: true }
-  );
   const { getConnectedWeb3 } = useWeb3Context();
   const { loading, data } = useQuery(FARMER_WITHDRAW_FRAME, {
     variables: { poolAddress },
@@ -381,7 +375,7 @@ export const InvestmentPopup = ({
             gas: gasLimit,
           });
       }
-      
+
       if (poolVersion === 3) {
         if (referralCode && applied) {
           await pool.methods
@@ -408,7 +402,6 @@ export const InvestmentPopup = ({
           user: accounts[0],
         });
       }
-
 
       onSuccess && onSuccess();
 
@@ -464,6 +457,16 @@ export const InvestmentPopup = ({
       setCurrentCurrency(tokenSymbol);
     }
   };
+
+  const isInvestDisabled = useMemo(() => {
+    if (isLoading) {
+      return true;
+    }
+    const inputVal = new BigNumber(value);
+    if (value === "" || inputVal.isEqualTo(0) || inputVal.gt(balance)) {
+      return true;
+    }
+  }, [isLoading, value, balance]);
 
   const renderContent = () => {
     if (hasCheckedDons) {
@@ -530,10 +533,7 @@ export const InvestmentPopup = ({
                     varaint="contained"
                     containedVariantColor="lightYellow"
                     width="100%"
-                    disabled={
-                      !(value <= balance && value != "0" && value != "") ||
-                      isLoading
-                    }
+                    disabled={isInvestDisabled}
                     onClick={handleInvest}
                   >
                     {renderButtonText()}
