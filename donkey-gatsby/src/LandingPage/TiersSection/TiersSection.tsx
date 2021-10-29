@@ -8,15 +8,17 @@ import tier2 from "./images/tier2.png";
 import tier3 from "./images/tier3.png";
 import tier4 from "./images/tier4.png";
 import tier5 from "./images/tier5.png";
+import CardProfile from "./images/CardProfile.png";
 import { ITierSection } from "./interfaces";
 import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import clsx from "clsx";
+import { Container } from "react-bootstrap";
 
 const Root = styled.div`
   background-color: #f2f2f2;
   min-height: 642px;
-  padding: 55px 20px 38px 20px;
+  padding: 55px 0px 38px 0px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     min-height: 725px;
     padding: 135px 120px 86px 120px;
@@ -53,7 +55,7 @@ const Card = styled.div`
   width: 180px;
   height: 218px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-    width: 218px;
+    width: 203px;
     height: 275px;
   }
 `;
@@ -61,6 +63,7 @@ const Card = styled.div`
 const CutomSlickSlider = styled(SlickSlider)`
   overflow: hidden;
   width: 100%;
+  height: 220px;
 `;
 
 const CardTypography = styled.p<{
@@ -81,24 +84,29 @@ const CardTypography = styled.p<{
 
 const CardHeader = styled.div`
   height: 86px;
-  background: linear-gradient(101.84deg, #fac200 2.78%, #fff037 98.95%);
   padding: 13px;
   display: flex;
   align-items: center;
-  @media only screen and (min-width: ${breakPoints.lg}) {
-    height: 104px;
-  }
+
 `;
 
-const Image = styled.img`
+const Image = styled.img<{ top?: string }>`
   position: absolute;
   right: 0px;
-  top: 21%;
+  z-index: 1;
+  top: ${(props) => (props.top ? props.top : "21%")};
 `;
 
 const CardBody = styled.div`
   padding: 13px;
   padding-top: 36px;
+`;
+
+const CardBg = styled.img`
+    position: absolute;
+    top: 0;
+    height: 218px;
+    width: 100%;
 `;
 
 const Dots = styled.div<{ selected: boolean }>`
@@ -126,15 +134,15 @@ export const TiersSection: React.FC = () => {
     slidesToShow: 1,
     slidesToScroll: 3,
     centerMode: true,
-    variableWidth: true
+    variableWidth: true,
   };
 
   const tiers: ITierSection[] = [
     { tier: 1, image: tier1, stakedDons: "500" },
     { tier: 2, image: tier2, stakedDons: "25,00" },
     { tier: 3, image: tier3, stakedDons: "5,000" },
-    { tier: 4, image: tier4, stakedDons: "25,000" },
-    { tier: 5, image: tier5, stakedDons: "50,000" },
+    { tier: 4, image: tier4, stakedDons: "25,000", imageTop: "7%" },
+    { tier: 5, image: tier5, stakedDons: "50,000", imageTop: "22%" },
   ];
 
   const [selectedTier, setSelectedTier] = React.useState(0);
@@ -150,9 +158,11 @@ export const TiersSection: React.FC = () => {
               smFontSize="25px"
               color="#fff"
               bold
+              style={{zIndex: 1}}
             >
               Tier {tier.tier}
             </CardTypography>
+         
           </CardHeader>
           <CardBody>
             <CardTypography
@@ -172,7 +182,8 @@ export const TiersSection: React.FC = () => {
               {tier.stakedDons} $DON
             </CardTypography>
           </CardBody>
-          <Image src={tier.image} alt="Image not found" />
+          <Image src={tier.image} top={tier.imageTop} alt="Image not found" />
+          <CardBg src={CardProfile} alt="Card image not found"/>
         </Card>
       </div>
     );
@@ -188,42 +199,44 @@ export const TiersSection: React.FC = () => {
   return (
     <>
       <Root>
-        <Typography>Check on our Tiers system!</Typography>
-        <div className="row">
-          <div className="col-12 col-lg-6">
-            <Paragraph className="d-block d-lg-none">
-              <ShowMoreContent content={content} length={220} />
-            </Paragraph>
-            <Paragraph className="d-none d-lg-block">{content}</Paragraph>
+        <Container>
+          <Typography>Check on our Tiers system!</Typography>
+          <div className="row">
+            <div className="col-12 col-lg-6">
+              <Paragraph className="d-block d-lg-none">
+                <ShowMoreContent content={content} length={220} />
+              </Paragraph>
+              <Paragraph className="d-none d-lg-block">{content}</Paragraph>
+            </div>
           </div>
-        </div>
-        {!isDesktop && (
-          <div className="mt-3 w-100">
-            <CutomSlickSlider ref={slickRef} {...settings}>
+          {!isDesktop && (
+            <div className="mt-3 w-100">
+              <CutomSlickSlider ref={slickRef} {...settings}>
+                {tiers.map((currentTier, index) => {
+                  return <>{renderCards(index)}</>;
+                })}
+              </CutomSlickSlider>
+              <div className="d-flex justify-content-center mt-4">
+                {tiers.map((value, index) => {
+                  return (
+                    <Dots
+                      className="mr-2"
+                      selected={index === selectedTier}
+                      onClick={handleChangeSlide(index)}
+                    />
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          {isDesktop && (
+            <div className="d-flex justify-content-between mt-3 w-100">
               {tiers.map((currentTier, index) => {
                 return <>{renderCards(index)}</>;
               })}
-            </CutomSlickSlider>
-            <div className="d-flex justify-content-center mt-4">
-              {tiers.map((value, index) => {
-                return (
-                  <Dots
-                    className="mr-2"
-                    selected={index === selectedTier}
-                    onClick={handleChangeSlide(index)}
-                  />
-                );
-              })}
             </div>
-          </div>
-        )}
-        {isDesktop && (
-          <div className="d-flex justify-content-between mt-3 w-100">
-            {tiers.map((currentTier, index) => {
-              return <>{renderCards(index)}</>;
-            })}
-          </div>
-        )}
+          )}
+        </Container>
       </Root>
     </>
   );

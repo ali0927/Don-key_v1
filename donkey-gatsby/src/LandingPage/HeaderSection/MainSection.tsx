@@ -4,9 +4,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
-import {
-  convertToInternationalCurrencySystem,
-} from "helpers";
+import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
@@ -17,6 +15,7 @@ import { graphql, useStaticQuery } from "gatsby";
 import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
+import { LaunchButton } from "components/LaunchButton";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -83,45 +82,20 @@ const ETH_PRICE = gql`
   }
 `;
 
-const LaunchButton = styled.button`
-  background: #222222;
-  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
-  padding: 1rem 2rem;
-  color: #fff;
-  font-weight: 500;
-  border: 0;
-  font-size: 16px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  :hover {
-    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
-      4px 4px 18px rgba(0, 0, 0, 0.5);
-  }
-`;
-
 const StakeButton = styled(ButtonWidget)`
   border: 2px solid #222222;
   font-weight: 600;
   width: 221px;
   @media only screen and (min-width: ${breakPoints.md}) {
-     width: 178px;
+    width: 178px;
   }
 `;
 
-const Rocket = styled(RocketLaunchIcon)`
+export const Rocket = styled(RocketLaunchIcon)`
   position: absolute;
   left: 6%;
   bottom: 5%;
 `;
-
-// const LunchRocketRoot = styled.div`
-//   position: absolute;
-//   width: 27%;
-//   bottom: 9px;
-//   left: 0;
-// `;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
@@ -189,10 +163,6 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
-  const handleDashboard = () => {
-    navigate("/dashboard");
-  };
-
   const handleTakePart = () => {
     navigate("/stake");
   };
@@ -241,14 +211,7 @@ export const MainSection: React.FC = () => {
                 Explore and follow strategies built by real farmers
               </Paragraph>
               <div className="d-flex flex-wrap">
-                <LaunchButton
-                  className="mt-3 mt-lg-5 mr-3 position-relative d-flex justify-content-end"
-                  style={{ width: 221, height: 55 }}
-                  onClick={handleDashboard}
-                >
-                  <Rocket />
-                  LAUNCH APP
-                </LaunchButton>
+                <LaunchButton className="d-block d-lg-none mt-3 mr-3" />
 
                 <StakeButton
                   varaint="outlined"
