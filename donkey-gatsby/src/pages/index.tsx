@@ -11,6 +11,7 @@ import { Footer } from "components/Footer";
 import { MainSection } from "LandingPage/HeaderSection";
 import React from "react";
 import { PartnerSection } from "LandingPage/PartnersSection";
+import { TiersSection } from "LandingPage/TiersSection";
 export default function Home() {
   return (
     <div>
@@ -20,6 +21,8 @@ export default function Home() {
 
       {/* Cards */}
       <CardsSection />
+
+      <TiersSection/>
 
       <BecomeAFarmerSection />
       {/* Trading strategy builder */}

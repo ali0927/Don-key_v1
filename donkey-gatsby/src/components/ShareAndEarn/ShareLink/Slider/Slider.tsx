@@ -12,6 +12,7 @@ import { DonCommonmodal } from "components/DonModal";
 import { ButtonWidget } from "components/Button";
 import { api } from "strapi";
 
+
 const CutomSlickSlider = styled(SlickSlider)`
   overflow: hidden;
   .selected {
@@ -49,11 +50,11 @@ const FooterText = styled.p<{ fontSize?: string }>`
   font-weight: 500;
 `;
 const settings = {
-  dots: false,
-  infinite: false,
+  dots: true,
+  infinite: true,
   speed: 500,
-  slidesToShow: 5,
-  initialSlide: 0,
+  slidesToShow: 1,
+  slidesToScroll: 1
 };
 
 const IMAGE_LIST_QUERY = gql`
