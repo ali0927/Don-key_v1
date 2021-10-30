@@ -14,6 +14,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import clsx from "clsx";
 import { Container } from "react-bootstrap";
+import { StaticImage } from "gatsby-plugin-image";
 
 const Root = styled.div`
   background-color: #f2f2f2;
@@ -102,7 +103,7 @@ const CardBody = styled.div`
   padding-top: 36px;
 `;
 
-const CardBg = styled.img`
+const CardBg = styled.div`
     position: absolute;
     top: 0;
     height: 218px;
@@ -183,7 +184,9 @@ export const TiersSection: React.FC = () => {
             </CardTypography>
           </CardBody>
           <Image src={tier.image} top={tier.imageTop} alt="Image not found" />
-          <CardBg src={CardProfile} alt="Card image not found"/>
+          <CardBg>
+          <StaticImage src={"./images/CardProfile.png"} alt="Card image not found"/>
+          </CardBg>
         </Card>
       </div>
     );

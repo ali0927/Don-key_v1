@@ -408,10 +408,12 @@ function NavBar({ variant = "landing", hideDappButton }: INavBarProps) {
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
         {variant === "landing" && (
-          <LaunchButton
-            style={{ width: 202, height: 55 }}
-            className="d-none d-lg-block mt-0 text-right"
-          />
+          <div className="d-none d-lg-block ">
+            <LaunchButton
+              style={{ width: 202, height: 55 }}
+              className="mt-0 text-right"
+            />
+          </div>
         )}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
