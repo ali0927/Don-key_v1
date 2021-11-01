@@ -4,26 +4,27 @@ import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { IVideo } from "./interfaces/IVideo";
 import SlickSlider from "react-slick";
+import clsx from "clsx";
 
 const Root = styled.div`
   background-color: #fff;
   min-height: 400px;
   padding: 45px 0px 45px 0px;
-  margin-left: 15px;
   @media only screen and (min-width: ${breakPoints.md}) {
     padding: 145px 0px 45px 0px;
   }
   @media only screen and (min-width: ${breakPoints.lg}) {
     padding: 200px 0px 100px 0px;
-    margin-left: 211px;
     min-height: 800px;
   }
 `;
 
 const VideoRoot = styled.div`
   margin-top: 30px;
+  margin-left: 15px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     margin-top: 60px;
+    margin-left: 211px;
   }
 `;
 
@@ -49,13 +50,11 @@ const IFrameRoot = styled.div`
   width: 260px;
   overflow: hidden;
   margin-top: 15px;
-  margin-left: 10px;
-  margin-right: 10px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-    width: 460px;
+    width: 470px;
     height: 330px;
     margin: 0px;
-    margin-top: 15px;
+    margin-top: 20px;
   }
 `;
 
@@ -68,16 +67,21 @@ const IFrame = styled.iframe`
 
 const VideoItem = styled.div`
   width: 100%;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
   opacity: 0.5;
 `;
 
 const CutomSlickSlider = styled(SlickSlider)`
   overflow: hidden;
   width: 100%;
-  margin: 0 -10px;
   height: 250px;
+  .selected-slide {
+    opacity: 1;
+  }
+  .selected-slide .iframeCSS {
+    transform: scale(1.1);
+  }
   .slick-slide {
     margin: 0 0px;
     @media only screen and (min-width: ${breakPoints.md}) {
@@ -85,7 +89,8 @@ const CutomSlickSlider = styled(SlickSlider)`
     }
   }
   .slick-slide.slick-center .iframeCSS {
-    transform: scale(1.08);
+    transform: scale(1.1);
+ 
   }
   .slick-slide.slick-center .videoItem {
     opacity: 1;
@@ -110,6 +115,7 @@ const DarkBorder = styled.div`
   background: #000;
   position: absolute;
   top: -2px;
+  cursor: pointer;
 `;
 
 const Dots = styled.div<{ selected: boolean }>`
@@ -157,10 +163,8 @@ export const VideoSection: React.FC = () => {
     speed: 300,
     centerMode: true,
     variableWidth: true,
-    // centerPadding: "60px",
-    dots: true,
+    centerPadding: '10px',
     slidesToShow: 1,
-    slidesToScroll: 3,
   };
 
   const handleChangeSlide = (slideNumber: number) => () => {
@@ -173,16 +177,18 @@ export const VideoSection: React.FC = () => {
   return (
     <>
       <Root>
-        <Typography lgFontSize="36px" smFontSize="30px" color="#000" bold>
-          As seen on:
-        </Typography>
+        <Container>
+          <Typography lgFontSize="36px" smFontSize="30px" color="#000" bold>
+            As seen on:
+          </Typography>
+        </Container>
 
         <VideoRoot className="d-flex position-relative">
           <CutomSlickSlider ref={slickRef} {...settings}>
             {videos.map((video, index) => {
               return (
                 <VideoItem
-                  className="videoItem"
+                  className={clsx("videoItem")}
                   key={index}
                   onClick={handleChangeSlide(index)}
                 >
@@ -216,18 +222,19 @@ export const VideoSection: React.FC = () => {
             })}
           </CutomSlickSlider>
         </VideoRoot>
-
-        <div className="d-flex justify-content-center mt-4">
-          {videos.map((value, index) => {
-            return (
-              <Dots
-                className="mr-2"
-                selected={index === selectedTier}
-                onClick={handleChangeSlide(index)}
-              />
-            );
-          })}
-        </div>
+        <Container>
+          <div className="d-flex justify-content-center mt-4">
+            {videos.map((value, index) => {
+              return (
+                <Dots
+                  className="mr-2"
+                  selected={index === selectedTier}
+                  onClick={handleChangeSlide(index)}
+                />
+              );
+            })}
+          </div>
+        </Container>
       </Root>
     </>
   );
