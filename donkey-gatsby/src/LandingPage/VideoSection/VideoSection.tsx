@@ -49,9 +49,13 @@ const IFrameRoot = styled.div`
   width: 260px;
   overflow: hidden;
   margin-top: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     width: 460px;
     height: 330px;
+    margin: 0px;
+    margin-top: 15px;
   }
 `;
 
@@ -66,6 +70,7 @@ const VideoItem = styled.div`
   width: 100%;
   margin-left: 5px;
   margin-right: 5px;
+  opacity: 0.5;
 `;
 
 const CutomSlickSlider = styled(SlickSlider)`
@@ -80,10 +85,10 @@ const CutomSlickSlider = styled(SlickSlider)`
     }
   }
   .slick-slide.slick-center .iframeCSS {
-    transform: scale(1.04);
-    @media only screen and (min-width: ${breakPoints.lg}) {
-      transform: scale(1.08);
-    }
+    transform: scale(1.08);
+  }
+  .slick-slide.slick-center .videoItem {
+    opacity: 1;
   }
   @media only screen and (min-width: ${breakPoints.lg}) {
     height: 500px;
@@ -176,7 +181,11 @@ export const VideoSection: React.FC = () => {
           <CutomSlickSlider ref={slickRef} {...settings}>
             {videos.map((video, index) => {
               return (
-                <VideoItem key={index} onClick={handleChangeSlide(index)}>
+                <VideoItem
+                  className="videoItem"
+                  key={index}
+                  onClick={handleChangeSlide(index)}
+                >
                   <IFrameRoot className="iframeCSS">
                     {" "}
                     <IFrame src={video.url}></IFrame>
