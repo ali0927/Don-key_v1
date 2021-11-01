@@ -3,7 +3,7 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import React from "react";
 import styled from "styled-components";
 import SlickSlider from "react-slick";
-import tier1 from "./images/tier1.png";
+import teir1 from "./images/tier1.png";
 import tier2 from "./images/tier2.png";
 import tier3 from "./images/tier3.png";
 import tier4 from "./images/tier4.png";
@@ -14,7 +14,7 @@ import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import clsx from "clsx";
 import { Container } from "react-bootstrap";
-import { StaticImage } from "gatsby-plugin-image";
+import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image";
 
 const Root = styled.div`
   background-color: #f2f2f2;
@@ -84,30 +84,36 @@ const CardTypography = styled.p<{
 `;
 
 const CardHeader = styled.div`
-  height: 86px;
+  height: 106px;
   padding: 13px;
   display: flex;
   align-items: center;
-
 `;
 
-const Image = styled.img<{ top?: string }>`
+const Image = styled.img<{ top?: string; height?: string }>`
   position: absolute;
   right: 0px;
   z-index: 1;
-  top: ${(props) => (props.top ? props.top : "21%")};
+  height: ${(props) => (props.height ? props.height : "174px")};
+  bottom: 0px;
+  //top: ${(props) => (props.top ? props.top : "20%")};
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    height: ${(props) => (props.height ? props.height : "219px")};
+  }
 `;
 
 const CardBody = styled.div`
   padding: 13px;
-  padding-top: 36px;
+
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    padding-top: 36px;
+  }
 `;
 
 const CardBg = styled.div`
-    position: absolute;
-    top: 0;
-    height: 218px;
-    width: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
 `;
 
 const Dots = styled.div<{ selected: boolean }>`
@@ -139,17 +145,18 @@ export const TiersSection: React.FC = () => {
   };
 
   const tiers: ITierSection[] = [
-    { tier: 1, image: tier1, stakedDons: "500" },
+    { tier: 1, image: teir1, stakedDons: "500" },
     { tier: 2, image: tier2, stakedDons: "25,00" },
     { tier: 3, image: tier3, stakedDons: "5,000" },
-    { tier: 4, image: tier4, stakedDons: "25,000", imageTop: "7%" },
-    { tier: 5, image: tier5, stakedDons: "50,000", imageTop: "22%" },
+    { tier: 4, image: tier4, stakedDons: "25,000", height: "100%" },
+    { tier: 5, image: tier5, stakedDons: "50,000" },
   ];
 
   const [selectedTier, setSelectedTier] = React.useState(0);
 
   const renderCards = (index: number) => {
     const tier = tiers[index];
+    //const tierImage = getImage(tier.image);
     return (
       <div className={clsx({ "mr-3": !isDesktop })}>
         <Card>
@@ -159,11 +166,10 @@ export const TiersSection: React.FC = () => {
               smFontSize="25px"
               color="#fff"
               bold
-              style={{zIndex: 1}}
+              style={{ zIndex: 1 }}
             >
               Tier {tier.tier}
             </CardTypography>
-         
           </CardHeader>
           <CardBody>
             <CardTypography
@@ -172,7 +178,7 @@ export const TiersSection: React.FC = () => {
               color="#222222"
               bold
             >
-              Staked $DON
+              Staked
             </CardTypography>
             <CardTypography
               lgFontSize={"16px"}
@@ -183,9 +189,14 @@ export const TiersSection: React.FC = () => {
               {tier.stakedDons} $DON
             </CardTypography>
           </CardBody>
-          <Image src={tier.image} top={tier.imageTop} alt="Image not found" />
+          <Image src={tier.image} height={tier.height} alt="Image not found" />
+          {/* <GatsbyImage image={tierImage} alt="Image not found"/> */}
+          {/* <StaticImage src={tier.image} alt="Card image not found" /> */}
           <CardBg>
-          <StaticImage src={"./images/CardProfile.png"} alt="Card image not found"/>
+            <StaticImage
+              src={"./images/CardProfile.png"}
+              alt="Card image not found"
+            />
           </CardBg>
         </Card>
       </div>

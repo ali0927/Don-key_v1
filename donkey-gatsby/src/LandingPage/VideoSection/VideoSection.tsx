@@ -43,14 +43,23 @@ const Typography = styled.p<{
   }
 `;
 
-const IFrame = styled.iframe`
+const IFrameRoot = styled.div`
   border-radius: 12px;
   height: 162px;
   width: 260px;
+  overflow: hidden;
+  margin-top: 15px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     width: 460px;
     height: 330px;
   }
+`;
+
+const IFrame = styled.iframe`
+  border-radius: inherit;
+  height: 100%;
+  width: 100%;
+  border: 0px;
 `;
 
 const VideoItem = styled.div`
@@ -67,8 +76,14 @@ const CutomSlickSlider = styled(SlickSlider)`
   .slick-slide {
     margin: 0 0px;
     @media only screen and (min-width: ${breakPoints.md}) {
-        margin: 0 10px;
+      margin: 0 10px;
+    }
   }
+  .slick-slide.slick-center .iframeCSS {
+    transform: scale(1.04);
+    @media only screen and (min-width: ${breakPoints.lg}) {
+      transform: scale(1.08);
+    }
   }
   @media only screen and (min-width: ${breakPoints.lg}) {
     height: 500px;
@@ -110,7 +125,7 @@ export const VideoSection: React.FC = () => {
       subscribers: "426K subscribers",
     },
     {
-      url:"https://www.youtube.com/embed/XkiRXMM5TTE",
+      url: "https://www.youtube.com/embed/XkiRXMM5TTE",
       name: "Kyle Chasse",
       subscribers: "20.2K subscribers",
     },
@@ -132,13 +147,15 @@ export const VideoSection: React.FC = () => {
   ];
 
   const settings = {
-    dots: true,
+    className: "center",
     infinite: true,
     speed: 300,
-    slidesToShow: 1,
-    slidesToScroll: 3,
     centerMode: true,
     variableWidth: true,
+    // centerPadding: "60px",
+    dots: true,
+    slidesToShow: 1,
+    slidesToScroll: 3,
   };
 
   const handleChangeSlide = (slideNumber: number) => () => {
@@ -159,11 +176,11 @@ export const VideoSection: React.FC = () => {
           <CutomSlickSlider ref={slickRef} {...settings}>
             {videos.map((video, index) => {
               return (
-                  <div key={index}>
-                <VideoItem>
-                  <IFrame
-                    src={video.url}
-                  ></IFrame>
+                <VideoItem key={index} onClick={handleChangeSlide(index)}>
+                  <IFrameRoot className="iframeCSS">
+                    {" "}
+                    <IFrame src={video.url}></IFrame>
+                  </IFrameRoot>
                   <Typography
                     className="mt-3"
                     lgFontSize="32px"
@@ -186,7 +203,6 @@ export const VideoSection: React.FC = () => {
                     <DarkBorder />
                   </div>
                 </VideoItem>
-                </div>
               );
             })}
           </CutomSlickSlider>
