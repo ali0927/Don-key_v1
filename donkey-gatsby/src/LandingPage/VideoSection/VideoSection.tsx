@@ -140,7 +140,7 @@ const Divider = styled.div`
 
 export const VideoSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
-  const [selectedTier, setSelectedTier] = React.useState(0);
+  const [selectedSlide, setSelectedSlide] = React.useState(0);
   const videos: IVideo[] = [
     {
       url: "https://www.youtube.com/embed/XrLwOmmz4bs",
@@ -181,7 +181,7 @@ export const VideoSection: React.FC = () => {
   const handleChangeSlide = (slideNumber: number) => () => {
     if (slickRef.current) {
       slickRef.current.slickGoTo(slideNumber);
-      setSelectedTier(slideNumber);
+      setSelectedSlide(slideNumber);
     }
   };
 
@@ -194,7 +194,7 @@ export const VideoSection: React.FC = () => {
           </Typography>
 
           <VideoRoot className="d-flex position-relative">
-            <CutomSlickSlider ref={slickRef} {...settings}>
+            <CutomSlickSlider ref={slickRef} {...settings} afterChange={(currentSlide)=> setSelectedSlide(currentSlide)}>
               {videos.map((video, index) => {
                 return (
                   <VideoWrapper
@@ -241,7 +241,7 @@ export const VideoSection: React.FC = () => {
               return (
                 <Dots
                   className="mr-2"
-                  selected={index === selectedTier}
+                  selected={index === selectedSlide}
                   onClick={handleChangeSlide(index)}
                 />
               );

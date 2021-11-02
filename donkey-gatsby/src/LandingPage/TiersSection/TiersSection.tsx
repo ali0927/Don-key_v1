@@ -225,7 +225,7 @@ export const TiersSection: React.FC = () => {
           </div>
           {!isDesktop && (
             <div className="mt-3 w-100">
-              <CutomSlickSlider ref={slickRef} {...settings}>
+              <CutomSlickSlider ref={slickRef} {...settings} afterChange={(currentSlide)=> setSelectedTier(currentSlide)}>
                 {tiers.map((currentTier, index) => {
                   return <>{renderCards(index)}</>;
                 })}
