@@ -10,22 +10,20 @@ const Root = styled.div`
   background-color: #fff;
   min-height: 400px;
   padding: 45px 0px 45px 0px;
+  width: 100%;
   @media only screen and (min-width: ${breakPoints.md}) {
     padding: 145px 0px 45px 0px;
+    width: 105%;
   }
   @media only screen and (min-width: ${breakPoints.lg}) {
     padding: 200px 0px 100px 0px;
     min-height: 800px;
+    width: 110%;
   }
 `;
 
 const VideoRoot = styled.div`
-  margin-top: 30px;
-  margin-left: 15px;
-  @media only screen and (min-width: ${breakPoints.lg}) {
-    margin-top: 60px;
-    margin-left: 211px;
-  }
+  margin-top: 14px;
 `;
 
 const Typography = styled.p<{
@@ -47,14 +45,11 @@ const Typography = styled.p<{
 const IFrameRoot = styled.div`
   border-radius: 12px;
   height: 162px;
-  width: 260px;
+  width: 210px;
   overflow: hidden;
-  margin-top: 15px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-    width: 470px;
-    height: 330px;
-    margin: 0px;
-    margin-top: 20px;
+    width: 360px;
+    height: 262px;
   }
 `;
 
@@ -65,38 +60,48 @@ const IFrame = styled.iframe`
   border: 0px;
 `;
 
+const VideoWrapper = styled.div`
+  opacity: 0.5;
+`;
+
 const VideoItem = styled.div`
   width: 100%;
-  margin-left: 10px;
-  margin-right: 10px;
-  opacity: 0.5;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    height: 460px;
+  }
 `;
 
 const CutomSlickSlider = styled(SlickSlider)`
   overflow: hidden;
   width: 100%;
-  height: 250px;
+  margin-left: 0px;
+  height: 280px;
   .selected-slide {
     opacity: 1;
   }
-  .selected-slide .iframeCSS {
-    transform: scale(1.1);
-  }
-  .slick-slide {
-    margin: 0 0px;
-    @media only screen and (min-width: ${breakPoints.md}) {
-      margin: 0 10px;
-    }
-  }
+
   .slick-slide.slick-center .iframeCSS {
     transform: scale(1.1);
- 
+    height: 180px;
+    @media only screen and (min-width: ${breakPoints.lg}) {
+    height: 305px;
+  }
   }
   .slick-slide.slick-center .videoItem {
     opacity: 1;
   }
+  @media only screen and (min-width: ${breakPoints.md}) {
+    height: 100%;
+    margin-left: -14px;
+  }
   @media only screen and (min-width: ${breakPoints.lg}) {
-    height: 500px;
+    margin-left: -39px;
   }
   /* height: 220px; */
 `;
@@ -124,6 +129,13 @@ const Dots = styled.div<{ selected: boolean }>`
   background: ${(props) => (props.selected ? "#000000" : "#E2E2E2")};
   border-radius: 100%;
   cursor: pointer;
+`;
+
+const Divider = styled.div`
+  margin-top: 0px;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    margin-top: 34px;
+  }
 `;
 
 export const VideoSection: React.FC = () => {
@@ -163,7 +175,6 @@ export const VideoSection: React.FC = () => {
     speed: 300,
     centerMode: true,
     variableWidth: true,
-    centerPadding: '10px',
     slidesToShow: 1,
   };
 
@@ -176,53 +187,55 @@ export const VideoSection: React.FC = () => {
 
   return (
     <>
-      <Root>
-        <Container>
+      <Container>
+        <Root>
           <Typography lgFontSize="36px" smFontSize="30px" color="#000" bold>
             As seen on:
           </Typography>
-        </Container>
 
-        <VideoRoot className="d-flex position-relative">
-          <CutomSlickSlider ref={slickRef} {...settings}>
-            {videos.map((video, index) => {
-              return (
-                <VideoItem
-                  className={clsx("videoItem")}
-                  key={index}
-                  onClick={handleChangeSlide(index)}
-                >
-                  <IFrameRoot className="iframeCSS">
-                    {" "}
-                    <IFrame src={video.url}></IFrame>
-                  </IFrameRoot>
-                  <Typography
-                    className="mt-3"
-                    lgFontSize="32px"
-                    smFontSize="18px"
-                    color="#000"
-                    bold
+          <VideoRoot className="d-flex position-relative">
+            <CutomSlickSlider ref={slickRef} {...settings}>
+              {videos.map((video, index) => {
+                return (
+                  <VideoWrapper
+                    className="videoItem"
+                    onClick={handleChangeSlide(index)}
                   >
-                    {video.name}
-                  </Typography>
-                  <Typography
-                    className="mt-2"
-                    lgFontSize="16px"
-                    smFontSize="12px"
-                    color="#000"
-                  >
-                    {video.subscribers}
-                  </Typography>
-                  <div className="position-relative mt-4 mb-2 d-none d-md-block">
-                    <GrayBorder />
-                    <DarkBorder />
-                  </div>
-                </VideoItem>
-              );
-            })}
-          </CutomSlickSlider>
-        </VideoRoot>
-        <Container>
+                    <VideoItem key={index}>
+                      <IFrameRoot className="iframeCSS">
+                        {" "}
+                        <IFrame src={video.url}></IFrame>
+                      </IFrameRoot>
+                      <Typography
+                        className="mt-3"
+                        lgFontSize="24px"
+                        smFontSize="18px"
+                        color="#000"
+                        bold
+                      >
+                        {video.name}
+                      </Typography>
+                      <Typography
+                        className="mt-2"
+                        lgFontSize="16px"
+                        smFontSize="12px"
+                        color="#000"
+                      >
+                        {video.subscribers}
+                      </Typography>
+                    </VideoItem>
+                    <Divider className="position-relative mb-2 d-none d-md-block">
+                      <GrayBorder />
+                      <div className="d-flex justify-content-center w-100">
+                        <DarkBorder />
+                      </div>
+                    </Divider>
+                  </VideoWrapper>
+                );
+              })}
+            </CutomSlickSlider>
+          </VideoRoot>
+
           <div className="d-flex justify-content-center mt-4">
             {videos.map((value, index) => {
               return (
@@ -234,8 +247,8 @@ export const VideoSection: React.FC = () => {
               );
             })}
           </div>
-        </Container>
-      </Root>
+        </Root>
+      </Container>
     </>
   );
 };
