@@ -90,8 +90,8 @@ const CutomSlickSlider = styled(SlickSlider)`
     transform: scale(1.1);
     height: 180px;
     @media only screen and (min-width: ${breakPoints.lg}) {
-    height: 305px;
-  }
+      height: 305px;
+    }
   }
   .slick-slide.slick-center .videoItem {
     opacity: 1;
@@ -194,7 +194,11 @@ export const VideoSection: React.FC = () => {
           </Typography>
 
           <VideoRoot className="d-flex position-relative">
-            <CutomSlickSlider ref={slickRef} {...settings} afterChange={(currentSlide)=> setSelectedSlide(currentSlide)}>
+            <CutomSlickSlider
+              ref={slickRef}
+              {...settings}
+              afterChange={(currentSlide) => setSelectedSlide(currentSlide)}
+            >
               {videos.map((video, index) => {
                 return (
                   <VideoWrapper
@@ -204,7 +208,7 @@ export const VideoSection: React.FC = () => {
                     <VideoItem key={index}>
                       <IFrameRoot className="iframeCSS">
                         {" "}
-                        <IFrame src={video.url}></IFrame>
+                        <IFrame src={video.url}  allow="fullscreen"></IFrame>
                       </IFrameRoot>
                       <Typography
                         className="mt-3"
