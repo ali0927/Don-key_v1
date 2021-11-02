@@ -16,6 +16,7 @@ import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
+import { MainSectionTimer } from "./MainSectionTimer";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -206,10 +207,11 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading>Beta DAPP is now live and open for the public</Heading>
+              <MainSectionTimer/>
+              {/* <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
-              </Paragraph>
+              </Paragraph> */}
               <div className="d-flex flex-wrap">
                 <LaunchButton className="d-block d-lg-none mt-3 mr-3" />
 
