@@ -3,6 +3,7 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import React from "react";
 import styled from "styled-components";
 import SlickSlider from "react-slick";
+import teir0 from "./images/tier0.png";
 import teir1 from "./images/tier1.png";
 import tier2 from "./images/tier2.png";
 import tier3 from "./images/tier3.png";
@@ -56,8 +57,8 @@ const Card = styled.div`
   width: 180px;
   height: 218px;
   @media only screen and (min-width: ${breakPoints.lg}) {
-    width: 203px;
-    height: 275px;
+    width: 170px;
+    height: 215px;
   }
 `;
 
@@ -84,30 +85,41 @@ const CardTypography = styled.p<{
 `;
 
 const CardHeader = styled.div`
-  height: 106px;
+  height: 100px;
   padding: 13px;
+  padding-top: 0px;
   display: flex;
   align-items: center;
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    height: 92px;
+  }
 `;
 
-const Image = styled.img<{ top?: string; height?: string }>`
+const Image = styled.img<{ bottom?: string; height?: string }>`
   position: absolute;
   right: 0px;
   z-index: 1;
-  height: ${(props) => (props.height ? props.height : "174px")};
-  bottom: 0px;
-  //top: ${(props) => (props.top ? props.top : "20%")};
+  height: ${(props) => (props.height ? props.height : "144px")};
+  bottom: ${(props) => (props.bottom ? props.bottom : "0px")};
   @media only screen and (min-width: ${breakPoints.lg}) {
-    height: ${(props) => (props.height ? props.height : "219px")};
+    height: ${(props) => (props.height ? props.height : "144px")};
   }
 `;
 
 const CardBody = styled.div`
   padding: 13px;
-
+  padding-top: 0px;
+  padding-bottom: 0px;
+  /* 
   @media only screen and (min-width: ${breakPoints.lg}) {
     padding-top: 36px;
-  }
+  } */
+`;
+
+const Divider = styled.hr`
+  border-top: 1px solid #dedee0;
+  margin: 0px;
+  width: 52%;
 `;
 
 const CardBg = styled.div`
@@ -145,12 +157,12 @@ export const TiersSection: React.FC = () => {
   };
 
   const tiers: ITierSection[] = [
-    { tier: 0, image: teir1, stakedDons: "100" },
-    { tier: 1, image: teir1, stakedDons: "500" },
-    { tier: 2, image: tier2, stakedDons: "25,00" },
-    { tier: 3, image: tier3, stakedDons: "5,000" },
-    { tier: 4, image: tier4, stakedDons: "25,000", height: "100%" },
-    { tier: 5, image: tier5, stakedDons: "50,000" },
+    { tier: 0, image: teir0, stakedDons: "100", apy: "Access to the Platform", height: "139px", bottom: "34px" },
+    { tier: 1, image: teir1, stakedDons: "500", apy: "10%",bottom: "5px" },
+    { tier: 2, image: tier2, stakedDons: "25,00", apy: "20%",bottom: "5px" },
+    { tier: 3, image: tier3, stakedDons: "5,000", apy: "50%" },
+    { tier: 4, image: tier4, stakedDons: "25,000", height: "90%", apy: "75%" },
+    { tier: 5, image: tier5, stakedDons: "50,000", apy: "100%" },
   ];
 
   const [selectedTier, setSelectedTier] = React.useState(0);
@@ -163,7 +175,7 @@ export const TiersSection: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTypography
-              lgFontSize={"30px"}
+              lgFontSize={"25px"}
               smFontSize="25px"
               color="#fff"
               bold
@@ -174,23 +186,34 @@ export const TiersSection: React.FC = () => {
           </CardHeader>
           <CardBody>
             <CardTypography
-              lgFontSize={"12px"}
+              lgFontSize={"10px"}
               smFontSize="10px"
               color="#222222"
-              bold
             >
               Staked
             </CardTypography>
             <CardTypography
-              lgFontSize={"16px"}
+              lgFontSize={"14px"}
               smFontSize="14px"
               color="#070602"
               bold
             >
               {tier.stakedDons} $DON
             </CardTypography>
+            <Divider className="mt-2 mb-2" />
+            <CardTypography lgFontSize="10px" smFontSize="10px" color="#222222">
+              Extra APY
+            </CardTypography>
+            <CardTypography
+              lgFontSize={"14px"}
+              smFontSize="14px"
+              color="#070602"
+              bold
+            >
+              {tier.apy}
+            </CardTypography>
           </CardBody>
-          <Image src={tier.image} height={tier.height} alt="Image not found" />
+          <Image src={tier.image} height={tier.height} bottom={tier.bottom} alt="Image not found" />
           {/* <GatsbyImage image={tierImage} alt="Image not found"/> */}
           {/* <StaticImage src={tier.image} alt="Card image not found" /> */}
           <CardBg>
@@ -226,7 +249,11 @@ export const TiersSection: React.FC = () => {
           </div>
           {!isDesktop && (
             <div className="mt-3 w-100">
-              <CutomSlickSlider ref={slickRef} {...settings} afterChange={(currentSlide)=> setSelectedTier(currentSlide)}>
+              <CutomSlickSlider
+                ref={slickRef}
+                {...settings}
+                afterChange={(currentSlide) => setSelectedTier(currentSlide)}
+              >
                 {tiers.map((currentTier, index) => {
                   return <>{renderCards(index)}</>;
                 })}

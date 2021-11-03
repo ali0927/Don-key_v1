@@ -5,4 +5,6 @@ export interface ITierSection {
     image: string;
     stakedDons: string;
     height?: string;
+    apy: string;
+    bottom?: string;
 }
