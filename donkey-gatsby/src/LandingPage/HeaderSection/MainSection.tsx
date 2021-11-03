@@ -207,6 +207,7 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
+              <Heading className="mb-2 mb-lg-4"> Dont tell your friends yet</Heading>
               <MainSectionTimer/>
               {/* <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">
