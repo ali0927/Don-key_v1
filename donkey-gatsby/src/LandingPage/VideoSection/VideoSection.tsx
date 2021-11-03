@@ -131,6 +131,13 @@ const Dots = styled.div<{ selected: boolean }>`
   cursor: pointer;
 `;
 
+const Overlay = styled.div`
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+`;
+
 const Divider = styled.div`
   margin-top: 0px;
   @media only screen and (min-width: ${breakPoints.lg}) {
@@ -143,27 +150,27 @@ export const VideoSection: React.FC = () => {
   const [selectedSlide, setSelectedSlide] = React.useState(0);
   const videos: IVideo[] = [
     {
-      url: "https://www.youtube.com/embed/XrLwOmmz4bs",
+      url: "https://www.youtube.com/embed/XrLwOmmz4bs?start=2764",
       name: "Crypto Banter",
       subscribers: "426K subscribers",
     },
     {
-      url: "https://www.youtube.com/embed/XkiRXMM5TTE",
+      url: "https://www.youtube.com/embed/XkiRXMM5TTE?start=386",
       name: "Kyle Chasse",
       subscribers: "20.2K subscribers",
     },
     {
-      url: "https://www.youtube.com/embed/NHyP0tKIM68",
+      url: "https://www.youtube.com/embed/NHyP0tKIM68?start=432",
       name: "EllioTrades Crypto",
       subscribers: "454K subscribers",
     },
     {
-      url: "https://www.youtube.com/embed/gRwqZOJDUOU",
+      url: "https://www.youtube.com/embed/gRwqZOJDUOU?start=2662",
       name: "Crypto Banter",
       subscribers: "426K subscribers",
     },
     {
-      url: "https://www.youtube.com/embed/vAw0H0tuwM4",
+      url: "https://www.youtube.com/embed/vAw0H0tuwM4?start=4565",
       name: "BitBoy Crypto",
       subscribers: "1.33M subscribers",
     },
@@ -202,13 +209,13 @@ export const VideoSection: React.FC = () => {
               {videos.map((video, index) => {
                 return (
                   <VideoWrapper
-                    className="videoItem"
+                    className="videoItem position-relative"
                     onClick={handleChangeSlide(index)}
                   >
                     <VideoItem key={index}>
                       <IFrameRoot className="iframeCSS">
                         {" "}
-                        <IFrame src={video.url}  allow="fullscreen"></IFrame>
+                        <IFrame src={video.url} allow="fullscreen"></IFrame>
                       </IFrameRoot>
                       <Typography
                         className="mt-3"
@@ -228,12 +235,14 @@ export const VideoSection: React.FC = () => {
                         {video.subscribers}
                       </Typography>
                     </VideoItem>
+                    {selectedSlide !== index && <Overlay />}
                     <Divider className="position-relative mb-2 d-none d-md-block">
                       <GrayBorder />
                       <div className="d-flex justify-content-center w-100">
                         <DarkBorder />
                       </div>
                     </Divider>
+                   
                   </VideoWrapper>
                 );
               })}
