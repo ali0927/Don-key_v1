@@ -52,7 +52,7 @@ const Heading = styled.h1`
   text-align: left;
   color: #222222;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 50px;
+    font-size: 49px;
   }
 `;
 
@@ -207,7 +207,7 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading className="mb-2 mb-lg-4"> Dont tell your friends yet</Heading>
+              <Heading className="mb-4">Don’t tell your friends yet!</Heading>
               <MainSectionTimer/>
               {/* <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">

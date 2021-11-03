@@ -145,6 +145,7 @@ export const TiersSection: React.FC = () => {
   };
 
   const tiers: ITierSection[] = [
+    { tier: 0, image: teir1, stakedDons: "100" },
     { tier: 1, image: teir1, stakedDons: "500" },
     { tier: 2, image: tier2, stakedDons: "25,00" },
     { tier: 3, image: tier3, stakedDons: "5,000" },
