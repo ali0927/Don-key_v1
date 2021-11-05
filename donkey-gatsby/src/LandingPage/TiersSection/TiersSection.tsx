@@ -156,8 +156,9 @@ const StakeButton = styled(ButtonWidget)`
 
 export const TiersSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
-  const content = `Our Tier System unlocks utility on Don-key’s copy-farming platform. Each level unlocks an additional level of benefits and profitability, rewarding holders of $DON as much as possible.
-  At the moment our tiers provide extra APY in the form of $DON tokens, while base profits are given in the farmed coin. In the future the tiers will unlock more utilities such as: referral rewards, generative NFT rewards, exclusive farming opportunities, autonomous strategy building interface and more. `;
+  const part1 = `Our Tier System unlocks utility on Don-key’s copy-farming platform. Each level unlocks an additional level of benefits and profitability, rewarding holders of $DON as much as possible.
+  `;
+  const part2 = `At the moment our tiers provide extra APY in the form of $DON tokens, while base profits are given in the farmed coin. In the future the tiers will unlock more utilities such as: referral rewards, generative NFT rewards, exclusive farming opportunities, autonomous strategy building, and more. `;
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
@@ -280,9 +281,13 @@ export const TiersSection: React.FC = () => {
           <div className="row">
             <div className="col-12 col-lg-6">
               <Paragraph className="d-block d-lg-none">
-                <ShowMoreContent content={content} length={220} />
+                {part1}
+                <br />
+                <ShowMoreContent content={part2} length={220} />
               </Paragraph>
-              <Paragraph className="d-none d-lg-block">{content}</Paragraph>
+              <Paragraph className="d-none d-lg-block">
+                {part1} <br /> {part2}
+              </Paragraph>
             </div>
           </div>
           {!isDesktop && (
