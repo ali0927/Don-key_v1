@@ -7,7 +7,7 @@ import { Carousel } from "react-bootstrap";
 
 const GrayBorder = styled.hr`
   position: absolute;
-  width: 78%;
+  width: 70%;
   border-top: 1.8px dashed#000D09;
   top: 2px;
   margin: 0px;
@@ -24,7 +24,7 @@ export const SlideShow: React.FC<ISlideShowProps> = (props) => {
         {chunks.map((items) => {
           return (
             <Carousel.Item>
-              <GrayBorder className="d-none d-md-block" />
+              <GrayBorder/>
               <div className="row justify-content-between">
                 {items.map((item, itemIndex) => {
                   return <Slide key={itemIndex} {...item} />;

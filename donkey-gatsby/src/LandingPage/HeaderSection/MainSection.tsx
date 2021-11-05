@@ -4,9 +4,7 @@ import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
 import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
-import {
-  convertToInternationalCurrencySystem,
-} from "helpers";
+import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
 import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
@@ -17,6 +15,8 @@ import { graphql, useStaticQuery } from "gatsby";
 import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
+import { LaunchButton } from "components/LaunchButton";
+import { MainSectionTimer } from "./MainSectionTimer";
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -48,25 +48,14 @@ const Heading = styled.h1`
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 40px;
-  font-weight: 800;
+  font-weight: 900;
   text-align: left;
   color: #222222;
   @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 50px;
+    font-size: 49px;
   }
 `;
 
-const Paragraph = styled.p`
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: left;
-  word-break: break-word;
-  width: 80%;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    width: 100%;
-  }
-`;
 
 const FooterRow = styled.div`
   width: 100%;
@@ -83,45 +72,20 @@ const ETH_PRICE = gql`
   }
 `;
 
-const LaunchButton = styled.button`
-  background: #222222;
-  box-shadow: 0px 6px 12px -6px rgba(24, 39, 75, 0.12);
-  padding: 1rem 2rem;
-  color: #fff;
-  font-weight: 500;
-  border: 0;
-  font-size: 16px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  :hover {
-    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
-      4px 4px 18px rgba(0, 0, 0, 0.5);
-  }
-`;
-
 const StakeButton = styled(ButtonWidget)`
   border: 2px solid #222222;
   font-weight: 600;
   width: 221px;
   @media only screen and (min-width: ${breakPoints.md}) {
-     width: 178px;
+    width: 178px;
   }
 `;
 
-const Rocket = styled(RocketLaunchIcon)`
+export const Rocket = styled(RocketLaunchIcon)`
   position: absolute;
   left: 6%;
   bottom: 5%;
 `;
-
-// const LunchRocketRoot = styled.div`
-//   position: absolute;
-//   width: 27%;
-//   bottom: 9px;
-//   left: 0;
-// `;
 
 export const MainSection: React.FC = () => {
   const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
@@ -189,10 +153,6 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
-  const handleDashboard = () => {
-    navigate("/dashboard");
-  };
-
   const handleTakePart = () => {
     navigate("/stake");
   };
@@ -236,23 +196,18 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading>Beta DAPP is now live and open for the public</Heading>
+              <Heading className="mb-4">Don’t tell your friends yet</Heading>
+              <MainSectionTimer/>
+              {/* <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
-              </Paragraph>
+              </Paragraph> */}
               <div className="d-flex flex-wrap">
-                <LaunchButton
-                  className="mt-3 mt-lg-5 mr-3 position-relative d-flex justify-content-end"
-                  style={{ width: 221, height: 55 }}
-                  onClick={handleDashboard}
-                >
-                  <Rocket />
-                  LAUNCH APP
-                </LaunchButton>
+                <LaunchButton className="mt-3 mr-3 " />
 
                 <StakeButton
                   varaint="outlined"
-                  className="mt-3 mt-lg-5"
+                  className="mt-3 "
                   width="178px"
                   height="55px"
                   onClick={handleTakePart}

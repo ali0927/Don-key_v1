@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 
-export const useTimer = (timerEnd: number) => {
+export const useTimer = (timerEnd: number| string, isUtc?: boolean) => {
   const [days, setDays] = useState(0);
   const [hrs, setHrs] = useState(0);
   const [mins, setMins] = useState(0);
@@ -9,7 +9,14 @@ export const useTimer = (timerEnd: number) => {
   const [hasEnded, setHasEnded] = useState(false);
 
   const update = () => {
-    const endTime = moment.unix(timerEnd);
+    let endTime = moment.utc();
+    if(isUtc){
+      endTime = moment.utc(timerEnd).local();
+    }
+    else{
+      endTime = moment.unix(timerEnd as number);
+    }
+   
     const duration = moment.duration(endTime.diff(moment()));
     const isEnded = endTime.isBefore(moment());
     setHasEnded(isEnded);

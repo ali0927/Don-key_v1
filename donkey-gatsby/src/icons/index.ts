@@ -92,5 +92,5 @@ export * from "./TickIcon";
 export * from './WalletConnectNewIcon'
 export * from './MetamaskIcon'
 export * from "./RocketLaunchIcon";
-
+export * from "./MainSectionSmallDots";
 

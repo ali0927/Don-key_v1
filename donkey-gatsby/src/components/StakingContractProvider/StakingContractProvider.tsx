@@ -189,10 +189,10 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   }, [checkCanClaimTokens]);
 
   useEffect(() => {
+    fetchTiers(stakingContract);
     if (connected) {
       if (chainId === BINANCE_CHAIN_ID) {
         fetchState();
-        fetchTiers(stakingContract);
         const interval = setInterval(() => {
           fetchPendingRewards();
         }, 1000);
