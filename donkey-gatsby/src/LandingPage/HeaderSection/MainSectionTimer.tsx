@@ -12,8 +12,8 @@ const TimerCard = styled.div`
   background: #fff251;
   box-shadow: 0px 3.72414px 8.68966px -3.72414px #d1c74c;
   @media only screen and (min-width: ${breakPoints.md}) {
-    height: 130px;
-    width: 117px;
+    height: 120px;
+    width: 105px;
     border-radius: 11px;
     box-shadow: 0px 6.73333px 15.7111px -6.73333px #d1c74c;
   }
@@ -40,18 +40,18 @@ const Typography = styled.p<{
 
 export const MainSectionTimer: React.FC = () => {
   const { days, hrs, mins, secs } = useTimer("Wednesday, 17 November 2021",true);
-  const renderDots = React.useMemo(() => {
+  const renderDots = (() => {
     return (
-      <div className="d-flex align-items-center ml-2 mr-2">
+      <div className="d-flex align-items-center mx-2 mx-md-4">
         <TimerDots className="d-none d-lg-block" />
         <MainSectionSmallDots className="d-block d-lg-none" />
       </div>
     );
-  }, []);
+  })();
 
   return (
     <>
-      <div className="d-flex justify-content-between mb-3 mb-lg-5">
+      <div className="d-flex mb-3 mb-lg-5">
         <TimerCard className="d-flex flex-column justify-content-center align-items-center">
           <Typography mdFontSize="50px" smFontSize="26px" color="#222222">
             {days}
@@ -71,7 +71,7 @@ export const MainSectionTimer: React.FC = () => {
         </TimerCard>
         {renderDots}
         <TimerCard className="d-flex flex-column justify-content-center align-items-center">
-          <Typography mdFontSize="50px" smFontSize="36px" color="#222222">
+          <Typography mdFontSize="50px" smFontSize="26px" color="#222222">
             {mins}
           </Typography>
           <Typography mdFontSize="16px" smFontSize="9px" color="#222222">

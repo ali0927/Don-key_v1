@@ -33,7 +33,7 @@ const Button = styled.div`
     width: 40px;
     height: 40px;
   }
-  @media( max-width: 500px ){
+  @media (max-width: 500px) {
     padding: 12px 6px;
   }
   @media (max-width: 320px) {
@@ -53,21 +53,31 @@ const Button = styled.div`
 
 const Subtitle = styled.div`
   font-size: 14px;
-  color: #A2A2A2;
+  color: #a2a2a2;
   font-weight: 500;
-  @media( max-width: 470px ){
+  @media (max-width: 470px) {
     display: none;
   }
+`;
 
-`
-
-const WalletPopup = ({ onClose }: { onClose: () => void }) => {
+const WalletPopup = ({
+  onClose,
+  onDone,
+}: {
+  onClose: () => void;
+  onDone?: () => void;
+}) => {
   const { connectDapp } = useWeb3Context();
 
-  const connectWallet = (wallet: string) => {
-    if (wallet === "injected") connectDapp("injected");
-    else connectDapp("walletconnect");
+  const connectWallet = async (wallet: string) => {
+    if (wallet === "injected") {
+      await  connectDapp("injected");
+    } else {
+      
+      await connectDapp("walletconnect");
+    }
     onClose();
+    onDone && onDone()
   };
 
   return (
@@ -87,7 +97,9 @@ const WalletPopup = ({ onClose }: { onClose: () => void }) => {
           <div className="container-fluid p-0 d-flex flex-column align-items-center my-5">
             <Button
               className="row w-100 align-items-center justify-content-between g-0"
-              onClick={() => connectWallet("injected")}
+              onClick={async () => {
+                 connectWallet("injected");
+              }}
             >
               <p className="col-8">Metamask</p>
               <div className="col-4 d-flex justify-content-end">
@@ -107,7 +119,7 @@ const WalletPopup = ({ onClose }: { onClose: () => void }) => {
               </div>
             </Button>
           </div>
-           {/* <p>Haven't got a crypto wallet yet?</p>
+          {/* <p>Haven't got a crypto wallet yet?</p>
           <Btn>Learn How to Create</Btn>  */}
         </div>
       </Main>

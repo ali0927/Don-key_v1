@@ -48,7 +48,7 @@ const Heading = styled.h1`
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 40px;
-  font-weight: 800;
+  font-weight: 900;
   text-align: left;
   color: #222222;
   @media only screen and (min-width: ${breakPoints.md}) {
@@ -56,17 +56,6 @@ const Heading = styled.h1`
   }
 `;
 
-const Paragraph = styled.p`
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: left;
-  word-break: break-word;
-  width: 80%;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    width: 100%;
-  }
-`;
 
 const FooterRow = styled.div`
   width: 100%;
@@ -207,18 +196,18 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading className="mb-4">Don’t tell your friends yet!</Heading>
+              <Heading className="mb-4">Don’t tell your friends yet</Heading>
               <MainSectionTimer/>
               {/* <Heading>Beta DAPP is now live and open for the public</Heading>
               <Paragraph className="mt-4 w-md-50">
                 Explore and follow strategies built by real farmers
               </Paragraph> */}
               <div className="d-flex flex-wrap">
-                <LaunchButton className=" mr-3 " />
+                <LaunchButton className="mt-3 mr-3 " />
 
                 <StakeButton
                   varaint="outlined"
-                  
+                  className="mt-3 "
                   width="178px"
                   height="55px"
                   onClick={handleTakePart}

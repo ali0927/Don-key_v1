@@ -1,22 +1,25 @@
 import { breakPoints } from "breakponts";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import SlickSlider from "react-slick";
+import SlickSlider, { Settings as SlickSettings } from "react-slick";
 import teir0 from "./images/tier0.png";
 import teir1 from "./images/tier1.png";
 import tier2 from "./images/tier2.png";
 import tier3 from "./images/tier3.png";
 import tier4 from "./images/tier4.png";
 import tier5 from "./images/tier5.png";
-import CardProfile from "./images/CardProfile.png";
 import { ITierSection } from "./interfaces";
 import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import clsx from "clsx";
 import { Container } from "react-bootstrap";
-import { StaticImage, GatsbyImage, getImage } from "gatsby-plugin-image";
-
+import { StaticImage } from "gatsby-plugin-image";
+import { ButtonWidget } from "components/Button";
+import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
+import { useWeb3Context } from "don-components";
+import WalletPopup from "components/WalletPopup/WalletPopup";
+import { useStakingContract } from "hooks";
 const Root = styled.div`
   background-color: #f2f2f2;
   min-height: 642px;
@@ -27,17 +30,16 @@ const Root = styled.div`
   }
 `;
 
-const Typography = styled.p`
-  font-family: "Poppins";
-  font-size: 32px;
-  font-style: normal;
+const Heading = styled.h2`
+  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 40px;
   font-weight: 900;
   text-align: left;
-  line-height: 38.4px;
-  margin-bottom: 15px;
-  @media only screen and (min-width: ${breakPoints.lg}) {
-    font-size: 50px;
-    margin-bottom: 30px;
+  color: #222222;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    font-size: 49px;
   }
 `;
 
@@ -119,7 +121,7 @@ const CardBody = styled.div`
 const Divider = styled.hr`
   border-top: 1px solid #dedee0;
   margin: 0px;
-  width: 52%;
+  width: 54px;
 `;
 
 const CardBg = styled.div`
@@ -135,6 +137,25 @@ const Dots = styled.div<{ selected: boolean }>`
   border-radius: 100%;
 `;
 
+const settings: SlickSettings = {
+  dots: false,
+  infinite: true,
+  speed: 300,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  centerMode: true,
+  variableWidth: true,
+};
+
+const StakeButton = styled(ButtonWidget)`
+  border: 2px solid #222222;
+  font-weight: 600;
+  width: 221px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    width: 178px;
+  }
+`;
+
 export const TiersSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
   const content = `While base profits are given in the farmed coin, whether it be
@@ -146,20 +167,24 @@ export const TiersSection: React.FC = () => {
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 300,
-    slidesToShow: 1,
-    slidesToScroll: 3,
-    centerMode: true,
-    variableWidth: true,
-  };
-
   const tiers: ITierSection[] = [
-    { tier: 0, image: teir0, stakedDons: "100", apy: "Access to the Platform", height: "139px", bottom: "34px" },
-    { tier: 1, image: teir1, stakedDons: "500", apy: "10%",bottom: "5px" },
-    { tier: 2, image: tier2, stakedDons: "25,00", apy: "20%",bottom: "5px" },
+    {
+      tier: 0,
+      image: teir0,
+      stakedDons: "100",
+      apy: "Access to DAPP",
+      height: "139px",
+      bottom: "34px",
+    },
+    { tier: 1, image: teir1, stakedDons: "500", apy: "10%", bottom: "5px" },
+    {
+      tier: 2,
+      image: tier2,
+      stakedDons: "2,500",
+      apy: "20%",
+      bottom: "10px",
+      height: "120px",
+    },
     { tier: 3, image: tier3, stakedDons: "5,000", apy: "50%" },
     { tier: 4, image: tier4, stakedDons: "25,000", height: "90%", apy: "75%" },
     { tier: 5, image: tier5, stakedDons: "50,000", apy: "100%" },
@@ -208,12 +233,21 @@ export const TiersSection: React.FC = () => {
               lgFontSize={"14px"}
               smFontSize="14px"
               color="#070602"
+              style={{ maxWidth: "50%" }}
               bold
             >
               {tier.apy}
             </CardTypography>
           </CardBody>
-          <Image src={tier.image} height={tier.height} bottom={tier.bottom} alt="Image not found" />
+          <Image
+            src={tier.image}
+            style={{
+              bottom: tier.bottom,
+              height: tier.height,
+              right: tier.right,
+            }}
+            alt="Image not found"
+          />
           {/* <GatsbyImage image={tierImage} alt="Image not found"/> */}
           {/* <StaticImage src={tier.image} alt="Card image not found" /> */}
           <CardBg>
@@ -233,12 +267,16 @@ export const TiersSection: React.FC = () => {
       setSelectedTier(slideNumber);
     }
   };
+  const {loading} = useStakingContract();
+  const { connectDapp, connected } = useWeb3Context();
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
       <Root>
         <Container>
-          <Typography>Check on our Tiers system!</Typography>
+          <Heading>Check out our tiers system</Heading>
           <div className="row">
             <div className="col-12 col-lg-6">
               <Paragraph className="d-block d-lg-none">
@@ -278,6 +316,28 @@ export const TiersSection: React.FC = () => {
               })}
             </div>
           )}
+          {/* <div className="d-flex justify-content-center  mt-5">
+            <StakeButton
+              varaint="outlined"
+              className="mt-3 "
+              width="178px"
+              height="55px"
+              onClick={() => {
+                setIsOpen(true);
+              }}
+            >
+              STAKE $DON
+            </StakeButton>
+            {isOpen && connected && !loading && (
+              <AcceleratedAPYModal
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+              />
+            )}
+            {isOpen && !connected && (
+              <WalletPopup onClose={() => setIsOpen(false)} onDone={() => setIsOpen(true)} />
+            )}
+          </div> */}
         </Container>
       </Root>
     </>

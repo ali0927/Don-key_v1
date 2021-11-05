@@ -7,4 +7,5 @@ export interface ITierSection {
     height?: string;
     apy: string;
     bottom?: string;
+    right?: string;
 }

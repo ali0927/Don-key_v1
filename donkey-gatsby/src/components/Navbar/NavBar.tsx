@@ -37,7 +37,6 @@ import { StakeIcon } from "icons/StakeIcon";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ClickAwayListener } from "@material-ui/core";
 import WalletPopup from "components/WalletPopup/WalletPopup";
-import { LaunchButton } from "components/LaunchButton";
 
 declare global {
   interface Window {
@@ -340,7 +339,7 @@ const DashboardDrawer = () => {
   );
 };
 
-function NavBar({ variant = "landing", hideDappButton }: INavBarProps) {
+function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
@@ -407,14 +406,7 @@ function NavBar({ variant = "landing", hideDappButton }: INavBarProps) {
           {variant === "landing" && <LandingMenu />}
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
-        {variant === "landing" && (
-          <div className="d-none d-lg-block ">
-            <LaunchButton
-              style={{ width: 202, height: 55 }}
-              className="mt-0 text-right"
-            />
-          </div>
-        )}
+        {variant === "landing" &&  <NavButton style={hideDappButton ? {visibility: "hidden"}: {}}  to="/dashboard">DAPP</NavButton>}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
     </MenuWrapper>
