@@ -159,7 +159,7 @@ const StakeButton = styled(ButtonWidget)`
 export const TiersSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
   const content = `While base profits are given in the farmed coin, whether it be
-       USDS, CAKE, Matic or whatewer else the investor decides to deposit
+       USDC, CAKE, Matic or whatewer else the investor decides to deposit
        in, additional rewards will be given in DON according to the
        following tier system! Through staking 100 DON, investors will
        have full access to Don-key’s range of farming options. It’s the
@@ -215,7 +215,7 @@ export const TiersSection: React.FC = () => {
               smFontSize="10px"
               color="#222222"
             >
-              Staked
+              {tier.tier === 0 ? "Hold" : "Stake"}
             </CardTypography>
             <CardTypography
               lgFontSize={"14px"}
@@ -226,9 +226,15 @@ export const TiersSection: React.FC = () => {
               {tier.stakedDons} $DON
             </CardTypography>
             <Divider className="mt-2 mb-2" />
-            <CardTypography lgFontSize="10px" smFontSize="10px" color="#222222">
-              Extra APY
-            </CardTypography>
+            {tier.tier !== 0 && (
+              <CardTypography
+                lgFontSize="10px"
+                smFontSize="10px"
+                color="#222222"
+              >
+                Extra APY
+              </CardTypography>
+            )}
             <CardTypography
               lgFontSize={"14px"}
               smFontSize="14px"
@@ -267,7 +273,7 @@ export const TiersSection: React.FC = () => {
       setSelectedTier(slideNumber);
     }
   };
-  const {loading} = useStakingContract();
+  const { loading } = useStakingContract();
   const { connectDapp, connected } = useWeb3Context();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -276,7 +282,7 @@ export const TiersSection: React.FC = () => {
     <>
       <Root>
         <Container>
-          <Heading>Check out our tiers system</Heading>
+          <Heading>Check out our tier system</Heading>
           <div className="row">
             <div className="col-12 col-lg-6">
               <Paragraph className="d-block d-lg-none">
