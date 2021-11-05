@@ -214,11 +214,11 @@ export const MainSection: React.FC = () => {
                 Explore and follow strategies built by real farmers
               </Paragraph> */}
               <div className="d-flex flex-wrap">
-                <LaunchButton className="d-block d-lg-none mt-3 mr-3" />
+                <LaunchButton className=" mr-3 " />
 
                 <StakeButton
                   varaint="outlined"
-                  className="mt-3 mt-lg-5"
+                  
                   width="178px"
                   height="55px"
                   onClick={handleTakePart}

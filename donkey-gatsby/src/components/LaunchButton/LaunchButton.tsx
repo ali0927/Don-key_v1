@@ -28,7 +28,10 @@ const StyleButton = styled.button`
   }
 `;
 
-export const LaunchButton: React.FC<{className?: string;style?: React.CSSProperties}> = (props) => {
+export const LaunchButton: React.FC<{
+  className?: string;
+  style?: React.CSSProperties;
+}> = (props) => {
   const handleDashboard = () => {
     navigate("/dashboard");
   };
@@ -36,8 +39,11 @@ export const LaunchButton: React.FC<{className?: string;style?: React.CSSPropert
   return (
     <>
       <StyleButton
-         className={clsx("position-relative d-flex justify-content-end", props.className)}
-        style={{ width: 221, height: 55,...props.style }}
+        className={clsx(
+          "position-relative d-flex justify-content-end",
+          props.className
+        )}
+        style={{ width: 221, height: 55, ...props.style }}
         onClick={handleDashboard}
       >
         <Rocket />
