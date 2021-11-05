@@ -16,9 +16,7 @@ import clsx from "clsx";
 import { Container } from "react-bootstrap";
 import { StaticImage } from "gatsby-plugin-image";
 import { ButtonWidget } from "components/Button";
-import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 import { useWeb3Context } from "don-components";
-import WalletPopup from "components/WalletPopup/WalletPopup";
 import { useStakingContract } from "hooks";
 const Root = styled.div`
   background-color: #f2f2f2;
@@ -158,12 +156,8 @@ const StakeButton = styled(ButtonWidget)`
 
 export const TiersSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
-  const content = `While base profits are given in the farmed coin, whether it be
-       USDC, CAKE, Matic or whatewer else the investor decides to deposit
-       in, additional rewards will be given in DON according to the
-       following tier system! Through staking 100 DON, investors will
-       have full access to Don-key’s range of farming options. It’s the
-       base requirement, Tier 0.`;
+  const content = `Our Tier System unlocks utility on Don-key’s copy-farming platform. Each level unlocks an additional level of benefits and profitability, rewarding holders of $DON as much as possible.
+  At the moment our tiers provide extra APY in the form of $DON tokens, while base profits are given in the farmed coin. In the future the tiers will unlock more utilities such as: referral rewards, generative NFT rewards, exclusive farming opportunities, autonomous strategy building interface and more. `;
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
