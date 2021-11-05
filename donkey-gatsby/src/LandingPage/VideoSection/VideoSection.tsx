@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Container } from "react-bootstrap";
 import { IVideo } from "./interfaces/IVideo";
 import SlickSlider from "react-slick";
-import clsx from "clsx";
+import { theme } from "theme";
 
 const Root = styled.div`
   background-color: #fff;
@@ -145,6 +145,12 @@ const Divider = styled.div`
   }
 `;
 
+const DotContainer = styled.div`
+${theme.mediaQueries.md.up}{
+  margin-left: -75px;
+}
+`;
+
 export const VideoSection: React.FC = () => {
   const slickRef = React.useRef<SlickSlider | null>(null);
   const [selectedSlide, setSelectedSlide] = React.useState(0);
@@ -249,8 +255,8 @@ export const VideoSection: React.FC = () => {
             </CutomSlickSlider>
           </VideoRoot>
 
-          <div className="d-flex justify-content-center mt-4">
-            {videos.map((value, index) => {
+          <DotContainer className="d-flex justify-content-center mt-4">
+            {videos.map((_, index) => {
               return (
                 <Dots
                   className="mr-2"
@@ -259,7 +265,7 @@ export const VideoSection: React.FC = () => {
                 />
               );
             })}
-          </div>
+          </DotContainer>
         </Root>
       </Container>
     </>

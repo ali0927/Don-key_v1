@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { breakPoints } from "breakponts";
 import { TimerDots, MainSectionSmallDots } from "icons";
 import { useTimer } from "hooks";
-import moment from "moment";
 
 const TimerCard = styled.div`
   height: 72px;
@@ -39,7 +38,7 @@ const Typography = styled.p<{
 
 
 export const MainSectionTimer: React.FC = () => {
-  const { days, hrs, mins, secs } = useTimer("Wednesday, 17 November 2021",true);
+  const { days, hrs, mins, secs } = useTimer("2021-11-10T18:00:00",true);
   const renderDots = (() => {
     return (
       <div className="d-flex align-items-center mx-2 mx-md-4">
