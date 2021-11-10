@@ -31,7 +31,6 @@ module.exports = {
     `gatsby-plugin-sass`,
     `gatsby-plugin-tsconfig-paths`,
     `gatsby-plugin-netlify`,
-    `gatsby-plugin-gatsby-cloud`,
     { resolve: `gatsby-plugin-sitemap` },
     {
       resolve: `gatsby-plugin-loadable-components-ssr`,
