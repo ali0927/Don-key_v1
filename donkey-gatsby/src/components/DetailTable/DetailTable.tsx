@@ -1,6 +1,6 @@
 //eslint-disable
 import React, { useEffect } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { useState } from "react";
 import { Switch, withStyles } from "@material-ui/core";
 import {
@@ -10,7 +10,12 @@ import {
   getTotalPoolValue,
   toEther,
 } from "helpers";
-import { getWeb3, useWeb3Context, NetworkConfigs } from "don-components";
+import {
+  getWeb3,
+  useWeb3Context,
+  NetworkConfigs,
+  BINANCE_CHAIN_ID,
+} from "don-components";
 import { LinkIcon } from "icons";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
@@ -18,6 +23,7 @@ import { useRefresh } from "components/LotteryForm/useRefresh";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { IFarmerInter } from "interfaces";
 import { InvestBlackCard } from "components/InvestBlackCard";
+import { StaticImage } from "gatsby-plugin-image";
 import {
   ConnectToMetamaskCard,
   InactiveNetworkCard,
@@ -30,7 +36,10 @@ import { breakPoints } from "../../breakponts";
 import Statistics from "./Statistics.svg";
 import followers from "./Followers.svg";
 import dominance from "./Cup.svg";
-
+import { Share } from "components/ShareAndEarn";
+import { ShareandEarnButton } from "icons";
+import { useReferralContext } from "contexts/ReferralContext";
+import clsx from "clsx";
 export const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
@@ -214,6 +223,21 @@ const BoostApyBox = styled.div`
   box-shadow: 0px 4px 10px rgb(0 0 0 / 35%);
 `;
 
+const ShareAndEarnMobile = styled(BoostApyBox)``;
+
+const ShareMobileText = styled.p`
+  font-family: Poppins;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0px;
+  color: #fff;
+  width: 175px;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    width: 215px;
+  }
+`;
+
 const YellowSwitch = withStyles((theme) => ({
   root: {
     width: 28,
@@ -261,6 +285,64 @@ const IconWrapper = styled.div`
   transform: scale(1);
 `;
 
+const ringAnimation = keyframes`
+  0% { -webkit-transform: rotateZ(0); }
+  1% { -webkit-transform: rotateZ(15deg); }
+  3% { -webkit-transform: rotateZ(-15deg); }
+  5% { -webkit-transform: rotateZ(15deg); }
+  7% { -webkit-transform: rotateZ(-15deg); }
+  9% { -webkit-transform: rotateZ(15deg); }
+  11% { -webkit-transform: rotateZ(-15deg); }
+  13% { -webkit-transform: rotateZ(15deg); }
+  15% { -webkit-transform: rotateZ(-15deg); }
+  17% { -webkit-transform: rotateZ(15deg); }
+  19% { -webkit-transform: rotateZ(-15deg); }
+  21% { -webkit-transform: rotateZ(15deg); }
+  23% { -webkit-transform: rotateZ(-15deg); }
+  25% { -webkit-transform: rotateZ(14deg); }
+  27% { -webkit-transform: rotateZ(-12deg); }
+  29% { -webkit-transform: rotateZ(10deg); }
+  31% { -webkit-transform: rotateZ(-8deg); }
+  33% { -webkit-transform: rotateZ(6deg); }
+  35% { -webkit-transform: rotateZ(-4deg); }
+  37% { -webkit-transform: rotateZ(2deg); }
+  39% { -webkit-transform: rotateZ(-1deg); }
+  41% { -webkit-transform: rotateZ(1deg); }
+
+  43% { -webkit-transform: rotateZ(0); }
+  100% { -webkit-transform: rotateZ(0); }
+
+`;
+
+const StyledShareButton = styled(ShareandEarnButton)`
+  position: absolute;
+
+  top: -34%;
+  cursor: pointer;
+  right: -28%;
+
+  transform: scale(0.4);
+  /* transform-origin: top right; */
+  /* &.animated {
+    animation: ${ringAnimation} 4s 0.7s ease-in-out 1;
+  } */
+  transition: transform 0.3s linear;
+  &:hover {
+    transform: scale(0.6) rotate(7deg);
+    /* transform-origin: center right; */
+  }
+  @media only screen and (min-width: ${breakPoints.lg}) {
+    top: -41%;
+    right: -34%;
+  }
+`;
+
+const ShareEarnMobile = styled.div`
+  position: absolute;
+  top: -21px;
+  right: -8px;
+`;
+
 export const DetailTable = ({
   poolAddress,
   apy,
@@ -270,6 +352,9 @@ export const DetailTable = ({
   tvl,
   oldPoolAddress,
   oldPoolVersion,
+  slug,
+  strategyName,
+  name,
 }: {
   poolAddress: string;
   oldPoolAddress: string;
@@ -279,10 +364,14 @@ export const DetailTable = ({
   boostApy: boolean;
   poolVersion: number;
   tvl: string;
+  slug: string;
   gasLimit?: string;
+  strategyName: string;
+  name: string;
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
   const [totalPoolValueInUSD, setTotalPoolValueInUsd] = useState("0");
+  const [openSharePopup, setSharePopup] = useState(false);
 
   const web3 = getWeb3(network.chainId);
   const {
@@ -295,7 +384,7 @@ export const DetailTable = ({
   const [isWithdrawRequested, setWithdrawRequested] = useState<boolean | null>(
     null
   );
-
+  const { hasSignedUp } = useReferralContext();
   const { toggle } = useUSDViewBool();
   const handleToggle = () => {
     toggle();
@@ -307,9 +396,10 @@ export const DetailTable = ({
 
   const isActiveNetwork = network?.chainId === currentNetwork;
   const connectedWeb3 = getConnectedWeb3();
+
   useEffect(() => {
     (async () => {
-      console.log(poolVersion, isActiveNetwork, connected)
+      // console.log(poolVersion, isActiveNetwork, connected);
       if (poolVersion > 2 && isActiveNetwork && connected) {
         const pool = await getPoolContract(
           connectedWeb3,
@@ -404,7 +494,7 @@ export const DetailTable = ({
   return (
     <>
       <Col
-        className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0"
+        className="mb-1 mb-md-3 mb-lg-5 p-3 p-md-0 p-lg-0"
         style={{ marginRight: 17 }}
       >
         <CardWrapper color="white">
@@ -505,10 +595,21 @@ export const DetailTable = ({
           </FirstCardRow>
         </CardWrapper>
       </Col>
-      <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0" style={{ marginLeft: 0 }}>
+      <Col
+        className="mb-1 mb-md-3 mb-lg-5 p-3 p-md-0 p-lg-0 position-relative"
+        style={{ marginLeft: 0 }}
+      >
         <BlackCardWrapper className="position-relative" color="black">
           {renderCardData()}
         </BlackCardWrapper>
+        {poolVersion > 3 &&
+        connected &&
+        network.chainId === BINANCE_CHAIN_ID ? (
+          <StyledShareButton
+            className={clsx("d-none d-lg-block",{ animated: !hasSignedUp })}
+            onClick={() => setSharePopup(true)}
+          />
+        ) : null}
       </Col>
       <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0">
         <BoostApyBox className="d-md-none">
@@ -522,6 +623,43 @@ export const DetailTable = ({
           </div>
         </BoostApyBox>
       </Col>
+
+      <Col className="mb-1 mb-md-3 mb-lg-5 p-3 p-md-0 p-lg-0">
+        <ShareAndEarnMobile className="d-lg-none position-relative">
+          <div className="d-flex">
+            <ShareMobileText className="pr-0  d-flex flex-column justify-content-center ">
+              Want to share the Don-Key love and gain more $DON?
+            </ShareMobileText>
+            <div className="">
+              {poolVersion > 3 &&
+              connected &&
+              network.chainId === BINANCE_CHAIN_ID ? (
+                <ShareEarnMobile>
+                  <StaticImage
+                    className={clsx({ animated: !hasSignedUp })}
+                    onClick={() => setSharePopup(true)}
+                    src="./shareMobile.png"
+                    alt="Image not found"
+                  />{" "}
+                </ShareEarnMobile>
+              ) : null}
+            </div>
+          </div>
+        </ShareAndEarnMobile>
+      </Col>
+
+      {openSharePopup && (
+        <Share
+          open={openSharePopup}
+          pool_address={poolAddress}
+          apy={apy}
+          chainId={network.chainId}
+          farmername={name}
+          slug={slug}
+          strategyName={strategyName}
+          onClose={() => setSharePopup(false)}
+        />
+      )}
     </>
   );
 };

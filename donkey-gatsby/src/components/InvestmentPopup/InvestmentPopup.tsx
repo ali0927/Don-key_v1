@@ -242,16 +242,15 @@ export const InvestmentPopup = ({
 
   const [applied, setApplied] = useState(false);
   const web3 = getConnectedWeb3();
-  const checkIfCodeisApplicable = async (code: string) => {
-    const userCode = await getUserReferralCode(web3);
-
+  const checkIfCodeisApplicable = async (code: string, pool_address: string) => {
+    const userCode = await getUserReferralCode(web3, pool_address);
     if (userCode === code.toLowerCase()) {
       return false;
     }
     const referralSystem = await getReferralSystemContract(web3);
     const accounts = await web3.eth.getAccounts();
     const hasReferred = await referralSystem.methods
-      .hasReferred(accounts[0])
+      .hasReferred(pool_address,accounts[0])
       .call();
     if (hasReferred) {
       return false;
@@ -291,7 +290,7 @@ export const InvestmentPopup = ({
   const applyCode = async (code: string) => {
     try {
       setChecking(true);
-      const isApplicable = await checkIfCodeisApplicable(code);
+      const isApplicable = await checkIfCodeisApplicable(code, poolAddress);
       if (isApplicable) {
         setReferralCode(code.toUpperCase());
         setApplied(true);
@@ -303,14 +302,13 @@ export const InvestmentPopup = ({
     }
   };
   useEffect(() => {
-    if (poolVersion === 3) {
+    if (poolVersion > 2) {
       const code = getReferralCode();
-
       if (code) {
         applyCode(code);
       }
     }
-  }, []);
+  }, [poolVersion]);
 
   const timeframe = !loading ? data.farmers[0]?.withdrawTimeFrame || "12" : "-";
 
@@ -376,7 +374,7 @@ export const InvestmentPopup = ({
           });
       }
 
-      if (poolVersion === 3) {
+      if (poolVersion > 2) {
         if (referralCode && applied) {
           await pool.methods
             .depositLiquidityWithCode(inputAmount, referralCode.toLowerCase())
@@ -390,18 +388,19 @@ export const InvestmentPopup = ({
             gas: gasLimit,
           });
         }
-      }
-      if (poolVersion === 4) {
-        await pool.methods.depositLiquidity(inputAmount).send({
-          from: accounts[0],
-          gas: gasLimit,
-        });
         sendEvent("Investment", {
           poolAddress: poolAddress,
           amount: value,
           user: accounts[0],
         });
       }
+      // if (poolVersion === 4) {
+      //   await pool.methods.depositLiquidity(inputAmount).send({
+      //     from: accounts[0],
+      //     gas: gasLimit,
+      //   });
+      
+      // }
 
       onSuccess && onSuccess();
 
@@ -449,7 +448,7 @@ export const InvestmentPopup = ({
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
   useEffect(() => {
     fetchTokenInfo();
-    handleImage();
+    handleImage(); 
   }, [tokenData]);
 
   const handleSymbolChange = (tokenSymbol: string) => () => {

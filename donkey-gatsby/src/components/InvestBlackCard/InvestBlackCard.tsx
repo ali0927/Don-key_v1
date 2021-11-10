@@ -157,6 +157,8 @@ export const InvestBlackCard = ({
           poolVersion
         );
         setCurrentHoldings(withdrawAmount);
+      }else {
+        setCurrentHoldings("0")
       }
       if (investedInOldPool && !isMigrated) {
         let withdrawAmount = await getAmount(
@@ -192,7 +194,7 @@ export const InvestBlackCard = ({
     useROIAndInitialInvestment(
       connectedWeb3,
       finalPoolAddress,
-      dependsOn % 2 == 0,
+      dependsOn % 2 === 0,
       true
     );
   const getSecondCardColumns = (

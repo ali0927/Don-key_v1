@@ -170,11 +170,11 @@ export const ShowAmountMobile = ({
   );
 };
 
-export const hideAddress = (item: string) => {
+export const hideAddress = (item: string,{ mask = "xxxxxxxxxxxxxxxxxxxxx", size = 10} = {}) => {
   return (
-    item.slice(0, 10) +
-    "xxxxxxxxxxxxxxxxxxxxx" +
-    item.slice(item.length - 10, item.length)
+    item.slice(0, size) +
+     mask +
+    item.slice(item.length - size, item.length)
   );
 };
 

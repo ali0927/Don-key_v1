@@ -62,7 +62,7 @@ export const setReferralCode = (code: string) => {
 };
 
 export const getShareUrl = (code: string) => {
-  return window.location.origin + "/share/" + code;
+  return process.env.GATSBY_SHARE_URL + "/api/v2/share/" + code;
 };
 
 export const getReferralCode = () => {

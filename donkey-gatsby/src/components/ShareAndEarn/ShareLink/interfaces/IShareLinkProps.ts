@@ -10,6 +10,5 @@ export interface IShareLinkProps {
     image_id: string;
     shortcode: string;
     slug: string;
-    fetchData: () => void;
     onClose: ()=> void;
 }

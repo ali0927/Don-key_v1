@@ -22,6 +22,9 @@ const CutomizeModalHeading = styled.h4`
 `;
 
 const StyledDialog = withStyles({
+  paperWidthMdSmall: {
+    maxWidth: "550px",
+  },
   paperWidthMd: {
     maxWidth: "761px",
   },
@@ -68,7 +71,7 @@ export const DonCommonmodal = ({
   PaperProps?: DialogProps["PaperProps"];
   variant: "common" | "v1";
   icon?: React.ReactElement;
-  size?: DialogProps["maxWidth"];
+  size?: DialogProps["maxWidth"] | "mdSmall";
   titleRightContent?: React.ReactElement;
   children: React.ReactNode;
   rounded?: boolean;
@@ -83,7 +86,7 @@ export const DonCommonmodal = ({
     if (variant === "common") {
       return (
         <>
-          <div className="d-flex align-items-center justify-content-between">
+          <div className="d-flex align-items-center justify-content-between mt-3">
             <CutomizeModalHeading className={clsx({ "mb-1": !!subtitle })}>
               {title}
             </CutomizeModalHeading>
@@ -119,6 +122,7 @@ export const DonCommonmodal = ({
       className={className}
       fullWidth={true}
       PaperProps={{ classes: { root: classes.paper }, ...PaperProps }}
+      //@ts-ignore
       maxWidth={size}
       disableEscapeKeyDown
       disableBackdropClick={disableBackdropClick}

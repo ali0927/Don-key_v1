@@ -13,11 +13,12 @@ import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
 import { useWeb3Context } from "don-components";
-import tier1 from "./images/tier1.png";
-import tier2 from "./images/tier2.png";
-import tier3 from "./images/tier3.png";
-import tier4 from "./images/tier4.png";
-import tier5 from "./images/tier5.png";
+import tier1 from "../../images/tiersImage/tier1.png";
+import tier2 from "../../images/tiersImage/tier2.png";
+import tier3 from "../../images/tiersImage/tier3.png";
+import tier4 from "../../images/tiersImage/tier4.png";
+import tier5 from "../../images/tiersImage/tier5.png";
+import { useReferralContext } from "contexts/ReferralContext";
 
 const Heading = styled.h2`
   font-weight: bold;
@@ -263,6 +264,7 @@ export const AcceleratedAPYModal = ({
       }
     })();
   }, []);
+  const {getTierCommission} = useReferralContext();
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   const renderContent = () => {
@@ -401,6 +403,12 @@ export const AcceleratedAPYModal = ({
                 {requiredDons}
               </Heading>
             </div>
+            <div className="d-flex align-items-center justify-content-between mt-2">
+              <SubHeading>Referral Commission Will be</SubHeading>
+              <Heading fontSize="20px" mobileFontSize="16px">
+                {getTierCommission(selectedTier)}%
+              </Heading>
+            </div>
 
             <div className="d-flex align-items-center justify-content-between mt-2">
               <SubHeading>Extra APY will be</SubHeading>
@@ -449,7 +457,7 @@ export const AcceleratedAPYModal = ({
 
             <HrLine className="mt-3 mt-md-4 mb-0" />
 
-            <FooterText className="pt-3 ">
+            <FooterText className="pt-1 pt-md-3 pb-1 pb-md-3">
               Staked DON tokens will be locked for {coolOffDuration} after
               unstaking. DON rewards are claimable on the go.{" "}
               <a

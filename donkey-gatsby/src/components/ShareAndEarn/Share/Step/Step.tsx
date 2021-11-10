@@ -29,6 +29,10 @@ const Hr = styled.hr`
   :last-child {
     display: none !important;
   }
+  @media only screen and (max-width: ${breakPoints.sm}) {
+    margin-top: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
 `;
 
 export const Step: React.FC<IStepProps> = (props) => {

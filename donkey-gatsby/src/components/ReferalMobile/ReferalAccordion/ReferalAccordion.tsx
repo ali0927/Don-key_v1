@@ -29,7 +29,7 @@ export const ReferalAccordion: React.FC<IReferalAccordionProps> = (props) => {
   };
 
   return (
-    <Accordion id="accordion-referal" className=" d-md-block d-lg-none">
+    <Accordion id="accordion-referal" >
       {referalState.map((investment, index) => {
         return (
           <>
@@ -97,12 +97,7 @@ export const ReferalAccordion: React.FC<IReferalAccordionProps> = (props) => {
                       />
                     </AccordionHeadingText>
                   </div>
-                  <div className="d-flex align-items-center justify-content-between  mb-2">
-                    <AccordionCaptionText>Materialized </AccordionCaptionText>
-                    <AccordionHeadingText>
-                      {investment.expired ? "Yes" : "No"}
-                    </AccordionHeadingText>
-                  </div>
+                 
                 </div>
               </AccordionDetails>
             </AccordionCard>

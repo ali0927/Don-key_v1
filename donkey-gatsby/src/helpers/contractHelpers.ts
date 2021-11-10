@@ -149,17 +149,20 @@ export const getReferralSystemContract = async (web3: Web3) => {
 
 export const getRewardSystemContract = async (web3: Web3) => {
   const referralContract = await getReferralSystemContract(web3);
+  // console.log(referralContract.options.address,"reward system address");
   const rewardSystemAddress = await referralContract.methods
     .getRewardSystem()
     .call();
+  // console.log(rewardSystemAddress, "Reward System Address");
+    
   const json = await import("../JsonData/RewardSystem.json");
   return new web3.eth.Contract(json.abi as any, rewardSystemAddress);
 };
 
-export const getUserReferralCode = async (web3: Web3) => {
+export const getUserReferralCode = async (web3: Web3, pool_address: string) => {
   const referralContract = await getReferralSystemContract(web3);
   const accounts = await web3.eth.getAccounts();
-  const userInfo = await referralContract.methods.userInfo(accounts[0]).call();
+  const userInfo = await referralContract.methods.userInfo(pool_address,accounts[0]).call();
   if (userInfo.exists) {
     return userInfo.referralCode as string;
   }
@@ -196,10 +199,17 @@ export const getUserAddressFromCode = async (web3: Web3, code: string) => {
   return userInfo.user;
 };
 
-export const signUpAsReferral = async (web3: Web3, code: string) => {
+export const signUpAsReferral = async (web3: Web3, code: string, pool_address: string) => {
   const referralContract = await getReferralSystemContract(web3);
   const accounts = await web3.eth.getAccounts();
-  await referralContract.methods.signUp(code).send({ from: accounts[0] });
+  const userInfo = await referralContract.methods.userInfo(pool_address, accounts[0]).call();
+  if(userInfo.exists){
+    return userInfo.referralCode;
+  }else {
+    await referralContract.methods.signUp(pool_address,code).send({ from: accounts[0] });
+    return code;
+  }
+ 
 };
 
 const aggregatorV3InterfaceABI = [

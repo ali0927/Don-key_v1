@@ -4,16 +4,14 @@ import { DetailTable } from "components/DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
-import { fixUrl, getShareUrl } from "helpers";
-import { Share, ShareLink } from "components/ShareAndEarn";
+import { fixUrl } from "helpers";
+
 import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
-import { gql, useLazyQuery } from "@apollo/client";
-import { useIsomorphicEffect } from "hooks";
 
 import { breakPoints } from "../../../src/breakponts";
 import { BackArrowButton } from "components/BackArrowButton";
@@ -43,31 +41,31 @@ const ImageWrapper = styled.div`
   justify-content: flex-start;
 `;
 
-const ShareButton = styled.button`
-  background: linear-gradient(146.14deg, #35424b 0%, #0b0e12 100%);
-  box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
-    4px 4px 18px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  border: 2px solid #000;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 15px;
-  padding: 14px 30px;
-  position: relative;
-  background-color: #fff037;
-  font-family: Poppins;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 21px;
-  color: #ffffff;
-  transition: all 0.5s;
-  :hover {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-      linear-gradient(146.14deg, #606060 0%, #0b0e12 100%);
-    box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
-      4px 4px 18px rgba(0, 0, 0, 0.5);
-  }
-`;
+// const ShareButton = styled.button`
+//   background: linear-gradient(146.14deg, #35424b 0%, #0b0e12 100%);
+//   box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
+//     4px 4px 18px rgba(0, 0, 0, 0.5);
+//   border-radius: 10px;
+//   border: 2px solid #000;
+//   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+//   border-radius: 15px;
+//   padding: 14px 30px;
+//   position: relative;
+//   background-color: #fff037;
+//   font-family: Poppins;
+//   font-size: 14px;
+//   font-style: normal;
+//   font-weight: 600;
+//   line-height: 21px;
+//   color: #ffffff;
+//   transition: all 0.5s;
+//   :hover {
+//     background: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+//       linear-gradient(146.14deg, #606060 0%, #0b0e12 100%);
+//     box-shadow: -4px -2px 16px rgba(195, 200, 205, 0.08),
+//       4px 4px 18px rgba(0, 0, 0, 0.5);
+//   }
+// `;
 
 const Section = styled.section`
   background-color: ${theme.palette.background.yellow};
@@ -89,18 +87,9 @@ const P = styled.p`
   }
 `;
 
-const SHORT_LINKS_QUERY = gql`
-  query shortLinks($walletAddress: String!, $poolAddress: String!) {
-    shortLinks(
-      where: { poolAddress_eq: $poolAddress, walletAddress_eq: $walletAddress }
-    ) {
-      shortcode
-      referral_image {
-        id
-      }
-    }
-  }
-`;
+
+
+
 
 export const FarmerBio = ({
   farmer,
@@ -121,61 +110,16 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
-    graphUrl,
+
     slug,
     farmerImage: { url: picture },
     oldPoolAddress,
     oldPoolVersion,
   } = farmer;
 
-  const [openSharePopup, setSharePopup] = useState(false);
-  const [openShareLink, setShareLink] = useState(false);
+  // const [openSharePopup, setSharePopup] = useState(false);
 
-  const [shortCode, setShortCode] = useState<{
-    referral_image: { id: string };
-    shortcode: string;
-  } | null>(null);
-  const { connected, address } = useWeb3Context();
-
-  const [fetchData, { loading, data: shortLink }] = useLazyQuery(
-    SHORT_LINKS_QUERY,
-    { fetchPolicy: "no-cache" }
-  );
-
-  const fetchInfoFromApi = async () => {
-    try {
-      fetchData({ variables: { poolAddress, walletAddress: address } });
-    } catch (e) {}
-  };
-
-  useEffect(() => {
-    if (connected) {
-      fetchInfoFromApi();
-    }
-  }, [connected, address]);
-
-  useIsomorphicEffect(() => {
-    if (shortLink && shortLink.shortLinks.length > 0) {
-      setShortCode(shortLink.shortLinks[0]);
-    }
-  }, [loading]);
-
-  const handleShareClick = async () => {
-    if (!connected) {
-      return alert("Connect Wallet");
-    }
-    if (shortLink && shortLink.shortLinks.length > 0) {
-      setShareLink(true);
-    } else {
-      setSharePopup(true);
-    }
-  };
-
-  // const handleCreateLink = () => {
-  //   fetchInfoFromApi();
-  //   setShareLink(true);
-  //   setSharePopup(false);
-  // };
+  const { connected } = useWeb3Context();
 
   const apy =
     strategies && strategies.length > 0
@@ -254,17 +198,19 @@ export const FarmerBio = ({
               </div>
             </div>
 
-            <Col
+            {/* <Col
               lg={6}
               className="d-none d-sm-none d-md-flex d-lg-flex justify-content-lg-end pb-2 align-items-end justify-content-sm-center justify-content-center justify-content-md-center"
             >
-              {/* {pool_version === 3 && network.chainId === BINANCE_CHAIN_ID ? (
-                <ShareButton onClick={handleShareClick}>
+              {pool_version > 3 &&
+              connected &&
+              network.chainId === BINANCE_CHAIN_ID ? (
+                <ShareButton onClick={() => setSharePopup(true)}>
                   <ShareandEarnIcon className="mr-2" color="#fff" />
                   Share and Earn
                 </ShareButton>
-              ) : null} */}
-            </Col>
+              ) : null}
+            </Col> */}
           </Row>
 
           <Row className="mt-2 mt-lg-5 justify-content-between">
@@ -277,6 +223,9 @@ export const FarmerBio = ({
               poolVersion={pool_version}
               poolAddress={poolAddress}
               boostApy={boostApy}
+              slug={slug}
+              strategyName={strategyName}
+              name={name}
             />
           </Row>
         </Container>
@@ -287,25 +236,11 @@ export const FarmerBio = ({
           open={openSharePopup}
           pool_address={poolAddress}
           apy={apy}
-          onCreateLink={handleCreateLink}
-          onClose={() => setSharePopup(false)}
-        />
-      )} */}
-
-      {/* {openShareLink && shortCode && (
-        <ShareLink
           chainId={network.chainId}
-          link={getShareUrl(shortCode.shortcode)}
-          open={openShareLink}
-          image_id={shortCode.referral_image.id.toString()}
-          farmerName={name}
+          farmername={name}
           slug={slug}
           strategyName={strategyName}
-          poolAddress={poolAddress}
-          fetchData={() => fetchInfoFromApi()}
-          apy={apy}
-          shortcode={shortCode.shortcode}
-          onClose={() => setShareLink(false)}
+          onClose={() => setSharePopup(false)}
         />
       )} */}
     </>

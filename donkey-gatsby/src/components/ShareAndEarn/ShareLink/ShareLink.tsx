@@ -138,13 +138,13 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         <div className="mt-4">
           <Slider
             tvl={tvl}
+            poolAddress={props.poolAddress}
             image_id={props.image_id}
             apy={props.apy}
             farmerName={props.farmerName}
             strategyName={props.strategyName}
             short_code={props.shortcode}
             slug={props.slug}
-            refetch={async () => props.fetchData()}
           />
         </div>
 
@@ -185,7 +185,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-2 d-none d-md-block" />
         </div>
         <div className="d-flex justify-content-center mt-2">
-          <StyledLink href="#" target="_blank">Read More</StyledLink>
+          <StyledLink href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read More</StyledLink>
         </div>
       </>
     );
@@ -198,7 +198,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
         title="Copy share link"
         variant="common"
         onClose={props.onClose}
-        size="sm"
+        size="mdSmall"
       >
         {renderSpinner()}
       </DonCommonmodal>

@@ -4,6 +4,9 @@ export interface IShareProps {
     open: boolean;
     pool_address: string;
     apy: string;
-    onCreateLink: (url:string) => void;
+    farmername: string;
+    slug: string;
+    chainId: number;
+    strategyName: string;
     onClose: () => void;
 }

@@ -2,17 +2,18 @@
 
 	"abi": [
 		{
-			"inputs": [],
-			"stateMutability": "nonpayable",
-			"type": "constructor"
-		},
-		{
 			"anonymous": false,
 			"inputs": [
 				{
 					"indexed": true,
 					"internalType": "address",
 					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "poolAddress",
 					"type": "address"
 				},
 				{
@@ -50,6 +51,37 @@
 				{
 					"indexed": true,
 					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "rewardAmountInUSD",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "rewardAmountInDon",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "timestamp",
+					"type": "uint256"
+				}
+			],
+			"name": "PendingRewardCredited",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
 					"name": "pool",
 					"type": "address"
 				}
@@ -77,6 +109,12 @@
 					"indexed": true,
 					"internalType": "address",
 					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "poolAddress",
 					"type": "address"
 				},
 				{
@@ -149,8 +187,50 @@
 				},
 				{
 					"indexed": false,
+					"internalType": "enum Tier",
+					"name": "tier",
+					"type": "uint8"
+				},
+				{
+					"indexed": false,
 					"internalType": "uint256",
-					"name": "value",
+					"name": "tierPer",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "totalInvestAmount",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "withdrawReqAmount",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "profitValue",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "rewardAmountInUSD",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "rewardAmountInDon",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "timeStamp",
 					"type": "uint256"
 				}
 			],
@@ -174,6 +254,11 @@
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
 					"name": "_userAddress",
 					"type": "address"
 				}
@@ -181,6 +266,333 @@
 			"name": "disableUser",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_owner",
+					"type": "address"
+				}
+			],
+			"name": "initialize",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pauseReferral",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_referrerAddress",
+					"type": "address"
+				}
+			],
+			"name": "ProcessPendingReward",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "donRewards",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "string",
+					"name": "code",
+					"type": "string"
+				},
+				{
+					"internalType": "address",
+					"name": "referrerAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "amountInUSd",
+					"type": "uint256"
+				}
+			],
+			"name": "referUserFromCode",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_address",
+					"type": "address"
+				}
+			],
+			"name": "removeAllowedPool",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "renounceOwnership",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "referrerAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "totalInvestedAmount",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "withdrawRequestedAmount",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "rewardAmount",
+					"type": "uint256"
+				}
+			],
+			"name": "rewardUser",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_donStakingAddress",
+					"type": "address"
+				}
+			],
+			"name": "setDonStakingAddress",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "token",
+					"type": "address"
+				}
+			],
+			"name": "setFeeToken",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "code",
+					"type": "string"
+				}
+			],
+			"name": "setNewReferralCode",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_address",
+					"type": "address"
+				}
+			],
+			"name": "setPriceFeed",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_rewardSystem",
+					"type": "address"
+				}
+			],
+			"name": "setRewardSystem",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "fee",
+					"type": "uint256"
+				}
+			],
+			"name": "setSignUpFee",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "poolAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "string",
+					"name": "referralCode",
+					"type": "string"
+				}
+			],
+			"name": "signUp",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address payable",
+					"name": "_tokenAddress",
+					"type": "address"
+				}
+			],
+			"name": "transferOwner",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "newOwner",
+					"type": "address"
+				}
+			],
+			"name": "transferOwnership",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unpause",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "unPauseReferral",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_referredAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "_referrerAddress",
+					"type": "address"
+				},
+				{
+					"internalType": "bool",
+					"name": "state",
+					"type": "bool"
+				}
+			],
+			"name": "updateFroceClaim",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "_tier",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_per",
+					"type": "uint256"
+				}
+			],
+			"name": "updateTier",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"inputs": [],
+			"name": "getDonStakingAddress",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -197,7 +609,25 @@
 			"type": "function"
 		},
 		{
+			"inputs": [],
+			"name": "getPriceFeed",
+			"outputs": [
+				{
+					"internalType": "contract IPriceFeed",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
 				{
 					"internalType": "address",
 					"name": "_address",
@@ -217,6 +647,11 @@
 		},
 		{
 			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
 				{
 					"internalType": "address",
 					"name": "_address",
@@ -263,6 +698,49 @@
 		{
 			"inputs": [
 				{
+					"internalType": "enum Tier",
+					"name": "_tier",
+					"type": "uint8"
+				}
+			],
+			"name": "getTierDetail",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "rewardPer",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "getTotalReferralCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
+				{
 					"internalType": "address",
 					"name": "_address",
 					"type": "address"
@@ -281,6 +759,11 @@
 		},
 		{
 			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
 				{
 					"internalType": "address",
 					"name": "_address",
@@ -351,13 +834,6 @@
 		},
 		{
 			"inputs": [],
-			"name": "pause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
 			"name": "paused",
 			"outputs": [
 				{
@@ -372,28 +848,42 @@
 		{
 			"inputs": [
 				{
-					"internalType": "string",
-					"name": "code",
-					"type": "string"
-				},
-				{
 					"internalType": "address",
-					"name": "referrerAddress",
+					"name": "",
 					"type": "address"
-				},
+				}
+			],
+			"name": "referralLinkCount",
+			"outputs": [
 				{
 					"internalType": "uint256",
-					"name": "amountInUSd",
+					"name": "",
 					"type": "uint256"
 				}
 			],
-			"name": "referUserFromCode",
-			"outputs": [],
-			"stateMutability": "nonpayable",
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "referralPaused",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
 			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_poolAddress",
+					"type": "address"
+				},
 				{
 					"internalType": "address",
 					"name": "_referror",
@@ -404,11 +894,6 @@
 			"outputs": [
 				{
 					"components": [
-						{
-							"internalType": "bool",
-							"name": "expired",
-							"type": "bool"
-						},
 						{
 							"internalType": "address",
 							"name": "poolAddress",
@@ -440,7 +925,7 @@
 							"type": "bool"
 						}
 					],
-					"internalType": "struct Referrer",
+					"internalType": "struct ReferralSystem.Referrer",
 					"name": "",
 					"type": "tuple"
 				}
@@ -451,37 +936,17 @@
 		{
 			"inputs": [
 				{
-					"internalType": "address",
-					"name": "_address",
-					"type": "address"
+					"internalType": "enum Tier",
+					"name": "",
+					"type": "uint8"
 				}
 			],
-			"name": "removeAllowedPool",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "renounceOwnership",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_address",
-					"type": "address"
-				}
-			],
-			"name": "rewardDelivered",
+			"name": "tierDetails",
 			"outputs": [
 				{
-					"internalType": "bool",
+					"internalType": "uint256",
 					"name": "",
-					"type": "bool"
+					"type": "uint256"
 				}
 			],
 			"stateMutability": "view",
@@ -491,120 +956,9 @@
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "referrerAddress",
+					"name": "_poolAddress",
 					"type": "address"
 				},
-				{
-					"internalType": "uint256",
-					"name": "rewardAmount",
-					"type": "uint256"
-				}
-			],
-			"name": "rewardUser",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "token",
-					"type": "address"
-				}
-			],
-			"name": "setFeeToken",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "string",
-					"name": "code",
-					"type": "string"
-				}
-			],
-			"name": "setNewReferralCode",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "_rewardSystem",
-					"type": "address"
-				}
-			],
-			"name": "setRewardSystem",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "uint256",
-					"name": "fee",
-					"type": "uint256"
-				}
-			],
-			"name": "setSignUpFee",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "string",
-					"name": "referralCode",
-					"type": "string"
-				}
-			],
-			"name": "signUp",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address payable",
-					"name": "_tokenAddress",
-					"type": "address"
-				}
-			],
-			"name": "transferOwner",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
-				{
-					"internalType": "address",
-					"name": "newOwner",
-					"type": "address"
-				}
-			],
-			"name": "transferOwnership",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"name": "unpause",
-			"outputs": [],
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"inputs": [
 				{
 					"internalType": "address",
 					"name": "_userAddress",
@@ -636,7 +990,7 @@
 							"type": "bool"
 						}
 					],
-					"internalType": "struct Referral",
+					"internalType": "struct ReferralSystem.Referral",
 					"name": "",
 					"type": "tuple"
 				}
@@ -677,13 +1031,18 @@
 							"type": "bool"
 						}
 					],
-					"internalType": "struct Referral",
+					"internalType": "struct ReferralSystem.Referral",
 					"name": "referral",
 					"type": "tuple"
 				},
 				{
 					"internalType": "address",
 					"name": "user",
+					"type": "address"
+				},
+				{
+					"internalType": "address",
+					"name": "pool",
 					"type": "address"
 				}
 			],

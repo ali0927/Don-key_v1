@@ -39,6 +39,7 @@
     "@loadable/component": "^5.15.0",
     "@netlify/functions": "^0.7.2",
     "@types/react-linkify": "^1.0.1",
+    "@types/react-redux": "^7.1.20",
     "axios": "^0.21.4",
     "babel-plugin-styled-components": "^1.13.2",
     "bootstrap": "^4.5.3",
@@ -47,6 +48,7 @@
     "dotenv": "^10.0.0",
     "gatsby": "3.12.1",
     "gatsby-plugin-force-trailing-slashes": "1.0.5",
+    "gatsby-plugin-gatsby-cloud": "^4.0.0",
     "gatsby-plugin-google-gtag": "^3.14.0",
     "gatsby-plugin-image": "^1.14.0",
     "gatsby-plugin-loadable-components-ssr": "^3.4.0",
@@ -76,8 +78,12 @@
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
     "react-linkify": "^1.0.0-alpha",
+    "react-redux": "^7.2.6",
     "react-virtualized": "^9.22.3",
+    "redux": "4.1.2",
+    "redux-thunk": "^2.4.0",
     "sass": "^1.42.1",
-    "styled-components": "^5.3.1"
+    "styled-components": "^5.3.1",
+    "typesafe-actions": "^5.1.0"
   }
 }

@@ -5,12 +5,15 @@ import SlickSlider from "react-slick";
 import { LeftSliderArrow, RightSliderArrow } from "icons";
 import { convertToInternationalCurrencySystem } from "helpers";
 import { breakPoints } from "breakponts";
-import { ReferralImage } from "don-components";
+import { ReferralImage, useWeb3Context } from "don-components";
 import { gql, useQuery } from "@apollo/client";
 import { Spinner } from "react-bootstrap";
 import { DonCommonmodal } from "components/DonModal";
 import { ButtonWidget } from "components/Button";
 import { api } from "strapi";
+import { useReferralContext } from "contexts/ReferralContext";
+import { signUser } from "components/Navbar";
+
 
 
 const CutomSlickSlider = styled(SlickSlider)`
@@ -113,11 +116,11 @@ export const Slider: React.FC<{
   farmerName: string;
   strategyName: string;
   image_id: string;
+  poolAddress: string;
   short_code: string;
   slug: string;
-  refetch: () => Promise<void>;
 }> = (props) => {
-  const { tvl, apy, farmerName, image_id, short_code, refetch, slug } = props;
+  const { tvl, apy, farmerName, image_id, short_code, slug, poolAddress } = props;
 
   const [selectedBanner, setSelectedBanner] = useState(image_id);
   const [imageLoading, setImageLoading] = useState(false);
@@ -127,6 +130,7 @@ export const Slider: React.FC<{
 
   const { data, loading } = useQuery(IMAGE_LIST_QUERY);
   const [isLoading, setIsLoading] = useState(false);
+  const { getConnectedWeb3 } = useWeb3Context();
   const banners: IBanner[] = useMemo(() => {
     if (data) {
       return data.referralImages.map((item: any) => ({
@@ -188,21 +192,25 @@ export const Slider: React.FC<{
 
     return banner?.url as string;
   }, [banners, selectedBanner]);
-
+  const {dispatch} = useReferralContext();
   const tvlUpdate = convertToInternationalCurrencySystem(tvl);
 
   const handleSave = async () => {
     setIsLoading(true);
     
     try {
+      
+      await signUser(getConnectedWeb3());
+
       await api.put("/api/v2/shortener", {
         image: selectedBanner,
         shortcode: short_code,
       });
+      dispatch({type: "CHANGE_IMAGE",data: {poolAddress,image_id: selectedBanner }})
     } catch (e) {
       console.log(e);
     } finally {
-      await refetch();
+    
       setIsLoading(false);
       setImageLoading(true);
       setIsEditOpen(false);
@@ -243,7 +251,7 @@ export const Slider: React.FC<{
           title="Edit Background"
           variant="common"
           onClose={() => setIsEditOpen(false)}
-          size="sm"
+          size="mdSmall"
         >
           <ReferralImage
             bgImage={selectedImage}
@@ -279,7 +287,7 @@ export const Slider: React.FC<{
               onClick={handlePrev}
             />
             <FooterText className="ml-2 mr-2">
-              Select the background for the banner
+              Select background for the banner
             </FooterText>
             <RightSliderArrow
               role="button"

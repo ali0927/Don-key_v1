@@ -2,6 +2,9 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import fetch from 'isomorphic-fetch'
 
 const StrapiURI = process.env.GATSBY_STRAPI_URL;
+
+const REFERRAL_SUBGRAPH = process.env.GATSBY_REFERRAL_SUBGRAPH;
+
 export const link = createHttpLink({
   fetch,
   uri:StrapiURI
@@ -25,7 +28,7 @@ export const uniswapClient = new ApolloClient({
 export const thegraphClient = new ApolloClient({
   link: createHttpLink({
     fetch,
-    uri: "https://api.thegraph.com/subgraphs/name/adeee11/referral",
+    uri: REFERRAL_SUBGRAPH,
   }),
  
   cache: new InMemoryCache(),

@@ -92,5 +92,9 @@ export * from "./TickIcon";
 export * from './WalletConnectNewIcon'
 export * from './MetamaskIcon'
 export * from "./RocketLaunchIcon";
+export * from "./ShareAndEarn";
+export * from "./CorrectIcon";
+export * from "./MobileCorrectIcon";
+export * from "./GrayInfoIcon";
 export * from "./MainSectionSmallDots";
 

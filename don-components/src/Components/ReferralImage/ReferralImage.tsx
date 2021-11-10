@@ -108,12 +108,12 @@ export const ReferralImage = ({
 
           <div className="d-flex">
             <div className="d-flex align-items-end">
-              <div>
+              <div className="d-flex flex-column align-items-center">
                 <HighLight>TVL</HighLight>
                 <Value className="mt-2">{"$" + tvl}</Value>
               </div>
               <Divider className="ml-3 mr-3" />
-              <div>
+              <div className="d-flex flex-column align-items-center">
                 <HighLight>APY</HighLight>
                 <Value className="mt-2">{apy}</Value>
               </div>
@@ -121,7 +121,7 @@ export const ReferralImage = ({
 
             <div className="d-flex align-items-end ml-3 ml-md-5">
               <Value>
-                Invest in <Wordhighlight>strategies</Wordhighlight> and make the
+                Invest in <Wordhighlight>farmers</Wordhighlight> and make the
                 best yield
               </Value>
             </div>
