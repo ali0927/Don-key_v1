@@ -20,6 +20,15 @@ const Root = styled.section`
   }
 `;
 
+const StyledAnchor = styled.a`
+color: #222;
+text-decoration: none;
+&:hover {
+  color: #222;
+  text-decoration: none;
+}
+`;
+
 const Footer = styled.div`
   padding-bottom: 3rem;
 `;
@@ -151,8 +160,14 @@ export const PartnerSection: React.FC = () => {
       </Root>
       <Footer className="container">
         <div className="d-flex justify-content-center justify-content-md-end align-items-center">
-          <FooterText>Audited by</FooterText>
-          <img src={Certik} alt="Certik image not found" />
+          <StyledAnchor
+            href="https://www.certik.org/projects/donkeyfinance"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <FooterText>Audited by</FooterText>
+            <img src={Certik} alt="Certik logo" />
+          </StyledAnchor>
         </div>
       </Footer>
     </Section>
