@@ -185,7 +185,7 @@ export const ShareLink: React.FC<IShareLinkProps> = (props) => {
           <div className="col-lg-2 d-none d-md-block" />
         </div>
         <div className="d-flex justify-content-center mt-2">
-          <StyledLink href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb" target="_blank">Read More</StyledLink>
+          <StyledLink href="https://don-key-finance.medium.com/don-key-referrals-are-about-to-go-live-9ac2b37d94cc" target="_blank">Read More</StyledLink>
         </div>
       </>
     );

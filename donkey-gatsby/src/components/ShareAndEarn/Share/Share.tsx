@@ -198,7 +198,7 @@ export const Share: React.FC<IShareProps> = (props) => {
           onClose={props.onClose}
           titleRightContent={
             <ReadMore
-              href="https://don-key-finance.medium.com/referral-program-bad96e3aa1cb"
+              href="https://don-key-finance.medium.com/don-key-referrals-are-about-to-go-live-9ac2b37d94cc"
               target="_blank"
             >
               Read more
