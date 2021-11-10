@@ -73,6 +73,9 @@ export const SendWithdrawalsDialog: React.FC<{
   };
   const web3 = getConnectedWeb3();
   const handleUpdate = async () => {
+    if(!withdrawValue || !new_pool){
+      return ;
+    }
     setLoading(true);
     try {
       const poolContract = await getPoolContract(
@@ -86,6 +89,8 @@ export const SendWithdrawalsDialog: React.FC<{
       await poolContract.methods
         .withdraw(toWei(withdrawValue, decimals), toWei(new_pool, decimals))
         .send({ from: accounts[0] });
+    }catch(e){
+      console.log(e);
     } finally {
       setLoading(false);
       onClose();
@@ -205,7 +210,7 @@ export const SendWithdrawalsDialog: React.FC<{
               containedVariantColor="lightYellow"
               onClick={handleUpdate}
             >
-              {loading ? <Spinner animation="border" size="sm" /> : "Update"}
+              {loading ? <Spinner animation="border" size="sm" /> : "Send"}
             </ButtonWidget>
           </div>
 
