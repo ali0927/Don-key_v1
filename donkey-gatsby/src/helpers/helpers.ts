@@ -55,18 +55,16 @@ export const getProfitLoss = async (web3: Web3, poolAddress: string) => {
   return value;
 };
 
-const REFERRAL_CODE = "REFERRAL_CODE";
 
-export const setReferralCode = (code: string) => {
-  localStorage.setItem(REFERRAL_CODE, code);
-};
 
 export const getShareUrl = (code: string) => {
-  return process.env.GATSBY_SHARE_URL + "/api/v2/share/" + code;
+  return process.env.GATSBY_SHARE_URL+ "/"  + code;
 };
 
 export const getReferralCode = () => {
-  return localStorage.getItem(REFERRAL_CODE);
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("referral");
+    return code;
 };
 
 export const fixUrl = (url?: string) => {

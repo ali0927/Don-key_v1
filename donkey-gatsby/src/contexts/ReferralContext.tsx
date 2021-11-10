@@ -1,5 +1,5 @@
-import { getReferralSystemContract, setReferralCode } from "helpers";
-import { createContext, useContext, useReducer, useRef, useState } from "react";
+import { getReferralSystemContract } from "helpers";
+import { createContext, useContext, useReducer, useRef } from "react";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { useIsomorphicEffect, useStakingContract } from "hooks";
 import React from "react";
@@ -150,11 +150,6 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
       if (connected) {
         checkhasSignedUp();
       }
-    }
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get("referral");
-    if (code) {
-      setReferralCode(code);
     }
   }, [chainId, connected, address, loading]);
 

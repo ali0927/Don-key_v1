@@ -169,10 +169,11 @@ export const getUserReferralCode = async (web3: Web3, pool_address: string) => {
   return null;
 };
 
-export const isValidReferralCode = async (web3: Web3, code: string) => {
+export const isValidReferralCode = async (web3: Web3, code: string, pool: string) => {
   const referralContract = await getReferralSystemContract(web3);
   const userInfo = await referralContract.methods.userInfoFromCode(code).call();
-  return userInfo.referral.exists;
+
+  return userInfo.pool === pool;
 };
 
 export const getPoolValue = async (web3: Web3, poolAddress: string) => {

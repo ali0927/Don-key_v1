@@ -255,7 +255,7 @@ export const InvestmentPopup = ({
     if (hasReferred) {
       return false;
     }
-    const isValidCode = await isValidReferralCode(web3, code.toLowerCase());
+    const isValidCode = await isValidReferralCode(web3, code.toLowerCase(),poolAddress);
     if (!isValidCode) {
       return false;
     }
@@ -302,7 +302,7 @@ export const InvestmentPopup = ({
     }
   };
   useEffect(() => {
-    if (poolVersion > 2) {
+    if (poolVersion > 3) {
       const code = getReferralCode();
       if (code) {
         applyCode(code);

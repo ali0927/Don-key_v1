@@ -7,7 +7,7 @@
   GATSBY_API_URL = "https://api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "false"
-  GATSBY_SHARE_URL = "https://api.don-key.finance"
+  GATSBY_SHARE_URL = "https://don-key.finance/share"
   GATSBY_REFERRAL_CONTRACT = "0x6482d0b6ec29eEf62289e829c7942Ad6E491d221"
   GATSBY_REFERRAL_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/referral-system"
 [context.staging.environment]
@@ -16,7 +16,7 @@
   GATSBY_API_URL = "https://api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "false"
-  GATSBY_SHARE_URL = "https://api.don-key.finance"
+  GATSBY_SHARE_URL = "https://don-key.finance/share"
   GATSBY_REFERRAL_CONTRACT = "0x6482d0b6ec29eEf62289e829c7942Ad6E491d221"
   GATSBY_REFERRAL_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/referral-system"
 [context."feature/*".environment]
