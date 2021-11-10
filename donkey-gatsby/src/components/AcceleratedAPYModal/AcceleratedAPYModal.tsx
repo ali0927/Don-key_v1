@@ -310,9 +310,9 @@ export const AcceleratedAPYModal = ({
         <div style={{ marginTop: -30, marginBottom: -20 }}>
           <Header>
             <Heading fontSize="23px" mobileFontSize="18px" className="mb-2">
-              Accelerated APY
+            Upgrade tier
             </Heading>
-            <SubHeading>Stake DON tokens and get Accelerated APY</SubHeading>
+            <SubHeading>Stake $DON and climb the tier ladder</SubHeading>
           </Header>
 
           <div className="d-flex justify-content-between align-items-center mt-4">

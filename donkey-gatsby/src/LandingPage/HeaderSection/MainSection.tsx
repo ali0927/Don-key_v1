@@ -17,6 +17,8 @@ import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
 import { MainSectionTimer } from "./MainSectionTimer";
+import { Text } from "components/Text";
+
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -55,7 +57,6 @@ const Heading = styled.h1`
     font-size: 49px;
   }
 `;
-
 
 const FooterRow = styled.div`
   width: 100%;
@@ -196,12 +197,10 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading className="mb-4">Don’t tell your friends yet</Heading>
-              <MainSectionTimer/>
-              {/* <Heading>Beta DAPP is now live and open for the public</Heading>
-              <Paragraph className="mt-4 w-md-50">
-                Explore and follow strategies built by real farmers
-              </Paragraph> */}
+              <Heading>Referral is live!</Heading>
+              <Text fontSize={18} className="mt-4" style={{maxWidth: 320}}>
+                Follow real farmers and share with real friends
+              </Text>
               <div className="d-flex flex-wrap">
                 <LaunchButton className="mt-3 mr-3 " />
 

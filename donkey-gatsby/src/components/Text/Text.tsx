@@ -5,13 +5,15 @@ import styled, { css } from "styled-components";
 const TextComp = ({
   tag = "p",
   className,
-  children
+  children,
+  style
 }: {
   tag?: "h1" | "h2" | "h3" | "h4" | "p";
   className?: string;
+  style?: React.CSSProperties;
   children?: React.ReactNode
 }) => {
-  return createElement(tag, { className },children);
+  return createElement(tag, { className, style },children);
 };
 
 export const Text = styled(TextComp)`
