@@ -1,10 +1,10 @@
 import { getReferralSystemContract, setReferralCode } from "helpers";
 import { createContext, useContext, useReducer, useRef, useState } from "react";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
-import { useIsomorphicEffect } from "hooks";
+import { useIsomorphicEffect, useStakingContract } from "hooks";
 import React from "react";
 import produce from "immer";
-
+import { isUndefined} from "lodash";
 const INITIAL_STATE: IReferralState = {
   hasSignedUp: false,
   referralCount: 0,
@@ -18,7 +18,7 @@ const ReferralContext = createContext<
   IReferralState & {
     checkSignUp: () => void;
     dispatch: React.Dispatch<IReferralActions>;
-    getTierCommission: (tier: number) => number;
+    getTierCommission: (tier: number) => number| string;
   }
 >({
   ...INITIAL_STATE,
@@ -134,7 +134,7 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   const [state, dispatchSync] = useReducer(referralStateReducer, INITIAL_STATE);
   const tierMap = useRef<{ [x: number]: number }>({});
   const { chainId, address, connected } = useWeb3Context();
-
+  const { loading} = useStakingContract()
   const checkhasSignedUp = async () => {
     await checkSignedUpThunk(dispatchSync, address);
     const web3 = getWeb3(BINANCE_CHAIN_ID);
@@ -156,10 +156,10 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
     if (code) {
       setReferralCode(code);
     }
-  }, [chainId, connected, address]);
+  }, [chainId, connected, address, loading]);
 
   const getTierCommission = (tier: number) => {
-    return tierMap.current[tier] || 5;
+    return isUndefined(tierMap.current[tier]) ? '-': tierMap.current[tier] ;
   };
 
   return (

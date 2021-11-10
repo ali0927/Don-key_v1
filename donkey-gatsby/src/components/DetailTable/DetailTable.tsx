@@ -16,7 +16,7 @@ import {
   NetworkConfigs,
   BINANCE_CHAIN_ID,
 } from "don-components";
-import { LinkIcon } from "icons";
+import { LinkIcon, MobileShareandEarnButton } from "icons";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useRefresh } from "components/LotteryForm/useRefresh";
@@ -314,6 +314,9 @@ const ringAnimation = keyframes`
 
 `;
 
+
+
+
 const StyledShareButton = styled(ShareandEarnButton)`
   position: absolute;
 
@@ -339,8 +342,8 @@ const StyledShareButton = styled(ShareandEarnButton)`
 
 const ShareEarnMobile = styled.div`
   position: absolute;
-  top: -21px;
-  right: -8px;
+  top: -15px;
+  right: -10px;
 `;
 
 export const DetailTable = ({
@@ -606,7 +609,7 @@ export const DetailTable = ({
         connected &&
         network.chainId === BINANCE_CHAIN_ID ? (
           <StyledShareButton
-            className={clsx("d-none d-lg-block",{ animated: !hasSignedUp })}
+            className={clsx("d-none d-lg-block", { animated: !hasSignedUp })}
             onClick={() => setSharePopup(true)}
           />
         ) : null}
@@ -624,29 +627,25 @@ export const DetailTable = ({
         </BoostApyBox>
       </Col>
 
-      <Col className="mb-1 mb-md-3 mb-lg-5 p-3 p-md-0 p-lg-0">
-        <ShareAndEarnMobile className="d-lg-none position-relative">
-          <div className="d-flex">
-            <ShareMobileText className="pr-0  d-flex flex-column justify-content-center ">
-              Want to share the Don-Key love and gain more $DON?
-            </ShareMobileText>
-            <div className="">
-              {poolVersion > 3 &&
-              connected &&
-              network.chainId === BINANCE_CHAIN_ID ? (
+      {poolVersion > 3 && connected && network.chainId === BINANCE_CHAIN_ID && (
+        <Col className="mb-1 mb-md-3 mb-lg-5 p-3 p-md-0 p-lg-0">
+          <ShareAndEarnMobile className="d-lg-none position-relative">
+            <div className="d-flex">
+              <ShareMobileText className="pr-0  d-flex flex-column justify-content-center ">
+                Want to share the Don-Key love and gain more $DON?
+              </ShareMobileText>
+              <div className="">
                 <ShareEarnMobile>
-                  <StaticImage
+                  <MobileShareandEarnButton
                     className={clsx({ animated: !hasSignedUp })}
                     onClick={() => setSharePopup(true)}
-                    src="./shareMobile.png"
-                    alt="Image not found"
-                  />{" "}
+                  />
                 </ShareEarnMobile>
-              ) : null}
+              </div>
             </div>
-          </div>
-        </ShareAndEarnMobile>
-      </Col>
+          </ShareAndEarnMobile>
+        </Col>
+      )}
 
       {openSharePopup && (
         <Share

@@ -20,4 +20,20 @@ export const ShareandEarnButton = (
   );
 };
 
+export const MobileShareandEarnButton = (
+  props: Omit<IStaticImageProps, "src" | "alt">
+) => {
+  return (
+    <StaticImage
+      width={115}
+      className={props.className}
+      quality={100}
+      formats={["png"]}
+      onClick={props.onClick}
+      placeholder="none"
+      alt="ShareAndEarn"
+      src="../images/shareandearn.png"
+    />
+  );
+};
 
