@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { ButtonWidget } from "components/Button";
 import { Spinner } from "react-bootstrap";
 import { formatNum, getPoolContract, getPoolToken, toEther, toWei } from "helpers";
-import { useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { useIsomorphicEffect, useStakingContract } from "hooks";
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
@@ -28,7 +28,7 @@ export const SendWithdrawalsDialog: React.FC<{
 
   const [new_pool, setnewPoolvalue] = useState("");
   const [withdrawValue, setwithDrawvalue] = useState("");
-  const { getConnectedWeb3 } = useWeb3Context();
+  const { getConnectedWeb3, chainId } = useWeb3Context();
 
   const [poolState, setPoolState] = useState({
     poolValue: "0",
@@ -38,24 +38,28 @@ export const SendWithdrawalsDialog: React.FC<{
     totalLp: "0",
     rewardsinStaking: "0",
   });
+
   const { stakingContract } = useStakingContract();
 
   const fetchPoolState = async () => {
-    const web3 = getConnectedWeb3();
+    const web3 = getConnectedWeb3()
     const pool = await getPoolContract(web3, pool_address, poolVersion);
     const prevPoolValue = await pool.methods.getTotalPoolValue().call();
-
+    console.log(prevPoolValue, "PrevPool Value");
     const greyWithdrawCount = await pool.methods
       .getGreyWithdrawalCount()
       .call();
     const token = await getPoolToken(web3, pool_address);
-
+    
     const symbol = await token.methods.symbol().call();
     const decimals = await token.methods.decimals().call();
     const totalLp = await pool.methods.totalSupply().call();
-    const rewardToken = await stakingContract.methods
-      .getRewardTokenAmount()
-      .call();
+    let rewardsinStaking = "0";
+    if(chainId === BINANCE_CHAIN_ID){
+      rewardsinStaking = toEther(await stakingContract.methods
+        .getRewardTokenAmount()
+        .call());
+    }
     const withdrawAmount = await pool.methods
       .getTotalGreyWithdrawalAmount()
       .call();
@@ -68,7 +72,7 @@ export const SendWithdrawalsDialog: React.FC<{
       poolValue: toEther(prevPoolValue, decimals),
       poolSymbol: symbol,
 
-      rewardsinStaking: toEther(rewardToken),
+      rewardsinStaking,
     });
   };
   const web3 = getConnectedWeb3();
