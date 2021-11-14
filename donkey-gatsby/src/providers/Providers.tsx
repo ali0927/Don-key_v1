@@ -29,6 +29,7 @@ export const Providers: React.FC = ({ children }) => {
             charSet="UTF-8"
             href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
           />
+<link rel="preconnect" href="https://bsc-node.node.don-key.finance" />
 
           <link
             rel="stylesheet"

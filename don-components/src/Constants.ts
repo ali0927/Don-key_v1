@@ -1,5 +1,5 @@
 export const ETHEREUM_RPC = ["https://speedy-nodes-nyc.moralis.io/68aef2291c7ad6299f6d0a37/eth/mainnet"];
-export const BINANCE_RPC = ["https://bsc-dataseed.binance.org"];
+export const BINANCE_RPC = ["https://bsc-node.node.don-key.finance"];
 export const MATIC_RPC = ["https://polygon-rpc.com"];
 export const AVAX_RPC = ["https://api.avax.network/ext/bc/C/rpc"];
 export const AVAX_CHAIN_ID = 43114;
