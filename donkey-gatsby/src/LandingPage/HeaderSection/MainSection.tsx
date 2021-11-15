@@ -139,7 +139,7 @@ export const MainSection: React.FC = () => {
 
   const volume24hrs = coingecko
     ? convertToInternationalCurrencySystem(
-        new BigNumber(coingecko.tickers[0].converted_volume.usd).toNumber()
+        new BigNumber(coingecko.tickers.reduce((prev: any,item: any) => new BigNumber(item.volume).plus(prev), 0)).toNumber()
       ).toString()
     : 0;
 
