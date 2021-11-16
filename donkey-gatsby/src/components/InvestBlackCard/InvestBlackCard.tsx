@@ -72,6 +72,7 @@ export const InvestBlackCard = ({
   const [isUpdatePoolOpen, setIsUpdateOpen] = useState(false);
   const [isAssignOpen, setIsAssignOpen] = useState(false);
   const [isSendWithdrawOpen, setIsSendWithdraw] = useState(false);
+  const [isWithdrawPaused, setIsWithdrawPaused] = useState(false);
   const { getConnectedWeb3, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const checkIsFarmer = async () => {
@@ -95,6 +96,12 @@ export const InvestBlackCard = ({
           .balanceOf(poolAddress)
           .call();
         const decimals = await poolToken.methods.decimals().call();
+        if (poolVersion === 4) {
+          const iswithdrawPaused = await poolContract.methods
+            .withdrawPaused()
+            .call();
+          setIsWithdrawPaused(iswithdrawPaused);
+        }
         setTokeninPool(toEther(poolTokenAmount, decimals));
       } catch (e: any) {
         console.log(e.message, "Error In Farmer");
@@ -157,8 +164,8 @@ export const InvestBlackCard = ({
           poolVersion
         );
         setCurrentHoldings(withdrawAmount);
-      }else {
-        setCurrentHoldings("0")
+      } else {
+        setCurrentHoldings("0");
       }
       if (investedInOldPool && !isMigrated) {
         let withdrawAmount = await getAmount(
@@ -277,6 +284,23 @@ export const InvestBlackCard = ({
     refresh();
   };
 
+  const pauseWithdraw = async () => {
+    const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
+    const accounts = await web3.eth.getAccounts();
+
+    await poolContract.methods._withdrawPause().send({ from: accounts[0] });
+
+    refresh();
+  };
+
+  const resumeWithdraw = async () => {
+    const poolContract = await getPoolContract(web3, poolAddress, poolVersion);
+    const accounts = await web3.eth.getAccounts();
+
+    await poolContract.methods._withdrawUnpause().send({ from: accounts[0] });
+
+    refresh();
+  };
   const renderFarmerUI = () => {
     if (process.env.GATSBY_SHOW_ADMIN) {
       if (isFarmer && (poolVersion === 3 || poolVersion === 4)) {
@@ -351,6 +375,31 @@ export const InvestBlackCard = ({
               >
                 Take Tokens
               </ButtonWidget>
+              {isWithdrawPaused ? (
+                <ButtonWidget
+                  varaint="contained"
+                  fontSize="14px"
+                  className={"mr-3"}
+                  containedVariantColor="lightYellow"
+                  height="30px"
+                  width="150px"
+                  onClick={() => resumeWithdraw()}
+                >
+                  Resume Withdraw
+                </ButtonWidget>
+              ) : (
+                <ButtonWidget
+                  varaint="contained"
+                  fontSize="14px"
+                  className={"mr-3"}
+                  containedVariantColor="lightYellow"
+                  height="30px"
+                  width="150px"
+                  onClick={() => pauseWithdraw()}
+                >
+                  Pause Withdraw
+                </ButtonWidget>
+              )}
               <ButtonWidget
                 varaint="contained"
                 fontSize="14px"
