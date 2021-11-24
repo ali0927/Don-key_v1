@@ -8,7 +8,6 @@ import {
   getPoolContract,
   getPoolToken,
   getTokenPrice,
-  getTotalPoolValue,
   toEther,
 } from "helpers";
 import { useIsomorphicEffect, useLocalStorageState } from "hooks";
@@ -420,6 +419,8 @@ export const Statistics = () => {
                         <div className=" d-flex flex-row align-items-center">
                           <StatisIconsSubicons>
                             <StaticImage
+                              loading="eager"
+                              
                               className="d-inline-block"
                               src="../../images/dongraphs.png"
                               alt="ImageNotFound"
@@ -442,6 +443,8 @@ export const Statistics = () => {
                         <div className=" d-flex flex-row align-items-center">
                           <StatisIconsSubicons>
                             <StaticImage
+                              loading="eager"
+                              
                               className="d-inline-block"
                               src="../../images/followerstatic.png"
                               alt="ImageNotFound"
@@ -470,6 +473,8 @@ export const Statistics = () => {
                         <div className=" d-flex flex-row align-items-center">
                           <StatisIconsSubicons>
                             <StaticImage
+                            
+                            
                               className="d-inline-block"
                               src="../../images/static1.png"
                               alt="ImageNotFound"
@@ -493,6 +498,7 @@ export const Statistics = () => {
                         <div className=" d-flex flex-row align-items-center">
                           <StatisIconsSubicons>
                             <StaticImage
+                              loading="eager"
                               className="d-inline-block"
                               src="../../images/pieadmin.png"
                               alt="ImageNotFound"
@@ -522,6 +528,7 @@ export const Statistics = () => {
                         <div className=" d-flex flex-row align-items-start">
                           <StatisIconsSubicons>
                             <StaticImage
+                              loading="eager"
                               className="d-inline-block"
                               src="../../images/trophy.png"
                               alt="ImageNotFound"
@@ -534,12 +541,13 @@ export const Statistics = () => {
                         </div>
                       </StatistiIcons>
                     </div>
-                    <div className="col position-relative ">
+                    {/* <div className="col position-relative ">
                       <DarkBorder />
                       <StatistiIcons>
                         <div className=" d-flex flex-row align-items-center">
                           <StatisIconsSubicons>
                             <StaticImage
+                              loading="eager"
                               className="d-inline-block"
                               src="../../images/dollarProfit.png"
                               alt="ImageNotFound"
@@ -551,7 +559,7 @@ export const Statistics = () => {
                           </Statisticsubrow>
                         </div>
                       </StatistiIcons>
-                    </div>
+                    </div> */}
                   </div>
                 </Iconssubcol>
               </div>

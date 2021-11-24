@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-import gql from "graphql-tag";
 
 import { breakPoints } from "breakponts";
 import yieldFarming from "../images/yieldfarming.svg";
@@ -76,13 +75,7 @@ const Paragraph = styled.p`
   }
 `;
 
-const ETH_PRICE = gql`
-  query bundle {
-    bundle(id: "1") {
-      ethPrice
-    }
-  }
-`;
+
 
 export type CustomPopupType = "none" | "cycle" | "stakeRewards";
 
@@ -180,8 +173,9 @@ const StakingQues = [
         tier, the more additional APY in DON you can earn, up to an extra 100%
         APY!
         <StaticImage
-          src="../images/stakeddon.png"
+          src="../images/Tiers.svg"
           alt="Staking on Donkey"
+          loading="eager"
           quality={100}
         />
       </>
