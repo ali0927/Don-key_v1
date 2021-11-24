@@ -293,9 +293,9 @@ export const MainSection: React.FC = () => {
                           );
                         })}
                       </FAQItem>
-                      <FAQItem img={statistics} title="Statistics">
+                      {/* <FAQItem img={statistics} title="Statistics">
                        <Statistics />
-                      </FAQItem>
+                      </FAQItem> */}
                     </div>
                   </div>
                 </StyledFaq>
