@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
@@ -88,16 +88,7 @@ export const Rocket = styled(RocketLaunchIcon)`
   bottom: 5%;
 `;
 
-export const MainSection: React.FC = () => {
-  const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
-    client: uniswapClient,
-  });
-
-  const [{ data: coingecko }] = useAxios({
-    method: "GET",
-    url: "https://api.coingecko.com/api/v3/coins/don-key",
-  });
-
+export const useFarmersList = () => {
   const Strategies = useStaticQuery(
     graphql`
       query StrapiFarmers {
@@ -109,24 +100,41 @@ export const MainSection: React.FC = () => {
               chainId
             }
             name
+            graphUrl
           }
         }
       }
     `
   );
+  return {
+    list: Strategies.allStrapiFarmers.nodes as ({poolAddress: string; network: {chainId: number}; name: string; graphUrl: string}[]),
+    count:Strategies.allStrapiFarmers.totalCount as number
+  }
+}
+
+export const useDonInfo = () => {
+  const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
+    client: uniswapClient,
+  });
+  
+ 
+  
+  const [{ data: coingecko }] = useAxios({
+    method: "GET",
+    url: "https://api.coingecko.com/api/v3/coins/don-key",
+  });
 
   const [usersCount, setUsersCount] = React.useState(0);
   const [totalTVL, setTotalTVL] = React.useState("0");
   const [usersLoading, setUsersLoading] = React.useState(false);
   const [tvlLoading, setTVLLoading] = React.useState(false);
 
-  const TotalStrategies = Strategies.allStrapiFarmers.totalCount;
-
+  const {list, count} = useFarmersList();
   const updateUsersCount = async () => {
     setUsersLoading(true);
 
     const totalUserCount = await getUsersCount(
-      Strategies.allStrapiFarmers.nodes
+      list
     );
     setUsersCount(totalUserCount);
     setUsersLoading(false);
@@ -139,7 +147,12 @@ export const MainSection: React.FC = () => {
 
   const volume24hrs = coingecko
     ? convertToInternationalCurrencySystem(
-        new BigNumber(coingecko.tickers.reduce((prev: any,item: any) => new BigNumber(item.volume).plus(prev), 0)).toNumber()
+        new BigNumber(
+          coingecko.tickers.reduce(
+            (prev: any, item: any) => new BigNumber(item.volume).plus(prev),
+            0
+          )
+        ).toNumber()
       ).toString()
     : 0;
 
@@ -154,13 +167,9 @@ export const MainSection: React.FC = () => {
     new BigNumber(parseFloat(finalDerivedEth) * circulatingSupply).toNumber()
   ).toString();
 
-  const handleTakePart = () => {
-    navigate("/stake");
-  };
-
   const updateTVL = async () => {
     setTVLLoading(true);
-    const totalTVL = await getTVL(Strategies.allStrapiFarmers.nodes);
+    const totalTVL = await getTVL(list);
     setTotalTVL(totalTVL);
     setTVLLoading(false);
     localStorage.setItem("don-key-tvl", totalTVL);
@@ -191,6 +200,36 @@ export const MainSection: React.FC = () => {
     })();
   }, []);
 
+  return {
+    donPrice: finalDerivedEth,
+    isDonPriceLoading: loading,
+    volume24hrs,
+    marketCap,
+    totalTVL,
+    tvlLoading,
+    usersCount,
+    usersLoading,
+    strategyCount: count,
+  };
+};
+
+export const MainSection: React.FC = () => {
+  const handleTakePart = () => {
+    navigate("/stake");
+  };
+
+  const {
+    donPrice,
+    isDonPriceLoading,
+    volume24hrs,
+    marketCap,
+    totalTVL,
+    tvlLoading,
+    usersCount,
+    usersLoading,
+    strategyCount,
+  } = useDonInfo();
+
   return (
     <>
       <Root className="position-relative">
@@ -198,7 +237,7 @@ export const MainSection: React.FC = () => {
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
               <Heading>Referral is live!</Heading>
-              <Text fontSize={18} className="mt-4" style={{maxWidth: 320}}>
+              <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
                 Follow real farmers and share with real friends
               </Text>
               <div className="d-flex flex-wrap">
@@ -227,20 +266,20 @@ export const MainSection: React.FC = () => {
                 slides={[
                   {
                     label: "DON price",
-                    value: finalDerivedEth,
-                    isLoading: loading,
+                    value: donPrice,
+                    isLoading: isDonPriceLoading,
                     symbol: "$",
                   },
                   {
                     label: "24-hour volume",
                     value: volume24hrs.toString(),
-                    isLoading: loading,
+                    isLoading: isDonPriceLoading,
                     symbol: "$",
                   },
                   {
                     label: "Market Cap",
                     value: marketCap,
-                    isLoading: loading,
+                    isLoading: isDonPriceLoading,
                     symbol: "$",
                   },
 
@@ -252,14 +291,14 @@ export const MainSection: React.FC = () => {
                   },
                   {
                     label: "Users",
-                    value: usersCount,
+                    value: usersCount.toString(),
                     isLoading: usersLoading,
                     symbol: "",
                   },
                   {
                     label: "Strategies",
-                    value: TotalStrategies,
-                    isLoading: loading,
+                    value: strategyCount.toString(),
+                    isLoading: isDonPriceLoading,
                     symbol: "",
                   },
                 ]}

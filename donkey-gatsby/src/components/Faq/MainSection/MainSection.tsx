@@ -1,34 +1,58 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-import { CardSection } from "../CardSection/CardSection";
+import gql from "graphql-tag";
 
+import { breakPoints } from "breakponts";
+import yieldFarming from "../images/yieldfarming.svg";
+import farmingonDonkey from "../images/farmingondonkey.svg";
+import stakingonDonkey from "../images/stakingondonkey.svg";
+import statistics from "../images/statistics.svg";
+import { StaticImage } from "gatsby-plugin-image";
+import { Statistics } from "../Statistics";
+import { FaqContentRow } from "../FaqContentRow";
+import { FAQItem } from "../FaqItem";
 const Root = styled.div`
   background-color: #fff037;
-  min-height: 450px;
-  padding-top: 4rem;
-  @media (max-width: 740px) {
-    min-height: 350px;
-  }
+  min-height: 428px;
+  padding-top: 3rem;
+  border-bottom-left-radius: 5%;
+  border-bottom-right-radius: 5%;
+
   @media (max-width: 600px) {
-    padding: 0;
-    min-height: 300px;
+    padding-top: 2rem;
+    min-height: 100px;
+
+    &:after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 60px;
+      border-radius: 50%;
+      bottom: -20px;
+      z-index: 0;
+      background-color: ${theme.palette.background.yellow};
+      ${theme.mediaQueries.md.up} {
+        display: block;
+      }
+    }
   }
   svg {
     transform: translate3d(0px, 0px, 0px) scale(1.1) !important;
   }
-  &:after {
-    position: absolute;
-    content: "";
-    width: 100%;
-    height: 150px;
-    border-radius: 50%;
-    bottom: -75px;
-    display: none;
-    z-index: 0;
-    background-color: ${theme.palette.background.yellow};
-    ${theme.mediaQueries.md.up} {
-      display: block;
+  @media (min-width: 760px) {
+    &:after {
+      position: absolute;
+      content: "";
+      width: 100%;
+      height: 110px;
+      border-radius: 50%;
+      bottom: -40px;
+      z-index: 0;
+      background-color: ${theme.palette.background.yellow};
+      ${theme.mediaQueries.md.up} {
+        display: block;
+      }
     }
   }
 `;
@@ -46,123 +70,185 @@ const Paragraph = styled.p`
   font-weight: 400;
   text-align: left;
   word-break: break-word;
-`;
-
-const FooterSubHeading = styled.div`
-  font-size: 23px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: left;
-  margin-top: 1.8rem;
-  color: #8d8d8d;
-  width: 100% !important;
-  @media (max-width: 990px) {
-    font-size: 20px;
-  }
-  @media (max-width: 780px) {
-    font-size: 16px;
-    width: 150px;
-  }
-  @media (max-width: 580px) {
-    font-size: 14px;
-    width: 115px;
-    margin-top: 0.8rem;
-    font-weight: 700;
-    line-height: 32px;
+  margin-bottom: 3rem;
+  @media only screen and (min-width: ${breakPoints.md}) {
+    margin-bottom: 5rem;
   }
 `;
 
-const FooterRow = styled.div`
-  width: 100%;
-  display: flex;
-  @media (max-width: 768px) {
-    width: 700px;
-    overflow: hidden;
+const ETH_PRICE = gql`
+  query bundle {
+    bundle(id: "1") {
+      ethPrice
+    }
   }
 `;
 
-const Col = styled.div`
-  margin-right: 2rem;
-  .active {
-    color: #000;
-    font-weight: 700;
-  }
-  .opacity-0 {
-    opacity: 0;
-  }
-  .opacity-100 {
-    opacity: 100;
-  }
-  @media (max-width: 980px) {
-    margin-right: 1rem;
-  }
-  @media (max-width: 780px) {
-    margin-right: 0.3rem;
-  }
+export type CustomPopupType = "none" | "cycle" | "stakeRewards";
+
+const YieldFarmingQuestions = [
+  {
+    num: 1,
+    ques: "What is Yield farming?",
+    ans: "Yield farming is the act of effectively allocating capital across the decentralized financial ecosystem. Skilled farmers constantly monitor and research strategies that best chase rewards and minimize risk.",
+    splitLength: 130,
+  },
+  {
+    num: 2,
+    ques: "Is Yield Farming Risky?",
+    ans: "Yield Farming risks vary across different strategies, which Don-key reports according to key metrics such as potential for impermanent loss and platform security.",
+    splitLength: 130,
+  },
+  {
+    num: 3,
+    ques: "What is Impermanent Loss?",
+    ans: "Impermanent Loss is a logistical side effect of liquidity provided to Dex’s like Uniswap, which adjusts the ratios of base pair assets in a pool to maintain equal value. This need to maintain equal value between trading pairs, means that price volatility between the tokens erodes their collective value in proportion to the volatility. Some strategies are more exposed than others, with the “low risk” strategies offering relative or complete safety from Impermanent loss. ",
+    splitLength: 130,
+  },
+  {
+    num: 4,
+    ques: "What is Copy-Farming?",
+    ans: "Through Don-key’s copy-farming, the everyday investor can participate in yield farming’s unmatched profitability. Simply deposit in Don-key’s different farmers’s pools to enjoy risk-assessed, high APY strategies in an expanding selection of crypto currencies.",
+    splitLength: 130,
+  },
+];
+
+const FarmingQues = [
+  {
+    ques: "What are the requirements to use the Don-key platform?",
+    ans: "100 $DON held in your wallet is the only requirement to use the DAPP.",
+
+    num: 1,
+  },
+  {
+    ques: "Do I farm with the DON token?",
+    ans: "No, you farm with whatever token you want to earn APY on; while staking can be done in $DON - find out how to do so in the staking section below",
+
+    num: 2,
+  },
+  {
+    ques: "Why is my portfolio negative upon investment?",
+    ans: "Some strategies involve protocols which incur an entrance fee or swap-in fee. These fees are deducted in the first cycle after the funds are invested, which could result in a negative starting balance. See the fee section in each strategy for the detailed breakdown of the fee structure.",
+
+    num: 3,
+  },
+  {
+    ques: "How does Don-key deposit and withdrawal cycles work?",
+    ans: (
+      <>
+        To maintain the most efficient liquidity pools, Don-key concentrates
+        deposits/withdrawals to coincide harmoniously with the daily farming
+        cycles. For Example:
+        <StaticImage src="../images/cycles.png" alt="Cycles" quality={100} />
+      </>
+    ),
+
+    num: 4,
+  },
+  {
+    ques: "Does Don-key auto compound my investment?",
+    ans: "Yes. Don-key auto compounds the pools on average twice a day in order to optimize the return while minimizing slippage, fees and price impact.",
+
+    num: 5,
+  },
+  {
+    ques: "How are profits paid?",
+    ans: "Base APY is paid in the underlying farm token while accelerated rewards APY is paid out in $DON.",
+
+    num: 6,
+  },
+  {
+    ques: "How does Don-key collect fees?",
+    ans: "At the time of withdrawal, Don-key only claims a performance fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards",
+
+    num: 4,
+  },
+];
+
+const StakingQues = [
+  {
+    ques: "Does Don-key offer staking?",
+    ans: "Yes, but staking is only offered to users who copy-farm on the platform and is given as a percentage of funds deposited to farm.",
+
+    num: 1,
+  },
+  {
+    ques: "What are the staking rewards?",
+    ans: (
+      <>
+        Rewards are determined by 5 DON tiers, outlined below. The higher your
+        tier, the more additional APY in DON you can earn, up to an extra 100%
+        APY!
+        <StaticImage
+          src="../images/stakeddon.png"
+          alt="Staking on Donkey"
+          quality={100}
+        />
+      </>
+    ),
+
+    num: 2,
+  },
+  {
+    ques: "How are DON staking rewards calculated?",
+    ans: "YDepending on your tier, the percent DON APY you accumulate is pegged to the dollar, so that within a year the quantity of rewards mirrors the percent promised by your tier. This means that while the dollar value of your DON always increases, the qunaitity of DON fluctuates according to price.",
+
+    num: 3,
+  },
+  {
+    ques: "Why did my staking rewards disappear?",
+    ans: "Whenever you join or increase your investment in a BSC based pool, DON rewards are automatically harvested, so that the new APY takes into account the added deposit quantity.",
+
+    num: 4,
+  },
+  {
+    ques: "What strategies are DON staking rewards available for?",
+    ans: "At the moment only BSC strategies offer DON staking rewards but the team is working on launching the token for MATIC, AVAX, and SOL as quickly as possible so that extra rewards can be offered on these chains as well.",
+
+    num: 5,
+  },
+  {
+    ques: "Are DON staking rewards limited to the extra APY?",
+    ans: "In the short term, yes, but soon Don-key will radically expand rewards to include other platform utilities such as exclusive access to VIP farms, reduced commission, access to leverage and even tier based NFT minting. ",
+
+    num: 6,
+  },
+  {
+    ques: "What is Don-key’s unstaking policy?",
+    ans: "Copy-farming deposits and profits are claimable within a max period of 24 hours in order to streamline investment cycles, while DON staking deposits have a 14 day cool off period after unstaking",
+
+    num: 7,
+  },
+];
+
+const StyledFaq = styled.div`
+  background-color: #fff;
+  border-radius: 20px;
+  position: relative;
+  z-index: 10;
 `;
 
-const GrayBorder = styled.hr`
-  position: absolute;
-  width: 100%;
-  border-top: 1.8px dashed#000D09;
-  top: 2px;
-  margin: 0px;
+
+
+
+
+const FAQContainer = styled.div`
+position: relative;
+top: -40px;
+${theme.mediaQueries.sm.up}{
+  top: -200px;
+}
 `;
 
-const DarkBorder = styled.div`
-  width: 29px;
-  height: 5px;
-  background: #000;
-`;
 
-const faqquestions = {
-  sections: [
-    {
-      title: "General Questions",
-      faq: [
-        {
-          ques: "What do I need to use the Don-key platform?",
-          ans: "Only 100 $DON",
-        },
-        {
-          ques: "Do I farm with the DON token?",
-          ans: "No, you farm with whatever token you want to earn APY on.",
-        },
-        {
-          ques: "Does Don-Key offer staking?",
-          ans: "Yes, but staking is only offered to users who farm on the platform.",
-        },
-        {
-          ques: "What are the staking rewards?",
-          ans: "Rewards are determined by 5 DON tiers, outlined below. The higher your tier, the more additional APY in DON you can earn,up to an extra 100% APY!",
-        },
-        {
-          ques: "What is Don-Key's unstaking policy?",
-          ans: "Farming deposits and rewards are instantly claimable, while DON deposits have a 14 day cool off period after unstaking (rewards are instantly claimable.)",
-        },
-        {
-          ques: "How does Don-key collect fees?",
-          ans: "At the time of withdrawal, Don-key only claims a percent fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards.",
-        },
-        {
-          ques: " What strategies are DON staking reward available for?",
-          ans: "At the moment BSC and ETH based strategies offer DON stakingrewards but the team is working on launching the token for MATIC, AVAX, and SOL as quickly as possible so that extra rewards can be offered on these chains as well.",
-        },
-      ],
-    },
-  ],
-};
+
 export const MainSection: React.FC = () => {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const handleClick = (value: number) => {
-    setSelectedIndex(value);
-  };
   return (
     <>
       <Root className="position-relative">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-7 mb-0 mb-sm-5">
+            <div className="col-lg-7 mb-0 ">
               <Heading>FAQ</Heading>
               <Paragraph className="mt-2 mt-sm-4 w-md-50">
                 Find answers to all most common questions our clients are faced
@@ -170,35 +256,60 @@ export const MainSection: React.FC = () => {
               </Paragraph>
             </div>
           </div>
-
-          <div className="d-flex pb-5 justify-content-start">
-            <FooterRow className="position-relative">
-              <GrayBorder className="d-block" />
-              {faqquestions.sections.map((item, index) => {
-                return (
-                  <Col
-                    key={item.title}
-                    className="position-relative d-flex flex-column align-items-start "
-                  >
-                    <DarkBorder
-                      className={
-                        selectedIndex === index ? "opacity-100" : "opacity-0"
-                      }
-                    />
-                    <FooterSubHeading
-                      onClick={() => handleClick(index)}
-                      className={selectedIndex === index ? "active" : ""}
-                    >
-                      {item.title}
-                    </FooterSubHeading>
-                  </Col>
-                );
-              })}
-            </FooterRow>
-          </div>
         </div>
       </Root>
-      <CardSection questions={faqquestions.sections[selectedIndex].faq} />
+      <div className="container">
+        <div className="row">
+          <FAQContainer className="col-12" >
+            <div className="d-flex pb-5 justify-content-start">
+              <div className="position-relative w-100">
+                <StyledFaq>
+                  <div className="row">
+                    <div className="col-12">
+                      <FAQItem img={yieldFarming} title="Yield Farming">
+                        {YieldFarmingQuestions.map((item) => {
+                          return (
+                            <FaqContentRow
+                              key={item.num}
+                              title={`${item.num}. ${item.ques}`}
+                              content={item.ans}
+                            />
+                          );
+                        })}
+                      </FAQItem>
+                      <FAQItem img={farmingonDonkey} title="Farming on Don-key">
+                        {FarmingQues.map((item) => {
+                          return (
+                            <FaqContentRow
+                              key={item.num}
+                              title={`${item.num}. ${item.ques}`}
+                              content={item.ans}
+                            />
+                          );
+                        })}
+                      </FAQItem>
+                      <FAQItem img={stakingonDonkey} title="Staking on Don-key">
+                        {StakingQues.map((item) => {
+                          return (
+                            <FaqContentRow
+                              key={item.num}
+                              title={`${item.num}. ${item.ques}`}
+                              content={item.ans}
+                            />
+                          );
+                        })}
+                      </FAQItem>
+                      <FAQItem img={statistics} title="Statistics">
+                       <Statistics />
+                      </FAQItem>
+                    </div>
+                  </div>
+                </StyledFaq>
+              </div>
+            </div>
+          </FAQContainer>
+        </div>
+      </div>
     </>
   );
 };

@@ -34,6 +34,9 @@ const StyledDialog = withStyles({
     margin: 0,
     width: `calc(100% - 28px)`,
   },
+  paperWidthCycle: {
+    maxWidth: "1170px",
+  }
 })(Dialog);
 
 const Content = styled(ModalContent)`

@@ -12,3 +12,4 @@ export * from "./useDidUpdate";
 export * from "./useDominance";
 export * from "./useWalletAddress";
 export * from "./useTimer";
+export * from "./useLocalStorageState";
