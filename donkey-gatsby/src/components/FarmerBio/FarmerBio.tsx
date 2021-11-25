@@ -20,6 +20,8 @@ const StyledFarmerImage = styled.img`
   object-fit: cover;
   width: 100px;
   height: 100px;
+  border: 1px solid black;
+  border-radius: 15px;
   @media only screen and (max-width: ${breakPoints.md}) {
     width: 56px;
     height: 56px !important;
