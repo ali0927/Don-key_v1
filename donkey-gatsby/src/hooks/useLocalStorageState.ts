@@ -4,7 +4,7 @@ import { useState } from "react";
 export const useLocalStorageState = <T extends any>(
     key: string,
     initiVal?: T,
-    caching = true
+    caching: boolean | number = true 
   ) => {
     const [state, setState] = useState(initiVal);
     const [isReady, setIsReady] = useState(false);
@@ -33,7 +33,13 @@ export const useLocalStorageState = <T extends any>(
         const oldLocalState = localStorage.getItem(key);
         if (oldLocalState) {
           const result = JSON.parse(oldLocalState);
-          if (result.timestamp + 10 * 60 * 1000 > Date.now()) {
+          let cacheDuration = 10 * 60 * 1000;
+          if(typeof caching === "number"){
+            cacheDuration = caching;
+          }
+          const notStale = (result.timestamp + cacheDuration) > Date.now();
+          // console.log(notStale, key);
+          if (notStale) {
             setState(result.state);
           } else {
             localStorage.removeItem(key);

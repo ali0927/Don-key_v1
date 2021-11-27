@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
@@ -16,8 +16,8 @@ import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
-import { MainSectionTimer } from "./MainSectionTimer";
 import { Text } from "components/Text";
+import { useLocalStorageState } from "hooks";
 
 const Root = styled.div`
   background-color: #fff037;
@@ -124,8 +124,8 @@ export const useDonInfo = () => {
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
 
-  const [usersCount, setUsersCount] = React.useState(0);
-  const [totalTVL, setTotalTVL] = React.useState("0");
+  const {hasLoaded, state: usersCount, updateState: setUsersCount} = useLocalStorageState("donkeyusercount",0, 24 * 60 * 60 * 1000);
+  const {hasLoaded: hasLoadedTvl, state: totalTvl, updateState: setTotalTvl} = useLocalStorageState("donkeytvl","", 24 * 60 * 60 * 1000);
   const [usersLoading, setUsersLoading] = React.useState(false);
   const [tvlLoading, setTVLLoading] = React.useState(false);
 
@@ -138,7 +138,6 @@ export const useDonInfo = () => {
     );
     setUsersCount(totalUserCount);
     setUsersLoading(false);
-    localStorage.setItem("don-key-users-count", totalUserCount.toString());
   };
 
   const circulatingSupply = coingecko
@@ -170,42 +169,29 @@ export const useDonInfo = () => {
   const updateTVL = async () => {
     setTVLLoading(true);
     const totalTVL = await getTVL(list);
-    setTotalTVL(totalTVL);
+    setTotalTvl(totalTVL);
     setTVLLoading(false);
-    localStorage.setItem("don-key-tvl", totalTVL);
+    
   };
 
   React.useEffect(() => {
     (async () => {
-      const dateOfSaved = localStorage.getItem("dateOfSaved");
-      const usersCount = localStorage.getItem("don-key-users-count");
-      const tvl = localStorage.getItem("don-key-tvl");
-      if (dateOfSaved && usersCount && tvl) {
-        const newDate = new Date().getTime();
-        const existingDate = new Date(dateOfSaved).getTime();
-        const diff = newDate - existingDate;
-        const diffMins = Math.round(diff / 60000);
-        if (diffMins > 10) {
-          updateUsersCount();
-          updateTVL();
-        } else {
-          setUsersCount(Number(usersCount));
-          setTotalTVL(tvl);
-        }
-      } else {
-        updateUsersCount();
+      if(hasLoadedTvl && !totalTvl){
         updateTVL();
-        localStorage.setItem("dateOfSaved", new Date().toString());
       }
+      if(hasLoaded && !usersCount){
+        updateUsersCount()
+      }
+      
     })();
-  }, []);
+  }, [hasLoadedTvl,hasLoaded]);
 
   return {
     donPrice: finalDerivedEth,
     isDonPriceLoading: loading,
     volume24hrs,
     marketCap,
-    totalTVL,
+    totalTVL: totalTvl,
     tvlLoading,
     usersCount,
     usersLoading,
