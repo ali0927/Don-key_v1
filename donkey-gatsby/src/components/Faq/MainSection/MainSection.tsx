@@ -172,12 +172,14 @@ const StakingQues = [
         Rewards are determined by 5 DON tiers, outlined below. The higher your
         tier, the more additional APY in DON you can earn, up to an extra 100%
         APY!
+        <div className="mt-3">
         <StaticImage
           src="../images/Tiers.svg"
           alt="Staking on Donkey"
           loading="eager"
           quality={100}
         />
+        </div>
       </>
     ),
 

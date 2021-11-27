@@ -11,13 +11,14 @@ const ImageWrapper = styled.div`
   position: relative;
   margin-top: -40px;
   ${theme.mediaQueries.sm.up} {
-    margin-top: -300px;
+    margin-top: -250px;
   }
+  /* z-index: 10; */
   img {
     width: 800px;
     height: 500px;
 
-    z-index: 9999999999999999;
+    /* z-index: 10; */
   }
 
   @media (max-width: 992px) {
