@@ -38,7 +38,7 @@ const Typography = styled.p<{
 
 
 export const MainSectionTimer: React.FC = () => {
-  const { days, hrs, mins, secs } = useTimer("2021-11-10T18:00:00",true);
+  const { days, hrs, mins, secs } = useTimer("2021-12-03T14:00:00",true);
   const renderDots = (() => {
     return (
       <div className="d-flex align-items-center mx-2 mx-md-4">

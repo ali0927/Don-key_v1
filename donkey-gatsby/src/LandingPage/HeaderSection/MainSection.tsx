@@ -18,6 +18,7 @@ import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
 import { Text } from "components/Text";
 import { useLocalStorageState } from "hooks";
+import { MainSectionTimer } from "./MainSectionTimer";
 
 const Root = styled.div`
   background-color: #fff037;
@@ -222,10 +223,13 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-              <Heading>Referral is live!</Heading>
+            <Heading className="mb-4">Good news coming soon</Heading>
+              <MainSectionTimer />
+              {/* <Heading>Referral is live!</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
                 Follow real farmers and share with real friends
-              </Text>
+              </Text> */}
+              
               <div className="d-flex flex-wrap">
                 <LaunchButton className="mt-3 mr-3 " />
 
