@@ -35,6 +35,11 @@ const NextImage = styled.img`
   object-position: center;
   width: 174px;
   height: 174px !important;
+  filter: grayscale(1);
+  &:hover {
+    filter: grayscale(0);
+  }
+  transition: all 0.2s ease-in-out;
 `;
 
 const Heading3 = styled.h3`
