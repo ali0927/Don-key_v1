@@ -153,6 +153,26 @@ export const PartnerSection: React.FC = () => {
                     src="./logos/CYBERFI.png"
                   />
                 </div>
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                    height={60}
+                    className="mb-5"
+                    src="./logos/scallop_logo.png"
+                  />
+                </div>
+                <div className="col-md-3 d-flex flex-column justify-content-center align-items-center">
+                  <StaticImage
+                    layout="constrained"
+                    alt="Investor"
+                    quality={100}
+                    height={60}
+                    className="mb-5"
+                    src="./logos/fireblocks_logo.png"
+                  />
+                </div>
               </div>
             </div>
           </div>
