@@ -335,20 +335,20 @@ export const StakingInfo = () => {
   }, []);
 
   const harvestDon = async () => {
-    // enableLoading();
-    // try {
-    //   await harvest();
-    // } finally {
-    //   disableLoading();
-    // }
+    enableLoading();
+    try {
+      await harvest();
+    } finally {
+      disableLoading();
+    }
   };
   const claimDons = async () => {
-    // enableLoading();
-    // try {
-    //   await claimTokens();
-    // } finally {
-    //   disableLoading();
-    // }
+    enableLoading();
+    try {
+      await claimTokens();
+    } finally {
+      disableLoading();
+    }
   };
 
   const renderHarvestCard = () => {
@@ -471,13 +471,13 @@ export const StakingInfo = () => {
 
   return (
     <>
-      {/* {isStakeModalOpen && (
+      {isStakeModalOpen && (
         <AcceleratedAPYModal
           open={isStakeModalOpen}
           onClose={() => setisModalOpen(false)}
         />
       )}
-      {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />} */}
+      {unstake && <UnstakeDonModal open={unstake} onClose={closeUnstake} />}
       <div className="row mt-0 mt-lg-3">
         <div className="col-lg-7 mb-3 mb-lg-2">
           <StakingCard className="d-flex h-100 flex-wrap justify-content-between">

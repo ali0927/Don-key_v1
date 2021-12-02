@@ -615,7 +615,7 @@ export const DetailTable = ({
         ) : null}
       </Col>
       <Col className="mb-1 mb-lg-5 p-3 p-md-0 p-lg-0">
-        {/* <BoostApyBox className="d-md-none">
+        <BoostApyBox className="d-md-none">
           <div className="row">
             <div className="col-6 pr-0 d-flex flex-column justify-content-center  ">
               Up to 100% extra APY
@@ -624,7 +624,7 @@ export const DetailTable = ({
               <BoostButton />
             </div>
           </div>
-        </BoostApyBox> */}
+        </BoostApyBox>
       </Col>
 
       {poolVersion > 3 && connected && network.chainId === BINANCE_CHAIN_ID && (
