@@ -23,7 +23,7 @@ import { MainSectionTimer } from "./MainSectionTimer";
 
 const Bg = styled.div`
     background-image: url(${Confety});
-    background-size: contain;
+    background-size: cover;
 `;
 
 const Root = styled.div`
@@ -44,7 +44,7 @@ const Root = styled.div`
     border-radius: 50%;
     bottom: -75px;
     display: none;
-    z-index: 0;
+    z-index: -1;
     background-color: ${theme.palette.background.yellow};
     ${theme.mediaQueries.md.up} {
       display: block;

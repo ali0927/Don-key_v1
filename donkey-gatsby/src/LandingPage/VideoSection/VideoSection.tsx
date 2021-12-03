@@ -7,7 +7,7 @@ import SlickSlider from "react-slick";
 import { theme } from "theme";
 
 const Root = styled.div`
-  background-color: #fff;
+
   min-height: 400px;
   padding: 45px 0px 45px 0px;
   width: 100%;
