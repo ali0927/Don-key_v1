@@ -18,7 +18,15 @@ import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
 import { Text } from "components/Text";
 import { useLocalStorageState } from "hooks";
+import Confety from "./images/confety_bg.png";
+import SDonkey from "./images/SDonkey.png";
 import { MainSectionTimer } from "./MainSectionTimer";
+import { StaticImage } from "gatsby-plugin-image";
+
+
+const Bg = styled.div`
+    background-image: url(${Confety});
+`;
 
 const Root = styled.div`
   background-color: #fff037;
@@ -54,8 +62,10 @@ const Heading = styled.h1`
   font-weight: 900;
   text-align: left;
   color: #222222;
+  width: 100%;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: 49px;
+    width:60%;
   }
 `;
 
@@ -87,6 +97,11 @@ export const Rocket = styled(RocketLaunchIcon)`
   position: absolute;
   left: 6%;
   bottom: 5%;
+`;
+
+export const HeaderImg = styled.img`
+    width: 691px;
+    height: 500px;
 `;
 
 export const useFarmersList = () => {
@@ -220,10 +235,11 @@ export const MainSection: React.FC = () => {
   return (
     <>
       <Root className="position-relative">
+        <Bg>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-            <Heading className="mb-4">Good news coming soon</Heading>
+            <Heading className="mb-4">Don-key listing on Kucoin</Heading>
               <MainSectionTimer />
               {/* <Heading>Referral is live!</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
@@ -245,8 +261,9 @@ export const MainSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-end">
-              <HeroImage />
+            <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-center">
+              <HeaderImg src={SDonkey} alt="image not found"/>
+            
             </div>
           </div>
 
@@ -303,6 +320,7 @@ export const MainSection: React.FC = () => {
 
           <div></div>
         </div>
+        </Bg>
       </Root>
     </>
   );
