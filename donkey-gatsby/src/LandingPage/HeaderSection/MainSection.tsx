@@ -6,7 +6,6 @@ import { useAxios } from "hooks/useAxios";
 import { uniswapClient } from "apolloClient";
 import { convertToInternationalCurrencySystem } from "helpers";
 import BigNumber from "bignumber.js";
-import { HeroImage } from "../HeroImage";
 import { navigate } from "gatsby-link";
 import { theme } from "theme";
 import { breakPoints } from "breakponts";
@@ -16,16 +15,15 @@ import { getTVL, getUsersCount } from "./helpers";
 import { RocketLaunchIcon } from "icons";
 import { ButtonWidget } from "components/Button";
 import { LaunchButton } from "components/LaunchButton";
-import { Text } from "components/Text";
 import { useLocalStorageState } from "hooks";
 import Confety from "./images/confety_bg.png";
 import SDonkey from "./images/SDonkey.png";
 import { MainSectionTimer } from "./MainSectionTimer";
-import { StaticImage } from "gatsby-plugin-image";
 
 
 const Bg = styled.div`
     background-image: url(${Confety});
+    background-size: contain;
 `;
 
 const Root = styled.div`
