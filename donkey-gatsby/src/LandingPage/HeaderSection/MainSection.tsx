@@ -100,6 +100,8 @@ export const Rocket = styled(RocketLaunchIcon)`
 export const HeaderImg = styled.img`
     width: 691px;
     height: 500px;
+    max-width: 150%;
+    object-fit: cover;
 `;
 
 export const useFarmersList = () => {
@@ -259,7 +261,7 @@ export const MainSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-center">
+            <div className="col-lg-5 mb-5 d-flex justify-content-center  align-items-center">
               <HeaderImg src={SDonkey} alt="image not found"/>
             
             </div>
