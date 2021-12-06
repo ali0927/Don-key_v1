@@ -27,24 +27,24 @@ export const TeamJSON: ITeamBoardProps[] = [
     //linkedLink: "https://www.linkedin.com/in/yanir-goldenberg-61074887/",
   },
   {
-    image: ben,
-    name: "Ben Rosental",
-    designation: "Chief Technology Officer",
-  },
-  {
     image: adarsh,
     name: "Adarshdeep Singh",
     designation: "Co-founder & Senior Frontend Developer",
   },
   {
-    image: alon2,
-    name: "Alon Buchshtab",
-    designation: "Software Developer",
-  },
-  {
     image: vijay,
     name: "Vijay Bhayani",
     designation: "Co-founder & Senior Solidity Developer",
+  },
+  {
+    image: ben,
+    name: "Ben Rosental",
+    designation: "Chief Technology Officer",
+  },
+  {
+    image: alon2,
+    name: "Alon Buchshtab",
+    designation: "Software Developer",
   },
   {
     image: deepak,
