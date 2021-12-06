@@ -19,6 +19,8 @@ import { useLocalStorageState } from "hooks";
 import Confety from "./images/confety_bg.png";
 import SDonkey from "./images/SDonkey.png";
 import { MainSectionTimer } from "./MainSectionTimer";
+import { StaticImage } from "gatsby-plugin-image";
+import { Text } from "components/Text";
 
 
 const Bg = styled.div`
@@ -63,8 +65,16 @@ const Heading = styled.h1`
   width: 100%;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: 49px;
-    width:60%;
+    width:80%;
   }
+`;
+
+const SubHeading = styled.h1`
+ font-family: "Poppins";
+  font-size: 40px;
+  font-weight: 400;
+  text-align: left;
+  color: #222222;
 `;
 
 const FooterRow = styled.div`
@@ -100,8 +110,6 @@ export const Rocket = styled(RocketLaunchIcon)`
 export const HeaderImg = styled.img`
     width: 691px;
     height: 500px;
-    max-width: 150%;
-    object-fit: cover;
 `;
 
 export const useFarmersList = () => {
@@ -239,8 +247,9 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-            <Heading className="mb-4">Don-key listing on Kucoin</Heading>
-              <MainSectionTimer />
+            <Heading className="mb-2">Kucoin listing is live!</Heading>
+            <Text  fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>Follow real farmers, make real yield</Text>
+              {/* <MainSectionTimer /> */}
               {/* <Heading>Referral is live!</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
                 Follow real farmers and share with real friends
@@ -261,7 +270,7 @@ export const MainSection: React.FC = () => {
               </div>
             </div>
 
-            <div className="col-lg-5 mb-5 d-flex justify-content-center  align-items-center">
+            <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-center">
               <HeaderImg src={SDonkey} alt="image not found"/>
             
             </div>
