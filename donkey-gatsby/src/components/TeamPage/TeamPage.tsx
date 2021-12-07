@@ -24,6 +24,12 @@ const TeamHeading = styled.p`
   }
 `;
 
+const RootTeam= styled.div`
+   .gap {
+      margin-bottom: 90px;
+   }
+`;
+
 export const TeamPage = () => {
   return (
     <Root>
@@ -35,8 +41,11 @@ export const TeamPage = () => {
               <TeamHeading className="mt-md-3">Our Team</TeamHeading>
             </div>
           </div>
+          <RootTeam className="row mt-3 mt-md-5 justify-content-center">
+            <TeamBoard key={TeamJSON[0].name} {...TeamJSON[0]} />
+          </RootTeam>
           <div className="row mt-3 mt-md-5">
-            {TeamJSON.map((team) => {
+            {TeamJSON.slice(1).map((team) => {
               return <TeamBoard key={team.name} {...team} />;
             })}
           </div>

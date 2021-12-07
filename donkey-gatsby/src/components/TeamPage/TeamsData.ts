@@ -56,12 +56,6 @@ export const TeamJSON: ITeamBoardProps[] = [
     name: "Jason Kelman",
     designation: "Chief Marketing Officer",
   },
-
-  {
-    image: shmuel,
-    name: "Shmuel Azrad",
-    designation: "Fullstack Developer",
-  },
   {
     image: shira,
     name: "Shira Avni",
@@ -85,7 +79,6 @@ export const TeamJSON: ITeamBoardProps[] = [
   //   designation: "Co-founder & Developer",
   //   //linkedLink: "https://www.linkedin.com/in/daniel-j-23016211",
   // },
-
   {
     image: charis,
     name: "Charis Rafailids",

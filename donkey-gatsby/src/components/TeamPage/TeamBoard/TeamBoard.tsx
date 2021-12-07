@@ -71,7 +71,7 @@ export const TeamBoard: React.FC<ITeamBoardProps> = (props) => {
 
   return (
     <>
-      <Column className="col-md-4 col-lg-3">
+      <Column className="col-md-4 col-lg-3 gap">
         <CardWarpper className="position-relative">
           <CardContent className="flex-column align-items-center">
             <NextImage className="img-fluid" src={image} alt={name} />
