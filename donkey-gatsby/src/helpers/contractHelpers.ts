@@ -649,7 +649,7 @@ export const getDonPriceWeb3 = async (web3: Web3) => {
 export const getDonPrice = async (isBSC = false) => {
   if (isBSC) {
     const res = await axios.get(
-      `https://api.pancakeswap.info/api/v2/tokens/${DONTokenAddressBSC}`
+      `https://api-donkey-m6p2q.ondigitalocean.app/api/v2/tokens/${DONTokenAddressBSC}`
     );
     return res.data.data.price;
   }
@@ -690,7 +690,7 @@ export const toWei = (val: string, decimals = 18) => {
 
 export const getWBNBPrice = async () => {
   const res = await axios.get(
-    `https://api.pancakeswap.info/api/v2/tokens/${WBNBAddress}`
+    `https://api-donkey-m6p2q.ondigitalocean.app/api/v2/tokens/${WBNBAddress}`
   );
   return res.data.data.price;
 };
