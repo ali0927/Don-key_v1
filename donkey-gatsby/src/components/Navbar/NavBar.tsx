@@ -16,6 +16,7 @@ import {
   BridgeIcon,
   DonBinance,
   DonEthereum,
+  DonKucoin,
   FAQIcon,
   FarmerIcon,
   HamburgerIcon,
@@ -112,6 +113,9 @@ const PancakeBuyURL =
   "https://pancakeswap.finance/swap?inputCurrency=0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c&outputCurrency=0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255";
 const UniSwapURL =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
+
+  const kucoinSwapURL =
+  "https://trade.kucoin.com/trade/KDON-USDT";
 
 const ConnectWalletButton = () => {
   const { connected } = useWeb3Context();
@@ -394,6 +398,9 @@ function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
                 </BuyButton>
                 <BuyButton target="_blank" href={UniSwapURL}>
                   <DonEthereum /> Buy $DON ERC20
+                </BuyButton>
+                <BuyButton target="_blank" href={kucoinSwapURL}>
+                  <DonKucoin /> buy $DON kucoin
                 </BuyButton>
               </div>
               {/* <DonPriceWrapper>

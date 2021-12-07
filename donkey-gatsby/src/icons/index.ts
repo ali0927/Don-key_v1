@@ -64,6 +64,7 @@ export * from "./CardDollar";
 export * from "./ArrowUpDown";
 export * from "./DonEthereum";
 export * from "./DonBinance";
+export * from "./DonKucoin";
 export * from "./EthereumIcon";
 export * from "./BinanceIcon";
 export * from "./DonKeyIcon";
