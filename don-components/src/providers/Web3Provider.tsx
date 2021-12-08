@@ -114,7 +114,7 @@ const buildRpcConfig = () => {
 };
 
 export const getWeb3: (chainId: number) => Web3 = memoize(
-  (chainId: number, cached = false) => {
+  (chainId: number) => {
     const network = NetworkConfigs.find((item) => item.chainId === chainId);
     if (!network) {
       throw new Error("Unsupported Network");
@@ -122,7 +122,7 @@ export const getWeb3: (chainId: number) => Web3 = memoize(
 
     return new Web3(
       new Web3.providers.HttpProvider(
-        getRandom(cached ? network.cached_rpcs : network.rpcs)
+        getRandom(network.rpcs)
       )
     );
   }
@@ -134,10 +134,10 @@ export const getCachedWeb3: (chainId: number) => Web3 = memoize(
     if (!network) {
       throw new Error("Unsupported Network");
     }
-
+    
     return new Web3(
       new Web3.providers.HttpProvider(
-        getRandom(network.cached_rpcs)
+        getRandom(network.cached_rpcs ?? network.rpcs)
       )
     );
   }
