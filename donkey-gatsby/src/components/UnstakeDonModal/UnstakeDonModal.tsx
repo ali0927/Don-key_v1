@@ -51,7 +51,7 @@ export const UnstakeDonModal = ({
       onClose={onClose}
       size="xs"
     >
-      <div style={{ marginTop: -30, marginBottom: -20 }}>
+      <div style={{ marginTop: -30}}>
         <div className="d-flex align-items-center justify-content-center">
           {/* <div style={{ width: 100 }}>
             <img
