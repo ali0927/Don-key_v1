@@ -5,7 +5,7 @@ import {
   getAmount,
   captureException,
 } from "helpers";
-import { getWeb3 } from "don-components";
+import { getCachedWeb3 } from "don-components";
 import BigNumber from "bignumber.js";
 import moment from "moment";
 import { IInvestment, IInvestorsFromGraph } from "../interfaces/IInvestors";
@@ -45,7 +45,7 @@ export const useInvestments = (data: {
     return orderBy(investors, ["timestamp"], ["desc"]);
   }, [investors]);
 
-  const web3 = getWeb3(chainId);
+  const web3 = getCachedWeb3(chainId);
   React.useEffect(() => {
     (async () => {
       try {

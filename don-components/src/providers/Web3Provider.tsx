@@ -105,23 +105,44 @@ const switchNetwork = async (provider: any, chainIdNum: number) => {
   }
 };
 
-
 const buildRpcConfig = () => {
-  const obj: {[x: number]: string} = {};
-  NetworkConfigs.map(item => {
+  const obj: { [x: number]: string } = {};
+  NetworkConfigs.map((item) => {
     obj[item.chainId] = getRandom(item.rpcs);
-  })
+  });
   return obj;
-}
+};
 
-export const getWeb3: (chainId: number) => Web3 = memoize((chainId: number) => {
-  const network = NetworkConfigs.find((item) => item.chainId === chainId);
-  if (!network) {
-    throw new Error("Unsupported Network");
+export const getWeb3: (chainId: number) => Web3 = memoize(
+  (chainId: number, cached = false) => {
+    const network = NetworkConfigs.find((item) => item.chainId === chainId);
+    if (!network) {
+      throw new Error("Unsupported Network");
+    }
+
+    return new Web3(
+      new Web3.providers.HttpProvider(
+        getRandom(cached ? network.cached_rpcs : network.rpcs)
+      )
+    );
   }
+);
 
-  return new Web3(new Web3.providers.HttpProvider(getRandom(network.rpcs)));
-});
+export const getCachedWeb3: (chainId: number) => Web3 = memoize(
+  (chainId: number) => {
+    const network = NetworkConfigs.find((item) => item.chainId === chainId);
+    if (!network) {
+      throw new Error("Unsupported Network");
+    }
+
+    return new Web3(
+      new Web3.providers.HttpProvider(
+        getRandom(network.cached_rpcs)
+      )
+    );
+  }
+);
+
 
 export const Web3Provider: React.FC<{
   children: React.ReactNode;
@@ -142,7 +163,7 @@ export const Web3Provider: React.FC<{
           walletconnect: {
             package: WalletConnectProvider,
             options: {
-              rpc: buildRpcConfig()
+              rpc: buildRpcConfig(),
             },
           },
         },

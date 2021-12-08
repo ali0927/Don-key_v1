@@ -7,7 +7,7 @@ import {
 } from "helpers";
 import { useEffect, useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { getWeb3 } from "don-components";
+import { getCachedWeb3  } from "don-components";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
 import { useMediaQuery } from "@material-ui/core";
@@ -108,7 +108,7 @@ export const ShowAmount = ({
   icon?: boolean;
 }) => {
   const { isUSD } = useUSDViewBool();
-  const web3 = getWeb3(chainId);
+  const web3 = getCachedWeb3(chainId);
   const { symbol, loading } = usePoolSymbol(poolAddress, web3);
 
   if (loading) {
@@ -142,7 +142,7 @@ export const ShowAmountMobile = ({
   icon?: boolean;
 }) => {
   const { isUSD } = useUSDViewBool();
-  const web3 = getWeb3(chainId);
+  const web3 = getCachedWeb3(chainId);
   const { symbol, loading } = usePoolSymbol(poolAddress, web3);
   if (loading) {
     return <>-</>;
@@ -216,7 +216,7 @@ export const InvestorListTable = ({
   const { data } = useQuery(INVESTORS_QUERY_DATA, {
     client: theGraphClient,
   });
-  const web3 = getWeb3(chainId);
+  const web3 = getCachedWeb3(chainId);
 
   useEffect(() => {
     (async () => {
