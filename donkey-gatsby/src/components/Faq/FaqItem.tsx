@@ -3,8 +3,6 @@ import { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import styled from "styled-components";
 
-
-
 const FAQRow = styled.div`
   cursor: pointer;
 `;
@@ -48,41 +46,52 @@ const FAQIconWrapper = styled.div`
   }
 `;
 
+const IconImage = styled.div`
+  height: 54px;
+  background-color: #fff037;
+  width: 54px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export const FAQItem = ({
-    img,
-    title,
-    children,
-  }: {
-    img: string;
-    title: string;
-    children?: React.ReactNode;
-  }) => {
-    const [isOpen, setIsOpen] = useState(false);
-  
-    return (
-      <>
-        <StyledBorder>
-          <FAQRow
-            className={clsx("row p-3 align-items-center")}
-            onClick={() => {
-              setIsOpen((val) => !val);
-            }}
-          >
-            <FAQIconWrapper className={clsx({ "is-open": isOpen }, "col-md-2")}>
+  img,
+  title,
+  children,
+}: {
+  img: string;
+  title: string;
+  children?: React.ReactNode;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <StyledBorder>
+        <FAQRow
+          className={clsx("row p-3 align-items-center")}
+          onClick={() => {
+            setIsOpen((val) => !val);
+          }}
+        >
+          <FAQIconWrapper className={clsx({ "is-open": isOpen }, "col-md-2")}>
+            <IconImage>
               <img src={img} alt={title} />
-            </FAQIconWrapper>
-            <div className="col-10 col-md-8">
-              <FAQSectionTitle className={clsx({ "is-open": isOpen })}>
-                {title}
-              </FAQSectionTitle>
-            </div>
-            <FAQIconWrapper className="col-2 col-md-2">
-              {isOpen ? <FaChevronUp /> : <FaChevronDown />}
-            </FAQIconWrapper>
-          </FAQRow>
-          {isOpen ? children : null}
-        </StyledBorder>
-      </>
-    );
-  };
+            </IconImage>
+          </FAQIconWrapper>
+          <div className="col-10 col-md-8">
+            <FAQSectionTitle className={clsx({ "is-open": isOpen })}>
+              {title}
+            </FAQSectionTitle>
+          </div>
+          <FAQIconWrapper className="col-2 col-md-2">
+            {isOpen ? <FaChevronUp /> : <FaChevronDown />}
+          </FAQIconWrapper>
+        </FAQRow>
+        {isOpen ? children : null}
+      </StyledBorder>
+    </>
+  );
+};

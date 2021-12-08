@@ -6,6 +6,8 @@ import { breakPoints } from "breakponts";
 import yieldFarming from "../images/yieldfarming.svg";
 import farmingonDonkey from "../images/farmingondonkey.svg";
 import stakingonDonkey from "../images/stakingondonkey.svg";
+import RewardsIcon from "../images/rewards.svg";
+import security from "../images/security.svg";
 import statistics from "../images/statistics.svg";
 import { StaticImage } from "gatsby-plugin-image";
 import { Statistics } from "../Statistics";
@@ -74,8 +76,6 @@ const Paragraph = styled.p`
     margin-bottom: 5rem;
   }
 `;
-
-
 
 export type CustomPopupType = "none" | "cycle" | "stakeRewards";
 
@@ -173,12 +173,12 @@ const StakingQues = [
         tier, the more additional APY in DON you can earn, up to an extra 100%
         APY!
         <div className="mt-3">
-        <StaticImage
-          src="../images/Tiers.svg"
-          alt="Staking on Donkey"
-          loading="eager"
-          quality={100}
-        />
+          <StaticImage
+            src="../images/Tiers.svg"
+            alt="Staking on Donkey"
+            loading="eager"
+            quality={100}
+          />
         </div>
       </>
     ),
@@ -217,6 +217,61 @@ const StakingQues = [
   },
 ];
 
+const SecuirtyQues = [
+  {
+    num: 1,
+    ques: "What is Don-key’s Approach to security?",
+    ans: "Don-key’s approach to security protocol is multifaceted and designed to assess risks from as many angles as possible. The most important layers include regular audits, institutional asset custody, and strategy insurance options.",
+  },
+  {
+    num: 2,
+    ques: "Who audits Don-key?",
+    ans: "All strategy pool contracts are audited by Certik, who ensure that smart contracts are secured and legitimate in their integrity.",
+  },
+  {
+    num: 3,
+    ques: "What is institutional custody?",
+    ans: "Don-key uses Fireblocks, known to be the leader in digital asset security, to secure funds in a third-party hardware vault. They protect liquidity from cyber attacks, collusion, and human error through the best-in-class cryptography paired with hardware isolation.",
+  },
+  {
+    num: 4,
+    ques: "How does Don-key offer insurance?",
+    ans: "Through teaming up with Bright Union, Don-key offers leading decentralized insurance solutions for specific pools. Marked by the Bright Union logo, these strategies are insured from platform hacks of all underlying farming platforms.The insurance is not for any hacks on Don-key itself which are mitigated by the custodian of Fireblocks and pool contract audits.",
+  },
+];
+
+const ReferralQues = [
+  {
+    num: 1,
+    ques: "How do referral rewards work?",
+    ans: "Don-key’s referral system is specific to individual copy-farm pools on BSC, and allows community members to refer only to strategies that they are invested in with a minimum of $250.",
+  },
+  {
+    num: 2,
+    ques: "How much can investors earn from referral rewards?",
+    ans: (
+      <>
+        <span>
+          Like staking rewards, referral rewards are dependent upon investor
+          tier and are as follows:
+        </span>
+        <div>
+          <StaticImage
+            src="../images/stakeddon.png"
+            alt="Cycles"
+            quality={100}
+          />
+        </div>
+      </>
+    ),
+  },
+  {
+    num: 3,
+    ques: "How many strategies can investors refer?",
+    ans: "While users can only refer one strategy to each affiliate, they can refer strategies to as many people as they like, thereby accruing dozens of additional sources of passive income.",
+  },
+];
+
 const StyledFaq = styled.div`
   background-color: #fff;
   border-radius: 20px;
@@ -224,19 +279,13 @@ const StyledFaq = styled.div`
   z-index: 10;
 `;
 
-
-
-
-
 const FAQContainer = styled.div`
-position: relative;
-top: -40px;
-${theme.mediaQueries.sm.up}{
-  top: -200px;
-}
+  position: relative;
+  top: -40px;
+  ${theme.mediaQueries.sm.up} {
+    top: -200px;
+  }
 `;
-
-
 
 export const MainSection: React.FC = () => {
   return (
@@ -256,7 +305,7 @@ export const MainSection: React.FC = () => {
       </Root>
       <div className="container">
         <div className="row">
-          <FAQContainer className="col-12" >
+          <FAQContainer className="col-12">
             <div className="d-flex pb-5 justify-content-start">
               <div className="position-relative w-100">
                 <StyledFaq>
@@ -286,6 +335,36 @@ export const MainSection: React.FC = () => {
                       </FAQItem>
                       <FAQItem img={stakingonDonkey} title="Staking on Don-key">
                         {StakingQues.map((item) => {
+                          return (
+                            <FaqContentRow
+                              key={item.num}
+                              title={`${item.num}. ${item.ques}`}
+                              content={item.ans}
+                            />
+                          );
+                        })}
+                      </FAQItem>
+
+                      <FAQItem
+                        img={RewardsIcon}
+                        title="Referral Rewards on Don-key"
+                      >
+                        {ReferralQues.map((item) => {
+                          return (
+                            <FaqContentRow
+                              key={item.num}
+                              title={`${item.num}. ${item.ques}`}
+                              content={item.ans}
+                            />
+                          );
+                        })}
+                      </FAQItem>
+
+                      <FAQItem
+                        img={security}
+                        title="Security on Don-key"
+                      >
+                        {SecuirtyQues.map((item) => {
                           return (
                             <FaqContentRow
                               key={item.num}
