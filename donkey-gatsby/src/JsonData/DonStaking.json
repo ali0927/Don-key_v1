@@ -122,6 +122,37 @@
 				},
 				{
 					"indexed": false,
+					"internalType": "enum Tier",
+					"name": "newTier",
+					"type": "uint8"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "timeStamp",
+					"type": "uint256"
+				}
+			],
+			"name": "DonEquivalentUpdated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "amount",
+					"type": "uint256"
+				},
+				{
+					"indexed": false,
 					"internalType": "uint256",
 					"name": "timeStamp",
 					"type": "uint256"
@@ -185,6 +216,31 @@
 				},
 				{
 					"indexed": false,
+					"internalType": "enum Tier",
+					"name": "newTier",
+					"type": "uint8"
+				},
+				{
+					"indexed": false,
+					"internalType": "uint256",
+					"name": "timeStamp",
+					"type": "uint256"
+				}
+			],
+			"name": "TierUpdated",
+			"type": "event"
+		},
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": true,
+					"internalType": "address",
+					"name": "user",
+					"type": "address"
+				},
+				{
+					"indexed": false,
 					"internalType": "uint256",
 					"name": "amount",
 					"type": "uint256"
@@ -203,13 +259,58 @@
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "_pool",
+					"name": "_addr",
 					"type": "address"
 				}
 			],
-			"name": "addWhitelist",
+			"name": "addToBlacklist",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "addToWhitelist",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_user",
+					"type": "address"
+				}
+			],
+			"name": "adminMigrateUser",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "blacklist",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -298,6 +399,19 @@
 		},
 		{
 			"inputs": [],
+			"name": "getOldStakingContract",
+			"outputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
 			"name": "getRewardTokenAmount",
 			"outputs": [
 				{
@@ -325,7 +439,7 @@
 		{
 			"inputs": [
 				{
-					"internalType": "enum DonStaking.Tier",
+					"internalType": "enum Tier",
 					"name": "_tier",
 					"type": "uint8"
 				}
@@ -333,7 +447,7 @@
 			"name": "getTierDetail",
 			"outputs": [
 				{
-					"internalType": "enum DonStaking.Tier",
+					"internalType": "enum Tier",
 					"name": "tier",
 					"type": "uint8"
 				},
@@ -345,6 +459,44 @@
 				{
 					"internalType": "uint256",
 					"name": "rewardPer",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "_tier",
+					"type": "uint8"
+				}
+			],
+			"name": "getTierInvestorCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "_tier",
+					"type": "uint8"
+				}
+			],
+			"name": "getTierRewardCapDetails",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "rewardcap",
 					"type": "uint256"
 				}
 			],
@@ -374,6 +526,25 @@
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "getUserTier",
+			"outputs": [
+				{
+					"internalType": "uint8",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
 					"name": "_user",
 					"type": "address"
 				},
@@ -386,6 +557,57 @@
 			"name": "increaseInvestedAmount",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_owner",
+					"type": "address"
+				}
+			],
+			"name": "initialize",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "isBlackListed",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "isMigrated",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -427,6 +649,50 @@
 			"type": "function"
 		},
 		{
+			"inputs": [
+				{
+					"internalType": "uint256",
+					"name": "_totalStakedAmount",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_totalCoolOffAmount",
+					"type": "uint256"
+				}
+			],
+			"name": "migrateTokenDetails",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "migratedCoolOffAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "migratedStakedAmount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"inputs": [],
 			"name": "owner",
 			"outputs": [
@@ -444,6 +710,19 @@
 			"name": "pause",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"name": "pauseTimeStamp",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -471,7 +750,12 @@
 			"outputs": [
 				{
 					"internalType": "uint256",
-					"name": "rewardAmount",
+					"name": "rewardAmountInDON",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "donPriceInUSD",
 					"type": "uint256"
 				}
 			],
@@ -482,11 +766,24 @@
 			"inputs": [
 				{
 					"internalType": "address",
-					"name": "_pool",
+					"name": "_addr",
 					"type": "address"
 				}
 			],
-			"name": "removeWhitelist",
+			"name": "removeFromBlacklist",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "removeFromWhitelist",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -514,6 +811,19 @@
 		{
 			"inputs": [
 				{
+					"internalType": "address",
+					"name": "_addr",
+					"type": "address"
+				}
+			],
+			"name": "setOldStakingContract",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
 					"internalType": "uint256",
 					"name": "_tokens",
 					"type": "uint256"
@@ -522,6 +832,68 @@
 			"name": "stake",
 			"outputs": [],
 			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"name": "tierDetails",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "tier_cap",
+					"type": "uint256"
+				},
+				{
+					"internalType": "uint256",
+					"name": "reward_per",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"name": "tierInvestorCount",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "",
+					"type": "uint8"
+				}
+			],
+			"name": "tierRewardCap",
+			"outputs": [
+				{
+					"internalType": "uint256",
+					"name": "",
+					"type": "uint256"
+				}
+			],
+			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -568,6 +940,24 @@
 			"inputs": [
 				{
 					"internalType": "address",
+					"name": "_user",
+					"type": "address"
+				},
+				{
+					"internalType": "uint256",
+					"name": "_amount",
+					"type": "uint256"
+				}
+			],
+			"name": "updateDonEquivalent",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
 					"name": "feed",
 					"type": "address"
 				}
@@ -580,7 +970,7 @@
 		{
 			"inputs": [
 				{
-					"internalType": "enum DonStaking.Tier",
+					"internalType": "enum Tier",
 					"name": "_tier",
 					"type": "uint8"
 				},
@@ -596,6 +986,24 @@
 				}
 			],
 			"name": "updateTier",
+			"outputs": [],
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "enum Tier",
+					"name": "_tier",
+					"type": "uint8"
+				},
+				{
+					"internalType": "uint256",
+					"name": "tokenAmount",
+					"type": "uint256"
+				}
+			],
+			"name": "updateTierRewardCap",
 			"outputs": [],
 			"stateMutability": "nonpayable",
 			"type": "function"
@@ -623,7 +1031,7 @@
 							"type": "uint256"
 						},
 						{
-							"internalType": "enum DonStaking.Tier",
+							"internalType": "enum Tier",
 							"name": "tier_type",
 							"type": "uint8"
 						},
@@ -646,11 +1054,35 @@
 							"internalType": "uint256",
 							"name": "lastRewardTime",
 							"type": "uint256"
+						},
+						{
+							"internalType": "uint256",
+							"name": "donEquivalent",
+							"type": "uint256"
 						}
 					],
 					"internalType": "struct DonStaking.Staker",
-					"name": "",
+					"name": "stakeDetails",
 					"type": "tuple"
+				}
+			],
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"inputs": [
+				{
+					"internalType": "address",
+					"name": "",
+					"type": "address"
+				}
+			],
+			"name": "whitelist",
+			"outputs": [
+				{
+					"internalType": "bool",
+					"name": "",
+					"type": "bool"
 				}
 			],
 			"stateMutability": "view",

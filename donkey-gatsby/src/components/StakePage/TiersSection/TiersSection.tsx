@@ -1,6 +1,5 @@
 import { breakPoints } from "breakponts";
-import { ShowMoreContent } from "components/ShowmoreContent";
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import SlickSlider, { Settings as SlickSettings } from "react-slick";
 import teir0 from "./images/tier0.png";
@@ -15,9 +14,7 @@ import { theme } from "theme";
 import clsx from "clsx";
 import { Container } from "react-bootstrap";
 import { StaticImage } from "gatsby-plugin-image";
-import { ButtonWidget } from "components/Button";
-import { useWeb3Context } from "don-components";
-import { useStakingContract } from "hooks";
+import { useReferralContext } from "contexts/ReferralContext";
 
 const Root = styled.div<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor};
@@ -35,26 +32,7 @@ const Root = styled.div<{ bgColor: string }>`
   }
 `;
 
-const Heading = styled.h2`
-  font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  font-size: 40px;
-  font-weight: 900;
-  text-align: left;
-  color: #222222;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    font-size: 49px;
-  }
-`;
 
-const Paragraph = styled.p`
-  font-family: Poppins;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  text-align: left;
-`;
 
 const Card = styled.div<{
   height: string;
@@ -71,10 +49,14 @@ const Card = styled.div<{
   }
 `;
 
-const CutomSlickSlider = styled(SlickSlider)<{ staking: boolean }>`
+const CutomSlickSlider = styled(SlickSlider)`
   overflow: hidden;
   width: 100%;
-  height: ${(props) => (props.staking ? "251px" : "220px")};
+  height: 248px;
+  padding: 0 20% 0 0 !important;
+  .slick-list {
+    overflow: visible;
+  }
 `;
 
 const CardTypography = styled.p<{
@@ -156,29 +138,18 @@ const settings: SlickSettings = {
   variableWidth: true,
 };
 
-const StakeButton = styled(ButtonWidget)`
-  border: 2px solid #222222;
-  font-weight: 600;
-  width: 221px;
-  @media only screen and (min-width: ${breakPoints.md}) {
-    width: 178px;
-  }
-`;
 
 interface IProps {
-  partOne: string;
-  partTwo: string;
+
   staking?: boolean;
 }
 
 export const TiersSection: React.FC<IProps> = ({
-  partOne,
-  partTwo,
+
   staking,
 }: IProps) => {
   const slickRef = React.useRef<SlickSlider | null>(null);
-  const part1 = partOne;
-  const part2 = partTwo;
+ 
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
@@ -206,6 +177,9 @@ export const TiersSection: React.FC<IProps> = ({
   ];
 
   const [selectedTier, setSelectedTier] = React.useState(0);
+
+
+  const { getTierCommission } = useReferralContext();
 
   const renderCards = (index: number, staking?: boolean) => {
     const tier = tiers[index];
@@ -275,7 +249,7 @@ export const TiersSection: React.FC<IProps> = ({
                   color="#070602"
                   bold
                 >
-                  5 %
+                  {getTierCommission(tier.tier)}%
                 </CardTypography>
               </>
             )}
@@ -312,29 +286,15 @@ export const TiersSection: React.FC<IProps> = ({
   return (
     <>
       <Root bgColor={staking ? "#FFF9E5" : "#F2F2F2"}>
-        <Container>
-          <Heading className={staking ? "d-none" : ""}>
-            Check out our tier system
-          </Heading>
-          <div className={staking ? "d-none" : "row"}>
-            <div className="col-12 col-lg-6">
-              <Paragraph className="d-block d-lg-none">
-                {part1}
-                <br />
-                <ShowMoreContent content={part2} length={220} />
-              </Paragraph>
-              <Paragraph className="d-none d-lg-block">
-                {part1} <br /> {part2}
-              </Paragraph>
-            </div>
-          </div>
+        <Container className="p-0">
           {!isDesktop && (
             <div className="mt-3 w-100">
               <CutomSlickSlider
                 ref={slickRef}
                 {...settings}
                 afterChange={(currentSlide) => setSelectedTier(currentSlide)}
-                staking={staking ? true : false}
+           
+                infinite={false}
               >
                 {tiers.map((currentTier, index) => {
                   return <>{renderCards(index, staking)}</>;
@@ -360,28 +320,6 @@ export const TiersSection: React.FC<IProps> = ({
               })}
             </div>
           )}
-          {/* <div className="d-flex justify-content-center  mt-5">
-            <StakeButton
-              varaint="outlined"
-              className="mt-3 "
-              width="178px"
-              height="55px"
-              onClick={() => {
-                setIsOpen(true);
-              }}
-            >
-              STAKE $DON
-            </StakeButton>
-            {isOpen && connected && !loading && (
-              <AcceleratedAPYModal
-                open={isOpen}
-                onClose={() => setIsOpen(false)}
-              />
-            )}
-            {isOpen && !connected && (
-              <WalletPopup onClose={() => setIsOpen(false)} onDone={() => setIsOpen(true)} />
-            )}
-          </div> */}
         </Container>
       </Root>
     </>

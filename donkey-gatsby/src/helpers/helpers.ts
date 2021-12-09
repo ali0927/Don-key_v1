@@ -1,4 +1,5 @@
 import BigNumber from "bignumber.js";
+import { isUndefined } from "lodash";
 import Web3 from "web3";
 import {
   calculateInitialInvestment,
@@ -77,9 +78,9 @@ export const fixUrl = (url?: string) => {
   return `https://${url}`;
 };
 
-export const formatNum = (num: string) => {
+export const formatNum = (num: string, digits?: number) => {
   const wrappedNum = new BigNumber(num);
-  let digits = wrappedNum.gt(1) ? 2 : 6;
+  digits = isUndefined(digits)? wrappedNum.gt(1) ? 2 : 6: digits;
   if (process.env.GATSBY_APP_ENV === "development") {
     digits = 6;
   }

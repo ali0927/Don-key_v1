@@ -34,6 +34,10 @@ interface IDonKeyTheme {
         };
         lg: {
             up: string;
+        },
+        xl: {
+            up: string;
+            down: string;
         }
     }
 };
@@ -73,6 +77,10 @@ export const theme: IDonKeyTheme = {
         },
         lg: {
             up:'@media (min-width: 992px)'
+        },
+        xl: {
+            up:'@media (min-width: 988px)',
+            down: `@media (max-width: 988px)`,
         }
     }
 }

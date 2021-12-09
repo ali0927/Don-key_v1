@@ -1,10 +1,13 @@
 @import "@fontsource/poppins/300.css";
 @import "@fontsource/poppins/400.css";
 @import "@fontsource/poppins/500.css";
+@import "@fontsource/poppins/700.css";
+@import "@fontsource/poppins/800.css";
 @import "@fontsource/work-sans/600.css";
 @import "@fontsource/work-sans/700.css";
 @import "@fontsource/work-sans/800.css";
 @import "@fontsource/work-sans/900.css";
+
 html {
   margin:0;
   padding:0;
@@ -28,6 +31,9 @@ body {
     text-decoration: none !important;
   }
 }
+.cursor-pointer {
+  cursor: pointer;
+}
 
 *::-webkit-scrollbar {
   width: 4px;
@@ -42,4 +48,11 @@ body {
 
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 100px;
+}
+
+
+.pr-md-big {
+  @media screen and (min-width: 768px) {
+    padding-right: 100px;
+  }
 }

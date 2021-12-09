@@ -44,7 +44,7 @@ const DONApy = styled.h6`
 
 const Heading = styled.h5`
   font-size: 18px;
-  font-weight: 900;
+  font-weight: 700;
 `;
 
 const CrossChainImage = styled.img`
@@ -62,8 +62,7 @@ const ArrowUpDOwnIcon = styled(ArrowUpDOwn)`
 
 const SubText = styled.span({
   fontSize: 12,
-  fontWeight: "bold",
-  fontFamily: "Poppins",
+  fontWeight: 500,
 });
 
 export const TokenInfo = ({
@@ -105,10 +104,10 @@ export const TokenInfo = ({
           <div className="col-5 d-flex flex-column  justify-content-end">
             <h5
               style={{
-                fontSize: 18,
-                fontWeight: 900,
+                fontSize: 22,
+                fontWeight: 700,
                 fontFamily: "Poppins",
-                marginBottom: 12,
+                marginBottom: 0,
               }}
             >
               {maxApy}%

@@ -57,7 +57,9 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
   }
   return null;
 };
-export const StakingContractProvider: React.FC = memo(({ children }) => {
+
+
+const useStaking = () => {
   const { chainId, getConnectedWeb3, connected, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const stakingContract = useMemo(() => {
@@ -116,7 +118,7 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
   };
 
   const fetchPendingRewards = async () => {
-    let pendingRewards = "0";
+    let pendingRewards = {rewardAmountInDON: "0"};
     try {
       const accounts = await web3.eth.getAccounts();
       pendingRewards = await stakingContract.methods
@@ -124,9 +126,9 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         .call();
     } catch (e) {
       captureException(e, "fetchPendingRewards");
-      pendingRewards = "0";
     }
-    setPendingReward(toEther(pendingRewards));
+    // console.log(pendingReward, "PP")
+    setPendingReward(toEther(pendingRewards.rewardAmountInDON));
   };
 
   const fetchState = async () => {
@@ -136,7 +138,8 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
       const userInfo = await stakingContract.methods
         .userInfo(accounts[0])
         .call();
-
+      console.log(userInfo, "userInfo");
+      console.log(DonStakingAddress);
       try {
         const minDuration = await stakingContract.methods
           .getMinDuration()
@@ -148,15 +151,17 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
         setCoolOffDuration("2 weeks");
       }
 
-      const donAmount = toEther(userInfo.tokenAmount);
-      const tierInfo = await getTierInfo(donAmount, stakingContract);
+      const donAmount = toEther(new BigNumber(userInfo.tokenAmount).plus(userInfo.donEquivalent).toFixed(0));
+      console.log(userInfo);
+      await fetchTiers(stakingContract);
+      const crTier = tierInfo.data[userInfo.tier_type];
       const coolOffDons = toEther(userInfo.coolOffAmount);
 
       setIsStaked(userInfo.isStaked);
       setStakedDon(donAmount);
       setInvestedAmount(toEther(userInfo.totalInvestedAmount));
-      if (tierInfo) {
-        setCurrentTier(tierInfo);
+      if (crTier) {
+        setCurrentTier(crTier);
       }
 
       await fetchPendingRewards();
@@ -288,7 +293,11 @@ export const StakingContractProvider: React.FC = memo(({ children }) => {
     holdedDons,
     investedAmount,
   ]);
+  return stakingObj
+}
 
+export const StakingContractProvider: React.FC = memo(({ children }) => {
+  const stakingObj = useStaking();
   return (
     <StakingContractContext.Provider value={stakingObj}>
       {children}

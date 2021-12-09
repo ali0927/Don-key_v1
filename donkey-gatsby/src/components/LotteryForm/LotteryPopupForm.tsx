@@ -4,12 +4,13 @@ import { DonCommonmodal } from "components/DonModal";
 import { AddIcon, BEP20, ERCIcon } from "icons";
 import { useState } from "react";
 import { Label, InputSmall } from "./LotteryForm";
-import { captureException, getLPTokenContract, getStakingContract, toWei } from "helpers";
+import { captureException, getLPTokenContract, getStakeContract, toWei } from "helpers";
 import { Spinner } from "react-bootstrap";
 import { useRefresh } from "./useRefresh";
 import { useTransactionNotification } from "./useTransactionNotification";
 import BigNumber from "bignumber.js";
 import { BINANCE_CHAIN_ID, ETHEREUM_CHAIN_ID, useWeb3Context } from "don-components";
+import { StakeType } from "interfaces";
 export interface ILotteryParticipate {
   amount: string;
   email: string;
@@ -20,10 +21,12 @@ export const LotteryPopupForm = ({
   availableAmount,
   onClose,
   onSuccess,
+  type
 }: {
   isOpen: boolean;
   availableAmount: string | null;
   onClose: () => void;
+  type: StakeType;
   onSuccess: () => void;
 }) => {
   const [state, setState] = useState<ILotteryParticipate>({
@@ -58,7 +61,7 @@ export const LotteryPopupForm = ({
     const accounts = await web3.eth.getAccounts();
     setLoading(true);
     try {
-      const stakingContract = await getStakingContract(web3, chainId === BINANCE_CHAIN_ID);
+      const stakingContract =  await getStakeContract(web3, type);
       const lpTokenContract = await getLPTokenContract(web3, chainId === BINANCE_CHAIN_ID);
       showProgress("Approve LP Token for Spend");
       let allowance = await lpTokenContract.methods

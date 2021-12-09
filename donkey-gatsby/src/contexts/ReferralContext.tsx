@@ -136,13 +136,13 @@ export const ReferralStateProvider: React.FC = ({ children }) => {
   const { chainId, address, connected } = useWeb3Context();
   const { loading} = useStakingContract()
   const checkhasSignedUp = async () => {
-    await checkSignedUpThunk(dispatchSync, address);
     const web3 = getWeb3(BINANCE_CHAIN_ID);
     const referralContract = await getReferralSystemContract(web3);
     for (let i = 0; i <= 5; i++) {
       const commission = await referralContract.methods.getTierDetail(i).call();
       tierMap.current[i] = commission / 100;
     }
+    await checkSignedUpThunk(dispatchSync, address);
   };
 
   useIsomorphicEffect(() => {

@@ -86,7 +86,7 @@ export const StackingLPTokens: React.FC = () => {
 
   const [ethStaking, setEthStaking] = React.useState(InitialState);
   const [bnbStaking, setBNBStaking] = React.useState(InitialState);
-  const {dependsOn} = useRefresh();
+  const { dependsOn } = useRefresh();
   const fethInfo = async () => {
     try {
       const [EthData, BNBData] = await Promise.all([
@@ -107,13 +107,15 @@ export const StackingLPTokens: React.FC = () => {
       setBNBStaking(BNBData);
     } catch (e) {
       console.log(e);
-      
+
     }
   };
 
   useIsomorphicEffect(() => {
     fethInfo();
   }, [connected, dependsOn]);
+
+  return <h1>Hello</h1>
 
   return (
     <>

@@ -21,6 +21,7 @@ import BigNumber from "bignumber.js";
 import { useWeb3Context } from "don-components";
 import styled, { css } from "styled-components";
 import { Spinner } from "react-bootstrap";
+import { SelectableWithdrawComponent } from "./SelectableWithdrawComponent";
 
 const OldWithdrawPopup = ({
   onWithdraw,
@@ -56,7 +57,7 @@ const OldWithdrawPopup = ({
   );
 };
 
-const BoxWrapper = styled.div`
+export const BoxWrapper = styled.div`
   border: 1px solid #ececec;
   border-radius: 10px;
   padding: 12px;
@@ -64,14 +65,14 @@ const BoxWrapper = styled.div`
   margin-top: 5px;
 `;
 
-const BoxInput = styled.div`
+export const BoxInput = styled.div`
   font-size: 28px;
   font-weight: 700;
   display: flex;
   align-items: center;
 `;
 
-const BoxUsd = styled.div`
+export const BoxUsd = styled.div`
   font-size: 12px;
   font-weight: 500;
   color: #a3a3a3;
@@ -84,7 +85,7 @@ const SelectedPillCss = css`
   border: 1px solid #fed700;
 `;
 
-const Pill = styled.div`
+export const Pill = styled.div`
   width: 70px;
   height: 36px;
   border-radius: 10px;
@@ -105,9 +106,9 @@ const Pill = styled.div`
   }
 `;
 
-const defaultPercents = [10, 20, 30, 50, 100];
+export const defaultPercents = [10, 20, 30, 50, 100];
 
-const WithdrawButton = styled(ButtonWidget)`
+export const WithdrawButton = styled(ButtonWidget)`
   display: block;
   /* background: linear-gradient(
       94.22deg,
@@ -134,7 +135,7 @@ const WithdrawButton = styled(ButtonWidget)`
   }
 `;
 
-const CancelButton = styled.button`
+export const CancelButton = styled.button`
   display: block;
   color: #000;
   font-size: 14px;
@@ -151,7 +152,7 @@ const CancelButton = styled.button`
   }
 `;
 
-const StyledInput = styled.input`
+export const StyledInput = styled.input`
   text-align: right;
   /* flex: 1; */
   padding-right: 10px;
@@ -172,93 +173,6 @@ const StyledInput = styled.input`
   }
   -moz-appearance: textfield;
 `;
-
-const SelectableWithdrawComponent = ({
-  title,
-  available,
-  currency,
-  price,
-  percent,
-  setPercent,
-}: {
-  title: string;
-  available: string;
-  currency: string;
-  price: string;
-  percent: string;
-  setPercent: (val: string) => void;
-}) => {
-  const amount = new BigNumber(available).multipliedBy(percent).dividedBy(100);
-  const [input, setInput] = React.useState(amount.toFixed(4));
-
-  return (
-    <div>
-      <div className="d-flex align-items-center justify-content-between">
-        <span style={{ fontSize: 14, fontWeight: 600 }}>{title}</span>
-        <span style={{ fontSize: 13, fontWeight: 500, color: "#A3A3A3" }}>
-          Available: {available} {currency}
-        </span>
-      </div>
-      <BoxWrapper>
-        <BoxInput>
-          <div>
-            <StyledInput
-              type="number"
-              value={input}
-              placeholder="0.0000"
-              onChange={(e) => {
-                const result = e.target.value;
-
-                setInput(result);
-                if (result === "") {
-                  setPercent("0");
-                }
-                if (new BigNumber(result).gt(available)) {
-                  setPercent("0");
-                } else {
-                  setPercent(
-                    new BigNumber(result)
-                      .multipliedBy(100)
-                      .dividedBy(available)
-                      .toFixed()
-                  );
-                }
-              }}
-            />
-          </div>
-          <div>{currency}</div>
-        </BoxInput>
-        <BoxUsd>
-          ≈ $
-          {input === ""
-            ? "0.00"
-            : new BigNumber(input).multipliedBy(price).toFixed(2)}
-        </BoxUsd>
-      </BoxWrapper>
-      <div className="mt-3 mb-4 d-flex align-items-center justify-content-between">
-        {defaultPercents.map((num) => {
-          return (
-            <Pill
-              key={num}
-              onClick={() => {
-                setPercent(num.toFixed());
-                setInput(
-                  new BigNumber(available)
-                    .multipliedBy(num)
-                    .dividedBy(100)
-                    .toFixed(4)
-                );
-              }}
-              selected={num === parseInt(percent)}
-            >
-              {num}%
-            </Pill>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
 
 const WithdrawFooter = styled.div`
   padding-top: 15px;

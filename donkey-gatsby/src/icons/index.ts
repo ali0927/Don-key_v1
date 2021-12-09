@@ -90,8 +90,8 @@ export * from "./BackArrow";
 export * from "./PaginateLeftArrow";
 export * from "./PaginateRightArrow";
 export * from "./TickIcon";
-export * from './WalletConnectNewIcon'
-export * from './MetamaskIcon'
+export * from "./WalletConnectNewIcon";
+export * from "./MetamaskIcon";
 export * from "./RocketLaunchIcon";
 export * from "./NextSlideIcon";
 export * from "./StakingRightArrow";
@@ -101,3 +101,9 @@ export * from "./MobileCorrectIcon";
 export * from "./GrayInfoIcon";
 export * from "./MainSectionSmallDots";
 export * from "./PlusIcon";
+export * from "./stakingArrow";
+export * from "./upArrow";
+export * from './questionToolTip'
+export * from './mainnetIcon'
+export * from './stakingMainnet'
+export * from './downArrow'
