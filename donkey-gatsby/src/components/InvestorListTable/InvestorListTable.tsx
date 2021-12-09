@@ -63,7 +63,8 @@ const usdAmount = (amount: string, amountN: number) => {
 };
 
 const busdAmount = (amount: string, symbol: string, amountN: number) => {
-  if (amountN > 0) {
+  const finalAmount = parseFloat(amount);
+  if (finalAmount > 0) {
     return (
       <>
         {" "}
@@ -148,6 +149,8 @@ export const ShowAmountMobile = ({
     return <>-</>;
   }
 
+
+
   return icon ? (
     <>
       {isUSD
@@ -170,11 +173,12 @@ export const ShowAmountMobile = ({
   );
 };
 
-export const hideAddress = (item: string,{ mask = "xxxxxxxxxxxxxxxxxxxxx", size = 10} = {}) => {
+export const hideAddress = (
+  item: string,
+  { mask = "xxxxxxxxxxxxxxxxxxxxx", size = 10 } = {}
+) => {
   return (
-    item.slice(0, size) +
-     mask +
-    item.slice(item.length - size, item.length)
+    item.slice(0, size) + mask + item.slice(item.length - size, item.length)
   );
 };
 
@@ -237,14 +241,18 @@ export const InvestorListTable = ({
   useEffect(() => {
     if (data) {
       if (data && data.investors.length > 0) {
-        if(blacklist.length > 0){
+        if (blacklist.length > 0) {
           const filteredItems = filter(
             data.investors,
             (item) =>
-              blacklist.findIndex((bl) => bl.address.trim().toLowerCase() === item.address.trim().toLowerCase()) === -1
+              blacklist.findIndex(
+                (bl) =>
+                  bl.address.trim().toLowerCase() ===
+                  item.address.trim().toLowerCase()
+              ) === -1
           );
           setInvestments(filteredItems);
-        }else {
+        } else {
           setInvestments(data.investors);
         }
       }
