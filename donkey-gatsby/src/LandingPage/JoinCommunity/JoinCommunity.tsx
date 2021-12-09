@@ -2,10 +2,10 @@ import { breakPoints } from "breakponts";
 import { CoingKoIcon } from "icons";
 import * as React from "react";
 import { Container } from "react-bootstrap";
-import { FaReddit } from "react-icons/fa";
+import { FaDiscord, FaReddit } from "react-icons/fa";
 import styled from "styled-components";
 import { theme } from "theme";
-import { SiTiktok } from "react-icons/si";
+import { SiTiktok, SiDiscord } from "react-icons/si";
 
 const CommunityRoot = styled.div`
   background: #222222;
@@ -165,6 +165,15 @@ export const JoinCommunity: React.FC = () => {
             </li>
             <li>
               <Anchor
+                href="https://discord.gg/nz9r9zrz"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <SiDiscord color="#5166f7" size={24} />
+              </Anchor>
+            </li>
+            <li>
+              <Anchor
                 href="https://twitter.com/Don_key_finance"
                 target="_blank"
                 rel="noreferrer"
@@ -194,6 +203,7 @@ export const JoinCommunity: React.FC = () => {
                 </svg>
               </Anchor>
             </li>
+          
             <li>
               <Anchor
                 href="https://www.reddit.com/r/don_key_finance/"
@@ -223,7 +233,11 @@ export const JoinCommunity: React.FC = () => {
               </Anchor>
             </li>
             <li>
-              <Anchor href="https://www.tiktok.com/@don_key_finance" target="_blank" rel="noreferrer">
+              <Anchor
+                href="https://www.tiktok.com/@don_key_finance"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <SiTiktok size={22} color="#fff" />
               </Anchor>
             </li>
