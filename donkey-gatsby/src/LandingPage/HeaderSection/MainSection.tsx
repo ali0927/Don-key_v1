@@ -265,7 +265,7 @@ export const MainSection: React.FC = () => {
                   height="55px"
                   onClick={handleTakePart}
                 >
-                  STAKE LP DON
+                  STAKE DON
                 </StakeButton>
               </div>
             </div>
