@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { SwitchRow } from "don-components";
+import { FANTOM_CHAIN_ID, SwitchRow } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
 import { navigate } from "gatsby-link";
@@ -306,6 +306,13 @@ const Overlay = styled.div`
   }
 `;
 
+const NetworkNameChainIdMap = {
+  "Polygon" : POLYGON_CHAIN_ID,
+  "AVAX" : AVAX_CHAIN_ID,
+  "BSC" : BINANCE_CHAIN_ID,
+  "Fantom": FANTOM_CHAIN_ID
+}
+
 type ExtraInfo = {
   guid: string;
   name: string;
@@ -336,17 +343,12 @@ export const InvestmentsPage = () => {
   const { showNotification } = useNotification();
 
   const [refresh, setRefresh] = useState(false);
-  const [networkName, setNetworkName] = useState("BSC");
+  const [networkName, setNetworkName] = useState<keyof typeof NetworkNameChainIdMap>("BSC");
   const [show, setShow] = useState(false);
 
-  const handleNameChange = (value: string) => {
-    if (value === "Polygon") {
-      setStrategyNetworkFilter(POLYGON_CHAIN_ID);
-    } else if (value === "AVAX") {
-      setStrategyNetworkFilter(AVAX_CHAIN_ID);
-    } else {
-      setStrategyNetworkFilter(BINANCE_CHAIN_ID);
-    }
+  const handleNameChange = (value: keyof typeof NetworkNameChainIdMap) => {
+    const num = NetworkNameChainIdMap[value];
+    setStrategyNetworkFilter(num);
     setNetworkName(value);
     setShow(false);
   };
@@ -1008,6 +1010,17 @@ export const InvestmentsPage = () => {
               }}
             >
               <div>BSC</div> <TickIcon className="tick-icon" />
+            </DropDownItem>
+            <DropDownItem
+              className={clsx(
+                "d-flex justify-content-between align-items-center",
+                { selected: networkName === "Fantom" }
+              )}
+              onClick={() => {
+                handleNameChange("Fantom");
+              }}
+            >
+              <div>Fantom</div> <TickIcon className="tick-icon" />
             </DropDownItem>
           </DropDown>
         </Overlay>

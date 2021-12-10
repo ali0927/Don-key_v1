@@ -9,7 +9,7 @@ import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
-import { getDonPriceWeb3 } from "helpers";
+import { formatNum, getDonPriceWeb3 } from "helpers";
 import { getWeb3 } from "don-components";
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 import Questionmark from "components/Icons/Questionmark";
@@ -488,7 +488,7 @@ export const StakingInfo = () => {
           <StakingCard className="d-flex h-100 flex-wrap justify-content-between">
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>
-              <StakingSubtitle>{stakedDon}</StakingSubtitle>
+              <StakingSubtitle>{formatNum(stakedDon,2)}</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>Tier</StakingTitle>
