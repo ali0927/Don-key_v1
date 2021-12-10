@@ -355,6 +355,12 @@ export const InvestmentsPage = () => {
 
   useEffect(() => {
     setStrategyNetworkFilter(network);
+    // @ts-ignore
+    Object.keys(NetworkNameChainIdMap).map((key: keyof typeof NetworkNameChainIdMap) => {
+      if(network === NetworkNameChainIdMap[key]){
+        setNetworkName(key);
+      }
+    })
   }, [network]);
   const handleRefresh = () => {
     setRefresh((old) => !old);
@@ -603,7 +609,7 @@ export const InvestmentsPage = () => {
           <ZeroInvestmentBox>
             <ZeroInvestmentInnerBox>
               <ZeroInvestmentContent>
-                You’re not following any farmers
+                You’re not following any farmers on {networkName}
               </ZeroInvestmentContent>
               <CenteredBox className="mb-5">
                 <ButtonWidget
