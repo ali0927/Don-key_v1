@@ -3,9 +3,10 @@ export const BINANCE_RPC = ["https://bsc.getblock.io/mainnet/?api_key=b745ef0d-e
 export const BINANCE_RPC_CACHED = ["https://node-api.don-key.finance/bsc"];
 export const MATIC_RPC_CACHED = ["https://node-api.don-key.finance/polygon"];
 export const AVAX_RPC_CACHED = ["https://node-api.don-key.finance/avax"];
+export const FANTOM_RPC_CACHED = ["https://node-api.don-key.finance/ftm"];
 // export const AVAX_RPC_CACHED = ["https://node-api.don-key.finance/avax"];
 export const MATIC_RPC = ["https://polygon-rpc.com"];
-export const FANTOM_RPC = ["https://rpc.ftm.tools/"];
+export const FANTOM_RPC = ["https://rpc.ftm.tools"];
 export const AVAX_RPC = ["https://api.avax.network/ext/bc/C/rpc"];
 export const AVAX_CHAIN_ID = 43114;
 export const ETHEREUM_CHAIN_ID = 1;
@@ -36,5 +37,6 @@ export const NetworkConfigs = [{
 },{
     chainId: FANTOM_CHAIN_ID,
     rpcs: FANTOM_RPC,
-    scan: "https://ftmscan.com"
+    scan: "https://ftmscan.com",
+    cached_rpcs: FANTOM_RPC_CACHED
 }]
