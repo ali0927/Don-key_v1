@@ -58,12 +58,11 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
   return null;
 };
 
-
 const useStaking = () => {
   const { chainId, getConnectedWeb3, connected, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
   const stakingContract = useMemo(() => {
-    const newWeb3 = getWeb3(56);
+    const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
     return connected
       ? new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress)
       : new newWeb3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
@@ -101,16 +100,28 @@ const useStaking = () => {
 
   const fetchDonsFromApi = async () => {
     let totalDons = new BigNumber(0);
-    const accounts = await web3.eth.getAccounts();
+
     try {
       const resp = await api.post("/api/v2/walletdetails", {
-        walletAddress: accounts[0],
+        walletAddress: address,
       });
+      const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
+      const contract = new newWeb3.eth.Contract(
+        DonStaking.abi as any,
+        DonStakingAddress
+      );
+      const userInfo = await contract.methods.userInfo(address).call();
+
       const bep = resp.data.bep;
       const erc = resp.data.erc;
       const staked = resp.data.staked;
       const coolOff = resp.data.coolOff;
-      totalDons = totalDons.plus(bep).plus(erc).plus(staked).plus(coolOff);
+      totalDons = totalDons
+        .plus(bep)
+        .plus(erc)
+        .plus(staked)
+        .plus(coolOff)
+        .plus(toEther(userInfo.donEquivalent));
     } catch (e) {
       captureException(e, "fetchDons From Api");
     }
@@ -118,7 +129,7 @@ const useStaking = () => {
   };
 
   const fetchPendingRewards = async () => {
-    let pendingRewards = {rewardAmountInDON: "0"};
+    let pendingRewards = { rewardAmountInDON: "0" };
     try {
       const accounts = await web3.eth.getAccounts();
       pendingRewards = await stakingContract.methods
@@ -138,8 +149,7 @@ const useStaking = () => {
       const userInfo = await stakingContract.methods
         .userInfo(accounts[0])
         .call();
-      console.log(userInfo, "userInfo");
-      console.log(DonStakingAddress);
+
       try {
         const minDuration = await stakingContract.methods
           .getMinDuration()
@@ -151,8 +161,12 @@ const useStaking = () => {
         setCoolOffDuration("2 weeks");
       }
 
-      const donAmount = toEther(new BigNumber(userInfo.tokenAmount).plus(userInfo.donEquivalent).toFixed(0));
-      console.log(userInfo);
+      const donAmount = toEther(
+        new BigNumber(userInfo.tokenAmount)
+          .plus(userInfo.donEquivalent)
+          .toFixed(0)
+      );
+
       await fetchTiers(stakingContract);
       const crTier = tierInfo.data[userInfo.tier_type];
       const coolOffDons = toEther(userInfo.coolOffAmount);
@@ -195,7 +209,7 @@ const useStaking = () => {
 
   useEffect(() => {
     fetchTiers(stakingContract);
-    if (connected) {
+    if (connected && address) {
       if (chainId === BINANCE_CHAIN_ID) {
         fetchState();
         const interval = setInterval(() => {
@@ -233,23 +247,23 @@ const useStaking = () => {
   const unstake = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.unstake().send({ from: accounts[0] });
-    
+
     await fetchState();
-    sendEvent("Unstake", {user: accounts[0], })
+    sendEvent("Unstake", { user: accounts[0] });
   };
 
   const harvest = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.claimReward().send({ from: accounts[0] });
     await fetchState();
-    sendEvent("Harvest", {user: accounts[0], rewards: pendingReward })
+    sendEvent("Harvest", { user: accounts[0], rewards: pendingReward });
   };
 
   const claimTokens = async () => {
     const accounts = await web3.eth.getAccounts();
     await stakingContract.methods.claimStaked().send({ from: accounts[0] });
     await fetchState();
-    sendEvent("Claimed", {user: accounts[0], claimed: coolOffAmount })
+    sendEvent("Claimed", { user: accounts[0], claimed: coolOffAmount });
   };
 
   const stakingObj: IStakingContractContext = useMemo(() => {
@@ -293,8 +307,8 @@ const useStaking = () => {
     holdedDons,
     investedAmount,
   ]);
-  return stakingObj
-}
+  return stakingObj;
+};
 
 export const StakingContractProvider: React.FC = memo(({ children }) => {
   const stakingObj = useStaking();
