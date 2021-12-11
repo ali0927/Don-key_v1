@@ -9,6 +9,7 @@ import {
   getAmount,
   getPoolContract,
   sendEvent,
+  toWei,
 } from "helpers";
 import Web3 from "web3";
 import { useStakingContract } from "./useStakingContract";
@@ -41,7 +42,7 @@ export const useWithdraw = () => {
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
   const { refetch } = useStakingContract();
-  const { getConnectedWeb3 } = useWeb3Context();
+  const { getConnectedWeb3, address } = useWeb3Context();
   const doWithdraw = async (
     poolAddress: string,
     poolVersion: number,
@@ -52,37 +53,38 @@ export const useWithdraw = () => {
     try {
       onStart && onStart();
       const web3 = getConnectedWeb3();
-      const accounts = await web3.eth.getAccounts();
-
+    
       const pool = await getPoolContract(web3, poolAddress, poolVersion);
-      const minAmountOut = await calculateUserClaimableAmount(
-        web3,
-        poolAddress
-      );
+     
       showProgress("Withdraw is in Progress");
-      const withdrawValue = await getAmount(web3, poolAddress, accounts[0]);
+     
       if (poolVersion === 1 || poolVersion === 3) {
-        await pool.methods.withdrawLiquidity().send({ from: accounts[0] });
+        await pool.methods.withdrawLiquidity().send({ from: address });
       }
       if (poolVersion === 2) {
-        const userLPTokens = await pool.methods.balanceOf(accounts[0]).call();
+        const minAmountOut = await calculateUserClaimableAmount(
+          web3,
+          poolAddress
+        );
+        const userLPTokens = await pool.methods.balanceOf(address).call();
         await pool.methods
           .withdrawLiquidity(
             userLPTokens,
-            new BigNumber(web3.utils.toWei(minAmountOut))
+            new BigNumber(toWei(minAmountOut))
               .multipliedBy(98)
               .dividedBy(100)
               .toFixed(0)
           )
-          .send({ from: accounts[0] });
+          .send({ from: address });
       }
 
       await create({
-        variables: { poolAddress, walletAddress: accounts[0] },
+        variables: { poolAddress, walletAddress: address },
       });
+      const withdrawValue = await getAmount(web3, poolAddress, address);
     
       sendEvent("Withdraw", {
-        user: accounts[0],
+        user: address,
         poolAddress: poolAddress,
         amount: withdrawValue,
       })
@@ -111,15 +113,14 @@ export const useWithdraw = () => {
     try {
       onStart && onStart();
       const web3 = getConnectedWeb3();
-      const accounts = await web3.eth.getAccounts();
       const pool = await getPoolContract(web3, poolAddress, 4);
       const withdraw = isGreyWithdraw
         ? pool.methods.withdrawGreyLiquidity
         : pool.methods.withdrawLiquidity;
       await withdraw(new BigNumber(share).multipliedBy(100).toFixed(0)).send({
-        from: accounts[0],
+        from: address,
       });
-      const withdrawValue = await getWithdrawAmount(web3, poolAddress, accounts[0], isGreyWithdraw,share);
+      const withdrawValue = await getWithdrawAmount(web3, poolAddress, address, isGreyWithdraw,share);
       if (isGreyWithdraw) {
         
         showSuccess("Withdraw Successful");
@@ -127,7 +128,7 @@ export const useWithdraw = () => {
         await create({
           variables: {
             poolAddress,
-            walletAddress: accounts[0],
+            walletAddress: address,
           },
         });
         showSuccess("Withdraw Request Created");
@@ -135,7 +136,7 @@ export const useWithdraw = () => {
 
       
       sendEvent("Withdraw", {
-        user: accounts[0],
+        user: address,
         poolAddress: poolAddress,
         amount: withdrawValue,
       })
