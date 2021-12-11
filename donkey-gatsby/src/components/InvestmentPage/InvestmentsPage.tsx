@@ -1119,7 +1119,7 @@ export const InvestmentsPage = () => {
             onSuccess={() => {
               handleSuccess(withDraw.farmerName);
             }}
-            onError={handleError}
+            onError={handleCloseWithDraw}
             onClose={handleCloseWithDraw}
           />
         )}

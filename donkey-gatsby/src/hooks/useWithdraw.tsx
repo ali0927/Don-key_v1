@@ -91,6 +91,7 @@ export const useWithdraw = () => {
 
       onSuccess && onSuccess();
     } catch (err) {
+      console.log(err);
       captureException(err, "Withdraw Failed");
       showFailure("Withdraw Failed");
       onError && onError(err);
@@ -140,6 +141,7 @@ export const useWithdraw = () => {
       })
       onSuccess && onSuccess();
     } catch (err) {
+      console.log(err);
       captureException(err, "Withdraw Failed");
       showFailure("Withdraw Failed");
       onError && onError(err);
