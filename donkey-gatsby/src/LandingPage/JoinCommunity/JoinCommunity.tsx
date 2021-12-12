@@ -165,11 +165,11 @@ export const JoinCommunity: React.FC = () => {
             </li>
             <li>
               <Anchor
-                href="https://discord.gg/nz9r9zrz"
+                href="https://discord.gg/sVRKvmWa6W"
                 target="_blank"
                 rel="noreferrer"
               >
-                <SiDiscord color="#5166f7" size={24} />
+                <SiDiscord color="#fff" size={24} />
               </Anchor>
             </li>
             <li>
