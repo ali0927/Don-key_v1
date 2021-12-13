@@ -314,7 +314,7 @@ const LandingMenu = () => {
             <div >
                 <a target="_blank" href={PancakeBuyURL} >$DON BEP20</a>
                 <a target="_blank" href={UniSwapURL} >$DON ERC20</a>
-                <a target="_blank" href={kucoinSwapURL} >$DON Kucoin</a>
+                <a target="_blank" href={kucoinSwapURL} >$KDON Kucoin</a>
             </div>
         </DropDownsDonToken>
       <MenuItem to="/faq">FAQ</MenuItem>
