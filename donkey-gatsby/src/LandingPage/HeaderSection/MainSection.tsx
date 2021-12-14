@@ -21,12 +21,8 @@ import SDonkey from "./images/SDonkey.png";
 import { MainSectionTimer } from "./MainSectionTimer";
 import { StaticImage } from "gatsby-plugin-image";
 import { Text } from "components/Text";
+import { HeroImage } from "../HeroImage";
 
-
-const Bg = styled.div`
-    background-image: url(${Confety});
-    background-size: cover;
-`;
 
 const Root = styled.div`
   background-color: #fff037;
@@ -243,11 +239,11 @@ export const MainSection: React.FC = () => {
   return (
     <>
       <Root className="position-relative">
-        <Bg>
+       
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-            <Heading className="mb-2">Kucoin listing is live!</Heading>
+            <Heading className="mb-2">Copy farming</Heading>
             <Text  fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>Follow real farmers, make real yield</Text>
               {/* <MainSectionTimer /> */}
               {/* <Heading>Referral is live!</Heading>
@@ -271,7 +267,7 @@ export const MainSection: React.FC = () => {
             </div>
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-center">
-              <HeaderImg src={SDonkey} alt="image not found"/>
+              <HeroImage />
             
             </div>
           </div>
@@ -329,7 +325,7 @@ export const MainSection: React.FC = () => {
 
           <div></div>
         </div>
-        </Bg>
+      
       </Root>
     </>
   );
