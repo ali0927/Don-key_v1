@@ -660,10 +660,7 @@ export const getDonPriceWeb3 = async (web3: Web3) => {
 
 export const getDonPrice = async (isBSC = false) => {
   if (isBSC) {
-    const res = await axios.get(
-      `https://api-donkey-m6p2q.ondigitalocean.app/api/v2/tokens/${DONTokenAddressBSC}`
-    );
-    return res.data.data.price;
+    return getDonPriceWeb3(getWeb3(56));
   }
 
   const res = await axios.post(
@@ -700,18 +697,13 @@ export const toWei = (val: string, decimals = 18) => {
   return new BigNumber(val).multipliedBy(10 ** decimals).toFixed(0);
 };
 
-export const getWBNBPrice = async () => {
-  const res = await axios.get(
-    `https://api-donkey-m6p2q.ondigitalocean.app/api/v2/tokens/${WBNBAddress}`
-  );
-  return res.data.data.price;
-};
+
 
 export const gettotalSWAPLPoolValue = async (web3: Web3, type: StakeType) => {
   const isBSC = type !== "ethereum";
   const tokenContract = await getERCContract(
     web3,
-    isBSC ? WBNBAddress : USDTAddressEth
+    isBSC ? DONTokenAddressBSC : USDTAddressEth
   );
 
   const balance = await tokenContract.methods
@@ -721,7 +713,7 @@ export const gettotalSWAPLPoolValue = async (web3: Web3, type: StakeType) => {
     isBSC ? toEther(balance) : new BigNumber(balance).dividedBy(10 ** 6)
   ).multipliedBy(2);
   if (isBSC) {
-    const wbnbPrice = await getWBNBPrice();
+    const wbnbPrice = await getDonPriceWeb3(getWeb3(56));
     return timestwo.multipliedBy(wbnbPrice);
   }
   return timestwo;

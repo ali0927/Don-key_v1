@@ -3,11 +3,11 @@ import { BINANCE_CHAIN_ID } from "don-components";
 import {
   calculateAPY,
   calculateTVL,
+  getDonPrice,
   getLPTokenContract,
   getNewStakingContract,
   getStakeContract,
   getStakingContract,
-  getWBNBPrice,
   toEther,
 } from "helpers";
 import { StakeType } from "interfaces";
@@ -82,7 +82,7 @@ export const fetchNewStakingInfo = async ({
     const apy = await calculateAPY(web3, "binancenew");
     defaultval.apy = apy.toFixed(0);
     const lpTokenAmount  = await stakingContract.methods.getStakedTokenAmount();
-    const wbnbPrice = await getWBNBPrice();
+    const wbnbPrice = await getDonPrice();
     const tvl = new BigNumber(toEther(lpTokenAmount)).multipliedBy(wbnbPrice).multipliedBy(2);
     defaultval.tvl = tvl.toString();
 
