@@ -440,7 +440,7 @@ function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
                   <DonEthereum /> Buy $DON ERC20
                 </BuyButton>
                 <BuyButton target="_blank" href={kucoinSwapURL}>
-                  <DonKucoin /> buy $DON kucoin
+                  <DonKucoin /> buy $KDON kucoin
                 </BuyButton>
               </div>
               {/* <DonPriceWrapper>
