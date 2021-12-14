@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Collapse } from "react-bootstrap";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -53,11 +54,11 @@ export const FaqContentRow = ({
               {isOpen ? <FaChevronUp /> : <FaChevronDown />}
             </div>
           </div>
-          <div className="row">
-            {isOpen && (
+          <Collapse in={isOpen}>
+          <div className="row" id="collapse-content">
               <FAQContentText className="col-md-10">{content}</FAQContentText>
-            )}
           </div>
+          </Collapse>
         </BorderStyled>
       </FAQContentWrapper>
     </div>

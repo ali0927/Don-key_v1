@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
+import { Collapse } from "react-bootstrap";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import styled from "styled-components";
 
@@ -75,6 +76,8 @@ export const FAQItem = ({
           onClick={() => {
             setIsOpen((val) => !val);
           }}
+          aria-controls="collapse-content"
+          aria-expanded={isOpen}
         >
           <FAQIconWrapper className={clsx({ "is-open": isOpen }, "col-md-2")}>
             <IconImage>
@@ -90,7 +93,11 @@ export const FAQItem = ({
             {isOpen ? <FaChevronUp /> : <FaChevronDown />}
           </FAQIconWrapper>
         </FAQRow>
-        {isOpen ? children : null}
+        <Collapse in={isOpen} >
+          <div id="collapse-content" >
+            { children }
+          </div>
+        </Collapse>
       </StyledBorder>
     </>
   );
