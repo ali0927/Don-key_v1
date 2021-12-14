@@ -80,6 +80,9 @@ const Anchor = styled.a`
     transition: transform 0.55s;
     & svg {
       transform: scale(1.2);
+      & path {
+          fill: #FFF037
+      }
     }
   }
 `;
@@ -203,7 +206,7 @@ export const JoinCommunity: React.FC = () => {
                 </svg>
               </Anchor>
             </li>
-          
+
             <li>
               <Anchor
                 href="https://www.reddit.com/r/don_key_finance/"
