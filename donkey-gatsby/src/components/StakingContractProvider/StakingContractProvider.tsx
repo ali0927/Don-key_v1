@@ -18,7 +18,13 @@ const tierInfo: {
   data: { [x: string]: ITier };
 } = { isReady: false, data: {} };
 
+const convertAPRtoAPY = (apr: string) => {
+  return (new BigNumber(1).plus(new BigNumber(apr).dividedBy(365))).pow(365).minus(1).multipliedBy(100).toFixed(0);
+}
+
 const fetchTiers = async (stakingContract: any) => {
+
+  
   if (!tierInfo.isReady) {
     for (const tierNum of tiersList) {
       const detail = await stakingContract.methods
@@ -26,7 +32,7 @@ const fetchTiers = async (stakingContract: any) => {
         .call();
       tierInfo.data[tierNum] = {
         tier: tierNum,
-        apy: parseInt(detail.rewardPer) / 100,
+        apy: parseInt(convertAPRtoAPY((parseInt(detail.rewardPer) / 10000).toString())) ,
         donRequired: tierNum === 0 ? "0" : toEther(detail.cap),
       };
     }
