@@ -69,7 +69,7 @@ const StyledStakingArrow = styled(StakingArrow)`
     top: auto;
     left: initial;
     transform: ${({ isOpen }: { isOpen?: boolean }) =>
-      `translateY(-50%) ${!isOpen ? `rotate(180deg)` : ``}`};
+    `translateY(-50%) ${!isOpen ? `rotate(180deg)` : ``}`};
   }
 `;
 
@@ -105,10 +105,10 @@ const LpStakingUI = ({
   const finalTvl =
     staking.tvl !== "-"
       ? new BigNumber(staking.tvl).toNumber().toLocaleString("en-US", {
-          style: "currency",
-          currency: "USD",
-          maximumFractionDigits: 0,
-        })
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      })
       : "-";
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
@@ -163,7 +163,7 @@ const LpStakingUI = ({
     try {
       const stakingContract = await getStakeContract(web3, type);
       const lpTokenContract = await getLPTokenContract(web3, true);
-      
+
       //   console.log(stakingContract.options.address, accounts[0], lpTokenContract.options.address);
       let allowance = await lpTokenContract.methods
         .allowance(accounts[0], stakingContract.options.address)
@@ -184,11 +184,11 @@ const LpStakingUI = ({
       await refetch();
       showSuccess("LP Tokens Staked");
 
-    
+
     } catch (e) {
       captureException(e, "handleStake");
       showFailure("Transaction Failed");
-    } 
+    }
   };
 
 
@@ -348,7 +348,7 @@ const LpStakingUI = ({
   };
 
   const renderPeggedDon = () => {
-    const markup =  (
+    const markup = (
       <div className="col-5 m-1 m-lg-0 col-lg-auto px-lg-0 pt-3 order-5 order-lg-4">
         <div
           className="mb-4 mb-lg-0"
@@ -376,16 +376,29 @@ const LpStakingUI = ({
         </div>
       </div>
     );
-    if(isDesktop){
+    if (isDesktop) {
       return markup
-    }else {
-      if(peggedDon !== ""){
+    } else {
+      if (peggedDon !== "") {
         return markup;
       }
     }
     return null;
   }
-
+  const availableLpTooltip = (props: string) => (
+    <Tooltip id="button-tooltip" {...props} >
+      {props === "-"
+        ? "-"
+        : formatNum(props, 11)}{" "}
+    </Tooltip>
+  );
+  const stakedLpTooltip = (props: string) => (
+    <Tooltip id="button-tooltip" {...props} >
+      {props === "-"
+        ? "-"
+        : new BigNumber(props).toFixed(10)}
+    </Tooltip>
+  );
   return (
     <>
       {isPopupOpen && (
@@ -413,7 +426,7 @@ const LpStakingUI = ({
               <div className="mr-2 d-flex flex-column align-items-center justify-content-center">
                 <ImageWrapper>{img}</ImageWrapper>
                 <h6
-                  style={{ lineHeight: 1.3, ...(isDesktop ?{ maxHeight: 20}: {}) }}
+                  style={{ lineHeight: 1.3, ...(isDesktop ? { maxHeight: 20 } : {}) }}
                   className="text-center mb-0"
                 >
                   {title}
@@ -462,12 +475,18 @@ const LpStakingUI = ({
           )}
           <div className="col-5 m-1 m-lg-0 available-col col-lg-2 pt-3 order-12 order-lg-2 px-lg-0">
             <p>Available LP Token</p>
-            <h2 className={isDesktop ? "lptoken" : ""}>
-              {staking.availableLp === "-"
-                ? "-"
-                : formatNum(staking.availableLp, 3)}{" "}
-              LP
-            </h2>
+            <OverlayTrigger
+              placement="top"
+              delay={{ show: 250, hide: 250 }}
+              overlay={availableLpTooltip(staking.availableLp)}
+            >
+              <h2 className={isDesktop ? "lptoken" : ""}>
+                {staking.availableLp === "-"
+                  ? "-"
+                  : formatNum(staking.availableLp, 3)}{" "}
+                LP
+              </h2>
+            </OverlayTrigger>
             <Button
               onClick={() => {
                 window.open(buyLink, "_blank");
@@ -488,11 +507,17 @@ const LpStakingUI = ({
 
           <div className="col-5 m-1 m-lg-0 col-lg-auto pt-3 order-3 order-lg-5">
             <p>STAKED LP</p>
-            <h2 className="mb-4 mb-lg-0">
-              {staking.stakedLp === "-"
-                ? "-"
-                : new BigNumber(staking.stakedLp).toFixed(4)}
-            </h2>
+            <OverlayTrigger
+              placement="top"
+              delay={{ show: 250, hide: 250 }}
+              overlay={stakedLpTooltip(staking.stakedLp)}
+            >
+              <h2 className="mb-4 mb-lg-0">
+                {staking.stakedLp === "-"
+                  ? "-"
+                  : new BigNumber(staking.stakedLp).toFixed(4)}
+              </h2>
+            </OverlayTrigger>
           </div>
           <div className="col-5 m-1 m-lg-0 col-lg-3 pt-3 position-relative order-4 order-lg-6 pl-lg-3">
             <div className="mr-lg-5">
