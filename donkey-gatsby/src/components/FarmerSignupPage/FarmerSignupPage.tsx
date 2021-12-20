@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useAxios } from "hooks/useAxios";
 import { DonKeyIcon, LargeCloud, SignupBottomBgIcon, SmallCloud } from "icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, Form, Spinner } from "react-bootstrap";
 import styled from "styled-components";
 import { DonKeyTextField } from "components/DonKeyTextField";
@@ -93,9 +93,9 @@ export const FarmerSignupPage = () => {
     React.useState<IDonKeyFieldInfoState | undefined>();
   const [errorMsg, setErrorMsg] = useState("");
   const [telegramInfoState, setTelegramInfoState] =
-  React.useState<IDonKeyFieldInfoState | undefined>();
+    React.useState<IDonKeyFieldInfoState | undefined>();
 
-  const [{}, executePost] = useAxios(
+  const [{ }, executePost] = useAxios(
     { method: "POST", url: "/api/v2/farmer" },
     { manual: true, useCache: false }
   );
@@ -126,7 +126,7 @@ export const FarmerSignupPage = () => {
         { rule: "required", errMessage: "Description is required." },
       ]);
       if (isFormError) {
-        
+
         return;
       }
       if (isNameError) {
@@ -160,7 +160,7 @@ export const FarmerSignupPage = () => {
       setIsSubmitted(true)
     } catch (error: any) {
       let message = "Please try again.";
-      captureException(error,"Farmer Signup Page");
+      captureException(error, "Farmer Signup Page");
       if (
         error.response &&
         error.response.status === 400 &&
@@ -238,7 +238,7 @@ export const FarmerSignupPage = () => {
         type: "error",
         msg: error.msg,
       });
-    } 
+    }
   }
 
   const handleDesChange = (value: string) => {
@@ -266,13 +266,18 @@ export const FarmerSignupPage = () => {
       msg: "",
     });
   };
-
-  useEffect(() => {
-    if (errorMsg) {
-      setErrorMsg("");
+  const handleImage = (file: File) => {
+    setErrorMsg("")
+    setImage(undefined)
+    console.warn("imagesize", file.size)
+    if (file.size > 10000005.12) {
+      setErrorMsg("Image size should be less than 10mb");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, description, image]);
+    else {
+      setErrorMsg("")
+      setImage(file)
+    }
+  };
 
   const renderContent = () => {
     if (posting) {
@@ -289,6 +294,7 @@ export const FarmerSignupPage = () => {
     if (isSubmitted) {
       return <div className="text-center">Thank you for your submission. We will be in touch soon.</div>;
     }
+    console.warn("file outside", image)
 
     return (
       <div className="container">
@@ -338,10 +344,10 @@ export const FarmerSignupPage = () => {
                 file={image}
                 fileExtensions=".png,	.jpg, .jpeg, .jfif, .pjpeg, .pjp,.gif,.avif,.apng,.svg,.webp"
                 errorMessage={errorMsg}
-                onChange={(image) => setImage(image)}
+                onChange={handleImage}
               />
             </Form.Group>
-            <ButtonWidget varaint="contained" height="40px" width="30%"  containedVariantColor="lightYellow" onClick={handleCreate}>
+            <ButtonWidget varaint="contained" height="40px" width="30%" containedVariantColor="lightYellow" onClick={handleCreate}>
               {" "}
               Submit
             </ButtonWidget>
