@@ -19,7 +19,7 @@ export const Providers: React.FC = ({ children }) => {
           title="Don-Key"
           description="Social trading meets yield farming"
           canonical="https://www.don-key.finance"
-          image="https://don-key.finance/images/donkey-icon.png"
+          image="https://don-key.finance/assets/images/donkey-icon.png"
         />
         <Helmet>
           {/** Slick slider cdns */}
