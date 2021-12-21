@@ -307,9 +307,9 @@ const Overlay = styled.div`
 `;
 
 const NetworkNameChainIdMap = {
-  "Polygon" : POLYGON_CHAIN_ID,
-  "AVAX" : AVAX_CHAIN_ID,
-  "BSC" : BINANCE_CHAIN_ID,
+  "Polygon": POLYGON_CHAIN_ID,
+  "AVAX": AVAX_CHAIN_ID,
+  "BSC": BINANCE_CHAIN_ID,
   "Fantom": FANTOM_CHAIN_ID
 }
 
@@ -357,7 +357,7 @@ export const InvestmentsPage = () => {
     setStrategyNetworkFilter(network);
     // @ts-ignore
     Object.keys(NetworkNameChainIdMap).map((key: keyof typeof NetworkNameChainIdMap) => {
-      if(network === NetworkNameChainIdMap[key]){
+      if (network === NetworkNameChainIdMap[key]) {
         setNetworkName(key);
       }
     })
@@ -814,8 +814,8 @@ export const InvestmentsPage = () => {
                                   if (!dons.isNaN()) {
                                     return donPrice.isReady
                                       ? `$${dons
-                                          .multipliedBy(donPrice.price)
-                                          .toFixed(2)}`
+                                        .multipliedBy(donPrice.price)
+                                        .toFixed(2)}`
                                       : "-";
                                   }
                                   return "$ 0";
@@ -862,7 +862,6 @@ export const InvestmentsPage = () => {
       );
     }
   };
-
   const renderOldInvestments = () => {
     if (!loading && filteredOldInvestMents.length > 0) {
       return (
@@ -940,12 +939,12 @@ export const InvestmentsPage = () => {
                             onClick={
                               !isWithdrawRequested
                                 ? handleOpenWithDraw(
-                                    investment.name,
-                                    investment.poolAddress,
-                                    investment.poolVersion
-                                      ? investment.poolVersion
-                                      : 1
-                                  )
+                                  investment.name,
+                                  investment.poolAddress,
+                                  investment.poolVersion
+                                    ? investment.poolVersion
+                                    : 1
+                                )
                                 : RedirectToFarmerProfile(investment.guid)
                             }
                           >
@@ -973,67 +972,67 @@ export const InvestmentsPage = () => {
       );
     }
   };
-
   const DropDownMenu = () => {
     return (
-      <ClickAwayListener mouseEvent="onMouseDown" onClickAway={()=> setShow(false)}>
+      <ClickAwayListener onClickAway={() => setShow(false)}>
         <Overlay
           onClick={() => {
             setShow(false);
           }}
         >
           <DropDown>
-            <h5 className="d-sm-none text-center">Network</h5>
-            <DropDownItem
-              className={clsx(
-                "d-flex justify-content-between align-items-center",
-                { selected: networkName === "Polygon" }
-              )}
-              onClick={() => {
-                handleNameChange("Polygon");
-              }}
-            >
-              <div>Polygon</div> <TickIcon className="tick-icon" />
-            </DropDownItem>
-            <DropDownItem
-              className={clsx(
-                "d-flex justify-content-between align-items-center",
-                { selected: networkName === "AVAX" }
-              )}
-              onClick={() => {
-                handleNameChange("AVAX");
-              }}
-            >
-              <div>AVAX</div> <TickIcon className="tick-icon" />
-            </DropDownItem>
-            <DropDownItem
-              className={clsx(
-                "d-flex justify-content-between align-items-center",
-                { selected: networkName === "BSC" }
-              )}
-              onClick={() => {
-                handleNameChange("BSC");
-              }}
-            >
-              <div>BSC</div> <TickIcon className="tick-icon" />
-            </DropDownItem>
-            <DropDownItem
-              className={clsx(
-                "d-flex justify-content-between align-items-center",
-                { selected: networkName === "Fantom" }
-              )}
-              onClick={() => {
-                handleNameChange("Fantom");
-              }}
-            >
-              <div>Fantom</div> <TickIcon className="tick-icon" />
-            </DropDownItem>
+            <div id="collapseExample" className="collapse" >
+              <h5 className="d-sm-none text-center">Network</h5>
+              <DropDownItem
+                className={clsx(
+                  "d-flex justify-content-between align-items-center",
+                  { selected: networkName === "Polygon" }
+                )}
+                onClick={() => {
+                  handleNameChange("Polygon");
+                }}
+              >
+                <div>Polygon</div> <TickIcon className="tick-icon" />
+              </DropDownItem>
+              <DropDownItem
+                className={clsx(
+                  "d-flex justify-content-between align-items-center",
+                  { selected: networkName === "AVAX" }
+                )}
+                onClick={() => {
+                  handleNameChange("AVAX");
+                }}
+              >
+                <div>AVAX</div> <TickIcon className="tick-icon" />
+              </DropDownItem>
+              <DropDownItem
+                className={clsx(
+                  "d-flex justify-content-between align-items-center",
+                  { selected: networkName === "BSC" }
+                )}
+                onClick={() => {
+                  handleNameChange("BSC");
+                }}
+              >
+                <div>BSC</div> <TickIcon className="tick-icon" />
+              </DropDownItem>
+              <DropDownItem
+                className={clsx(
+                  "d-flex justify-content-between align-items-center",
+                  { selected: networkName === "Fantom" }
+                )}
+                onClick={() => {
+                  handleNameChange("Fantom");
+                }}
+              >
+                <div>Fantom</div> <TickIcon className="tick-icon" />
+              </DropDownItem>
+            </div >
           </DropDown>
         </Overlay>
-      </ClickAwayListener>
+      </ClickAwayListener >
     );
   };
-
   return (
     <USDViewProvider
       value={{
@@ -1058,7 +1057,7 @@ export const InvestmentsPage = () => {
                       </TotalInvestedAmount>
                     </div>
                     <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-end mt-2 mt-lg-0 positioin-static position-sm-relative">
-                      <DropdownBtn active={show} onClick={() => setShow(!show)}>
+                      <DropdownBtn active={show} onClick={() => setShow(!show)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false"  >
                         {networkName}
                         <AiFillCaretDown className="icon" />
                       </DropdownBtn>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMediaQuery } from "@material-ui/core";
+import { Collapse, useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import StakingArrow from "icons/stakingArrow";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -224,16 +224,16 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
                 className={clsx("w-100 text-center ", {
                   "text-lg-left": !isInCoolOffPeriod,
                 })}
-             
+
               >
                 {isInCoolOffPeriod
                   ? `${formatNum(coolOffAmount, 3)} $DON`
                   : donPrice &&
-                    `$${formatNum(
-                      new BigNumber(donPrice)
-                        .multipliedBy(pendingReward)
-                        .toFixed()
-                    )}`}
+                  `$${formatNum(
+                    new BigNumber(donPrice)
+                      .multipliedBy(pendingReward)
+                      .toFixed()
+                  )}`}
               </RewardsHeading>
               {!isInCoolOffPeriod && (
                 <DownArrow
@@ -297,6 +297,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
                 })}
                 style={{ marginLeft: 15, marginTop: 15 }}
                 onClick={() => setIsOpenStaking((old) => !old)}
+                aria-controls="collapse-content"
               />
             </div>
           </div>
@@ -319,41 +320,44 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
           )}
         </Card>
       </Paper>
-      {isOpenStaking && (
-        <Paper
-          bgColor="#FDFAFA"
-          maxWidth="1124px"
-          borderRadius={0}
-          classname={
-            isDesktop
-              ? "p-4 mt-1 d-flex justify-content-center align-items-center"
-              : "d-none"
-          }
-        >
-          <Card className="row w-100 g-0">
-            <div className="col-4 divider d-flex align-items-center">
-              <div className="w-100 d-flex justify-content-center">
-                <Button
-                  onClick={doHarvest}
-                  bgColor=" linear-gradient(0deg, #FFF037, #FFF037), #B4B4B4"
-                  className="py-3"
-                  disabled={
-                    chainId !== BINANCE_CHAIN_ID ||
-                    new BigNumber(pendingReward).isEqualTo(0)
-                  }
-                >
-                  {HLoading ? (
-                    <Spinner animation="border" size="sm" />
-                  ) : (
-                    "Harvest"
-                  )}
-                </Button>
+      <Collapse in={isOpenStaking} >
+        <div id="collapse-content" >
+          <Paper
+            bgColor="#FDFAFA"
+            maxWidth="1124px"
+            borderRadius={0}
+            classname={
+              isDesktop
+                ? "p-4 mt-1 d-flex justify-content-center align-items-center"
+                : "d-none"
+            }
+          >
+            <Card className="row w-100 g-0">
+              <div className="col-4 divider d-flex align-items-center">
+                <div className="w-100 d-flex justify-content-center">
+                  <Button
+                    onClick={doHarvest}
+                    bgColor=" linear-gradient(0deg, #FFF037, #FFF037), #B4B4B4"
+                    className="py-3"
+                    disabled={
+                      chainId !== BINANCE_CHAIN_ID ||
+                      new BigNumber(pendingReward).isEqualTo(0)
+                    }
+                  >
+                    {HLoading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "Harvest"
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="col-8">{renderButtons()}</div>
-          </Card>
-        </Paper>
-      )}
+              <div className="col-8">{renderButtons()}</div>
+            </Card>
+          </Paper>
+        </div>
+      </Collapse>
+
     </>
   );
 };

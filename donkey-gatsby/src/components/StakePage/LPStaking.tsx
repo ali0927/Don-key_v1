@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMediaQuery } from "@material-ui/core";
+import { Collapse, useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
 import StakingArrow from "icons/stakingArrow";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
@@ -532,6 +532,7 @@ const LpStakingUI = ({
                     setIsOpenStaking((old) => !old);
                     setOpenStackMob((old) => !old);
                   }}
+                  aria-controls="collapse-content"
                 />
               </div>
               <div className="d-flex justify-content-center">
@@ -546,6 +547,7 @@ const LpStakingUI = ({
                     setIsOpenStaking((old) => !old);
                     setOpenStackMob((old) => !old);
                   }}
+                  aria-controls="collapse-content"
                 />
               </div>
             </div>
@@ -556,29 +558,31 @@ const LpStakingUI = ({
           </div>
         </Card>
       </Paper>
-      {isOpenStaking && (
-        <Paper
-          bgColor="#FDFAFA"
-          maxWidth="1160px"
-          borderRadius={0}
-          classname={
-            isDesktop
-              ? "p-4 mt-1 d-flex justify-content-center align-items-center"
-              : "d-none"
-          }
-        >
-          <Card className="row w-100 g-0">
-            <div className="col-4 divider">
-              <div className="w-100 d-flex justify-content-center">
-                {harvestButton()}
+      <Collapse in={isOpenStaking} >
+        <div id="collapse-content" >
+          <Paper
+            bgColor="#FDFAFA"
+            maxWidth="1160px"
+            borderRadius={0}
+            classname={
+              isDesktop
+                ? "p-4 mt-1 d-flex justify-content-center align-items-center"
+                : "d-none"
+            }
+          >
+            <Card className="row w-100 g-0">
+              <div className="col-4 divider">
+                <div className="w-100 d-flex justify-content-center">
+                  {harvestButton()}
+                </div>
               </div>
-            </div>
-            <div className="col-8 d-flex justify-content-end">
-              {stakeButtons()}
-            </div>{" "}
-          </Card>
-        </Paper>
-      )}
+              <div className="col-8 d-flex justify-content-end">
+                {stakeButtons()}
+              </div>{" "}
+            </Card>
+          </Paper>
+        </div>
+      </Collapse>
     </>
   );
 };

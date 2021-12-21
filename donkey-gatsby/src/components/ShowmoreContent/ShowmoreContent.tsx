@@ -1,13 +1,25 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
+import { addDots } from "helpers";
 import React, { useEffect, useState } from "react";
 import Linkify from "react-linkify";
+import styled from "styled-components";
 
+const P = styled.span` 
+span {
+  animation-name: example;
+  animation-duration: 1s;
+}
+
+@keyframes example {
+  0% {opacity:0}
+  100% {opacity: 1;}
+}`
 export const ShowMoreContent = ({
   content,
   length,
   showAllContent = false,
-  onShowMoreClick = () => {},
-  onShowLessClick = () => {},
+  onShowMoreClick = () => { },
+  onShowLessClick = () => { },
   isShowLinks = false,
 }: {
   content: string;
@@ -35,27 +47,30 @@ export const ShowMoreContent = ({
     return (
       <>
         {isShowLinks && <Linkify>{content}</Linkify>}
-        {!isShowLinks && content + " "}
-        <a
-          href="#"
-          className="text-dark p-0 font-weight-bold"
-          onClick={(e) => {
-            e.preventDefault();
-            setShowMore(false);
-            onShowLessClick();
-          }}
-        >
-          Show less
-        </a>
+        {!isShowLinks && content.substring(0, length)}
+        <P >
+          <span >{content.substring(length,)}</span>
+          <a
+            href="#"
+            className="text-dark p-0 font-weight-bold"
+            onClick={(e) => {
+              e.preventDefault();
+              setShowMore(false);
+              onShowLessClick();
+            }}
+          >
+            <span>Show less</span>
+          </a>
+        </P>
       </>
     );
   } else {
     return (
-      <>
-        {content.slice(0, length) + "... "}
+      < >
+        {addDots(content, length)}
         <a
           href="#"
-          className="text-dark p-0 font-weight-bold"
+          className="text-dark p-0 font-weight-bold "
           onClick={(e) => {
             e.preventDefault();
             setShowMore(true);
@@ -64,7 +79,7 @@ export const ShowMoreContent = ({
         >
           Show more
         </a>
-      </>
+      </ >
     );
   }
 };
