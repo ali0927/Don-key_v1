@@ -11,7 +11,7 @@ const ImageMeta = ({ image }: {image?: string}) => {
         <Helmet>
             <meta property="twitter:card" content="summary_large_image" />
             <meta property="twitter:image" content={image} />
-            <meta property="og:image" content={image} />
+            <meta property="og:image" itemProp="image" content={image} />
         </Helmet >
     )
 }
