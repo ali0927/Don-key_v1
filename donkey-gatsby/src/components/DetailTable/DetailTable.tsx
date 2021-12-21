@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import { useState } from "react";
-import { Switch, withStyles } from "@material-ui/core";
 import {
   getPoolContract,
   getPoolToken,
@@ -40,6 +39,7 @@ import { Share } from "components/ShareAndEarn";
 import { ShareandEarnButton } from "icons";
 import { useReferralContext } from "contexts/ReferralContext";
 import clsx from "clsx";
+import "./SwitchStyle.scss";
 export const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
@@ -238,39 +238,6 @@ const ShareMobileText = styled.p`
   }
 `;
 
-const YellowSwitch = withStyles((theme) => ({
-  root: {
-    width: 28,
-    height: 16,
-    padding: 0,
-    display: "flex",
-  },
-  switchBase: {
-    padding: 2,
-    color: "#fff",
-    "&$checked": {
-      transform: "translateX(12px)",
-      color: theme.palette.common.white,
-      "& + $track": {
-        opacity: 1,
-        backgroundColor: "#F8C400",
-        borderColor: "#F8C400",
-      },
-    },
-  },
-  thumb: {
-    width: 12,
-    height: 12,
-    boxShadow: "none",
-  },
-  track: {
-    border: `1px solid #fff`,
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor: "#F8C400",
-  },
-  checked: {},
-}))(Switch);
 
 const TokenSwitchLabels = styled.div`
   font-weight: 500;
@@ -493,7 +460,6 @@ export const DetailTable = ({
       return <ConnectToMetamaskCard network={network} />;
     }
   };
-
   return (
     <>
       <Col
@@ -513,10 +479,9 @@ export const DetailTable = ({
                   </TotalPoolValueLabel>
                   <a
                     href={
-                      `${
-                        NetworkConfigs.find(
-                          (item) => item.chainId === network.chainId
-                        )?.scan
+                      `${NetworkConfigs.find(
+                        (item) => item.chainId === network.chainId
+                      )?.scan
                       }/address/` + poolAddress
                     }
                     target="_blank"
@@ -535,11 +500,10 @@ export const DetailTable = ({
 
                 <TokenSwitchLabels className="d-flex align-items-center">
                   {symbol.toUpperCase()}
-                  <YellowSwitch
-                    className="mx-2"
-                    value={true}
-                    onChange={handleToggle}
-                  />{" "}
+                  <label className="switch mx-2 my-1">
+                    <input type="checkbox" onChange={handleToggle} value="true" />
+                    <span className="slider round"></span>
+                  </label>
                   USD
                 </TokenSwitchLabels>
               </div>
@@ -606,8 +570,8 @@ export const DetailTable = ({
           {renderCardData()}
         </BlackCardWrapper>
         {poolVersion > 3 &&
-        connected &&
-        network.chainId === BINANCE_CHAIN_ID ? (
+          connected &&
+          network.chainId === BINANCE_CHAIN_ID ? (
           <StyledShareButton
             className={clsx("d-none d-lg-block", { animated: !hasSignedUp })}
             onClick={() => setSharePopup(true)}
