@@ -171,7 +171,7 @@ export const createPages = async ({ graphql, actions }: any) => {
     const strategies = sortStrategies(
       token.strategies.filter(
         (item: any) =>
-          item.farmer.status === "active" || item.farmer.status === "comingsoon"
+        (item.farmer.status === "active" || item.farmer.status === "comingsoon" ) && item.network.chainId !== 56
       )
     );
     if (strategies.length > 0) {
@@ -241,7 +241,7 @@ export const createPages = async ({ graphql, actions }: any) => {
   
   farmers.forEach((farmer: any) => {
     const strategies = farmer.strategies;
-    if (strategies.length > 0 && farmer.farmerImage) {
+    if (strategies.length > 0 && farmer.farmerImage && farmer.network.chainId !== 56)  {
       createPage({
         path: `/dashboard/farmer/${farmer.slug}`,
         component: path.resolve(`./src/templates/farmerTemplate.tsx`),

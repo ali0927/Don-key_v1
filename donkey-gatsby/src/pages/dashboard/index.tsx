@@ -132,6 +132,10 @@ export default function Dashboard() {
       if (!isActive) {
         return isActive;
       } else {
+
+        if(item.network.chainId === 56){
+          return false;
+        }
         const strategies = item.strategies.filter((item: any) => {
           const farmer = item.farmer;
           // const farmer = farmers.find((item: any) => item.strapiId === farmerId);
@@ -141,6 +145,7 @@ export default function Dashboard() {
         return strategies.length > 0;
       }
     }
+    
   );
 
   return (
