@@ -133,7 +133,7 @@ export default function Dashboard() {
         return isActive;
       } else {
 
-        if(item.network.chainId === 56){
+        if(item.network?.chainId === 56){
           return false;
         }
         const strategies = item.strategies.filter((item: any) => {
