@@ -77,6 +77,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
     coolOffAmount,
     coolOffTime,
     stakedDon,
+    claimTokens,
     canClaimTokens,
   } = useStakingContract();
 
@@ -145,7 +146,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
             border=" 0.5px solid #000000"
             className="py-md-3 ml-2  py-2"
             disabled={!canClaimTokens}
-            onClick={openStakingModal}
+            onClick={claimTokens}
           >
             Claim
           </Button>
