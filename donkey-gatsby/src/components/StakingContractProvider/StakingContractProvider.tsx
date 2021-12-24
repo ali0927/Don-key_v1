@@ -245,17 +245,17 @@ const useStaking = () => {
     }
   };
   const stake = async (amount: string) => {
-    // const accounts = await web3.eth.getAccounts();
-    // await checkAndApproveDon(amount);
-    // await stakingContract.methods.stake(amount).send({ from: accounts[0] });
-    // await fetchState();
+    const accounts = await web3.eth.getAccounts();
+    await checkAndApproveDon(amount);
+    await stakingContract.methods.stake(amount).send({ from: accounts[0] });
+    await fetchState();
   };
   const unstake = async () => {
-    // const accounts = await web3.eth.getAccounts();
-    // await stakingContract.methods.unstake().send({ from: accounts[0] });
+    const accounts = await web3.eth.getAccounts();
+    await stakingContract.methods.unstake().send({ from: accounts[0] });
 
-    // await fetchState();
-    // sendEvent("Unstake", { user: accounts[0] });
+    await fetchState();
+    sendEvent("Unstake", { user: accounts[0] });
   };
 
   const harvest = async () => {

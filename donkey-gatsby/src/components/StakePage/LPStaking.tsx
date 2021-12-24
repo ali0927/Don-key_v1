@@ -309,8 +309,7 @@ const LpStakingUI = ({
               className="py-1"
               color="#ffffff"
               maxWidth="94px"
-              disabled={type === "ethereum"}
-              onClick={type === "ethereum" ?  undefined: () => setIsPopupOpen(true)}
+              onClick={() => setIsPopupOpen(true)}
             >
               Stake
             </Button>

@@ -367,8 +367,6 @@ export const BridgePopup = ({
   >("initial");
   const web3 = getConnectedWeb3();
   const handleSwap = async () => {
-    // Blocked
-    return;
     if (step === "transferring") {
       return;
     }
@@ -415,7 +413,7 @@ export const BridgePopup = ({
     }
     if (input1Chain === chainId) {
       return (
-        <Button className="my-2" disabled={true} onClick={handleSwap}>
+        <Button className="my-2" disabled={!isValid} onClick={handleSwap}>
           {" "}
           Transfer
         </Button>
