@@ -243,8 +243,8 @@ export const MainSection: React.FC = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-            <Heading className="mb-2">Copy farming</Heading>
-            <Text  fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>Follow real farmers, make real yield</Text>
+            <Heading className="mb-2">Farm. Profit. Repeat</Heading>
+            <Text  fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>Copy Professionally Designed Yield Farming Strategies</Text>
               {/* <MainSectionTimer /> */}
               {/* <Heading>Referral is live!</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
