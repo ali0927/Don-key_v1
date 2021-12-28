@@ -372,7 +372,9 @@ const StakePage = () => {
           text1="Liquidity Pool"
           text2="Stake DON LP token and gain DON rewards. Stake BSC LP tokens and gain DON rewards plus access to tiers"
         >
+
           <LPStaking type="binancenew" />
+          <LPStaking type="ethereumnew" />
           <LPStaking type="ethereum" />
           <LPStaking type="binance" />
         </TierCard>

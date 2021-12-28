@@ -69,7 +69,7 @@ const StyledStakingArrow = styled(StakingArrow)`
     top: auto;
     left: initial;
     transform: ${({ isOpen }: { isOpen?: boolean }) =>
-    `translateY(-50%) ${!isOpen ? `rotate(180deg)` : ``}`};
+      `translateY(-50%) ${!isOpen ? `rotate(180deg)` : ``}`};
   }
 `;
 
@@ -105,10 +105,10 @@ const LpStakingUI = ({
   const finalTvl =
     staking.tvl !== "-"
       ? new BigNumber(staking.tvl).toNumber().toLocaleString("en-US", {
-        style: "currency",
-        currency: "USD",
-        maximumFractionDigits: 0,
-      })
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0,
+        })
       : "-";
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
@@ -142,7 +142,7 @@ const LpStakingUI = ({
 
     setDisableButtons(true);
     try {
-      showProgress("Unstaking Amount and Harvesting Rewards");
+      // showProgress("Unstaking Amount and Harvesting Rewards");
       const accounts = await web3.eth.getAccounts();
       const contract = await getStakeContract(web3, type);
       await contract.methods.exit().send({ from: accounts[0] });
@@ -161,37 +161,38 @@ const LpStakingUI = ({
     const accounts = await web3.eth.getAccounts();
     // setLoading(true);
     try {
-      const stakingContract = await getStakeContract(web3, type);
-      const lpTokenContract = await getLPTokenContract(web3, true);
+      const stakingContract = await getStakeContract(
+        web3,
+        type === "binance" ? "binancenew" : "ethereumnew"
+      );
+      const lpTokenContract = await getLPTokenContract(web3, type === "binance" || type === "binancenew");
 
       //   console.log(stakingContract.options.address, accounts[0], lpTokenContract.options.address);
       let allowance = await lpTokenContract.methods
         .allowance(accounts[0], stakingContract.options.address)
         .call();
 
-      const stakeAmount = await lpTokenContract.methods.balanceOf(accounts[0]).call();
+      const stakeAmount = await lpTokenContract.methods
+        .balanceOf(accounts[0])
+        .call();
 
-      if (new BigNumber(toWei(stakeAmount)).gt(allowance)) {
+      if (new BigNumber(stakeAmount).gt(allowance)) {
         showProgress("Approve LP Token for Spend");
         await lpTokenContract.methods
-          .approve(stakingContract.options.address, toWei(stakeAmount))
+          .approve(stakingContract.options.address, stakeAmount)
           .send({ from: accounts[0] });
       }
       showProgress("Stake LP Token on Don-key");
       await stakingContract.methods
-        .stake(toWei(stakeAmount))
+        .stake(stakeAmount)
         .send({ from: accounts[0] });
       await refetch();
       showSuccess("LP Tokens Staked");
-
-
     } catch (e) {
       captureException(e, "handleStake");
       showFailure("Transaction Failed");
     }
   };
-
-
 
   const handleMigrate = async () => {
     showProgress("Unstaking Previous LP Tokens");
@@ -200,7 +201,7 @@ const LpStakingUI = ({
     showSuccess("Successfully Unstaked Lp");
     await handleStake();
     refresh();
-  }
+  };
 
   const renderButtons = (isMobile = false) => {
     const isShown = (!isMobile && isDesktop) || (isMobile && !isDesktop);
@@ -256,7 +257,7 @@ const LpStakingUI = ({
           >
             Unstake LP
           </Button>
-          {type === "binance" ? (
+          {type === "binance" || type === "ethereum" ? (
             <Button
               bgColor="#000000"
               color="#ffffff"
@@ -377,26 +378,22 @@ const LpStakingUI = ({
       </div>
     );
     if (isDesktop) {
-      return markup
+      return markup;
     } else {
       if (peggedDon !== "") {
         return markup;
       }
     }
     return null;
-  }
+  };
   const availableLpTooltip = (props: string) => (
-    <Tooltip id="button-tooltip" {...props} >
-      {props === "-"
-        ? "-"
-        : formatNum(props, 11)}{" "}
+    <Tooltip id="button-tooltip" {...props}>
+      {props === "-" ? "-" : formatNum(props, 11)}{" "}
     </Tooltip>
   );
   const stakedLpTooltip = (props: string) => (
-    <Tooltip id="button-tooltip" {...props} >
-      {props === "-"
-        ? "-"
-        : new BigNumber(props).toFixed(10)}
+    <Tooltip id="button-tooltip" {...props}>
+      {props === "-" ? "-" : new BigNumber(props).toFixed(10)}
     </Tooltip>
   );
   return (
@@ -426,7 +423,10 @@ const LpStakingUI = ({
               <div className="mr-2 d-flex flex-column align-items-center justify-content-center">
                 <ImageWrapper>{img}</ImageWrapper>
                 <h6
-                  style={{ lineHeight: 1.3, ...(isDesktop ? { maxHeight: 20 } : {}) }}
+                  style={{
+                    lineHeight: 1.3,
+                    ...(isDesktop ? { maxHeight: 20 } : {}),
+                  }}
                   className="text-center mb-0"
                 >
                   {title}
@@ -558,8 +558,8 @@ const LpStakingUI = ({
           </div>
         </Card>
       </Paper>
-      <Collapse in={isOpenStaking} >
-        <div id="collapse-content" >
+      <Collapse in={isOpenStaking}>
+        <div id="collapse-content">
           <Paper
             bgColor="#FDFAFA"
             maxWidth="1160px"
@@ -600,7 +600,9 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
           connected,
           type,
           web3: getWeb3(
-            type === "ethereum" ? ETHEREUM_CHAIN_ID : BINANCE_CHAIN_ID
+            type === "ethereum" || type === "ethereumnew"
+              ? ETHEREUM_CHAIN_ID
+              : BINANCE_CHAIN_ID
           ),
           address,
         }),
@@ -625,7 +627,7 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
       fetchInfo();
     }
   }, [connected, dependsOn, address]);
-
+  const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
   const map = {
     ethereum: {
       title: "Ethereum Mainnet",
@@ -636,8 +638,8 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
         <img
           src={donkeyeth}
           alt="donkey"
-          width={useMediaQuery(theme.mediaQueries.lg.up) ? 39 : 20}
-          height={useMediaQuery(theme.mediaQueries.lg.up) ? 50 : 27.13}
+          width={isDesktop ? 39 : 20}
+          height={isDesktop ? 50 : 27.13}
         />
       ),
     },
@@ -650,8 +652,8 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
         <img
           src={donkeybsc}
           alt="donkey"
-          width={useMediaQuery(theme.mediaQueries.lg.up) ? 39 : 20}
-          height={useMediaQuery(theme.mediaQueries.lg.up) ? 50 : 27.13}
+          width={isDesktop ? 39 : 20}
+          height={isDesktop ? 50 : 27.13}
         />
       ),
     },
@@ -664,8 +666,22 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
         <img
           src={donkeybsc}
           alt="donkey"
-          width={useMediaQuery(theme.mediaQueries.lg.up) ? 39 : 20}
-          height={useMediaQuery(theme.mediaQueries.lg.up) ? 50 : 27.13}
+          width={isDesktop ? 39 : 20}
+          height={isDesktop ? 50 : 27.13}
+        />
+      ),
+    },
+    ethereumnew: {
+      staking,
+      network: ETHEREUM_CHAIN_ID,
+      title: "Ethereum Mainnet New",
+      buyLink: UniswapLink,
+      img: (
+        <img
+          src={donkeyeth}
+          alt="donkey"
+          width={isDesktop ? 39 : 20}
+          height={isDesktop ? 50 : 27.13}
         />
       ),
     },

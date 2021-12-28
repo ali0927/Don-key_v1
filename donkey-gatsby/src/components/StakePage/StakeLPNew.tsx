@@ -94,7 +94,7 @@ export const StakeLpNewPopup = ({
     setLoading(true);
     try {
       const stakingContract = await getStakeContract(web3, type);
-      const lpTokenContract = await getLPTokenContract(web3, true);
+      const lpTokenContract = await getLPTokenContract(web3, type === "binance" || type === "binancenew");
       showProgress("Approve LP Token for Spend");
       //   console.log(stakingContract.options.address, accounts[0], lpTokenContract.options.address);
       let allowance = await lpTokenContract.methods

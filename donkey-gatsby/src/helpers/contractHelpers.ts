@@ -25,6 +25,9 @@ export const DONBSCbridge = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
 export const DONETHbridge = "0x533e3c0e6b48010873B947bddC4721b1bDFF9648";
 const ReferralSystemAddress = process.env.GATSBY_REFERRAL_CONTRACT;
 const DonkeyPriceFeedAddress = "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6";
+const LPTokenStakeContractBsc = "0x6a4d94c3E28d8A98f29A614a325a3E171f799847";
+const LPTokenStakeContractEth = "0x737543958801F7D8678c41998A23f5655C0Dd9b6";
+
 let ibusdContract: Contract | null = null;
 let FairLaunchContract: Contract | null = null;
 
@@ -163,14 +166,20 @@ export const getRewardSystemContract = async (web3: Web3) => {
 export const getUserReferralCode = async (web3: Web3, pool_address: string) => {
   const referralContract = await getReferralSystemContract(web3);
   const accounts = await web3.eth.getAccounts();
-  const userInfo = await referralContract.methods.userInfo(pool_address, accounts[0]).call();
+  const userInfo = await referralContract.methods
+    .userInfo(pool_address, accounts[0])
+    .call();
   if (userInfo.exists) {
     return userInfo.referralCode as string;
   }
   return null;
 };
 
-export const isValidReferralCode = async (web3: Web3, code: string, pool: string) => {
+export const isValidReferralCode = async (
+  web3: Web3,
+  code: string,
+  pool: string
+) => {
   const referralContract = await getReferralSystemContract(web3);
   const userInfo = await referralContract.methods.userInfoFromCode(code).call();
 
@@ -201,17 +210,24 @@ export const getUserAddressFromCode = async (web3: Web3, code: string) => {
   return userInfo.user;
 };
 
-export const signUpAsReferral = async (web3: Web3, code: string, pool_address: string) => {
+export const signUpAsReferral = async (
+  web3: Web3,
+  code: string,
+  pool_address: string
+) => {
   const referralContract = await getReferralSystemContract(web3);
   const accounts = await web3.eth.getAccounts();
-  const userInfo = await referralContract.methods.userInfo(pool_address, accounts[0]).call();
+  const userInfo = await referralContract.methods
+    .userInfo(pool_address, accounts[0])
+    .call();
   if (userInfo.exists) {
     return userInfo.referralCode;
   } else {
-    await referralContract.methods.signUp(pool_address, code).send({ from: accounts[0] });
+    await referralContract.methods
+      .signUp(pool_address, code)
+      .send({ from: accounts[0] });
     return code;
   }
-
 };
 
 const aggregatorV3InterfaceABI = [
@@ -628,16 +644,16 @@ export const getStakingContract = async (web3: Web3, isBSC = false) => {
   return contract;
 };
 
-export const getNewStakingContract = async (web3: Web3) => {
+export const getNewStakingContract = async (web3: Web3, isBsc = false) => {
   const stakingJSON = await import("../JsonData/LpStaking.json");
-
+  
   const contract = new web3.eth.Contract(
     stakingJSON.abi as any,
-    "0x6a4d94c3E28d8A98f29A614a325a3E171f799847"
+    isBsc ? LPTokenStakeContractBsc : LPTokenStakeContractEth
   );
 
   return contract;
-}
+};
 
 export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
   const lpJSON = await import("../JsonData/BUSDToken.json");
@@ -697,10 +713,8 @@ export const toWei = (val: string, decimals = 18) => {
   return new BigNumber(val).multipliedBy(10 ** decimals).toFixed(0);
 };
 
-
-
 export const gettotalSWAPLPoolValue = async (web3: Web3, type: StakeType) => {
-  const isBSC = type !== "ethereum";
+  const isBSC = type === "binancenew" || type === "binance";
   const tokenContract = await getERCContract(
     web3,
     isBSC ? DONTokenAddressBSC : USDTAddressEth
@@ -719,18 +733,25 @@ export const gettotalSWAPLPoolValue = async (web3: Web3, type: StakeType) => {
   return timestwo;
 };
 export const getStakeContract = async (web3: Web3, type: StakeType) => {
-  const stakingContract = type === "binancenew" ? await getNewStakingContract(web3) : await getStakingContract(web3, type === "binance");
-  return stakingContract;
-}
+  if (type === "binancenew" || type === "ethereumnew") {
+    return await getNewStakingContract(web3, type === "binancenew");
+  }
+  return await getStakingContract(web3, type === "binance");
+};
 
 export const calculateAPY = async (web3: Web3, type: StakeType) => {
   const stakingContract = await getStakeContract(web3, type);
-  const lpContract = await getLPTokenContract(web3, type === "binance" || type === "binancenew");
+  const lpContract = await getLPTokenContract(
+    web3,
+    type === "binance" || type === "binancenew"
+  );
 
   let totalStakedTokens = new BigNumber(
     toEther(await stakingContract.methods.totalSupply().call())
   );
-  const donPrice = await getDonPrice(type === "binance" || type === "binancenew");
+  const donPrice = await getDonPrice(
+    type === "binance" || type === "binancenew"
+  );
   const rewardRate = toEther(await stakingContract.methods.rewardRate().call());
   const totalLPSupply = toEther(await lpContract.methods.totalSupply().call());
   const totalLPAmount = await gettotalSWAPLPoolValue(web3, type);
@@ -749,9 +770,9 @@ export const calculateAPY = async (web3: Web3, type: StakeType) => {
   return nominator.div(denominator).multipliedBy(100);
 };
 
-export const calculateTVL = async (web3: Web3,type: StakeType) => {
+export const calculateTVL = async (web3: Web3, type: StakeType) => {
   const stakingContract = await getStakeContract(web3, type);
-  const lpContract = await getLPTokenContract(web3, type !== "ethereum");
+  const lpContract = await getLPTokenContract(web3, type === "binancenew" || type === "binance");
 
   let totalStakedTokens = new BigNumber(
     await stakingContract.methods.totalSupply().call()

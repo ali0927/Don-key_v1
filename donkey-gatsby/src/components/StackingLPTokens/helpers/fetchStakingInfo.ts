@@ -7,7 +7,6 @@ import {
   getLPTokenContract,
   getNewStakingContract,
   getStakeContract,
-  getStakingContract,
   toEther,
 } from "helpers";
 import { StakeType } from "interfaces";
@@ -29,6 +28,7 @@ export const fetchStakingInfo = async ({
   const defaultval: IStaking = {
     ...InitialState,
   };
+
   try {
     const apy = await calculateAPY(web3, type);
     defaultval.apy = apy.toFixed(0);
@@ -36,24 +36,28 @@ export const fetchStakingInfo = async ({
     defaultval.tvl = tvl;
 
     if (connected) {
+   
       const stakingContract = await getStakeContract(
         web3,
         type
       );
+     
       const staked = await stakingContract.methods.balanceOf(address).call();
       defaultval.stakedLp = toEther(staked);
       defaultval.isStaked = new BigNumber(staked).gt(0);
       const rewards = await stakingContract.methods.earned(address).call();
       defaultval.rewards = toEther(rewards);
+    
       const lpTokenContract = await getLPTokenContract(
         web3,
-        type !== "ethereum"
+        type !== "ethereum" && type !== "ethereumnew"
       );
       const amount = await lpTokenContract.methods.balanceOf(address).call();
       defaultval.availableLp = toEther(amount);
+      // console.log(defaultval, "Default");
     }
   } catch (e) {
-    console.error(e);
+    console.error(e, "Error");
     return defaultval;
   }
 

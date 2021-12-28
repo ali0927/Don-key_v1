@@ -127,7 +127,7 @@ export type IStrategyPool = {
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 
-export type StakeType = "binance" | "ethereum" | "binancenew";
+export type StakeType = "binance" | "ethereum" | "binancenew" | "ethereumnew";
 export interface IStoreState {
   auth: {
     user: IUser | null;

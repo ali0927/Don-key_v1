@@ -82,7 +82,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
   } = useStakingContract();
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
-  console.log(pendingReward, "Pending");
+
   const openStakingModal = () => {
     setisModalOpen(true);
   };
