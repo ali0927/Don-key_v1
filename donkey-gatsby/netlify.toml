@@ -3,7 +3,7 @@
   publish = "public/"
 [context.master.environment]
   GATSBY_STRAPI_URL = "https://cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x639Ee2A4B3A8d8afAfc9b73eb6127b9c27ba2e85"
+  GATSBY_STAKING_CONTRACT = "0xFBfe9C95591bae27f25dB4B12c76230733188F44"
   GATSBY_API_URL = "https://api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "false"
@@ -15,7 +15,7 @@
   GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
 [context.staging.environment]
   GATSBY_STRAPI_URL = "https://cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x639Ee2A4B3A8d8afAfc9b73eb6127b9c27ba2e85"
+  GATSBY_STAKING_CONTRACT = "0xFBfe9C95591bae27f25dB4B12c76230733188F44"
   GATSBY_API_URL = "https://api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "false"
@@ -27,7 +27,7 @@
   GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
 [context."feature/*".environment]
   GATSBY_STRAPI_URL = "https://cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x639Ee2A4B3A8d8afAfc9b73eb6127b9c27ba2e85"
+  GATSBY_STAKING_CONTRACT = "0xFBfe9C95591bae27f25dB4B12c76230733188F44"
   GATSBY_API_URL = "https://api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "false"
@@ -39,13 +39,13 @@
   GATSBY_SHOW_ADMIN = "false"
 [context.deploy-preview.environment]
   GATSBY_STRAPI_URL = "https://dev-cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x639Ee2A4B3A8d8afAfc9b73eb6127b9c27ba2e85"
+  GATSBY_STAKING_CONTRACT = "0xFBfe9C95591bae27f25dB4B12c76230733188F44"
   GATSBY_API_URL = "https://dev-api.don-key.finance"
   GATSBY_APP_ENV = "development"
   GATSBY_SHOW_ADMIN = "false"
 [context.staging-with-admin.environment]
   GATSBY_STRAPI_URL = "https://cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x639Ee2A4B3A8d8afAfc9b73eb6127b9c27ba2e85"
+  GATSBY_STAKING_CONTRACT = "0xFBfe9C95591bae27f25dB4B12c76230733188F44"
   GATSBY_API_URL = "https://staging-api.don-key.finance"
   GATSBY_APP_ENV = "production"
   GATSBY_SHOW_ADMIN = "true"
