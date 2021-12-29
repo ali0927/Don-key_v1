@@ -362,9 +362,9 @@ const StakePage = () => {
         description="Stake $DON token and LP tokens to gain access to higher tiers, extra APY and LP APY rewards."
       />
       <div className=" d-flex justify-content-center px-3 mt-n5">
-        {/* <TierCard text1="DON" text2="Rewards harvest upon deposit and withdraw">
+        <TierCard text1="DON" text2="Rewards harvest upon deposit and withdraw">
           <DonStaking donPrice={donPrice} />
-        </TierCard> */}
+        </TierCard>
       </div>
 
       <div className=" d-flex justify-content-center px-3 mt-4">
