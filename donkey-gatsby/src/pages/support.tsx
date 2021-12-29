@@ -17,7 +17,7 @@ const Header = styled.div`
     display: block;
     content: "";
     position: absolute;
-    top: 280px;
+    top: 266px;
     background-color: ${theme.palette.background.yellow};
     height: 300px;
     width: 100%;

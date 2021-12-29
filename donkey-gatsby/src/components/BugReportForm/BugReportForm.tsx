@@ -108,7 +108,6 @@ const INITIAL_STATE = {
   email: "",
   title: "",
   message: "",
-  page: "",
   walletAddress: "",
   telegram: "",
   attachment: null as File | null,
@@ -138,9 +137,6 @@ const validate = (state: typeof INITIAL_STATE) => {
     return { isValid: false, message: "Please enter email" };
   } else if (!validateEmail(state.email)) {
     return { isValid: false, message: "Please enter a valid email" };
-  }
-  if (state.type === "technical" && !state.page) {
-    return { isValid: false, message: "Please enter a page" };
   }
   if (state.type === "investrelated" && !state.walletAddress) {
     return { isValid: false, message: "Please enter wallet address" };
@@ -242,16 +238,6 @@ export const BugReportForm = () => {
           })}
         </Select>
       </Label>
-      {formState.type === "technical" && (
-        <Label>
-          Page <span className="text-danger">*</span>
-          <Input
-          value={formState.page}
-          onChange={handleChange("page")}
-          placeholder="Homepage"
-        />
-        </Label>
-      )}
       {formState.type === "investrelated" && (
         <Label>
           Wallet Address <span className="text-danger">*</span>
@@ -282,20 +268,20 @@ export const BugReportForm = () => {
           placeholder="Livia Siphron"
         />
       </Label>
+        <Label>
+        Telegram
+        <Input
+          value={formState.telegram}
+          onChange={handleChange("telegram")}
+          placeholder="@Livia_siphron"
+        />
+      </Label>
       <Label>
         Email <span className="text-danger">*</span>
         <Input
           value={formState.email}
           onChange={handleChange("email")}
           placeholder="example@gmail.com"
-        />
-      </Label>
-      <Label>
-        Telegram
-        <Input
-          value={formState.telegram}
-          onChange={handleChange("telegram")}
-          placeholder="@Livia_siphron"
         />
       </Label>
       <Label>
