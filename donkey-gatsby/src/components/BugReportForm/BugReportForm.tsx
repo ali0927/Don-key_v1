@@ -5,6 +5,7 @@ import { Spinner } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
+import { theme } from "theme";
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
   border: 1px solid rgba(245, 245, 245, 0.5);
@@ -54,6 +55,10 @@ const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
   background: #fff url(${coolicon}) no-repeat calc(100% - 34px) center/8px;
+  ${theme.mediaQueries.md.down}{
+    background: #fff url(${coolicon}) no-repeat calc(100% - 20px) center/8px;
+    padding-right: 40px;
+  }
 `;
 const Form = styled.div`
   background-color: #fff;
@@ -226,7 +231,7 @@ export const BugReportForm = () => {
     <Form>
       {sent && <SuccessOverlay duration={5} isOpen={sent} onClose={onClose} />}
       <Label>
-        Type
+        Type <span className="text-danger">*</span>
         <Select onChange={handleChange("type")} value={formState.type}>
           {Types.map((item) => {
             return (
@@ -239,7 +244,7 @@ export const BugReportForm = () => {
       </Label>
       {formState.type === "technical" && (
         <Label>
-          Page
+          Page <span className="text-danger">*</span>
           <Input
           value={formState.page}
           onChange={handleChange("page")}
@@ -249,7 +254,7 @@ export const BugReportForm = () => {
       )}
       {formState.type === "investrelated" && (
         <Label>
-          Wallet Address
+          Wallet Address <span className="text-danger">*</span>
           <Input
             value={formState.walletAddress}
             onChange={handleChange("walletAddress")}
@@ -258,7 +263,7 @@ export const BugReportForm = () => {
         </Label>
       )}
       <Label>
-        Urgency
+        Urgency <span className="text-danger">*</span>
         <Select onChange={handleChange("urgency")} value={formState.urgency}>
           {Urgencies.map((item) => {
             return (
@@ -270,7 +275,7 @@ export const BugReportForm = () => {
         </Select>
       </Label>
       <Label>
-        Name
+        Name <span className="text-danger">*</span>
         <Input
           value={formState.name}
           onChange={handleChange("name")}
@@ -278,7 +283,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Email
+        Email <span className="text-danger">*</span>
         <Input
           value={formState.email}
           onChange={handleChange("email")}
@@ -294,7 +299,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Screenshot
+        Screenshot <span className="text-danger">*</span>
         <Input
           ref={(ref) => (inputRef.current = ref)}
           onChange={handleImageSelect}
@@ -303,7 +308,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Title
+        Title <span className="text-danger">*</span>
         <Input
           value={formState.title}
           onChange={handleChange("title")}
@@ -311,7 +316,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Message <SmallSpan>Be as detailed and clear as possible</SmallSpan>
+        Message <span className="text-danger">*</span> <SmallSpan>Be as detailed and clear as possible</SmallSpan>
         <TextArea
           rows={5}
           value={formState.message}
