@@ -18,6 +18,7 @@ import {
   DonEthereum,
   DonKucoin,
   FAQIcon,
+  SupportIcon,
   FarmerIcon,
   HamburgerIcon,
   LitePaperIcon,
@@ -114,8 +115,7 @@ const PancakeBuyURL =
 const UniSwapURL =
   "https://app.uniswap.org/#/swap?inputCurrency=0x217ddead61a42369a266f1fb754eb5d3ebadc88a&outputCurrency=0xdac17f958d2ee523a2206206994597c13d831ec7&use=V2";
 
-  const kucoinSwapURL =
-  "https://trade.kucoin.com/trade/KDON-USDT";
+const kucoinSwapURL = "https://trade.kucoin.com/trade/KDON-USDT";
 
 const ConnectWalletButton = () => {
   const { connected } = useWeb3Context();
@@ -244,6 +244,7 @@ const DropDownsDonToken = styled.div`
             background-color: ${theme.palette.common.lightYellow};
         }
     }
+  }
 `;
 
 const DrawerSmallItem = ({
@@ -297,6 +298,9 @@ const LandingDrawer = () => {
       <DrawerItem icon={<FAQIcon />} to="/faq">
         FAQ
       </DrawerItem>
+      <DrawerItem icon={<SupportIcon />} to="/support">
+        Support
+      </DrawerItem>
     </>
   );
 };
@@ -318,6 +322,7 @@ const LandingMenu = () => {
             </div>
         </DropDownsDonToken>
       <MenuItem to="/faq">FAQ</MenuItem>
+      <MenuItem to="/support">Support</MenuItem>
     </>
   );
 };
@@ -336,9 +341,12 @@ const DashboardMenu = () => {
     <>
       <MenuItem to="/dashboard">Main</MenuItem>
       {connected && <MenuItem to="/dashboard/investment">Investments</MenuItem>}
-      {connected && isShown && <MenuItem to="/dashboard/referrals">Referrals</MenuItem>}
+      {connected && isShown && (
+        <MenuItem to="/dashboard/referrals">Referrals</MenuItem>
+      )}
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
       <MenuItem to="/faq">FAQ</MenuItem>
+      <MenuItem to="/support">Support</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
     </>
   );
@@ -383,7 +391,7 @@ const DashboardDrawer = () => {
   );
 };
 
-function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
+function NavBar({ variant = "landing", hideDappButton }: INavBarProps) {
   const [isOpen, openDrawer, closeDrawer] = useToggle();
 
   const closeIfOpen = () => {
@@ -453,7 +461,14 @@ function NavBar({ variant = "landing",hideDappButton  }: INavBarProps) {
           {variant === "landing" && <LandingMenu />}
           {variant === "loggedin" && <DashboardMenu />}
         </Menu>
-        {variant === "landing" &&  <NavButton style={hideDappButton ? {visibility: "hidden"}: {}}  to="/dashboard">DAPP</NavButton>}
+        {variant === "landing" && (
+          <NavButton
+            style={hideDappButton ? { visibility: "hidden" } : {}}
+            to="/dashboard"
+          >
+            DAPP
+          </NavButton>
+        )}
         {variant === "loggedin" && <ConnectWalletButton />}
       </StyledNav>
     </MenuWrapper>

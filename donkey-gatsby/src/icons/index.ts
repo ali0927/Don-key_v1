@@ -78,6 +78,7 @@ export * from "./FarmerIcon";
 export * from "./TeamIcon";
 export * from "./BuyDonIcon";
 export * from "./FAQIcon";
+export * from './SupportIcon'
 export * from "./TwitterIconOutlined";
 export * from "./LitePaperIcon";
 export * from "./HamburgerIcon";
