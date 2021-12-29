@@ -1086,7 +1086,7 @@ export const InvestmentsPage = () => {
                       </NetworkButton> */}
                     </div>
                   </div>
-                  {chainId === BINANCE_CHAIN_ID && <StakingInfo />}
+                  {/* {chainId === BINANCE_CHAIN_ID && <StakingInfo />} */}
                 </Col>
               </Row>
             </Container>
