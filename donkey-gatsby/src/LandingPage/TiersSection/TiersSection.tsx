@@ -247,7 +247,7 @@ export const TiersSection: React.FC<IProps> = ({
                 smFontSize="10px"
                 color="#222222"
               >
-                Extra APY
+                Extra APR
               </CardTypography>
             )}
             <CardTypography
