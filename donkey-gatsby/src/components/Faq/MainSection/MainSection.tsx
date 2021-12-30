@@ -174,7 +174,7 @@ const StakingQues = [
         APY!
         <div className="mt-3">
           <StaticImage
-            src="../images/Tiers.svg"
+            src="../images/rewards-table.png"
             alt="Staking on Donkey"
             loading="eager"
             quality={100}
@@ -257,7 +257,7 @@ const ReferralQues = [
         </span>
         <div>
           <StaticImage
-            src="../images/stakeddon.png"
+            src="../images/refferal-table.png"
             alt="Cycles"
             quality={100}
           />
