@@ -30,6 +30,7 @@ export const Paper = ({
   borderRadius = 120,
   classname,
   height,
+  disabled
 }: {
   children: React.ReactNode;
   maxWidth?: number | string;
@@ -37,6 +38,7 @@ export const Paper = ({
   borderRadius?: number;
   classname?: string;
   height?: number | string;
+  disabled?: boolean;
 }) => {
   return (
     <div
@@ -51,6 +53,7 @@ export const Paper = ({
         border: "none",
         height: height ? "fit-content" : "",
         minHeight: "130px",
+        ...(disabled ? {filter: "blur(4px)", pointerEvents: "none"}: {})
       }}
     >
       {children}
@@ -373,10 +376,10 @@ const StakePage = () => {
           text2="Stake DON LP token and gain DON rewards. Stake BSC LP tokens and gain DON rewards plus access to tiers"
         >
 
-          <LPStaking type="binancenew" />
+          <LPStaking type="binancenew" disabled />
           <LPStaking type="ethereumnew" />
           <LPStaking type="ethereum" />
-          <LPStaking type="binance" />
+          <LPStaking type="binance" disabled />
         </TierCard>
       </div>
       <div className="py-lg-5 d-flex justify-content-center">

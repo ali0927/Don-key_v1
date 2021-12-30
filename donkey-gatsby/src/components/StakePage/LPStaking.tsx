@@ -73,6 +73,32 @@ const StyledStakingArrow = styled(StakingArrow)`
   }
 `;
 
+const DisabledContent = styled.div`
+  position: absolute;
+  top: 50%;
+  z-index: 10;
+  left: 50%;
+  background-color: #fff;
+  min-height: 60px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  transform: translateX(-50%) translateY(-50%);
+  text-align: center;
+  box-shadow: 1px 1px 3px #00000036;
+  border-radius : 4px;
+`;
+
+const Disabled = () => {
+  return (
+    <DisabledContent>
+      We are upgrading the Contract. It will take take between 24-48 hours.
+    </DisabledContent>
+  );
+};
+
 const LpStakingUI = ({
   buyLink,
   staking,
@@ -81,6 +107,7 @@ const LpStakingUI = ({
   title,
   network,
   type,
+  disabled,
 }: {
   buyLink: string;
   peggedDon?: string;
@@ -89,6 +116,7 @@ const LpStakingUI = ({
   title: string;
   type: StakeType;
   network: number;
+  disabled?: boolean;
 }) => {
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
   const [isOpenStaking, setIsOpenStaking] = useState(false);
@@ -114,6 +142,9 @@ const LpStakingUI = ({
     useTransactionNotification();
   const hasStakedAmount = new BigNumber(Number(staking.stakedLp)).gt(0);
   const doHarvest = async () => {
+    if(disabled){
+      return;
+    }
     enableHLoading();
     try {
       // await harvest();
@@ -138,6 +169,9 @@ const LpStakingUI = ({
     }
   };
   const handleUnstake = async () => {
+    if(disabled){
+      return;
+    }
     const web3 = getConnectedWeb3();
 
     setDisableButtons(true);
@@ -157,6 +191,9 @@ const LpStakingUI = ({
     }
   };
   const handleStake = async () => {
+    if(disabled){
+      return;
+    }
     const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     // setLoading(true);
@@ -165,7 +202,10 @@ const LpStakingUI = ({
         web3,
         type === "binance" ? "binancenew" : "ethereumnew"
       );
-      const lpTokenContract = await getLPTokenContract(web3, type === "binance" || type === "binancenew");
+      const lpTokenContract = await getLPTokenContract(
+        web3,
+        type === "binance" || type === "binancenew"
+      );
 
       //   console.log(stakingContract.options.address, accounts[0], lpTokenContract.options.address);
       let allowance = await lpTokenContract.methods
@@ -195,6 +235,9 @@ const LpStakingUI = ({
   };
 
   const handleMigrate = async () => {
+    if(disabled){
+      return;
+    }
     showProgress("Unstaking Previous LP Tokens");
     await handleUnstake();
     refresh();
@@ -408,192 +451,208 @@ const LpStakingUI = ({
           }}
         />
       )}{" "}
-      <Paper
-        bgColor={isDesktop ? "#FDFAFA" : "#ffffff"}
-        maxWidth="1180px"
-        borderRadius={0}
-        classname="p-0 p-lg-3 px-lg-2 mt-4 mt-lg-2"
-      >
-        <Card className="row justify-content-center justify-content-lg-between ">
-          {type === "binancenew" && (
-            <StyledImage src={TierAccess} alt="Tier Access" />
-          )}
-          <div className="col-5 py-2 col-lg-3 m-1 ml-0 m-lg-0 mt-lg-2 divider order-1 pr-lg-0">
-            <div className="d-flex flex-column flex-lg-row justify-content-between justify-content-lg-start align-items-center align-items-lg-stretch">
-              <div className="mr-2 d-flex flex-column align-items-center justify-content-center">
-                <ImageWrapper>{img}</ImageWrapper>
-                <h6
-                  style={{
-                    lineHeight: 1.3,
-                    ...(isDesktop ? { maxHeight: 20 } : {}),
-                  }}
-                  className="text-center mb-0"
-                >
-                  {title}
-                </h6>
-              </div>
-              <div className="d-flex flex-column justify-content-between align-items-center">
-                <p className="rewards">Rewards Available</p>
-                <h1 className="money w-100 text-center text-lg-left mb-0 ">
-                  {staking.rewards === "-"
-                    ? "-"
-                    : new BigNumber(staking.rewards).toFixed(2)}{" "}
-                  $DON
-                </h1>
-                <DownArrow
-                  className={
-                    openHarvestMob ? "d-lg-none mt-2" : "d-lg-none rotate mt-2"
-                  }
-                  onClick={() => setOpenHarvestMob(!openHarvestMob)}
-                />
-              </div>
-            </div>
-          </div>
-          {openHarvestMob && (
-            <div
-              className={
-                isDesktop ? "d-none" : "col-11 order-3 m-1 py-1 d-flex "
-              }
-            >
-              <Button
-                onClick={doHarvest}
-                bgColor=" linear-gradient(0deg, #FFF037, #FFF037), #B4B4B4"
-                className="py-1 mx-1"
-                maxWidth="95px"
-                disabled={
-                  (connected && chainId !== network && !hasStakedAmount) ||
-                  disableButtons
-                }
-              >
-                {HLoading ? (
-                  <Spinner animation="border" size="sm" />
-                ) : (
-                  "Harvest"
-                )}
-              </Button>
-            </div>
-          )}
-          <div className="col-5 m-1 m-lg-0 available-col col-lg-2 pt-3 order-12 order-lg-2 px-lg-0">
-            <p>Available LP Token</p>
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 250, hide: 250 }}
-              overlay={availableLpTooltip(staking.availableLp)}
-            >
-              <h2 className={isDesktop ? "lptoken" : ""}>
-                {staking.availableLp === "-"
-                  ? "-"
-                  : formatNum(staking.availableLp, 3)}{" "}
-                LP
-              </h2>
-            </OverlayTrigger>
-            <Button
-              onClick={() => {
-                window.open(buyLink, "_blank");
-              }}
-              bgColor="#F4E41C"
-              maxWidth="55px"
-              fontSize="9px"
-            >
-              Get More
-            </Button>
-          </div>
-          <div className="col-5 m-1  m-lg-0 col-lg-1 px-lg-0 pt-3 order-2 order-lg-3">
-            <p>APY</p>
-            <h2>{staking.apy}%</h2>
-          </div>
+      <div className="position-relative">
+        {disabled && <Disabled />}
 
-          {renderPeggedDon()}
-
-          <div className="col-5 m-1 m-lg-0 col-lg-auto pt-3 order-3 order-lg-5">
-            <p>STAKED LP</p>
-            <OverlayTrigger
-              placement="top"
-              delay={{ show: 250, hide: 250 }}
-              overlay={stakedLpTooltip(staking.stakedLp)}
-            >
-              <h2 className="mb-4 mb-lg-0">
-                {staking.stakedLp === "-"
-                  ? "-"
-                  : new BigNumber(staking.stakedLp).toFixed(4)}
-              </h2>
-            </OverlayTrigger>
-          </div>
-          <div className="col-5 m-1 m-lg-0 col-lg-3 pt-3 position-relative order-4 order-lg-6 pl-lg-3">
-            <div className="mr-lg-5">
-              <p>TVL</p>
-              <div className="d-flex align-items-center justify-content-between">
-                <h1 className="tvl position-relative">{finalTvl}</h1>
-                <StyledStakingArrow
-                  isOpen={isOpenStaking}
-                  className={clsx("cursor-pointer d-none d-lg-block")}
-                  // style={{ right: "20px", bottom: "10px" }}
-                  onClick={() => {
-                    setIsOpenStaking((old) => !old);
-                    setOpenStackMob((old) => !old);
-                  }}
-                  aria-controls="collapse-content"
-                />
-              </div>
-              <div className="d-flex justify-content-center">
-                <StakingArrow
-                  className={
-                    isOpenStaking
-                      ? "d-block d-lg-none cursor-pointer mt-2"
-                      : "d-block d-lg-none cursor-pointer rotate"
-                  }
-                  // style={{ bottom: "5px", left: "44%" }}
-                  onClick={() => {
-                    setIsOpenStaking((old) => !old);
-                    setOpenStackMob((old) => !old);
-                  }}
-                  aria-controls="collapse-content"
-                />
-              </div>
-            </div>
-            <div style={{ position: "absolute", bottom: 10, right: 5 }}></div>
-          </div>
-          <div className="col-11 order-4 m-1 mx-sm-2 p-0 g-0 d-lg-none">
-            {openStackMob && stakeButtons(true)}
-          </div>
-        </Card>
-      </Paper>
-      <Collapse in={isOpenStaking}>
-        <div id="collapse-content">
-          <Paper
-            bgColor="#FDFAFA"
-            maxWidth="1160px"
-            borderRadius={0}
-            classname={
-              isDesktop
-                ? "p-4 mt-1 d-flex justify-content-center align-items-center"
-                : "d-none"
-            }
-          >
-            <Card className="row w-100 g-0">
-              <div className="col-4 divider">
-                <div className="w-100 d-flex justify-content-center">
-                  {harvestButton()}
+        <Paper
+          bgColor={isDesktop ? "#FDFAFA" : "#ffffff"}
+          maxWidth="1180px"
+          borderRadius={0}
+          disabled={disabled}
+          classname="p-0 p-lg-3 px-lg-2 mt-4 mt-lg-2"
+        >
+          <Card className="row justify-content-center justify-content-lg-between ">
+            {type === "binancenew" && (
+              <StyledImage src={TierAccess} alt="Tier Access" />
+            )}
+            <div className="col-5 py-2 col-lg-3 m-1 ml-0 m-lg-0 mt-lg-2 divider order-1 pr-lg-0">
+              <div className="d-flex flex-column flex-lg-row justify-content-between justify-content-lg-start align-items-center align-items-lg-stretch">
+                <div className="mr-2 d-flex flex-column align-items-center justify-content-center">
+                  <ImageWrapper>{img}</ImageWrapper>
+                  <h6
+                    style={{
+                      lineHeight: 1.3,
+                      ...(isDesktop ? { maxHeight: 20 } : {}),
+                    }}
+                    className="text-center mb-0"
+                  >
+                    {title}
+                  </h6>
+                </div>
+                <div className="d-flex flex-column justify-content-between align-items-center">
+                  <p className="rewards">Rewards Available</p>
+                  <h1 className="money w-100 text-center text-lg-left mb-0 ">
+                    {staking.rewards === "-"
+                      ? "-"
+                      : new BigNumber(staking.rewards).toFixed(2)}{" "}
+                    $DON
+                  </h1>
+                  <DownArrow
+                    className={
+                      openHarvestMob
+                        ? "d-lg-none mt-2"
+                        : "d-lg-none rotate mt-2"
+                    }
+                    onClick={() => setOpenHarvestMob(!openHarvestMob)}
+                  />
                 </div>
               </div>
-              <div className="col-8 d-flex justify-content-end">
-                {stakeButtons()}
-              </div>{" "}
-            </Card>
-          </Paper>
-        </div>
-      </Collapse>
+            </div>
+            {openHarvestMob && (
+              <div
+                className={
+                  isDesktop ? "d-none" : "col-11 order-3 m-1 py-1 d-flex "
+                }
+              >
+                <Button
+                  onClick={doHarvest}
+                  bgColor=" linear-gradient(0deg, #FFF037, #FFF037), #B4B4B4"
+                  className="py-1 mx-1"
+                  maxWidth="95px"
+                  disabled={
+                    (connected && chainId !== network && !hasStakedAmount) ||
+                    disableButtons
+                  }
+                >
+                  {HLoading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    "Harvest"
+                  )}
+                </Button>
+              </div>
+            )}
+            <div className="col-5 m-1 m-lg-0 available-col col-lg-2 pt-3 order-12 order-lg-2 px-lg-0">
+              <p>Available LP Token</p>
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 250 }}
+                overlay={availableLpTooltip(staking.availableLp)}
+              >
+                <h2 className={isDesktop ? "lptoken" : ""}>
+                  {staking.availableLp === "-"
+                    ? "-"
+                    : formatNum(staking.availableLp, 3)}{" "}
+                  LP
+                </h2>
+              </OverlayTrigger>
+              <Button
+                onClick={() => {
+                  window.open(buyLink, "_blank");
+                }}
+                bgColor="#F4E41C"
+                maxWidth="55px"
+                fontSize="9px"
+              >
+                Get More
+              </Button>
+            </div>
+            <div className="col-5 m-1  m-lg-0 col-lg-1 px-lg-0 pt-3 order-2 order-lg-3">
+              <p>APY</p>
+              <h2>{staking.apy}%</h2>
+            </div>
+
+            {renderPeggedDon()}
+
+            <div className="col-5 m-1 m-lg-0 col-lg-auto pt-3 order-3 order-lg-5">
+              <p>STAKED LP</p>
+              <OverlayTrigger
+                placement="top"
+                delay={{ show: 250, hide: 250 }}
+                overlay={stakedLpTooltip(staking.stakedLp)}
+              >
+                <h2 className="mb-4 mb-lg-0">
+                  {staking.stakedLp === "-"
+                    ? "-"
+                    : new BigNumber(staking.stakedLp).toFixed(4)}
+                </h2>
+              </OverlayTrigger>
+            </div>
+            <div className="col-5 m-1 m-lg-0 col-lg-3 pt-3 position-relative order-4 order-lg-6 pl-lg-3">
+              <div className="mr-lg-5">
+                <p>TVL</p>
+                <div className="d-flex align-items-center justify-content-between">
+                  <h1 className="tvl position-relative">{finalTvl}</h1>
+                  <StyledStakingArrow
+                    isOpen={isOpenStaking}
+                    className={clsx("cursor-pointer d-none d-lg-block")}
+                    // style={{ right: "20px", bottom: "10px" }}
+                    onClick={() => {
+                      setIsOpenStaking((old) => !old);
+                      setOpenStackMob((old) => !old);
+                    }}
+                    aria-controls="collapse-content"
+                  />
+                </div>
+                <div className="d-flex justify-content-center">
+                  <StakingArrow
+                    className={
+                      isOpenStaking
+                        ? "d-block d-lg-none cursor-pointer mt-2"
+                        : "d-block d-lg-none cursor-pointer rotate"
+                    }
+                    // style={{ bottom: "5px", left: "44%" }}
+                    onClick={() => {
+                      setIsOpenStaking((old) => !old);
+                      setOpenStackMob((old) => !old);
+                    }}
+                    aria-controls="collapse-content"
+                  />
+                </div>
+              </div>
+              <div style={{ position: "absolute", bottom: 10, right: 5 }}></div>
+            </div>
+            <div className="col-11 order-4 m-1 mx-sm-2 p-0 g-0 d-lg-none">
+              {openStackMob && stakeButtons(true)}
+            </div>
+          </Card>
+        </Paper>
+        <Collapse in={isOpenStaking}>
+          <div id="collapse-content">
+            <Paper
+              bgColor="#FDFAFA"
+              maxWidth="1160px"
+              borderRadius={0}
+              classname={
+                isDesktop
+                  ? "p-4 mt-1 d-flex justify-content-center align-items-center"
+                  : "d-none"
+              }
+            >
+              <Card className="row w-100 g-0">
+                <div className="col-4 divider">
+                  <div className="w-100 d-flex justify-content-center">
+                    {harvestButton()}
+                  </div>
+                </div>
+                <div className="col-8 d-flex justify-content-end">
+                  {stakeButtons()}
+                </div>{" "}
+              </Card>
+            </Paper>
+          </div>
+        </Collapse>
+      </div>
     </>
   );
 };
 
-export const LPStaking = ({ type }: { type: StakeType }) => {
+export const LPStaking = ({
+  type,
+  disabled,
+}: {
+  type: StakeType;
+  disabled?: boolean;
+}) => {
   const [staking, setStaking] = React.useState(InitialState);
 
   const { connected, address } = useWeb3Context();
   const { dependsOn } = useRefresh();
   const [peggedDon, setPeggedDon] = useState("");
   const fetchInfo = async () => {
+    if (disabled) {
+      return;
+    }
     try {
       const [EthData] = await Promise.all([
         fetchStakingInfo({
@@ -689,5 +748,12 @@ export const LPStaking = ({ type }: { type: StakeType }) => {
 
   const props = map[type];
 
-  return <LpStakingUI {...props} type={type} peggedDon={peggedDon} />;
+  return (
+    <LpStakingUI
+      {...props}
+      type={type}
+      peggedDon={peggedDon}
+      disabled={disabled}
+    />
+  );
 };

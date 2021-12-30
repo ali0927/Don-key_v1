@@ -59,11 +59,13 @@ export const StakeLpNewPopup = ({
   open,
   onClose,
   type,
+disabled
 }: {
   availableLp: string;
   open: boolean;
   onClose: () => void;
   type: StakeType;
+  disabled?: boolean
 }) => {
   const [selectedPercent, setSelectedPresent] = useState<string>("0");
   const [donEquivalent, setDonEquivalent] = useState("");
@@ -89,6 +91,9 @@ export const StakeLpNewPopup = ({
     useTransactionNotification();
   const { refresh } = useRefresh();
   const handleStake = async () => {
+    if(disabled){
+      return;
+    }
     const web3 = getConnectedWeb3();
     const accounts = await web3.eth.getAccounts();
     setLoading(true);
