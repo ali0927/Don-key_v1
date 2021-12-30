@@ -129,15 +129,10 @@ const validate = (state: typeof INITIAL_STATE) => {
   }
   if (!state.name) {
     return { isValid: false, message: "Please enter name" };
-  } else if (!(state.name.length >= 5)) {
-    return { isValid: false, message: "Name should be at least 5 Characters" };
+  } else if (!(state.name.length >= 3)) {
+    return { isValid: false, message: "Name should be at least 3 Characters" };
   }
-  
-  if (!state.email) {
-    return { isValid: false, message: "Please enter email" };
-  } else if (!validateEmail(state.email)) {
-    return { isValid: false, message: "Please enter a valid email" };
-  }
+
   if (state.type === "investrelated" && !state.walletAddress) {
     return { isValid: false, message: "Please enter wallet address" };
   }
@@ -151,10 +146,10 @@ const validate = (state: typeof INITIAL_STATE) => {
   }
   if (!state.title) {
     return { isValid: false, message: "Please enter title" };
-  } else if (!(state.title.length >= 10)) {
+  } else if (!(state.title.length >= 8)) {
     return {
       isValid: false,
-      message: "Please enter at least 10 characters in title",
+      message: "Please enter at least 8 characters in title",
     };
   }
   if (!state.message) {
@@ -227,7 +222,7 @@ export const BugReportForm = () => {
     <Form>
       {sent && <SuccessOverlay duration={5} isOpen={sent} onClose={onClose} />}
       <Label>
-        Type <span className="text-danger">*</span>
+        Type
         <Select onChange={handleChange("type")} value={formState.type}>
           {Types.map((item) => {
             return (
@@ -240,7 +235,7 @@ export const BugReportForm = () => {
       </Label>
       {formState.type === "investrelated" && (
         <Label>
-          Wallet Address <span className="text-danger">*</span>
+          Wallet Address
           <Input
             value={formState.walletAddress}
             onChange={handleChange("walletAddress")}
@@ -249,7 +244,7 @@ export const BugReportForm = () => {
         </Label>
       )}
       <Label>
-        Urgency <span className="text-danger">*</span>
+        Urgency
         <Select onChange={handleChange("urgency")} value={formState.urgency}>
           {Urgencies.map((item) => {
             return (
@@ -261,7 +256,7 @@ export const BugReportForm = () => {
         </Select>
       </Label>
       <Label>
-        Name <span className="text-danger">*</span>
+        Name
         <Input
           value={formState.name}
           onChange={handleChange("name")}
@@ -269,23 +264,15 @@ export const BugReportForm = () => {
         />
       </Label>
         <Label>
-        Telegram
+        Telegram Or Email
         <Input
           value={formState.telegram}
           onChange={handleChange("telegram")}
-          placeholder="@Livia_siphron"
+          placeholder="@Livia_siphron / liviashipron@gmail.com"
         />
       </Label>
       <Label>
-        Email <span className="text-danger">*</span>
-        <Input
-          value={formState.email}
-          onChange={handleChange("email")}
-          placeholder="example@gmail.com"
-        />
-      </Label>
-      <Label>
-        Screenshot <span className="text-danger">*</span>
+        Screenshot
         <Input
           ref={(ref) => (inputRef.current = ref)}
           onChange={handleImageSelect}
@@ -294,7 +281,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Title <span className="text-danger">*</span>
+        Title
         <Input
           value={formState.title}
           onChange={handleChange("title")}
@@ -302,7 +289,7 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Message <span className="text-danger">*</span> <SmallSpan>Be as detailed and clear as possible</SmallSpan>
+        Message <SmallSpan>Be as detailed and clear as possible</SmallSpan>
         <TextArea
           rows={5}
           value={formState.message}
