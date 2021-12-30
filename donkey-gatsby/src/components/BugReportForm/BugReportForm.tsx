@@ -55,7 +55,7 @@ const Select = styled.select`
   -moz-appearance: none;
   appearance: none;
   background: #fff url(${coolicon}) no-repeat calc(100% - 34px) center/8px;
-  ${theme.mediaQueries.md.down}{
+  ${theme.mediaQueries.md.down} {
     background: #fff url(${coolicon}) no-repeat calc(100% - 20px) center/8px;
     padding-right: 40px;
   }
@@ -175,7 +175,7 @@ export const BugReportForm = () => {
   const [isCreating, setIsCreating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { showFailure } = useTransactionNotification();
-  const [sent, setIsSent] = useState(false);
+  const [sent, setIsSent] = useState<{ ticketid: number } | null>(null);
 
   const [formState, setFormState] = useState(INITIAL_STATE);
   const handleChange =
@@ -185,7 +185,7 @@ export const BugReportForm = () => {
       setFormState((old) => ({ ...old, [key]: value }));
     };
   const onClose = () => {
-    setIsSent(false);
+    setIsSent(null);
   };
   const handleCreate = async () => {
     const validationResp = validate(formState);
@@ -195,14 +195,15 @@ export const BugReportForm = () => {
     }
     setIsCreating(true);
     try {
-      await createBug(formState);
+      const resp = await createBug(formState);
 
       setFormState(INITIAL_STATE);
       //@ts-ignore
       inputRef.current!.value = null;
-      setIsSent(true);
+      setIsSent({ ticketid: resp.ticketid });
     } catch (e) {
       console.log(e);
+      showFailure("Please Try Again Later");
     } finally {
       setIsCreating(false);
     }
@@ -220,7 +221,7 @@ export const BugReportForm = () => {
 
   return (
     <Form>
-      {sent && <SuccessOverlay duration={5} isOpen={sent} onClose={onClose} />}
+      {sent && <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />}
       <Label>
         Type
         <Select onChange={handleChange("type")} value={formState.type}>
@@ -263,7 +264,7 @@ export const BugReportForm = () => {
           placeholder="Livia Siphron"
         />
       </Label>
-        <Label>
+      <Label>
         Telegram Or Email
         <Input
           value={formState.telegram}

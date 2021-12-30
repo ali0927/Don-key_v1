@@ -40,6 +40,7 @@ const StyledHeading = styled.h4`
   position: relative;
   top: -100px;
   font-size: 28px;
+  max-width: 600px;
   text-align: center;
 `;
 
@@ -48,23 +49,26 @@ const Container = styled.div``;
 export const SuccessOverlay = (props: {
   isOpen: boolean;
   onClose: () => void;
-  duration: number;
+  duration?: number;
+  ticketid: number;
 }) => {
   const body =
     typeof window !== "undefined"
       ? document.getElementsByTagName("body")[0]
       : null;
 
-    const closeOverlay = useCallback(() => {
-        props.onClose();
-    }, []);
+  const closeOverlay = useCallback(() => {
+    props.onClose();
+  }, []);
 
-   useEffect(() => {
-    const id = setTimeout(closeOverlay, props.duration * 1000)
-    return () => {
+  useEffect(() => {
+    if (props.duration) {
+      const id = setTimeout(closeOverlay, props.duration * 1000);
+      return () => {
         clearTimeout(id);
+      };
     }
-   }, [])
+  }, []);
 
   if (!body) {
     return null;
@@ -76,7 +80,13 @@ export const SuccessOverlay = (props: {
           <DonkeySuccessStyled />
           <StyledHeading>
             Success! <br />
-            Your report was sent
+            Your issue was reported. <br/> <span style={{fontSize: 16, lineHeight: "1.1"}}>
+            If we contact you in regards to this bug we
+            will first identify your Ticket ID. We will not ask you for this
+            Ticket ID. If the person you are talking to can not provide this
+            Ticket ID then it is not an official Don-key support. <br />
+            Your Ticket ID is: {props.ticketid}
+            </span>
           </StyledHeading>
         </Container>
       </Overlay>,

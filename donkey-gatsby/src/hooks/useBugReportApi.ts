@@ -9,7 +9,6 @@ export const useBugReportApi = () => {
   const createBug = async (formState: IBugFormState) => {
     const {
       name,
-      page,
       attachment,
       email,
       message,
@@ -21,12 +20,7 @@ export const useBugReportApi = () => {
     } = formState;
 
     const Extras = [];
-    if (page) {
-      Extras.push({
-        __component: "component.location",
-        page,
-      });
-    }
+
     if (walletAddress) {
       Extras.push({
         __component: "component.wallet-details",
