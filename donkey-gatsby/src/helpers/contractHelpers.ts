@@ -25,7 +25,7 @@ export const DONBSCbridge = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
 export const DONETHbridge = "0x533e3c0e6b48010873B947bddC4721b1bDFF9648";
 const ReferralSystemAddress = process.env.GATSBY_REFERRAL_CONTRACT;
 const DonkeyPriceFeedAddress = "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6";
-const LPTokenStakeContractBsc = "0x6a4d94c3E28d8A98f29A614a325a3E171f799847";
+const LPTokenStakeContractBsc = "0x68DC579eC90a6B6618e9686909229A8D870b2f33";
 const LPTokenStakeContractEth = "0x737543958801F7D8678c41998A23f5655C0Dd9b6";
 
 let ibusdContract: Contract | null = null;
