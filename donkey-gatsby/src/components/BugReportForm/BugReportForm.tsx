@@ -113,13 +113,7 @@ const INITIAL_STATE = {
   attachment: null as File | null,
 };
 export type IBugFormState = typeof INITIAL_STATE;
-const validateEmail = (email: string) => {
-  return email
-    .toLowerCase()
-    .match(
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
+
 const validate = (state: typeof INITIAL_STATE) => {
   if (!state.type) {
     return { isValid: false, message: "Please select a type" };
@@ -265,7 +259,8 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Telegram Or Email
+        Telegram Or Email<br />
+        <SmallSpan>So we can contact you once the bug is fixed</SmallSpan>
         <Input
           value={formState.telegram}
           onChange={handleChange("telegram")}
@@ -290,7 +285,8 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Message <SmallSpan>Be as detailed and clear as possible</SmallSpan>
+        Message<br />
+        <SmallSpan>Be as detailed and clear as possible</SmallSpan>
         <TextArea
           rows={5}
           value={formState.message}
