@@ -43,6 +43,14 @@ const Label = styled.label`
   display: block;
 `;
 
+const CheckBeforeSend = styled.div`
+background-color: #fff037;
+border: 2px dashed #222222;
+border-radius: 15px;
+padding: 22px 27px;
+margin-bottom: 70px;
+`;
+
 const Select = styled.select`
   ${InputFieldCSS}
   outline: none;
@@ -215,6 +223,12 @@ export const BugReportForm = () => {
 
   return (
     <Form>
+      <CheckBeforeSend>
+      <h4>Before submitting a bug report please:</h4><br/>
+        <ul>
+          <li>Execute a hard refresh and erase all Cache from the browser (Ctr+F5 / Cmd+Shift+R).</li>
+        </ul>
+      </CheckBeforeSend>
       {sent && <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />}
       <Label>
         Type
@@ -259,12 +273,12 @@ export const BugReportForm = () => {
         />
       </Label>
       <Label>
-        Telegram Or Email<br />
+        Telegram Nick Name<br />
         <SmallSpan>So we can contact you once the bug is fixed</SmallSpan>
         <Input
           value={formState.telegram}
           onChange={handleChange("telegram")}
-          placeholder="@Livia_siphron / liviashipron@gmail.com"
+          placeholder="@Livia_siphron"
         />
       </Label>
       <Label>
