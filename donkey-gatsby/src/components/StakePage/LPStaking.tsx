@@ -34,6 +34,7 @@ import { StakeLpNewPopup } from "./StakeLPNew";
 import { StakeType } from "interfaces";
 import styled from "styled-components";
 import TierAccess from "../../images/tier.png";
+import TierNew from "../../images/tier_new.png";
 import { AiOutlineQuestionCircle } from "react-icons/ai";
 import WalletPopup from "components/WalletPopup/WalletPopup";
 import donkeybsc from "../../images/donkeybsc.svg";
@@ -464,6 +465,9 @@ const LpStakingUI = ({
           <Card className="row justify-content-center justify-content-lg-between ">
             {type === "binancenew" && (
               <StyledImage src={TierAccess} alt="Tier Access" />
+            )}
+            {type === "ethereumnew" && (
+              <StyledImage src={TierNew} alt="New" />
             )}
             <div className="col-5 py-2 col-lg-3 m-1 ml-0 m-lg-0 mt-lg-2 divider order-1 pr-lg-0">
               <div className="d-flex flex-column flex-lg-row justify-content-between justify-content-lg-start align-items-center align-items-lg-stretch">
