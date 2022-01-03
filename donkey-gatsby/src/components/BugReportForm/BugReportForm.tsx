@@ -122,7 +122,16 @@ const INITIAL_STATE = {
 };
 export type IBugFormState = typeof INITIAL_STATE;
 
+
+//@ts-ignore
+const validateEmail = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+
 const validate = (state: typeof INITIAL_STATE) => {
+
   if (!state.type) {
     return { isValid: false, message: "Please select a type" };
   }
@@ -133,6 +142,14 @@ const validate = (state: typeof INITIAL_STATE) => {
     return { isValid: false, message: "Please enter name" };
   } else if (!(state.name.length >= 3)) {
     return { isValid: false, message: "Name should be at least 3 Characters" };
+  }
+
+  if (!state.telegram) {
+    return { isValid: false, message: "Please enter telegram" };
+  } else if (!(state.telegram.length >= 3)) {
+    return { isValid: false, message: "Telegram should be at least 3 Characters" };
+  } else if (validateEmail(state.telegram)) {
+    return { isValid: false, message: "Please enter a vaild Telegram name" };
   }
 
   if (state.type === "investrelated" && !state.walletAddress) {
@@ -170,6 +187,9 @@ const SmallSpan = styled.span`
   color: #767b86;
   font-weight: normal;
 `;
+
+
+
 
 export const BugReportForm = () => {
   const { createBug } = useBugReportApi();
