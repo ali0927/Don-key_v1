@@ -11,6 +11,7 @@ import { WebsiteMeta } from "components/meta";
 import { Helmet } from "react-helmet";
 import { Provider as ReduxProvider } from "react-redux";
 import { store } from "store";
+import { LogRocketProvider } from "LogRocketProvider";
 export const Providers: React.FC = ({ children }) => {
   return (
     <ReduxProvider store={store}>
@@ -29,7 +30,7 @@ export const Providers: React.FC = ({ children }) => {
             charSet="UTF-8"
             href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
           />
-<link rel="preconnect" href="https://bsc-node.node.don-key.finance" />
+          <link rel="preconnect" href="https://bsc-node.node.don-key.finance" />
 
           <link
             rel="stylesheet"
@@ -110,7 +111,9 @@ export const Providers: React.FC = ({ children }) => {
             <Web3Provider>
               <StakingContractProvider>
                 <ReferralStateProvider>
-                  <TooltipProvider>{children}</TooltipProvider>
+                  <LogRocketProvider>
+                    <TooltipProvider>{children}</TooltipProvider>
+                  </LogRocketProvider>
                 </ReferralStateProvider>
               </StakingContractProvider>
             </Web3Provider>
