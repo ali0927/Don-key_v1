@@ -411,7 +411,7 @@ export const AcceleratedAPYModal = ({
             </div>
 
             <div className="d-flex align-items-center justify-content-between mt-2">
-              <SubHeading>Extra APY will be</SubHeading>
+              <SubHeading>Extra APR will be</SubHeading>
               <Heading fontSize="20px" mobileFontSize="16px">
                 +{predictedApy}%
               </Heading>

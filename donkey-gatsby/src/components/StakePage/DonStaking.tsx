@@ -245,7 +245,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
             </div>
           </div>
           <div className="col-5 m-1 m-lg-0 col-lg-2 pt-3">
-            <p>EXTRA APY</p>
+            <p>EXTRA APR</p>
             <h2 className="mb-3 mb-lg-0">{tier.apy}%</h2>
           </div>
           {!isInCoolOffPeriod && openHarvestMob && (

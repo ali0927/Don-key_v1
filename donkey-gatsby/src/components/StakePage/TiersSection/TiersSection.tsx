@@ -15,6 +15,7 @@ import clsx from "clsx";
 import { Container } from "react-bootstrap";
 import { StaticImage } from "gatsby-plugin-image";
 import { useReferralContext } from "contexts/ReferralContext";
+import { tiersInfo } from "LandingPage/TiersSection";
 
 const Root = styled.div<{ bgColor: string }>`
   background-color: ${(props) => props.bgColor};
@@ -153,28 +154,7 @@ export const TiersSection: React.FC<IProps> = ({
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
-  const tiers: ITierSection[] = [
-    {
-      tier: 0,
-      image: teir0,
-      stakedDons: "100",
-      apy: "Access to DAPP",
-      height: "139px",
-      bottom: "34px",
-    },
-    { tier: 1, image: teir1, stakedDons: "500", apy: "10%", bottom: "5px" },
-    {
-      tier: 2,
-      image: tier2,
-      stakedDons: "2,500",
-      apy: "20%",
-      bottom: "10px",
-      height: "120px",
-    },
-    { tier: 3, image: tier3, stakedDons: "5,000", apy: "50%" },
-    { tier: 4, image: tier4, stakedDons: "25,000", height: "90%", apy: "75%" },
-    { tier: 5, image: tier5, stakedDons: "50,000", apy: "100%" },
-  ];
+
 
   const [selectedTier, setSelectedTier] = React.useState(0);
 
@@ -182,7 +162,7 @@ export const TiersSection: React.FC<IProps> = ({
   const { getTierCommission } = useReferralContext();
 
   const renderCards = (index: number, staking?: boolean) => {
-    const tier = tiers[index];
+    const tier = tiersInfo[index];
     //const tierImage = getImage(tier.image);
     return (
       <div className={clsx({ "mr-3": !isDesktop })}>
@@ -221,7 +201,7 @@ export const TiersSection: React.FC<IProps> = ({
                 smFontSize="10px"
                 color="#222222"
               >
-                Extra APY
+                Extra APR
               </CardTypography>
             )}
             <CardTypography
@@ -296,12 +276,12 @@ export const TiersSection: React.FC<IProps> = ({
            
                 infinite={false}
               >
-                {tiers.map((currentTier, index) => {
+                {tiersInfo.map((currentTier, index) => {
                   return <>{renderCards(index, staking)}</>;
                 })}
               </CutomSlickSlider>
               <div className="d-flex justify-content-center mt-4">
-                {tiers.map((value, index) => {
+                {tiersInfo.map((value, index) => {
                   return (
                     <Dots
                       className="mr-2"
@@ -315,7 +295,7 @@ export const TiersSection: React.FC<IProps> = ({
           )}
           {isDesktop && (
             <div className="d-flex justify-content-between mt-3 w-100">
-              {tiers.map((currentTier, index) => {
+              {tiersInfo.map((currentTier, index) => {
                 return <>{renderCards(index, staking)}</>;
               })}
             </div>
