@@ -30,8 +30,10 @@ export const Providers: React.FC = ({ children }) => {
             charSet="UTF-8"
             href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
           />
-          <link rel="preconnect" href="https://bsc-node.node.don-key.finance" />
-
+          <link rel="preconnect" href="https://node-api.don-key.finance" />
+          <link rel="preconnect" href="https://bsc.getblock.io" />
+          <link rel="preconnect" href="https://polygon-rpc.com" />
+          <link rel="preconnect" href="https://rpc.ftm.tools" />
           <link
             rel="stylesheet"
             type="text/css"
