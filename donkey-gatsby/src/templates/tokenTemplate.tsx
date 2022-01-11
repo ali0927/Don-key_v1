@@ -76,6 +76,7 @@ export const FarmerBioShort = ({
         extraApy={
           tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
         }
+        disabled={!!item.farmer.hideInvestButton}
         totalValue={
           <>
             {" "}

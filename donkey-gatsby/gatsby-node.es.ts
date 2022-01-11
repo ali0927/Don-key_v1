@@ -141,6 +141,7 @@ export const createPages = async ({ graphql, actions }: any) => {
               address
             }
             farmer {
+              hideInvestButton
               status
               name
               farmerImage {
