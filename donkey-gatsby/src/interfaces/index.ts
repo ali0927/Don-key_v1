@@ -81,6 +81,7 @@ export interface IFarmerInter {
   last_cycle: string;
   active: boolean;
   twitter: string;
+  hideInvestButton: boolean | null;
   telegram: string;
   poolAddress: string;
   poolVersion: number;

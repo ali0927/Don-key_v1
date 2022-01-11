@@ -4,7 +4,7 @@ import { DetailTable } from "components/DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import {  useState } from "react";
+import { useState } from "react";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
@@ -89,10 +89,6 @@ const P = styled.p`
   }
 `;
 
-
-
-
-
 export const FarmerBio = ({
   farmer,
   tvl,
@@ -112,7 +108,7 @@ export const FarmerBio = ({
     strategies,
     poolVersion: pool_version,
     twitter,
-
+    hideInvestButton,
     slug,
     farmerImage: { url: picture },
     oldPoolAddress,
@@ -120,8 +116,6 @@ export const FarmerBio = ({
   } = farmer;
 
   // const [openSharePopup, setSharePopup] = useState(false);
-
-  const { connected } = useWeb3Context();
 
   const apy =
     strategies && strategies.length > 0
@@ -219,7 +213,9 @@ export const FarmerBio = ({
             <DetailTable
               apy={apy}
               network={network}
+              hideInvestButton={hideInvestButton}
               tvl={tvl}
+            
               oldPoolAddress={oldPoolAddress}
               oldPoolVersion={oldPoolVersion}
               poolVersion={pool_version}

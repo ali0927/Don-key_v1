@@ -324,6 +324,7 @@ export const DetailTable = ({
   oldPoolVersion,
   slug,
   strategyName,
+  hideInvestButton,
   name,
 }: {
   poolAddress: string;
@@ -337,6 +338,7 @@ export const DetailTable = ({
   slug: string;
   gasLimit?: string;
   strategyName: string;
+  hideInvestButton: boolean | null;
   name: string;
 }) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
@@ -446,6 +448,7 @@ export const DetailTable = ({
             poolAddress={poolAddress}
             poolVersion={poolVersion}
             network={network}
+            hideInvestButton={hideInvestButton}
             oldPoolAddress={oldPoolAddress}
             oldPoolVersion={oldPoolVersion}
             isWithdrawRequested={isWithdrawRequested}
