@@ -181,18 +181,18 @@ export const  tiersInfo: ITierSection[] = [
     height: "139px",
     bottom: "34px",
   },
-  { tier: 1, image: teir1, stakedDons: "500", apy: "10%", bottom: "5px" },
+  { tier: 1, image: teir1, stakedDons: "500", apy: "5%", bottom: "5px" },
   {
     tier: 2,
     image: tier2,
     stakedDons: "2,500",
-    apy: "20%",
+    apy: "10%",
     bottom: "10px",
     height: "120px",
   },
-  { tier: 3, image: tier3, stakedDons: "5,000", apy: "40%" },
-  { tier: 4, image: tier4, stakedDons: "25,000", height: "90%", apy: "55%" },
-  { tier: 5, image: tier5, stakedDons: "50,000", apy: "70%" },
+  { tier: 3, image: tier3, stakedDons: "5,000", apy: "15%" },
+  { tier: 4, image: tier4, stakedDons: "25,000", height: "90%", apy: "30%" },
+  { tier: 5, image: tier5, stakedDons: "50,000", apy: "40%" },
 ];
 
 export const TiersSection: React.FC<IProps> = ({
