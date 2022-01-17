@@ -39,7 +39,7 @@ import { StakeIcon } from "icons/StakeIcon";
 import { BridgePopup } from "components/Bridgepopup/Bridgepopup";
 import { ClickAwayListener } from "@material-ui/core";
 import WalletPopup from "components/WalletPopup/WalletPopup";
-
+import {GrMoney} from "react-icons/gr";
 declare global {
   interface Window {
     ethereum: any;
@@ -289,7 +289,7 @@ const LandingDrawer = () => {
       >
         Litepaper
       </DrawerItem>
-      <DrawerItem icon={<FarmerIcon />} to="/earning">
+      <DrawerItem icon={<GrMoney size={24} />} to="/earning">
         Earning
       </DrawerItem>
       <DrawerItem icon={<FarmerIcon />} to="/farmers">
