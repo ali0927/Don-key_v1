@@ -209,40 +209,40 @@ const SmallItem = styled(DonGatsbyLink)`
 `;
 
 const DropDownsDonToken = styled.div`
-    position: relative;
-    display: inline-block;
-    &:hover{
-        & div{
-            display: block;
-        }
+  position: relative;
+  display: inline-block;
+  &:hover {
+    & div {
+      display: block;
     }
-    & button{
-        background-color: transparent;
-        border: none;
+  }
+  & button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    color: #070602;
+    padding: 16px 3rem 16px 1rem;
+  }
+  & div {
+    display: none;
+    position: absolute;
+    min-width: 160px;
+    overflow: hidden;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    background-color: ${theme.palette.background.yellow};
+    border-radius: 10px;
+    & a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      &:hover {
         cursor: pointer;
-        font-size: 14px;
-        font-weight: 500;
-        color: #070602;
-        padding: 16px 3rem 16px 1rem;
-    }
-    & div{
-        display: none;
-        position: absolute;
-        min-width: 160px;
-        overflow:hidden;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 2;
-        background-color: ${theme.palette.background.yellow};
-        border-radius: 10px;
-        & a{
-        color: black;
-        padding: 12px 16px;
-        text-decoration: none;
-        display: block;
-        &:hover{
-            cursor: pointer;
-            background-color: ${theme.palette.common.lightYellow};
-        }
+        background-color: ${theme.palette.common.lightYellow};
+      }
     }
   }
 `;
@@ -289,6 +289,9 @@ const LandingDrawer = () => {
       >
         Litepaper
       </DrawerItem>
+      <DrawerItem icon={<FarmerIcon />} to="/earning">
+        Earning
+      </DrawerItem>
       <DrawerItem icon={<FarmerIcon />} to="/farmers">
         Farmers
       </DrawerItem>
@@ -311,16 +314,23 @@ const LandingMenu = () => {
       <MenuItem href="/litepaper.pdf" target="_blank">
         Litepaper
       </MenuItem>
+      <MenuItem to="/earning">Earning</MenuItem>
       <MenuItem to="/farmers">Farmers</MenuItem>
       <MenuItem to="/team">Team</MenuItem>
       <DropDownsDonToken>
-            <button >$DON</button>
-            <div >
-                <a target="_blank" href={PancakeBuyURL} >$DON BEP20</a>
-                <a target="_blank" href={UniSwapURL} >$DON ERC20</a>
-                <a target="_blank" href={kucoinSwapURL} >$KDON Kucoin</a>
-            </div>
-        </DropDownsDonToken>
+        <button>$DON</button>
+        <div>
+          <a target="_blank" href={PancakeBuyURL}>
+            $DON BEP20
+          </a>
+          <a target="_blank" href={UniSwapURL}>
+            $DON ERC20
+          </a>
+          <a target="_blank" href={kucoinSwapURL}>
+            $KDON Kucoin
+          </a>
+        </div>
+      </DropDownsDonToken>
       <MenuItem to="/faq">FAQ</MenuItem>
       <MenuItem to="/support">Support</MenuItem>
     </>

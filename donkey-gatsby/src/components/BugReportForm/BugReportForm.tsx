@@ -25,15 +25,15 @@ const InputFieldCSS = css`
   }
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   ${InputFieldCSS}
 `;
 
-const TextArea = styled.textarea`
+export const TextArea = styled.textarea`
   ${InputFieldCSS}
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   color: #222222;
   font-family: "Work Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif,
@@ -51,7 +51,7 @@ padding: 22px 27px;
 margin-bottom: 70px;
 `;
 
-const Select = styled.select`
+export const Select = styled.select`
   ${InputFieldCSS}
   outline: none;
 
@@ -68,7 +68,7 @@ const Select = styled.select`
     padding-right: 40px;
   }
 `;
-const Form = styled.div`
+export const Form = styled.div`
   background-color: #fff;
   border-radius: 20px;
   box-shadow: 0px 9.951690673828125px 59.710147857666016px 0px #262d7614;

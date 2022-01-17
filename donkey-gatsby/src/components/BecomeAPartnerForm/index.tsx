@@ -1,0 +1,1 @@
+export { BecomeAPartnerForm } from "./BecomeAPartnerForm";

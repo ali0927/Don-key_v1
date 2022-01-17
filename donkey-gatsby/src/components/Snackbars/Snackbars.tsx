@@ -10,7 +10,7 @@ any,
 >(({ message }: { message: string }, ref) => {
   return (
     <Alert
-      className="shadow-sm"
+      className="shadow-sm d-flex align-items-center"
       ref={ref}
       severity="success"
       icon={<CircularProgress color="inherit" size={"1rem"} />}
