@@ -6,6 +6,6 @@ export const captureException = (e: any, msg: string) => {
     console.log(e, msg);
   }
 
-  LogRocket.captureException(e);
-  LogRocket.captureMessage(msg);
+  LogRocket.captureException(e, {extra: {msg}});
+  // LogRocket.captureMessage(msg);
 };
