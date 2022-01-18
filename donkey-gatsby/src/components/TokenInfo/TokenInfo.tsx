@@ -115,7 +115,7 @@ export const TokenInfo = ({
             <SubText>Up to APY</SubText>
           </div>
           <div className="col-7 d-flex flex-column align-items-end  justify-content-end">
-            <DONApy>{new BigNumber(maxApy).plus(100).toFixed()}%</DONApy>
+            <DONApy>{new BigNumber(maxApy).plus(40).toFixed()}%</DONApy>
             <SubText>APY for DON stakers</SubText>
           </div>
         </>

@@ -74,7 +74,7 @@ export const FarmerBioShort = ({
         showOnRight={!tokenObj.boostApy}
         buttonLabel="Open"
         extraApy={
-          tokenObj.boostApy && new BigNumber(item.apy).plus(100).toFixed() + "%"
+          tokenObj.boostApy && new BigNumber(item.apy).plus(40).toFixed() + "%"
         }
         disabled={!!item.farmer.hideInvestButton}
         totalValue={
