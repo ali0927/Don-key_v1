@@ -19,8 +19,6 @@ const staketierInfo: {
   data: { [x: string]: ITier };
 } = { isReady: false, data: {} };
 
-
-
 const fetchTiers = async (stakingContract: any) => {
   if (!staketierInfo.isReady) {
     for (const tierNum of tiersList) {
@@ -112,12 +110,17 @@ const useStaking = () => {
         walletAddress: address,
       });
       const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
-      const contract = new newWeb3.eth.Contract(
-        DonStaking.abi as any,
-        DonStakingAddress
-      );
-      const userInfo = await contract.methods.userInfo(address).call();
-
+      let donEquivalent = "0";
+      try {
+        const contract = new newWeb3.eth.Contract(
+          DonStaking.abi as any,
+          DonStakingAddress
+        );
+        const userInfo = await contract.methods.userInfo(address).call();
+        donEquivalent = toEther(userInfo.donEquivalent);
+      } catch (e) {
+        captureException(e, "Error in Fetching Don Equivalent");
+      }
       const bep = resp.data.bep;
       const erc = resp.data.erc;
       const staked = resp.data.staked;
@@ -127,9 +130,9 @@ const useStaking = () => {
         .plus(erc)
         .plus(staked)
         .plus(coolOff)
-        .plus(toEther(userInfo.donEquivalent));
+        .plus(donEquivalent);
     } catch (e) {
-      captureException(e, "fetchDons From Api");
+      captureException(e, "fetchDons From Api : " + address);
     }
     setHoldedDons(totalDons);
   };
@@ -312,6 +315,7 @@ const useStaking = () => {
     currentTier,
     holdedDons,
     investedAmount,
+    address,
   ]);
   return stakingObj;
 };
