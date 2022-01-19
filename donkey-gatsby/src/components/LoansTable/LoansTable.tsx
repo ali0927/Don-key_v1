@@ -1,7 +1,7 @@
 import { CountDown } from "components/CountDown"
 
 export const LoansTable = () => {
-    return  <div className="strip table_strip your_loans" style={{paddingTop: '54px'}}>
+    return  <div className="strip table_strip your_loans" style={{paddingTop: '54px' ,paddingBottom: '104px'}}>
     <div className="boxed">
       <h3>Your Loans</h3>
       <table>

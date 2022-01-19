@@ -603,3 +603,32 @@ table span.closed::before {
     font-size: 20px;
     font-weight: 400;
 }
+
+.strip.table_strip.previous_auctions {
+    background-color: #E9E9E9;
+    padding-bottom: 150px;
+}
+
+.strip.table_strip.previous_auctions thead tr {
+    border-bottom: 7px solid #E9E9E9;
+    box-shadow: inset 0 -5px 0px #c4c4c4;
+}
+
+.strip.table_strip.previous_auctions tbody tr:first-child {
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.strip.table_strip.previous_auctions tbody tr:first-child td:first-child {
+    color: black;
+    font-size: 19px;
+    transform: rotateY(41deg);
+}
+
+.strip.table_strip.previous_auctions tbody {
+    border-bottom: 10px solid #e9e9e9;
+}
+
+tr.table_group {
+    cursor: pointer;
+}

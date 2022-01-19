@@ -2,6 +2,7 @@ import { BidsTable } from "components/BidsTable";
 import { CountDown } from "components/CountDown";
 import { Footer } from "components/Footer";
 import { LoansTable } from "components/LoansTable";
+import { PreviousAuctionsTable } from "components/PreviousAuctionsTable";
 import { MakeABidForm } from "components/MakeABidForm";
 import { NavBar } from "components/Navbar";
 import React from "react";
@@ -30,6 +31,7 @@ export default function Auction() {
 
       <BidsTable />
       <LoansTable />
+      <PreviousAuctionsTable />
       <Footer />
     </>
   );
