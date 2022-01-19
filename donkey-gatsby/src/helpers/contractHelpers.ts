@@ -341,6 +341,16 @@ const makeAsyncMultiCalled = <T extends any[], V>(
   };
 };
 
+export const getPriceFromPriceFeed = async (
+  web3: Web3,
+  priceFeedAddress: string,
+  tokenAddress: string
+) => {
+  const priceFeeds = await getDonkeyPriceFeedContract(web3, priceFeedAddress);
+  const usdPrice = await priceFeeds.methods.getPriceinUSD(tokenAddress).call();
+  return usdPrice;
+};
+
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
     const tokenAddress = await getTokenAddress(web3, poolAddress);
@@ -361,13 +371,7 @@ export const getTokenPrice = memoizeAsync(
     if (index === -1) {
       const pool = await getPoolContract(web3, poolAddress, 3);
       const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
-      const priceFeeds = await getDonkeyPriceFeedContract(
-        web3,
-        priceFeedsListAddress
-      );
-      const usdPrice = await priceFeeds.methods
-        .getPriceinUSD(tokenAddress)
-        .call();
+      const usdPrice = await getPriceFromPriceFeed(web3, priceFeedsListAddress, tokenAddress);
       return toEther(usdPrice);
     }
     const bnbPrice = await (await getPancakeContract(web3)).methods
@@ -646,7 +650,7 @@ export const getStakingContract = async (web3: Web3, isBSC = false) => {
 
 export const getNewStakingContract = async (web3: Web3, isBsc = false) => {
   const stakingJSON = await import("../JsonData/LpStaking.json");
-  
+
   const contract = new web3.eth.Contract(
     stakingJSON.abi as any,
     isBsc ? LPTokenStakeContractBsc : LPTokenStakeContractEth
@@ -706,7 +710,7 @@ export const getDonPrice = async (isBSC = false) => {
   return donPrice.toFixed(10);
 };
 
-export const toEther = (val: string, decimals = 18) => {
+export const toEther = (val: string | number, decimals = 18) => {
   return new BigNumber(val).dividedBy(10 ** decimals).toString();
 };
 export const toWei = (val: string, decimals = 18) => {
@@ -772,7 +776,10 @@ export const calculateAPY = async (web3: Web3, type: StakeType) => {
 
 export const calculateTVL = async (web3: Web3, type: StakeType) => {
   const stakingContract = await getStakeContract(web3, type);
-  const lpContract = await getLPTokenContract(web3, type === "binancenew" || type === "binance");
+  const lpContract = await getLPTokenContract(
+    web3,
+    type === "binancenew" || type === "binance"
+  );
 
   let totalStakedTokens = new BigNumber(
     await stakingContract.methods.totalSupply().call()
@@ -784,4 +791,132 @@ export const calculateTVL = async (web3: Web3, type: StakeType) => {
     .dividedBy(totalLPSupply)
     .multipliedBy(totalLPAmount)
     .toFixed(2);
+};
+
+export const getPromotionalPoolContract = async (
+  web3: Web3,
+  poolAddress: string
+) => {
+  const promotionalPoolABI = await import(
+    "../JsonData/PromotionalPool-ABI.json"
+  );
+  const promotionalPoolToken = new web3.eth.Contract(
+    promotionalPoolABI.default as any,
+    poolAddress
+  );
+  return promotionalPoolToken;
+};
+
+export const getPoolInfo = async (web3: Web3, poolAddress: string) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+  const poolInfo = await promotionalPoolContract.methods.poolInfo(0).call();
+  return poolInfo;
+};
+
+export const getRewardToken = async (web3: Web3, poolAddress: string) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+  const rewardAddr = await promotionalPoolContract.methods.rewardToken().call();
+  const bep20ABI = await import("../JsonData/BEP20Token.json");
+  const rewardToken = new web3.eth.Contract(bep20ABI.abi as any, rewardAddr);
+  const symbol = await rewardToken.methods.symbol().call();
+  const name = await rewardToken.methods.name().call();
+  const decimals = await rewardToken.methods.decimals().call();
+  return { name, symbol, decimals };
+};
+
+export const getPendingReward = async (
+  web3: Web3,
+  poolAddress: string,
+  account: string
+) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+  const pendingReward = await promotionalPoolContract.methods
+    .pendingReward(account)
+    .call();
+  return pendingReward;
+};
+
+export const getStakedAmount = async (
+  web3: Web3,
+  poolAddress: string,
+  account: string
+) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+  const amountStaked = await promotionalPoolContract.methods
+    .userInfo(account)
+    .call();
+  return amountStaked.amount;
+};
+
+export const approveDon = async (
+  web3: Web3,
+  poolAddress: string,
+  amount: string,
+  address: string
+) => {
+  const donContract = await getBSCDon(web3);
+
+  const res = await donContract.methods
+    .approve(poolAddress, amount)
+    .send({ from: address });
+  return res;
+};
+
+export const checkAllowance = async (
+  web3: Web3,
+  poolAddress: string,
+  amount: string,
+  address: string
+) => {
+  const donContract = await getBSCDon(web3);
+  const allowance = await donContract.methods
+    .allowance(address, poolAddress)
+    .call();
+  return new BigNumber(allowance).gte(amount);
+};
+
+export const stakeDon = async (
+  web3: Web3,
+  poolAddress: string,
+  amount: string,
+  address: string
+) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+
+  const _res = await promotionalPoolContract.methods
+    .deposit(amount)
+    .send({ from: address });
+  return _res;
+};
+
+export const withdrawDon = async (
+  web3: Web3,
+  poolAddress: string,
+  amount: string,
+  address: string
+) => {
+  const promotionalPoolContract = await getPromotionalPoolContract(
+    web3,
+    poolAddress
+  );
+
+  const _res = await promotionalPoolContract.methods
+    .withdraw(amount)
+    .send({ from: address });
+  return _res;
 };

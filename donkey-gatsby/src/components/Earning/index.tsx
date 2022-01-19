@@ -1,0 +1,1 @@
+export {EarningPage as default } from "./EarningPage";

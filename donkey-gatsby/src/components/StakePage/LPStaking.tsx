@@ -89,7 +89,7 @@ const DisabledContent = styled.div`
   transform: translateX(-50%) translateY(-50%);
   text-align: center;
   box-shadow: 1px 1px 3px #00000036;
-  border-radius : 4px;
+  border-radius: 4px;
 `;
 
 const Disabled = () => {
@@ -143,7 +143,7 @@ const LpStakingUI = ({
     useTransactionNotification();
   const hasStakedAmount = new BigNumber(Number(staking.stakedLp)).gt(0);
   const doHarvest = async () => {
-    if(disabled){
+    if (disabled) {
       return;
     }
     enableHLoading();
@@ -170,7 +170,7 @@ const LpStakingUI = ({
     }
   };
   const handleUnstake = async () => {
-    if(disabled){
+    if (disabled) {
       return;
     }
     const web3 = getConnectedWeb3();
@@ -192,7 +192,7 @@ const LpStakingUI = ({
     }
   };
   const handleStake = async () => {
-    if(disabled){
+    if (disabled) {
       return;
     }
     const web3 = getConnectedWeb3();
@@ -236,7 +236,7 @@ const LpStakingUI = ({
   };
 
   const handleMigrate = async () => {
-    if(disabled){
+    if (disabled) {
       return;
     }
     showProgress("Unstaking Previous LP Tokens");
@@ -466,9 +466,7 @@ const LpStakingUI = ({
             {type === "binancenew" && (
               <StyledImage src={TierAccess} alt="Tier Access" />
             )}
-            {type === "ethereumnew" && (
-              <StyledImage src={TierNew} alt="New" />
-            )}
+            {type === "ethereumnew" && <StyledImage src={TierNew} alt="New" />}
             <div className="col-5 py-2 col-lg-3 m-1 ml-0 m-lg-0 mt-lg-2 divider order-1 pr-lg-0">
               <div className="d-flex flex-column flex-lg-row justify-content-between justify-content-lg-start align-items-center align-items-lg-stretch">
                 <div className="mr-2 d-flex flex-column align-items-center justify-content-center">
@@ -553,7 +551,12 @@ const LpStakingUI = ({
             </div>
             <div className="col-5 m-1  m-lg-0 col-lg-1 px-lg-0 pt-3 order-2 order-lg-3">
               <p>APY</p>
-              <h2>{staking.apy}%</h2>
+              <h2>
+                {type === "binancenew" || type === "ethereumnew"
+                  ? staking.apy
+                  : "0"}
+                %
+              </h2>
             </div>
 
             {renderPeggedDon()}

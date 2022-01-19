@@ -495,7 +495,7 @@ export const StakingInfo = () => {
               <StakingSubtitle>{tier.tier}</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{ width: "21%" }}>
-              <StakingTitle>Extra APY</StakingTitle>
+              <StakingTitle>Extra APR</StakingTitle>
               <StakingSubtitle>{tier.apy} %</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{ width: "36%" }}>

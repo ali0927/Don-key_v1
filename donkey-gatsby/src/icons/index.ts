@@ -108,3 +108,4 @@ export * from './questionToolTip'
 export * from './mainnetIcon'
 export * from './stakingMainnet'
 export * from './downArrow'
+export * from "./DonPartnerIcon";

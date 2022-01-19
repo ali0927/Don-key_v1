@@ -10,47 +10,45 @@ import BigNumber from "bignumber.js";
 import moment from "moment";
 import { api } from "strapi";
 import React from "react";
+import { tiersInfo } from "LandingPage/TiersSection";
 const DonStakingAddress = process.env.GATSBY_STAKING_CONTRACT;
 export type ITier = { apy: number; donRequired: string; tier: number };
 const tiersList = [0, 1, 2, 3, 4, 5];
-const tierInfo: {
+const staketierInfo: {
   isReady: boolean;
   data: { [x: string]: ITier };
 } = { isReady: false, data: {} };
 
-const convertAPRtoAPY = (apr: string) => {
-  return (new BigNumber(1).plus(new BigNumber(apr).dividedBy(365))).pow(365).minus(1).multipliedBy(100).toFixed(0);
-}
-
 const fetchTiers = async (stakingContract: any) => {
-
-  
-  if (!tierInfo.isReady) {
+  if (!staketierInfo.isReady) {
     for (const tierNum of tiersList) {
       const detail = await stakingContract.methods
         .getTierDetail(tierNum)
         .call();
-      tierInfo.data[tierNum] = {
+      staketierInfo.data[tierNum] = {
         tier: tierNum,
-        apy: parseInt(convertAPRtoAPY((parseInt(detail.rewardPer) / 10000).toString())) ,
+        apy: parseInt(
+          tiersInfo.find((item) => item.tier === tierNum)?.apy ||
+            "0%".split("%")[0]
+        ),
         donRequired: tierNum === 0 ? "0" : toEther(detail.cap),
       };
     }
-    tierInfo.isReady = true;
+    staketierInfo.isReady = true;
   }
 };
 
 export const getTierInfo = async (amount: string, stakingContract: any) => {
   await fetchTiers(stakingContract);
   for (const tierNum of tiersList) {
-    const tier = tierInfo.data[tierNum];
+    const tier = staketierInfo.data[tierNum];
     const amountBN = new BigNumber(amount);
     if (tierNum === 5) {
       if (amountBN.gte(tier.donRequired)) {
         return tier;
       }
     }
-    const nextTier = tierInfo.data[tierNum + 1];
+    const nextTier = staketierInfo.data[tierNum + 1];
     if (tierNum === 0) {
       if (amountBN.lt(nextTier.donRequired)) {
         return tier;
@@ -112,12 +110,17 @@ const useStaking = () => {
         walletAddress: address,
       });
       const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
-      const contract = new newWeb3.eth.Contract(
-        DonStaking.abi as any,
-        DonStakingAddress
-      );
-      const userInfo = await contract.methods.userInfo(address).call();
-
+      let donEquivalent = "0";
+      try {
+        const contract = new newWeb3.eth.Contract(
+          DonStaking.abi as any,
+          DonStakingAddress
+        );
+        const userInfo = await contract.methods.userInfo(address).call();
+        donEquivalent = toEther(userInfo.donEquivalent);
+      } catch (e) {
+        captureException(e, "Error in Fetching Don Equivalent");
+      }
       const bep = resp.data.bep;
       const erc = resp.data.erc;
       const staked = resp.data.staked;
@@ -127,9 +130,9 @@ const useStaking = () => {
         .plus(erc)
         .plus(staked)
         .plus(coolOff)
-        .plus(toEther(userInfo.donEquivalent));
+        .plus(donEquivalent);
     } catch (e) {
-      captureException(e, "fetchDons From Api");
+      captureException(e, "fetchDons From Api : " + address);
     }
     setHoldedDons(totalDons);
   };
@@ -174,7 +177,7 @@ const useStaking = () => {
       );
 
       await fetchTiers(stakingContract);
-      const crTier = tierInfo.data[userInfo.tier_type];
+      const crTier = staketierInfo.data[userInfo.tier_type];
       const coolOffDons = toEther(userInfo.coolOffAmount);
 
       setIsStaked(userInfo.isStaked);
@@ -291,7 +294,7 @@ const useStaking = () => {
       loading,
       lastRewardTime,
       getTierList: () => {
-        return tierInfo.data;
+        return staketierInfo.data;
       },
       getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
       stakingAddress: DonStakingAddress as string,
@@ -312,6 +315,7 @@ const useStaking = () => {
     currentTier,
     holdedDons,
     investedAmount,
+    address,
   ]);
   return stakingObj;
 };

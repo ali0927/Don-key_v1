@@ -46,6 +46,7 @@ export const InvestBlackCard = ({
   apy,
   oldPoolAddress,
   oldPoolVersion,
+  hideInvestButton,
   isWithdrawRequested,
 }: {
   poolAddress: string;
@@ -54,6 +55,7 @@ export const InvestBlackCard = ({
   oldPoolAddress: string;
   oldPoolVersion: number;
   boostApy: boolean;
+  hideInvestButton: boolean | null;
   apy: string;
   isWithdrawRequested?: boolean;
 }) => {
@@ -492,7 +494,7 @@ export const InvestBlackCard = ({
     }
     return (
       <div className="row mt-2 mb-1 justify-content-center">
-        {!isWithdrawRequested && (
+        {!isWithdrawRequested && !hideInvestButton && (
           <ButtonWidget
             varaint="contained"
             fontSize="14px"
