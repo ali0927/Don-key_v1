@@ -2,11 +2,19 @@
     width: 100%;
 }
 .boxed {
-    max-width: 1140px;
-    width: 100%;
+    width: 1140px;
+    max-width: 96%;
     margin: auto;
     display: flex;
 }
+
+@media (max-width: 850px) {
+    .boxed {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 
 button {
     border: 1px solid #FFF78F;
@@ -87,9 +95,22 @@ button.white:hover {
     width: 50%;
 }
 
+@media (max-width: 850px) {
+    .width-50 {
+        width: 100%;
+    }
+}
+
 .strip.autcion_head {
     background-color: #fff037;
     padding-top: 20px;
+}
+
+@media (max-width: 850px) {
+    .strip.autcion_head {
+        background-color: whitesmoke;
+        box-shadow: inset 0 650px 0 0 #fff037;
+    }
 }
 
 .make_a_bid {
@@ -99,6 +120,12 @@ button.white:hover {
     color: #fff;
     box-shadow: 0 0 44px -2px #00000059;
     margin-bottom: -102px;
+}
+
+@media (max-width: 850px) {
+    .make_a_bid {
+        margin-top: 53px;
+    }
 }
 
 .make_a_bid .field {
@@ -226,6 +253,13 @@ button.white:hover {
     max-width: 400px;
     align-items: center;
     margin-top: 75px;
+}
+
+@media (max-width: 850px) {
+    .countdowner {
+    margin-top: 29px;
+    margin: auto;
+    }
 }
 
 
