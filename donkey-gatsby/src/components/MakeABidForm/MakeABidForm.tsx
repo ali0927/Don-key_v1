@@ -9,7 +9,7 @@ import {
   getTokenPrice,
 } from "helpers";
 import { useStakingContract } from "hooks";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
 
 const Dropdown: React.FC = (props) => {
@@ -107,6 +107,48 @@ const calcCommisionPercent = (debtAmount: string, commission: BigNumber) => {
     .toFixed(2);
 };
 
+const NewInput = (props: {
+  value: string;
+  onChange: (value: string) => void;
+  validator: (value: string) => boolean;
+}) => {
+  const [value, setValue] = useState("");
+
+  const lastValidValueRef = useRef(value);
+  const inputRef = useRef<HTMLInputElement>(null);
+  if (props.validator(value)) {
+    lastValidValueRef.current = value;
+  }
+
+  const onBlur = () => {
+    if (lastValidValueRef.current !== value) {
+      setValue(lastValidValueRef.current);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<any>) => {
+    const value = e.target.value;
+    if (props.validator(value)) {
+      props.onChange(value);
+    }
+    setValue(value);
+  };
+  useEffect(() => {
+    if (inputRef.current !== document.activeElement) {
+      setValue(props.value);
+    }
+  }, [props.value]);
+
+  return (
+    <input
+      ref={inputRef}
+      value={value}
+      onBlur={onBlur}
+      onChange={handleChange}
+    />
+  );
+};
+
 const calcFloorCommission = (state: IBidFormState, debtRatio: string) => {
   if (state.fetchstatus !== "fetchingcomplete") {
     return state.commission;
@@ -124,7 +166,6 @@ const calcFloorCommission = (state: IBidFormState, debtRatio: string) => {
 
 const transformArray = <T extends any>(arr: T[], index: number) => {
   if (arr.length > 2) {
-
     return [
       arr[index],
       ...arr.slice(0, index),
@@ -140,7 +181,7 @@ export const MakeABidForm = () => {
   const pools = useActivePools();
 
   const [state, setState] = useState(INITIAL_FORM_STATE);
-
+  const commissionRef = useRef(state.commission);
   const maxDebtRatio = TierBorrowPercentMap[tier.tier as 0] || "0";
 
   const fetchLps = async () => {
@@ -223,6 +264,29 @@ export const MakeABidForm = () => {
   const selectNewLp = (index: number) => {
     setState((old) => ({ ...old, selectedLp: index }));
   };
+
+  const selectLpPercent = (percent: string) => {
+    setState((old) => {
+      const newState = { ...old, percentLp: percent };
+
+      newState.commission = calcFloorCommission(newState, maxDebtRatio);
+
+      return newState;
+    });
+  };
+
+  const minCommission = useMemo(() => {
+    return calcFloorCommission(state, maxDebtRatio);
+  }, [state, maxDebtRatio]);
+
+  if (!state.commission.lt(minCommission)) {
+    commissionRef.current = state.commission;
+  }
+
+  const validate = (val: string) => {
+    return minCommission.lte(val);
+  };
+
   return (
     <div className="make_a_bid">
       {state.fetchstatus !== "fetchingcomplete" ? (
@@ -331,27 +395,25 @@ export const MakeABidForm = () => {
             <div className="percent_select">
               <div
                 className={clsx({ selected: state.percentLp === "25" })}
-                onClick={() => setState((old) => ({ ...old, percentLp: "25" }))}
+                onClick={() => selectLpPercent("25")}
               >
                 25%
               </div>
               <div
                 className={clsx({ selected: state.percentLp === "50" })}
-                onClick={() => setState((old) => ({ ...old, percentLp: "50" }))}
+                onClick={() => selectLpPercent("50")}
               >
                 50%
               </div>
               <div
                 className={clsx({ selected: state.percentLp === "70" })}
-                onClick={() => setState((old) => ({ ...old, percentLp: "70" }))}
+                onClick={() => selectLpPercent("70")}
               >
                 70%
               </div>
               <div
                 className={clsx({ selected: state.percentLp === "100" })}
-                onClick={() =>
-                  setState((old) => ({ ...old, percentLp: "100" }))
-                }
+                onClick={() => selectLpPercent("100")}
               >
                 100%
               </div>
@@ -390,7 +452,16 @@ export const MakeABidForm = () => {
               <div className="option">
                 <div className="left">
                   <div className="title">
-                    <input value={state.commission.toFixed(2)} />{" "}
+                    <NewInput
+                      onChange={(e) =>
+                        setState((old) => ({
+                          ...old,
+                          commission: new BigNumber(e),
+                        }))
+                      }
+                      validator={validate}
+                      value={state.commission.toFixed(2)}
+                    />{" "}
                     {selectedLp!.tokenSymbol}
                   </div>
                 </div>
@@ -398,7 +469,11 @@ export const MakeABidForm = () => {
                   <div className="amount">
                     <div className="icon"></div>
                     <div className="amount">
-                      {calcCommisionPercent(borrowAmount, state.commission)}%
+                      {calcCommisionPercent(
+                        borrowAmount,
+                        commissionRef.current
+                      )}
+                      %
                     </div>
                   </div>
                 </div>
