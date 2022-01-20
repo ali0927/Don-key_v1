@@ -717,7 +717,6 @@ table .toggle_fold {
 @media (max-width: 850px) {
     table, .strip.table_strip.previous_auctions .table_group {
         width: 95%;
-        position: relative;
     }
 
     table .toggle_fold {
@@ -741,6 +740,8 @@ table .toggle_fold {
         display: flex;
         flex-direction: column;
         height: auto;
+        position: relative;
+        padding-bottom: 20px;
     }
     
 
@@ -761,12 +762,10 @@ table .toggle_fold {
         font-size: 12px;
         text-transform: uppercase;
     }
-    td:first-child {
+    td:nth-of-type(1) {
         display: none;
     }
-    .strip.table_strip.previous_auctions td:first-child {
-        display: flex;
-    }
+
     td.status {
         justify-content: start;
     }
