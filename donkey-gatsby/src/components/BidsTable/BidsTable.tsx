@@ -30,7 +30,6 @@ export const BidsTable = () => {
           <td><button>claim</button></td>
         </TableRow>
         <TableRow>
-        <div className="toggle_fold">⌵</div>
           <td>2</td>
           <td data-title="status" className="status pending">pending</td>
           <td data-title="wallet">qqw04sjww1920223.....</td>
@@ -41,7 +40,6 @@ export const BidsTable = () => {
           <td><button className="white">See Details</button></td>
         </TableRow>
         <TableRow>
-        <div className="toggle_fold">⌵</div>
           <td>3</td>
           <td data-title="status" className="status rejected">rejected</td>
           <td data-title="wallet">0608sjhw1320223.....</td>

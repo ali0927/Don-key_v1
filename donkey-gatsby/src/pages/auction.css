@@ -730,6 +730,11 @@ table .toggle_fold {
         width: 16px;
         text-align: center;
         line-height: 9px;
+        cursor: pointer;
+    }
+
+    table .open .toggle_fold {
+        transform: rotateX(180deg);
     }
 
     thead {
@@ -772,5 +777,11 @@ table .toggle_fold {
     table button {
         width: 100%;
         height: 39px;
+    }
+    tr.folding td {
+        display: none;
+    }
+    tr.folding td:nth-of-type(2), tr.folding td:nth-of-type(3), tr.folding td:nth-of-type(4), tr.folding.open td:not(:nth-of-type(1)) {
+        display: flex;
     }
 }
