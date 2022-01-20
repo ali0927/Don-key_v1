@@ -6,15 +6,15 @@ export const BidsTable = () => {
   const [openClaim, setOpenClaim] = useState(false);
   return (
     <div
-      className="sTableRowip table_sTableRowip your_bids"
+      className="strip table_strip your_bids"
       style={{ paddingTop: "165px" }}
     >
       <div className="boxed">
-        {openClaim && (
-          <ClaimPopup open={openClaim} onClose={() => setOpenClaim(false)} />
-        )}
         <h3>Your Bids</h3>
         <table>
+          {openClaim && (
+            <ClaimPopup open={openClaim} onClose={() => setOpenClaim(false)} />
+          )}
           <thead>
             <TableRow>
               <th>#</th>
@@ -39,11 +39,10 @@ export const BidsTable = () => {
               <td data-title="borrow">$2,280,00</td>
               <td data-title="commission">8%</td>
               <td>
-                <button onClick={() => setOpenClaim(true)}>claim</button>
+                <button onClick={(e) => setOpenClaim(true)}>claim</button>
               </td>
             </TableRow>
             <TableRow>
-              <div className="toggle_fold">⌵</div>
               <td>2</td>
               <td data-title="status" className="status pending">
                 pending
@@ -58,7 +57,6 @@ export const BidsTable = () => {
               </td>
             </TableRow>
             <TableRow>
-              <div className="toggle_fold">⌵</div>
               <td>3</td>
               <td data-title="status" className="status rejected">
                 rejected

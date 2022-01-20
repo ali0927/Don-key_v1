@@ -730,6 +730,12 @@ table .toggle_fold {
         width: 16px;
         text-align: center;
         line-height: 9px;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    table .open .toggle_fold {
+        transform: rotateX(180deg);
     }
 
     thead {
@@ -766,11 +772,23 @@ table .toggle_fold {
         display: none;
     }
 
-    td.status {
+    .strip:not(.previous_auctions) td:nth-of-type(2), .strip.previous_auctions tr:nth-of-type(1) td:nth-of-type(2) {
         justify-content: start;
     }
     table button {
         width: 100%;
         height: 39px;
+    }
+    tr.folding td {
+        display: none;
+    }
+    tr.folding td:nth-of-type(2), tr.folding td:nth-of-type(3), tr.folding td:nth-of-type(4), tr.folding.open td:not(:nth-of-type(1)) {
+        display: flex;
+    }
+    .previous_auctions tr:nth-of-type(1) td:not(:nth-of-type(2)){
+        display:none;
+    }
+    .strip.table_strip.previous_auctions .table_group {
+        max-height: 46px;
     }
 }

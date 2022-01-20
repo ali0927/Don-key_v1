@@ -2,7 +2,7 @@ import { CountDown } from "components/CountDown"
 import {TableRow} from 'components/TableRow'
 
 export const LoansTable = () => {
-    return  <div className="sTableRowip table_sTableRowip your_loans" style={{paddingTop: '54px' ,paddingBottom: '104px'}}>
+    return  <div className="strip table_strip your_loans" style={{paddingTop: '54px' ,paddingBottom: '104px'}}>
     <div className="boxed">
       <h3>Your Loans</h3>
       <table>
