@@ -126,6 +126,10 @@ button.white:hover {
     .make_a_bid {
         margin-top: 53px;
     }
+    .make_a_bid {
+        margin-top: 53px;
+        padding: 38px 5vw 27px 5vw;
+    }
 }
 
 .make_a_bid .field {
@@ -169,12 +173,23 @@ button.white:hover {
 
 .make_a_bid .field .option .left, .make_a_bid .field .option .right {
     display: flex;
+    align-items: center;
 }
 
 .make_a_bid .field .option .title, .make_a_bid .field .option input {
     width: auto;
     font-weight: 500;
     font-size: 18px;
+}
+.make_a_bid .field .option .right {
+    min-width: 100px;
+}
+@media (max-width: 950px) {
+    .make_a_bid .lp_staking .field .option .title {
+        font-size: 13px;
+        font-weight: 400;
+        padding-right: 4px;
+    }
 }
 
 .make_a_bid .field .option input {
@@ -568,6 +583,7 @@ td.status.rejected {
     overflow: hidden;
     max-height: 50px;
     cursor:pointer;
+    z-index: 10;
 }
 
 .field.dropdown.active {
@@ -691,4 +707,27 @@ table span.closed::before {
 
 .strip.table_strip.previous_auctions table.previous_auctions_head {
     border-radius: 15px 15px 0 0;
+}
+
+
+/* Mobile Table */
+@media (max-width: 850px) {
+    table, .strip.table_strip.previous_auctions .table_group {
+        width: 95%;
+    }
+
+    thead {
+        display:none;
+    }
+
+    tr {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+
+    td {
+        height: 50px;
+        padding: 6px 15px;
+    }
 }

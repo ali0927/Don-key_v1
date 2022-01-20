@@ -21,7 +21,7 @@ export default function Auction() {
               Be part of Don-key's auction to win loan and some more 2-3
               sentences explanation text to describe purpose of the page.
             </p>
-            <CountDown date={`2022-01-20T07:00:00`} />
+            <CountDown date={`2022-01-22T07:00:00`} />
           </div>
           <div className="width-50 bid_column">
             <MakeABidForm />
