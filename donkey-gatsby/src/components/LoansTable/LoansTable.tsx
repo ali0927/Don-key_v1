@@ -1,12 +1,13 @@
 import { CountDown } from "components/CountDown"
+import {TableRow} from 'components/TableRow'
 
 export const LoansTable = () => {
-    return  <div className="strip table_strip your_loans" style={{paddingTop: '54px' ,paddingBottom: '104px'}}>
+    return  <div className="sTableRowip table_sTableRowip your_loans" style={{paddingTop: '54px' ,paddingBottom: '104px'}}>
     <div className="boxed">
       <h3>Your Loans</h3>
       <table>
         <thead>
-          <tr>
+          <TableRow>
           <th>#</th>
           <th>last day to pay</th>
           <th>value</th>
@@ -14,10 +15,10 @@ export const LoansTable = () => {
           <th>commission</th>
           <th>total</th>
           <th>action</th>
-          </tr>
+          </TableRow>
         </thead>
         <tbody>
-        <tr>
+        <TableRow>
           <td>1</td>
           <td data-title="last day to pay" className="timer"><CountDown date={`2022-03-20T00:00:00`}/></td>
           <td data-title="value">$2,280,00</td>
@@ -25,8 +26,8 @@ export const LoansTable = () => {
           <td data-title="commission">0.003</td>
           <td data-title="total" className="total">195</td>
           <td><button className="claim">pay</button></td>
-        </tr>
-        <tr>
+        </TableRow>
+        <TableRow>
           <td>2</td>
           <td data-title="last day to pay" className="timer"><CountDown date={`2022-03-20T00:00:20`}/></td>
           <td data-title="value">$1,180,00</td>
@@ -34,8 +35,8 @@ export const LoansTable = () => {
           <td data-title="commission">0.001</td>
           <td data-title="total" className="total">164</td>
           <td><button className="claim">pay</button></td>
-        </tr>
-        <tr className="closed">
+        </TableRow>
+        <TableRow className="closed">
           <td>3</td>
           <td data-title="last day to pay" className="timer"><CountDown date={`2001-02-10T00:00:00`}/></td>
           <td data-title="value">$3,530,00</td>
@@ -43,7 +44,7 @@ export const LoansTable = () => {
           <td data-title="commission">0.004</td>
           <td data-title="total" className="total">195</td>
           <td><span className="closed">closed</span></td>
-        </tr>
+        </TableRow>
         
         </tbody>
       </table>
