@@ -1,7 +1,7 @@
 import {TableRow} from 'components/TableRow'
 
 export const BidsTable = () => {
-    return   <div className="sTableRowip table_sTableRowip your_bids" style={{paddingTop: '165px'}}>
+    return   <div className="strip table_strip your_bids" style={{paddingTop: '165px'}}>
     <div className="boxed">
       <h3>Your Bids</h3>
       <table>
