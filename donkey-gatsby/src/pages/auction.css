@@ -546,7 +546,7 @@ td.status.success {
     color: #42A889;
 }
 
-table th:first-child, table td:first-child {
+table th:nth-of-type(1), table td:nth-of-type(1) {
     width: 89px;
     text-align: center;
     color: #B4B4B4;
@@ -664,19 +664,19 @@ table span.closed::before {
     margin-bottom: 7px;
 }
 
-.strip.table_strip.previous_auctions .table_group tr:first-child {
+.strip.table_strip.previous_auctions .table_group tr:nth-of-type(1) {
     font-size: 21px;
     font-weight: 600;
 }
 
-.strip.table_strip.previous_auctions .table_group tr:first-child td:first-child {
+.strip.table_strip.previous_auctions .table_group tr:nth-of-type(1) td:nth-of-type(1) {
     color: black;
     font-size: 19px;
     transform: rotateY(41deg);
     transition: transform 0.3s ease-in-out;
 }
 
-.strip.table_strip.previous_auctions .table_group.open tr:first-child td:first-child {
+.strip.table_strip.previous_auctions .table_group.open tr:nth-of-type(1) td:nth-of-type(1) {
     transform: rotateX(41deg) rotateZ(90deg);
 }
 
@@ -696,7 +696,7 @@ table span.closed::before {
     display: none;
 }
 
-.table_group tr:first-child {
+.table_group tr:nth-of-type(1) {
     cursor: pointer;
 }
 
