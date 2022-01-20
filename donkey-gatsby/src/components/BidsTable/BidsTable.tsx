@@ -39,7 +39,7 @@ export const BidsTable = () => {
               <td data-title="borrow">$2,280,00</td>
               <td data-title="commission">8%</td>
               <td>
-                <button onClick={(e) => setOpenClaim(true)}>claim</button>
+                <button onClick={() => setOpenClaim(true)}>claim</button>
               </td>
             </TableRow>
             <TableRow>
