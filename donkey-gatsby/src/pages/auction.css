@@ -709,11 +709,28 @@ table span.closed::before {
     border-radius: 15px 15px 0 0;
 }
 
+table .toggle_fold {
+    display: none;
+}
 
 /* Mobile Table */
 @media (max-width: 850px) {
     table, .strip.table_strip.previous_auctions .table_group {
         width: 95%;
+        position: relative;
+    }
+
+    table .toggle_fold {
+        display: block;
+        position: absolute;
+        top: 14px;
+        right: 17px;
+        font-size: 23px;
+        font-weight: 900;
+        height: 16px;
+        width: 16px;
+        text-align: center;
+        line-height: 9px;
     }
 
     thead {
@@ -725,9 +742,36 @@ table span.closed::before {
         flex-direction: column;
         height: auto;
     }
+    
 
     td {
         height: 50px;
         padding: 6px 15px;
+        font-size: 15px;
+        display: flex;
+        font-weight: 500;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    td::before {
+        content: attr(data-title);
+        color: #42a889;
+        font-weight: 100;
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+    td:first-child {
+        display: none;
+    }
+    .strip.table_strip.previous_auctions td:first-child {
+        display: flex;
+    }
+    td.status {
+        justify-content: start;
+    }
+    table button {
+        width: 100%;
+        height: 39px;
     }
 }
