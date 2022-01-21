@@ -301,8 +301,8 @@ const LandingDrawer = () => {
       <DrawerItem icon={<FAQIcon />} to="/faq">
         FAQ
       </DrawerItem>
-      <DrawerItem icon={<SupportIcon />} to="/support">
-        Support
+      <DrawerItem icon={<SupportIcon />} to="/community">
+        Community
       </DrawerItem>
     </>
   );
@@ -332,7 +332,7 @@ const LandingMenu = () => {
         </div>
       </DropDownsDonToken>
       <MenuItem to="/faq">FAQ</MenuItem>
-      <MenuItem to="/support">Support</MenuItem>
+      <MenuItem to="/community">Community</MenuItem>
     </>
   );
 };
@@ -356,7 +356,7 @@ const DashboardMenu = () => {
       )}
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
       <MenuItem to="/faq">FAQ</MenuItem>
-      <MenuItem to="/support">Support</MenuItem>
+      <MenuItem to="/community">Community</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
     </>
   );
