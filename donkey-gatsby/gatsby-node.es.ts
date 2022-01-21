@@ -75,11 +75,11 @@ export const onCreateWebpackConfig = ({ actions }: any) => {
     plugins: [
       new webpack.ProvidePlugin({
         Buffer: [require.resolve("buffer/"), "Buffer"],
-        'process.nextTick': ['don-utils', 'nextTick']
+        "process.nextTick": ["don-utils", "nextTick"],
       }),
       new webpack.IgnorePlugin({
         resourceRegExp: /^electron$/,
-      })
+      }),
     ],
     resolve: {
       fallback: {
@@ -162,11 +162,8 @@ export const createPages = async ({ graphql, actions }: any) => {
       }
     }
   `);
-  
- 
 
   const tokens = tokensdata.data.allStrapiTokens.nodes;
-
 
   tokens.forEach((token: any) => {
     const strategies = sortStrategies(
@@ -240,7 +237,7 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   const farmers = farmersResp.data.allStrapiFarmers.nodes;
   const tvl = await calcSumOfAllPoolValues();
-  
+
   farmers.forEach((farmer: any) => {
     const strategies = farmer.strategies;
     if (strategies.length > 0 && farmer.farmerImage) {
@@ -257,7 +254,29 @@ export const createPages = async ({ graphql, actions }: any) => {
     }
   });
 
+  const auctionsResp = await graphql(`
+    query MyAuctions {
+      allStrapiAuctions {
+        nodes {
+          auctionAddress
+          slug
+          name
+        }
+      }
+    }
+  `);
 
+  const auctions = auctionsResp.data.allStrapiAuctions.nodes;
+
+  auctions.forEach((auction: any) => {
+    createPage({
+      path: `/auctions/${auction.slug}`,
+      component: path.resolve(`./src/templates/auctionTemplate.tsx`),
+      context: {
+        auction,
+      },
+    });
+  })
 
   // Rewrite For Share Links
   createRedirect({

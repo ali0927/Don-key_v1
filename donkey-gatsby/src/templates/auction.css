@@ -564,12 +564,12 @@ td.status.rejected {
     color: #7E8089;
 }
 
-.icon.pancake {
+/* .icon.pancake {
     background-image:url('./pancake_icon.png');
 }
 .icon.busd {
     background-image:url('./busd_icon.png');
-}
+} */
 
 .dropdown_container {
     position: relative;
