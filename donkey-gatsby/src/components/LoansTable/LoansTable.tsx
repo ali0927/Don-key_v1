@@ -30,7 +30,7 @@ export const LoansTable = () => {
             <TableRow>
               <td>1</td>
               <td data-title="last day to pay" className="timer">
-                <CountDown date={`2022-03-20T00:00:00`} />
+                <CountDown date={`2022-04-20T00:00:00`} />
               </td>
               <td data-title="value">$2,280,00</td>
               <td data-title="loan">$2,280,00</td>
@@ -47,7 +47,7 @@ export const LoansTable = () => {
             <TableRow>
               <td>2</td>
               <td data-title="last day to pay" className="timer">
-                <CountDown date={`2022-03-20T00:00:20`} />
+                <CountDown date={`2022-04-20T00:00:20`} />
               </td>
               <td data-title="value">$1,180,00</td>
               <td data-title="loan">$1,180,00</td>
@@ -59,9 +59,9 @@ export const LoansTable = () => {
                 <button className="claim">pay</button>
               </td>
             </TableRow>
-            <TableRow className="closed">
+            <TableRow>
               <td>3</td>
-              <td data-title="last day to pay" className="timer">
+              <td data-title="last day to pay" className="timer closed">
                 <CountDown date={`2001-02-10T00:00:00`} />
               </td>
               <td data-title="value">$3,530,00</td>

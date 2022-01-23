@@ -13,6 +13,7 @@ export default function Auction() {
   return (
     <>
       <NavBar />
+      <div className="auction_page">
       <div className="strip autcion_head">
         <div className="boxed">
           <div className="width-50 details_column">
@@ -22,17 +23,18 @@ export default function Auction() {
               Be part of Don-key's auction to win loan and some more 2-3
               sentences explanation text to describe purpose of the page.
             </p>
-            <CountDown date={`2022-01-22T07:00:00`} />
+            <CountDown date={`2022-02-22T07:00:00`} />
           </div>
           <div className="width-50 bid_column">
             <MakeABidForm />
           </div>
         </div>
       </div>
-
+      
       <BidsTable />
       <LoansTable />
       <PreviousAuctionsTable />
+      </div>
       <Footer />
     </>
   );

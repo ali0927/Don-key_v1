@@ -1,7 +1,7 @@
-.strip {
+.auction_page .strip {
     width: 100%;
 }
-.boxed {
+.auction_page .boxed {
     width: 1140px;
     max-width: 96%;
     margin: auto;
@@ -9,14 +9,14 @@
 }
 
 @media (max-width: 850px) {
-    .boxed {
+    .auction_page .boxed {
         flex-direction: column;
         align-items: center;
     }
 }
 
 
-button {
+.auction_page button {
     border: 1px solid #FFF78F;
     border-radius: 10px;
     height: 49px;
@@ -25,11 +25,11 @@ button {
     transition: all 0.2s ease-in-out;
 }
 
-button:hover {
+.auction_page button:hover {
     border-color: #212529;
 }
 
-.popup_overlay {
+.auction_page .popup_overlay {
     background-color:#00000066;
     width:100vw;
     height:100vh;
@@ -41,7 +41,7 @@ button:hover {
     align-items: center;
     animation: fadeIn 0.3s;
 }
-.popup_box {
+.auction_page .popup_box {
     border-radius:10px;
     background-color:white;
     box-shadow: 0 0 15px black;
@@ -53,7 +53,7 @@ button:hover {
     to {opacity:1;}
   }
 
-table button {
+.auction_page table button {
     width: 114px;
     height: 34px;
     background-color: black;
@@ -65,38 +65,38 @@ table button {
     transition: all 0.2s ease-in-out;
 }
 
-table button.white {
+.auction_page table button.white {
     background-color: white;
     border-color: #E5E6EA;
     color: #9B9B9B;
 }
 
-table button.gray {
+.auction_page table button.gray {
     border-color: #E5E6EA;
     color: #9B9B9B;
     background: linear-gradient(0deg, #F2F4F7 0%, #F0F2F5 48.04%, #FFFFFF 100%);
 }
 
-table button:hover {
+.auction_page table button:hover {
     background-color: #fff037;
     color: black;
     border-color:black;
 }
 
-table button.gray:hover {
+.auction_page table button.gray:hover {
     border-color: black;
 }
 
-button.white:hover {
+.auction_page button.white:hover {
     background-color: white;
 }
 
-.width-50 {
+.auction_page .width-50 {
     width: 50%;
 }
 
 @media (max-width: 850px) {
-    .width-50 {
+    .auction_page .width-50 {
         width: 100%;
     }
 }
@@ -291,42 +291,42 @@ button.white:hover {
     justify-content: center;
 }
 
-.countdowner > div .data {
+.auction_page .countdowner > div .data {
     font-size: 48px;
     font-weight: 100;
 }
 
-.countdowner .dots {
+.auction_page .countdowner .dots {
     font-size: 47px;
     font-weight: 100;
     text-shadow: 0 28px 0 black;
     margin-top: -56px;
 }
 
-table .countdowner > div .data {
+.auction_page table .countdowner > div .data {
     font-size: 15px;
 }
 
-table .countdowner > div .title {
+.auction_page table .countdowner > div .title {
     font-size: 9px;
     color: #9b9b9b;
     letter-spacing: -0.5px;
 }
 
-table .countdowner .dots {
+.auction_page table .countdowner .dots {
     font-size: 21px;
     text-shadow: 0 12px 0 black;
     margin-top: -24px;
 }
 
-table .countdowner > div {
+.auction_page table .countdowner > div {
     background-color: #F7F7F7;
     box-shadow: none;
     width: 46px;
     height: 41px;
 }
 
-table .countdowner {
+.auction_page table .countdowner {
     max-width: 151px;
     margin-top: 0;
     gap: 5px;
@@ -337,7 +337,7 @@ table .countdowner {
     font-size: 15px;
 }
 
-table tr.closed td.timer {
+.auction_page table td.timer.closed {
     opacity: 0.4;
 }
 
@@ -503,38 +503,38 @@ table tr.closed td.timer {
     margin-bottom: 30px;
 }
 
-table {
+.auction_page table {
     background-color: #fff;
     border-radius: 15px;
 }
 
-tr {
+.auction_page tr {
     height: 99px;
     border-bottom: 1px solid #f5f5f5;
 }
 
-th, td {
+.auction_page th, td {
     min-width: 92px;
 }
 
-thead tr {
+.auction_page thead tr {
     border-bottom: 1px solid #C4C4C4;
 }
 
-thead th {
+.auction_page thead th {
     font-size: 15px;
     color: #9B9B9B;
     text-transform: uppercase;
     font-weight: 100;
 }
 
-td.status {
+.auction_page td.status {
     text-transform: uppercase;
     font-size: 12px;
     font-weight: 500;
 }
 
-td.status::before {
+.auction_page td.status::before {
     background-color: inherit;
     border-radius: 50%;
     content: '●';
@@ -542,21 +542,21 @@ td.status::before {
     margin-right: 16px;
 }
 
-td.status.success {
+.auction_page td.status.success {
     color: #42A889;
 }
 
-table th:nth-of-type(1), table td:nth-of-type(1) {
+.auction_page table th:nth-of-type(1), table td:nth-of-type(1) {
     width: 89px;
     text-align: center;
     color: #B4B4B4;
 }
 
-table th:last-child, table td:last-child {
+.auction_page table th:last-child, table td:last-child {
     text-align: center;
 }
 
-td.status.pending {
+.auction_page td.status.pending {
     color: #4958C5;
 }
 
@@ -571,12 +571,12 @@ td.status.rejected {
     background-image:url('./busd_icon.png');
 } */
 
-.dropdown_container {
+.auction_page .dropdown_container {
     position: relative;
     height: 50px;
 }
 
-.field.dropdown {
+.auction_page .field.dropdown {
     height: auto;
     background: black;
     transition: max-height 0.3s ease-in-out;
@@ -586,16 +586,16 @@ td.status.rejected {
     z-index: 10;
 }
 
-.field.dropdown.active {
+.auction_page .field.dropdown.active {
     max-height: 300px;
 }
 
 
-.tooltip_con {
+.auction_page .tooltip_con {
     position: relative;
 }
 
-.tooltip_content {
+.auction_page .tooltip_content {
     position: absolute;
     pointer-events: none;
     top: 23px;
@@ -609,12 +609,12 @@ td.status.rejected {
     z-index:10;
 }
 
-.tooltip_con:hover .tooltip_content {
+.auction_page .tooltip_con:hover .tooltip_content {
     top: 33px;
     opacity: 1;
 }
 
-.tooltip_content:before {
+.auction_page .tooltip_content:before {
     content: "";
     position: absolute;
     top: -7px;
@@ -625,25 +625,25 @@ td.status.rejected {
     border-right: 7px solid transparent;
 }
 
-.tooltip_content a {
+.auction_page .tooltip_content a {
     color: white;
     font-size: 12px;
     display: block;
     margin-top: 26px;
 }
 
-.tooltip_content p {
+.auction_page .tooltip_content p {
     color: #a3a3a3;
     font-size: 12px;
     max-width: 240px;
     margin-bottom: 2px;
 }
 
-table span.closed {
+.auction_page table span.closed {
     color: #b6b6b6;
 }
 
-table span.closed::before {
+.auction_page table span.closed::before {
     content: "L";
     -webkit-transform: rotateY(180deg) rotateZ(322deg);
     transform: rotateY(180deg) rotateZ(322deg);
@@ -709,17 +709,17 @@ table span.closed::before {
     border-radius: 15px 15px 0 0;
 }
 
-table .toggle_fold {
+.auction_page table .toggle_fold {
     display: none;
 }
 
 /* Mobile Table */
 @media (max-width: 850px) {
-    table, .strip.table_strip.previous_auctions .table_group {
+    .auction_page table, .strip.table_strip.previous_auctions .table_group {
         width: 95%;
     }
 
-    table .toggle_fold {
+    .auction_page table .toggle_fold {
         display: block;
         position: absolute;
         top: 14px;
@@ -734,15 +734,15 @@ table .toggle_fold {
         transition: all 0.3s ease-in-out;
     }
 
-    table .open .toggle_fold {
+    .auction_page table .open .toggle_fold {
         transform: rotateX(180deg);
     }
 
-    thead {
+    .auction_page thead {
         display:none;
     }
 
-    tr {
+    .auction_page tr {
         display: flex;
         flex-direction: column;
         height: auto;
@@ -751,7 +751,7 @@ table .toggle_fold {
     }
     
 
-    td {
+    .auction_page td {
         height: 50px;
         padding: 6px 15px;
         font-size: 15px;
@@ -761,28 +761,28 @@ table .toggle_fold {
         align-items: center;
     }
 
-    td::before {
+    .auction_page td::before {
         content: attr(data-title);
         color: #42a889;
         font-weight: 100;
         font-size: 12px;
         text-transform: uppercase;
     }
-    td:nth-of-type(1) {
+    .auction_page td:nth-of-type(1) {
         display: none;
     }
 
     .strip:not(.previous_auctions) td:nth-of-type(2), .strip.previous_auctions tr:nth-of-type(1) td:nth-of-type(2) {
         justify-content: start;
     }
-    table button {
+    .auction_page table button {
         width: 100%;
         height: 39px;
     }
-    tr.folding td {
+    .auction_page tr.folding td {
         display: none;
     }
-    tr.folding td:nth-of-type(2), tr.folding td:nth-of-type(3), tr.folding td:nth-of-type(4), tr.folding.open td:not(:nth-of-type(1)) {
+    .auction_page tr.folding td:nth-of-type(2), tr.folding td:nth-of-type(3), tr.folding td:nth-of-type(4), tr.folding.open td:not(:nth-of-type(1)) {
         display: flex;
     }
     .previous_auctions tr:nth-of-type(1) td:not(:nth-of-type(2)){
