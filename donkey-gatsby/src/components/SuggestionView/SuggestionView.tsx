@@ -102,7 +102,7 @@ const SuggetionPrevButton = styled(BsArrowRightSquare)`
 export const SuggestionView = ({ id }: {id: string}) => {
   const riskImages = useRiskImageList()
   const suggestion = useMemo(() => {
-    return dummyFiltered[parseInt(id)]
+    return dummyFiltered[id ? parseInt(id) : 0]
   }, [id])
 
   const generateRandomText = (length: number) => {
