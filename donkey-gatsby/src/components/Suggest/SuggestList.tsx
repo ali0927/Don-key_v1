@@ -3,14 +3,17 @@ import { SuggestCard } from "./SuggestCard";
 
 export const SuggestList: React.FC<{
   suggestList: {
+    idx: number
     title: string;
     apy: number;
     votes: number;
+    name: string;
     address: string;
     description: string;
     risk: number;
     comments: number;
     status: string;
+    category: string;
   }[];
 }> = (props) => {
 

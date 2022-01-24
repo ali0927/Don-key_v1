@@ -92,7 +92,7 @@ const VoteButton = styled.button`
   font-weight: 500;
   font-size: 12px;
   color: #000;
-  display: fles;
+  display: flex;
   align-item: sapce-around;
   border-radius: 10px;
   border: 0;
@@ -131,7 +131,7 @@ const STATUS_MAP = {
 
 type SuggestStatusType = keyof typeof STATUS_MAP;
 
-const useRiskImageList = () => {
+export const useRiskImageList = () => {
   const riskImages = useStaticQuery(
     graphql`
       query StrapiRisks {
@@ -151,6 +151,7 @@ const useRiskImageList = () => {
 
 export const SuggestCard: React.FC<{ 
   suggest: { 
+    idx: number;
     title: string;
     apy: number;
     votes: number;
@@ -167,10 +168,17 @@ export const SuggestCard: React.FC<{
   const handleCommentChange = (e: any) => {
     setComment(e.target.value)
   }
+  const handleCommentClick = (e: any) => {
+    e.stopPropagation();
+    setShowVoteModal(true)
+  }
+  const handleCardClick = () => {
+    window.location.href = `community/suggestion/${props.suggest.idx}`
+  }
 
   return (
     <div>
-      <SuggestCardSection>
+      <SuggestCardSection onClick={() => handleCardClick()}>
         <div className="row">
           <div className="col-md-9">
             <SuggestTitle>{props.suggest.title}</SuggestTitle>
@@ -209,7 +217,7 @@ export const SuggestCard: React.FC<{
             <SuggestRiskImage src={riskImages[props.suggest.risk].image.url} />
           </div>
         </div>
-        <CommentButton onClick={() => setShowVoteModal(true)}>
+        <CommentButton onClick={(e) => handleCommentClick(e)}>
           Comment &amp; Vote
         </CommentButton>
       </SuggestCardSection>

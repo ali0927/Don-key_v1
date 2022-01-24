@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
 import { AiOutlineInfoCircle, AiFillCaretDown } from "react-icons/ai";
-import { SuggestList } from "components/SuggestList";
-import { SuggestRequestForm } from "components/SuggestRequestForm";
+import { SuggestList } from "./SuggestList";
+import { SuggestRequestForm } from "./SuggestRequestForm";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
 
@@ -138,30 +138,38 @@ const SuggestStatus = {
   approved: 'approved'
 }
 
-const dummyFiltered = [
+export const dummyFiltered = [
   {
+    idx: 0,
     title: 'Keyboard shortcut to add a new post',
     apy: 12.123,
     votes: 550,
+    name: 'Albert',
     address: '123qwe123qwewrwer',
-    description: 'Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post?',
+    description: 'Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? ',
     risk: 2,
     comments: 4,
-    status: 'new'
+    status: 'new',
+    date: '15 Jan 2022 15:30',
+    category: 'Payments'
   },
   {
+    idx: 1,
     title: 'Shortcut keyboard to add a new post',
     apy: 23.123,
     votes: 250,
+    name: 'Daniel',
     address: 'wewrwer123qwe123qwewrwer',
     description: 'Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post?',
     risk: 1,
     comments: 4,
-    status: 'approved'
+    status: 'approved',
+    date: '15 Jan 2022 15:30',
+    category: 'Payments'
   }
 ]
 
-export const SuggestForm: React.FC = () => {
+export const Suggest: React.FC = () => {
   const [show, setShow] = useState(false);
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all)
 

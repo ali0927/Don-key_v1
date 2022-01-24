@@ -1,5 +1,5 @@
 import { BugReport } from "components/BugReport";
-import { SuggestForm } from "components/SuggestForm";
+import { Suggest } from "components/Suggest";
 import { Footer } from "components/Footer";
 import { NavBar } from "components/Navbar";
 import { Pill, PillContainer } from "components/Pills";
@@ -88,7 +88,7 @@ export const CommunityPage = () => {
         </div>
       </Header>
 
-      {selectedTab === CommunityTabs.strategy && <SuggestForm />}
+      {selectedTab === CommunityTabs.strategy && <Suggest />}
       {selectedTab === CommunityTabs.bugReport && <BugReport />}
 
       <Footer />

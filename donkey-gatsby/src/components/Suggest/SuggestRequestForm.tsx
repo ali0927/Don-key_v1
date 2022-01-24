@@ -1,11 +1,12 @@
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-// import { useSuggestRequestApi } from "hooks";
 import React, { useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
+import { useRiskImageList } from "components/Suggest/SuggestCard";
 import { theme } from "theme";
+
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
   border: 1px solid rgba(245, 245, 245, 0.5);
@@ -90,11 +91,8 @@ const DefaultOption = { name: "Select an option", value: "" } as const;
 
 const Types = [
   DefaultOption,
-  {
-    name: "Investment Issue",
-    value: "investrelated",
-  },
-  { name: "Technical application suggest", value: "technical" },
+  { name: "BSC", value: 56 },
+  { name: "Ethereum", value: 1 },
 ] as const;
 
 const Urgencies = [
@@ -110,15 +108,12 @@ const Urgencies = [
 type IType = typeof Types[number]["value"];
 type IUrgency = typeof Urgencies[number]["value"];
 const INITIAL_STATE = {
-  type: "" as IType,
-  urgency: "" as IUrgency,
   name: "",
-  email: "",
-  title: "",
-  message: "",
-  walletAddress: "",
   telegram: "",
-  attachment: null as File | null,
+  network: 1,
+  apy: 10,
+  title: "",
+  message: ""
 };
 export type ISuggestFormState = typeof INITIAL_STATE;
 
@@ -129,66 +124,22 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
-
-const validate = (state: typeof INITIAL_STATE) => {
-
-  if (!state.type) {
-    return { isValid: false, message: "Please select a type" };
-  }
-  if (!state.urgency) {
-    return { isValid: false, message: "Please select urgency" };
-  }
-  if (!state.name) {
-    return { isValid: false, message: "Please enter name" };
-  } else if (!(state.name.length >= 3)) {
-    return { isValid: false, message: "Name should be at least 3 Characters" };
-  }
-
-  if (!state.telegram) {
-    return { isValid: false, message: "Please enter telegram" };
-  } else if (!(state.telegram.length >= 3)) {
-    return { isValid: false, message: "Telegram should be at least 3 Characters" };
-  } else if (validateEmail(state.telegram)) {
-    return { isValid: false, message: "Please enter a vaild Telegram name" };
-  }
-
-  if (state.type === "investrelated" && !state.walletAddress) {
-    return { isValid: false, message: "Please enter wallet address" };
-  }
-  if (state.type === "investrelated" && state.walletAddress) {
-    if (!(state.walletAddress.length >= 30)) {
-      return { isValid: false, message: "Please enter a valid wallet address" };
-    }
-  }
-  if (!state.attachment) {
-    return { isValid: false, message: "Please attach a screenshot" };
-  }
-  if (!state.title) {
-    return { isValid: false, message: "Please enter title" };
-  } else if (!(state.title.length >= 8)) {
-    return {
-      isValid: false,
-      message: "Please enter at least 8 characters in title",
-    };
-  }
-  if (!state.message) {
-    return { isValid: false, message: "Please enter message" };
-  } else if (!(state.message.length >= 10)) {
-    return {
-      isValid: false,
-      message: "Please enter at least 10 characters in message",
-    };
-  }
-  return { isValid: true, message: null };
-};
-
 const SmallSpan = styled.span`
   font-size: 12px;
   color: #767b86;
   font-weight: normal;
 `;
+const RiskImage = styled.img`
+  width: 100px;
+`
+const APYPercent = styled.label`
+  position: absolute;
+  right: 10px;
+  top: 28px;
+`
 
 export const SuggestRequestForm = () => {
+  const riskImages = useRiskImageList()
   const [isCreating, setIsCreating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { showFailure } = useTransactionNotification();
@@ -236,7 +187,7 @@ export const SuggestRequestForm = () => {
       {sent && <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />}
       <Label>
         Network
-        <Select onChange={handleChange("type")} value={formState.type}>
+        <Select onChange={handleChange("network")} value={formState.network}>
           {Types.map((item) => {
             return (
               <option key={item.value} value={item.value}>
@@ -246,6 +197,23 @@ export const SuggestRequestForm = () => {
           })}
         </Select>
       </Label>
+      <div style={{display:'flex', width:'100%'}}>
+        <Label>
+          Estimated APY
+          <div style={{position: 'relative'}}>
+            <Input
+              value={formState.apy}
+              onChange={handleChange("apy")}
+              placeholder="12.24"
+            />
+            <APYPercent>%</APYPercent>
+          </div>
+        </Label>
+        <div style={{marginLeft: '20px'}}>
+          <Label>Risk Level</Label>
+          <RiskImage src={riskImages[1].image.url} />
+        </div>
+      </div>
    
       <Label>
         Describe the risk in your words
