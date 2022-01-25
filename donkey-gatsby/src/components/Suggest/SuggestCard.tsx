@@ -35,7 +35,13 @@ const SuggestStatus = styled.div`
       color: ${STATUS_MAP[props.status as "new"].color};
     `;
   }}
+
 `;
+const SuggestVotesBox = styled.div`
+  @media (max-width: 768px) {
+    margin-top: 10px;
+  }
+`
 const SuggestStatusTitle = styled.div`
   font-weight: 600;
   font-size: 14px;
@@ -193,12 +199,12 @@ export const SuggestCard: React.FC<{
               </SuggestStatusTitle>
             </div>
           </div>
-          <div className="col-md-3">
+          <SuggestVotesBox className="col-md-3">
             <SuggestVotes>
               <span style={{fontSize:'10px'}}>Votes</span>
               <span>{props.suggest.votes}</span>
             </SuggestVotes>
-          </div>
+          </SuggestVotesBox>
         </div>
         <SuggestDescription>
           {props.suggest.description}
