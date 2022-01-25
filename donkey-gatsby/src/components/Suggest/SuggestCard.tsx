@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import { navigate } from "gatsby-link";
 import { UserIcon } from "components/Icons";
 import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
@@ -173,7 +174,7 @@ export const SuggestCard: React.FC<{
     setShowVoteModal(true)
   }
   const handleCardClick = () => {
-    window.location.href = `community/suggestion/${props.suggest.idx}`
+    navigate(`/community/suggestion/${props.suggest.idx}`);
   }
 
   return (

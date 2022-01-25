@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+import { navigate } from "gatsby-link";
 
 export default function _SuggestionRedirect() {
   useEffect(() => {
-    window.location.href = "/community"
+    navigate(`/community`);
   }, [])
 
   return <>
