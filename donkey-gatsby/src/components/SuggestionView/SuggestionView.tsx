@@ -7,6 +7,7 @@ import { Footer } from "components/Footer";
 import { useRiskImageList } from "components/Suggest/SuggestCard";
 import { Comment } from "./Comment";
 import { CommentEdit } from "./CommentEdit";
+import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
 import styled from "styled-components";
 
@@ -71,7 +72,7 @@ const SuggestionUser = styled.label`
 `;
 const SuggestionRiskImage = styled.img`
   width: 100%;
-  margin 10px 0;
+  margin-top: 10px;
   padding: 0px 20px;
 `
 const SuggetionCommentRow = styled.div`
@@ -99,22 +100,32 @@ const SuggetionPrevButton = styled(BsArrowRightSquare)`
   width: 25px;
   height: 25px;
 `
+const RiskDescriptionButton = styled.button`
+  background: none;
+  border: none;
+  text-decoration: underline;
+  font-size: 0.8rem;
+  margin: 0 auto;
+`
+
+export const generateRandomText = (length: number) => {
+  const characters = ' abcdefghijklm nopqrstuvwxyz ';
+  let result = ' ';
+  const charactersLength = characters.length;
+  for(let i = 0; i < length; i++) {
+      result += 
+      characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result
+}
+
+
 export const SuggestionView = ({ id }: {id: string}) => {
+  const [showRiskDetail, setShowRiskDetail] = useState(false)
   const riskImages = useRiskImageList()
   const suggestion = useMemo(() => {
     return dummyFiltered[id ? parseInt(id) : 0]
   }, [id])
-
-  const generateRandomText = (length: number) => {
-    const characters = ' abcdefghijklm nopqrstuvwxyz ';
-    let result = ' ';
-    const charactersLength = characters.length;
-    for(let i = 0; i < length; i++) {
-        result += 
-        characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result
-  }
 
   const comments = useMemo(() => {
     const _comments = new Array(suggestion.comments).fill({}).map(item => {
@@ -149,14 +160,14 @@ export const SuggestionView = ({ id }: {id: string}) => {
             <SuggestionTitle>{suggestion.title}</SuggestionTitle>
             <label style={{color: 'lightgrey'}}>{suggestion.date}</label>
             <SuggestionCategory>{suggestion.category}</SuggestionCategory>
-            <ShowMoreContent content={suggestion.description} length={280} />
+            <ShowMoreContent content={suggestion.description} length={270} />
           </div>
           <div className="col-sm-12 col-md-2">
             <SuggestVotes>
               <span style={{fontSize:'10px'}}>Votes</span>
               <span>{suggestion.votes}</span>
             </SuggestVotes>
-            <div>
+            <div style={{display:'flex', flexDirection:'column'}}>
               <div style={{display:'flex', alignItems:'center'}}>
                 <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
                 <SuggestionUser>{suggestion.name}</SuggestionUser>
@@ -177,6 +188,9 @@ export const SuggestionView = ({ id }: {id: string}) => {
                 </SuggestionUser>
               </div>
               <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} />
+              <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
+                Risk Description
+              </RiskDescriptionButton>
             </div>
           </div>
         </SuggestionBox>
@@ -194,6 +208,23 @@ export const SuggestionView = ({ id }: {id: string}) => {
       </div>      
 
       <Footer />
+
+      <DonCommonmodal
+        isOpen={showRiskDetail}
+        title="Risk Description"
+        variant="common"
+        onClose={() => setShowRiskDetail(false)}
+        size="sm"
+      >
+        <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
+          <div className="col-4">
+            <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} style={{padding: 0}} />
+          </div>
+          <div className="col-8" style={{fontSize:'0.8rem'}}>
+            This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.
+          </div>
+        </div>
+      </DonCommonmodal>
     </div>
   )
 }
