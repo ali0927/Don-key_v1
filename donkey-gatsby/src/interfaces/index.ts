@@ -64,9 +64,27 @@ export interface INetwork {
   name: string;
   chainId: number;
   symbol: string;
+  tokenSymbol: string;
+}
+export type IInsurance = {
+  percent: string;
+  protocol: {
+    name: string;
+    productId: number;
+    icon : {
+      url: string;
+    };
+    network: INetwork;
+  }
+  token: IStrapiToken | null;
 }
 
-export interface IFarmerInter {
+export type IInsuranceProps = {
+  hasInsurance?: boolean | null;
+  Insurance?: IInsurance[];
+  minAmountForInsurance?: number | null;
+};
+export interface IFarmerInter extends IInsuranceProps {
   name: string
   description: string;
   graphUrl: string;

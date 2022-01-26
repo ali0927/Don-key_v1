@@ -64,12 +64,17 @@ export const getTierInfo = async (amount: string, stakingContract: any) => {
 
 const useStaking = () => {
   const { chainId, getConnectedWeb3, connected, address } = useWeb3Context();
-  const web3 = getConnectedWeb3();
-  const stakingContract = useMemo(() => {
+
+  const viewstakingContract = useMemo(() => {
     const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
-    return connected
-      ? new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress)
-      : new newWeb3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
+    return new newWeb3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
+  }, []);
+  const connectedStakingContract = useMemo(() => {
+    if (!connected) {
+      return null;
+    }
+    const web3 = getConnectedWeb3();
+    return new web3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, [connected]);
   const [coolOffTime, setCoolOffTime] = useState("0");
   const [isInCoolOffPeriod, setIsInCoolOffPeriod] = useState(false);
@@ -140,9 +145,8 @@ const useStaking = () => {
   const fetchPendingRewards = async () => {
     let pendingRewards = { rewardAmountInDON: "0" };
     try {
-      const accounts = await web3.eth.getAccounts();
-      pendingRewards = await stakingContract.methods
-        .pendingReward(accounts[0])
+      pendingRewards = await viewstakingContract.methods
+        .pendingReward(address)
         .call();
     } catch (e) {
       captureException(e, "fetchPendingRewards");
@@ -153,46 +157,44 @@ const useStaking = () => {
 
   const fetchState = async () => {
     setLoading(true);
-    if (BINANCE_CHAIN_ID === chainId) {
-      const accounts = await web3.eth.getAccounts();
-      const userInfo = await stakingContract.methods
-        .userInfo(accounts[0])
+
+    const userInfo = await viewstakingContract.methods.userInfo(address).call();
+
+    try {
+      const minDuration = await viewstakingContract.methods
+        .getMinDuration()
         .call();
+      const duration = moment.duration(minDuration * 1000);
+      setCoolOffDuration(duration.humanize());
+    } catch (e) {
+      captureException(e, "getMinDuration");
+      setCoolOffDuration("2 weeks");
+    }
 
-      try {
-        const minDuration = await stakingContract.methods
-          .getMinDuration()
-          .call();
-        const duration = moment.duration(minDuration * 1000);
-        setCoolOffDuration(duration.humanize());
-      } catch (e) {
-        captureException(e, "getMinDuration");
-        setCoolOffDuration("2 weeks");
-      }
-
-      const donAmount = toEther(
-        new BigNumber(userInfo.tokenAmount)
-          .plus(userInfo.donEquivalent)
-          .toFixed(0)
-      );
-
-      await fetchTiers(stakingContract);
+    const donAmount = toEther(
+      new BigNumber(userInfo.tokenAmount)
+        .plus(userInfo.donEquivalent)
+        .toFixed(0)
+    );
+      await fetchTiers(viewstakingContract);
       const crTier = staketierInfo.data[userInfo.tier_type];
       const coolOffDons = toEther(userInfo.coolOffAmount);
 
-      setIsStaked(userInfo.isStaked);
-      setStakedDon(donAmount);
-      setInvestedAmount(toEther(userInfo.totalInvestedAmount));
-      if (crTier) {
-        setCurrentTier(crTier);
-      }
+ 
 
-      await fetchPendingRewards();
-      setCoolOffTime(userInfo.coolOffPeriod);
-      setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
-      setCoolOffAmount(coolOffDons);
-      setLastRewardTime(userInfo.lastRewardTime);
+    setIsStaked(userInfo.isStaked);
+    setStakedDon(donAmount);
+    setInvestedAmount(toEther(userInfo.totalInvestedAmount));
+    if (crTier) {
+      setCurrentTier(crTier);
     }
+
+    await fetchPendingRewards();
+    setCoolOffTime(userInfo.coolOffPeriod);
+    setIsInCoolOffPeriod(new BigNumber(userInfo.coolOffPeriod).gt(0));
+    setCoolOffAmount(coolOffDons);
+    setLastRewardTime(userInfo.lastRewardTime);
+
     await fetchDonsFromApi();
 
     setLoading(false);
@@ -217,69 +219,70 @@ const useStaking = () => {
   }, [checkCanClaimTokens]);
 
   useEffect(() => {
-    fetchTiers(stakingContract);
+    fetchTiers(viewstakingContract);
     if (connected && address) {
-      if (chainId === BINANCE_CHAIN_ID) {
-        fetchState();
-        const interval = setInterval(() => {
-          fetchPendingRewards();
-        }, 1000);
-        return () => {
-          clearState();
-          clearInterval(interval);
-        };
-      } else {
-        fetchDonsFromApi();
-      }
+      // if (chainId === BINANCE_CHAIN_ID) {
+      fetchState();
+      const interval = setInterval(() => {
+        fetchPendingRewards();
+      }, 1000);
+      return () => {
+        clearState();
+        clearInterval(interval);
+      };
+      // } else {
+      //   fetchDonsFromApi();
+      // }
     }
   }, [chainId, connected, address]);
 
   const checkAndApproveDon = async (amount: string) => {
-    const accounts = await web3.eth.getAccounts();
-    const donContract = await getBSCDon(web3);
+    const donContract = await getBSCDon(getConnectedWeb3());
     const allowance = await donContract.methods
-      .allowance(accounts[0], DonStakingAddress)
+      .allowance(address, DonStakingAddress)
       .call();
 
     if (new BigNumber(allowance).lt(amount)) {
       await donContract.methods
         .approve(DonStakingAddress, amount)
-        .send({ from: accounts[0] });
+        .send({ from: address });
     }
   };
   const stake = async (amount: string) => {
-    const accounts = await web3.eth.getAccounts();
     await checkAndApproveDon(amount);
-    await stakingContract.methods.stake(amount).send({ from: accounts[0] });
+    await connectedStakingContract?.methods
+      .stake(amount)
+      .send({ from: address });
     await fetchState();
   };
   const unstake = async () => {
-    const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.unstake().send({ from: accounts[0] });
+    await connectedStakingContract?.methods.unstake().send({ from: address });
 
     await fetchState();
-    sendEvent("Unstake", { user: accounts[0] });
+    sendEvent("Unstake", { user: address });
   };
 
   const harvest = async () => {
-    const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.claimReward().send({ from: accounts[0] });
+    await connectedStakingContract?.methods
+      .claimReward()
+      .send({ from: address });
     await fetchState();
-    sendEvent("Harvest", { user: accounts[0], rewards: pendingReward });
+    sendEvent("Harvest", { user: address, rewards: pendingReward });
   };
 
   const claimTokens = async () => {
-    const accounts = await web3.eth.getAccounts();
-    await stakingContract.methods.claimStaked().send({ from: accounts[0] });
+    await connectedStakingContract?.methods
+      .claimStaked()
+      .send({ from: address });
     await fetchState();
-    sendEvent("Claimed", { user: accounts[0], claimed: coolOffAmount });
+    sendEvent("Claimed", { user: address, claimed: coolOffAmount });
   };
 
   const stakingObj: IStakingContractContext = useMemo(() => {
     return {
       isStaked: isStaked,
       stakedDon,
-      stakingContract,
+      stakingContract: connectedStakingContract || viewstakingContract,
       coolOffAmount,
       isInCoolOffPeriod: isInCoolOffPeriod,
       coolOffTime,
@@ -296,7 +299,7 @@ const useStaking = () => {
       getTierList: () => {
         return staketierInfo.data;
       },
-      getTierInfo: (amount: string) => getTierInfo(amount, stakingContract),
+      getTierInfo: (amount: string) => getTierInfo(amount, viewstakingContract),
       stakingAddress: DonStakingAddress as string,
       stake,
       unstake,
