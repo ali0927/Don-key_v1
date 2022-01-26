@@ -197,7 +197,7 @@ const generateRandomText = (length: number) => {
 const renderTooltipFees = (props: any) => (
   <Tooltip id="button-tooltip" {...props} className="mytooltip">
     <strong>
-      Please address the risks in terms of: Impermanent loss, platform risk, audits and TVL in the pools)
+      Please address the risks in terms of: Impermanent loss, platform risk, audits and TVL in the pools
     </strong>
   </Tooltip>
 );
@@ -328,12 +328,12 @@ export const SuggestRequestForm = () => {
         >
           <BsQuestionCircle style={{marginLeft: '5px'}}/>
         </OverlayTrigger>
-
-        <Input
+        <TextArea
+          rows={2}
           value={formState.title}
           onChange={handleChange("title")}
           placeholder="Start write here"
-        />
+        ></TextArea>
       </Label>
       <Label>
         Suggestion Flow<br />
@@ -371,10 +371,12 @@ export const SuggestRequestForm = () => {
             <RiskImage src={riskImages[exmapleSuggestions[selectedExmaple].risk].image.url} />
           </div>
 
-          <div style={{display:'flex', width:'100%', margin:'10px 0'}}>
+          <div style={{display:'flex', width:'100%', margin:'0'}}>
             <div style={{width:'100%'}}>
+            {/* 
               <UserImage src={ExampleUser} alt="user" />
               <label style={{fontSize:'0.8rem', fontWeight: 500}}>{exmapleSuggestions[selectedExmaple].name}</label>
+            */}
             </div>
             <div style={{fontSize:'1rem', fontWeight:600}}>
               <span>{exmapleSuggestions[selectedExmaple].apy}</span>

@@ -248,9 +248,7 @@ export const Suggest: React.FC = () => {
         <div className="col-lg-6 d-flex flex-column mt-5 pt-md-5">
           <h2>Add your Strategy</h2>
           <SubHeading>
-            Molestie morbi nec, amet sem sed. Potenti mauris at donec
-            curabitur. Aenean lorem vel gravida donec nunc, tortor arcu
-            mattis. Dictumst maecenas augue arcu dignissim. Tortor lorem.
+            So you think you are a novel farmer? suggest your newest and best strategy, and put it up to vote with the Don-key community. We will be watching and deploying based on voting and comments. Before deploying the pool Don-key will contact you VIA telegram to help set-up your Don-key profile and finalize details.
           </SubHeading>
           <DonkeyScope />
         </div>

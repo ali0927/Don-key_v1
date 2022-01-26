@@ -68,16 +68,14 @@ export const CommunityPage = () => {
             <div className="col-lg-6 py-5">
               <Heading>Community page</Heading>
               <SubHeading>
-                Molestie morbi nec, amet sem sed. Potenti mauris at donec
-                curabitur. Aenean lorem vel gravida donec nunc, tortor arcu
-                mattis. Dictumst maecenas augue arcu dignissim. Tortor lorem.
+                Welcome to our community page where users can vote and suggest new strategies, report bugs and more features coming soon.
               </SubHeading>
             </div>
             <div className="col-12 pb-4">
               <NextArrowButton to='#' onClick={handleNextClick}/>
               <PillContainer>
                 <Pill active={selectedTab === CommunityTabs.strategy} onClick={() => setSelectedTab(CommunityTabs.strategy)}>
-                  Suggest requests
+                  Suggest Strategy
                 </Pill>
                 <Pill active={selectedTab === CommunityTabs.bugReport} onClick={() => setSelectedTab(CommunityTabs.bugReport)} style={{margin: '0 auto'}}>
                   Bug Report

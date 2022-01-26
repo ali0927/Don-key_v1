@@ -103,7 +103,7 @@ const VoteButton = styled.button`
   font-size: 12px;
   color: #000;
   display: flex;
-  align-item: sapce-around;
+  align-items: center;
   border-radius: 10px;
   border: 0;
   background-color: yellow;
@@ -220,7 +220,7 @@ export const SuggestCard: React.FC<{
             </div>
             <div style={{display:'flex', alignItems:'center'}}>
               <AiOutlineMessage size="25px"/> 
-              <SuggestAddress>{`${props.suggest.comments} commits`}</SuggestAddress>
+              <SuggestAddress>{`${props.suggest.comments} Comments`}</SuggestAddress>
             </div>
           </div>
           <div className="col-6">
