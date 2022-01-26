@@ -146,10 +146,16 @@ export const BrightSdkProvider: React.FC = (props) => {
 
    
   useIsomorphicEffect(() => {
-    if(connected && status === "initial" && allowedChainId && chainId && allowedChainId){
+    if(connected && status === "initial"  && chainId && allowedChainId){
       initializeSDk()
     }
   }, [connected, address, chainId])
+
+  useDidUpdate(() => {
+    if(status === "ready" && connected && allowedChainId && address){
+      initializeSDk()
+    }
+  }, [address])
 
   return (
     <BrightUnionContext.Provider
