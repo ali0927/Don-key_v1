@@ -104,7 +104,7 @@ const Comp = (props: { className?: string }) => {
   return (
     <StaticImage
       className={props.className}
-      src="../../images/carrier-donkey.png"
+      src="../../images/don-tier.svg"
       alt="Bug Reporter Donkey"
       layout="fullWidth"
     />
