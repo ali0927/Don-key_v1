@@ -9,7 +9,9 @@ import { Comment } from "components/Suggest/Comment";
 import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
+import { DummySuggestions } from "JsonData/DummyData";
 import styled from "styled-components";
+import { navigate } from "gatsby";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -52,7 +54,8 @@ const SuggestVotes = styled.div`
   border-radius: 10px;
   justify-content: center;
   align-items: center;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 1.2rem;
   margin: 0 10px 20px 10px;
   padding: 10px 0;
   @media (max-width: 568px) {
@@ -86,17 +89,19 @@ const SuggestionPath = styled.div`
   position: relative;
   font-weight: 500;
 `
-const SuggetionNextButton = styled(BsArrowLeftSquare)`
+const SuggetionNextButton = styled(BsArrowRightSquare)`
   cursor: pointer;
   margin: 10px;
   width: 25px;
   height: 25px;
+  visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
 `
-const SuggetionPrevButton = styled(BsArrowRightSquare)`
+const SuggetionPrevButton = styled(BsArrowLeftSquare)`
   cursor: pointer;
   margin: 10px;
   width: 25px;
   height: 25px;
+  visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
 `
 const RiskDescriptionButton = styled.button`
   background: none;
@@ -117,6 +122,22 @@ const generateRandomText = (length: number) => {
   return result
 }
 
+const generateRandomAddress = () => {
+  const characters = 'abcdefghijklm0123456789';
+  let result = '0x';
+  const charactersLength = characters.length;
+  for(let i = 0; i < 5; i++) {
+      result += 
+      characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  result += "..."
+  for(let i = 0; i < 5; i++) {
+    result += 
+    characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result
+}
+
 export default function SuggestionView ({ 
   pageContext: { suggestionInfo }
   }: {
@@ -133,7 +154,7 @@ export default function SuggestionView ({
   const comments = useMemo(() => {
     const _comments = new Array(suggestion.comments).fill({}).map(item => {
       return {
-        user: generateRandomText(10),
+        user: generateRandomAddress(),
         date: '1/15 Mon',
         content: generateRandomText(200),
         likes: Math.floor(Math.random() * 10)
@@ -141,6 +162,13 @@ export default function SuggestionView ({
     })
     return _comments
   }, [suggestion.comments])
+
+  const nextSuggestion = (e: any) => {
+    navigate(`/community/suggestion/${suggestion.idx + 1}`)
+  }
+  const prevSuggestion = (e: any) => {
+    navigate(`/community/suggestion/${suggestion.idx - 1}`)
+  }
 
   return (
     <div style={{background:"#F5F5F5"}}>
@@ -157,8 +185,8 @@ export default function SuggestionView ({
         <SuggestionBox className="row">
           <div className="col-sm-12 col-md-10" style={{display:'flex', flexDirection:'column'}}>
             <div style={{display:'flex', marginBottom: '20px'}}>
-              <SuggetionNextButton />
-              <SuggetionPrevButton />
+              <SuggetionPrevButton visible={suggestion.idx > 0} onClick={prevSuggestion} />
+              <SuggetionNextButton visible={DummySuggestions.length - 1 > suggestion.idx} onClick={nextSuggestion}/>
             </div>
             <SuggestionTitle>{suggestion.title}</SuggestionTitle>
             <label style={{color: 'lightgrey'}}>{suggestion.date}</label>
@@ -167,7 +195,7 @@ export default function SuggestionView ({
           </div>
           <div className="col-sm-12 col-md-2">
             <SuggestVotes>
-              <span style={{fontSize:'10px'}}>Votes</span>
+              <span style={{fontSize:'0.8rem'}}>Votes</span>
               <span>{suggestion.votes}</span>
             </SuggestVotes>
             <div style={{display:'flex', flexDirection:'column'}}>
@@ -228,6 +256,7 @@ export default function SuggestionView ({
           </div>
         </div>
       </DonCommonmodal>
+
     </div>
   )
 }

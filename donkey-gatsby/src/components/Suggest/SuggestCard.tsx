@@ -22,6 +22,9 @@ const SuggestTitle = styled.h4`
   font-weight: 600;
   font-size: 18px;
   line-height: 27px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 54px;
   margin-bottom: 12px;
 `;
 const SuggestStatus = styled.div`
@@ -54,7 +57,7 @@ const SuggestVotes = styled.div`
   height: 100%;
   justify-content: center;
   align-items: center;
-  font-weight: 500;
+  font-weight: 650;
 `;
 const SuggestDescription = styled.p`
   margin: 20px 0;
@@ -187,7 +190,7 @@ export const SuggestCard: React.FC<{
     <div>
       <SuggestCardSection onClick={() => handleCardClick()}>
         <div className="row">
-          <div className="col-md-9">
+          <div className="col-9">
             <SuggestTitle>{props.suggest.title}</SuggestTitle>
             <div style={{display: 'flex', alignItems: 'center'}}>
               <SuggestStatus status={props.suggest.status as SuggestStatusType}>
@@ -199,9 +202,9 @@ export const SuggestCard: React.FC<{
               </SuggestStatusTitle>
             </div>
           </div>
-          <SuggestVotesBox className="col-md-3">
+          <SuggestVotesBox className="col-3">
             <SuggestVotes>
-              <span style={{fontSize:'10px'}}>Votes</span>
+              <span style={{fontSize:'0.6rem'}}>Votes</span>
               <span>{props.suggest.votes}</span>
             </SuggestVotes>
           </SuggestVotesBox>
@@ -210,7 +213,7 @@ export const SuggestCard: React.FC<{
           {props.suggest.description}
         </SuggestDescription>
         <div className="row">
-          <div className="col-md-6" style={{display:'flex', flexDirection:'column', justifyContent:'space-around'}}>
+          <div className="col-6" style={{display:'flex', flexDirection:'column', justifyContent:'space-around'}}>
             <div style={{display:'flex', alignItems:'center'}}>
               <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
               <SuggestAddress>{props.suggest.address}</SuggestAddress>
@@ -220,7 +223,7 @@ export const SuggestCard: React.FC<{
               <SuggestAddress>{`${props.suggest.comments} commits`}</SuggestAddress>
             </div>
           </div>
-          <div className="col-md-6">
+          <div className="col-6">
             <SuggestRiskImage src={riskImages[props.suggest.risk].image.url} />
           </div>
         </div>
@@ -252,7 +255,7 @@ export const SuggestCard: React.FC<{
           placeholder="Start write comment here..."
         ></TextArea>
         <CommentButton onClick={() => setShowVoteModal(false)}>
-          Submit Suggestion
+          Submit Comment
         </CommentButton>
       </DonCommonmodal>
   </div>

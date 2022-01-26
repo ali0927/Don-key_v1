@@ -56,7 +56,6 @@ export const Comment: React.FC<{
           </Like>
           <ReplyButton>Reply</ReplyButton>
         </div>
-
       </div>
     </CommentBox>
   )   

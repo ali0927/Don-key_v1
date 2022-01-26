@@ -131,6 +131,17 @@ const DonkeyScope = styled(Comp)`
     margin: 40px 0;
   }
 `;
+const MoreButton = styled.button`
+  padding: 16px;
+  font-weight: 500;
+  font-size: 1rem;
+  border: 1px solid black;
+  color: #000;
+  border-radius: 10px;
+  background: transparent;
+  display: block;
+  width: 100%;
+`;
 
 const SuggestStatus = { 
   all: 'all', 
@@ -220,15 +231,22 @@ export const Suggest: React.FC = () => {
 
       {filterList.length > 0 &&
         <>
-          <div className="row py-4 mb-2">
+          <div className="row py-4">
             <SuggestList suggestList={filterList} />
           </div>
         </>
       }
+      <div className="row justify-content-center mb-4">
+        <div className="col-4">
+          <MoreButton>
+            View More
+          </MoreButton>
+        </div>
+      </div>
 
       <div className="row mb-5 pt-5">
         <div className="col-lg-6 d-flex flex-column mt-5 pt-md-5">
-          <h2>Add your suggestion</h2>
+          <h2>Add your Strategy</h2>
           <SubHeading>
             Molestie morbi nec, amet sem sed. Potenti mauris at donec
             curabitur. Aenean lorem vel gravida donec nunc, tortor arcu

@@ -107,6 +107,7 @@ const Urgencies = [
 type IType = typeof Types[number]["value"];
 type IUrgency = typeof Urgencies[number]["value"];
 const INITIAL_STATE = {
+  nickName: "",
   name: "",
   telegram: "",
   network: 1,
@@ -163,14 +164,14 @@ const ExampleSuggetionBox = styled.div`
   background: #FBFBFB;
 `
 const RiskImage = styled.img`
-  width: 80px;
+  width: 100px;
 `
 const SuggetionImage = styled.img`
   width: 60px;
   height: 60px;
   over-flow: hidden;
   border-radius: 10px;
-  margin: 10px 5px;
+  margin: 10px 6px;
   cursor: pointer;
   border: ${(props: { selected: boolean }) => props.selected ? '1px solid orange': 'none'}
 `
@@ -241,12 +242,14 @@ export const SuggestRequestForm = () => {
 
   return (
     <Form>
-      <CheckBeforeSend>
-      <h4>Before submitting a suggestion please:</h4><br/>
-        <ul>
-          <li>Execute a hard refresh and erase all Cache from the browser (Ctr+F5 / Cmd+Shift+R).</li>
-        </ul>
-      </CheckBeforeSend>
+       <Label>
+        Nick Name<br />
+        <Input
+          value={formState.nickName}
+          onChange={handleChange("nickName")}
+          placeholder="Livia"
+        />
+      </Label>
       <Label>
         Telegram Name<br />
         <SmallSpan>So we can contact you once the suggestion is applied</SmallSpan>
@@ -257,7 +260,7 @@ export const SuggestRequestForm = () => {
         />
       </Label>
       <Label>
-        Suggestion Name
+        Strategy Name
         <Input
           value={formState.name}
           onChange={handleChange("name")}
@@ -339,13 +342,13 @@ export const SuggestRequestForm = () => {
         title="Suggestion Examples"
         variant="common"
         onClose={() => setShowExampleSuggestion(false)}
-        size="sm"
+        size="mdSmall"
       >
         <ExampleSuggetionBox>
           <div style={{display:'flex', width:'100%'}}>
             <div style={{width:'100%'}}>
               <label style={{fontSize:'0.8rem'}}>Suggestion Name</label>
-              <h5>{exmapleSuggestions[selectedExmaple].title}</h5>
+              <h5 style={{fontWeight:600}}>{exmapleSuggestions[selectedExmaple].title}</h5>
             </div>
             <RiskImage src={riskImages[exmapleSuggestions[selectedExmaple].risk].image.url} />
           </div>
@@ -355,14 +358,14 @@ export const SuggestRequestForm = () => {
               <UserImage src={ExampleUser} alt="user" />
               <label style={{fontSize:'0.8rem', fontWeight: 500}}>{exmapleSuggestions[selectedExmaple].name}</label>
             </div>
-            <div style={{fontSize:'1rem', fontWeight: 500}}>
+            <div style={{fontSize:'1rem', fontWeight:600}}>
               <span>{exmapleSuggestions[selectedExmaple].apy}</span>
               <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
             </div>
           </div>
 
-          <div style={{fontSize:'0.8rem', overflowWrap:'anywhere'}}>
-            <ShowMoreContent content={exmapleSuggestions[selectedExmaple].description} length={150} />
+          <div style={{fontSize:'1rem', overflowWrap:'anywhere'}}>
+            <ShowMoreContent content={exmapleSuggestions[selectedExmaple].description} length={180} />
           </div>
         </ExampleSuggetionBox>
 
@@ -377,7 +380,6 @@ export const SuggestRequestForm = () => {
           <span>Select Suggestion</span>
           <BsArrowRight style={{margin: '10px', cursor:'pointer'}} onClick={() => nextExample()}/>
         </div>
-        
       </DonCommonmodal>
 
     </Form>

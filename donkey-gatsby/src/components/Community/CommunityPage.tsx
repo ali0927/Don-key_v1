@@ -79,7 +79,7 @@ export const CommunityPage = () => {
                 <Pill active={selectedTab === CommunityTabs.strategy} onClick={() => setSelectedTab(CommunityTabs.strategy)}>
                   Suggest requests
                 </Pill>
-                <Pill active={selectedTab === CommunityTabs.bugReport} onClick={() => setSelectedTab(CommunityTabs.bugReport)}>
+                <Pill active={selectedTab === CommunityTabs.bugReport} onClick={() => setSelectedTab(CommunityTabs.bugReport)} style={{margin: '0 auto'}}>
                   Bug Report
                 </Pill>
               </PillContainer>

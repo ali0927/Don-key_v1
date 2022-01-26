@@ -21,7 +21,7 @@ export const SuggestList: React.FC<{
     <>
       {props.suggestList.map((strategy) => {
         return (
-          <div className="col-md-6 col-lg-4 mb-5">
+          <div className="col-md-6 col-lg-4 mb-4">
             <SuggestCard suggest={strategy}/>
           </div>
         );
