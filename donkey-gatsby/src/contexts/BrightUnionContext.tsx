@@ -59,15 +59,13 @@ const filterCovers = (covers: IBrightUnion["activeCovers"]) => {
   }, [] as IBrightUnion["activeCovers"]);
 };
 
-
-
 export const BrightSdkProvider: React.FC = (props) => {
   const [{ status, activeCovers }, setState] = useState<IBrightUnion>({
     status: "initial",
     activeCovers: [],
   });
   const brightClientRef = useRef<any>(null);
-  const { getConnectedWeb3, address, chainId } = useWeb3Context();
+  const { getConnectedWeb3, address, chainId, connected } = useWeb3Context();
 
   const setBrightClient = (brightClient: any) => {
     brightClientRef.current = brightClient;
@@ -133,7 +131,7 @@ export const BrightSdkProvider: React.FC = (props) => {
       updatedQuote.period,
       updatedQuote
     );
-     return insuraceQuote;
+    return insuraceQuote;
   };
 
   const buyQuote = async (quote: any) => {
@@ -142,20 +140,16 @@ export const BrightSdkProvider: React.FC = (props) => {
     const result = await brightClient.buyQuote(quote);
     return result;
   };
-  const allowedChainId = chainId === BINANCE_CHAIN_ID || chainId === POLYGON_CHAIN_ID;
-  useDidUpdate(() => {
-    if (status === "ready" && address && allowedChainId) {
-      refetch();
-    }
-  }, [address, chainId]);
+  const allowedChainId =
+    chainId === BINANCE_CHAIN_ID || chainId === POLYGON_CHAIN_ID;
 
-  useDidUpdate(() => {
-    if (status === "ready" && allowedChainId) {
-      // if () {
-        initializeSDk();
-      // }
+
+   
+  useIsomorphicEffect(() => {
+    if(connected && status === "initial" && allowedChainId && chainId && allowedChainId){
+      initializeSDk()
     }
-  }, [chainId]);
+  }, [connected, address, chainId])
 
   return (
     <BrightUnionContext.Provider
@@ -178,12 +172,7 @@ export const useBrightClient = () => {
   const { initialize, ...rest } = useContext(
     BrightUnionContext
   ) as IBrightContext;
-  const { status } = rest;
-  useIsomorphicEffect(() => {
-    if (status === "initial") {
-      initialize();
-    }
-  }, [status]);
+
 
   return rest;
 };
