@@ -648,7 +648,7 @@ export const DetailTable = ({
         <BoostApyBox className="d-md-none">
           <div className="row">
             <div className="col-6 pr-0 d-flex flex-column justify-content-center  ">
-              Up to 40% extra APY
+              Up to 40% extra APR
             </div>
             <div className="col-6 pl-0 d-flex flex-column justify-content-center align-items-end">
               <BoostButton />
