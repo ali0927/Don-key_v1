@@ -201,6 +201,7 @@ export const createPages = async ({ graphql, actions }: any) => {
           telegram
           guid
           slug
+          Zone
           hideInvestButton
           farmerfee
           performancefee

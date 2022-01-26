@@ -89,6 +89,7 @@ export interface IFarmerInter {
   oldPoolAddress: string;
   network: INetwork;
   strategies:IStrategy[];
+  Zone: {id: number; strapi_component: "component.klima-tokens"; klima: string;}[] ;
 }
 
 export type IStrategy = {
