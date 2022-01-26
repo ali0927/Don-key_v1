@@ -1,11 +1,11 @@
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import React, { useRef, useState } from "react";
-import { Spinner } from "react-bootstrap";
+import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
 import { useRiskImageList } from "components/Suggest/SuggestCard";
-import { BsTriangleFill, BsArrowRight, BsArrowLeft } from "react-icons/bs";
+import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { theme } from "theme";
@@ -90,8 +90,10 @@ const DefaultOption = { name: "Select an option", value: "" } as const;
 
 const Types = [
   DefaultOption,
-  { name: "BSC", value: 56 },
-  { name: "Ethereum", value: 1 },
+  { name: "Binance Smart Chain", value: 56 },
+  { name: "Fantom", value: 250 },
+  { name: "Polygon", value: 137 },
+  { name: "Avalanche", value: 43114 }
 ] as const;
 
 const Urgencies = [
@@ -143,7 +145,7 @@ const RiskLevel = styled.div`
 const RiskLevelSelector = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 10px;
+  margin: 5px 0;
   align-items: ${(props: { level: number }) => props.level === 0 ? 'flex-end': props.level === 1 ? 'center': 'flex-start'};
 `
 const RiskLevelSelectorIcon = styled(BsTriangleFill)`
@@ -191,6 +193,14 @@ const generateRandomText = (length: number) => {
   }
   return result
 }
+
+const renderTooltipFees = (props: any) => (
+  <Tooltip id="button-tooltip" {...props} className="mytooltip">
+    <strong>
+      Please address the risks in terms of: Impermanent loss, platform risk, audits and TVL in the pools)
+    </strong>
+  </Tooltip>
+);
 
 const ExampleSuggestions = (): Array<any> => {
   let _example = new Array(5).fill(0).map(item => {
@@ -302,7 +312,7 @@ export const SuggestRequestForm = () => {
           <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)} />
         </div>
         <RiskLevelSelector level={riskLevel}>
-          <div style={{display:'flex', flexDirection:'column', width:'fit-content', alignItems:'center'}}>
+          <div style={{display:'flex', flexDirection:'column', width:'20%', alignItems:'center'}}>
             <RiskLevelSelectorIcon level={riskLevel} />
             <label>{riskImages[riskLevel].Title}</label> 
           </div>
@@ -311,6 +321,14 @@ export const SuggestRequestForm = () => {
    
       <Label>
         Describe the risk in your words
+        <OverlayTrigger
+          placement="right"
+          delay={{show: 250, hide: 400}}
+          overlay={renderTooltipFees}
+        >
+          <BsQuestionCircle style={{marginLeft: '5px'}}/>
+        </OverlayTrigger>
+
         <Input
           value={formState.title}
           onChange={handleChange("title")}
