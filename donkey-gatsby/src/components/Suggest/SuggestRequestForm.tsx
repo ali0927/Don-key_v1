@@ -8,7 +8,6 @@ import { useRiskImageList } from "components/Suggest/SuggestCard";
 import { BsTriangleFill, BsArrowRight, BsArrowLeft } from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { generateRandomText } from "components/SuggestionView";
 import { theme } from "theme";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import ExampleUser from "../../images/ex-user.png";
@@ -181,6 +180,16 @@ const UserImage = styled.img`
   border-radius: 50%;
   margin-right: 10px;
 `
+const generateRandomText = (length: number) => {
+  const characters = ' abcdefghijklm nopqrstuvwxyz ';
+  let result = ' ';
+  const charactersLength = characters.length;
+  for(let i = 0; i < length; i++) {
+      result += 
+      characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result
+}
 
 const ExampleSuggestions = (): Array<any> => {
   let _example = new Array(5).fill(0).map(item => {

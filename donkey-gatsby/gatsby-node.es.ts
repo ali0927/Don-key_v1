@@ -2,6 +2,8 @@ import path from "path";
 import webpack from "webpack";
 import _ from "lodash";
 import { calcSumOfAllPoolValues } from "./src/helpers/contractHelpers";
+import { DummySuggestions, DummyEarningIDs } from "./src/JsonData/DummyData";
+
 /**
  * Here is the place where Gatsby creates the URLs for all the
  * posts, tags, pages and authors that we fetched from the Ghost site.
@@ -162,12 +164,8 @@ export const createPages = async ({ graphql, actions }: any) => {
       }
     }
   `);
-  
- 
 
   const tokens = tokensdata.data.allStrapiTokens.nodes;
-
-
   tokens.forEach((token: any) => {
     const strategies = sortStrategies(
       token.strategies.filter(
@@ -257,7 +255,25 @@ export const createPages = async ({ graphql, actions }: any) => {
     }
   });
 
+  DummySuggestions.forEach((suggestion: any) => {
+    createPage({
+      path: `/community/suggestion/${suggestion.idx}`,
+      component: path.resolve(`./src/templates/suggestionTemplate.tsx`),
+      context: {
+        suggestionInfo: suggestion
+      },
+    });
+  });
 
+  DummyEarningIDs.forEach((id: any) => {
+    createPage({
+      path: `/earning/${id}`,
+      component: path.resolve(`./src/templates/earningTemplate.tsx`),
+      context: {
+        id: id
+      },
+    });
+  });
 
   // Rewrite For Share Links
   createRedirect({

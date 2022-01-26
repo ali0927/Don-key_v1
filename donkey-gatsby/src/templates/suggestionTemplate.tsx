@@ -5,13 +5,11 @@ import { BsCircleFill, BsFillChatRightDotsFill, BsArrowLeftSquare, BsArrowRightS
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import { useRiskImageList } from "components/Suggest/SuggestCard";
-import { Comment } from "./Comment";
-import { CommentEdit } from "./CommentEdit";
+import { Comment } from "components/Suggest/Comment";
+import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
 import styled from "styled-components";
-
-import { dummyFiltered } from "components/Suggest";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -108,7 +106,7 @@ const RiskDescriptionButton = styled.button`
   margin: 0 auto;
 `
 
-export const generateRandomText = (length: number) => {
+const generateRandomText = (length: number) => {
   const characters = ' abcdefghijklm nopqrstuvwxyz ';
   let result = ' ';
   const charactersLength = characters.length;
@@ -119,13 +117,18 @@ export const generateRandomText = (length: number) => {
   return result
 }
 
-
-export const SuggestionView = ({ id }: {id: string}) => {
+export default function SuggestionView ({ 
+  pageContext: { suggestionInfo }
+  }: {
+    pageContext: {
+      suggestionInfo: any;
+  };
+}) {
   const [showRiskDetail, setShowRiskDetail] = useState(false)
   const riskImages = useRiskImageList()
   const suggestion = useMemo(() => {
-    return dummyFiltered[id ? parseInt(id) : 0]
-  }, [id])
+    return suggestionInfo
+  }, [suggestionInfo])
 
   const comments = useMemo(() => {
     const _comments = new Array(suggestion.comments).fill({}).map(item => {

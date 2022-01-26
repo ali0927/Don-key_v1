@@ -7,6 +7,7 @@ import { SuggestList } from "./SuggestList";
 import { SuggestRequestForm } from "./SuggestRequestForm";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
+import { DummySuggestions } from "JsonData/DummyData";
 
 const DropdownBtn = styled.div`
   border: 2px solid #222222;
@@ -138,37 +139,6 @@ const SuggestStatus = {
   approved: 'approved'
 }
 
-export const dummyFiltered = [
-  {
-    idx: 0,
-    title: 'Keyboard shortcut to add a new post',
-    apy: 12.123,
-    votes: 550,
-    name: 'Albert',
-    address: '123qwe123qwewrwer',
-    description: 'Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post? ',
-    risk: 2,
-    comments: 4,
-    status: 'new',
-    date: '15 Jan 2022 15:30',
-    category: 'Payments'
-  },
-  {
-    idx: 1,
-    title: 'Shortcut keyboard to add a new post',
-    apy: 23.123,
-    votes: 250,
-    name: 'Daniel',
-    address: 'wewrwer123qwe123qwewrwer',
-    description: 'Have you considered adding the markdown support when adding a new post? Have you considered adding the markdown support when adding a new post?',
-    risk: 1,
-    comments: 4,
-    status: 'approved',
-    date: '15 Jan 2022 15:30',
-    category: 'Payments'
-  }
-]
-
 export const Suggest: React.FC = () => {
   const [show, setShow] = useState(false);
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all)
@@ -179,9 +149,9 @@ export const Suggest: React.FC = () => {
   };
 
   const filterList = useMemo(() => {
-    if(strategyFilter === SuggestStatus.all) return dummyFiltered
-    return dummyFiltered.filter(item => item.status === strategyFilter)
-  }, [dummyFiltered, strategyFilter])
+    if(strategyFilter === SuggestStatus.all) return DummySuggestions
+    return DummySuggestions.filter(item => item.status === strategyFilter)
+  }, [DummySuggestions, strategyFilter])
 
   const DropDownMenu = () => {
     return (
@@ -235,7 +205,6 @@ export const Suggest: React.FC = () => {
       </ClickAwayListener>
     );
   };
-
 
   return (
     <div className="container">
