@@ -168,7 +168,6 @@ const WithdrawRequest = ({
 
   if (isWithdrawRequested) {
     if (loading || !data) {
-
       return Loader;
     } else {
       const createTimer = data.withdrawRequests[0]?.created_at || Date.now();
@@ -187,6 +186,23 @@ const WithdrawRequest = ({
     }
   }
   return null;
+};
+
+const getFieldFromFarmer = (
+  farmer: IFarmerInter,
+  key: IFarmerInter["Zone"][0]["strapi_component"]
+) => {
+  if (farmer.Zone && farmer.Zone.length > 0) {
+    const index = farmer.Zone.findIndex(
+      (item) => item.strapi_component === key
+    );
+    if (index === -1) {
+      return null;
+    }
+    return farmer.Zone[index];
+  } else {
+    return null;
+  }
 };
 
 export const FarmerStrategies = ({
@@ -232,6 +248,19 @@ export const FarmerStrategies = ({
                   poolAddress={farmer.poolAddress}
                   strategies={farmer.strategies}
                 />
+                {getFieldFromFarmer(farmer, "component.klima-tokens") && (
+                  <div style={{backgroundColor: "#fff", textAlign: "center", borderRadius: 6, padding:20}}>
+                    This Strategy uses USDC to buy KLIMA. the amount of Klima is
+                    accumulated even when the price goes down. Current amount of
+                    Klima in pool:{" "}
+                    <span className="font-weight-bold">
+                    {
+                      getFieldFromFarmer(farmer, "component.klima-tokens")
+                        ?.klima
+                    } KLIMA
+                    </span>
+                  </div>
+                )}
                 <StrategyTableRoot className="d-flex flex-column justify-content-center">
                   <div className="d-flex justify-content-center">
                     <Image

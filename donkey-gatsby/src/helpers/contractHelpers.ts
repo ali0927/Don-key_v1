@@ -7,6 +7,7 @@ import { isEqual } from "lodash";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { getWeb3 } from "don-components";
+import { waitFor } from "don-utils";
 import { StakeType } from "interfaces";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
 
@@ -413,6 +414,20 @@ const getPoolJSON = async (version: number) => {
   }
   return await import("../JsonData/pool2.json");
 };
+
+
+export const hasMined = async (txHash: string, web3: Web3) => {
+  while(true){
+    const receipt = await web3.eth.getTransactionReceipt(txHash);
+    console.log("Loop Running");
+    if(!receipt){
+      await waitFor(500);
+    }else {
+      console.log("Loop Ended")
+      return receipt;
+    }
+  }
+}
 
 export const getPoolContract = memoizeAsync(
   async (web3: Web3, poolAddress: string, version: number) => {

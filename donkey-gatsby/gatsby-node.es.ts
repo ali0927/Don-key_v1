@@ -9,6 +9,8 @@ import { calcSumOfAllPoolValues } from "./src/helpers/contractHelpers";
 
 const STRAPI_TOKENS = "StrapiTokens";
 const STRAPI_FARMERS = "StrapiFarmers";
+const STRAPI_NETWORKS = "StrapiNetworks";
+
 export const onCreateNode = async ({
   node, // the node that was just created
   getNodes,
@@ -67,6 +69,40 @@ export const onCreateNode = async ({
         item.token = associatedToken;
       }
     });
+    node.Insurance.forEach(
+      (item: {
+        protocol: { id: string; network: any };
+        token: { network: any };
+      }) => {
+        const allNodes = getNodes();
+
+        if (!item.protocol) {
+          return;
+        }
+        if (
+          item.protocol.network !== null &&
+          item.protocol.network !== undefined
+        ) {
+          item.protocol.network = allNodes.find(
+            (networkNode: any) =>
+              networkNode &&
+              networkNode.internal &&
+              networkNode.internal.type === STRAPI_NETWORKS &&
+              networkNode.strapiId === item.protocol.network
+          );
+        }
+        if (item.token) {
+          if (item.token.network !== null && item.token.network !== undefined)
+            item.token.network = allNodes.find(
+              (networkNode: any) =>
+                networkNode &&
+                networkNode.internal &&
+                networkNode.internal.type === STRAPI_NETWORKS &&
+                networkNode.strapiId === item.token.network
+            );
+        }
+      }
+    );
   }
 };
 
@@ -198,11 +234,29 @@ export const createPages = async ({ graphql, actions }: any) => {
           telegram
           guid
           slug
+          Zone
           hideInvestButton
           farmerfee
           performancefee
           poolAddress
           poolVersion
+          Insurance {
+            percent
+       
+            protocol {
+              icon {
+                url
+              }
+              productId
+              name
+              network {
+                chainId
+                tokenSymbol
+              }
+            }
+          }
+          minAmountForInsurance
+          hasInsurance
           oldPoolAddress
           oldPoolVersion
           network {
@@ -277,6 +331,7 @@ export const createPages = async ({ graphql, actions }: any) => {
       },
     });
   })
+
 
   // Rewrite For Share Links
   createRedirect({

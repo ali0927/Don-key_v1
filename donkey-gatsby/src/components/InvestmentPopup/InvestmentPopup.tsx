@@ -38,6 +38,8 @@ import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import Downarrow from "components/Icons/Downarrow";
 import { useInvestmentPopupStyles } from "./styles/useInvestmentPopupStyles";
+import { isInsurable } from "helpers/isInsurable";
+import { IInsuranceProps } from "interfaces";
 
 const ButtonWrapper = styled.div({
   width: "100%",
@@ -207,12 +209,18 @@ const FARMER_WITHDRAW_FRAME = gql`
   }
 `;
 
+
+
+
 export const InvestmentPopup = ({
   poolAddress,
   poolVersion,
   gasLimit,
   onClose,
   onSuccess,
+
+  minAmountForInsurance
+  
 }: {
   poolAddress: string;
   apy: string;
@@ -220,7 +228,7 @@ export const InvestmentPopup = ({
   gasLimit?: string;
   onSuccess?: () => void;
   onClose: () => void;
-}) => {
+} & IInsuranceProps) => {
   const [tokenPrice, setTokenPrice] = useState("-");
   const [value, setValue] = useState("");
   const [isLoading, enable] = useToggle();
@@ -234,8 +242,7 @@ export const InvestmentPopup = ({
     variables: { poolAddress },
   });
 
-  const { showProgress, showSuccess, showFailure } =
-    useTransactionNotification();
+  const { showProgress, showSuccess, showFailure } = useTransactionNotification();
   const { refetch, holdingDons } = useStakingContract();
   const [referralCode, setReferralCode] = useState("");
   const [_, setChecking] = useState(false);
@@ -312,12 +319,13 @@ export const InvestmentPopup = ({
 
   const timeframe = !loading ? data.farmers[0]?.withdrawTimeFrame || "12" : "-";
 
+
   const handleInvest = async () => {
     if (isLoading) {
       return;
     }
     enable();
-
+ 
     try {
       if (isUnWrapped && tokenData.tokens[0]) {
         const wrappedTokenAddres = tokenData.tokens[0].tokenAddress;
@@ -394,15 +402,12 @@ export const InvestmentPopup = ({
           user: accounts[0],
         });
       }
-      // if (poolVersion === 4) {
-      //   await pool.methods.depositLiquidity(inputAmount).send({
-      //     from: accounts[0],
-      //     gas: gasLimit,
-      //   });
-      
+      // if(isInsurable(value, minAmountForInsurance)){
+       
       // }
-
+      
       onSuccess && onSuccess();
+      onClose();
 
       showSuccess("Money invested into Pool Successfully");
     } catch (err) {
@@ -611,6 +616,7 @@ export const InvestmentPopup = ({
         </MyBalancemobile>
 
         {renderContent()}
+       
       </DonCommonmodal>
     </>
   );

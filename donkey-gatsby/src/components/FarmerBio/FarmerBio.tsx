@@ -1,17 +1,15 @@
 import { Col, Container, Row } from "react-bootstrap";
-import { ShareandEarnIcon } from "icons";
 import { DetailTable } from "components/DetailTable";
 import styled from "styled-components";
 import { capitalize } from "lodash";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { useState } from "react";
 import { IFarmerInter } from "interfaces";
 import { TwitterIcon } from "components/TwitterIcon";
 import BigNumber from "bignumber.js";
 import { theme } from "theme";
 import { fixUrl } from "helpers";
 
-import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
+import { useWeb3Context } from "don-components";
 
 import { breakPoints } from "../../../src/breakponts";
 import { BackArrowButton } from "components/BackArrowButton";
@@ -115,7 +113,7 @@ export const FarmerBio = ({
     oldPoolVersion,
   } = farmer;
 
-  // const [openSharePopup, setSharePopup] = useState(false);
+ 
 
   const apy =
     strategies && strategies.length > 0
@@ -224,6 +222,9 @@ export const FarmerBio = ({
               slug={slug}
               strategyName={strategyName}
               name={name}
+              Insurance={farmer.Insurance}
+              hasInsurance={farmer.hasInsurance}
+              minAmountForInsurance={farmer.minAmountForInsurance}
             />
           </Row>
         </Container>
