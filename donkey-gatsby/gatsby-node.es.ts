@@ -242,7 +242,7 @@ export const createPages = async ({ graphql, actions }: any) => {
           poolVersion
           Insurance {
             percent
-       
+
             protocol {
               icon {
                 url
@@ -339,5 +339,18 @@ export const createPages = async ({ graphql, actions }: any) => {
     force: true,
     toPath: `${process.env.GATSBY_API_URL}/api/v2/share/:splat`,
     statusCode: 200,
+  });
+
+  const earningpageIds = ["atl", "nacho"];
+
+  
+  earningpageIds.forEach((id) => {
+    createPage({
+      path: `/earning/${id}`,
+      component: path.resolve(`./src/templates/earningTemplate.tsx`),
+      context: {
+        id,
+      },
+    });
   });
 };
