@@ -46,7 +46,6 @@ export const Title = styled.label`
 const EarningBox = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-evenly;
   margin: 50px 0;
 `;
 
@@ -73,17 +72,18 @@ const calculateRoi = (data: {
 };
 
 const EarningCardWrapper = ({
-  id,
-  logo,
-  comingSoon,
-  contractAddress,
-  tokenAddress,
+  item: {
+    comingSoon,
+    logo,
+    contractAddress,
+    tokenAddress,
+    tokenChain,
+    id,
+    priceFeed,
+    priceFeedChain,
+  },
 }: {
-  id: string;
-  logo: any;
-  comingSoon: boolean;
-  contractAddress: string;
-  tokenAddress: string;
+  item: typeof DataEarning[0];
 }) => {
   const [loading, setLoading] = useState(true);
 
@@ -129,7 +129,7 @@ const EarningCardWrapper = ({
         web3,
         contractAddress
       );
-      const Reward = await getRewardToken(web3, contractAddress);
+      const Reward = await getRewardToken(web3, contractAddress, tokenChain);
 
       const endBlock = await PromotionalPool.methods.bonusEndBlock().call();
       const rewardPerBlock = await PromotionalPool.methods
@@ -143,8 +143,8 @@ const EarningCardWrapper = ({
       }
       const tokenPrice = toEther(
         await getPriceFromPriceFeed(
-          web3,
-          "0x6926aeb5703e9533B5Dd9AC58A9101622588aDe6",
+          getWeb3(priceFeedChain),
+          priceFeed,
           tokenAddress
         )
       );
@@ -207,21 +207,19 @@ export const EarningPage = () => {
       <NavBar />
       <EarningSection>
         <HeaderSection />
+        <div className="container">
         <EarningBox className="row">
+          
           {DataEarning.map((item) => {
             return (
-              <div className="col-sm-12 col-md-4 col-xl-3">
-                <EarningCardWrapper
-                  comingSoon={item.comingSoon}
-                  id={item.id}
-                  logo={item.logo}
-                  tokenAddress={item.tokenAddress}
-                  contractAddress={item.contractAddress}
-                />
+              <div key={item.id} className="col-sm-12 col-md-4 ">
+                <EarningCardWrapper item={item} />
               </div>
             );
           })}
         </EarningBox>
+        </div>
+       
       </EarningSection>
       <Footer />
     </div>
