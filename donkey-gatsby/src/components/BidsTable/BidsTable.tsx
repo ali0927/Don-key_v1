@@ -1,9 +1,11 @@
 import { ClaimPopup } from "components/ClaimPopup";
+import { DetailsPopup } from "components/DetailsPopup";
 import { TableRow } from "components/TableRow";
 import { useState } from "react";
 
 export const BidsTable = () => {
   const [openClaim, setOpenClaim] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   return (
     <div
       className="strip table_strip your_bids"
@@ -15,6 +17,11 @@ export const BidsTable = () => {
           {openClaim && (
             <ClaimPopup open={openClaim} onClose={() => setOpenClaim(false)} />
           )}
+          {openDetails && (
+            <DetailsPopup open={openDetails} onClose={() => setOpenDetails(false)} />
+          )}
+
+  
           <thead>
             <TableRow>
               <th>#</th>
@@ -53,7 +60,7 @@ export const BidsTable = () => {
               <td data-title="borrow">$2,280,00</td>
               <td data-title="commission">12%</td>
               <td>
-                <button className="white">See Details</button>
+                <button onClick={() => setOpenDetails(true)} className="white">See Details</button>
               </td>
             </TableRow>
             <TableRow>

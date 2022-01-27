@@ -9,7 +9,14 @@ const StyledButton = styled.button`
   font-size: 14px;
   background: linear-gradient(0deg, #0e0f10 0%, #272a2f 48.04%, #131415 100%);
   border-radius: 5px;
-  border: 0px;
+  border: 1px solid;
+  width: 100%;
+  height: 39px;
+  &:hover {
+    background:#FFF037;
+    color:black;
+    border-color:black;
+  }
   ${(props: { variant?: "white" | "black" }) => {
     return (
       props.variant === "white" &&
@@ -109,6 +116,7 @@ export const PayPopup = ({
   const { hrs, days, mins } = useTimer("2022-01-29T07:00:00", true);
   return (
     <DonCommonmodal
+      className="auctionPop"
       onClose={onClose}
       variant="common"
       title={
@@ -122,6 +130,8 @@ export const PayPopup = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              marginTop: "-21px",
+              marginBottom: '20px'
             }}
           >
             <svg
@@ -144,8 +154,8 @@ export const PayPopup = ({
       <h2 style={{ fontWeight: 700, fontSize: 25 }} className="mb-3">
         Redeem
       </h2>
-      <p>We hope you made money with our money.</p>{" "}
-      <p style={{ fontWeight: 100, fontSize: 16 }}>
+      <p style={{marginBottom: '25px'}}>We hope you made money with our money.</p>{" "}
+      <p style={{ fontWeight: 100, fontSize: 16, marginBottom: '47px' }}>
         In order to redeem your LP collateral you need to pay:
       </p>
       <div style={{ fontSize: 13 }}>
@@ -170,9 +180,9 @@ export const PayPopup = ({
         <span className="mr-4" style={{ fontWeight: 300 }}>
           Total:{" "}
         </span>
-        <span style={{ fontWeight: 500 }}>195 BUSD</span>
+        <span style={{ fontWeight: 600 }}>195 BUSD</span>
       </div>
-      <div className="d-flex my-4">
+      <div className="d-flex my-4" style={{paddingTop: '16px',paddingBottom: '18px'}}>
         <div className="pr-2 w-50">
           <StyledButton>Pay</StyledButton>
         </div>
@@ -181,7 +191,8 @@ export const PayPopup = ({
         </div>
       </div>
       <HorizontalRuleWithText text="Last day to Pay" />
-      <div className="d-flex align-items-center">
+      <div className="d-flex align-items-center" style={{paddingTop: '14px',
+paddingBottom: '26px'}}>
         <TimerCard>
           <TimerNum>{days}</TimerNum>
           <TimerText>DAYS</TimerText>

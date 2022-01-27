@@ -56,7 +56,7 @@ export const LoansTable = () => {
                 164
               </td>
               <td>
-                <button className="claim">pay</button>
+                <button onClick={() => setIsPayOpen(true)} className="claim">pay</button>
               </td>
             </TableRow>
             <TableRow>

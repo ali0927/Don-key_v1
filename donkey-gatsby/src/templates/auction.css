@@ -791,3 +791,12 @@ td.status.rejected {
         max-height: 46px;
     }
 }
+
+.auctionPop .MuiDialog-container {
+        max-width: 414px;
+        margin: auto;
+}
+
+.auctionPop .Components__ModalContent-lnHRxH {
+    padding: 36px 42px;
+}
