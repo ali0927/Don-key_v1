@@ -4,7 +4,7 @@ export const PreviousAuctionsTable = () => {
     return  <div className="strip table_strip previous_auctions" style={{paddingTop: '71px'}}>
     <div className="boxed">
       <h3>Previous Auctions</h3>
-      <table class="previous_auctions_head">
+      <table className="previous_auctions_head">
         <thead>
           <tr>
           <th>#</th>
