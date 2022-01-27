@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { InvestmentPopup } from "components/InvestmentPopup";
 import { shortenAddress } from "don-utils";
 import { useMediaQuery } from "@material-ui/core";
 import { TotalProfitLoss } from "components/TotalProfitLoss";
-import { useIsInvested } from "hooks/useIsInvested";
 import { WithDrawPopup } from "components/WithDrawPopup";
 import {
-  captureException,
   formatNum,
   getAmount,
   getPoolContract,
@@ -33,10 +31,11 @@ import {
   CardInnerInfo,
 } from "components/DetailTable";
 import { LPShareIcon, ProfitIcon } from "icons";
-import { INetwork } from "interfaces";
+import { IInsuranceProps, INetwork } from "interfaces";
 import { BoostButton } from "components/BoostButton";
 import { useWeb3Context } from "don-components";
 import { api } from "strapi";
+import { useBrightClient } from "contexts/BrightUnionContext";
 
 export const InvestBlackCard = ({
   poolAddress,
@@ -48,6 +47,10 @@ export const InvestBlackCard = ({
   oldPoolVersion,
   hideInvestButton,
   isWithdrawRequested,
+
+  minAmountForInsurance,
+  Insurance,
+  insuranceBtn
 }: {
   poolAddress: string;
   poolVersion: number;
@@ -58,7 +61,8 @@ export const InvestBlackCard = ({
   hideInvestButton: boolean | null;
   apy: string;
   isWithdrawRequested?: boolean;
-}) => {
+  insuranceBtn?: React.ReactElement;
+} & IInsuranceProps) => {
   const { refresh, dependsOn } = useRefresh();
   const isSmall = useMediaQuery(`@media screen and (max-width:400px)`);
   const finalPoolAddress = isSmall ? shortenAddress(poolAddress) : poolAddress;
@@ -67,6 +71,8 @@ export const InvestBlackCard = ({
   const [currentHoldings, setCurrentHoldings] = useState("0");
 
   const [showInvestmentPopup, setShowInvestmentPopup] = useState(false);
+
+  const { activeCovers, status } = useBrightClient();
 
   const { isUSD } = useUSDViewBool();
   const [isFarmer, setIsFarmer] = useState(false);
@@ -77,6 +83,11 @@ export const InvestBlackCard = ({
   const [isWithdrawPaused, setIsWithdrawPaused] = useState(false);
   const { getConnectedWeb3, address } = useWeb3Context();
   const web3 = getConnectedWeb3();
+
+  // const {activeCovers, status} = useBrightClient();
+  useEffect(() => {
+    console.log(activeCovers, status);
+  }, []);
   const checkIsFarmer = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
       try {
@@ -115,8 +126,11 @@ export const InvestBlackCard = ({
   const [investedInOldPool, setInvestedInOldPool] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [withdrawLp, setWithdrawLp] = useState(new BigNumber("0"));
-
+ 
   const [totalLp, setTotalLp] = useState(new BigNumber("0"));
+
+
+
 
   const fetchWithdrawShare = async () => {
     if (poolVersion === 3 || poolVersion === 4) {
@@ -534,6 +548,7 @@ export const InvestBlackCard = ({
       </div>
     );
   }
+
   return (
     <>
       <CardInnerInfo className="d-flex justify-content-center mb-3">
@@ -545,7 +560,11 @@ export const InvestBlackCard = ({
                 ? "My Old Holdings"
                 : "My Current Holdings"}
             </CardLabel>
-            <CardValue color="white" style={{ marginBottom: 30 }}>
+            <CardValue
+              color="white"
+              className={clsx({ "mb-0": !!insuranceBtn })}
+              style={!!insuranceBtn ? {} : { marginBottom: 30 }}
+            >
               <DollarView
                 chainId={network.chainId}
                 poolAddress={poolAddress}
@@ -553,7 +572,10 @@ export const InvestBlackCard = ({
               />
             </CardValue>
           </>
+
+          {insuranceBtn && insuranceBtn}
           {renderButtons()}
+
           {renderFarmerUI()}
         </div>
       </CardInnerInfo>
@@ -629,6 +651,9 @@ export const InvestBlackCard = ({
       {showInvestmentPopup && (
         <InvestmentPopup
           poolVersion={poolVersion}
+          Insurance={Insurance}
+          hasInsurance={!!insuranceBtn}
+          minAmountForInsurance={minAmountForInsurance}
           poolAddress={poolAddress}
           onClose={() => setShowInvestmentPopup(false)}
           onSuccess={onSuccess}

@@ -84,6 +84,15 @@ const getRandom = (arr: string[]) => {
   const len = arr.length - 1;
   return arr[Math.round(Math.random() * len)];
 };
+
+const setNetworkId = (chainIdNum: number) => {
+  //@ts-ignore
+  if(global?.user?.networkId){
+    //@ts-ignore
+    global.user.networkId = chainIdNum;
+  }
+}
+
 const switchNetwork = async (provider: any, chainIdNum: number) => {
   const chainId = `0x${chainIdNum.toString(16)}`;
   if (provider.request) {
@@ -91,7 +100,9 @@ const switchNetwork = async (provider: any, chainIdNum: number) => {
       await provider.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: chainId }],
-      });
+      }); 
+      setNetworkId(chainIdNum)
+      
     } catch (switchError: any) {
       // This error code indicates that the chain has not been added to MetaMask.
       if (switchError.code === 4902) {
@@ -99,6 +110,8 @@ const switchNetwork = async (provider: any, chainIdNum: number) => {
           method: "wallet_addEthereumChain",
           params: [NetworkConfigsList.find((item) => item.chainId === chainId)],
         });
+        //@ts-ignore
+        setNetworkId(chainIdNum)
       }
     }
     // handle other "switch" errors

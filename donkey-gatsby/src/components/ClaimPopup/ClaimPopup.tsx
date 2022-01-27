@@ -8,7 +8,14 @@ const StyledButton = styled.button`
   font-size: 14px;
   background: linear-gradient(0deg, #0e0f10 0%, #272a2f 48.04%, #131415 100%);
   border-radius: 5px;
-  border: 0px;
+  border: 1px solid;
+  width: 100%;
+  height: 39px;
+  &:hover {
+    background:#FFF037;
+    color:black;
+    border-color:black;
+  }
   ${(props: { variant?: "white" | "black" }) => {
     return (
       props.variant === "white" &&
@@ -30,6 +37,7 @@ export const ClaimPopup = ({
 }) => {
   return (
     <DonCommonmodal
+      className="auctionPop"
       onClose={onClose}
       variant="common"
       title={
@@ -43,6 +51,8 @@ export const ClaimPopup = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              marginTop: "-21px",
+              marginBottom: '20px'
             }}
           >
             <svg
@@ -62,9 +72,11 @@ export const ClaimPopup = ({
       size="sm"
       isOpen={open}
     >
-      <h3 className="mb-3">It’s a win!</h3>
-      <p >Congratulations. Your bid from 24/02/2021 has been won.</p>{" "}
-      <p style={{fontWeight: 100}}>You can now claim your loan. Click here to see the loan details</p>
+      <h3 className="mb-3" style={{fontWeight: 600,
+fontSize: '25px',
+paddingBottom: '7px'}}>It’s a win!</h3>
+      <p style={{marginBottom: '23px'}}>Congratulations. Your bid from 24/02/2021 has been won.</p>{" "}
+      <p style={{fontWeight: 100, marginBottom: '48px'}}>You can now claim your loan. Click here to see the loan details</p>
       <div className="d-flex my-4">
         <div className="pr-2 w-50">
           <StyledButton>CLAIM</StyledButton>

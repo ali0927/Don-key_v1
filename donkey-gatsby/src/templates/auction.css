@@ -120,15 +120,14 @@
     color: #fff;
     box-shadow: 0 0 44px -2px #00000059;
     margin-bottom: -102px;
+    min-height: 750px;
 }
 
 @media (max-width: 850px) {
     .make_a_bid {
         margin-top: 53px;
-    }
-    .make_a_bid {
-        margin-top: 53px;
         padding: 38px 5vw 27px 5vw;
+        min-height:auto;
     }
 }
 
@@ -791,4 +790,13 @@ td.status.rejected {
     .strip.table_strip.previous_auctions .table_group {
         max-height: 46px;
     }
+}
+
+.auctionPop .MuiDialog-container {
+        max-width: 414px;
+        margin: auto;
+}
+
+.auctionPop .Components__ModalContent-lnHRxH {
+    padding: 36px 42px;
 }

@@ -14,15 +14,15 @@ import {
   useWeb3Context,
   NetworkConfigs,
   BINANCE_CHAIN_ID,
+  POLYGON_CHAIN_ID,
 } from "don-components";
 import { LinkIcon, MobileShareandEarnButton } from "icons";
 import BigNumber from "bignumber.js";
 import { useUSDViewBool } from "contexts/USDViewContext";
 import { useRefresh } from "components/LotteryForm/useRefresh";
 import { usePoolSymbol } from "hooks/usePoolSymbol";
-import { IFarmerInter } from "interfaces";
+import { IFarmerInter, IInsuranceProps } from "interfaces";
 import { InvestBlackCard } from "components/InvestBlackCard";
-import { StaticImage } from "gatsby-plugin-image";
 import {
   ConnectToMetamaskCard,
   InactiveNetworkCard,
@@ -40,6 +40,10 @@ import { ShareandEarnButton } from "icons";
 import { useReferralContext } from "contexts/ReferralContext";
 import clsx from "clsx";
 import "./SwitchStyle.scss";
+import { InsuranceInfo } from "components/InvestBlackCard/InsuranceInfo";
+import { useDispatch } from "react-redux";
+import { openPopup } from "store/actions";
+import { useIsInvested } from "hooks/useIsInvested";
 export const CardWrapper = styled.div`
   min-height: 280px;
   background: ${(props: { color: "black" | "white" }) =>
@@ -238,7 +242,6 @@ const ShareMobileText = styled.p`
   }
 `;
 
-
 const TokenSwitchLabels = styled.div`
   font-weight: 500;
   font-size: 14px;
@@ -280,9 +283,6 @@ const ringAnimation = keyframes`
   100% { -webkit-transform: rotateZ(0); }
 
 `;
-
-
-
 
 const StyledShareButton = styled(ShareandEarnButton)`
   position: absolute;
@@ -326,6 +326,9 @@ export const DetailTable = ({
   strategyName,
   hideInvestButton,
   name,
+  hasInsurance,
+  Insurance,
+  minAmountForInsurance,
 }: {
   poolAddress: string;
   oldPoolAddress: string;
@@ -340,7 +343,7 @@ export const DetailTable = ({
   strategyName: string;
   hideInvestButton: boolean | null;
   name: string;
-}) => {
+} & IInsuranceProps) => {
   const [totalPoolValue, setTotalPoolValue] = useState("0");
   const [totalPoolValueInUSD, setTotalPoolValueInUsd] = useState("0");
   const [openSharePopup, setSharePopup] = useState(false);
@@ -361,14 +364,14 @@ export const DetailTable = ({
   const handleToggle = () => {
     toggle();
   };
-
+  const dispatch = useDispatch();
   const { dependsOn } = useRefresh();
 
   const { symbol } = usePoolSymbol(poolAddress, web3);
 
   const isActiveNetwork = network?.chainId === currentNetwork;
   const connectedWeb3 = getConnectedWeb3();
-
+  const { isInvested } = useIsInvested(poolAddress, getWeb3(network.chainId));
   useEffect(() => {
     (async () => {
       // console.log(poolVersion, isActiveNetwork, connected);
@@ -454,10 +457,65 @@ export const DetailTable = ({
             isWithdrawRequested={isWithdrawRequested}
             boostApy={boostApy}
             apy={apy}
+            Insurance={Insurance}
+            hasInsurance={hasInsurance}
+            minAmountForInsurance={minAmountForInsurance}
+            insuranceBtn={
+              isInvested ? (
+                <InsuranceInfo
+                  hasInsurance={hasInsurance}
+                  poolAddress={poolAddress}
+                  poolChainId={network.chainId}
+                  openInsurance={({ value }) =>
+                    dispatch(
+                      openPopup({
+                        type: "INSURANCE_POPUP",
+                        data: {
+                          value,
+                          poolAddress,
+                          poolChainId: network.chainId,
+                          Insurance: Insurance!,
+                          minAmountForInsurance: minAmountForInsurance!,
+                        },
+                      })
+                    )
+                  }
+                  Insurance={Insurance}
+                />
+              ) : undefined
+            }
           />
         );
       } else {
-        return <InactiveNetworkCard correctNetwork={network} />;
+        return (
+          <InactiveNetworkCard
+            insuranceBtn={
+              isInvested && !(network?.chainId === BINANCE_CHAIN_ID || network?.chainId === POLYGON_CHAIN_ID) ? (
+                <InsuranceInfo
+                  hasInsurance={hasInsurance}
+                  poolAddress={poolAddress}
+                  poolChainId={network.chainId}
+                  openInsurance={({ value }) =>
+                    dispatch(
+                      openPopup({
+                        type: "INSURANCE_POPUP",
+                        data: {
+                          value,
+                          poolAddress,
+                          poolChainId: network.chainId,
+                          Insurance: Insurance!,
+                          minAmountForInsurance: minAmountForInsurance!,
+                        },
+                      })
+                    )
+                  }
+                  Insurance={Insurance}
+                />
+              ) : undefined
+            }
+            correctNetwork={network}
+          />
+        );
       }
     } else {
       return <ConnectToMetamaskCard network={network} />;
@@ -482,9 +540,10 @@ export const DetailTable = ({
                   </TotalPoolValueLabel>
                   <a
                     href={
-                      `${NetworkConfigs.find(
-                        (item) => item.chainId === network.chainId
-                      )?.scan
+                      `${
+                        NetworkConfigs.find(
+                          (item) => item.chainId === network.chainId
+                        )?.scan
                       }/address/` + poolAddress
                     }
                     target="_blank"
@@ -504,7 +563,11 @@ export const DetailTable = ({
                 <TokenSwitchLabels className="d-flex align-items-center">
                   {symbol.toUpperCase()}
                   <label className="switch mx-2 my-1">
-                    <input type="checkbox" onChange={handleToggle} value="true" />
+                    <input
+                      type="checkbox"
+                      onChange={handleToggle}
+                      value="true"
+                    />
                     <span className="slider round"></span>
                   </label>
                   USD
@@ -573,8 +636,8 @@ export const DetailTable = ({
           {renderCardData()}
         </BlackCardWrapper>
         {poolVersion > 3 &&
-          connected &&
-          network.chainId === BINANCE_CHAIN_ID ? (
+        connected &&
+        network.chainId === BINANCE_CHAIN_ID ? (
           <StyledShareButton
             className={clsx("d-none d-lg-block", { animated: !hasSignedUp })}
             onClick={() => setSharePopup(true)}
@@ -585,7 +648,7 @@ export const DetailTable = ({
         <BoostApyBox className="d-md-none">
           <div className="row">
             <div className="col-6 pr-0 d-flex flex-column justify-content-center  ">
-              Up to 100% extra APY
+              Up to 40% extra APR
             </div>
             <div className="col-6 pl-0 d-flex flex-column justify-content-center align-items-end">
               <BoostButton />
