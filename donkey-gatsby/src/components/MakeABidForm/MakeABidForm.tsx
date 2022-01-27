@@ -430,7 +430,7 @@ export const MakeABidForm = () => {
                     The Tier 5 will get 70%, Tier 4 will get 50%, and all the
                     rest will get 0%.
                   </p>
-                  <a href="#">MORE INFO</a>
+                  <a href="https://google.com">MORE INFO</a>
                 </div>
               </div>
             </div>
