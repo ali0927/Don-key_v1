@@ -461,7 +461,7 @@ export const DetailTable = ({
             hasInsurance={hasInsurance}
             minAmountForInsurance={minAmountForInsurance}
             insuranceBtn={
-              isInvested ? (
+              isInvested && hasInsurance ? (
                 <InsuranceInfo
                   hasInsurance={hasInsurance}
                   poolAddress={poolAddress}
@@ -490,7 +490,7 @@ export const DetailTable = ({
         return (
           <InactiveNetworkCard
             insuranceBtn={
-              isInvested && !(network?.chainId === BINANCE_CHAIN_ID || network?.chainId === POLYGON_CHAIN_ID) ? (
+              isInvested && !(network?.chainId === BINANCE_CHAIN_ID || network?.chainId === POLYGON_CHAIN_ID) && hasInsurance ? (
                 <InsuranceInfo
                   hasInsurance={hasInsurance}
                   poolAddress={poolAddress}
