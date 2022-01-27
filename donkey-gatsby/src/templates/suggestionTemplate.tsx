@@ -19,13 +19,17 @@ const SuggestionBox = styled.div`
   padding: 40px;
   margin: 30px 0;
   position: relative;
-  @media (max-width: 568px) {
+  @media (max-width: 768px) {
     padding: 20px;
+    margin: 10px;
   }
 `;
 const SuggestionTitle = styled.label`
   font-size: 1.4rem;
   font-weight: 600;
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+  }
 `
 const SuggestionCategory = styled.label`
   background: #F5F5F5;
@@ -58,8 +62,10 @@ const SuggestVotes = styled.div`
   font-size: 1.2rem;
   margin: 0 10px 20px 10px;
   padding: 10px 0;
-  @media (max-width: 568px) {
-    margin-top: 20px;
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 20px 0;
+    font-size: 1rem;
   }
 `;
 const SuggestionUser = styled.label`
@@ -73,8 +79,9 @@ const SuggestionUser = styled.label`
 `;
 const SuggestionRiskImage = styled.img`
   width: 100%;
-  margin-top: 10px;
+  margin: 10px auto 0 auto;
   padding: 0px 20px;
+  max-width: 160px;
 `
 const SuggetionCommentRow = styled.div`
   display: flex;
@@ -88,6 +95,9 @@ const SuggestionPath = styled.div`
   margin: 20px 0;
   position: relative;
   font-weight: 500;
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 const SuggetionNextButton = styled(BsArrowRightSquare)`
   cursor: pointer;
@@ -95,6 +105,9 @@ const SuggetionNextButton = styled(BsArrowRightSquare)`
   width: 25px;
   height: 25px;
   visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 const SuggetionPrevButton = styled(BsArrowLeftSquare)`
   cursor: pointer;
@@ -102,6 +115,9 @@ const SuggetionPrevButton = styled(BsArrowLeftSquare)`
   width: 25px;
   height: 25px;
   visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
+  @media (max-width: 768px) {
+    display: none;
+  }
 `
 const RiskDescriptionButton = styled.button`
   background: none;
@@ -182,46 +198,62 @@ export default function SuggestionView ({
           {`Community page / User suggestions / ${suggestion.title}`}
         </SuggestionPath>
 
-        <SuggestionBox className="row">
-          <div className="col-sm-12 col-md-10" style={{display:'flex', flexDirection:'column'}}>
-            <div style={{display:'flex', marginBottom: '20px'}}>
-              <SuggetionPrevButton visible={suggestion.idx > 0} onClick={prevSuggestion} />
-              <SuggetionNextButton visible={DummySuggestions.length - 1 > suggestion.idx} onClick={nextSuggestion}/>
-            </div>
-            <SuggestionTitle>{suggestion.title}</SuggestionTitle>
-            <label style={{color: 'lightgrey'}}>{suggestion.date}</label>
-            <SuggestionCategory>{suggestion.category}</SuggestionCategory>
-            <ShowMoreContent content={suggestion.description} length={270} />
+        <SuggestionBox>
+          <div style={{display:'flex', marginBottom: '20px'}}>
+            <SuggetionPrevButton visible={suggestion.idx > 0} onClick={prevSuggestion} />
+            <SuggetionNextButton visible={DummySuggestions.length - 1 > suggestion.idx} onClick={nextSuggestion}/>
           </div>
-          <div className="col-sm-12 col-md-2">
-            <SuggestVotes>
-              <span style={{fontSize:'0.8rem'}}>Votes</span>
-              <span>{suggestion.votes}</span>
-            </SuggestVotes>
-            <div style={{display:'flex', flexDirection:'column'}}>
-              <div style={{display:'flex', alignItems:'center'}}>
-                <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-                <SuggestionUser>{suggestion.name}</SuggestionUser>
+
+          <div className="row">
+            <div className="col-9 col-md-10" style={{display:'flex', flexDirection:'column'}}>
+              <SuggestionTitle>{suggestion.title}</SuggestionTitle>
+              <label style={{color: 'lightgrey'}}>{suggestion.date}</label>
+            </div>
+            <div className="col-3 col-md-2">
+              <SuggestVotes>
+                <span style={{fontSize:'0.8rem'}}>Votes</span>
+                <span>{suggestion.votes}</span>
+              </SuggestVotes>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-sm-12 col-md-10" style={{display:'flex', flexDirection:'column'}}>
+              <SuggestionCategory>{suggestion.category}</SuggestionCategory>
+              <ShowMoreContent content={suggestion.description} length={270} />
+            </div>
+            <div className="col-sm-12 col-md-2">
+              <div style={{display:'flex', flexDirection:'column', marginTop:'10px'}}>
+                <div style={{display:'flex', alignItems:'center'}}>
+                  <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
+                  <SuggestionUser>{suggestion.name}</SuggestionUser>
+                </div>
+                <div className="row">
+                  <div className="col-6 col-md-12">
+                    <div style={{display:'flex', alignItems:'center'}}>
+                      <BsCircleFill style={{width:25, height:6}} /> 
+                      <SuggestionUser>{suggestion.status}</SuggestionUser>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                      <BsCircleFill style={{width:25, height:6}} /> 
+                      <SuggestionUser>{`${suggestion.comments} comments`}</SuggestionUser>
+                    </div>
+                    <div style={{display:'flex', alignItems:'center'}}>
+                      <BsCircleFill style={{width:25, height:6}} /> 
+                      <SuggestionUser>
+                        {`${suggestion.apy}%`}
+                        <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
+                      </SuggestionUser>
+                    </div>
+                  </div>
+                  <div className="col-6 col-md-12" style={{display:'flex', flexDirection:'column'}}>
+                    <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} />
+                    <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
+                      Risk Description
+                    </RiskDescriptionButton>
+                  </div>
+                </div>
               </div>
-              <div style={{display:'flex', alignItems:'center'}}>
-                <BsCircleFill style={{width:25, height:6}} /> 
-                <SuggestionUser>{suggestion.status}</SuggestionUser>
-              </div>
-              <div style={{display:'flex', alignItems:'center'}}>
-                <BsCircleFill style={{width:25, height:6}} /> 
-                <SuggestionUser>{`${suggestion.comments} comments`}</SuggestionUser>
-              </div>
-              <div style={{display:'flex', alignItems:'center'}}>
-                <BsCircleFill style={{width:25, height:6}} /> 
-                <SuggestionUser>
-                  {`${suggestion.apy}%`}
-                  <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
-                </SuggestionUser>
-              </div>
-              <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} />
-              <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
-                Risk Description
-              </RiskDescriptionButton>
             </div>
           </div>
         </SuggestionBox>
@@ -248,10 +280,10 @@ export default function SuggestionView ({
         size="sm"
       >
         <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
-          <div className="col-4">
+          <div className="col-sm-12 col-md-4" style={{display:'flex'}}>
             <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} style={{padding: 0}} />
           </div>
-          <div className="col-8" style={{fontSize:'0.8rem'}}>
+          <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
             This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.
           </div>
         </div>

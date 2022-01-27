@@ -9,6 +9,9 @@ import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "rea
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { theme } from "theme";
+import { ClickAwayListener } from "@material-ui/core";
+import clsx from "clsx";
+import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import ExampleUser from "../../images/ex-user.png";
 
@@ -74,6 +77,9 @@ export const Form = styled.div`
   border-radius: 20px;
   box-shadow: 0px 9.951690673828125px 59.710147857666016px 0px #262d7614;
   padding: 60px;
+  @media (max-width: 768px) {
+    padding: 20px 10px;
+  }
 `;
 export const SuggestRequestButton = styled.button`
   padding: 16px;
@@ -89,7 +95,6 @@ export const SuggestRequestButton = styled.button`
 const DefaultOption = { name: "Select an option", value: "" } as const;
 
 const Types = [
-  DefaultOption,
   { name: "Binance Smart Chain", value: 56 },
   { name: "Fantom", value: 250 },
   { name: "Polygon", value: 137 },
@@ -112,7 +117,7 @@ const INITIAL_STATE = {
   nickName: "",
   name: "",
   telegram: "",
-  network: 1,
+  network: { name: "Binance Smart Chain", value: 56 },
   apy: 10,
   title: "",
   message: ""
@@ -167,6 +172,9 @@ const ExampleSuggetionBox = styled.div`
 `
 const RiskImage = styled.img`
   width: 100px;
+  @media (max-width: 768px) {
+    width: 70px;
+  }
 `
 const SuggetionImage = styled.img`
   width: 60px;
@@ -183,6 +191,120 @@ const UserImage = styled.img`
   border-radius: 50%;
   margin-right: 10px;
 `
+const ExampleSuggestionTitle = styled.div`
+  font-weight: 600;
+  font-size: 1.2rem;
+`
+const ExampleSuggetionContent = styled.div`
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+`
+const ExampleList = styled.div`
+  display: flex;
+  overflow-x: auto;
+  justify-content: center;
+  @media (max-width: 768px) {
+    justify-content: normal;
+  }
+`
+const DropdownBtn = styled.div`
+  border: 1px solid #222222;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: #000;
+  text-transform: capitalize;
+  ${(props: { active?: boolean }) =>
+    props.active &&
+    `
+      background: #000;
+      color:#fff;
+    `}
+  .icon {
+    font-size: 20px;
+    margin-left: 10px;
+  }
+`;
+
+const DropDown = styled.ul`
+  position: absolute;
+  top: 62px;
+  left: 0;
+  background: #c0c0c0;
+  padding: 10px 0px;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  color: white;
+  border-radius: 5px;
+  width: 100%;
+  h4 {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e5e5;
+  }
+  .selected {
+    background: #201f1f;
+  }
+  @media (max-width: 568px) {
+    position: fixed;
+    z-index: 1;
+    padding: 20px 0px;
+    background: #000000;
+    top: auto;
+    left: 0;
+    right: 0;
+    bottom: -16px;
+    min-height: 34vh;
+    border-radius: 24px 24px 0 0;
+    overflow-x: hidden;
+    transition: 0.5s;
+  }
+`;
+const Overlay = styled.div`
+  @media (max-width: 568px) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+  }
+`;
+const DropDownItem = styled.li`
+  padding: 10px 32px;
+  padding-right: 54px;
+  cursor: pointer;
+  display: flex;
+  text-transform: capitalize;
+  .tick-icon {
+    display: none;
+  }
+  &:hover {
+    background: #201f1f;
+  }
+
+  @media (max-width: 568px) {
+    &:hover {
+      .tick-icon {
+        display: block;
+      }
+    }
+  }
+`;
+
 const generateRandomText = (length: number) => {
   const characters = ' abcdefghijklm nopqrstuvwxyz ';
   let result = ' ';
@@ -226,6 +348,7 @@ export const SuggestRequestForm = () => {
   const [sent, setIsSent] = useState<{ ticketid: number } | null>(null);
   const [showExampleSuggestion, setShowExampleSuggestion] = useState(false);
   const [selectedExmaple, setSelectedExample] = useState(0);
+  const [showNetworkSelect, setShowNetworkSelect] = useState(false);
 
   const exmapleSuggestions = ExampleSuggestions()
 
@@ -243,12 +366,45 @@ export const SuggestRequestForm = () => {
    
   };
 
+  const changeNetwork = (network: any) => {
+    setFormState((old) => ({ ...old, network: network }));
+  }
+
   const prevExample = () => {
     if (selectedExmaple > 0) setSelectedExample(selectedExmaple - 1)
   }
   const nextExample = () => {
     if (selectedExmaple < exmapleSuggestions.length - 1) setSelectedExample(selectedExmaple + 1)
   }
+
+  const DropDownMenu = () => {
+    return (
+      <ClickAwayListener onClickAway={() => setShowNetworkSelect(false)}>
+        <Overlay
+          onClick={() => {
+            setShowNetworkSelect(false);
+          }}
+        >
+          <DropDown>
+            <div id="collapseExample" className="collapse">
+              {Types.map(item => 
+                <DropDownItem
+                  key={item.value}
+                  className={clsx(
+                    "d-flex justify-content-between align-items-center",
+                    { selected: item.value === formState.network.value }
+                  )}
+                  onClick={() => changeNetwork(item)}
+                >
+                  <div>{item.name}</div>
+                </DropDownItem>
+              )}
+            </div>
+          </DropDown>
+        </Overlay>
+      </ClickAwayListener>
+    );
+  };
 
   return (
     <Form>
@@ -280,15 +436,13 @@ export const SuggestRequestForm = () => {
       {sent && <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />}
       <Label>
         Network
-        <Select onChange={handleChange("network")} value={formState.network}>
-          {Types.map((item) => {
-            return (
-              <option key={item.value} value={item.value}>
-                {item.name}
-              </option>
-            );
-          })}
-        </Select>
+        <div className="d-flex position-relative">
+          <DropdownBtn active={showNetworkSelect} onClick={() => setShowNetworkSelect(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
+            {formState.network.name}
+            <AiFillCaretDown className="icon" />
+          </DropdownBtn>
+          {showNetworkSelect && <DropDownMenu />}
+        </div>
       </Label>
       <Label>
         Estimated APY
@@ -306,9 +460,9 @@ export const SuggestRequestForm = () => {
       <div>
         <div style={{display:'flex'}}>
           <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(2)}/>
-          <RiskLevel color="#32CD32" onClick={() => setRiskLevel(2)} />
+          <RiskLevel color="#32CD32" />
           <RiskLevel color="#FFD700" onClick={() => setRiskLevel(1)} />
-          <RiskLevel color="orange" onClick={() => setRiskLevel(0)} />
+          <RiskLevel color="orange" />
           <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)} />
         </div>
         <RiskLevelSelector level={riskLevel}>
@@ -322,7 +476,7 @@ export const SuggestRequestForm = () => {
       <Label>
         Describe the risk in your words
         <OverlayTrigger
-          placement="right"
+          placement="top"
           delay={{show: 250, hide: 400}}
           overlay={renderTooltipFees}
         >
@@ -366,7 +520,7 @@ export const SuggestRequestForm = () => {
           <div style={{display:'flex', width:'100%'}}>
             <div style={{width:'100%'}}>
               <label style={{fontSize:'0.8rem'}}>Suggestion Name</label>
-              <h5 style={{fontWeight:600}}>{exmapleSuggestions[selectedExmaple].title}</h5>
+              <ExampleSuggestionTitle>{exmapleSuggestions[selectedExmaple].title}</ExampleSuggestionTitle>
             </div>
             <RiskImage src={riskImages[exmapleSuggestions[selectedExmaple].risk].image.url} />
           </div>
@@ -384,18 +538,18 @@ export const SuggestRequestForm = () => {
             </div>
           </div>
 
-          <div style={{fontSize:'1rem', overflowWrap:'anywhere'}}>
+          <ExampleSuggetionContent>
             <ShowMoreContent content={exmapleSuggestions[selectedExmaple].description} length={180} />
-          </div>
+          </ExampleSuggetionContent>
         </ExampleSuggetionBox>
 
-        <div style={{display:'flex', overflowX:'auto', justifyContent:'center'}}>
+        <ExampleList>
           {exmapleSuggestions.map((example, idx) => 
             <SuggetionImage src={ExampleSuggetionImg} onClick={() => setSelectedExample(idx)} selected={selectedExmaple === idx}/>
           )}
-        </div>
+        </ExampleList>
         
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+        <div style={{display:'flex', justifyContent:'center', alignItems:'center', fontWeight:600}}>
           <BsArrowLeft style={{margin: '10px', cursor:'pointer'}} onClick={() => prevExample()}/>
           <span>Select Suggestion</span>
           <BsArrowRight style={{margin: '10px', cursor:'pointer'}} onClick={() => nextExample()}/>

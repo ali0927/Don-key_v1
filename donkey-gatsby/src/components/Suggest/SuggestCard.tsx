@@ -100,7 +100,7 @@ const VoteModalSubtitle = styled.div`
 const VoteButton = styled.button`
   padding: 30px;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 1rem;
   color: #000;
   display: flex;
   align-items: center;
@@ -108,6 +108,9 @@ const VoteButton = styled.button`
   border: 0;
   background-color: yellow;
   margin-right: 30px;
+  @media (max-width: 768px) {
+    padding: 10px 30px;
+  }
 `
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);

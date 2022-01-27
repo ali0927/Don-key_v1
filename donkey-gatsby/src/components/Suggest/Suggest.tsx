@@ -141,6 +141,9 @@ const MoreButton = styled.button`
   background: transparent;
   display: block;
   width: 100%;
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
 `;
 
 const SuggestStatus = { 
@@ -221,7 +224,7 @@ export const Suggest: React.FC = () => {
     <div className="container">
       <div className="row mb-2">
         <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
-          <DropdownBtn active={show} onClick={() => setShow(!show)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
+          <DropdownBtn active={show} onClick={() => setShow(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
             {strategyFilter}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>

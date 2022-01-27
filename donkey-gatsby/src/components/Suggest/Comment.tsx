@@ -46,7 +46,7 @@ export const Comment: React.FC<{
           {`${comment.user}`}
           <span style={{color: 'lightgrey', marginLeft:'10px'}}>{comment.date}</span>
         </CommentUser>
-        <div>
+        <div style={{overflowWrap: 'anywhere'}}>
           {comment.content}
         </div>
         <div style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
