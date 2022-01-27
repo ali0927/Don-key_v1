@@ -691,9 +691,6 @@ td.status.rejected {
     max-height: 999px;
 }
 
-.table_group thead {
-    display: none;
-}
 
 .table_group tr:nth-of-type(1) {
     cursor: pointer;
@@ -799,4 +796,15 @@ td.status.rejected {
 
 .auctionPop .Components__ModalContent-lnHRxH {
     padding: 36px 42px;
+}
+
+.previous_auctions thead th {
+    width: 19%;
+}
+
+.table_group thead {
+    visibility: collapse;
+}
+.previous_auctions .table_group thead * {
+    border: 0 none;
 }
