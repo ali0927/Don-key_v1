@@ -141,7 +141,7 @@ const MoreButton = styled.button`
   background: transparent;
   display: block;
   width: 100%;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     padding: 10px;
   }
 `;
@@ -240,7 +240,7 @@ export const Suggest: React.FC = () => {
         </>
       }
       <div className="row justify-content-center mb-4">
-        <div className="col-4">
+        <div className="col-sm-12 col-md-4">
           <MoreButton>
             View More
           </MoreButton>

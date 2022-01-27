@@ -77,7 +77,7 @@ export const Form = styled.div`
   border-radius: 20px;
   box-shadow: 0px 9.951690673828125px 59.710147857666016px 0px #262d7614;
   padding: 60px;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     padding: 20px 10px;
   }
 `;
@@ -172,8 +172,8 @@ const ExampleSuggetionBox = styled.div`
 `
 const RiskImage = styled.img`
   width: 100px;
-  @media (max-width: 768px) {
-    width: 70px;
+  @media (max-width: 568px) {
+    display: none;
   }
 `
 const SuggetionImage = styled.img`
@@ -198,7 +198,7 @@ const ExampleSuggestionTitle = styled.div`
 const ExampleSuggetionContent = styled.div`
   font-size: 1rem;
   overflow-wrap: anywhere;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     font-size: 0.8rem;
   }
 `
@@ -206,7 +206,7 @@ const ExampleList = styled.div`
   display: flex;
   overflow-x: auto;
   justify-content: center;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     justify-content: normal;
   }
 `
@@ -304,6 +304,14 @@ const DropDownItem = styled.li`
     }
   }
 `;
+const ExampleSuggetionAPY = styled.div`
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 24px 0px;
+  @media (max-width: 568px) {
+    display: none;
+  }
+`
 
 const generateRandomText = (length: number) => {
   const characters = ' abcdefghijklm nopqrstuvwxyz ';
@@ -532,10 +540,10 @@ export const SuggestRequestForm = () => {
               <label style={{fontSize:'0.8rem', fontWeight: 500}}>{exmapleSuggestions[selectedExmaple].name}</label>
             */}
             </div>
-            <div style={{fontSize:'1rem', fontWeight:600}}>
-              <span>{exmapleSuggestions[selectedExmaple].apy}</span>
+            <ExampleSuggetionAPY>
+              <span>{exmapleSuggestions[selectedExmaple].apy}%</span>
               <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
-            </div>
+            </ExampleSuggetionAPY>
           </div>
 
           <ExampleSuggetionContent>

@@ -12,6 +12,7 @@ import YellowBack from "images/yellow_background.png";
 import { DummySuggestions } from "JsonData/DummyData";
 import styled from "styled-components";
 import { navigate } from "gatsby";
+import { DonGatsbyLink, IDonGatsbyLinkProps } from "components/DonGatsbyLink";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -19,7 +20,7 @@ const SuggestionBox = styled.div`
   padding: 40px;
   margin: 30px 0;
   position: relative;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     padding: 20px;
     margin: 10px;
   }
@@ -27,7 +28,7 @@ const SuggestionBox = styled.div`
 const SuggestionTitle = styled.label`
   font-size: 1.4rem;
   font-weight: 600;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     font-size: 1.2rem;
   }
 `
@@ -37,7 +38,7 @@ const SuggestionCategory = styled.label`
   border-radius: 5px;
   width: fit-content;
   font-size: 0.8rem;
-  margin: 20px 0;
+  margin-bottom: 20px;
 `
 const BackImage = styled.div`
   position: relative;
@@ -62,7 +63,7 @@ const SuggestVotes = styled.div`
   font-size: 1.2rem;
   margin: 0 10px 20px 10px;
   padding: 10px 0;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     margin: 0;
     padding: 20px 0;
     font-size: 1rem;
@@ -91,11 +92,10 @@ const SuggetionCommentRow = styled.div`
   font-weight: 600;
 `
 const SuggestionPath = styled.div`
-  color: #000;
   margin: 20px 0;
   position: relative;
   font-weight: 500;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `
@@ -105,7 +105,7 @@ const SuggetionNextButton = styled(BsArrowRightSquare)`
   width: 25px;
   height: 25px;
   visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `
@@ -115,7 +115,7 @@ const SuggetionPrevButton = styled(BsArrowLeftSquare)`
   width: 25px;
   height: 25px;
   visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     display: none;
   }
 `
@@ -125,6 +125,17 @@ const RiskDescriptionButton = styled.button`
   text-decoration: underline;
   font-size: 0.8rem;
   margin: 0 auto;
+`
+const SuggestionInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  @media (max-width: 600px) {
+    margin-top: 10px;
+  }
+`
+const SuggestionLink = styled(DonGatsbyLink)`
+  text-decoration: none !important;
+  color: #000;
 `
 
 const generateRandomText = (length: number) => {
@@ -195,7 +206,8 @@ export default function SuggestionView ({
 
       <div className="container">
         <SuggestionPath>
-          {`Community page / User suggestions / ${suggestion.title}`}
+          <SuggestionLink to="/community">{`Community page / User suggestions / `}</SuggestionLink>
+          <span style={{fontWeight: 600}}>{suggestion.title}</span>
         </SuggestionPath>
 
         <SuggestionBox>
@@ -223,7 +235,7 @@ export default function SuggestionView ({
               <ShowMoreContent content={suggestion.description} length={270} />
             </div>
             <div className="col-sm-12 col-md-2">
-              <div style={{display:'flex', flexDirection:'column', marginTop:'10px'}}>
+              <SuggestionInfo>
                 <div style={{display:'flex', alignItems:'center'}}>
                   <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
                   <SuggestionUser>{suggestion.name}</SuggestionUser>
@@ -253,7 +265,7 @@ export default function SuggestionView ({
                     </RiskDescriptionButton>
                   </div>
                 </div>
-              </div>
+              </SuggestionInfo>
             </div>
           </div>
         </SuggestionBox>

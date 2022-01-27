@@ -41,7 +41,7 @@ const SuggestStatus = styled.div`
 
 `;
 const SuggestVotesBox = styled.div`
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     margin-top: 10px;
   }
 `
@@ -108,7 +108,7 @@ const VoteButton = styled.button`
   border: 0;
   background-color: yellow;
   margin-right: 30px;
-  @media (max-width: 768px) {
+  @media (max-width: 600px) {
     padding: 10px 30px;
   }
 `
@@ -176,6 +176,7 @@ export const SuggestCard: React.FC<{
   }
 }> = (props)  => {
   const riskImages = useRiskImageList()
+  console.log('riskImages-----------', riskImages)
   const [showVoteModal, setShowVoteModal] = useState(false)
   const [comment, setComment] = useState('')
   const handleCommentChange = (e: any) => {
