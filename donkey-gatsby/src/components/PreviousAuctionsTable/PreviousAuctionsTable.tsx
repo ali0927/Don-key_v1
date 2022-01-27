@@ -17,6 +17,7 @@ export const PreviousAuctionsTable = () => {
           </tr>
         </thead>
         
+        
       </table>
       <TableGroup date="12/03/2022">
       <tr>
