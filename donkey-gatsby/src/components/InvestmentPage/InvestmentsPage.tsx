@@ -12,7 +12,7 @@ import {
 } from "react-bootstrap";
 import { Footer } from "components/Footer/Footer";
 import { USDViewProvider } from "contexts/USDViewContext";
-import { FANTOM_CHAIN_ID, SwitchRow } from "don-components";
+import { FANTOM_CHAIN_ID, SwitchRow, BSC_TESTNET_CHAIN_ID } from "don-components";
 import { useNotification } from "components/Notification";
 import moment from "moment";
 import { navigate } from "gatsby-link";
@@ -310,7 +310,8 @@ const NetworkNameChainIdMap = {
   "Polygon": POLYGON_CHAIN_ID,
   "AVAX": AVAX_CHAIN_ID,
   "BSC": BINANCE_CHAIN_ID,
-  "Fantom": FANTOM_CHAIN_ID
+  "Fantom": FANTOM_CHAIN_ID,
+  "BSC Testnet": BSC_TESTNET_CHAIN_ID
 }
 
 type ExtraInfo = {
@@ -1086,7 +1087,7 @@ export const InvestmentsPage = () => {
                       </NetworkButton> */}
                     </div>
                   </div>
-                  {chainId === BINANCE_CHAIN_ID && <StakingInfo />}
+                  {chainId === BSC_TESTNET_CHAIN_ID && <StakingInfo />}
                 </Col>
               </Row>
             </Container>

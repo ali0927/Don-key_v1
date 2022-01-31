@@ -18,7 +18,11 @@ import clsx from "clsx";
 import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
-import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
+import {
+  BINANCE_CHAIN_ID,
+  BSC_TESTNET_CHAIN_ID,
+  useWeb3Context,
+} from "don-components";
 import tier1 from "../../images/tiersImage/tier1.png";
 import tier2 from "../../images/tiersImage/tier2.png";
 import tier3 from "../../images/tiersImage/tier3.png";
@@ -272,9 +276,9 @@ export const AcceleratedAPYModal = ({
   }, []);
   const { getTierCommission } = useReferralContext();
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
-
+  console.log(chainId, BSC_TESTNET_CHAIN_ID)
   const renderContent = () => {
-    if (chainId !== BINANCE_CHAIN_ID) {
+    if (chainId !== BINANCE_CHAIN_ID && chainId !== BSC_TESTNET_CHAIN_ID) {
       return (
         <div
           style={{ minHeight: 200 }}
@@ -284,7 +288,13 @@ export const AcceleratedAPYModal = ({
           <div>
             <ButtonWidget
               varaint="contained"
-              onClick={() => switchNetwork(BINANCE_CHAIN_ID)}
+              onClick={() =>
+                switchNetwork(
+                  process.env.NODE_ENV === "development"
+                    ? BINANCE_CHAIN_ID
+                    : BSC_TESTNET_CHAIN_ID
+                )
+              }
               style={{ fontSize: 14 }}
               className="py-1 font-weight-bold"
               containedVariantColor="lightYellow"

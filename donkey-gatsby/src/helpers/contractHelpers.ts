@@ -6,7 +6,7 @@ import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
-import { getWeb3 } from "don-components";
+import { BINANCE_CHAIN_ID, getWeb3 } from "don-components";
 import { waitFor } from "don-utils";
 import { StakeType } from "interfaces";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -16,7 +16,7 @@ const IBUSDAddress = "0x7C9e73d4C71dae564d41F78d56439bB4ba87592f";
 const FairLaunchAddress = "0xA625AB01B08ce023B2a342Dbb12a16f2C8489A8F";
 export const USDTDONLP = "0x91b1b853c1426c4aa78cac984c6f6dd1e80b0c4f";
 export const WBNBDONLP = "0xe091ffaaab02b5b3f0cf9f4309c22a6550de4c8e";
-export const DONTokenAddressBSC = "0x86b3f23b6e90f5bbfac59b5b2661134ef8ffd255";
+export const DONTokenAddressBSC = "0xC618619f10a3E94E28aba56dE244C0FE1D42D0AE";
 export const DONTokenAddressEth = "0x217ddead61a42369a266f1fb754eb5d3ebadc88a";
 export const StakingBSCAddress = "0xe2451a1F50Dc718eF2b37D2C29539121B18b9d24";
 export const StakingEthAddress = "0x21A05270dCeCB199C8E41E8297c15e6e1328aE48";
@@ -195,13 +195,20 @@ export const getPoolValue = async (web3: Web3, poolAddress: string) => {
     const bn = new BigNumber(toEther(amount, decimals)).toFixed(2);
     return bn.toString();
   } catch (e) {
+    console.trace();
     captureException(e, "getPoolValue: " + poolAddress);
     return "0";
   }
 };
 export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
   const totalPoolValue = await getPoolValue(web3, poolAddress);
-  const tokenPrice = await getTokenPrice(web3, poolAddress);
+  let tokenPrice = "1";
+  try {
+    tokenPrice = await getTokenPrice(web3, poolAddress);
+  } catch (e) {
+    console.trace();
+    captureException(e, "Error in Pool Value USD");
+  }
 
   return new BigNumber(totalPoolValue).multipliedBy(tokenPrice).toString();
 };
@@ -354,38 +361,44 @@ export const getPriceFromPriceFeed = async (
 
 export const getTokenPrice = memoizeAsync(
   async (web3: Web3, poolAddress: string) => {
-    const tokenAddress = await getTokenAddress(web3, poolAddress);
-    if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
+    try {
+      const tokenAddress = await getTokenAddress(web3, poolAddress);
+      if (tokenAddress.toLowerCase() === BUSDAddress.toLowerCase()) {
+        return "1";
+      }
+
+      const index = tokenPriceGetter.findIndex(
+        (item) => item.token.toLowerCase() === tokenAddress.toLowerCase()
+      );
+      if (index > -1) {
+        const price = await getPriceFromChainLink(
+          web3,
+          tokenPriceGetter[index].priceFeedAddress
+        );
+        return price;
+      }
+      if (index === -1) {
+        const pool = await getPoolContract(web3, poolAddress, 3);
+        const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
+        const usdPrice = await getPriceFromPriceFeed(
+          web3,
+          priceFeedsListAddress,
+          tokenAddress
+        );
+        return toEther(usdPrice);
+      }
+      const bnbPrice = await (await getPancakeContract(web3)).methods
+        .getAmountsOut(toWei("0.1"), [tokenAddress, BUSDAddress])
+        .call();
+
+      let price = new BigNumber(toEther(bnbPrice[1])).dividedBy(0.1).toString();
+
+      return price;
+    } catch (e) {
+      console.trace();
+      captureException(e, "Get TokenPrice Error");
       return "1";
     }
-
-    const index = tokenPriceGetter.findIndex(
-      (item) => item.token.toLowerCase() === tokenAddress.toLowerCase()
-    );
-    if (index > -1) {
-      const price = await getPriceFromChainLink(
-        web3,
-        tokenPriceGetter[index].priceFeedAddress
-      );
-      return price;
-    }
-    if (index === -1) {
-      const pool = await getPoolContract(web3, poolAddress, 3);
-      const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
-      const usdPrice = await getPriceFromPriceFeed(
-        web3,
-        priceFeedsListAddress,
-        tokenAddress
-      );
-      return toEther(usdPrice);
-    }
-    const bnbPrice = await (await getPancakeContract(web3)).methods
-      .getAmountsOut(toWei("0.1"), [tokenAddress, BUSDAddress])
-      .call();
-
-    let price = new BigNumber(toEther(bnbPrice[1])).dividedBy(0.1).toString();
-
-    return price;
   }
 );
 
@@ -688,8 +701,13 @@ export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
   return contract;
 };
 
-export const getDonPriceWeb3 = async (web3: Web3) => {
-  const priceFeedContract = await getDonkeyPriceFeedContract(web3);
+export const getDonPriceWeb3 = async () => {
+  if (process.env.NODE_ENV === "development") {
+    return "1";
+  }
+  const priceFeedContract = await getDonkeyPriceFeedContract(
+    getWeb3(BINANCE_CHAIN_ID)
+  );
   const priceofToken = await priceFeedContract.methods
     .getPriceinUSD(DONTokenAddressBSC)
     .call();
@@ -698,7 +716,7 @@ export const getDonPriceWeb3 = async (web3: Web3) => {
 
 export const getDonPrice = async (isBSC = false) => {
   if (isBSC) {
-    return getDonPriceWeb3(getWeb3(56));
+    return getDonPriceWeb3();
   }
 
   const res = await axios.post(
@@ -749,7 +767,7 @@ export const gettotalSWAPLPoolValue = async (web3: Web3, type: StakeType) => {
     isBSC ? toEther(balance) : new BigNumber(balance).dividedBy(10 ** 6)
   ).multipliedBy(2);
   if (isBSC) {
-    const wbnbPrice = await getDonPriceWeb3(getWeb3(56));
+    const wbnbPrice = await getDonPriceWeb3();
     return timestwo.multipliedBy(wbnbPrice);
   }
   return timestwo;
@@ -845,7 +863,7 @@ export const getRewardToken = async (
   );
   const rewardAddr = await promotionalPoolContract.methods.rewardToken().call();
   const bep20ABI = await import("../JsonData/BEP20Token.json");
-    console.log(rewardAddr, poolAddress, chainId, "Chain");
+  console.log(rewardAddr, poolAddress, chainId, "Chain");
   const newWeb3 = chainId ? getWeb3(chainId) : web3;
   const rewardToken = new newWeb3.eth.Contract(bep20ABI.abi as any, rewardAddr);
   const symbol = await rewardToken.methods.symbol().call();

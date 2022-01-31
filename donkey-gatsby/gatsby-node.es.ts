@@ -324,7 +324,7 @@ export const createPages = async ({ graphql, actions }: any) => {
 
   auctions.forEach((auction: any) => {
     createPage({
-      path: `/auctions/${auction.slug}`,
+      path: `/auction/${auction.slug}`,
       component: path.resolve(`./src/templates/auctionTemplate.tsx`),
       context: {
         auction,
