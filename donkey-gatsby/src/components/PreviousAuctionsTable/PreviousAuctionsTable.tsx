@@ -1,5 +1,6 @@
 import {TableGroup} from "components/TableGroup"
 
+
 export const PreviousAuctionsTable = () => {
     return  <div className="strip table_strip previous_auctions" style={{paddingTop: '71px'}}>
     <div className="boxed">
@@ -15,6 +16,7 @@ export const PreviousAuctionsTable = () => {
           <th>commission</th>
           </tr>
         </thead>
+        
         
       </table>
       <TableGroup date="12/03/2022">

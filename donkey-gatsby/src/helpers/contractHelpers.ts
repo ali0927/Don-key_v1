@@ -372,7 +372,11 @@ export const getTokenPrice = memoizeAsync(
     if (index === -1) {
       const pool = await getPoolContract(web3, poolAddress, 3);
       const priceFeedsListAddress = await pool.methods.getPriceFeed().call();
-      const usdPrice = await getPriceFromPriceFeed(web3, priceFeedsListAddress, tokenAddress);
+      const usdPrice = await getPriceFromPriceFeed(
+        web3,
+        priceFeedsListAddress,
+        tokenAddress
+      );
       return toEther(usdPrice);
     }
     const bnbPrice = await (await getPancakeContract(web3)).methods
@@ -415,19 +419,18 @@ const getPoolJSON = async (version: number) => {
   return await import("../JsonData/pool2.json");
 };
 
-
 export const hasMined = async (txHash: string, web3: Web3) => {
-  while(true){
+  while (true) {
     const receipt = await web3.eth.getTransactionReceipt(txHash);
     console.log("Loop Running");
-    if(!receipt){
+    if (!receipt) {
       await waitFor(500);
-    }else {
-      console.log("Loop Ended")
+    } else {
+      console.log("Loop Ended");
       return receipt;
     }
   }
-}
+};
 
 export const getPoolContract = memoizeAsync(
   async (web3: Web3, poolAddress: string, version: number) => {
@@ -831,17 +834,24 @@ export const getPoolInfo = async (web3: Web3, poolAddress: string) => {
   return poolInfo;
 };
 
-export const getRewardToken = async (web3: Web3, poolAddress: string) => {
+export const getRewardToken = async (
+  web3: Web3,
+  poolAddress: string,
+  chainId?: number
+) => {
   const promotionalPoolContract = await getPromotionalPoolContract(
     web3,
     poolAddress
   );
   const rewardAddr = await promotionalPoolContract.methods.rewardToken().call();
   const bep20ABI = await import("../JsonData/BEP20Token.json");
-  const rewardToken = new web3.eth.Contract(bep20ABI.abi as any, rewardAddr);
+    console.log(rewardAddr, poolAddress, chainId, "Chain");
+  const newWeb3 = chainId ? getWeb3(chainId) : web3;
+  const rewardToken = new newWeb3.eth.Contract(bep20ABI.abi as any, rewardAddr);
   const symbol = await rewardToken.methods.symbol().call();
   const name = await rewardToken.methods.name().call();
   const decimals = await rewardToken.methods.decimals().call();
+  // console.log(symbol, name)
   return { name, symbol, decimals };
 };
 

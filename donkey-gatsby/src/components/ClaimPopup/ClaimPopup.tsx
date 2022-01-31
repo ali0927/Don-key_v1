@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   font-size: 14px;
   background: linear-gradient(0deg, #0e0f10 0%, #272a2f 48.04%, #131415 100%);
   border-radius: 5px;
-  border: 1px solid;
+  border: 1px solid black;
   width: 100%;
   height: 39px;
   &:hover {

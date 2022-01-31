@@ -422,6 +422,14 @@
     margin-top: 32px;
 }
 
+@media (max-width: 850px) {
+.make_a_bid .submit_btn_con .info {
+    flex-direction: column;
+    gap: 9px;
+}
+}
+
+
 .collateral .percent_select {
     display: flex;
     justify-content: space-between;
@@ -592,6 +600,8 @@ td.status.rejected {
 
 .auction_page .tooltip_con {
     position: relative;
+    padding: 0 0 15px 18px;
+    margin-bottom: -15px;
 }
 
 .auction_page .tooltip_content {
@@ -605,12 +615,13 @@ td.status.rejected {
     border-radius: 10px;
     opacity: 0;
     transition: all 0.3s ease-in-out;
-    z-index:10;
+    z-index:20;
 }
 
-.auction_page .tooltip_con:hover .tooltip_content {
+.auction_page .tooltip_con:hover .tooltip_content, .auction_page .tooltip_con .tooltip_content:hover {
     top: 33px;
     opacity: 1;
+    pointer-events: all;
 }
 
 .auction_page .tooltip_content:before {
@@ -691,9 +702,6 @@ td.status.rejected {
     max-height: 999px;
 }
 
-.table_group thead {
-    display: none;
-}
 
 .table_group tr:nth-of-type(1) {
     cursor: pointer;
@@ -799,4 +807,15 @@ td.status.rejected {
 
 .auctionPop .Components__ModalContent-lnHRxH {
     padding: 36px 42px;
+}
+
+.previous_auctions thead th {
+    width: 19%;
+}
+
+.table_group thead {
+    visibility: collapse;
+}
+.previous_auctions .table_group thead * {
+    border: 0 none;
 }
