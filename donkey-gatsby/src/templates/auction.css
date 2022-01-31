@@ -422,6 +422,14 @@
     margin-top: 32px;
 }
 
+@media (max-width: 850px) {
+.make_a_bid .submit_btn_con .info {
+    flex-direction: column;
+    gap: 9px;
+}
+}
+
+
 .collateral .percent_select {
     display: flex;
     justify-content: space-between;
