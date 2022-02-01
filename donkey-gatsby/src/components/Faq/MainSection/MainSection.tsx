@@ -154,7 +154,7 @@ const FarmingQues = [
     ques: "How does Don-key collect fees?",
     ans: "At the time of withdrawal, Don-key only claims a performance fee on profits generated for the user - distributing 10% equally between platform maintenance and farmer rewards",
 
-    num: 4,
+    num: 7,
   },
 ];
 
