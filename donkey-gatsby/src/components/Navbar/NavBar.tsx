@@ -332,7 +332,7 @@ const LandingMenu = () => {
         </div>
       </DropDownsDonToken>
       <MenuItem to="/faq">FAQ</MenuItem>
-      <MenuItem to="/auctions/busd-auction">Auction</MenuItem>
+      <MenuItem to="/auction/busd-auction">Auction</MenuItem>
       <MenuItem to="/support">Support</MenuItem>
     </>
   );

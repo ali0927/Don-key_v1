@@ -5,23 +5,33 @@ import { LoansTable } from "components/LoansTable";
 import { PreviousAuctionsTable } from "components/PreviousAuctionsTable";
 import { MakeABidForm } from "components/MakeABidForm";
 import { NavBar } from "components/Navbar";
-import React from "react";
+import React, { useEffect } from "react";
 import "./auction.css";
+import { useDispatch } from "react-redux";
+import { fetchAuctionsThunk } from "store/actions";
 
-
-
-
-
-
-type IAuctionPageState = {
+export type IAuctionPageState = {
   auctions: {
-    address: string
+    address: string;
     startTime: number;
     endTime: number;
-    supportedLps: {lpAddress: string; symbol: string; balance: string; price: string, strategyName: string}[];
+    initialized: boolean;
+    maxDebtMap: {
+      [TierNumber: number]: string;
+    };
+    supportedLps: {
+      lpAddress: string;
+      symbol: string;
+      balance?: string;
+      price: string;
+      strategyName: string;
+      strategyImage: string;
+      tokenImage: string;
+      minCommission: number;
+    }[];
   }[];
   // bids from the graph
-  userBids: {
+  userBids?: {
     auctionAddress: string;
     lpAddress: string;
     lendedAmount: string;
@@ -29,9 +39,9 @@ type IAuctionPageState = {
     // debtRatio: string;
     commission: string;
     commissionPercent: string;
-    status: "rejected"  | "pending" | "won" | "claimed"
+    status: "rejected" | "pending" | "won" | "claimed";
   }[];
-  loans : {
+  loans?: {
     status: "unclaimed" | "unpaid" | "paid" | "recovered";
     lpAddress: string;
     lendedAmount: string;
@@ -39,16 +49,17 @@ type IAuctionPageState = {
     commission: string;
     commissionPercent: string;
     totalAmountTobePaid: string;
-  }[]
-}
-
-
-
+  }[];
+  endedAuctions?: {}[];
+};
 
 export default function Auction() {
 
-  
+  const dispatch = useDispatch();
 
+  useEffect(() => {
+      dispatch(fetchAuctionsThunk())
+  }, []);
 
   return (
     <>

@@ -1,4 +1,7 @@
 import { ThunkAction } from "redux-thunk";
+import { IAuthState } from "store/reducers/authReducer";
+import { IPopupState } from "store/reducers/popupReducer";
+import { IAuctionPageState } from "templates/auctionTemplate";
 
 export type IFarmer = {
   poolAddress: string;
@@ -136,6 +139,9 @@ export type IStrategy = {
 
   token: {
     boostApy: boolean;
+    image: {
+      url: string
+    }
   };
 };
 
@@ -148,14 +154,20 @@ export type IStrategyPool = {
 export type CallBackorVal<T> = T | ((val: T) => T);
 
 export type StakeType = "binance" | "ethereum" | "binancenew" | "ethereumnew";
-export interface IStoreState {
-  auth: {
-    user: IUser | null;
-    isLoggedIn: boolean;
-    hasStaked: null | true | false;
-  };
-  farmer: IFarmerInter | null;
-}
+
+export type IStoreState = {
+  auth: IAuthState;
+  popups: IPopupState;
+  auctions: (
+    | { status: "INITIAL" | "FETCHING" | "FETCH_FAILED" }
+    | {
+        status: "FETCH_SUCCESS";
+        currentAuction: IAuctionPageState["auctions"][number];
+        auctionState: IAuctionPageState;
+        lastFetchedTime: string;
+      }
+  ) ;
+};
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;
 

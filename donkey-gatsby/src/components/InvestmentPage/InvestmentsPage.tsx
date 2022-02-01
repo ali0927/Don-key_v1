@@ -340,6 +340,7 @@ export const InvestmentsPage = () => {
     poolAddress: "",
     pool_version: 1,
   });
+  
   const { data } = useQuery(ALL_FARMER_QUERY);
   const { showNotification } = useNotification();
 

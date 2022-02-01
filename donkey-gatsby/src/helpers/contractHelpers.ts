@@ -206,7 +206,7 @@ export const getPoolValueInUSD = async (web3: Web3, poolAddress: string) => {
   try {
     tokenPrice = await getTokenPrice(web3, poolAddress);
   } catch (e) {
-    console.trace();
+    // console.trace();
     captureException(e, "Error in Pool Value USD");
   }
 
@@ -395,7 +395,7 @@ export const getTokenPrice = memoizeAsync(
 
       return price;
     } catch (e) {
-      console.trace();
+      // console.trace();
       captureException(e, "Get TokenPrice Error");
       return "1";
     }
