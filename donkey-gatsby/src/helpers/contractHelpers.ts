@@ -6,7 +6,7 @@ import { Contract } from "web3-eth-contract";
 import { isEqual } from "lodash";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
-import { getWeb3 } from "don-components";
+import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import { waitFor } from "don-utils";
 import { StakeType } from "interfaces";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -604,6 +604,9 @@ export const calcSumOfAllPoolValues = memoizeAsync(async () => {
   let allPoolValues = new BigNumber(0);
   const resp = await strapi.post("/graphql", { query: ALL_FARMERS_QUERY });
   const list = resp.data.data.farmers.map(async (farmer: any) => {
+    if (farmer.network.chainId === BSC_TESTNET_CHAIN_ID) {
+      return;
+    }
     const web3 = getWeb3(farmer.network.chainId);
     const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
     allPoolValues = allPoolValues.plus(poolValue);
@@ -845,7 +848,7 @@ export const getRewardToken = async (
   );
   const rewardAddr = await promotionalPoolContract.methods.rewardToken().call();
   const bep20ABI = await import("../JsonData/BEP20Token.json");
-    console.log(rewardAddr, poolAddress, chainId, "Chain");
+  console.log(rewardAddr, poolAddress, chainId, "Chain");
   const newWeb3 = chainId ? getWeb3(chainId) : web3;
   const rewardToken = new newWeb3.eth.Contract(bep20ABI.abi as any, rewardAddr);
   const symbol = await rewardToken.methods.symbol().call();
