@@ -1,7 +1,7 @@
 import { useTimer } from "hooks";
 
-export const CountDown = ({ date }: { date: string }) => {
-  const { hrs, mins, secs } = useTimer(date, true);
+export const CountDown = ({ date }: { date: number }) => {
+  const { hrs, mins, secs } = useTimer(date);
   return (
     <div className="countdowner">
       <div className="hours">

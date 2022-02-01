@@ -2,7 +2,14 @@ import { gql } from "@apollo/client";
 import { client } from "apolloClient";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
-import { getTokenPrice, getTokenSymbol } from "helpers";
+import {
+  getPoolContract,
+  getPoolToken,
+  getTokenPrice,
+  getTokenSymbol,
+  toEther,
+} from "helpers";
+import produce from "immer";
 import { AppThunk, IFarmer, IFarmerInter, IStoreState } from "interfaces";
 
 import { IAuctionPageState } from "templates/auctionTemplate";
@@ -22,6 +29,16 @@ export const fetchAuctionSuccess = (auctions: IAuctionPageState["auctions"]) =>
 
 export const fetchAuctions = () => {
   return action("FETCH_AUCTIONS");
+};
+
+export const fetchBalances = () => {
+  return action("FETCH_BALANCES");
+};
+
+export const fetchBalanceSuccess = (
+  auctions: IAuctionPageState["auctions"]
+) => {
+  return action("FETCH_BALANCES_SUCCESS", { auctions });
 };
 
 const ALL_FARMERS_QUERY = gql`
@@ -87,7 +104,7 @@ export const fetchAuctionsThunk =
         auctionState.endTime = await contract.getauctionEndTime();
         auctionState.startTime = await contract.getauctionStartTime();
         auctionState.maxDebtMap = contract.getMaxDebtMap();
-        console.log(auctionState, "Auction State")
+        console.log(auctionState, "Auction State");
         const filterFarmers: IFarmerInter[] = [];
         await Promise.all(
           farmers.map(async (farmer) => {
@@ -104,7 +121,9 @@ export const fetchAuctionsThunk =
             filterFarmers.map(async (farmer) => {
               const price = await getTokenPrice(web3, farmer.poolAddress);
               const symbol = await getTokenSymbol(web3, farmer.poolAddress);
-              const minCommission = await contract.getFloorCommission(farmer.poolAddress);
+              const minCommission = await contract.getFloorCommission(
+                farmer.poolAddress
+              );
               return {
                 lpAddress: farmer.poolAddress,
                 price,
@@ -118,7 +137,7 @@ export const fetchAuctionsThunk =
           );
         }
       } catch (e) {
-          console.log(e, "Feth Auctions")
+        console.log(e, "Feth Auctions");
         return auctionState;
       }
 
@@ -127,4 +146,34 @@ export const fetchAuctionsThunk =
     const fetchedAuctions = await Promise.all(promises);
     // save auctions to store
     dispatch(fetchAuctionSuccess(fetchedAuctions));
+  };
+
+export const fetchBalancesThunk =
+  (userAddress: string): AppThunk =>
+  async (dispatch, getState) => {
+    dispatch(fetchBalances());
+
+    const state = getState();
+    const auctions = state.auctions;
+
+    if (auctions.status === "FETCH_SUCCESS") {
+      let fetchedAuctions = auctions.auctionState.auctions;
+      const web3 = getWeb3(BSC_TESTNET_CHAIN_ID);
+      const promises: Promise<any>[] = [];
+      fetchedAuctions.forEach((item, index) => {
+        const list = item.supportedLps.map(async (lp, lindex) => {
+          const pool = await getPoolContract(web3, lp.lpAddress, 4);
+
+          const userBalance = await pool.methods.balanceOf(userAddress).call();
+
+          fetchedAuctions = produce(fetchedAuctions, (draft) => {
+            draft[index].supportedLps[lindex].balance = toEther(userBalance);
+          });
+        });
+        promises.push(...list);
+      });
+      await Promise.all(promises);
+
+      dispatch(fetchBalanceSuccess(fetchedAuctions));
+    }
   };

@@ -58,7 +58,9 @@ const NewInput = (props: {
 
   const lastValidValueRef = useRef(value);
   const inputRef = useRef<HTMLInputElement>(null);
-  if (props.validator(value)) {
+  const isValidValue = props.validator(value)
+  console.log(isValidValue, "IsValidValue");
+  if (isValidValue) {
     lastValidValueRef.current = value;
   }
 
@@ -70,7 +72,8 @@ const NewInput = (props: {
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const value = e.target.value;
-    if (props.validator(value)) {
+    const isValid = props.validator(value);
+    if (isValid) {
       props.onChange(value);
     }
     setValue(value);
@@ -117,9 +120,7 @@ const AuctionForm = ({
   const [state, setState] = useState(INITIAL_FORM_STATE);
 
   const { tier } = useStakingContract();
-  const { connected } = useWeb3Context();
-  // const [selectedLp]
-  const commissionRef = useRef(new BigNumber(0));
+
   const selectedLp = auction.supportedLps[state.selectedLp];
 
   const selectNewLp = (index: number) => {
@@ -134,10 +135,15 @@ const AuctionForm = ({
       const newState = { ...old, percentLp: percent };
       if (balance) {
         const borrowAmount = new BigNumber(balance)
-          .multipliedBy(percent).multipliedBy(maxDebtRatio).dividedBy(100)
+          .multipliedBy(percent)
+          .multipliedBy(maxDebtRatio)
+          .dividedBy(100)
           .dividedBy(100);
-          console.log(borrowAmount.toFixed(2), "BorrowAmount", selectedLp.minCommission)
-        newState.commission = calcFloorCommission(borrowAmount, selectedLp.minCommission);
+
+        newState.commission = calcFloorCommission(
+          borrowAmount,
+          selectedLp.minCommission
+        );
       }
 
       return newState;
@@ -151,12 +157,8 @@ const AuctionForm = ({
   }, [state.percentLp, auction, selectedLp]);
 
   const minCommission = useMemo(() => {
-    return new BigNumber(selectedLp.minCommission);
+    return debtAmount.multipliedBy(maxDebtRatio).multipliedBy(selectedLp.minCommission).dividedBy(10000);
   }, [selectedLp]);
-
-  if (!state.commission.lt(minCommission)) {
-    commissionRef.current = state.commission;
-  }
 
   const validate = (val: string) => {
     return minCommission.lte(val);
@@ -171,6 +173,15 @@ const AuctionForm = ({
   const borrowAmountInUsd = borrowAmount
     .multipliedBy(selectedLp.price)
     .toFixed(2);
+
+  useEffect(() => {
+    setState((old) => {
+      return {
+        ...old,
+        commission: calcFloorCommission(borrowAmount, selectedLp.minCommission),
+      };
+    });
+  }, []);
 
   return (
     <>
@@ -299,8 +310,8 @@ const AuctionForm = ({
             <div className="tooltip_trigger info_icon">i</div>
             <div className="tooltip_content">
               <p>
-                The Tier 5 will get 70%, Tier 4 will get 50%, and all the rest
-                will get 0%.
+                The Tier 5 will get {auction.maxDebtMap[5]}%, Tier 4 will get{" "}
+                {auction.maxDebtMap[4]}%, and all the rest will get {auction.maxDebtMap[0]}%.
               </p>
               <a href="https://google.com">MORE INFO</a>
             </div>
@@ -312,7 +323,8 @@ const AuctionForm = ({
         <p>
           Collateral {debtAmount.toFixed(2)} {selectedLp.symbol} *{" "}
           {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol} Tier{" "}
-          {tier.tier} Debt ratio is {maxDebtRatio}%
+          {tier.tier} Debt ratio is {maxDebtRatio}% <br />
+          {selectedLp.strategyName} Min Commission is {selectedLp.minCommission}%
         </p>
       </div>
 
@@ -341,7 +353,7 @@ const AuctionForm = ({
               <div className="amount">
                 <div className="icon"></div>
                 <div className="amount">
-                  {calcCommisionPercent(borrowAmount, commissionRef.current)}%
+                  {calcCommisionPercent(borrowAmount, state.commission)}%
                 </div>
               </div>
             </div>

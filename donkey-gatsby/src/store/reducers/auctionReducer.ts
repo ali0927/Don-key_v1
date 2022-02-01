@@ -16,6 +16,7 @@ export const auctionReducer: Reducer<IStoreState["auctions"], IAuctionActions> =
           draft.status = "FETCHING";
         });
       }
+      case "FETCH_BALANCES_SUCCESS":
       case "FETCH_AUCTION_SUCCESS": {
         const { auctions } = action.payload;
         return produce(state, (draft) => {
@@ -30,7 +31,8 @@ export const auctionReducer: Reducer<IStoreState["auctions"], IAuctionActions> =
                 currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
               );
             });
-            draft.currentAuction = currentAuction[0];
+            draft.currentAuction =
+              currentAuction.length > 0 ? currentAuction[0] : auctions[0];
           }
         });
       }

@@ -7,8 +7,10 @@ import { MakeABidForm } from "components/MakeABidForm";
 import { NavBar } from "components/Navbar";
 import React, { useEffect } from "react";
 import "./auction.css";
-import { useDispatch } from "react-redux";
-import { fetchAuctionsThunk } from "store/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAuctionsThunk, fetchBalancesThunk } from "store/actions";
+import { IStoreState } from "interfaces";
+import { useWeb3Context } from "don-components";
 
 export type IAuctionPageState = {
   auctions: {
@@ -54,12 +56,29 @@ export type IAuctionPageState = {
 };
 
 export default function Auction() {
-
   const dispatch = useDispatch();
+  const auctions = useSelector((state: IStoreState) => state.auctions);
+
+
+  const { connected, address } = useWeb3Context();
+  // const [selectedLp]
+
+
+
 
   useEffect(() => {
-      dispatch(fetchAuctionsThunk())
-  }, []);
+    if (auctions.status === "INITIAL" || auctions.status === "FETCH_FAILED") {
+      dispatch(fetchAuctionsThunk());
+    }
+  }, [auctions.status]);
+
+  useEffect(() => {
+
+    if(connected && address && auctions.status === "FETCH_SUCCESS"){
+      dispatch(fetchBalancesThunk(address))
+    }
+
+  }, [connected, address, auctions.status]) 
 
   return (
     <>
@@ -74,7 +93,9 @@ export default function Auction() {
                 Be part of Don-key's auction to win loan and some more 2-3
                 sentences explanation text to describe purpose of the page.
               </p>
-              <CountDown date={`2022-02-22T07:00:00`} />
+              {auctions.status === "FETCH_SUCCESS" && (
+                <CountDown date={auctions.currentAuction.endTime} />
+              )}
             </div>
             <div className="width-50 bid_column">
               <MakeABidForm />
