@@ -155,17 +155,19 @@ export type CallBackorVal<T> = T | ((val: T) => T);
 
 export type StakeType = "binance" | "ethereum" | "binancenew" | "ethereumnew";
 
+export type IAuctionSuccessState = {
+  status: "FETCH_SUCCESS" | "FETCH_BALANCE_SUCCESS";
+  currentAuction: IAuctionPageState["auctions"][number];
+  auctionState: IAuctionPageState;
+  lastFetchedTime: string;
+}
+
 export type IStoreState = {
   auth: IAuthState;
   popups: IPopupState;
   auctions: (
     | { status: "INITIAL" | "FETCHING" | "FETCH_FAILED" }
-    | {
-        status: "FETCH_SUCCESS";
-        currentAuction: IAuctionPageState["auctions"][number];
-        auctionState: IAuctionPageState;
-        lastFetchedTime: string;
-      }
+    | IAuctionSuccessState
   ) ;
 };
 

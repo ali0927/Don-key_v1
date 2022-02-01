@@ -16,12 +16,31 @@ export const auctionReducer: Reducer<IStoreState["auctions"], IAuctionActions> =
           draft.status = "FETCHING";
         });
       }
-      case "FETCH_BALANCES_SUCCESS":
+
       case "FETCH_AUCTION_SUCCESS": {
         const { auctions } = action.payload;
         return produce(state, (draft) => {
           draft.status = "FETCH_SUCCESS";
           if (draft.status === "FETCH_SUCCESS") {
+            draft.auctionState = { auctions };
+            const currentAuction = auctions.filter((item) => {
+              const startTime = moment.unix(item.startTime);
+              const endTime = moment.unix(item.endTime);
+              const currentTime = moment();
+              return (
+                currentTime.isAfter(startTime) && currentTime.isBefore(endTime)
+              );
+            });
+            draft.currentAuction =
+              currentAuction.length > 0 ? currentAuction[0] : auctions[0];
+          }
+        });
+      }
+      case "FETCH_BALANCES_SUCCESS": {
+        const { auctions } = action.payload;
+        return produce(state, (draft) => {
+          draft.status = "FETCH_BALANCE_SUCCESS";
+          if (draft.status === "FETCH_BALANCE_SUCCESS") {
             draft.auctionState = { auctions };
             const currentAuction = auctions.filter((item) => {
               const startTime = moment.unix(item.startTime);

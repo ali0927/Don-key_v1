@@ -1,12 +1,22 @@
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
-import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
+import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
+import { getAuctionContract } from "Contracts";
+import {
+  BINANCE_CHAIN_ID,
+  BSC_TESTNET_CHAIN_ID,
+  getWeb3,
+  useWeb3Context,
+} from "don-components";
 import { graphql, useStaticQuery } from "gatsby";
 import {
+  captureException,
   formatNum,
   getERCContract,
   getPoolContract,
   getTokenPrice,
+  toEther,
+  toWei,
 } from "helpers";
 import { useStakingContract } from "hooks";
 import { IStoreState } from "interfaces";
@@ -58,7 +68,7 @@ const NewInput = (props: {
 
   const lastValidValueRef = useRef(value);
   const inputRef = useRef<HTMLInputElement>(null);
-  const isValidValue = props.validator(value)
+  const isValidValue = props.validator(value);
   console.log(isValidValue, "IsValidValue");
   if (isValidValue) {
     lastValidValueRef.current = value;
@@ -115,20 +125,22 @@ const transformArray = <T extends any>(arr: T[], index: number) => {
 const AuctionForm = ({
   auction,
 }: {
+  status: IStoreState["auctions"]["status"];
   auction: IAuctionPageState["auctions"][0];
 }) => {
   const [state, setState] = useState(INITIAL_FORM_STATE);
-
+  const [isLoading, setIsLoading] = useState(false);
   const { tier } = useStakingContract();
-
+  const { getConnectedWeb3, address } = useWeb3Context();
   const selectedLp = auction.supportedLps[state.selectedLp];
-
+  const { showProgress, showSuccess, showFailure } =
+    useTransactionNotification();
   const selectNewLp = (index: number) => {
     setState((old) => ({ ...old, selectedLp: index }));
   };
   const maxDebtRatio = auction.maxDebtMap[tier.tier as 0] || "0";
 
-  const balance = selectedLp.balance || "10";
+  const balance = formatNum(selectedLp.withdrawAmount || "10");
 
   const selectLpPercent = (percent: string) => {
     setState((old) => {
@@ -157,7 +169,10 @@ const AuctionForm = ({
   }, [state.percentLp, auction, selectedLp]);
 
   const minCommission = useMemo(() => {
-    return debtAmount.multipliedBy(maxDebtRatio).multipliedBy(selectedLp.minCommission).dividedBy(10000);
+    return debtAmount
+      .multipliedBy(maxDebtRatio)
+      .multipliedBy(selectedLp.minCommission)
+      .dividedBy(10000);
   }, [selectedLp]);
 
   const validate = (val: string) => {
@@ -182,6 +197,40 @@ const AuctionForm = ({
       };
     });
   }, []);
+
+  const handleStake = async () => {
+    const Auction = getAuctionContract(auction.address, BSC_TESTNET_CHAIN_ID);
+    try {
+      setIsLoading(true);
+      showProgress("Lending Lp Token");
+      if (
+        !Auction.connectedToWallet ||
+        Auction.chainId !== BSC_TESTNET_CHAIN_ID
+      ) {
+        await Auction.disconnectFromWallet();
+        await Auction.connectToWallet(getConnectedWeb3());
+      }
+      await Auction.bid({
+        lendedAmount: toWei(
+          new BigNumber(selectedLp.balance!)
+            .multipliedBy(state.percentLp)
+            .dividedBy(100)
+            .toString()
+        ),
+        comission: toWei(state.commission.toString()),
+        lpToken: selectedLp.lpAddress,
+        userAddress: address,
+      });
+
+      showSuccess("LP Token Lent Successfully");
+    } catch (e) {
+      console.trace();
+      captureException(e, "Handle Lp Lending");
+      showFailure("Try again Later");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -311,7 +360,8 @@ const AuctionForm = ({
             <div className="tooltip_content">
               <p>
                 The Tier 5 will get {auction.maxDebtMap[5]}%, Tier 4 will get{" "}
-                {auction.maxDebtMap[4]}%, and all the rest will get {auction.maxDebtMap[0]}%.
+                {auction.maxDebtMap[4]}%, and all the rest will get{" "}
+                {auction.maxDebtMap[0]}%.
               </p>
               <a href="https://google.com">MORE INFO</a>
             </div>
@@ -324,7 +374,8 @@ const AuctionForm = ({
           Collateral {debtAmount.toFixed(2)} {selectedLp.symbol} *{" "}
           {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol} Tier{" "}
           {tier.tier} Debt ratio is {maxDebtRatio}% <br />
-          {selectedLp.strategyName} Min Commission is {selectedLp.minCommission}%
+          {selectedLp.strategyName} Min Commission is {selectedLp.minCommission}
+          %
         </p>
       </div>
 
@@ -361,8 +412,8 @@ const AuctionForm = ({
         </div>
       </div>
       <div className="submit_btn_con">
-        <button className="submit_and_stake" style={{ marginTop: "41px" }}>
-          Submit &amp; Stake
+        <button className="submit_and_stake" onClick={isLoading ? () => {}: handleStake} style={{ marginTop: "41px" }}>
+          {isLoading ? <Spinner animation="border" />: "Submit &amp; Stake"}
         </button>
         <div className="info">
           <span>Floor commision {selectedLp.minCommission}%</span>
@@ -380,7 +431,8 @@ export const MakeABidForm = () => {
 
   return (
     <div className="make_a_bid">
-      {currentAuctionState.status !== "FETCH_SUCCESS" ? (
+      {currentAuctionState.status !== "FETCH_SUCCESS" &&
+      currentAuctionState.status !== "FETCH_BALANCE_SUCCESS" ? (
         <div
           style={{
             display: "flex",
@@ -392,7 +444,10 @@ export const MakeABidForm = () => {
           <Spinner animation="border" />
         </div>
       ) : (
-        <AuctionForm auction={currentAuctionState.currentAuction} />
+        <AuctionForm
+          status={currentAuctionState.status}
+          auction={currentAuctionState.currentAuction}
+        />
       )}
     </div>
   );
