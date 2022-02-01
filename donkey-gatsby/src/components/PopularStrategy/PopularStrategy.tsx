@@ -111,6 +111,22 @@ const TokenImage = styled.img`
   margin-right: 6px;
 `;
 
+const RiskImg = styled.div`
+position:relative;
+  &.loss_tag::after{
+    content: 'Impermanent Loss';
+    background-color: #E95753;
+    position: absolute;
+    bottom: -18px;
+    font-size: 10px;
+    color: white;
+    left: -5px;
+    width: 110px;
+    text-align: center;
+    border-radius: 50px;
+  }
+`;
+
 const Title = styled.h5<{ fontSize: string }>`
   font-family: Poppins;
   font-size: 16px;
@@ -158,6 +174,7 @@ export const PopularStrategy = ({
   showAllContent,
   farmerId,
   onShowMoreClick,
+  impermanentLoss,
 
   version,
   showOnRight,
@@ -195,6 +212,7 @@ export const PopularStrategy = ({
   onCardClick?: () => void;
   onButtonClick?: () => void;
   showAllContent?: boolean;
+  impermanentLoss?: boolean;
   onShowMoreClick?: () => void;
   onShowLessClick?: () => void;
   extraApy?: string;
@@ -288,18 +306,19 @@ export const PopularStrategy = ({
             {riskImage && (
               <div className="text-right" style={{ minHeight: 80 }}>
                 {imageRisk ? (
-                  <div
+                  <RiskImg
+                  className={impermanentLoss ? "loss_tag" : ""}
                     style={{
                       textAlign: "right",
                       paddingLeft: 10,
                     }}
                   >
-                    <img
+                    <img 
                       src={imageRisk}
                       alt="ImageNotFound"
                       style={{ fill: "green", width: 80 }}
                     />
-                  </div>
+                  </RiskImg>
                 ) : (
                   riskImage && (
                     <OverlayTrigger
