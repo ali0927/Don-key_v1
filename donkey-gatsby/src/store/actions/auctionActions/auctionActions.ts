@@ -3,6 +3,7 @@ import { client } from "apolloClient";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import {
+  getAmount,
   getPoolContract,
   getPoolToken,
   getTokenPrice,
@@ -72,7 +73,7 @@ export const fetchAuctionsThunk =
   (): AppThunk => async (dispatch, getState) => {
     dispatch(fetchAuctions());
     // TO DO Fetch Auctionaddresses from Strapi
-    const auctionAddresses = ["0x7dbb49707d27c125ceb2d21d91109216ad4aa70a"];
+    const auctionAddresses = ["0x2030dbAE880163B92C5e946B3EC945F0113B0C79"];
 
     // To do Fetch All Pools addresses
     const result = await client.query({ query: ALL_FARMERS_QUERY });
@@ -163,11 +164,12 @@ export const fetchBalancesThunk =
       fetchedAuctions.forEach((item, index) => {
         const list = item.supportedLps.map(async (lp, lindex) => {
           const pool = await getPoolContract(web3, lp.lpAddress, 4);
-
+          const withdrawAmount = await getAmount(web3, lp.lpAddress, userAddress, 4, 100);
           const userBalance = await pool.methods.balanceOf(userAddress).call();
 
           fetchedAuctions = produce(fetchedAuctions, (draft) => {
             draft[index].supportedLps[lindex].balance = toEther(userBalance);
+            draft[index].supportedLps[lindex].withdrawAmount = withdrawAmount;
           });
         });
         promises.push(...list);

@@ -9,7 +9,7 @@ import React, { useEffect } from "react";
 import "./auction.css";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAuctionsThunk, fetchBalancesThunk } from "store/actions";
-import { IStoreState } from "interfaces";
+import { IAuctionSuccessState, IStoreState } from "interfaces";
 import { useWeb3Context } from "don-components";
 
 export type IAuctionPageState = {
@@ -24,6 +24,7 @@ export type IAuctionPageState = {
     supportedLps: {
       lpAddress: string;
       symbol: string;
+      withdrawAmount?: string;
       balance?: string;
       price: string;
       strategyName: string;
@@ -55,16 +56,16 @@ export type IAuctionPageState = {
   endedAuctions?: {}[];
 };
 
+const isOneOf = <T extends string>(val: T, arr: T[]) => {
+  return arr.includes(val);
+};
+
 export default function Auction() {
   const dispatch = useDispatch();
   const auctions = useSelector((state: IStoreState) => state.auctions);
 
-
   const { connected, address } = useWeb3Context();
   // const [selectedLp]
-
-
-
 
   useEffect(() => {
     if (auctions.status === "INITIAL" || auctions.status === "FETCH_FAILED") {
@@ -73,13 +74,13 @@ export default function Auction() {
   }, [auctions.status]);
 
   useEffect(() => {
-
-    if(connected && address && auctions.status === "FETCH_SUCCESS"){
-      dispatch(fetchBalancesThunk(address))
+    if (connected && address && auctions.status === "FETCH_SUCCESS") {
+      dispatch(fetchBalancesThunk(address));
     }
+  }, [connected, address, auctions.status]);
 
-  }, [connected, address, auctions.status]) 
 
+  
   return (
     <>
       <NavBar />
@@ -93,8 +94,15 @@ export default function Auction() {
                 Be part of Don-key's auction to win loan and some more 2-3
                 sentences explanation text to describe purpose of the page.
               </p>
-              {auctions.status === "FETCH_SUCCESS" && (
-                <CountDown date={auctions.currentAuction.endTime} />
+              {isOneOf(auctions.status, [
+                "FETCH_SUCCESS",
+                "FETCH_BALANCE_SUCCESS",
+              ]) && (
+                <CountDown
+                  date={
+                    (auctions as IAuctionSuccessState).currentAuction.endTime
+                  }
+                />
               )}
             </div>
             <div className="width-50 bid_column">
