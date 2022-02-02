@@ -7,6 +7,7 @@ import { isEqual } from "lodash";
 import { captureException } from "./captureException";
 import { api, strapi } from "../strapi";
 import { BINANCE_CHAIN_ID, getWeb3 } from "don-components";
+import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import { waitFor } from "don-utils";
 import { StakeType } from "interfaces";
 const BUSDAddress = "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56";
@@ -617,6 +618,9 @@ export const calcSumOfAllPoolValues = memoizeAsync(async () => {
   let allPoolValues = new BigNumber(0);
   const resp = await strapi.post("/graphql", { query: ALL_FARMERS_QUERY });
   const list = resp.data.data.farmers.map(async (farmer: any) => {
+    if (farmer.network.chainId === BSC_TESTNET_CHAIN_ID) {
+      return;
+    }
     const web3 = getWeb3(farmer.network.chainId);
     const poolValue = await getPoolValueInUSD(web3, farmer.poolAddress);
     allPoolValues = allPoolValues.plus(poolValue);

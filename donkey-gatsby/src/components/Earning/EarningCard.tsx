@@ -148,11 +148,13 @@ export const EarningCard = ({
             {isLoading(<Skeleton width={30} />, `${data.roi}%`)}
           </EarningSectionValue>
         </EarningSectionRoi>
-        <EarningSectionExpire>
-          {!comingSoon && duration
-            ? isLoading(<Skeleton width={100} />, `Expires in ${duration}`)
-            : ""}
-        </EarningSectionExpire>
+        {!hasEnded && (
+          <EarningSectionExpire>
+            {!comingSoon && duration
+              ? isLoading(<Skeleton width={100} />, `Expires in ${duration}`)
+              : ""}
+          </EarningSectionExpire>
+        )}
       </div>
       <EarningBtn
         disabled={loading || comingSoon}

@@ -178,6 +178,7 @@ export const createPages = async ({ graphql, actions }: any) => {
             }
             farmer {
               hideInvestButton
+              impermanentLoss
               status
               name
               farmerImage {
@@ -236,6 +237,7 @@ export const createPages = async ({ graphql, actions }: any) => {
           slug
           Zone
           hideInvestButton
+          impermanentLoss
           farmerfee
           performancefee
           poolAddress

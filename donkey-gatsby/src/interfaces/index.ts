@@ -102,6 +102,7 @@ export interface IFarmerInter extends IInsuranceProps {
   active: boolean;
   twitter: string;
   hideInvestButton: boolean | null;
+  impermanentLoss: boolean | null;
   telegram: string;
   poolAddress: string;
   poolVersion: number;
