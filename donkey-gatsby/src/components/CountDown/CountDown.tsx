@@ -1,7 +1,18 @@
 import { useTimer } from "hooks";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 export const CountDown = ({ date }: { date: number }) => {
-  const { hrs, mins, secs } = useTimer(date);
+  const { hrs, mins, secs, hasEnded } = useTimer(date);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if(hasEnded){
+      
+    }
+  }, [])
+
   return (
     <div className="countdowner">
       <div className="hours">

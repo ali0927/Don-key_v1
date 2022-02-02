@@ -23,6 +23,10 @@ export const getQueryParam = (name: string) => {
 export const tuplify = <T extends any[]>(...args: T) => {
   return args;
 };
+export const isOneOf = <T extends string>(val: T, arr: T[]) => {
+  return arr.includes(val);
+};
+
 
 export const getROI = async (web3: any, poolAddress: string) => {
   const investedAmountWithReward = new BigNumber(

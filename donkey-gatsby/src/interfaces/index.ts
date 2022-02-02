@@ -1,7 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import { IAuthState } from "store/reducers/authReducer";
 import { IPopupState } from "store/reducers/popupReducer";
-import { IAuctionPageState } from "templates/auctionTemplate";
 
 export type IFarmer = {
   poolAddress: string;
@@ -23,15 +22,15 @@ export type IFarmer = {
     chainId: number;
     networkName: string;
     networkSymbol: string;
-  }
+  };
   strategyImage?: string;
   investors?: null | number;
   status:
-  | "not_signed_up"
-  | "under_review"
-  | "active"
-  | "inactive"
-  | "comingsoon";
+    | "not_signed_up"
+    | "under_review"
+    | "active"
+    | "inactive"
+    | "comingsoon";
 };
 
 export interface IUser {
@@ -74,13 +73,13 @@ export type IInsurance = {
   protocol: {
     name: string;
     productId: number;
-    icon : {
+    icon: {
       url: string;
     };
     network: INetwork;
-  }
+  };
   token: IStrapiToken | null;
-}
+};
 
 export type IInsuranceProps = {
   hasInsurance?: boolean | null;
@@ -88,12 +87,12 @@ export type IInsuranceProps = {
   minAmountForInsurance?: number | null;
 };
 export interface IFarmerInter extends IInsuranceProps {
-  name: string
+  name: string;
   description: string;
   graphUrl: string;
   farmerImage: {
     url: string;
-  }
+  };
   slug: string;
   status: "active" | "hidden" | "comingsoon";
   guid: string;
@@ -109,20 +108,24 @@ export interface IFarmerInter extends IInsuranceProps {
   oldPoolVersion: number;
   oldPoolAddress: string;
   network: INetwork;
-  strategies:IStrategy[];
-  Zone: {id: number; strapi_component: "component.klima-tokens"; klima: string;}[] ;
+  strategies: IStrategy[];
+  Zone: {
+    id: number;
+    strapi_component: "component.klima-tokens";
+    klima: string;
+  }[];
 }
 
 export type IStrategy = {
   risk: {
     Title: string;
-    image:  {
+    image: {
       url: string;
-    }
-  }
+    };
+  };
   blacklist: {
     address: string;
-  }[]
+  }[];
   created_at: string;
   id: string;
   info: string;
@@ -140,40 +143,93 @@ export type IStrategy = {
   token: {
     boostApy: boolean;
     image: {
-      url: string
-    }
+      url: string;
+    };
   };
 };
 
 export type IStrategyPool = {
   poolAddress: string;
   version: number;
-  status: "active" | "deprecated"
-}
+  status: "active" | "deprecated";
+};
 
 export type CallBackorVal<T> = T | ((val: T) => T);
 
 export type StakeType = "binance" | "ethereum" | "binancenew" | "ethereumnew";
 
+export type IAuction = {
+  address: string;
+  startTime: number;
+  endTime: number;
+  initialized: boolean;
+  tenure: number;
+  maxDebtMap: {
+    [TierNumber: number]: string;
+  };
+  supportedLps: {
+    lpAddress: string;
+    symbol: string;
+    withdrawAmount?: string;
+    balance?: string;
+    price: string;
+    strategyName: string;
+    strategyImage: string;
+    tokenImage: string;
+    minCommission: number;
+  }[];
+};
+
 export type IAuctionSuccessState = {
   status: "FETCH_SUCCESS" | "FETCH_BALANCE_SUCCESS";
-  currentAuction: IAuctionPageState["auctions"][number];
-  auctionState: IAuctionPageState;
-  lastFetchedTime: string;
-}
+  currentAuction: IAuction | null;
+  auctionState: IAuction[];
+
+  firstAuction: IAuction;
+  lastAuction: IAuction;
+};
+
+export type ILoan = {
+  status: "unclaimed" | "unpaid" | "paid" | "recovered";
+  lpAddress: string;
+  lendedAmount: string;
+  borrowedAmount: string;
+  commission: string;
+  commissionPercent: string;
+  totalAmountTobePaid: string;
+};
+
+export type IBid = {
+  auctionAddress: string;
+  lpAddress: string;
+  lendedAmount: string;
+  borrowedAmount: string;
+  // debtRatio: string;
+  commission: string;
+  commissionPercent: string;
+  status: "rejected" | "pending" | "won" | "claimed";
+};
 
 export type IStoreState = {
   auth: IAuthState;
   popups: IPopupState;
-  auctions: (
-    | { status: "INITIAL" | "FETCHING" | "FETCH_FAILED" }
-    | IAuctionSuccessState
-  ) ;
+
+  auctions: {
+    auctionInfo:
+      | { status: "INITIAL" | "FETCHING" | "FETCH_FAILED" }
+      | IAuctionSuccessState;
+    userBids: {
+      status: "INITIAL" | "FETCHING" | "FETCH_FAILED" | "FETCH_SUCCESS";
+      data: IBid[];
+    };
+    loans?: {
+      status: "INITIAL" | "FETCHING" | "FETCH_SUCCESS" | "FETCH_FAILED";
+      data: ILoan[];
+    };
+  };
 };
 
 export type AppThunk = ThunkAction<void, IStoreState, unknown, any>;
-
-
 
 export type IStrapiImage = {
   id: number;
@@ -214,7 +270,7 @@ export type IStrapiToken = {
   subtitle: string;
   description: string;
   boostApy: boolean;
-  status: "commingsoon" | "active" | "disabled" | "hidden"
+  status: "commingsoon" | "active" | "disabled" | "hidden";
   tokenAddress: string;
   maxApy: string;
   slug: string;

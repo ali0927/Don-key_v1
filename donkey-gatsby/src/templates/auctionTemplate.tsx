@@ -11,58 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchAuctionsThunk, fetchBalancesThunk } from "store/actions";
 import { IAuctionSuccessState, IStoreState } from "interfaces";
 import { useWeb3Context } from "don-components";
+import { isOneOf } from "helpers";
 
-export type IAuctionPageState = {
-  auctions: {
-    address: string;
-    startTime: number;
-    endTime: number;
-    initialized: boolean;
-    maxDebtMap: {
-      [TierNumber: number]: string;
-    };
-    supportedLps: {
-      lpAddress: string;
-      symbol: string;
-      withdrawAmount?: string;
-      balance?: string;
-      price: string;
-      strategyName: string;
-      strategyImage: string;
-      tokenImage: string;
-      minCommission: number;
-    }[];
-  }[];
-  // bids from the graph
-  userBids?: {
-    auctionAddress: string;
-    lpAddress: string;
-    lendedAmount: string;
-    borrowedAmount: string;
-    // debtRatio: string;
-    commission: string;
-    commissionPercent: string;
-    status: "rejected" | "pending" | "won" | "claimed";
-  }[];
-  loans?: {
-    status: "unclaimed" | "unpaid" | "paid" | "recovered";
-    lpAddress: string;
-    lendedAmount: string;
-    borrowedAmount: string;
-    commission: string;
-    commissionPercent: string;
-    totalAmountTobePaid: string;
-  }[];
-  endedAuctions?: {}[];
-};
 
-const isOneOf = <T extends string>(val: T, arr: T[]) => {
-  return arr.includes(val);
-};
 
 export default function Auction() {
   const dispatch = useDispatch();
-  const auctions = useSelector((state: IStoreState) => state.auctions);
+  const auctions = useSelector((state: IStoreState) => state.auctions.auctionInfo);
 
   const { connected, address } = useWeb3Context();
   // const [selectedLp]
@@ -79,8 +34,16 @@ export default function Auction() {
     }
   }, [connected, address, auctions.status]);
 
-
+  const currentAuction =
+    (auctions as IAuctionSuccessState).currentAuction || null;
+  // const 
+  const isSuccessState = isOneOf(auctions.status, [
+    "FETCH_SUCCESS",
+    "FETCH_BALANCE_SUCCESS",
+  ]);
   
+  
+
   return (
     <>
       <NavBar />
@@ -94,16 +57,11 @@ export default function Auction() {
                 Be part of Don-key's auction to win loan and some more 2-3
                 sentences explanation text to describe purpose of the page.
               </p>
-              {isOneOf(auctions.status, [
-                "FETCH_SUCCESS",
-                "FETCH_BALANCE_SUCCESS",
-              ]) && (
-                <CountDown
-                  date={
-                    (auctions as IAuctionSuccessState).currentAuction.endTime
-                  }
-                />
-              )}
+              {isSuccessState && (currentAuction ? (
+                <CountDown date={currentAuction.endTime} />
+              ) :  (
+                null
+              ))}
             </div>
             <div className="width-50 bid_column">
               <MakeABidForm />

@@ -2,28 +2,14 @@ import BigNumber from "bignumber.js";
 import clsx from "clsx";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { getAuctionContract } from "Contracts";
-import {
-  BINANCE_CHAIN_ID,
-  BSC_TESTNET_CHAIN_ID,
-  getWeb3,
-  useWeb3Context,
-} from "don-components";
-import { graphql, useStaticQuery } from "gatsby";
-import {
-  captureException,
-  formatNum,
-  getERCContract,
-  getPoolContract,
-  getTokenPrice,
-  toEther,
-  toWei,
-} from "helpers";
-import { useStakingContract } from "hooks";
-import { IStoreState } from "interfaces";
+import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
+import { captureException, formatNum, toWei } from "helpers";
+import { useStakingContract, useSwitchNetwork } from "hooks";
+import { IAuction, IStoreState } from "interfaces";
+import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { IAuctionPageState } from "templates/auctionTemplate";
 
 const Dropdown: React.FC = (props) => {
   const [condition, setCondition] = useState(false);
@@ -125,13 +111,14 @@ const transformArray = <T extends any>(arr: T[], index: number) => {
 const AuctionForm = ({
   auction,
 }: {
-  status: IStoreState["auctions"]["status"];
-  auction: IAuctionPageState["auctions"][0];
+  status: IStoreState["auctions"]["auctionInfo"]["status"];
+  auction: IAuction;
 }) => {
   const [state, setState] = useState(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
   const { tier } = useStakingContract();
-  const { getConnectedWeb3, address } = useWeb3Context();
+
+  const { getConnectedWeb3, address, chainId } = useWeb3Context();
   const selectedLp = auction.supportedLps[state.selectedLp];
   const { showProgress, showSuccess, showFailure } =
     useTransactionNotification();
@@ -198,18 +185,16 @@ const AuctionForm = ({
     });
   }, []);
 
+  const { switchNetwork } = useSwitchNetwork();
+
   const handleStake = async () => {
     const Auction = getAuctionContract(auction.address, BSC_TESTNET_CHAIN_ID);
     try {
       setIsLoading(true);
       showProgress("Lending Lp Token");
-      if (
-        !Auction.connectedToWallet ||
-        Auction.chainId !== BSC_TESTNET_CHAIN_ID
-      ) {
-        await Auction.disconnectFromWallet();
-        await Auction.connectToWallet(getConnectedWeb3());
-      }
+
+      await Auction.connectToWallet(getConnectedWeb3());
+
       await Auction.bid({
         lendedAmount: toWei(
           new BigNumber(selectedLp.balance!)
@@ -412,12 +397,32 @@ const AuctionForm = ({
         </div>
       </div>
       <div className="submit_btn_con">
-        <button className="submit_and_stake" onClick={isLoading ? () => {}: handleStake} style={{ marginTop: "41px" }}>
-          {isLoading ? <Spinner animation="border" />: "Submit &amp; Stake"}
-        </button>
+        {chainId !== BSC_TESTNET_CHAIN_ID ? (
+          <button
+            className="submit_and_stake"
+            onClick={() => switchNetwork(BSC_TESTNET_CHAIN_ID)}
+            style={{ marginTop: "41px" }}
+          >
+            Switch Network
+          </button>
+        ) : (
+          <button
+            className="submit_and_stake"
+            onClick={isLoading ? () => {} : handleStake}
+            style={{ marginTop: "41px" }}
+          >
+            {isLoading ? <Spinner animation="border" /> : "Submit & Stake"}
+          </button>
+        )}
         <div className="info">
           <span>Floor commision {selectedLp.minCommission}%</span>
-          <span>Repay loan date: 06/12/2021</span>
+          <span>
+            Repay loan date:{" "}
+            {moment
+              .unix(auction.endTime)
+              .add(moment.duration(auction.tenure, "seconds"))
+              .format("DD/mm/yyyy")}
+          </span>
         </div>
       </div>
     </>
@@ -426,7 +431,7 @@ const AuctionForm = ({
 
 export const MakeABidForm = () => {
   const currentAuctionState = useSelector(
-    (state: IStoreState) => state.auctions
+    (state: IStoreState) => state.auctions.auctionInfo
   );
 
   return (
@@ -443,11 +448,13 @@ export const MakeABidForm = () => {
         >
           <Spinner animation="border" />
         </div>
-      ) : (
+      ) : currentAuctionState.currentAuction ? (
         <AuctionForm
           status={currentAuctionState.status}
           auction={currentAuctionState.currentAuction}
         />
+      ) : (
+        "Auction Hasnt Started"
       )}
     </div>
   );
