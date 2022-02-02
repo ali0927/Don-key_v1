@@ -42,7 +42,7 @@ const calcCommisionPercent = (
   return new BigNumber(commission)
     .dividedBy(borrowAmount)
     .multipliedBy(100)
-    .toFixed(2);
+    
 };
 
 const NewInput = (props: {
@@ -186,7 +186,7 @@ const AuctionForm = ({
   }, []);
 
   const { switchNetwork } = useSwitchNetwork();
-
+  const commissionPer = calcCommisionPercent(borrowAmount, state.commission);
   const handleStake = async () => {
     const Auction = getAuctionContract(auction.address, BSC_TESTNET_CHAIN_ID);
     try {
@@ -202,7 +202,7 @@ const AuctionForm = ({
             .dividedBy(100)
             .toString()
         ),
-        comission: toWei(state.commission.toString()),
+        comission: (commissionPer).multipliedBy(100).toFixed(0),
         lpToken: selectedLp.lpAddress,
         userAddress: address,
       });
@@ -389,7 +389,7 @@ const AuctionForm = ({
               <div className="amount">
                 <div className="icon"></div>
                 <div className="amount">
-                  {calcCommisionPercent(borrowAmount, state.commission)}%
+                  {commissionPer.toFixed(2)}%
                 </div>
               </div>
             </div>
