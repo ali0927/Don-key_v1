@@ -8,16 +8,20 @@ import { NavBar } from "components/Navbar";
 import React, { useEffect } from "react";
 import "./auction.css";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAuctionsThunk, fetchBalancesThunk } from "store/actions";
+import {
+  fetchAuctionsThunk,
+  fetchBalancesThunk,
+  fetchBidsAndLoansThunk,
+} from "store/actions";
 import { IAuctionSuccessState, IStoreState } from "interfaces";
 import { useWeb3Context } from "don-components";
 import { isOneOf } from "helpers";
 
-
-
 export default function Auction() {
   const dispatch = useDispatch();
-  const auctions = useSelector((state: IStoreState) => state.auctions.auctionInfo);
+  const auctions = useSelector(
+    (state: IStoreState) => state.auctions.auctionInfo
+  );
 
   const { connected, address } = useWeb3Context();
   // const [selectedLp]
@@ -30,19 +34,33 @@ export default function Auction() {
 
   useEffect(() => {
     if (connected && address && auctions.status === "FETCH_SUCCESS") {
-      dispatch(fetchBalancesThunk(address));
+      dispatch(
+        fetchBalancesThunk(address, {
+          onSuccess: async () => {
+            dispatch(fetchBidsAndLoansThunk(address));
+          },
+        })
+      );
     }
   }, [connected, address, auctions.status]);
 
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
-  // const 
+  const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
+  // const
   const isSuccessState = isOneOf(auctions.status, [
     "FETCH_SUCCESS",
     "FETCH_BALANCE_SUCCESS",
   ]);
-  
-  
+
+  const renderTimer = () => {
+    if (isSuccessState && currentAuction) {
+      return <CountDown date={currentAuction.endTime} />;
+    }
+    if (isSuccessState && !currentAuction && nextAuction) {
+      return <CountDown date={nextAuction.startTime} />;
+    }
+  };
 
   return (
     <>
@@ -57,11 +75,7 @@ export default function Auction() {
                 Be part of Don-key's auction to win loan and some more 2-3
                 sentences explanation text to describe purpose of the page.
               </p>
-              {isSuccessState && (currentAuction ? (
-                <CountDown date={currentAuction.endTime} />
-              ) :  (
-                null
-              ))}
+              {renderTimer()}
             </div>
             <div className="width-50 bid_column">
               <MakeABidForm />

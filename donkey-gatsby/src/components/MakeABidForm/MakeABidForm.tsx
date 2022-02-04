@@ -9,7 +9,8 @@ import { IAuction, IStoreState } from "interfaces";
 import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBidsAndLoansThunk } from "store/actions";
 
 const Dropdown: React.FC = (props) => {
   const [condition, setCondition] = useState(false);
@@ -55,7 +56,7 @@ const NewInput = (props: {
   const lastValidValueRef = useRef(value);
   const inputRef = useRef<HTMLInputElement>(null);
   const isValidValue = props.validator(value);
-  console.log(isValidValue, "IsValidValue");
+  
   if (isValidValue) {
     lastValidValueRef.current = value;
   }
@@ -176,6 +177,7 @@ const AuctionForm = ({
     .multipliedBy(selectedLp.price)
     .toFixed(2);
 
+  const dispatch = useDispatch();
   useEffect(() => {
     setState((old) => {
       return {
@@ -206,6 +208,8 @@ const AuctionForm = ({
         lpToken: selectedLp.lpAddress,
         userAddress: address,
       });
+
+      await dispatch(fetchBidsAndLoansThunk(address));
 
       showSuccess("LP Token Lent Successfully");
     } catch (e) {

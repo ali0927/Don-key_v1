@@ -39,15 +39,20 @@ const updateCurrentAuction = (state: IStoreState["auctions"]) => {
       });
       const lastAuction = sortedAuctions[auctions.length - 1];
       const firstAuction = sortedAuctions[0];
-      const firstStart = moment.unix(firstAuction.startTime);
-      const lastEnd = moment.unix(lastAuction.endTime);
+      const nextAuctions = auctions.filter((item) => {
+        const startTime = moment.unix(item.startTime);
+
+        return currentTime.isBefore(startTime);
+      });
       const auctionInfo = draft.auctionInfo as IAuctionSuccessState;
-      if (currentTime.isBetween(firstStart, lastEnd)) {
+      if (currentAuction.length > 0) {
         // Not Started
         auctionInfo.currentAuction = currentAuction[0];
       } else {
         auctionInfo.currentAuction = null;
       }
+      auctionInfo.nextAuction =
+        nextAuctions.length > 0 ? nextAuctions[0] : null;
       auctionInfo.firstAuction = firstAuction;
       auctionInfo.lastAuction = lastAuction;
     });
@@ -87,6 +92,52 @@ export const auctionReducer: Reducer<IStoreState["auctions"], IAuctionActions> =
           }
         });
         return updateCurrentAuction(newState);
+      }
+      case "FETCHING_BIDS": {
+        return produce(state, (draft) => {
+          draft.userBids.status = "FETCHING";
+        });
+      }
+      case "FETCH_BIDS_SUCCESS": {
+        const { bids } = action.payload;
+        return produce(state, (draft) => {
+          draft.userBids.status = "FETCH_SUCCESS";
+          draft.userBids.data = bids;
+        });
+      }
+      case "FETCH_BIDS_FAIL": {
+        return produce(state, (draft) => {
+          draft.userBids.status = "FETCH_FAILED";
+        });
+      }
+      case "FETCHING_LOANS": {
+        return produce(state, (draft) => {
+          draft.loans.status = "FETCHING";
+        });
+      }
+      case "FETCH_LOANS_SUCCESS": {
+        const { loans } = action.payload;
+        return produce(state, (draft) => {
+          draft.loans.status = "FETCH_SUCCESS";
+          draft.loans.data = loans;
+        });
+      }
+      case "FETCH_LOANS_FAIL": {
+        return produce(state, (draft) => {
+          draft.loans.status = "FETCH_FAILED";
+        });
+      }
+      case "BID_REVOKED": {
+        const { auctionAddress } = action.payload;
+
+        return produce(state, (draft) => {
+          const index = state.userBids.data.findIndex(
+            (item) => item.auctionAddress === auctionAddress
+          );
+          if (index > -1) {
+            draft.userBids.data.splice(index, 1);
+          }
+        });
       }
     }
 

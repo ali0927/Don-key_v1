@@ -178,6 +178,7 @@ export type IAuction = {
     strategyImage: string;
     tokenImage: string;
     minCommission: number;
+    lockedLp: number;
   }[];
 };
 
@@ -185,19 +186,20 @@ export type IAuctionSuccessState = {
   status: "FETCH_SUCCESS" | "FETCH_BALANCE_SUCCESS";
   currentAuction: IAuction | null;
   auctionState: IAuction[];
-
+  nextAuction: IAuction | null;
   firstAuction: IAuction;
   lastAuction: IAuction;
 };
 
 export type ILoan = {
-  status: "unclaimed" | "unpaid" | "paid" | "recovered";
+  status: "unpaid" | "paid" | "recovered";
   lpAddress: string;
   lendedAmount: string;
   borrowedAmount: string;
   commission: string;
   commissionPercent: string;
   totalAmountTobePaid: string;
+  settlementTime: number;
 };
 
 export type IBid = {
@@ -223,7 +225,7 @@ export type IStoreState = {
       status: "INITIAL" | "FETCHING" | "FETCH_FAILED" | "FETCH_SUCCESS";
       data: IBid[];
     };
-    loans?: {
+    loans: {
       status: "INITIAL" | "FETCHING" | "FETCH_SUCCESS" | "FETCH_FAILED";
       data: ILoan[];
     };

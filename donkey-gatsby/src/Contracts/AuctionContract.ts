@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import { getWeb3 } from "don-components";
-import { clone, cloneDeep, memoize } from "lodash";
+import { getERCContract, toWei } from "helpers";
+import { cloneDeep, memoize } from "lodash";
 import Web3 from "web3";
 
 // Purpose of the contract to have only functions or methods
@@ -27,12 +28,22 @@ class AuctionContract {
 
   async fetchDebtRatios(array: number[]) {
     const promises = array.map(async (num) => {
-      this.debtMap[num] = new BigNumber(await this.viewContract.methods
-        .maxLoanAllocation(num)
-        .call()).dividedBy(100).toFixed(0);
+      this.debtMap[num] = new BigNumber(
+        await this.viewContract.methods.maxLoanAllocation(num).call()
+      )
+        .dividedBy(100)
+        .toFixed(0);
     });
     await Promise.all(promises);
     return this.debtMap;
+  }
+
+  async forceRecovery({
+    userAddress,
+  }: {
+    userAddress: string;
+  }): Promise<boolean> {
+    return await this.viewContract.methods.forceRecovery(userAddress).call();
   }
 
   async initialize() {
@@ -51,7 +62,10 @@ class AuctionContract {
     this.connectedToWallet = true;
     const contractAbi = await import("JsonData/AuctionContract.json");
 
-    this.contract = new web3.eth.Contract(cloneDeep(contractAbi.default) as any, this.address);
+    this.contract = new web3.eth.Contract(
+      cloneDeep(contractAbi.default) as any,
+      this.address
+    );
   }
   async disconnectFromWallet() {
     this.contract = null;
@@ -68,15 +82,16 @@ class AuctionContract {
   };
 
   isWhiteListed = async (poolAddress: string) => {
-    return (await this.viewContract.methods
-      .lpToken(poolAddress)
-      .call() !== "0x0000000000000000000000000000000000000000") as boolean;
+    return ((await this.viewContract.methods.lpToken(poolAddress).call()) !==
+      "0x0000000000000000000000000000000000000000") as boolean;
   };
 
   getFloorCommission = async (poolAddress: string) => {
-    return new BigNumber((await this.viewContract.methods
-      .floorCommission(poolAddress)
-      .call())).dividedBy(100).toNumber() as number;
+    return new BigNumber(
+      await this.viewContract.methods.floorCommission(poolAddress).call()
+    )
+      .dividedBy(100)
+      .toNumber() as number;
   };
 
   getLoanTenure = async () => {
@@ -105,10 +120,39 @@ class AuctionContract {
     // call revoke
     await this.contract.methods.revokeBid().send({ from: userAddress });
   };
-  repayLoan = async ({}: { tokenAddress: string; amount: string }) => {
+  borrow = async ({ userAddress }: { userAddress: string }) => {
+    await this.contract.methods.borrow().send({ from: userAddress });
+  };
+
+  getLoanTokenAddress = async () => {
+    return (await this.viewContract.methods.loanToken().call()) as string;
+  };
+
+  getLoanToken = async (web3: Web3) => {
+    return await getERCContract(web3, await this.getLoanTokenAddress());
+  };
+
+  repayLoan = async ({
+    amount,
+    userAddress,
+    web3,
+  }: {
+    web3: Web3;
+    amount: string;
+    userAddress: string;
+  }) => {
     // call repay loan on contract
     // approve amount on underlying token to return
-    alert("Called Repay Loan");
+    const loanToken = await this.getLoanToken(web3);
+    const weiAmount = toWei(amount);
+    const allowance = await loanToken.methods.allowance(
+      userAddress,
+      this.address
+    );
+    if (new BigNumber(allowance).lt(weiAmount)) {
+      await loanToken.methods.approve(weiAmount).send({ from: userAddress });
+    }
+    await this.contract.methods.repay(amount).send({ from: userAddress });
   };
 
   recoverLoan = async ({ userAddress }: { userAddress: string }) => {
@@ -116,12 +160,16 @@ class AuctionContract {
   };
 
   isWinnerAnounced = async () => {
-    return await this.viewContract.methods.isWinnerAnnounced().call() as boolean;
-  }
+    return (await this.viewContract.methods
+      .isWinnerAnnounced()
+      .call()) as boolean;
+  };
 
-  isWinner = async ({userAddress}: {userAddress: string}) => {
-    return await this.viewContract.methods.isWinner(userAddress).call() as boolean;
-  }
+  isWinner = async ({ userAddress }: { userAddress: string }) => {
+    return (await this.viewContract.methods
+      .isWinner(userAddress)
+      .call()) as boolean;
+  };
 
   getUserInfo = async ({ userAddress }: { userAddress: string }) => {
     // fetch userInfo from contract;
@@ -166,7 +214,6 @@ class AuctionContract {
     return 2;
   };
 }
-
 
 export const getAuctionContract = memoize(
   (address: string, chainId: number) => {

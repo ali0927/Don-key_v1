@@ -1,6 +1,7 @@
 import { useTimer } from "hooks";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { updateCurrentAuctionAction } from "store/actions";
 
 export const CountDown = ({ date }: { date: number }) => {
   const { hrs, mins, secs, hasEnded } = useTimer(date);
@@ -9,9 +10,9 @@ export const CountDown = ({ date }: { date: number }) => {
 
   useEffect(() => {
     if(hasEnded){
-      
+      dispatch(updateCurrentAuctionAction());
     }
-  }, [])
+  }, [hasEnded])
 
   return (
     <div className="countdowner">

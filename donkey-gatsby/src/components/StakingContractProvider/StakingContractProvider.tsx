@@ -123,7 +123,11 @@ const useStaking = () => {
       const resp = await api.post("/api/v2/walletdetails", {
         walletAddress: address,
       });
-      const newWeb3 = getWeb3(process.env.NODE_ENV === "development" ? BSC_TESTNET_CHAIN_ID : BINANCE_CHAIN_ID);
+      const newWeb3 = getWeb3(
+        process.env.NODE_ENV === "development"
+          ? BSC_TESTNET_CHAIN_ID
+          : BINANCE_CHAIN_ID
+      );
       let donEquivalent = "0";
       try {
         const contract = new newWeb3.eth.Contract(
@@ -166,8 +170,15 @@ const useStaking = () => {
 
   const fetchState = async () => {
     setLoading(true);
-
-    const userInfo = await viewstakingContract.methods.userInfo(address).call();
+    let userInfo;
+    try {
+      userInfo = await viewstakingContract.methods.userInfo(address).call();
+      console.log(userInfo, "User")
+    } catch (e: any) {
+      console.log("Error UserInfo");
+      throw new Error(e);
+     
+    }
 
     try {
       const minDuration = await viewstakingContract.methods

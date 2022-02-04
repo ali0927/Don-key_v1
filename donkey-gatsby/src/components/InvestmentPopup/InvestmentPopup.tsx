@@ -217,8 +217,6 @@ export const InvestmentPopup = ({
   gasLimit,
   onClose,
   onSuccess,
-
-  minAmountForInsurance
   
 }: {
   poolAddress: string;
