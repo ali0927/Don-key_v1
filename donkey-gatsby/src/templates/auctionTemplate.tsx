@@ -71,6 +71,8 @@ export default function Auction() {
     }
   };
 
+  const isPilotOver = !currentAuction && !nextAuction;
+
   return (
     <>
       <NavBar />
@@ -79,10 +81,24 @@ export default function Auction() {
           <div className="boxed">
             <div className="width-50 details_column">
               <h5>catch your luck by the tail</h5>
-              <h3>next auction finishes in</h3>
+              {isPilotOver ? (
+                <h3>PILOT DONE!</h3>
+              ) : (
+                <h3>next auction finishes in</h3>
+              )}
               <p>
-                Be part of Don-key's auction to win loan and some more 2-3
-                sentences explanation text to describe purpose of the page.
+                {isPilotOver ? (
+                  <>
+                    Thank you for Participating in the wallet feel free to leave
+                    your remarks here:
+                  </>
+                ) : (
+                  <>
+                    {" "}
+                    Be part of Don-key's auction to win loan and some more 2-3
+                    sentences explanation text to describe purpose of the page.
+                  </>
+                )}
               </p>
               {renderTimer()}
             </div>

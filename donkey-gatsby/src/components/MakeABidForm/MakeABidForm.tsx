@@ -1,16 +1,19 @@
+
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
+import { BugReportButton, Label, TextArea, Input } from "components/BugReportForm";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
-import { captureException, formatNum, toWei } from "helpers";
+import { captureException, formatNum, isOneOf, toWei, validateEmail } from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
-import { IAuction, IStoreState } from "interfaces";
+import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBidsAndLoansThunk } from "store/actions";
+import { strapi } from "strapi";
 
 const Dropdown: React.FC = (props) => {
   const [condition, setCondition] = useState(false);
@@ -40,10 +43,7 @@ const calcCommisionPercent = (
   borrowAmount: BigNumber,
   commission: BigNumber
 ) => {
-  return new BigNumber(commission)
-    .dividedBy(borrowAmount)
-    .multipliedBy(100)
-    
+  return new BigNumber(commission).dividedBy(borrowAmount).multipliedBy(100);
 };
 
 const NewInput = (props: {
@@ -56,7 +56,7 @@ const NewInput = (props: {
   const lastValidValueRef = useRef(value);
   const inputRef = useRef<HTMLInputElement>(null);
   const isValidValue = props.validator(value);
-  
+
   if (isValidValue) {
     lastValidValueRef.current = value;
   }
@@ -204,7 +204,7 @@ const AuctionForm = ({
             .dividedBy(100)
             .toString()
         ),
-        comission: (commissionPer).multipliedBy(100).toFixed(0),
+        comission: commissionPer.multipliedBy(100).toFixed(0),
         lpToken: selectedLp.lpAddress,
         userAddress: address,
       });
@@ -392,9 +392,7 @@ const AuctionForm = ({
             <div className="right">
               <div className="amount">
                 <div className="icon"></div>
-                <div className="amount">
-                  {commissionPer.toFixed(2)}%
-                </div>
+                <div className="amount">{commissionPer.toFixed(2)}%</div>
               </div>
             </div>
           </div>
@@ -433,33 +431,146 @@ const AuctionForm = ({
   );
 };
 
-export const MakeABidForm = () => {
-  const currentAuctionState = useSelector(
-    (state: IStoreState) => state.auctions.auctionInfo
-  );
+
+
+const usePilotSuggestionApi = () => {
+  const createSuggestion = async (args:{name: string, email:string, remarks: string}) => {
+    const resp = await strapi.post("/pilot-suggestions",args);
+    return resp.data;
+  }
+  return {createSuggestion}
+}
+
+
+const validate = ({name, email, remarks}: {name: string; email: string; remarks: string}) => {
+  if(!name){
+    return {valid: false, message: "Please Enter a name"};
+  }
+  if(name.length < 3){
+    return {valid: false, message: "Please Enter a valid name"};
+  }
+  if(!email){
+    return {valid: false, message: "Please enter an email"};
+  }
+  if(!validateEmail(email)){
+    return {valid: false, message: "Please enter a valid email"}
+  }
+  if(!remarks){
+    return {valid: false, message: "Please enter a remark"};
+  }
+  if(remarks.length < 10){
+    return {valid: false, message: "Remarks should have minimum 10 characters"};
+  }
+
+  return {valid: true};
+
+}
+
+const AuctionSuggestionForm = () => {
+  const [formState, setState] = useState({ name: "", email: "", remarks: "" });
+  const [isCreating, setisCreating] = useState(false);
+  const {showSuccess, showFailure} = useTransactionNotification();
+
+  const {createSuggestion} = usePilotSuggestionApi();
+
+  const handleCreate = async () => {
+    setisCreating(true);
+    try {
+      const validationResult = validate(formState);
+      if(!validationResult.valid){
+        showFailure(validationResult.message);
+        return;
+      }
+      await createSuggestion(formState);
+      showSuccess("Thank you for your Suggestion.");
+      setState({name:"", email: "", remarks: ""});
+    }catch(e){
+      showFailure("Try Again Later");
+    }finally {
+      setisCreating(false);
+    }
+  }
+
+
+  const handleChange =
+    <K extends keyof typeof formState>(key: K) =>
+    (e: { target: { value: string | File } }) => {
+      const value = e.target.value;
+      setState((old) => ({ ...old, [key]: value }));
+    };
 
   return (
-    <div className="make_a_bid">
-      {currentAuctionState.status !== "FETCH_SUCCESS" &&
-      currentAuctionState.status !== "FETCH_BALANCE_SUCCESS" ? (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 500,
-          }}
-        >
-          <Spinner animation="border" />
-        </div>
-      ) : currentAuctionState.currentAuction ? (
-        <AuctionForm
-          status={currentAuctionState.status}
-          auction={currentAuctionState.currentAuction}
+    <>
+      <Label>
+        Name
+        <Input
+          value={formState.name}
+          onChange={handleChange("name")}
+          placeholder="Livia Siphron"
         />
-      ) : (
-        "Auction Hasnt Started"
-      )}
-    </div>
+      </Label>
+      <Label>
+        Email
+        <Input
+          value={formState.email}
+          onChange={handleChange("email")}
+          placeholder="Your Email"
+        />
+      </Label>
+      <Label>
+        Your Remarks
+        <br />
+        <TextArea
+          rows={5}
+          value={formState.remarks}
+          onChange={handleChange("remarks")}
+          placeholder=""
+        ></TextArea>
+      </Label>
+      <BugReportButton onClick={handleCreate}>
+        {isCreating ? <Spinner animation="border" size="sm" /> : "Send My suggestion"}
+      </BugReportButton>
+    </>
   );
+};
+
+export const MakeABidForm = () => {
+  const auctions = useSelector(
+    (state: IStoreState) => state.auctions.auctionInfo
+  );
+  const currentAuction =
+    (auctions as IAuctionSuccessState).currentAuction || null;
+  const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
+
+  const isPilotOver = !currentAuction && !nextAuction;
+
+  const renderForm = () => {
+    if (isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"])) {
+      if (currentAuction) {
+        return (
+          <AuctionForm status={auctions.status} auction={currentAuction} />
+        );
+      }
+      if (!currentAuction && nextAuction) {
+        return "Wait For Next Auction To Start";
+      }
+      if (isPilotOver) {
+        return <AuctionSuggestionForm />
+      }
+    }
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: 500,
+        }}
+      >
+        <Spinner animation="border" />
+      </div>
+    );
+  };
+
+  return <div className={clsx("make_a_bid ", {"bg-white pb-5": isPilotOver})}>{renderForm()}</div>;
 };

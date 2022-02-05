@@ -120,8 +120,10 @@
     color: #fff;
     box-shadow: 0 0 44px -2px #00000059;
     margin-bottom: -102px;
-    min-height: 750px;
+    min-height: 400px;
 }
+
+
 
 @media (max-width: 850px) {
     .make_a_bid {
