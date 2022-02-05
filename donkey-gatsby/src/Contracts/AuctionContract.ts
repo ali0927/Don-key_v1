@@ -135,6 +135,7 @@ class AuctionContract {
   };
 
   getLoanTokenAddress = async () => {
+    console.log(this.address,)
     return (await this.viewContract.methods.loanToken().call()) as string;
   };
 
@@ -158,11 +159,11 @@ class AuctionContract {
     const allowance = await loanToken.methods.allowance(
       userAddress,
       this.address
-    );
+    ).call();
     if (new BigNumber(allowance).lt(weiAmount)) {
-      await loanToken.methods.approve(weiAmount).send({ from: userAddress });
+      await loanToken.methods.approve(this.address,weiAmount).send({ from: userAddress });
     }
-    await this.contract.methods.repay(amount).send({ from: userAddress });
+    await this.contract.methods.repay(weiAmount).send({ from: userAddress });
   };
 
   recoverLoan = async ({ userAddress }: { userAddress: string }) => {

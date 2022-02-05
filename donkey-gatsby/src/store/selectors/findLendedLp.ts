@@ -3,9 +3,10 @@ import { IAuctionSuccessState, IStoreState } from "interfaces";
 import memoizeOne from "memoize-one";
 
 export const createFindLendedLp = () => {
-  return (
+  return memoizeOne(
     (auctions: IStoreState["auctions"]["auctionInfo"], lpAddress: string) => {
-      console.log("SS",auctions,isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"]))
+      // console.log("SS",auctions,isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"]))
+      // console.trace()
       if (
         isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"])
       ) {

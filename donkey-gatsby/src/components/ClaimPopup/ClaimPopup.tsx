@@ -6,8 +6,7 @@ import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { claimLoanThunk } from "store/actions";
-import { selectAuction } from "store/selectors";
-import { bidSelector } from "store/selectors/bidSelector";
+import { bidSelector } from "store/selectors";
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.button`
@@ -39,9 +38,9 @@ const StyledButton = styled.button`
 export const ClaimPopup = ({
   open,
   onClose,
-  auctionAddress,
+  lpAddress,
 }: {
-  auctionAddress: string;
+  lpAddress: string;
   open: boolean;
   onClose: () => void;
 }) => {
@@ -49,14 +48,14 @@ export const ClaimPopup = ({
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
   const bid = useSelector((state: IStoreState) =>
-    bidSelector(state.auctions.userBids, auctionAddress)
+    bidSelector(state.auctions.userBids, lpAddress)
   );
 
   const claimLoan = async () => {
     setIsLoading(true);
     dispatch(
       claimLoanThunk({
-        auctionAddress,
+        auctionAddress: bid?.auctionAddress as string,
         web3: getConnectedWeb3(),
         userAddress: address,
         onDone: () => {

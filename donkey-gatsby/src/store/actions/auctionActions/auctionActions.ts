@@ -4,6 +4,7 @@ import BigNumber from "bignumber.js";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import {
+  captureException,
   getAmount,
   getInvestedAmount,
   getPoolContract,
@@ -23,7 +24,12 @@ import {
   ISupportedLP,
 } from "interfaces";
 import { gt } from "lodash";
-import { selectAuction } from "store/selectors";
+import {
+  bidSelector,
+  findLendedLp,
+  loanSelector,
+  selectAuction,
+} from "store/selectors";
 
 import { action } from "typesafe-actions";
 import Web3 from "web3";
@@ -111,7 +117,10 @@ export const fetchAuctionsThunk =
       };
 
       try {
-        const oldState = selectAuction(getState().auctions.auctionInfo, contract.address);
+        const oldState = selectAuction(
+          getState().auctions.auctionInfo,
+          contract.address
+        );
         if (oldState && oldState.initialized) {
           return oldState;
         }
@@ -244,7 +253,6 @@ const getLoanStatus = (
   loanSettled: boolean,
   forceRecovered: boolean
 ): ILoan["status"] => {
-
   if (loanSettled && forceRecovered) {
     return "recovered";
   }
@@ -302,7 +310,9 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
           userAddress,
         });
 
-        const repaymentAmount = await auctionContract.estimatedRepaymentAmount({userAddress});
+        const repaymentAmount = await auctionContract.estimatedRepaymentAmount({
+          userAddress,
+        });
 
         const loan: ILoan = {
           borrowedAmount: toEther(info.borrowedAmount),
@@ -367,6 +377,51 @@ export const claimLoanThunk =
       dispatch(fetchLoansSuccess(loans));
       onDone && onDone();
     } catch (e) {
+      captureException(e, "Error Claim Loan");
+      onError && onError();
+    }
+  };
+
+export const payLoanThunk =
+  ({
+    web3,
+    lpAddress,
+    userAddress,
+    onDone,
+    onError,
+  }: {
+    web3: Web3;
+    lpAddress: string;
+    userAddress: string;
+    onDone?: () => void;
+    onError?: () => void;
+  }): AppThunk =>
+  async (dispatch, getState) => {
+    try {
+      const loan = loanSelector(getState().auctions.loans, lpAddress);
+      const bid = bidSelector(getState().auctions.userBids, lpAddress);
+      console.log(bid, "bid");
+      const auctionContract = getAuctionContract(
+        bid?.auctionAddress as string,
+        BSC_TESTNET_CHAIN_ID
+      );
+      if (!auctionContract.connectedToWallet) {
+        await auctionContract.connectToWallet(web3);
+      }
+      console.log("Reached");
+      await auctionContract.repayLoan({
+        userAddress,
+        web3,
+
+        amount: loan?.totalAmountTobePaid as string,
+      });
+
+      const { bids, loans } = await fetchBidsAndLoans(getState(), userAddress);
+      dispatch(fetchBidsSuccess(bids));
+      dispatch(fetchLoansSuccess(loans));
+      onDone && onDone();
+    } catch (e) {
+      captureException(e, "Error Pay Loan");
       onError && onError();
     }
   };

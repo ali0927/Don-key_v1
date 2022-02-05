@@ -1,9 +1,13 @@
 import { DonCommonmodal } from "components/DonModal";
+import { useWeb3Context } from "don-components";
 import { formatNum } from "helpers";
 import { useTimer } from "hooks";
 import { ILoan, IStoreState } from "interfaces";
-import React from "react";
-import { useSelector } from "react-redux";
+import memoizeOne from "memoize-one";
+import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { payLoanThunk } from "store/actions";
 import { findLendedLp } from "store/selectors";
 import { loanSelector } from "store/selectors/loanSelector";
 import styled, { css } from "styled-components";
@@ -111,6 +115,11 @@ const Dots = styled.div`
   }
 `;
 
+const lpSelector = (lpAddress: string) =>
+  memoizeOne((state: IStoreState) =>
+    findLendedLp(state.auctions.auctionInfo, lpAddress)
+  );
+
 export const PayPopup = ({
   open,
   onClose,
@@ -121,9 +130,30 @@ export const PayPopup = ({
   onClose: () => void;
 }) => {
   const { hrs, days, mins } = useTimer(loan.settlementTime);
-  const lpToken = useSelector((state: IStoreState) =>
-    findLendedLp(state.auctions.auctionInfo, loan.lpAddress)
-  );
+  const lpToken = useSelector(lpSelector(loan.lpAddress));
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  const dispatch = useDispatch();
+  const { address, getConnectedWeb3 } = useWeb3Context();
+
+  const claimLoan = async () => {
+    setIsLoading(true);
+    dispatch(
+      payLoanThunk({
+        lpAddress: loan.lpAddress,
+        web3: getConnectedWeb3(),
+        userAddress: address,
+        onDone: () => {
+          setIsLoading(false);
+        },
+        onError: () => {
+          setIsLoading(false);
+        },
+      })
+    );
+  };
+
   return (
     <DonCommonmodal
       className="auctionPop"
@@ -207,10 +237,18 @@ export const PayPopup = ({
         style={{ paddingTop: "16px", paddingBottom: "18px" }}
       >
         <div className="pr-2 w-50">
-          <StyledButton>Pay &amp; Unstake</StyledButton>
+          <StyledButton disabled={isLoading} onClick={claimLoan}>
+            {isLoading ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <>Pay &amp; Unstake</>
+            )}
+          </StyledButton>
         </div>
         <div className="pl-2 w-50">
-          <StyledButton variant="white">Close</StyledButton>
+          <StyledButton variant="white" onClick={onClose}>
+            Close
+          </StyledButton>
         </div>
       </div>
       <HorizontalRuleWithText text="Last day to Pay" />
