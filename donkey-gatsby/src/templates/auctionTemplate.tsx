@@ -12,6 +12,7 @@ import {
   fetchAuctionsThunk,
   fetchBalancesThunk,
   fetchBidsAndLoansThunk,
+  updateCurrentAuctionAction,
 } from "store/actions";
 import { IAuctionSuccessState, IStoreState } from "interfaces";
 import { useWeb3Context } from "don-components";
@@ -53,12 +54,20 @@ export default function Auction() {
     "FETCH_BALANCE_SUCCESS",
   ]);
 
+  const updateCurrentAuction = () => {
+    dispatch(updateCurrentAuctionAction());
+  };
+
   const renderTimer = () => {
     if (isSuccessState && currentAuction) {
-      return <CountDown date={currentAuction.endTime} />;
+      return (
+        <CountDown onEnd={updateCurrentAuction} date={currentAuction.endTime} />
+      );
     }
     if (isSuccessState && !currentAuction && nextAuction) {
-      return <CountDown date={nextAuction.startTime} />;
+      return (
+        <CountDown onEnd={updateCurrentAuction} date={nextAuction.startTime} />
+      );
     }
   };
 

@@ -1,5 +1,13 @@
 import { DonCommonmodal } from "components/DonModal";
-import React from "react";
+import { useWeb3Context } from "don-components";
+import { IStoreState } from "interfaces";
+import moment from "moment";
+import React, { useState } from "react";
+import { Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { claimLoanThunk } from "store/actions";
+import { selectAuction } from "store/selectors";
+import { bidSelector } from "store/selectors/bidSelector";
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.button`
@@ -12,9 +20,9 @@ const StyledButton = styled.button`
   width: 100%;
   height: 39px;
   &:hover {
-    background:#FFF037;
-    color:black;
-    border-color:black;
+    background: #fff037;
+    color: black;
+    border-color: black;
   }
   ${(props: { variant?: "white" | "black" }) => {
     return (
@@ -31,10 +39,35 @@ const StyledButton = styled.button`
 export const ClaimPopup = ({
   open,
   onClose,
+  auctionAddress,
 }: {
+  auctionAddress: string;
   open: boolean;
   onClose: () => void;
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { address, getConnectedWeb3 } = useWeb3Context();
+  const bid = useSelector((state: IStoreState) =>
+    bidSelector(state.auctions.userBids, auctionAddress)
+  );
+
+  const claimLoan = async () => {
+    setIsLoading(true);
+    dispatch(
+      claimLoanThunk({
+        auctionAddress,
+        web3: getConnectedWeb3(),
+        userAddress: address,
+        onDone: () => {
+          setIsLoading(false);
+        },
+        onError: () => {
+          setIsLoading(false);
+        },
+      })
+    );
+  };
   return (
     <DonCommonmodal
       className="auctionPop"
@@ -52,7 +85,7 @@ export const ClaimPopup = ({
               alignItems: "center",
               justifyContent: "center",
               marginTop: "-21px",
-              marginBottom: '20px'
+              marginBottom: "20px",
             }}
           >
             <svg
@@ -72,14 +105,27 @@ export const ClaimPopup = ({
       size="sm"
       isOpen={open}
     >
-      <h3 className="mb-3" style={{fontWeight: 600,
-fontSize: '25px',
-paddingBottom: '7px'}}>It’s a win!</h3>
-      <p style={{marginBottom: '23px'}}>Congratulations. Your bid from 24/02/2021 has been won.</p>{" "}
-      <p style={{fontWeight: 100, marginBottom: '48px'}}>You can now claim your loan. Click here to see the loan details</p>
+      <h3
+        className="mb-3"
+        style={{ fontWeight: 600, fontSize: "25px", paddingBottom: "7px" }}
+      >
+        It's a win!
+      </h3>
+      <p style={{ marginBottom: "23px" }}>
+        Congratulations. Your bid from{" "}
+        {bid
+          ? moment.unix(parseInt(bid.participationTime)).format("D/MM/YYYY")
+          : ""}{" "}
+        has been won.
+      </p>{" "}
+      <p style={{ fontWeight: 100, marginBottom: "48px" }}>
+        You can now claim your loan. Click here to see the loan details
+      </p>
       <div className="d-flex my-4">
         <div className="pr-2 w-50">
-          <StyledButton>CLAIM</StyledButton>
+          <StyledButton disabled={isLoading} onClick={claimLoan}>
+            {isLoading ? <Spinner animation="border" size="sm" /> : "CLAIM"}
+          </StyledButton>
         </div>
         <div className="pl-2 w-50">
           <StyledButton variant="white">Later</StyledButton>

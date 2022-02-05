@@ -1,19 +1,19 @@
-import { useTimer } from "hooks";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { updateCurrentAuctionAction } from "store/actions";
+import { useIsomorphicEffect, useTimer } from "hooks";
 
-export const CountDown = ({ date }: { date: number }) => {
+export const CountDown = ({
+  date,
+  onEnd,
+}: {
+  date: number;
+  onEnd?: () => void;
+}) => {
   const { hrs, mins, secs, hasEnded } = useTimer(date);
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if(hasEnded){
-      dispatch(updateCurrentAuctionAction());
+  useIsomorphicEffect(() => {
+    if (hasEnded) {
+      onEnd && onEnd();
     }
-  }, [hasEnded])
-
+  }, [hasEnded]);
   return (
     <div className="countdowner">
       <div className="hours">

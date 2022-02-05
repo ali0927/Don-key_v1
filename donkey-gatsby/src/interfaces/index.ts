@@ -159,6 +159,19 @@ export type CallBackorVal<T> = T | ((val: T) => T);
 
 export type StakeType = "binance" | "ethereum" | "binancenew" | "ethereumnew";
 
+export type ISupportedLP = {
+  lpAddress: string;
+  symbol: string;
+  withdrawAmount?: string;
+  balance?: string;
+  price: string;
+  strategyName: string;
+  strategyImage: string;
+  tokenImage: string;
+  minCommission: number;
+  lockedLp?: string;
+}
+
 export type IAuction = {
   address: string;
   startTime: number;
@@ -168,18 +181,7 @@ export type IAuction = {
   maxDebtMap: {
     [TierNumber: number]: string;
   };
-  supportedLps: {
-    lpAddress: string;
-    symbol: string;
-    withdrawAmount?: string;
-    balance?: string;
-    price: string;
-    strategyName: string;
-    strategyImage: string;
-    tokenImage: string;
-    minCommission: number;
-    lockedLp: number;
-  }[];
+  supportedLps: ISupportedLP[];
 };
 
 export type IAuctionSuccessState = {
@@ -210,6 +212,7 @@ export type IBid = {
   // debtRatio: string;
   commission: string;
   commissionPercent: string;
+  participationTime: string;
   status: "rejected" | "pending" | "won" | "claimed";
 };
 

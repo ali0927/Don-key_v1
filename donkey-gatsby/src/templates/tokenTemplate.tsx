@@ -77,7 +77,7 @@ export const FarmerBioShort = ({
           tokenObj.boostApy && new BigNumber(item.apy).plus(40).toFixed() + "%"
         }
         disabled={!!item.farmer.hideInvestButton}
-        impermanentLoss={item.farmer.impermanentLoss}
+        impermanentLoss={!!item.farmer.impermanentLoss}
         totalValue={
           <>
             {" "}

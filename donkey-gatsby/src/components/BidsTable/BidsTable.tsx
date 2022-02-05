@@ -35,31 +35,18 @@ import { createFindLendedLp } from "store/selectors/findLendedLp";
 // };
 
 const ClaimButton = ({ auctionAddress }: { auctionAddress: string }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch();
-  const { address, getConnectedWeb3 } = useWeb3Context();
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const claimLoan = async (auctionAddress: string) => {
-    setIsLoading(true);
-    dispatch(
-      claimLoanThunk({
-        auctionAddress,
-        web3: getConnectedWeb3(),
-        userAddress: address,
-        onDone: () => {
-          setIsLoading(false);
-        },
-        onError: () => {
-          setIsLoading(false);
-        },
-      })
-    );
-  };
   return (
     <td>
-      <button disabled={isLoading} onClick={() => claimLoan(auctionAddress)}>
-        {isLoading ? <Spinner size="sm" animation="border" /> : "Claim"}
-      </button>
+      {isPopupOpen && (
+        <ClaimPopup
+          auctionAddress={auctionAddress}
+          open={isPopupOpen}
+          onClose={() => setIsPopupOpen(false)}
+        />
+      )}
+      <button onClick={() => setIsPopupOpen(true)}>Claim</button>
     </td>
   );
 };
@@ -85,6 +72,7 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
       })
     );
   };
+
   return (
     <td>
       <button disabled={isLoading} onClick={() => claimLoan(auctionAddress)}>
@@ -107,7 +95,7 @@ export const FindStrategy = ({
     return createFindLendedLp();
   }, []);
 
-  const lptoken = useSelector((state: IStoreState) => findLp(state, address));
+  const lptoken = useSelector((state: IStoreState) => findLp(state.auctions.auctionInfo, address));
 
   if (lptoken) {
     return children({ lptoken });
@@ -116,7 +104,6 @@ export const FindStrategy = ({
 };
 
 export const BidsTable = () => {
-  const [openClaim, setOpenClaim] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
 
   const bids = useSelector((state: IStoreState) => state.auctions.userBids);
@@ -130,12 +117,6 @@ export const BidsTable = () => {
         <div className="boxed">
           <h3>Your Bids</h3>
           <table>
-            {openClaim && (
-              <ClaimPopup
-                open={openClaim}
-                onClose={() => setOpenClaim(false)}
-              />
-            )}
             {openDetails && (
               <DetailsPopup
                 open={openDetails}
@@ -158,7 +139,7 @@ export const BidsTable = () => {
             <tbody>
               {bids.data.map((bid, index) => {
                 return (
-                  <TableRow>
+                  <TableRow key={bid.lpAddress}>
                     <td>{index + 1}</td>
                     <td
                       data-title="status"
@@ -168,7 +149,7 @@ export const BidsTable = () => {
                         rejected: bid.status === "rejected",
                       })}
                     >
-                      {isOneOf(bid.status, ["claimed", "won"]) && "Succesful"}
+                      {isOneOf(bid.status, ["claimed", "won"]) && "Successful"}
                       {bid.status === "rejected" && "Rejected"}
                       {bid.status === "pending" && "Pending"}
                     </td>

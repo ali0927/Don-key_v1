@@ -38,6 +38,16 @@ class AuctionContract {
     return this.debtMap;
   }
 
+  estimatedRepaymentAmount = async ({
+    userAddress,
+  }: {
+    userAddress: string;
+  }) => {
+    return await this.viewContract.methods
+      .estimatedRepaymentAmount(userAddress)
+      .call();
+  };
+
   async forceRecovery({
     userAddress,
   }: {
@@ -95,7 +105,7 @@ class AuctionContract {
   };
 
   getLoanTenure = async () => {
-    return (await this.viewContract.methods.loanTenure.call()) as number;
+    return (await this.viewContract.methods.loanTenure().call()) as number;
   };
 
   bid = async ({

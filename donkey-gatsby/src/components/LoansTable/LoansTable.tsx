@@ -3,12 +3,26 @@ import { CountDown } from "components/CountDown";
 import { PayPopup } from "components/PayPopup";
 import { TableRow } from "components/TableRow";
 import { formatNum } from "helpers";
-import { IStoreState } from "interfaces";
+import { ILoan, IStoreState } from "interfaces";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 
-export const LoansTable = () => {
+const LoanPayButton = ({ loan }: { loan: ILoan }) => {
   const [isPayOpen, setIsPayOpen] = useState(false);
+
+  return (
+    <td>
+      {isPayOpen && (
+        <PayPopup loan={loan} open onClose={() => setIsPayOpen(false)} />
+      )}
+      <button onClick={() => setIsPayOpen(true)} className="claim">
+        Pay
+      </button>
+    </td>
+  );
+};
+
+export const LoansTable = () => {
   const loans = useSelector((state: IStoreState) => state.auctions.loans);
 
   if (loans.status === "FETCH_SUCCESS" && loans.data.length > 0) {
@@ -17,7 +31,6 @@ export const LoansTable = () => {
         className="strip table_strip your_loans"
         style={{ paddingTop: "54px", paddingBottom: "104px" }}
       >
-        {isPayOpen && <PayPopup open onClose={() => setIsPayOpen(false)} />}
         <div className="boxed">
           <h3>Your Loans</h3>
           <table>
@@ -62,14 +75,17 @@ export const LoansTable = () => {
                         );
                       }}
                     </FindStrategy>
-                    <td>
-                      <button
-                        onClick={() => setIsPayOpen(true)}
-                        className="claim"
-                      >
-                        Pay
-                      </button>
-                    </td>
+                    {item.status === "unpaid" && <LoanPayButton loan={item} />}
+                    {item.status === "paid" && (
+                      <td>
+                        <span className="closed">closed</span>
+                      </td>
+                    )}
+                    {item.status === "recovered" && (
+                      <td>
+                        <span className="closed">closed</span>
+                      </td>
+                    )}
                   </TableRow>
                 );
               })}

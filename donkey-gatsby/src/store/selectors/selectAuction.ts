@@ -3,14 +3,17 @@ import { IAuctionSuccessState, IStoreState } from "interfaces";
 import memoizeOne from "memoize-one";
 
 export const createSelectAuction = () => {
-  return memoizeOne((state: IStoreState, address: string) => {
-    const auctions = state.auctions.auctionInfo;
-    if (isOneOf(auctions.status, ["FETCH_BALANCE_SUCCESS", "FETCH_SUCCESS"])) {
-      const auctionList = (auctions as IAuctionSuccessState).auctionState;
-      return auctionList.find((item) => item.address === address);
+  return memoizeOne(
+    (auctions: IStoreState["auctions"]["auctionInfo"], address: string) => {
+      if (
+        isOneOf(auctions.status, ["FETCH_BALANCE_SUCCESS", "FETCH_SUCCESS"])
+      ) {
+        const auctionList = (auctions as IAuctionSuccessState).auctionState;
+        return auctionList.find((item) => item.address === address);
+      }
+      return null;
     }
-    return null;
-  });
+  );
 };
 
 export const selectAuction = createSelectAuction();

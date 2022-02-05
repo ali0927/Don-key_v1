@@ -1,25 +1,31 @@
 import { isOneOf } from "helpers";
-import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
+import { IAuctionSuccessState, IStoreState } from "interfaces";
 import memoizeOne from "memoize-one";
 
 export const createFindLendedLp = () => {
-  return memoizeOne((state: IStoreState, lpAddress: string) => {
-    const auctions = state.auctions.auctionInfo;
-    let lpFound: IAuction["supportedLps"][number] | null = null;
-    if (isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"])) {
-      const auctionList = (auctions as IAuctionSuccessState).auctionState;
-      auctionList.find(
-        (item) =>
-          !!item.supportedLps.find((lp) => {
-            if (lp.lpAddress === lpAddress) {
-              lpFound = lp;
-              return true;
+  return (
+    (auctions: IStoreState["auctions"]["auctionInfo"], lpAddress: string) => {
+      console.log("SS",auctions,isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"]))
+      if (
+        isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"])
+      ) {
+        const auctionList = (auctions as IAuctionSuccessState).auctionState;
+        for (let i = 0; i < auctionList.length; i++) {
+          const auction = auctionList[i];
+          const supportedLp = auction.supportedLps.find(
+            (lp) => {
+              console.log(lp.lpAddress, lpAddress, "SS");
+              return lp.lpAddress === lpAddress
             }
-          })
-      );
+          );
+          if (supportedLp) {
+            return supportedLp;
+          }
+        }
+      }
+      return null;
     }
-    return lpFound;
-  });
+  );
 };
 
 export const findLendedLp = createFindLendedLp();

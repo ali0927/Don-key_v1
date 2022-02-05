@@ -5,9 +5,11 @@ import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import {
   getAmount,
+  getInvestedAmount,
   getPoolContract,
   getTokenPrice,
   getTokenSymbol,
+  isOneOf,
   toEther,
 } from "helpers";
 import produce from "immer";
@@ -18,6 +20,7 @@ import {
   IFarmerInter,
   ILoan,
   IStoreState,
+  ISupportedLP,
 } from "interfaces";
 import { gt } from "lodash";
 import { selectAuction } from "store/selectors";
@@ -81,9 +84,12 @@ export const fetchAuctionsThunk =
       "0x51A41d4D99269747F89fB4d11454c9Fa43F4ff5e",
       "0x992B1Df075BfE49fC9f20c2eCD94d35030b2dEB0",
       "0xd16fC092449F78C5d38F81685039c97c2B1AfEde",
+      "0xa13711003f637c896A0E533d09Eea4B0f727C197",
+      "0x300901FDa9aca9784aE63039ECaC187FfA42871B",
+      "0xB99bc4D37F55db85024f0c1F986507063F9BB11A",
+      "0x55E7a5FA41136878111BeEBd7BaBA6fB1CD9D836",
     ];
 
-    
     // To do Fetch All Pools addresses
     const result = await client.query({ query: ALL_FARMERS_QUERY });
     const farmers: IFarmerInter[] = result.data.farmers;
@@ -105,7 +111,7 @@ export const fetchAuctionsThunk =
       };
 
       try {
-        const oldState = selectAuction(getState(), contract.address);
+        const oldState = selectAuction(getState().auctions.auctionInfo, contract.address);
         if (oldState && oldState.initialized) {
           return oldState;
         }
@@ -126,7 +132,7 @@ export const fetchAuctionsThunk =
             }
           })
         );
-        console.log(filterFarmers, "FilterFarmers");
+
         if (filterFarmers.length > 0) {
           auctionState.supportedLps = await Promise.all(
             filterFarmers.map(async (farmer) => {
@@ -135,7 +141,7 @@ export const fetchAuctionsThunk =
               const minCommission = await contract.getFloorCommission(
                 farmer.poolAddress
               );
-              return {
+              const supportedLp: ISupportedLP = {
                 lpAddress: farmer.poolAddress,
                 price,
                 symbol,
@@ -143,7 +149,8 @@ export const fetchAuctionsThunk =
                 strategyName: farmer.strategies[0].name,
                 tokenImage: farmer.strategies[0].token.image.url,
                 strategyImage: farmer.farmerImage.url,
-              } as typeof auctionState.supportedLps[0];
+              };
+              return supportedLp;
             })
           );
         }
@@ -175,18 +182,22 @@ export const fetchBalancesThunk =
       fetchedAuctions.forEach((item, index) => {
         const list = item.supportedLps.map(async (lp, lindex) => {
           const pool = await getPoolContract(web3, lp.lpAddress, 4);
-          const withdrawAmount = await getAmount(
-            web3,
-            lp.lpAddress,
-            userAddress,
-            4,
-            100
-          );
+          const withdrawAmount = await pool.methods
+            .getUserInvestedAmount(userAddress)
+            .call();
           const userBalance = await pool.methods.balanceOf(userAddress).call();
-
+          const lockedLp = await pool.methods
+            .lockedLPAmount(userAddress)
+            .call();
           fetchedAuctions = produce(fetchedAuctions, (draft) => {
             draft[index].supportedLps[lindex].balance = toEther(userBalance);
-            draft[index].supportedLps[lindex].withdrawAmount = withdrawAmount;
+            draft[index].supportedLps[lindex].withdrawAmount = toEther(
+              new BigNumber(1)
+                .minus(new BigNumber(lockedLp).dividedBy(userBalance))
+                .multipliedBy(withdrawAmount)
+                .toFixed(0)
+            );
+            draft[index].supportedLps[lindex].lockedLp = toEther(lockedLp);
           });
         });
         promises.push(...list);
@@ -233,10 +244,11 @@ const getLoanStatus = (
   loanSettled: boolean,
   forceRecovered: boolean
 ): ILoan["status"] => {
+
   if (loanSettled && forceRecovered) {
     return "recovered";
   }
-  return loanSettled ? "unpaid" : "paid";
+  return !loanSettled ? "unpaid" : "paid";
 };
 
 const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
@@ -258,6 +270,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
         commissionPercent: "0",
         lendedAmount: "0",
         lpAddress: "",
+        participationTime: "0",
       };
       const auctionContract = getAuctionContract(
         item.address,
@@ -267,9 +280,11 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
       const info = await auctionContract.getUserInfo({ userAddress });
       const anounced = await auctionContract.isWinnerAnounced();
       const isWinner = await auctionContract.isWinner({ userAddress });
-      const hasClaimed = info.borrowedTime !== 0;
+      const hasClaimed = !new BigNumber(info.borrowedTime).isEqualTo(0);
       bid.status = getBidStatus(anounced, isWinner, hasClaimed);
-      bid.borrowedAmount = toEther(info.estimatedBorrowedAmount);
+      bid.borrowedAmount = isOneOf(bid.status, ["claimed", "won"])
+        ? toEther(info.borrowedAmount)
+        : toEther(info.estimatedBorrowedAmount);
       const commissionBn = new BigNumber(info.commissionInPer).dividedBy(100);
       bid.commission = commissionBn
         .dividedBy(100)
@@ -278,6 +293,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
       bid.commissionPercent = commissionBn.toFixed(2);
       bid.lendedAmount = toEther(info.lendedAmount);
       bid.lpAddress = info.lptoken;
+      bid.participationTime = info.participationTime;
       if (new BigNumber(info.lendedAmount).gt(0)) {
         bids.push(bid);
       }
@@ -286,6 +302,8 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
           userAddress,
         });
 
+        const repaymentAmount = await auctionContract.estimatedRepaymentAmount({userAddress});
+
         const loan: ILoan = {
           borrowedAmount: toEther(info.borrowedAmount),
           commission: toEther(info.commissionAmount),
@@ -293,8 +311,8 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
           lendedAmount: toEther(info.lendedAmount),
           lpAddress: info.lptoken,
           status: getLoanStatus(info.loanSettled, forceRecovery),
-          totalAmountTobePaid: info.lptoken,
-          settlementTime: info.loanSettlementTime,
+          totalAmountTobePaid: toEther(repaymentAmount),
+          settlementTime: info.settlementTime,
         };
         loans.push(loan);
       }
