@@ -10,8 +10,9 @@ import React, { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { claimLoanThunk, revokeBidThunk } from "store/actions";
-import { createSelectAuction } from "store/selectors";
+import { createSelectAuction, selectAuction } from "store/selectors";
 import { createFindLendedLp } from "store/selectors/findLendedLp";
+import { selectAuctionByLp } from "store/selectors/selectAuctionByLp";
 
 // const FindAuction = ({
 //   address,
@@ -55,7 +56,7 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
-  
+
   const claimLoan = async (auctionAddress: string) => {
     setIsLoading(true);
     dispatch(
@@ -89,16 +90,21 @@ export const FindStrategy = ({
   address: string;
   children: (arg: {
     lptoken: IAuction["supportedLps"][number];
+    auction: IAuction;
   }) => React.ReactElement;
 }) => {
   const findLp = useMemo(() => {
     return createFindLendedLp();
   }, []);
 
-  const lptoken = useSelector((state: IStoreState) => findLp(state.auctions.auctionInfo, address));
-
-  if (lptoken) {
-    return children({ lptoken });
+  const lptoken = useSelector((state: IStoreState) =>
+    findLp(state.auctions.auctionInfo, address)
+  );
+  const auction = useSelector((state: IStoreState) =>
+    selectAuctionByLp(state.auctions.auctionInfo, lptoken?.lpAddress)
+  );
+  if (lptoken && auction) {
+    return children({ lptoken, auction });
   }
   return <></>;
 };
@@ -156,7 +162,7 @@ export const BidsTable = () => {
                     <td data-title="wallet">{shortenAddress(bid.lpAddress)}</td>
 
                     <FindStrategy address={bid.lpAddress}>
-                      {({ lptoken }) => {
+                      {({ lptoken, auction }) => {
                         return (
                           <>
                             <td data-title="strategy lp">
@@ -171,24 +177,26 @@ export const BidsTable = () => {
                             <td data-title="commission">
                               {formatNum(bid.commission)} {lptoken.symbol}
                             </td>
+                            {isOneOf(bid.status, ["pending", "rejected"]) &&
+                              !auction.endTime && (
+                                <RevokeButton
+                                  auctionAddress={bid.auctionAddress}
+                                />
+                              )}
+                            {bid.status === "won" && (
+                              <ClaimButton lpAddress={bid.lpAddress} />
+                            )}
+                            {bid.status === "claimed" && (
+                              <td>
+                                <button disabled className="white">
+                                  Claimed{" "}
+                                </button>
+                              </td>
+                            )}
                           </>
                         );
                       }}
                     </FindStrategy>
-
-                    {isOneOf(bid.status, ["pending", "rejected"]) && (
-                      <RevokeButton auctionAddress={bid.auctionAddress} />
-                    )}
-                    {bid.status === "won" && (
-                      <ClaimButton lpAddress={bid.lpAddress} />
-                    )}
-                    {bid.status === "claimed" && (
-                      <td>
-                        <button disabled className="white">
-                          Claimed{" "}
-                        </button>
-                      </td>
-                    )}
                   </TableRow>
                 );
               })}

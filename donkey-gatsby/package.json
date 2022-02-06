@@ -42,6 +42,7 @@
     "@popperjs/core": "^2.11.2",
     "@types/react-linkify": "^1.0.1",
     "@types/react-redux": "^7.1.20",
+    "webpack": "5.52.0",
     "add": "^2.0.6",
     "axios": "^0.21.4",
     "babel-plugin-styled-components": "^1.13.2",

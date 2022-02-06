@@ -82,7 +82,7 @@ export default function Auction() {
     }
   };
 
-  const isPilotOver = !currentAuction && !nextAuction;
+  const isPilotOver = isSuccessState && !currentAuction && !nextAuction;
 
   return (
     <>
@@ -98,7 +98,7 @@ export default function Auction() {
                 <h3>next auction finishes in</h3>
               )}
               <p>
-                {isPilotOver ? (
+                { isPilotOver ? (
                   <>
                     Thank you for Participating in the wallet feel free to leave
                     your remarks here:

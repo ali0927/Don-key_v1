@@ -5,8 +5,6 @@ import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import {
   captureException,
-  getAmount,
-  getInvestedAmount,
   getPoolContract,
   getTokenPrice,
   getTokenSymbol,
@@ -24,12 +22,9 @@ import {
   IStoreState,
   ISupportedLP,
 } from "interfaces";
-import { gt } from "lodash";
 import Moralis from "moralis/types";
-import { useMoralis } from "react-moralis";
 import {
   bidSelector,
-  findLendedLp,
   loanSelector,
   selectAuction,
 } from "store/selectors";
@@ -82,21 +77,12 @@ const ALL_FARMERS_QUERY = gql`
 export const fetchAuctionsThunk =
   (): AppThunk => async (dispatch, getState) => {
     dispatch(fetchAuctions());
-    // TO DO Fetch Auctionaddresses from Strapi
-    const myauctionAddresses = [
-      "0x6F5550Fa6a5d72DcE2fF71CA481B7479285C0cb0",
-      "0x8729D613E76493Ff27735502B5E9e61f64146602",
-    ];
 
     const auctionAddresses = [
-      "0x5592ECb7aB968eF521fc5e47c094D410Fc278a69",
-      "0x51A41d4D99269747F89fB4d11454c9Fa43F4ff5e",
-      "0x992B1Df075BfE49fC9f20c2eCD94d35030b2dEB0",
-      "0xd16fC092449F78C5d38F81685039c97c2B1AfEde",
-      "0xa13711003f637c896A0E533d09Eea4B0f727C197",
-      "0x300901FDa9aca9784aE63039ECaC187FfA42871B",
-      "0xB99bc4D37F55db85024f0c1F986507063F9BB11A",
-      "0x55E7a5FA41136878111BeEBd7BaBA6fB1CD9D836",
+      "0x1c30c0361caBe650D5674BF887c778ABF28A9Fbb",
+      "0xEa19dADA1AA131B350d79b29f5C126972E818B47",
+      "0xEeA3b3727908FfcedF0B5F420c4d42C5f46C9fa2",
+      "0x8B60b8A3f57E2dC242Bc133eE694ACcD67427c3F",
     ];
 
     // To do Fetch All Pools addresses
@@ -479,7 +465,12 @@ export const fetchPreviousAuctionThunk =
   async (dispatch) => {
     try {
       dispatch(fetchPrevAuctionAction());
-      const MoralisDBS = ["AuctionWinnerone"];
+      const MoralisDBS = [
+        "auctionwinnertwo",
+        "auctionwinnnerthree",
+        "auctionwinnerfour",
+        "auctionwinnerfive",
+      ];
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {
         const Winner = Moralis.Object.extend(dbname);
@@ -493,12 +484,12 @@ export const fetchPreviousAuctionThunk =
         const promises = results.map(async (item) => {
           const userAddress = item.get("user");
           const auction = item.get("auctionAddress");
-          console.log(auction,"Address");
+          console.log(auction, "Address");
           const auctionContract = getAuctionContract(
             auction,
             BSC_TESTNET_CHAIN_ID
           );
-          if(!auctionContract.initialized){
+          if (!auctionContract.initialized) {
             await auctionContract.initialize();
           }
           const borrowAmount = toEther(item.get("allocatedAmount"));
@@ -522,7 +513,7 @@ export const fetchPreviousAuctionThunk =
 
       dispatch(fetchPrevAuctionSuccess(prevAuctions));
     } catch (e) {
-      captureException(e,"Fail Prev Fetch")
+      captureException(e, "Fail Prev Fetch");
       dispatch(fetchPrevAuctionFail());
     }
   };
