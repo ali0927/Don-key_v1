@@ -541,11 +541,11 @@ export const MakeABidForm = () => {
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
-
-  const isPilotOver = !currentAuction && !nextAuction;
+  const isReady = isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"]);
+  const isPilotOver = isReady &&  !currentAuction && !nextAuction;
 
   const renderForm = () => {
-    if (isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"])) {
+    if (isReady) {
       if (currentAuction) {
         return (
           <AuctionForm status={auctions.status} auction={currentAuction} />

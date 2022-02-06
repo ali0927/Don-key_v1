@@ -34,14 +34,14 @@ import { createFindLendedLp } from "store/selectors/findLendedLp";
 //   return null;
 // };
 
-const ClaimButton = ({ auctionAddress }: { auctionAddress: string }) => {
+const ClaimButton = ({ lpAddress }: { lpAddress: string }) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
     <td>
       {isPopupOpen && (
         <ClaimPopup
-          auctionAddress={auctionAddress}
+          lpAddress={lpAddress}
           open={isPopupOpen}
           onClose={() => setIsPopupOpen(false)}
         />
@@ -55,7 +55,7 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
-
+  
   const claimLoan = async (auctionAddress: string) => {
     setIsLoading(true);
     dispatch(
@@ -180,7 +180,7 @@ export const BidsTable = () => {
                       <RevokeButton auctionAddress={bid.auctionAddress} />
                     )}
                     {bid.status === "won" && (
-                      <ClaimButton auctionAddress={bid.auctionAddress} />
+                      <ClaimButton lpAddress={bid.lpAddress} />
                     )}
                     {bid.status === "claimed" && (
                       <td>
@@ -198,5 +198,5 @@ export const BidsTable = () => {
       </div>
     );
   }
-  return null;
+  return <div className="py-5"></div>;
 };

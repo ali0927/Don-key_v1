@@ -17,6 +17,10 @@ const INITIAL_AUCTION_STATE: IStoreState["auctions"] = {
     status: "INITIAL",
     data: [],
   },
+  prevAuctions: {
+    status: "INITIAL",
+    data: [],
+  },
 };
 
 const updateCurrentAuction = (state: IStoreState["auctions"]) => {
@@ -137,6 +141,18 @@ export const auctionReducer: Reducer<IStoreState["auctions"], IAuctionActions> =
           if (index > -1) {
             draft.userBids.data.splice(index, 1);
           }
+        });
+      }
+      case "FETCH_PREV_AUCTION": {
+        return produce(state, (draft) => {
+          draft.prevAuctions.status = "FETCHING";
+        });
+      }
+      case "FETCH_PREV_AUCTION_SUCCESS": {
+        const { prevAuctions } = action.payload;
+        return produce(state, (draft) => {
+          draft.prevAuctions.status = "FETCH_SUCCESS";
+          draft.prevAuctions.data = prevAuctions;
         });
       }
     }

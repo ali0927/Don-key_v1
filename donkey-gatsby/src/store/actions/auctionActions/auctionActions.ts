@@ -20,10 +20,13 @@ import {
   IBid,
   IFarmerInter,
   ILoan,
+  IPrevWinners,
   IStoreState,
   ISupportedLP,
 } from "interfaces";
 import { gt } from "lodash";
+import Moralis from "moralis/types";
+import { useMoralis } from "react-moralis";
 import {
   bidSelector,
   findLendedLp,
@@ -463,3 +466,63 @@ export const revokeBidThunk =
 export const updateCurrentAuctionAction = () => {
   return action("UPDATE_CURRENT_AUCTION");
 };
+
+export const fetchPrevAuctionAction = () => action("FETCH_PREV_AUCTION");
+
+export const fetchPrevAuctionSuccess = (prevAuctions: IPrevWinners[]) =>
+  action("FETCH_PREV_AUCTION_SUCCESS", { prevAuctions });
+
+export const fetchPrevAuctionFail = () => action("FETCH_PREV_AUCTION_FAIL");
+
+export const fetchPreviousAuctionThunk =
+  (Moralis: Moralis): AppThunk =>
+  async (dispatch) => {
+    try {
+      dispatch(fetchPrevAuctionAction());
+      const MoralisDBS = ["AuctionWinnerone"];
+      const prevAuctions: IPrevWinners[] = [];
+      const pms = MoralisDBS.map(async (dbname) => {
+        const Winner = Moralis.Object.extend(dbname);
+        const query = new Moralis.Query(Winner);
+        const results = await query.find();
+        const winner: IPrevWinners = {
+          auctionAddress: results[0].get("auctionAddress"),
+          announcementDate: results[0].get("block_timestamp"),
+          winners: [],
+        };
+        const promises = results.map(async (item) => {
+          const userAddress = item.get("user");
+          const auction = item.get("auctionAddress");
+          console.log(auction,"Address");
+          const auctionContract = getAuctionContract(
+            auction,
+            BSC_TESTNET_CHAIN_ID
+          );
+          if(!auctionContract.initialized){
+            await auctionContract.initialize();
+          }
+          const borrowAmount = toEther(item.get("allocatedAmount"));
+          const info = await auctionContract.getUserInfo({ userAddress });
+          winner.auctionAddress;
+          winner.winners.push({
+            borrowAmount,
+            commissionpercent: new BigNumber(info.commissionInPer)
+              .dividedBy(100)
+              .toFixed(2),
+            userAddress: userAddress,
+            lpToken: info.lptoken,
+            lendedAmount: toEther(info.lendedAmount),
+          });
+        });
+
+        await Promise.all(promises);
+        prevAuctions.push(winner);
+      });
+      await Promise.all(pms);
+
+      dispatch(fetchPrevAuctionSuccess(prevAuctions));
+    } catch (e) {
+      captureException(e,"Fail Prev Fetch")
+      dispatch(fetchPrevAuctionFail());
+    }
+  };

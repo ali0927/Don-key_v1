@@ -12,17 +12,21 @@ import {
   fetchAuctionsThunk,
   fetchBalancesThunk,
   fetchBidsAndLoansThunk,
+  fetchPreviousAuctionThunk,
   updateCurrentAuctionAction,
 } from "store/actions";
 import { IAuctionSuccessState, IStoreState } from "interfaces";
 import { useWeb3Context } from "don-components";
 import { isOneOf } from "helpers";
+import { useMoralis } from "react-moralis";
 
 export default function Auction() {
   const dispatch = useDispatch();
   const auctions = useSelector(
     (state: IStoreState) => state.auctions.auctionInfo
   );
+  const prevAuction = useSelector((state: IStoreState) => state.auctions.prevAuctions);
+  const {Moralis, isInitialized} = useMoralis();
 
   const { connected, address } = useWeb3Context();
   // const [selectedLp]
@@ -31,7 +35,14 @@ export default function Auction() {
     if (auctions.status === "INITIAL" || auctions.status === "FETCH_FAILED") {
       dispatch(fetchAuctionsThunk());
     }
+
   }, [auctions.status]);
+
+  useEffect(() => {
+    if(prevAuction.status === "INITIAL" && isInitialized){
+      dispatch(fetchPreviousAuctionThunk(Moralis,))
+    }
+  }, [prevAuction, isInitialized])
 
   useEffect(() => {
     if (connected && address && auctions.status === "FETCH_SUCCESS") {

@@ -216,6 +216,18 @@ export type IBid = {
   status: "rejected" | "pending" | "won" | "claimed";
 };
 
+export type IPrevWinners = {
+  auctionAddress: string;
+  announcementDate: string;
+  winners: {
+    userAddress: string;
+    borrowAmount: string;
+    commissionpercent: string;
+    lpToken: string;
+    lendedAmount: string;
+  }[]
+}
+
 export type IStoreState = {
   auth: IAuthState;
   popups: IPopupState;
@@ -232,6 +244,10 @@ export type IStoreState = {
       status: "INITIAL" | "FETCHING" | "FETCH_SUCCESS" | "FETCH_FAILED";
       data: ILoan[];
     };
+    prevAuctions: {
+      status: "INITIAL" | "FETCHING" | "FETCH_SUCCESS" | "FETCH_FAILED";
+      data: IPrevWinners[]
+    }
   };
 };
 
