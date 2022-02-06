@@ -7,11 +7,9 @@
     "don-hooks",
     "don-components",
     "donkey-next",
-    "donkey-gatsby"
+    "donkey-gatsby",
+    "auction-admin"
   ],
-  "resolutions": {
-    "webpack": "5.52.0"
-  },
   "dependencies": {
     "@apollo/client": "^3.3.18",
     "@ethersproject/providers": "^5.0.23",
