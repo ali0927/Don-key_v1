@@ -178,7 +178,7 @@ function App() {
       }
       return [...prev, { auction_address, userAddress, timestamp }];
     }, [] as { auction_address: string; userAddress: string; timestamp: string }[]);
-    console.log(UserList, "User");
+
     const prs = UserList.map(async (item) => {
       const AuctionContract = getAuctionContract(
         item.auction_address,
@@ -192,7 +192,7 @@ function App() {
       let auction = initialState.auctions.find(
         (auct) => auct.auctionAddress === item.auction_address
       );
-      console.log(auction, initialState, "ss");
+ 
       if (!auction) {
         auction = {
           auctionAddress: item.auction_address,
