@@ -162,7 +162,7 @@ export const BidsTable = () => {
                     <td data-title="wallet">{shortenAddress(bid.lpAddress)}</td>
 
                     <FindStrategy address={bid.lpAddress}>
-                      {({ lptoken, auction }) => {
+                      {({ lptoken }) => {
                         return (
                           <>
                             <td data-title="strategy lp">
@@ -177,12 +177,11 @@ export const BidsTable = () => {
                             <td data-title="commission">
                               {formatNum(bid.commission)} {lptoken.symbol}
                             </td>
-                            {isOneOf(bid.status, ["pending", "rejected"]) &&
-                              !auction.endTime && (
-                                <RevokeButton
-                                  auctionAddress={bid.auctionAddress}
-                                />
-                              )}
+                            {isOneOf(bid.status, ["pending", "rejected"]) && (
+                              <RevokeButton
+                                auctionAddress={bid.auctionAddress}
+                              />
+                            )}
                             {bid.status === "won" && (
                               <ClaimButton lpAddress={bid.lpAddress} />
                             )}
