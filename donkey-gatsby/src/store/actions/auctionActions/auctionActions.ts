@@ -189,7 +189,7 @@ export const fetchBalancesThunk =
             .call();
           fetchedAuctions = produce(fetchedAuctions, (draft) => {
             draft[index].supportedLps[lindex].balance = toEther(userBalance);
-            draft[index].supportedLps[lindex].withdrawAmount = toEther(
+            draft[index].supportedLps[lindex].withdrawAmount = new BigNumber(userBalance).isEqualTo(0) ? "0":  toEther(
               new BigNumber(1)
                 .minus(new BigNumber(lockedLp).dividedBy(userBalance))
                 .multipliedBy(withdrawAmount)

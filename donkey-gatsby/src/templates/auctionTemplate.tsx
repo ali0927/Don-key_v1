@@ -56,6 +56,8 @@ export default function Auction() {
     }
   }, [connected, address, auctions.status]);
 
+
+
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;

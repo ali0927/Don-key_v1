@@ -43,7 +43,7 @@ const calcCommisionPercent = (
   borrowAmount: BigNumber,
   commission: BigNumber
 ) => {
-  return new BigNumber(commission).dividedBy(borrowAmount).multipliedBy(100);
+  return borrowAmount.isEqualTo(0) ? new BigNumber(0): new BigNumber(commission).dividedBy(borrowAmount).multipliedBy(100);
 };
 
 const NewInput = (props: {
@@ -95,7 +95,7 @@ const calcFloorCommission = (
   borrowAmount: BigNumber,
   floorCommission: string | number
 ) => {
-  return borrowAmount.multipliedBy(floorCommission).dividedBy(100);
+  return borrowAmount.isEqualTo(0) ? borrowAmount: borrowAmount.multipliedBy(floorCommission).dividedBy(100);
 };
 
 const transformArray = <T extends any>(arr: T[], index: number) => {
