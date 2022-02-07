@@ -175,6 +175,7 @@
 .make_a_bid .field .option .left, .make_a_bid .field .option .right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
 }
 
 .make_a_bid .field .option .title, .make_a_bid .field .option input {
