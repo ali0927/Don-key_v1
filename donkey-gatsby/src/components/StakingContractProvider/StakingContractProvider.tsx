@@ -174,7 +174,7 @@ const useStaking = () => {
     try {
      
       userInfo = await viewstakingContract.methods.userInfo(address).call();
-      console.log(userInfo, "User")
+      console.log(userInfo, "User", address, DonStakingAddress);
     } catch (e: any) {
       console.log("Error UserInfo");
       captureException(e, `Address: ${address} Staking: ${DonStakingAddress} `)
