@@ -1,11 +1,30 @@
-
+import {
+  FormControl,
+  InputBase,
+  MenuItem,
+  NativeSelect,
+  Select,
+  Theme,
+  withStyles,
+} from "@material-ui/core";
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
-import { BugReportButton, Label, TextArea, Input } from "components/BugReportForm";
+import {
+  BugReportButton,
+  Label,
+  TextArea,
+  Input,
+} from "components/BugReportForm";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
-import { captureException, formatNum, isOneOf, toWei, validateEmail } from "helpers";
+import {
+  captureException,
+  formatNum,
+  isOneOf,
+  toWei,
+  validateEmail,
+} from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
@@ -14,6 +33,41 @@ import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBidsAndLoansThunk } from "store/actions";
 import { strapi } from "strapi";
+
+const BootstrapInput = withStyles((theme: Theme) => ({
+  root: {
+    "label + &": {
+      marginTop: theme.spacing(3),
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: "relative",
+    backgroundColor: theme.palette.background.paper,
+    border: "1px solid #ced4da",
+    fontSize: 16,
+    padding: "10px 26px 10px 12px",
+    transition: theme.transitions.create(["border-color", "box-shadow"]),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
+    "&:focus": {
+      borderRadius: 4,
+      borderColor: "#80bdff",
+      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
+    },
+  },
+}))(InputBase);
 
 const Dropdown: React.FC = (props) => {
   const [condition, setCondition] = useState(false);
@@ -43,7 +97,9 @@ const calcCommisionPercent = (
   borrowAmount: BigNumber,
   commission: BigNumber
 ) => {
-  return borrowAmount.isEqualTo(0) ? new BigNumber(0): new BigNumber(commission).dividedBy(borrowAmount).multipliedBy(100);
+  return borrowAmount.isEqualTo(0)
+    ? new BigNumber(0)
+    : new BigNumber(commission).dividedBy(borrowAmount).multipliedBy(100);
 };
 
 const NewInput = (props: {
@@ -95,7 +151,9 @@ const calcFloorCommission = (
   borrowAmount: BigNumber,
   floorCommission: string | number
 ) => {
-  return borrowAmount.isEqualTo(0) ? borrowAmount: borrowAmount.multipliedBy(floorCommission).dividedBy(100);
+  return borrowAmount.isEqualTo(0)
+    ? borrowAmount
+    : borrowAmount.multipliedBy(floorCommission).dividedBy(100);
 };
 
 const transformArray = <T extends any>(arr: T[], index: number) => {
@@ -166,7 +224,7 @@ const AuctionForm = ({
   const validate = (val: string) => {
     return minCommission.lte(val);
   };
-
+  console.log(balance, selectedLp.price, "val");
   const balanceInUsd = new BigNumber(balance)
     .multipliedBy(selectedLp.price)
     .toFixed(2);
@@ -238,10 +296,16 @@ const AuctionForm = ({
           <span className="data">≈ ${formatNum(balanceInUsd)}</span>
         </div>
         <div className="dropdown_container">
-          <Dropdown>
-            {transformArray(auction.supportedLps, state.selectedLp).map(
-              (item, index) => {
-                return (
+          <Select
+           
+            value={selectedLp?.lpAddress}
+            onChange={() => {}}
+            input={<BootstrapInput />}
+          >
+            {auction.supportedLps.map((item, index) => {
+              return (
+                <MenuItem key={item.lpAddress} value={item.lpAddress}>
+                  {" "}
                   <div
                     key={item.lpAddress}
                     onClick={() => selectNewLp(index)}
@@ -265,15 +329,15 @@ const AuctionForm = ({
                           }}
                         ></div>
                         <div className="amount">
-                          {balance} {item.symbol}
+                          {item.balance} {item.symbol}
                         </div>
                       </div>
                     </div>
                   </div>
-                );
-              }
-            )}
-          </Dropdown>
+                </MenuItem>
+              );
+            })}
+          </Select>
         </div>
       </div>
       <div className="collateral">
@@ -431,66 +495,76 @@ const AuctionForm = ({
   );
 };
 
-
-
 const usePilotSuggestionApi = () => {
-  const createSuggestion = async (args:{name: string, email:string, remarks: string}) => {
-    const resp = await strapi.post("/pilot-suggestions",args);
+  const createSuggestion = async (args: {
+    name: string;
+    email: string;
+    remarks: string;
+  }) => {
+    const resp = await strapi.post("/pilot-suggestions", args);
     return resp.data;
-  }
-  return {createSuggestion}
-}
+  };
+  return { createSuggestion };
+};
 
+const validate = ({
+  name,
+  email,
+  remarks,
+}: {
+  name: string;
+  email: string;
+  remarks: string;
+}) => {
+  if (!name) {
+    return { valid: false, message: "Please Enter a name" };
+  }
+  if (name.length < 3) {
+    return { valid: false, message: "Please Enter a valid name" };
+  }
+  if (!email) {
+    return { valid: false, message: "Please enter an email" };
+  }
+  if (!validateEmail(email)) {
+    return { valid: false, message: "Please enter a valid email" };
+  }
+  if (!remarks) {
+    return { valid: false, message: "Please enter a remark" };
+  }
+  if (remarks.length < 10) {
+    return {
+      valid: false,
+      message: "Remarks should have minimum 10 characters",
+    };
+  }
 
-const validate = ({name, email, remarks}: {name: string; email: string; remarks: string}) => {
-  if(!name){
-    return {valid: false, message: "Please Enter a name"};
-  }
-  if(name.length < 3){
-    return {valid: false, message: "Please Enter a valid name"};
-  }
-  if(!email){
-    return {valid: false, message: "Please enter an email"};
-  }
-  if(!validateEmail(email)){
-    return {valid: false, message: "Please enter a valid email"}
-  }
-  if(!remarks){
-    return {valid: false, message: "Please enter a remark"};
-  }
-  if(remarks.length < 10){
-    return {valid: false, message: "Remarks should have minimum 10 characters"};
-  }
-
-  return {valid: true};
-
-}
+  return { valid: true };
+};
 
 const AuctionSuggestionForm = () => {
   const [formState, setState] = useState({ name: "", email: "", remarks: "" });
   const [isCreating, setisCreating] = useState(false);
-  const {showSuccess, showFailure} = useTransactionNotification();
+  const { showSuccess, showFailure } = useTransactionNotification();
 
-  const {createSuggestion} = usePilotSuggestionApi();
+  const { createSuggestion } = usePilotSuggestionApi();
 
   const handleCreate = async () => {
     setisCreating(true);
     try {
       const validationResult = validate(formState);
-      if(!validationResult.valid){
+      if (!validationResult.valid) {
         showFailure(validationResult.message);
         return;
       }
       await createSuggestion(formState);
       showSuccess("Thank you for your Suggestion.");
-      setState({name:"", email: "", remarks: ""});
-    }catch(e){
+      setState({ name: "", email: "", remarks: "" });
+    } catch (e) {
       showFailure("Try Again Later");
-    }finally {
+    } finally {
       setisCreating(false);
     }
-  }
-
+  };
 
   const handleChange =
     <K extends keyof typeof formState>(key: K) =>
@@ -528,7 +602,11 @@ const AuctionSuggestionForm = () => {
         ></TextArea>
       </Label>
       <BugReportButton onClick={handleCreate}>
-        {isCreating ? <Spinner animation="border" size="sm" /> : "Send My suggestion"}
+        {isCreating ? (
+          <Spinner animation="border" size="sm" />
+        ) : (
+          "Send My suggestion"
+        )}
       </BugReportButton>
     </>
   );
@@ -541,8 +619,11 @@ export const MakeABidForm = () => {
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
-  const isReady = isOneOf(auctions.status, ["FETCH_SUCCESS", "FETCH_BALANCE_SUCCESS"]);
-  const isPilotOver = isReady &&  !currentAuction && !nextAuction;
+  const isReady = isOneOf(auctions.status, [
+    "FETCH_SUCCESS",
+    "FETCH_BALANCE_SUCCESS",
+  ]);
+  const isPilotOver = isReady && !currentAuction && !nextAuction;
 
   const renderForm = () => {
     if (isReady) {
@@ -555,7 +636,7 @@ export const MakeABidForm = () => {
         return "Wait For Next Auction To Start";
       }
       if (isPilotOver) {
-        return <AuctionSuggestionForm />
+        return <AuctionSuggestionForm />;
       }
     }
     return (
@@ -572,5 +653,9 @@ export const MakeABidForm = () => {
     );
   };
 
-  return <div className={clsx("make_a_bid ", {"bg-white pb-5": isPilotOver})}>{renderForm()}</div>;
+  return (
+    <div className={clsx("make_a_bid ", { "bg-white pb-5": isPilotOver })}>
+      {renderForm()}
+    </div>
+  );
 };
