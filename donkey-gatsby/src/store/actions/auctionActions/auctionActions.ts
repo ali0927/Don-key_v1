@@ -479,7 +479,7 @@ export const fetchPreviousAuctionThunk =
 
       const auctionData = auctionInfo.data[0];
   
-      const MoralisDBS: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionTable);
+    const MoralisDBS: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionTable);
   
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {

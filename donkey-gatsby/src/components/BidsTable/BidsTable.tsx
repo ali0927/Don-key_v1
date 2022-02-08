@@ -113,7 +113,7 @@ export const BidsTable = () => {
   const [openDetails, setOpenDetails] = useState(false);
 
   const bids = useSelector((state: IStoreState) => state.auctions.userBids);
-
+  const {address} = useWeb3Context();
   if (bids.status === "FETCH_SUCCESS" && bids.data.length > 0) {
     return (
       <div
@@ -159,7 +159,7 @@ export const BidsTable = () => {
                       {bid.status === "rejected" && "Rejected"}
                       {bid.status === "pending" && "Pending"}
                     </td>
-                    <td data-title="wallet">{shortenAddress(bid.lpAddress)}</td>
+                    <td data-title="wallet">{shortenAddress(address)}</td>
 
                     <FindStrategy address={bid.lpAddress}>
                       {({ lptoken }) => {
