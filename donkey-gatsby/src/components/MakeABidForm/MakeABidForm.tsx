@@ -106,7 +106,7 @@ const transformArray = <T extends any>(arr: T[], index: number) => {
       ...arr.slice(index + 1, arr.length),
     ];
   }
-  return arr.reverse();
+  return [...arr].reverse();
 };
 
 const AuctionForm = ({

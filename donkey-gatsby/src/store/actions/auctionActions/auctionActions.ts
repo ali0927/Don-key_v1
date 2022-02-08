@@ -476,6 +476,9 @@ export const fetchPreviousAuctionThunk =
         const Winner = Moralis.Object.extend(dbname);
         const query = new Moralis.Query(Winner);
         const results = await query.find();
+        if(results.length === 0){
+          return;
+        }
         const winner: IPrevWinners = {
           auctionAddress: results[0].get("auctionAddress"),
           announcementDate: results[0].get("block_timestamp"),
