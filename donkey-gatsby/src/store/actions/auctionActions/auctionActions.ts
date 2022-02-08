@@ -79,10 +79,10 @@ export const fetchAuctionsThunk =
     dispatch(fetchAuctions());
 
     const auctionAddresses = [
-      "0x1c30c0361caBe650D5674BF887c778ABF28A9Fbb",
-      "0xEa19dADA1AA131B350d79b29f5C126972E818B47",
-      "0xEeA3b3727908FfcedF0B5F420c4d42C5f46C9fa2",
-      "0x8B60b8A3f57E2dC242Bc133eE694ACcD67427c3F",
+      "0x4c784C582d4d3E419e2287Cf921516Ac09A2D827",
+      "0x9a7661620865C0114a62Cc20458075e89FFFec4D",
+      "0x87dF0AC3EA940B35EC8acA9F896eb3D7165e0c43",
+      "0x6dc94ebEFd7fDA827D254E3F3ec5Bec640Cd5AAe",
     ];
 
     // To do Fetch All Pools addresses
@@ -466,10 +466,10 @@ export const fetchPreviousAuctionThunk =
     try {
       dispatch(fetchPrevAuctionAction());
       const MoralisDBS = [
+        "auctionwinnerone",
         "auctionwinnertwo",
-        "auctionwinnnerthree",
+        "auctionwinnerthree",
         "auctionwinnerfour",
-        "auctionwinnerfive",
       ];
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {
