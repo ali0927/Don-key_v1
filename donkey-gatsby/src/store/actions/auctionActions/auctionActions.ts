@@ -475,6 +475,11 @@ export const fetchPreviousAuctionThunk =
         "auctionwinnertwo",
         "auctionwinnerthree",
         "auctionwinnerfour",
+        "auctionwinnersfive",
+        "auctionwinnerssix",
+        "auctionwinnersseven",
+        "auctionwinnerseight",
+        "auctionwinnersnine"
       ];
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {
