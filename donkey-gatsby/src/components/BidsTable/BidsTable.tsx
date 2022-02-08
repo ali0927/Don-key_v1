@@ -57,10 +57,10 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
 
-  const claimLoan = async (auctionAddress: string) => {
+  const revokeBid = async (auctionAddress: string) => {
     setIsLoading(true);
     dispatch(
-      claimLoanThunk({
+      revokeBidThunk({
         auctionAddress,
         web3: getConnectedWeb3(),
         userAddress: address,
@@ -76,7 +76,7 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
 
   return (
     <td>
-      <button disabled={isLoading} onClick={() => claimLoan(auctionAddress)}>
+      <button disabled={isLoading} onClick={() => revokeBid(auctionAddress)}>
         {isLoading ? <Spinner size="sm" animation="border" /> : "Revoke"}
       </button>
     </td>

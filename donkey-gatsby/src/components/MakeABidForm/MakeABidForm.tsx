@@ -46,7 +46,7 @@ const BootstrapInput = withStyles((theme: Theme) => ({
     position: "relative",
     backgroundColor: "#000",
     color: "#fff",
-    border: "1px solid #ced4da",
+    border: "1px solid #464646",
     display: "flex",
     fontSize: 16,
     width: "100%",
@@ -299,7 +299,7 @@ const AuctionForm = ({
           <h5>LP for staking</h5>
           <span className="data">≈ ${formatNum(balanceInUsd)}</span>
         </div>
-        <div className="dropdown_container">
+        <div className="dropdown_container ">
           <Select
             value={selectedLp?.lpAddress}
             onChange={() => {}}
@@ -316,19 +316,19 @@ const AuctionForm = ({
                   <div
                     key={item.lpAddress}
                     onClick={() => selectNewLp(index)}
-                    className="option w-100 d-flex"
+                    className="option w-100 d-flex align-items-center justify-content-between"
                   >
-                    <div className="left">
+                    <div className="left d-flex align-items-center">
                       <div
                         className="icon"
                         style={{
-                          backgroundImage: `url('${item.tokenImage}')`,
+                          backgroundImage: `url('${item.strategyImage}')`,
                         }}
                       ></div>
-                      <div className="title">{item.strategyName}</div>
+                      <div className="title font-weight-bold">{item.strategyName}</div>
                     </div>
                     <div className="right">
-                      <div className="amount">
+                      <div className="amount d-flex align-items-center">
                         <div
                           className="icon"
                           style={{
@@ -336,7 +336,7 @@ const AuctionForm = ({
                           }}
                         ></div>
                         <div className="amount">
-                         Balance: {item.balance} {item.symbol}
+                        {item.balance} {item.symbol}
                         </div>
                       </div>
                     </div>
@@ -639,9 +639,9 @@ export const MakeABidForm = () => {
           <AuctionForm status={auctions.status} auction={currentAuction} />
         );
       }
-      // if (nextAuction) {
-      //   return <AuctionForm status={auctions.status} auction={nextAuction} />;
-      // }
+      if (nextAuction) {
+        return <AuctionForm status={auctions.status} auction={nextAuction} />;
+      }
       if (!currentAuction && nextAuction) {
         return "Wait For Next Auction To Start";
       }
