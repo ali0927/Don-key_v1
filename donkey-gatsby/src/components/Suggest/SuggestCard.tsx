@@ -5,8 +5,7 @@ import { UserIcon } from "components/Icons";
 import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
-import { useStaticQuery, graphql } from "gatsby";
-
+import { useRiskList } from "./Suggest";
 const SuggestCardSection = styled.div`
 padding: 50px 25px;
 background: #ffffff;
@@ -144,23 +143,7 @@ const STATUS_MAP = {
 
 type SuggestStatusType = keyof typeof STATUS_MAP;
 
-export const useRiskImageList = () => {
-  const riskImages = useStaticQuery(
-    graphql`
-      query StrapiRisks {
-        allStrapiRisks {
-          nodes {
-            Title
-            image {
-              url
-            }
-          }
-        }
-      }
-    `
-  );
-  return riskImages.allStrapiRisks.nodes
-}
+
 
 export const SuggestCard: React.FC<{ 
   suggest: { 
@@ -175,8 +158,7 @@ export const SuggestCard: React.FC<{
     status: String;
   }
 }> = (props)  => {
-  const riskImages = useRiskImageList()
-  console.log('riskImages-----------', riskImages)
+  const riskImages = useRiskList()
   const [showVoteModal, setShowVoteModal] = useState(false)
   const [comment, setComment] = useState('')
   const handleCommentChange = (e: any) => {

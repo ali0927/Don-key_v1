@@ -1,16 +1,20 @@
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
-import { useRiskImageList } from "components/Suggest/SuggestCard";
+import { useRiskList, useNetworkList } from "components/Suggest";
 import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
+import { checkBalanceForStrategy } from "helpers";
+import { useStakingContract } from "hooks";
+import { useWeb3Context } from "don-components";
 import { theme } from "theme";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
+import { useSuggestionApi } from "hooks";
 import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import ExampleUser from "../../images/ex-user.png";
@@ -94,33 +98,22 @@ export const SuggestRequestButton = styled.button`
 `;
 const DefaultOption = { name: "Select an option", value: "" } as const;
 
-const Types = [
-  { name: "Binance Smart Chain", value: 56 },
-  { name: "Fantom", value: 250 },
-  { name: "Polygon", value: 137 },
-  { name: "Avalanche", value: 43114 }
+const NetworkTypes = [
+  { name: "Binance Smart Chain", value: 56, strapiId: 1 },
+  { name: "Matic Network", value: 137, strapiId: 3 },
+  { name: "Avalanche", value: 43114, strapiId: 6 }
 ] as const;
 
-const Urgencies = [
-  DefaultOption,
-  { name: "Not urgent at all", value: "low" },
-  { name: "It could wait a day or two", value: "medium" },
-  {
-    name: "Very urgent - the sky is falling!",
-    value: "high",
-  },
-] as const;
-
-type IType = typeof Types[number]["value"];
-type IUrgency = typeof Urgencies[number]["value"];
 const INITIAL_STATE = {
-  nickName: "",
-  name: "",
-  telegram: "",
-  network: { name: "Binance Smart Chain", value: 56 },
-  apy: 10,
   title: "",
-  message: ""
+  description: "",
+  nickName: "",
+  telegram: "",
+  address: "",
+  network: 0,
+  apy: 10,
+  riskword: "",
+  risk: 0
 };
 export type ISuggestFormState = typeof INITIAL_STATE;
 
@@ -145,6 +138,7 @@ const RiskLevel = styled.div`
   width: 20%;
   height: 15px;
   margin: 2px;
+  margin-bottom: 60px;
   cursor: pointer;
 `
 const RiskLevelSelector = styled.div`
@@ -154,7 +148,7 @@ const RiskLevelSelector = styled.div`
   align-items: ${(props: { level: number }) => props.level === 0 ? 'flex-end': props.level === 1 ? 'center': 'flex-start'};
 `
 const RiskLevelSelectorIcon = styled(BsTriangleFill)`
-  color: ${(props: { level: number }) => props.level === 0 ? '#FF4500': props.level === 1 ? '#FFD700': '#00BFFF'};
+  color: ${(props: { level: number }) => props.level === 0 ? '#FF4500': props.level === 1 ? '#32CD32': props.level === 2 ? 'orange': props.level === 3 ? '#FFD700': '#00BFFF'};
 `
 const ShowExampleSuggestionBtn = styled.button`
   background: none;
@@ -332,6 +326,15 @@ const renderTooltipFees = (props: any) => (
   </Tooltip>
 );
 
+const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
+  return (
+    <div style={{display:'flex', flexDirection:'column', marginTop: '16px', alignItems:'center'}}>
+      <RiskLevelSelectorIcon level={riskLevel} />
+      <label style={{textAlign: 'center'}}>{risks[riskLevel].Title}</label> 
+    </div>
+  )
+}
+
 const ExampleSuggestions = (): Array<any> => {
   let _example = new Array(5).fill(0).map(item => {
     return {
@@ -347,8 +350,12 @@ const ExampleSuggestions = (): Array<any> => {
   return _example
 }
 
+
 export const SuggestRequestForm = () => {
-  const riskImages = useRiskImageList();
+  const { createSuggestion } = useSuggestionApi();
+  const riskImages = useRiskList();
+  // const networkList = useNetworkList();
+  // console.log('networkList---------', networkList)
   const [riskLevel, setRiskLevel] = useState(1);
   const [isCreating, setIsCreating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -357,8 +364,17 @@ export const SuggestRequestForm = () => {
   const [showExampleSuggestion, setShowExampleSuggestion] = useState(false);
   const [selectedExmaple, setSelectedExample] = useState(0);
   const [showNetworkSelect, setShowNetworkSelect] = useState(false);
+  const { getConnectedWeb3 } = useWeb3Context();
 
-  const exmapleSuggestions = ExampleSuggestions()
+  const exmapleSuggestions = ExampleSuggestions();
+
+  const { tier } = useStakingContract();  
+  const checkBalance = async () => {
+    const web3 = getConnectedWeb3();
+    const _res = await checkBalanceForStrategy(web3);
+    if ( _res || tier.tier > 0 ) return true;
+    else return false;
+  };
 
   const [formState, setFormState] = useState(INITIAL_STATE);
   const handleChange =
@@ -371,7 +387,24 @@ export const SuggestRequestForm = () => {
     setIsSent(null);
   };
   const handleCreate = async () => {
-   
+    const checked = await checkBalance();
+    // const checked = true;
+    if (checked) {
+      let _suggestion = { ...formState };
+      _suggestion.network = NetworkTypes[_suggestion.network].strapiId;
+      _suggestion.risk = riskImages[_suggestion.risk].strapiId;
+      const web3 =  getConnectedWeb3();
+      const accounts = await web3.eth.getAccounts();
+      _suggestion.address = accounts[0];
+      try {
+        const resp = await createSuggestion(_suggestion);
+        setFormState(INITIAL_STATE);
+      } catch (e) {
+        console.log(e);
+        showFailure("Please Try Again Later");
+      } finally {
+      }
+    }
   };
 
   const changeNetwork = (network: any) => {
@@ -395,14 +428,14 @@ export const SuggestRequestForm = () => {
         >
           <DropDown>
             <div id="collapseExample" className="collapse">
-              {Types.map(item => 
+              {NetworkTypes.map((item, idx) => 
                 <DropDownItem
                   key={item.value}
                   className={clsx(
                     "d-flex justify-content-between align-items-center",
-                    { selected: item.value === formState.network.value }
+                    { selected: item.value === formState.network }
                   )}
-                  onClick={() => changeNetwork(item)}
+                  onClick={() => changeNetwork(idx)}
                 >
                   <div>{item.name}</div>
                 </DropDownItem>
@@ -436,8 +469,8 @@ export const SuggestRequestForm = () => {
       <Label>
         Strategy Name
         <Input
-          value={formState.name}
-          onChange={handleChange("name")}
+          value={formState.title}
+          onChange={handleChange("title")}
           placeholder="Start write here"
         />
       </Label>
@@ -446,7 +479,7 @@ export const SuggestRequestForm = () => {
         Network
         <div className="d-flex position-relative">
           <DropdownBtn active={showNetworkSelect} onClick={() => setShowNetworkSelect(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
-            {formState.network.name}
+            {NetworkTypes[formState.network].name}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {showNetworkSelect && <DropDownMenu />}
@@ -467,18 +500,22 @@ export const SuggestRequestForm = () => {
       <Label>Risk Level</Label>
       <div>
         <div style={{display:'flex'}}>
-          <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(2)}/>
-          <RiskLevel color="#32CD32" />
-          <RiskLevel color="#FFD700" onClick={() => setRiskLevel(1)} />
-          <RiskLevel color="orange" />
-          <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)} />
+          <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(4)}>
+            { riskLevel === 4 && renderRiskLevelSelector(riskImages, 4) }
+          </RiskLevel>
+          <RiskLevel color="#32CD32" onClick={() => setRiskLevel(1)}>
+            { riskLevel === 1 && renderRiskLevelSelector(riskImages, 1) }
+          </RiskLevel>
+          <RiskLevel color="#FFD700" onClick={() => setRiskLevel(3)}>
+            { riskLevel === 3 && renderRiskLevelSelector(riskImages, 3) }
+          </RiskLevel>
+          <RiskLevel color="orange"  onClick={() => setRiskLevel(2)}>
+          { riskLevel === 2 && renderRiskLevelSelector(riskImages, 2) }  
+          </RiskLevel>
+          <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)}>
+            { riskLevel === 0 && renderRiskLevelSelector(riskImages, 0) }
+          </RiskLevel>
         </div>
-        <RiskLevelSelector level={riskLevel}>
-          <div style={{display:'flex', flexDirection:'column', width:'20%', alignItems:'center'}}>
-            <RiskLevelSelectorIcon level={riskLevel} />
-            <label>{riskImages[riskLevel].Title}</label> 
-          </div>
-        </RiskLevelSelector>
       </div>
    
       <Label>
@@ -492,17 +529,18 @@ export const SuggestRequestForm = () => {
         </OverlayTrigger>
         <TextArea
           rows={2}
-          value={formState.title}
-          onChange={handleChange("title")}
+          value={formState.riskword}
+          onChange={handleChange("riskword")}
           placeholder="Start write here"
         ></TextArea>
       </Label>
+
       <Label>
         Suggestion Flow<br />
         <TextArea
           rows={5}
-          value={formState.message}
-          onChange={handleChange("message")}
+          value={formState.description}
+          onChange={handleChange("description")}
           placeholder="Start write here"
         ></TextArea>
       </Label>

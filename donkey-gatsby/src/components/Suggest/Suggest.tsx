@@ -7,7 +7,46 @@ import { SuggestList } from "./SuggestList";
 import { SuggestRequestForm } from "./SuggestRequestForm";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
+import { useSuggestionApi } from "hooks";
 import { DummySuggestions } from "JsonData/DummyData";
+import { useStaticQuery, graphql } from "gatsby";
+import { INetwork } from "LandingPage/CardsSection/interfaces";
+
+export const useRiskList = () => {
+  const riskImages = useStaticQuery(
+    graphql`
+      query StrapiRisks {
+        allStrapiRisks {
+          nodes {
+            Title
+            image {
+              url
+            }
+            strapiId
+          }
+        }
+      }
+    `
+  );
+  return riskImages.allStrapiRisks.nodes
+}
+export const useNetworkList = () => {
+  const StrategiesData = useStaticQuery(
+    graphql`
+      query MyQuery {
+        allStrapiNetworks {
+          nodes {
+            chainId
+            name
+            strapiId
+          }
+        }
+      }
+    `
+  );
+  return StrategiesData.allStrapiNetworks.nodes;
+}
+
 
 const DropdownBtn = styled.div`
   border: 2px solid #222222;
@@ -155,17 +194,35 @@ const SuggestStatus = {
 
 export const Suggest: React.FC = () => {
   const [show, setShow] = useState(false);
-  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all)
+  const { fetchList } = useSuggestionApi();
+  const [suggestionList, setSuggestionList] = useState([]); 
+  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
+  const [viewMore, setViewMore] = useState(false);
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
     setShow(false);
   };
 
-  const filterList = useMemo(() => {
-    if(strategyFilter === SuggestStatus.all) return DummySuggestions
-    return DummySuggestions.filter(item => item.status === strategyFilter)
-  }, [DummySuggestions, strategyFilter])
+  useEffect(() => {
+    onLoad();
+  }, []);
+
+  const onLoad = async () => {
+    const _suggestionList = await fetchList();
+    setSuggestionList(_suggestionList);
+  };
+
+  const filterList = suggestionList
+  // const filterList = useMemo(() => {
+  //   const _suggestionList = [...suggestionList];
+  //   console.log('suggestionList------------', suggestionList)
+  //   if (strategyFilter === SuggestStatus.all) return suggestionList;
+  //   const _list = suggestionList.filter((item: any) => item.status === strategyFilter);
+  //   return viewMore ? _list: _list.slice(0, 3);
+  // }, [strategyFilter]);
+
+  console.log('filterList------------', filterList)
 
   const DropDownMenu = () => {
     return (
@@ -239,13 +296,15 @@ export const Suggest: React.FC = () => {
           </div>
         </>
       }
-      <div className="row justify-content-center mb-4">
-        <div className="col-sm-12 col-md-4">
-          <MoreButton>
-            View More
-          </MoreButton>
+      {filterList.length > 0 &&
+        <div className="row justify-content-center mb-4">
+          <div className="col-sm-12 col-md-4">
+            <MoreButton onClick={() => setViewMore(true)}>
+              View More
+            </MoreButton>
+          </div>
         </div>
-      </div>
+      }
 
       <div className="row mb-5 pt-5">
         <div className="col-lg-6 d-flex flex-column mt-5 pt-md-5">

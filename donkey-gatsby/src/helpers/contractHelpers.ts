@@ -920,3 +920,13 @@ export const withdrawDon = async (
     .send({ from: address });
   return _res;
 };
+
+export const checkBalanceForStrategy = async (
+  web3: Web3
+) => {
+  const accounts = await web3.eth.getAccounts();
+  const donContract = await getBSCDon(web3);
+  const userBalance = await donContract.methods.balanceOf(accounts[0]).call();
+  if (parseFloat(toEther(userBalance)) >= 100) return true;
+  else return false;
+}

@@ -14,3 +14,4 @@ export * from "./useWalletAddress";
 export * from "./useTimer";
 export * from "./useLocalStorageState";
 export * from "./useBugReportApi";
+export * from "./useSuggestionApi";
