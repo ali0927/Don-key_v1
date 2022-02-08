@@ -88,7 +88,7 @@ export default function Auction() {
 
   return (
     <>
-      <NavBar />
+      <NavBar variant="loggedin" />
       <div className="auction_page">
         <div className="strip autcion_head">
           <div className="boxed">
