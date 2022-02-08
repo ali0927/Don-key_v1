@@ -36,6 +36,7 @@ import { strapi } from "strapi";
 
 const BootstrapInput = withStyles((theme: Theme) => ({
   root: {
+    width: "100%",
     "label + &": {
       marginTop: theme.spacing(3),
     },
@@ -43,9 +44,12 @@ const BootstrapInput = withStyles((theme: Theme) => ({
   input: {
     borderRadius: 4,
     position: "relative",
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: "#000",
+    color: "#fff",
     border: "1px solid #ced4da",
+    display: "flex",
     fontSize: 16,
+    width: "100%",
     padding: "10px 26px 10px 12px",
     transition: theme.transitions.create(["border-color", "box-shadow"]),
     // Use the system font instead of the default Roboto font.
@@ -186,7 +190,7 @@ const AuctionForm = ({
   };
   const maxDebtRatio = auction.maxDebtMap[tier.tier as 0] || "0";
 
-  const balance = formatNum(selectedLp.withdrawAmount || "10");
+  const balance = selectedLp.withdrawAmount || "10";
 
   const selectLpPercent = (percent: string) => {
     setState((old) => {
@@ -228,7 +232,7 @@ const AuctionForm = ({
   const balanceInUsd = new BigNumber(balance)
     .multipliedBy(selectedLp.price)
     .toFixed(2);
-
+  console.log(balanceInUsd, balance, selectedLp.price, "Usd Balance");
   const borrowAmount = debtAmount.multipliedBy(maxDebtRatio).dividedBy(100);
   const debtAmountInUsd = debtAmount.multipliedBy(selectedLp.price).toFixed(2);
   const borrowAmountInUsd = borrowAmount
@@ -297,19 +301,22 @@ const AuctionForm = ({
         </div>
         <div className="dropdown_container">
           <Select
-           
             value={selectedLp?.lpAddress}
             onChange={() => {}}
             input={<BootstrapInput />}
           >
             {auction.supportedLps.map((item, index) => {
               return (
-                <MenuItem key={item.lpAddress} value={item.lpAddress}>
+                <MenuItem
+                  className="w-100"
+                  key={item.lpAddress}
+                  value={item.lpAddress}
+                >
                   {" "}
                   <div
                     key={item.lpAddress}
                     onClick={() => selectNewLp(index)}
-                    className="option"
+                    className="option w-100 d-flex"
                   >
                     <div className="left">
                       <div
@@ -329,7 +336,7 @@ const AuctionForm = ({
                           }}
                         ></div>
                         <div className="amount">
-                          {item.balance} {item.symbol}
+                         Balance: {item.balance} {item.symbol}
                         </div>
                       </div>
                     </div>
@@ -632,6 +639,9 @@ export const MakeABidForm = () => {
           <AuctionForm status={auctions.status} auction={currentAuction} />
         );
       }
+      // if (nextAuction) {
+      //   return <AuctionForm status={auctions.status} auction={nextAuction} />;
+      // }
       if (!currentAuction && nextAuction) {
         return "Wait For Next Auction To Start";
       }
