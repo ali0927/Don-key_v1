@@ -172,10 +172,12 @@ const useStaking = () => {
     setLoading(true);
     let userInfo;
     try {
+     
       userInfo = await viewstakingContract.methods.userInfo(address).call();
       console.log(userInfo, "User")
     } catch (e: any) {
       console.log("Error UserInfo");
+      captureException(e, `Address: ${address} Staking: ${DonStakingAddress} `)
       throw new Error(e);
      
     }
