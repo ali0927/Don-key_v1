@@ -99,9 +99,11 @@ const WITHDRAWALREQUESTS_QUERY = gql`
 export const InactiveNetworkCard = ({
   correctNetwork,
   variant = "black",
+  insuranceBtn
 }: {
   correctNetwork: INetwork;
   variant?: "black" | "white";
+  insuranceBtn?: React.ReactElement;
 }) => {
   const { switchNetwork } = useSwitchNetwork();
   if (variant === "black") {
@@ -111,6 +113,7 @@ export const InactiveNetworkCard = ({
         <Text>
           Change the network on your wallet to {correctNetwork.symbol}
         </Text>
+       
         <Text
           className="d-flex align-items-center justify-content-center"
           muted
@@ -118,6 +121,7 @@ export const InactiveNetworkCard = ({
         >
           Click on switch to add or change network
         </Text>
+        {insuranceBtn && insuranceBtn}
         <div className="mt-5">
           {/* <DonButtonOutlined className="mr-3">
             <WalletIcon /> Disconnect
@@ -143,6 +147,7 @@ export const InactiveNetworkCard = ({
           You’re connected to the wrong network! Change the network on your
           wallet to {correctNetwork.symbol}.
         </h6>
+       
         <Text style={{cursor: 'context-menu'}} className="mb-0" muted>
           Click on switch to add or change network
         </Text>

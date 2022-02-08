@@ -5,11 +5,13 @@ import {
   captureException,
 } from "helpers";
 import { useEffect, useState } from "react";
+import Web3 from "web3";
 
 export const useInitialInvestment = (
   poolAddress: string,
   refresh = false,
-  address?: string
+  address?: string,
+  web3Instance?: Web3
 ) => {
   const [initialInvestment, setinitialInvestment] = useState("-");
   const [initialInvestmentInUSD, setinitialInvestmentinUSD] = useState("-");
@@ -18,7 +20,7 @@ export const useInitialInvestment = (
   useEffect(() => {
     (async () => {
       try {
-        const web3 = getConnectedWeb3();
+        const web3 = web3Instance || getConnectedWeb3();
         const accounts = address ? [address] : await web3.eth.getAccounts();
         const amounts = [
           calculateInitialInvestment(web3, poolAddress, accounts[0]),

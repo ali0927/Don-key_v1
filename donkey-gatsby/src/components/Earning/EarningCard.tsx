@@ -82,14 +82,17 @@ const EarningBtn = styled.button`
   }
 `;
 const EarningComming = styled.div`
-  position: absolute;
-  background: #ff6534;
-  right: -46px;
-  top: 30px;
-  transform: rotate(45deg);
-  color: white;
-  padding: 10px 50px;
-  font-size: small;
+position: absolute;
+background: #ff6534;
+right: -110px;
+top: 92px;
+line-height: 27px;
+transform: rotate(45deg) translateX(-50%);
+color: white;
+height: 28px;
+width: 184px;
+text-align: center;
+font-size: small;
 `;
 
 export const EarningCard = ({
@@ -144,15 +147,19 @@ export const EarningCard = ({
         </EarningSection>
         <EarningSectionRoi>
           <EarningSectionName>Roi</EarningSectionName>
+          {!hasEnded && (
           <EarningSectionValue>
             {isLoading(<Skeleton width={30} />, `${data.roi}%`)}
           </EarningSectionValue>
+          )}
         </EarningSectionRoi>
-        <EarningSectionExpire>
-          {!comingSoon && duration
-            ? isLoading(<Skeleton width={100} />, `Expires in ${duration}`)
-            : ""}
-        </EarningSectionExpire>
+        {!hasEnded && (
+          <EarningSectionExpire>
+            {!comingSoon && duration
+              ? isLoading(<Skeleton width={100} />, `Expires in ${duration}`)
+              : ""}
+          </EarningSectionExpire>
+        )}
       </div>
       <EarningBtn
         disabled={loading || comingSoon}
