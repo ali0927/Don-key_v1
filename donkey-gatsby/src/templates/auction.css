@@ -239,7 +239,7 @@
 .make_a_bid .borrow p {
     color: #a3a3a3;
     font-size: 12px;
-    max-width: 240px;
+    /* max-width: 340px; */
     margin-bottom: 2px;
 }
 

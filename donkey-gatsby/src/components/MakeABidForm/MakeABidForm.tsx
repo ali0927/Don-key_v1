@@ -432,9 +432,9 @@ const AuctionForm = ({
         </h5>
         <p>
           Collateral {debtAmount.toFixed(2)} {selectedLp.symbol} *{" "}
-          {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol} Tier{" "}
+          {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol} <br /> Tier{" "}
           {tier.tier} Debt ratio is {maxDebtRatio}% <br />
-          {selectedLp.strategyName} Min Commission is {selectedLp.minCommission}
+          Min Commission is {selectedLp.minCommission}
           %
         </p>
       </div>
