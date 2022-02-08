@@ -25,8 +25,10 @@ export default function Auction() {
   const auctions = useSelector(
     (state: IStoreState) => state.auctions.auctionInfo
   );
-  const prevAuction = useSelector((state: IStoreState) => state.auctions.prevAuctions);
-  const {Moralis, isInitialized} = useMoralis();
+  const prevAuction = useSelector(
+    (state: IStoreState) => state.auctions.prevAuctions
+  );
+  const { Moralis, isInitialized } = useMoralis();
 
   const { connected, address } = useWeb3Context();
   // const [selectedLp]
@@ -35,14 +37,13 @@ export default function Auction() {
     if (auctions.status === "INITIAL" || auctions.status === "FETCH_FAILED") {
       dispatch(fetchAuctionsThunk());
     }
-
   }, [auctions.status]);
 
   useEffect(() => {
-    if(prevAuction.status === "INITIAL" && isInitialized){
-      dispatch(fetchPreviousAuctionThunk(Moralis,))
+    if (prevAuction.status === "INITIAL" && isInitialized) {
+      dispatch(fetchPreviousAuctionThunk(Moralis));
     }
-  }, [prevAuction, isInitialized])
+  }, [prevAuction, isInitialized]);
 
   useEffect(() => {
     if (connected && address && auctions.status === "FETCH_SUCCESS") {
@@ -55,8 +56,6 @@ export default function Auction() {
       );
     }
   }, [connected, address, auctions.status]);
-
-
 
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
@@ -85,6 +84,8 @@ export default function Auction() {
   };
 
   const isPilotOver = isSuccessState && !currentAuction && !nextAuction;
+  const hasNextAuction = isSuccessState && !currentAuction && nextAuction;
+  const hasCurrentAction = isSuccessState && currentAuction && nextAuction;
 
   return (
     <>
@@ -97,10 +98,13 @@ export default function Auction() {
               {isPilotOver ? (
                 <h3>PILOT DONE!</h3>
               ) : (
-                <h3>next auction finishes in</h3>
+                <>
+                  {hasNextAuction && <h3>Next Auction Starts In</h3>}
+                  {hasCurrentAction && <h3>Current Auction Ends In</h3>}
+                </>
               )}
               <p>
-                { isPilotOver ? (
+                {isPilotOver ? (
                   <>
                     Thank you for Participating in the wallet feel free to leave
                     your remarks here:
