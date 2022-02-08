@@ -64,9 +64,27 @@ export interface INetwork {
   name: string;
   chainId: number;
   symbol: string;
+  tokenSymbol: string;
+}
+export type IInsurance = {
+  percent: string;
+  protocol: {
+    name: string;
+    productId: number;
+    icon : {
+      url: string;
+    };
+    network: INetwork;
+  }
+  token: IStrapiToken | null;
 }
 
-export interface IFarmerInter {
+export type IInsuranceProps = {
+  hasInsurance?: boolean | null;
+  Insurance?: IInsurance[];
+  minAmountForInsurance?: number | null;
+};
+export interface IFarmerInter extends IInsuranceProps {
   name: string
   description: string;
   graphUrl: string;
@@ -82,6 +100,7 @@ export interface IFarmerInter {
   active: boolean;
   twitter: string;
   hideInvestButton: boolean | null;
+  impermanentLoss: boolean | null;
   telegram: string;
   poolAddress: string;
   poolVersion: number;
@@ -89,6 +108,7 @@ export interface IFarmerInter {
   oldPoolAddress: string;
   network: INetwork;
   strategies:IStrategy[];
+  Zone: {id: number; strapi_component: "component.klima-tokens"; klima: string;}[] ;
 }
 
 export type IStrategy = {
