@@ -9,9 +9,12 @@ import { ReferralStateProvider } from "contexts/ReferralContext";
 import React from "react";
 import { WebsiteMeta } from "components/meta";
 import { Helmet } from "react-helmet";
-import { Provider as ReduxProvider } from "react-redux";
+import { Provider, Provider as ReduxProvider } from "react-redux";
 import { store } from "store";
+import { BrightSdkProvider } from "contexts/BrightUnionContext";
 import { LogRocketProvider } from "LogRocketProvider";
+import { GlobalPopupProvider } from "components/GlobalPopupProvider";
+
 export const Providers: React.FC = ({ children }) => {
   return (
     <ReduxProvider store={store}>
@@ -111,13 +114,19 @@ export const Providers: React.FC = ({ children }) => {
             }}
           >
             <Web3Provider>
-              <StakingContractProvider>
-                <ReferralStateProvider>
-                  <LogRocketProvider>
-                    <TooltipProvider>{children}</TooltipProvider>
-                  </LogRocketProvider>
-                </ReferralStateProvider>
-              </StakingContractProvider>
+              <Provider store={store}>
+                <StakingContractProvider>
+                  <ReferralStateProvider>
+                    <BrightSdkProvider>
+                      <LogRocketProvider>
+                        <TooltipProvider>
+                          <GlobalPopupProvider>{children}</GlobalPopupProvider>
+                        </TooltipProvider>
+                      </LogRocketProvider>
+                    </BrightSdkProvider>
+                  </ReferralStateProvider>
+                </StakingContractProvider>
+              </Provider>
             </Web3Provider>
           </SnackbarProvider>
         </NotificationProvider>

@@ -78,7 +78,7 @@ export const fixUrl = (url?: string) => {
   return `https://${url}`;
 };
 
-export const formatNum = (num: string, digits?: number) => {
+export const formatNum = (num: string | number, digits?: number) => {
   const wrappedNum = new BigNumber(num);
   digits = isUndefined(digits)? wrappedNum.gt(1) ? 2 : 6: digits;
   if (process.env.GATSBY_APP_ENV === "development") {

@@ -1,6 +1,12 @@
 import { ButtonWidget } from "components/Button";
 import { DonCommonmodal } from "components/DonModal";
-import { captureException, getBSCDon, sendEvent, toEther, toWei } from "helpers";
+import {
+  captureException,
+  getBSCDon,
+  sendEvent,
+  toEther,
+  toWei,
+} from "helpers";
 import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import BigNumber from "bignumber.js";
@@ -12,7 +18,7 @@ import clsx from "clsx";
 import BgImage from "images/success-bg.png";
 import { DonTokenIcon } from "icons/DonTokenIcon";
 import { breakPoints } from "breakponts";
-import { useWeb3Context } from "don-components";
+import { BINANCE_CHAIN_ID, useWeb3Context } from "don-components";
 import tier1 from "../../images/tiersImage/tier1.png";
 import tier2 from "../../images/tiersImage/tier2.png";
 import tier3 from "../../images/tiersImage/tier3.png";
@@ -161,7 +167,7 @@ export const AcceleratedAPYModal = ({
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
-  const { getConnectedWeb3 } = useWeb3Context();
+  const { getConnectedWeb3, chainId, switchNetwork } = useWeb3Context();
 
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();
@@ -232,12 +238,12 @@ export const AcceleratedAPYModal = ({
           toWei(new BigNumber(donAmount).minus(stakedDon).toString())
         );
         setHasCompleted(true);
-        const web3 =  getConnectedWeb3();
+        const web3 = getConnectedWeb3();
         const accounts = await web3.eth.getAccounts();
         sendEvent("Tier Change", {
           newTier: selectedTier.toFixed(),
-          user: accounts[0]
-        })
+          user: accounts[0],
+        });
       } catch (e) {
         captureException(e, "StakeDon");
       } finally {
@@ -264,10 +270,34 @@ export const AcceleratedAPYModal = ({
       }
     })();
   }, []);
-  const {getTierCommission} = useReferralContext();
+  const { getTierCommission } = useReferralContext();
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   const renderContent = () => {
+    if (chainId !== BINANCE_CHAIN_ID) {
+      return (
+        <div
+          style={{ minHeight: 200 }}
+          className="d-flex flex-column text-center justify-content-center align-items-center"
+        >
+          <h4>Switch network to BSC in order to upgrade tier</h4>
+          <div>
+            <ButtonWidget
+              varaint="contained"
+              onClick={() => switchNetwork(BINANCE_CHAIN_ID)}
+              style={{ fontSize: 14 }}
+              className="py-1 font-weight-bold"
+              containedVariantColor="lightYellow"
+              width="205px"
+              height="48px"
+            >
+              Switch Network
+            </ButtonWidget>
+          </div>
+        </div>
+      );
+    }
+
     if (!hasCheckedDons) {
       return (
         <div
@@ -310,7 +340,7 @@ export const AcceleratedAPYModal = ({
         <div style={{ marginTop: -30, marginBottom: -20 }}>
           <Header>
             <Heading fontSize="23px" mobileFontSize="18px" className="mb-2">
-            Upgrade tier
+              Upgrade tier
             </Heading>
             <SubHeading>Stake $DON and climb the tier ladder</SubHeading>
           </Header>

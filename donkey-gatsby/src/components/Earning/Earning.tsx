@@ -13,7 +13,6 @@ import {
 } from "helpers";
 import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import DataEarning from "./DataEarning";
-import YellowBack from "./images/yellow_background.png";
 import DONKey from "./images/donkey-icon.png";
 import BigNumber from "bignumber.js";
 import WalletPopup from "components/WalletPopup/WalletPopup";
@@ -23,6 +22,7 @@ import { StakeDonNew } from "./StakeDonNew";
 import { UnStakeDonNew } from "./UnstakeDonNew";
 import { theme } from "theme";
 import { HeaderSection } from "./HeaderSection";
+import { DonCommonmodal } from "components/DonModal";
 
 const EarningSection = styled.div`
   min-height: 100%;
@@ -31,19 +31,7 @@ const EarningSection = styled.div`
   flex-direction: column;
   z-index: 0;
 `;
-const BackImage = styled.img`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 320px;
-  z-index: -1;
-`;
-const TitleSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-`;
+
 const Title = styled.label`
   font-size: xx-large;
   font-weight: bold;
@@ -159,6 +147,8 @@ export const Earning = ({ id }: { id: string }) => {
     symbol: "",
   });
 
+  const [showHarvestPopup, setShowHarvestPopup] = useState(false);
+
   const [isHarvesting, setIsHarvesting] = useState(false);
   const { showFailure, showProgress, showSuccess } =
     useTransactionNotification();
@@ -175,9 +165,11 @@ export const Earning = ({ id }: { id: string }) => {
       poolObj.contractAddress,
       address
     );
+
     const { name, symbol, decimals } = await getRewardToken(
       web3,
-      poolObj.contractAddress
+      poolObj.contractAddress,
+      poolObj.tokenChain
     );
 
     setPoolInfo({
@@ -212,6 +204,11 @@ export const Earning = ({ id }: { id: string }) => {
   }, [connected, address]);
 
   const harvest = async () => {
+    if (poolObj.harvestDisabled) {
+      setShowHarvestPopup(true);
+      return;
+    }
+
     setIsHarvesting(true);
     try {
       showProgress("Harvesting Rewards");
@@ -276,6 +273,20 @@ export const Earning = ({ id }: { id: string }) => {
                   />
                 </div>
                 <Title>{formatNum(poolInfo.pendingRewards)}</Title>
+                {showHarvestPopup && (
+                  <DonCommonmodal
+                    title=""
+                    variant="common"
+                    size="xs"
+                    isOpen
+                    onClose={() => setShowHarvestPopup(false)}
+                  >
+                  <p className="mb-4">
+                  Due to cross-chain rewards the harvest will automatically
+                    disperse the rewards when pool closes.
+                  </p>
+                  </DonCommonmodal>
+                )}
                 <Subtitle>{poolInfo.symbol} Earned</Subtitle>
                 {chainId === BINANCE_CHAIN_ID && (
                   <EarningBtn
