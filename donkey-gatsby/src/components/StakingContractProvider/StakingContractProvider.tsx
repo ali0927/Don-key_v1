@@ -72,7 +72,7 @@ const useStaking = () => {
 
   const viewstakingContract = useMemo(() => {
     const newWeb3 = getWeb3(
-      process.env.NODE_ENV === "development"
+      process.env.GATSBY_APP_ENV === "development"
         ? BSC_TESTNET_CHAIN_ID
         : BINANCE_CHAIN_ID
     );
@@ -124,7 +124,7 @@ const useStaking = () => {
         walletAddress: address,
       });
       const newWeb3 = getWeb3(
-        process.env.NODE_ENV === "development"
+        process.env.GATSBY_APP_ENV === "development"
           ? BSC_TESTNET_CHAIN_ID
           : BINANCE_CHAIN_ID
       );

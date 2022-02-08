@@ -276,7 +276,7 @@ export const AcceleratedAPYModal = ({
   }, []);
   const { getTierCommission } = useReferralContext();
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
-  console.log(chainId, BSC_TESTNET_CHAIN_ID)
+
   const renderContent = () => {
     if (chainId !== BINANCE_CHAIN_ID && chainId !== BSC_TESTNET_CHAIN_ID) {
       return (
@@ -290,7 +290,7 @@ export const AcceleratedAPYModal = ({
               varaint="contained"
               onClick={() =>
                 switchNetwork(
-                  process.env.NODE_ENV === "development"
+                  process.env.GATSBY_APP_ENV !== "development"
                     ? BINANCE_CHAIN_ID
                     : BSC_TESTNET_CHAIN_ID
                 )

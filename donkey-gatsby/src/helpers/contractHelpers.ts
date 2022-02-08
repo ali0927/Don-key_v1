@@ -705,7 +705,7 @@ export const getLPTokenContract = async (web3: Web3, isBSC = false) => {
 };
 
 export const getDonPriceWeb3 = async () => {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.GATSBY_APP_ENV === "development") {
     return "1";
   }
   const priceFeedContract = await getDonkeyPriceFeedContract(
