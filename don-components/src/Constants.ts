@@ -11,10 +11,10 @@ export const FANTOM_RPC = ["https://rpc.ftm.tools"];
 export const AVAX_RPC = ["https://api.avax.network/ext/bc/C/rpc"];
 export const AVAX_CHAIN_ID = 43114;
 export const ETHEREUM_CHAIN_ID = 1;
-export const BINANCE_CHAIN_ID = parseInt(process.env.GATSBY_BINANCE_CHAIN_ID || "56");
+export const BINANCE_CHAIN_ID = 56;
 export const POLYGON_CHAIN_ID = 137;
 export const FANTOM_CHAIN_ID = 250;
-export const BSC_TESTNET_CHAIN_ID = parseInt(process.env.GATSBY_BSC_TESTNET_CHAIN_ID || "97");
+export const BSC_TESTNET_CHAIN_ID = 97;
 
 
 export const NetworkConfigs = [{
