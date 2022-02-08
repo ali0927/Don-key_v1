@@ -25,7 +25,7 @@
   GATSBY_LP_STAKING_ETH_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpeth"
   GATSBY_LP_STAKING_BSC_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpbsc"
   GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
-[context.feature/auction-page.environment]
+[context."feature/auction-page".environment]
   GATSBY_STRAPI_URL = "https://dev-cms.don-key.finance"
   GATSBY_STAKING_CONTRACT = "0x9E2403892eD4a6Dd663A4DF5ED6b55800Bed2F31"
   GATSBY_API_URL = "https://dev-api.don-key.finance"
