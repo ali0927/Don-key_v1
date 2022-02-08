@@ -95,5 +95,5 @@ export const LoansTable = () => {
       </div>
     );
   }
-  return <div className="py-5"></div>;
+  return <div></div>;
 };
