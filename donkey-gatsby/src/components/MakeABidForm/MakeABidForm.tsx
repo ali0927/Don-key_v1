@@ -1,8 +1,6 @@
 import {
-  FormControl,
   InputBase,
   MenuItem,
-  NativeSelect,
   Select,
   Theme,
   withStyles,
@@ -494,7 +492,7 @@ const AuctionForm = ({
             {moment
               .unix(auction.endTime)
               .add(moment.duration(auction.tenure, "seconds"))
-              .format("DD/mm/yyyy")}
+              .format("DD/MM/yyyy")}
           </span>
         </div>
       </div>

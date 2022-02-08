@@ -23,11 +23,8 @@ import {
   ISupportedLP,
 } from "interfaces";
 import Moralis from "moralis/types";
-import {
-  bidSelector,
-  loanSelector,
-  selectAuction,
-} from "store/selectors";
+import { bidSelector, loanSelector, selectAuction } from "store/selectors";
+import { strapi } from "strapi";
 
 import { action } from "typesafe-actions";
 import Web3 from "web3";
@@ -78,17 +75,14 @@ export const fetchAuctionsThunk =
   (): AppThunk => async (dispatch, getState) => {
     dispatch(fetchAuctions());
 
-    const auctionAddresses = [
-      "0x4c784C582d4d3E419e2287Cf921516Ac09A2D827",
-      "0x9a7661620865C0114a62Cc20458075e89FFFec4D",
-      "0x87dF0AC3EA940B35EC8acA9F896eb3D7165e0c43",
-      "0x6dc94ebEFd7fDA827D254E3F3ec5Bec640Cd5AAe",
-      "0x2ca65607B33C62d72C0309f84EdC7106c0E75a2C",
-      "0xA2Bf18bbDD07CA70b23b4cd73e65d067F9ef47cb",
-      "0xA77Df1e358bE7e9E006A935DE3E3bD0Afd5CcE95",
-      "0xC02dcb56165a743d6ED9C87bEeA55Dd29396E785",
-      "0x4DD27488c8EaF04A94DA5696ede29846Bc91FE43"
-    ];
+    const auctionInfo = await strapi.get("/auctions");
+
+
+    const auctionData = auctionInfo.data[0];
+
+    const auctionAddresses: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionAddress);
+
+
 
     // To do Fetch All Pools addresses
     const result = await client.query({ query: ALL_FARMERS_QUERY });
@@ -121,10 +115,15 @@ export const fetchAuctionsThunk =
 
         await contract.initialize();
         auctionState.initialized = true;
-        auctionState.endTime = await contract.getauctionEndTime();
-        auctionState.startTime = await contract.getauctionStartTime();
+        [auctionState.endTime, auctionState.startTime, auctionState.tenure] =
+          await Promise.all([
+            contract.getauctionEndTime(),
+            contract.getauctionStartTime(),
+            contract.getLoanTenure(),
+          ]);
+
         auctionState.maxDebtMap = contract.getMaxDebtMap();
-        auctionState.tenure = await contract.getLoanTenure();
+
         const filterFarmers: IFarmerInter[] = [];
         await Promise.all(
           farmers.map(async (farmer) => {
@@ -139,11 +138,12 @@ export const fetchAuctionsThunk =
         if (filterFarmers.length > 0) {
           auctionState.supportedLps = await Promise.all(
             filterFarmers.map(async (farmer) => {
-              const price = await getTokenPrice(web3, farmer.poolAddress);
-              const symbol = await getTokenSymbol(web3, farmer.poolAddress);
-              const minCommission = await contract.getFloorCommission(
-                farmer.poolAddress
-              );
+              const [price, symbol, minCommission] = await Promise.all([
+                getTokenPrice(web3, farmer.poolAddress),
+                getTokenSymbol(web3, farmer.poolAddress),
+                contract.getFloorCommission(farmer.poolAddress),
+              ]);
+
               const supportedLp: ISupportedLP = {
                 lpAddress: farmer.poolAddress,
                 price,
@@ -194,12 +194,16 @@ export const fetchBalancesThunk =
             .call();
           fetchedAuctions = produce(fetchedAuctions, (draft) => {
             draft[index].supportedLps[lindex].balance = toEther(userBalance);
-            draft[index].supportedLps[lindex].withdrawAmount = new BigNumber(userBalance).isEqualTo(0) ? "0":  toEther(
-              new BigNumber(1)
-                .minus(new BigNumber(lockedLp).dividedBy(userBalance))
-                .multipliedBy(withdrawAmount)
-                .toFixed(0)
-            );
+            draft[index].supportedLps[lindex].withdrawAmount = new BigNumber(
+              userBalance
+            ).isEqualTo(0)
+              ? "0"
+              : toEther(
+                  new BigNumber(1)
+                    .minus(new BigNumber(lockedLp).dividedBy(userBalance))
+                    .multipliedBy(withdrawAmount)
+                    .toFixed(0)
+                );
             draft[index].supportedLps[lindex].lockedLp = toEther(lockedLp);
           });
         });
@@ -470,23 +474,19 @@ export const fetchPreviousAuctionThunk =
   async (dispatch) => {
     try {
       dispatch(fetchPrevAuctionAction());
-      const MoralisDBS = [
-        "auctionwinnerone",
-        "auctionwinnertwo",
-        "auctionwinnerthree",
-        "auctionwinnerfour",
-        "auctionwinnersfive",
-        "auctionwinnerssix",
-        "auctionwinnersseven",
-        "auctionwinnerseight",
-        "auctionwinnersnine"
-      ];
+      const auctionInfo = await strapi.get("/auctions");
+
+
+      const auctionData = auctionInfo.data[0];
+  
+      const MoralisDBS: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionTable);
+  
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {
         const Winner = Moralis.Object.extend(dbname);
         const query = new Moralis.Query(Winner);
         const results = await query.find();
-        if(results.length === 0){
+        if (results.length === 0) {
           return;
         }
         const winner: IPrevWinners = {
