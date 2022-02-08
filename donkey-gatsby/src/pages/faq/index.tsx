@@ -1,5 +1,5 @@
-import InvestmentPage from "components/Faq";
+import FaqPage from "components/Faq";
 
 export default function Faq() {
-  return <InvestmentPage />;
+  return <FaqPage />;
 }

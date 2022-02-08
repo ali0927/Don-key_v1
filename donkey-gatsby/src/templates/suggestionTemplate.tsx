@@ -4,7 +4,7 @@ import { UserIcon } from "components/Icons";
 import { BsCircleFill, BsFillChatRightDotsFill, BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs"
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
-import { useRiskImageList } from "components/Suggest/SuggestCard";
+import { useRiskList } from "components/Suggest";
 import { Comment } from "components/Suggest/Comment";
 import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
@@ -173,7 +173,7 @@ export default function SuggestionView ({
   };
 }) {
   const [showRiskDetail, setShowRiskDetail] = useState(false)
-  const riskImages = useRiskImageList()
+  const riskImages = useRiskList()
   const suggestion = useMemo(() => {
     return suggestionInfo
   }, [suggestionInfo])
