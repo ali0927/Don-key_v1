@@ -12,7 +12,7 @@ const Comp = (props: { className?: string }) => {
   return (
     <StaticImage
       className={props.className}
-      src="../images/bug-report/fix-donkey.png"
+      src="../../images/bug-report/fix-donkey.png"
       alt="Bug Reporter Donkey"
       layout="fullWidth"
     />
