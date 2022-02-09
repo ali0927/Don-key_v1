@@ -158,22 +158,15 @@ const calcFloorCommission = (
     : borrowAmount.multipliedBy(floorCommission).dividedBy(100);
 };
 
-const transformArray = <T extends any>(arr: T[], index: number) => {
-  if (arr.length > 2) {
-    return [
-      arr[index],
-      ...arr.slice(0, index),
-      ...arr.slice(index + 1, arr.length),
-    ];
-  }
-  return [...arr].reverse();
-};
+
 
 const AuctionForm = ({
   auction,
+  disabled
 }: {
-  status: IStoreState["auctions"]["auctionInfo"]["status"];
+
   auction: IAuction;
+  disabled?: boolean;
 }) => {
   const [state, setState] = useState(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
@@ -283,7 +276,7 @@ const AuctionForm = ({
 
   return (
     <>
-      <div className="head" style={{ marginBottom: "22px" }}>
+      <div className={clsx("head", {blurred: disabled})} style={{ marginBottom: "22px" }}>
         <h4>Make a Bid</h4>
         <div className="tooltip_con">
           <div className="tooltip_trigger info_icon">i</div>
@@ -634,14 +627,11 @@ export const MakeABidForm = () => {
     if (isReady) {
       if (currentAuction) {
         return (
-          <AuctionForm status={auctions.status} auction={currentAuction} />
+          <AuctionForm  auction={currentAuction} />
         );
       }
-      if (nextAuction) {
-        return <AuctionForm status={auctions.status} auction={nextAuction} />;
-      }
       if (!currentAuction && nextAuction) {
-        return "Wait For Next Auction To Start";
+        return <AuctionForm  auction={nextAuction} />
       }
       if (isPilotOver) {
         return <AuctionSuggestionForm />;

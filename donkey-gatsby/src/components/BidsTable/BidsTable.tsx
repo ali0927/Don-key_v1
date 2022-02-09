@@ -205,5 +205,5 @@ export const BidsTable = () => {
       </div>
     );
   }
-  return <div className="py-5"></div>;
+  return <div className=""></div>;
 };

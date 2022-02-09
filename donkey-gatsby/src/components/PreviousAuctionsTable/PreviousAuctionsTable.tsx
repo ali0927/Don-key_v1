@@ -12,7 +12,7 @@ export const PreviousAuctionsTable = () => {
   );
 
   if (
-    prevAuctions.status !== "FETCH_SUCCESS" &&
+    prevAuctions.status !== "FETCH_SUCCESS" ||
     prevAuctions.data.length === 0
   ) {
     return <div className="py-5"></div>;
@@ -21,9 +21,9 @@ export const PreviousAuctionsTable = () => {
   return (
     <div
       className="strip table_strip previous_auctions"
-      style={{ paddingTop: "71px" }}
+
     >
-      <div className="boxed">
+      <div className="boxed" style={{ paddingTop: 130 }}>
         <h3>Previous Auctions</h3>
         <table className="previous_auctions_head">
           <thead>
