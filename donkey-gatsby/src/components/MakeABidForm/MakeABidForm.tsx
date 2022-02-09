@@ -158,16 +158,7 @@ const calcFloorCommission = (
     : borrowAmount.multipliedBy(floorCommission).dividedBy(100);
 };
 
-
-
-const AuctionForm = ({
-  auction,
-  
-}: {
-
-  auction: IAuction;
-
-}) => {
+const AuctionForm = ({ auction }: { auction: IAuction }) => {
   const [state, setState] = useState(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
   const { tier } = useStakingContract();
@@ -316,7 +307,9 @@ const AuctionForm = ({
                           backgroundImage: `url('${item.strategyImage}')`,
                         }}
                       ></div>
-                      <div className="title font-weight-bold">{item.strategyName}</div>
+                      <div className="title font-weight-bold">
+                        {item.strategyName}
+                      </div>
                     </div>
                     <div className="right">
                       <div className="amount d-flex align-items-center">
@@ -327,7 +320,7 @@ const AuctionForm = ({
                           }}
                         ></div>
                         <div className="amount">
-                        {item.balance} {item.symbol}
+                          {item.balance} {item.symbol}
                         </div>
                       </div>
                     </div>
@@ -423,10 +416,9 @@ const AuctionForm = ({
         </h5>
         <p>
           Collateral {debtAmount.toFixed(2)} {selectedLp.symbol} *{" "}
-          {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol} <br /> Tier{" "}
-          {tier.tier} Debt ratio is {maxDebtRatio}% <br />
-          Min Commission is {selectedLp.minCommission}
-          %
+          {maxDebtRatio}% = {borrowAmount.toFixed(2)} {selectedLp!.symbol}{" "}
+          <br /> Tier {tier.tier} Debt ratio is {maxDebtRatio}% <br />
+          Min Commission is {selectedLp.minCommission}%
         </p>
       </div>
 
@@ -614,7 +606,7 @@ export const MakeABidForm = () => {
   const auctions = useSelector(
     (state: IStoreState) => state.auctions.auctionInfo
   );
-  const {connected} = useWeb3Context();
+  const { connected } = useWeb3Context();
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
@@ -627,12 +619,10 @@ export const MakeABidForm = () => {
   const renderForm = () => {
     if (isReady) {
       if (currentAuction) {
-        return (
-          <AuctionForm  auction={currentAuction} />
-        );
+        return <AuctionForm auction={currentAuction} />;
       }
       if (!currentAuction && nextAuction) {
-        return <AuctionForm  auction={nextAuction} />
+        return <AuctionForm auction={nextAuction} />;
       }
       if (isPilotOver) {
         return <AuctionSuggestionForm />;
@@ -653,7 +643,12 @@ export const MakeABidForm = () => {
   };
 
   return (
-    <div className={clsx("make_a_bid ", { "bg-white pb-5": isPilotOver, blurred: !currentAuction && nextAuction || !connected })}>
+    <div
+      className={clsx("make_a_bid ", {
+        "bg-white pb-5": isPilotOver,
+        blurred: (!currentAuction && nextAuction) || !connected,
+      })}
+    >
       {renderForm()}
     </div>
   );
