@@ -162,11 +162,11 @@ const calcFloorCommission = (
 
 const AuctionForm = ({
   auction,
-  disabled
+  
 }: {
 
   auction: IAuction;
-  disabled?: boolean;
+
 }) => {
   const [state, setState] = useState(INITIAL_FORM_STATE);
   const [isLoading, setIsLoading] = useState(false);
@@ -276,7 +276,7 @@ const AuctionForm = ({
 
   return (
     <>
-      <div className={clsx("head", {blurred: disabled})} style={{ marginBottom: "22px" }}>
+      <div className={clsx("head")} style={{ marginBottom: "22px" }}>
         <h4>Make a Bid</h4>
         <div className="tooltip_con">
           <div className="tooltip_trigger info_icon">i</div>
@@ -614,6 +614,7 @@ export const MakeABidForm = () => {
   const auctions = useSelector(
     (state: IStoreState) => state.auctions.auctionInfo
   );
+  const {connected} = useWeb3Context();
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
@@ -652,7 +653,7 @@ export const MakeABidForm = () => {
   };
 
   return (
-    <div className={clsx("make_a_bid ", { "bg-white pb-5": isPilotOver })}>
+    <div className={clsx("make_a_bid ", { "bg-white pb-5": isPilotOver, blurred: !currentAuction && nextAuction || !connected })}>
       {renderForm()}
     </div>
   );
