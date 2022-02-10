@@ -10,7 +10,7 @@ import React, { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { revokeBidThunk } from "store/actions";
-import { selectAuction } from "store/selectors";
+import { selectAuction, selectCurrentAuction } from "store/selectors";
 import { createFindLendedLp } from "store/selectors/findLendedLp";
 
 // const FindAuction = ({
@@ -62,7 +62,7 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
-
+  const currentAuction = useSelector(selectCurrentAuction);
   const revokeBid = async (auctionAddress: string) => {
     setIsLoading(true);
     dispatch(
@@ -82,7 +82,10 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
 
   return (
     <td>
-      <button disabled={isLoading} onClick={() => revokeBid(auctionAddress)}>
+      <button
+        disabled={isLoading || currentAuction?.address !== auctionAddress}
+        onClick={() => revokeBid(auctionAddress)}
+      >
         {isLoading ? <Spinner size="sm" animation="border" /> : "Revoke"}
       </button>
     </td>

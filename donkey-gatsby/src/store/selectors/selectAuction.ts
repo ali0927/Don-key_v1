@@ -4,7 +4,10 @@ import memoizeOne from "memoize-one";
 
 export const createSelectAuction = () => {
   return memoizeOne(
-    (auctions: IStoreState["auctions"]["auctionInfo"], auctionAddress: string) => {
+    (
+      auctions: IStoreState["auctions"]["auctionInfo"],
+      auctionAddress: string
+    ) => {
       if (
         isOneOf(auctions.status, ["FETCH_BALANCE_SUCCESS", "FETCH_SUCCESS"])
       ) {
@@ -14,6 +17,13 @@ export const createSelectAuction = () => {
       return null;
     }
   );
+};
+export const selectCurrentAuction = (state: IStoreState) => {
+  const auctions = state.auctions.auctionInfo;
+  if (isOneOf(auctions.status, ["FETCH_BALANCE_SUCCESS", "FETCH_SUCCESS"])) {
+    return (auctions as IAuctionSuccessState).currentAuction;
+  }
+  return null;
 };
 
 export const selectAuction = createSelectAuction();
