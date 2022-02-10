@@ -9,10 +9,9 @@ import { IAuction, IStoreState } from "interfaces";
 import React, { useMemo, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { claimLoanThunk, revokeBidThunk } from "store/actions";
-import { createSelectAuction, selectAuction } from "store/selectors";
+import { revokeBidThunk } from "store/actions";
+import { selectAuction } from "store/selectors";
 import { createFindLendedLp } from "store/selectors/findLendedLp";
-import { selectAuctionByLp } from "store/selectors/selectAuctionByLp";
 
 // const FindAuction = ({
 //   address,
@@ -35,7 +34,13 @@ import { selectAuctionByLp } from "store/selectors/selectAuctionByLp";
 //   return null;
 // };
 
-const ClaimButton = ({ lpAddress }: { lpAddress: string }) => {
+const ClaimButton = ({
+  lpAddress,
+  auctionAddress,
+}: {
+  lpAddress: string;
+  auctionAddress: string;
+}) => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   return (
@@ -43,6 +48,7 @@ const ClaimButton = ({ lpAddress }: { lpAddress: string }) => {
       {isPopupOpen && (
         <ClaimPopup
           lpAddress={lpAddress}
+          auctionAddress={auctionAddress}
           open={isPopupOpen}
           onClose={() => setIsPopupOpen(false)}
         />
@@ -84,10 +90,12 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
 };
 
 export const FindStrategy = ({
-  address,
+  lpAddress,
+  auctionAddress,
   children,
 }: {
-  address: string;
+  lpAddress: string;
+  auctionAddress: string;
   children: (arg: {
     lptoken: IAuction["supportedLps"][number];
     auction: IAuction;
@@ -98,10 +106,10 @@ export const FindStrategy = ({
   }, []);
 
   const lptoken = useSelector((state: IStoreState) =>
-    findLp(state.auctions.auctionInfo, address)
+    findLp(state.auctions.auctionInfo, lpAddress, auctionAddress)
   );
   const auction = useSelector((state: IStoreState) =>
-    selectAuctionByLp(state.auctions.auctionInfo, lptoken?.lpAddress)
+    selectAuction(state.auctions.auctionInfo, auctionAddress)
   );
   if (lptoken && auction) {
     return children({ lptoken, auction });
@@ -113,7 +121,7 @@ export const BidsTable = () => {
   const [openDetails, setOpenDetails] = useState(false);
 
   const bids = useSelector((state: IStoreState) => state.auctions.userBids);
-  const {address} = useWeb3Context();
+  const { address } = useWeb3Context();
   if (bids.status === "FETCH_SUCCESS" && bids.data.length > 0) {
     return (
       <div
@@ -161,7 +169,10 @@ export const BidsTable = () => {
                     </td>
                     <td data-title="wallet">{shortenAddress(address)}</td>
 
-                    <FindStrategy address={bid.lpAddress}>
+                    <FindStrategy
+                      auctionAddress={bid.auctionAddress}
+                      lpAddress={bid.lpAddress}
+                    >
                       {({ lptoken }) => {
                         return (
                           <>
@@ -183,7 +194,10 @@ export const BidsTable = () => {
                               />
                             )}
                             {bid.status === "won" && (
-                              <ClaimButton lpAddress={bid.lpAddress} />
+                              <ClaimButton
+                                auctionAddress={bid.auctionAddress}
+                                lpAddress={bid.lpAddress}
+                              />
                             )}
                             {bid.status === "claimed" && (
                               <td>

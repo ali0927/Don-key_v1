@@ -39,16 +39,18 @@ export const ClaimPopup = ({
   open,
   onClose,
   lpAddress,
+  auctionAddress
 }: {
   lpAddress: string;
   open: boolean;
   onClose: () => void;
+  auctionAddress: string;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
   const bid = useSelector((state: IStoreState) =>
-    bidSelector(state.auctions.userBids, lpAddress)
+    bidSelector(state.auctions.userBids, lpAddress, auctionAddress)
   );
 
   const claimLoan = async () => {

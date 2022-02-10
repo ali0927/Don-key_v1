@@ -170,7 +170,7 @@ export type ISupportedLP = {
   tokenImage: string;
   minCommission: number;
   lockedLp?: string;
-}
+};
 
 export type IAuction = {
   address: string;
@@ -197,6 +197,7 @@ export type ILoan = {
   status: "unpaid" | "paid" | "recovered";
   lpAddress: string;
   lendedAmount: string;
+  auctionAddress: string;
   borrowedAmount: string;
   commission: string;
   commissionPercent: string;
@@ -225,8 +226,8 @@ export type IPrevWinners = {
     commissionpercent: string;
     lpToken: string;
     lendedAmount: string;
-  }[]
-}
+  }[];
+};
 
 export type IStoreState = {
   auth: IAuthState;
@@ -246,8 +247,8 @@ export type IStoreState = {
     };
     prevAuctions: {
       status: "INITIAL" | "FETCHING" | "FETCH_SUCCESS" | "FETCH_FAILED";
-      data: IPrevWinners[]
-    }
+      data: IPrevWinners[];
+    };
   };
 };
 

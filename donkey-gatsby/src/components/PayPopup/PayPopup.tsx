@@ -9,7 +9,6 @@ import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { payLoanThunk } from "store/actions";
 import { findLendedLp } from "store/selectors";
-import { loanSelector } from "store/selectors/loanSelector";
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.button`
@@ -115,9 +114,9 @@ const Dots = styled.div`
   }
 `;
 
-const lpSelector = (lpAddress: string) =>
+const lpSelector = (lpAddress: string, auctionAddress: string) =>
   memoizeOne((state: IStoreState) =>
-    findLendedLp(state.auctions.auctionInfo, lpAddress)
+    findLendedLp(state.auctions.auctionInfo, lpAddress, auctionAddress)
   );
 
 export const PayPopup = ({
@@ -130,7 +129,7 @@ export const PayPopup = ({
   onClose: () => void;
 }) => {
   const { hrs, days, mins } = useTimer(loan.settlementTime);
-  const lpToken = useSelector(lpSelector(loan.lpAddress));
+  const lpToken = useSelector(lpSelector(loan.lpAddress, loan.auctionAddress));
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -141,7 +140,7 @@ export const PayPopup = ({
     setIsLoading(true);
     dispatch(
       payLoanThunk({
-        lpAddress: loan.lpAddress,
+        auctionAddress: loan.auctionAddress,
         web3: getConnectedWeb3(),
         userAddress: address,
         onDone: () => {

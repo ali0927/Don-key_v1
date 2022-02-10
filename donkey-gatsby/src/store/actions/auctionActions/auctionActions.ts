@@ -23,7 +23,7 @@ import {
   ISupportedLP,
 } from "interfaces";
 import Moralis from "moralis/types";
-import { bidSelector, loanSelector, selectAuction } from "store/selectors";
+import { selectAuction } from "store/selectors";
 import { strapi } from "strapi";
 
 import { action } from "typesafe-actions";
@@ -77,12 +77,11 @@ export const fetchAuctionsThunk =
 
     const auctionInfo = await strapi.get("/auctions");
 
-
     const auctionData = auctionInfo.data[0];
 
-    const auctionAddresses: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionAddress);
-
-
+    const auctionAddresses: string[] = auctionData.AuctionAddress.map(
+      (item: any) => item.auctionAddress
+    );
 
     // To do Fetch All Pools addresses
     const result = await client.query({ query: ALL_FARMERS_QUERY });
@@ -317,6 +316,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
           commission: toEther(info.commissionAmount),
           commissionPercent: commissionBn.toFixed(2),
           lendedAmount: toEther(info.lendedAmount),
+          auctionAddress: bid.auctionAddress,
           lpAddress: info.lptoken,
           status: getLoanStatus(info.loanSettled, forceRecovery),
           totalAmountTobePaid: toEther(repaymentAmount),
@@ -383,35 +383,30 @@ export const claimLoanThunk =
 export const payLoanThunk =
   ({
     web3,
-    lpAddress,
+    auctionAddress,
     userAddress,
     onDone,
     onError,
   }: {
     web3: Web3;
-    lpAddress: string;
+    auctionAddress: string;
     userAddress: string;
     onDone?: () => void;
     onError?: () => void;
   }): AppThunk =>
   async (dispatch, getState) => {
     try {
-      const loan = loanSelector(getState().auctions.loans, lpAddress);
-      const bid = bidSelector(getState().auctions.userBids, lpAddress);
-      console.log(bid, "bid");
       const auctionContract = getAuctionContract(
-        bid?.auctionAddress as string,
+        auctionAddress,
         BSC_TESTNET_CHAIN_ID
       );
       if (!auctionContract.connectedToWallet) {
         await auctionContract.connectToWallet(web3);
       }
-      console.log("Reached");
+
       await auctionContract.repayLoan({
         userAddress,
         web3,
-
-        amount: loan?.totalAmountTobePaid as string,
       });
 
       const { bids, loans } = await fetchBidsAndLoans(getState(), userAddress);
@@ -476,11 +471,12 @@ export const fetchPreviousAuctionThunk =
       dispatch(fetchPrevAuctionAction());
       const auctionInfo = await strapi.get("/auctions");
 
-
       const auctionData = auctionInfo.data[0];
-  
-    const MoralisDBS: string[] = auctionData.AuctionAddress.map((item: any) => item.auctionTable);
-  
+
+      const MoralisDBS: string[] = auctionData.AuctionAddress.map(
+        (item: any) => item.auctionTable
+      );
+
       const prevAuctions: IPrevWinners[] = [];
       const pms = MoralisDBS.map(async (dbname) => {
         const Winner = Moralis.Object.extend(dbname);

@@ -1,6 +1,6 @@
 import BigNumber from "bignumber.js";
 import { getWeb3 } from "don-components";
-import { getERCContract, toWei } from "helpers";
+import { getERCContract } from "helpers";
 import { cloneDeep, memoize } from "lodash";
 import Web3 from "web3";
 
@@ -135,7 +135,7 @@ class AuctionContract {
   };
 
   getLoanTokenAddress = async () => {
-    console.log(this.address,)
+    console.log(this.address);
     return (await this.viewContract.methods.loanToken().call()) as string;
   };
 
@@ -144,24 +144,26 @@ class AuctionContract {
   };
 
   repayLoan = async ({
-    amount,
     userAddress,
     web3,
   }: {
     web3: Web3;
-    amount: string;
+
     userAddress: string;
   }) => {
     // call repay loan on contract
     // approve amount on underlying token to return
     const loanToken = await this.getLoanToken(web3);
-    const weiAmount = toWei(amount);
-    const allowance = await loanToken.methods.allowance(
+    const weiAmount = await this.estimatedRepaymentAmount({
       userAddress,
-      this.address
-    ).call();
+    });
+    const allowance = await loanToken.methods
+      .allowance(userAddress, this.address)
+      .call();
     if (new BigNumber(allowance).lt(weiAmount)) {
-      await loanToken.methods.approve(this.address,weiAmount).send({ from: userAddress });
+      await loanToken.methods
+        .approve(this.address, weiAmount)
+        .send({ from: userAddress });
     }
     await this.contract.methods.repay(weiAmount).send({ from: userAddress });
   };

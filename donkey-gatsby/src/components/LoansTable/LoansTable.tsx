@@ -53,7 +53,10 @@ export const LoansTable = () => {
                     <td data-title="last day to pay" className="timer">
                       <CountDown date={item.settlementTime} />
                     </td>
-                    <FindStrategy address={item.lpAddress}>
+                    <FindStrategy
+                      auctionAddress={item.auctionAddress}
+                      lpAddress={item.lpAddress}
+                    >
                       {({ lptoken }) => {
                         return (
                           <>
