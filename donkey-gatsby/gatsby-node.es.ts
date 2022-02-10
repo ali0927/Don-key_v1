@@ -312,6 +312,37 @@ export const createPages = async ({ graphql, actions }: any) => {
     }
   });
 
+  const suggestionsResp = await graphql(`
+    query fetchSuggestions {
+      allStrapiSuggestions {
+        nodes {
+          address
+          apy
+          description
+          id
+          strapiId
+          status
+          title
+          created_at(formatString: "DD/MM/Y")
+          network {
+            chainId
+            name
+          }
+          risk {
+            Title
+            image {
+              url
+            }
+            id
+          }
+          nickName
+        }
+      }
+    }
+  `);
+
+  const suggestions = suggestionsResp.data.allStrapiSuggestions.nodes;
+
   DummySuggestions.forEach((suggestion: any) => {
     createPage({
       path: `/community/suggestion/${suggestion.idx}`,

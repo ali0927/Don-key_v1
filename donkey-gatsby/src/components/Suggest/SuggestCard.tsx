@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import styled, { css } from "styled-components";
 import { navigate } from "gatsby-link";
 import { UserIcon } from "components/Icons";
@@ -171,6 +171,9 @@ export const SuggestCard: React.FC<{
   const handleCardClick = () => {
     navigate(`/community/suggestion/${props.suggest.idx}`);
   }
+  const risk = useMemo(() => {
+    return risks.find((item: any) => item.strapiId === props.suggest.risk);
+  }, [risks, props.suggest.risk]);
 
   return (
     <div>
@@ -210,7 +213,7 @@ export const SuggestCard: React.FC<{
             </div>
           </div>
           <div className="col-6">
-            <SuggestRiskImage src={risks[props.suggest.risk].image.url} />
+            <SuggestRiskImage src={risk.image.url} />
           </div>
         </div>
         <CommentButton onClick={(e) => handleCommentClick(e)}>

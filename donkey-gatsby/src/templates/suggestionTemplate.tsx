@@ -176,7 +176,11 @@ export default function SuggestionView ({
   const { risks } = useRiskAndNetworkList()
   const suggestion = useMemo(() => {
     return suggestionInfo
-  }, [suggestionInfo])
+  }, [suggestionInfo]);
+
+  const risk = useMemo(() => {
+    return risks.find((item: any) => item.strapiId === suggestion.risk);
+  }, [risks, suggestion]);
 
   const comments = useMemo(() => {
     const _comments = new Array(suggestion.comments).fill({}).map(item => {
@@ -259,7 +263,7 @@ export default function SuggestionView ({
                     </div>
                   </div>
                   <div className="col-6 col-md-12" style={{display:'flex', flexDirection:'column'}}>
-                    <SuggestionRiskImage src={risks[suggestion.risk].image.url} />
+                    <SuggestionRiskImage src={risk.image.url} />
                     <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
                       Risk Description
                     </RiskDescriptionButton>
@@ -293,7 +297,7 @@ export default function SuggestionView ({
       >
         <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
           <div className="col-sm-12 col-md-4" style={{display:'flex'}}>
-            <SuggestionRiskImage src={risks[suggestion.risk].image.url} style={{padding: 0}} />
+            <SuggestionRiskImage src={risk.image.url} style={{padding: 0}} />
           </div>
           <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
             This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.
