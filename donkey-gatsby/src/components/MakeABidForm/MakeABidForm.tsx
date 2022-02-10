@@ -319,7 +319,7 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
                           }}
                         ></div>
                         <div className="amount">
-                          {item.balance} {item.symbol}
+                          {item.withdrawAmount} {item.symbol}
                         </div>
                       </div>
                     </div>
