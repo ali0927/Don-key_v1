@@ -286,7 +286,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
       const info = await auctionContract.getUserInfo({ userAddress });
       const anounced = await auctionContract.isWinnerAnounced();
       const isWinner = await auctionContract.isWinner({ userAddress });
-      const hasClaimed = !new BigNumber(info.borrowedTime).isEqualTo(0);
+      const hasClaimed = new BigNumber(info.borrowedTime).gt(0);
       bid.status = getBidStatus(anounced, isWinner, hasClaimed);
       bid.borrowedAmount = isOneOf(bid.status, ["claimed", "won"])
         ? toEther(info.borrowedAmount)
