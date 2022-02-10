@@ -49,7 +49,7 @@ export const PreviousAuctionsTable = () => {
                     <td data-title="wallet">
                       {shortenAddress(winner.userAddress)}
                     </td>
-                    <FindStrategy address={winner.lpToken}>
+                    <FindStrategy auctionAddress={winner.auctionAddress}  lpAddress={winner.lpToken}>
                       {({ lptoken }) => {
                         return (
                           <>

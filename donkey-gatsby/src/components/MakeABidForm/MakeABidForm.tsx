@@ -214,7 +214,6 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
   const balanceInUsd = new BigNumber(balance)
     .multipliedBy(selectedLp.price)
     .toFixed(2);
-  console.log(balanceInUsd, balance, selectedLp.price, "Usd Balance");
   const borrowAmount = debtAmount.multipliedBy(maxDebtRatio).dividedBy(100);
   const debtAmountInUsd = debtAmount.multipliedBy(selectedLp.price).toFixed(2);
   const borrowAmountInUsd = borrowAmount
@@ -646,7 +645,7 @@ export const MakeABidForm = () => {
     <div
       className={clsx("make_a_bid ", {
         "bg-white pb-5": isPilotOver,
-        blurred: (!currentAuction && nextAuction) || !connected,
+        // blurred: (!currentAuction && nextAuction) || !connected,
       })}
     >
       {renderForm()}

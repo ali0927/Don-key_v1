@@ -226,6 +226,7 @@ export type IPrevWinners = {
     commissionpercent: string;
     lpToken: string;
     lendedAmount: string;
+    auctionAddress: string;
   }[];
 };
 

@@ -135,8 +135,15 @@ export const fetchAuctionsThunk =
         );
 
         if (filterFarmers.length > 0) {
+          const lps: ISupportedLP[] = [];
           auctionState.supportedLps = await Promise.all(
             filterFarmers.map(async (farmer) => {
+              const lp = lps.find(
+                (item) => item.lpAddress === farmer.poolAddress
+              );
+              if (lp) {
+                return lp;
+              }
               const [price, symbol, minCommission] = await Promise.all([
                 getTokenPrice(web3, farmer.poolAddress),
                 getTokenSymbol(web3, farmer.poolAddress),
@@ -152,6 +159,7 @@ export const fetchAuctionsThunk =
                 tokenImage: farmer.strategies[0].token.image.url,
                 strategyImage: farmer.farmerImage.url,
               };
+              lps.push(supportedLp);
               return supportedLp;
             })
           );
@@ -493,7 +501,7 @@ export const fetchPreviousAuctionThunk =
         const promises = results.map(async (item) => {
           const userAddress = item.get("user");
           const auction = item.get("auctionAddress");
-          console.log(auction, "Address");
+
           const auctionContract = getAuctionContract(
             auction,
             BSC_TESTNET_CHAIN_ID
@@ -509,6 +517,7 @@ export const fetchPreviousAuctionThunk =
             commissionpercent: new BigNumber(info.commissionInPer)
               .dividedBy(100)
               .toFixed(2),
+            auctionAddress: auction,
             userAddress: userAddress,
             lpToken: info.lptoken,
             lendedAmount: toEther(info.lendedAmount),
