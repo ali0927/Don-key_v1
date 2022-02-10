@@ -80,7 +80,7 @@ module.exports = {
       options: {
         apiURL: process.env.GATSBY_STRAPI_URL,
         queryLimit: 1000, // Defaults to 100
-        collectionTypes: [`tokens`, `strategies`, `farmers`, "risks", "networks", "protocols", "suggestions"],
+        collectionTypes: [`tokens`, `strategies`, `farmers`, `risks`, `networks`, `protocols`, `suggestions`, `customers`, `comments`, 'replies'],
         // singleTypes: [`home-page`, `contact`],
       },
     },

@@ -4,7 +4,7 @@ import { UserIcon } from "components/Icons";
 import { BsCircleFill, BsFillChatRightDotsFill, BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs"
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
-import { useRiskList } from "components/Suggest";
+import { useRiskAndNetworkList } from "components/Suggest";
 import { Comment } from "components/Suggest/Comment";
 import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
@@ -173,7 +173,7 @@ export default function SuggestionView ({
   };
 }) {
   const [showRiskDetail, setShowRiskDetail] = useState(false)
-  const riskImages = useRiskList()
+  const { risks } = useRiskAndNetworkList()
   const suggestion = useMemo(() => {
     return suggestionInfo
   }, [suggestionInfo])
@@ -259,7 +259,7 @@ export default function SuggestionView ({
                     </div>
                   </div>
                   <div className="col-6 col-md-12" style={{display:'flex', flexDirection:'column'}}>
-                    <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} />
+                    <SuggestionRiskImage src={risks[suggestion.risk].image.url} />
                     <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
                       Risk Description
                     </RiskDescriptionButton>
@@ -293,7 +293,7 @@ export default function SuggestionView ({
       >
         <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
           <div className="col-sm-12 col-md-4" style={{display:'flex'}}>
-            <SuggestionRiskImage src={riskImages[suggestion.risk].image.url} style={{padding: 0}} />
+            <SuggestionRiskImage src={risks[suggestion.risk].image.url} style={{padding: 0}} />
           </div>
           <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
             This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.

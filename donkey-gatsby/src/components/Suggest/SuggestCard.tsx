@@ -5,7 +5,7 @@ import { UserIcon } from "components/Icons";
 import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
-import { useRiskList } from "./Suggest";
+import { useRiskAndNetworkList } from "./Suggest";
 const SuggestCardSection = styled.div`
 padding: 50px 25px;
 background: #ffffff;
@@ -158,7 +158,7 @@ export const SuggestCard: React.FC<{
     status: String;
   }
 }> = (props)  => {
-  const riskImages = useRiskList()
+  const { risks } = useRiskAndNetworkList()
   const [showVoteModal, setShowVoteModal] = useState(false)
   const [comment, setComment] = useState('')
   const handleCommentChange = (e: any) => {
@@ -210,7 +210,7 @@ export const SuggestCard: React.FC<{
             </div>
           </div>
           <div className="col-6">
-            <SuggestRiskImage src={riskImages[props.suggest.risk].image.url} />
+            <SuggestRiskImage src={risks[props.suggest.risk].image.url} />
           </div>
         </div>
         <CommentButton onClick={(e) => handleCommentClick(e)}>

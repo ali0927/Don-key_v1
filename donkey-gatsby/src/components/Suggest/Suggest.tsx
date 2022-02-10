@@ -12,10 +12,10 @@ import { DummySuggestions } from "JsonData/DummyData";
 import { useStaticQuery, graphql } from "gatsby";
 import { INetwork } from "LandingPage/CardsSection/interfaces";
 
-export const useRiskList = () => {
-  const riskImages = useStaticQuery(
+export const useRiskAndNetworkList = () => {
+  const riskAndNetworks = useStaticQuery(
     graphql`
-      query StrapiRisks {
+      query StrapiRisksAndNetworks {
         allStrapiRisks {
           nodes {
             Title
@@ -25,15 +25,6 @@ export const useRiskList = () => {
             strapiId
           }
         }
-      }
-    `
-  );
-  return riskImages.allStrapiRisks.nodes
-}
-export const useNetworkList = () => {
-  const StrategiesData = useStaticQuery(
-    graphql`
-      query MyQuery {
         allStrapiNetworks {
           nodes {
             chainId
@@ -44,9 +35,8 @@ export const useNetworkList = () => {
       }
     `
   );
-  return StrategiesData.allStrapiNetworks.nodes;
+  return { risks: riskAndNetworks.allStrapiRisks.nodes, networks: riskAndNetworks.allStrapiNetworks.nodes }
 }
-
 
 const DropdownBtn = styled.div`
   border: 2px solid #222222;

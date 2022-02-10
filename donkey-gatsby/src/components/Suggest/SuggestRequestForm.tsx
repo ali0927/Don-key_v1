@@ -4,7 +4,7 @@ import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
-import { useRiskList, useNetworkList } from "components/Suggest";
+import { useRiskAndNetworkList } from "components/Suggest";
 import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
@@ -353,7 +353,7 @@ const ExampleSuggestions = (): Array<any> => {
 
 export const SuggestRequestForm = () => {
   const { createSuggestion } = useSuggestionApi();
-  const riskImages = useRiskList();
+  const { risks } = useRiskAndNetworkList();
   // const networkList = useNetworkList();
   // console.log('networkList---------', networkList)
   const [riskLevel, setRiskLevel] = useState(1);
@@ -392,7 +392,7 @@ export const SuggestRequestForm = () => {
     if (checked) {
       let _suggestion = { ...formState };
       _suggestion.network = NetworkTypes[_suggestion.network].strapiId;
-      _suggestion.risk = riskImages[_suggestion.risk].strapiId;
+      _suggestion.risk = risks[_suggestion.risk].strapiId;
       const web3 =  getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
       _suggestion.address = accounts[0];
@@ -501,19 +501,19 @@ export const SuggestRequestForm = () => {
       <div>
         <div style={{display:'flex'}}>
           <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(4)}>
-            { riskLevel === 4 && renderRiskLevelSelector(riskImages, 4) }
+            { riskLevel === 4 && renderRiskLevelSelector(risks, 4) }
           </RiskLevel>
           <RiskLevel color="#32CD32" onClick={() => setRiskLevel(1)}>
-            { riskLevel === 1 && renderRiskLevelSelector(riskImages, 1) }
+            { riskLevel === 1 && renderRiskLevelSelector(risks, 1) }
           </RiskLevel>
           <RiskLevel color="#FFD700" onClick={() => setRiskLevel(3)}>
-            { riskLevel === 3 && renderRiskLevelSelector(riskImages, 3) }
+            { riskLevel === 3 && renderRiskLevelSelector(risks, 3) }
           </RiskLevel>
           <RiskLevel color="orange"  onClick={() => setRiskLevel(2)}>
-          { riskLevel === 2 && renderRiskLevelSelector(riskImages, 2) }  
+          { riskLevel === 2 && renderRiskLevelSelector(risks, 2) }  
           </RiskLevel>
           <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)}>
-            { riskLevel === 0 && renderRiskLevelSelector(riskImages, 0) }
+            { riskLevel === 0 && renderRiskLevelSelector(risks, 0) }
           </RiskLevel>
         </div>
       </div>
@@ -568,7 +568,7 @@ export const SuggestRequestForm = () => {
               <label style={{fontSize:'0.8rem'}}>Suggestion Name</label>
               <ExampleSuggestionTitle>{exmapleSuggestions[selectedExmaple].title}</ExampleSuggestionTitle>
             </div>
-            <RiskImage src={riskImages[exmapleSuggestions[selectedExmaple].risk].image.url} />
+            <RiskImage src={risks[exmapleSuggestions[selectedExmaple].risk].image.url} />
           </div>
 
           <div style={{display:'flex', width:'100%', margin:'0'}}>
