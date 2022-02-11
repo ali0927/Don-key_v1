@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
 import styled from "styled-components";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
@@ -182,12 +182,12 @@ const SuggestStatus = {
   approved: 'approved'
 }
 
-export const Suggest: React.FC = () => {
+export const Suggest = () => {
   const [show, setShow] = useState(false);
   const { fetchList } = useSuggestionApi();
-  const [suggestionList, setSuggestionList] = useState([]); 
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
   const [viewMore, setViewMore] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
@@ -199,20 +199,19 @@ export const Suggest: React.FC = () => {
   }, []);
 
   const onLoad = async () => {
-    const _suggestionList = await fetchList();
-    setSuggestionList(_suggestionList);
-  };
+    const suggestionList = await fetchList();
+    setSuggestions(suggestionList);
+  }
 
-  const filterList = suggestionList
-  // const filterList = useMemo(() => {
-  //   const _suggestionList = [...suggestionList];
-  //   console.log('suggestionList------------', suggestionList)
-  //   if (strategyFilter === SuggestStatus.all) return suggestionList;
-  //   const _list = suggestionList.filter((item: any) => item.status === strategyFilter);
-  //   return viewMore ? _list: _list.slice(0, 3);
-  // }, [strategyFilter]);
-
-  console.log('filterList------------', filterList)
+  const filterList = useMemo(() => {
+    let _list = suggestions;
+    if (strategyFilter !== SuggestStatus.all) {
+      _list = suggestions.filter((item: any) => item.status === strategyFilter);
+      _list = viewMore ? _list: _list.slice(0, 3);
+    }
+    console.log('filter----------------', _list);
+    return _list;
+  }, [suggestions, viewMore]);
 
   const DropDownMenu = () => {
     return (
@@ -270,13 +269,13 @@ export const Suggest: React.FC = () => {
   return (
     <div className="container">
       <div className="row mb-2">
-        <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
+        {/* <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
           <DropdownBtn active={show} onClick={() => setShow(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
             {strategyFilter}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {show && <DropDownMenu />}
-        </div>
+        </div> */}
       </div>
 
       {filterList.length > 0 &&
