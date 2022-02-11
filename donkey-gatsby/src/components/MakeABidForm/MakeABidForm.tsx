@@ -16,7 +16,6 @@ import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
-import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBidsAndLoansThunk } from "store/actions";
@@ -593,7 +592,7 @@ export const MakeABidForm = () => {
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
-  const prevAuction = (auctions as IAuctionSuccessState).lastAuction || null;
+  // const prevAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   const isReady = isOneOf(auctions.status, [
     "FETCH_SUCCESS",
     "FETCH_BALANCE_SUCCESS",
@@ -602,8 +601,8 @@ export const MakeABidForm = () => {
 
   const renderForm = () => {
     if (isReady) {
-      if (prevAuction) {
-        return <AuctionForm auction={prevAuction} />;
+      if (currentAuction) {
+        return <AuctionForm auction={currentAuction} />;
       }
       if (!currentAuction && nextAuction) {
         return <AuctionForm auction={nextAuction} />;
