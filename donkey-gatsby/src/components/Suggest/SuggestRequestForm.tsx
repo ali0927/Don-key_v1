@@ -148,7 +148,7 @@ const RiskLevelSelector = styled.div`
   align-items: ${(props: { level: number }) => props.level === 0 ? 'flex-end': props.level === 1 ? 'center': 'flex-start'};
 `
 const RiskLevelSelectorIcon = styled(BsTriangleFill)`
-  color: ${(props: { level: number }) => props.level === 0 ? '#FF4500': props.level === 1 ? '#32CD32': props.level === 2 ? 'orange': props.level === 3 ? '#FFD700': '#00BFFF'};
+  color: ${(props: { color: string }) => props.color};
 `
 const ShowExampleSuggestionBtn = styled.button`
   background: none;
@@ -327,10 +327,16 @@ const renderTooltipFees = (props: any) => (
 );
 
 const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
+  const risk = risks.find((item: any) => item.strapiId === riskLevel);
+  const color = riskLevel === 1 ? '#FF4500': riskLevel === 5 ? '#32CD32': riskLevel === 6 ? 'orange': riskLevel === 2 ? '#FFD700': '#00BFFF';
+  console.log('risks----', risk)
+
+  if (!risk) return;
+
   return (
     <div style={{display:'flex', flexDirection:'column', marginTop: '16px', alignItems:'center'}}>
-      <RiskLevelSelectorIcon level={riskLevel} />
-      <label style={{textAlign: 'center'}}>{risks[riskLevel].Title}</label> 
+      <RiskLevelSelectorIcon color={color} />
+      <label style={{textAlign: 'center'}}>{risk.Title}</label> 
     </div>
   )
 }
@@ -342,7 +348,7 @@ const ExampleSuggestions = (): Array<any> => {
       apy: 12.123,
       name: generateRandomText(10),
       description: generateRandomText(300),
-      risk: Math.floor(Math.random() * 3),
+      risk: 2,
       date: '15 Jan 2022 15:30',
       category: 'Payments'
     }
@@ -356,7 +362,7 @@ export const SuggestRequestForm = () => {
   const { risks } = useRiskAndNetworkList();
   // const networkList = useNetworkList();
   // console.log('networkList---------', networkList)
-  const [riskLevel, setRiskLevel] = useState(1);
+  const [riskLevel, setRiskLevel] = useState(2);
   const [isCreating, setIsCreating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { showFailure } = useTransactionNotification();
@@ -392,7 +398,7 @@ export const SuggestRequestForm = () => {
     if (checked) {
       let _suggestion = { ...formState };
       _suggestion.network = NetworkTypes[_suggestion.network].strapiId;
-      _suggestion.risk = risks[_suggestion.risk].strapiId;
+      _suggestion.risk = _suggestion.risk;
       const web3 =  getConnectedWeb3();
       const accounts = await web3.eth.getAccounts();
       _suggestion.address = accounts[0];
@@ -500,20 +506,20 @@ export const SuggestRequestForm = () => {
       <Label>Risk Level</Label>
       <div>
         <div style={{display:'flex'}}>
-          <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(4)}>
-            { riskLevel === 4 && renderRiskLevelSelector(risks, 4) }
-          </RiskLevel>
-          <RiskLevel color="#32CD32" onClick={() => setRiskLevel(1)}>
-            { riskLevel === 1 && renderRiskLevelSelector(risks, 1) }
-          </RiskLevel>
-          <RiskLevel color="#FFD700" onClick={() => setRiskLevel(3)}>
+          <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(3)}>
             { riskLevel === 3 && renderRiskLevelSelector(risks, 3) }
           </RiskLevel>
-          <RiskLevel color="orange"  onClick={() => setRiskLevel(2)}>
-          { riskLevel === 2 && renderRiskLevelSelector(risks, 2) }  
+          <RiskLevel color="#32CD32" onClick={() => setRiskLevel(5)}>
+            { riskLevel === 5 && renderRiskLevelSelector(risks, 5) }
           </RiskLevel>
-          <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(0)}>
-            { riskLevel === 0 && renderRiskLevelSelector(risks, 0) }
+          <RiskLevel color="#FFD700" onClick={() => setRiskLevel(2)}>
+            { riskLevel === 2 && renderRiskLevelSelector(risks, 2) }
+          </RiskLevel>
+          <RiskLevel color="orange"  onClick={() => setRiskLevel(6)}>
+          { riskLevel === 6 && renderRiskLevelSelector(risks, 6) }  
+          </RiskLevel>
+          <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(1)}>
+            { riskLevel === 1 && renderRiskLevelSelector(risks, 1) }
           </RiskLevel>
         </div>
       </div>
