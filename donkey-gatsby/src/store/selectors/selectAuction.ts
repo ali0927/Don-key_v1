@@ -12,7 +12,7 @@ export const createSelectAuction = () => {
         isOneOf(auctions.status, ["FETCH_BALANCE_SUCCESS", "FETCH_SUCCESS"])
       ) {
         const auctionList = (auctions as IAuctionSuccessState).auctionState;
-        return auctionList.find((item) => item.address === auctionAddress);
+        return auctionList.find((item) => item.address.toLowerCase() === auctionAddress.toLowerCase());
       }
       return null;
     }

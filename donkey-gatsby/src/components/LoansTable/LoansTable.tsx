@@ -16,7 +16,7 @@ const LoanPayButton = ({ loan }: { loan: ILoan }) => {
         <PayPopup loan={loan} open onClose={() => setIsPayOpen(false)} />
       )}
       <button onClick={() => setIsPayOpen(true)} className="claim">
-        Pay
+        Re-Pay
       </button>
     </td>
   );

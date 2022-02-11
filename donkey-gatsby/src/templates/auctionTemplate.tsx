@@ -94,11 +94,11 @@ export default function Auction() {
         <div className="strip autcion_head">
           <div className="boxed">
             <div className="width-50 details_column">
-              <h5>catch your luck by the tail</h5>
               {isPilotOver ? (
-                <h3>PILOT DONE!</h3>
+                <h3 className="mt-5">PILOT DONE!</h3>
               ) : (
                 <>
+                  <h5>catch your luck by the tail</h5>
                   {hasNextAuction && <h3>Next Auction Starts In</h3>}
                   {hasCurrentAction && <h3>Current Auction Ends In</h3>}
                 </>
@@ -125,8 +125,12 @@ export default function Auction() {
           </div>
         </div>
 
-        <BidsTable />
-        <LoansTable />
+        {connected && (
+          <>
+            <BidsTable />
+            <LoansTable />
+          </>
+        )}
         <PreviousAuctionsTable />
       </div>
       <Footer />

@@ -16,7 +16,7 @@ export const createFindLendedLp = () => {
       ) {
         const auctionList = (auctions as IAuctionSuccessState).auctionState;
         const auction = auctionList.find(
-          (item) => item.address === auctionAddress
+          (item) => item.address.toLowerCase() === auctionAddress.toLowerCase()
         );
         if (auction) {
           const supportedLp = auction.supportedLps.find((lp) => {

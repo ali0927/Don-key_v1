@@ -240,7 +240,7 @@ export const PayPopup = ({
             {isLoading ? (
               <Spinner animation="border" size="sm" />
             ) : (
-              <>Pay &amp; Unstake</>
+              <>Re-Pay &amp; Unstake</>
             )}
           </StyledButton>
         </div>

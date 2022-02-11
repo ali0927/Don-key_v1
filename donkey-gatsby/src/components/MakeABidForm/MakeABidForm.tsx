@@ -1,10 +1,4 @@
-import {
-  InputBase,
-  MenuItem,
-  Select,
-  Theme,
-  withStyles,
-} from "@material-ui/core";
+import { ClickAwayListener } from "@material-ui/core";
 import BigNumber from "bignumber.js";
 import clsx from "clsx";
 import {
@@ -16,72 +10,17 @@ import {
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
-import {
-  captureException,
-  formatNum,
-  isOneOf,
-  toWei,
-  validateEmail,
-} from "helpers";
+import { captureException, formatNum, isOneOf, toWei } from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Spinner } from "react-bootstrap";
+import { createPortal } from "react-dom";
+import { usePopper } from "react-popper";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBidsAndLoansThunk } from "store/actions";
 import { strapi } from "strapi";
-
-const BootstrapInput = withStyles((theme: Theme) => ({
-  root: {
-    width: "100%",
-    "label + &": {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: "#000",
-    color: "#fff",
-    border: "1px solid #464646",
-    display: "flex",
-    fontSize: 16,
-    width: "100%",
-    padding: "10px 26px 10px 12px",
-    transition: theme.transitions.create(["border-color", "box-shadow"]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      borderRadius: 4,
-      borderColor: "#80bdff",
-      boxShadow: "0 0 0 0.2rem rgba(0,123,255,.25)",
-    },
-  },
-}))(InputBase);
-
-const Dropdown: React.FC = (props) => {
-  const [condition, setCondition] = useState(false);
-  return (
-    <div
-      onClick={() => setCondition(!condition)}
-      className={condition ? "field dropdown active" : "field dropdown"}
-    >
-      {props.children}
-    </div>
-  );
-};
 
 type IBidFormState = {
   percentLp: string;
@@ -143,6 +82,7 @@ const NewInput = (props: {
     <input
       ref={inputRef}
       value={value}
+      style={{ width: value.length + "ch" }}
       onBlur={onBlur}
       onChange={handleChange}
     />
@@ -156,6 +96,57 @@ const calcFloorCommission = (
   return borrowAmount.isEqualTo(0)
     ? borrowAmount
     : borrowAmount.multipliedBy(floorCommission).dividedBy(100);
+};
+
+// const
+
+const BidFormDropDown = ({
+  selectedOption,
+  options,
+  renderRow,
+}: {
+  selectedOption: any;
+  options: any[];
+  renderRow: (args: any, index: number) => React.ReactElement;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [referenceElement, setReferenceElement] =
+    React.useState<HTMLDivElement | null>(null);
+  const [popperElement, setPopperElement] =
+    React.useState<HTMLDivElement | null>(null);
+  const { styles, attributes } = usePopper(referenceElement, popperElement);
+
+  const PopupContent = (
+    <>
+      {options.map((item, index) => {
+        return renderRow(item, index);
+      })}
+    </>
+  );
+  const selectedIndex = options.findIndex((item) => item === selectedOption);
+  const DefaultRow = renderRow(options[selectedIndex], selectedIndex);
+
+  return (
+    <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+      <div
+        ref={setReferenceElement}
+        onClick={() => setIsOpen(val => !val)}
+        className="field bidformdropdown dropdown"
+      >
+        {DefaultRow}
+        {isOpen && (
+          <div
+            ref={setPopperElement}
+            style={styles.popper}
+            className="bidformdropdown__elm"
+            {...attributes.popper}
+          >
+            {PopupContent}
+          </div>
+        )}
+      </div>
+    </ClickAwayListener>
+  );
 };
 
 const AuctionForm = ({ auction }: { auction: IAuction }) => {
@@ -216,9 +207,9 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
     .toFixed(2);
   const borrowAmount = debtAmount.multipliedBy(maxDebtRatio).dividedBy(100);
   const debtAmountInUsd = debtAmount.multipliedBy(selectedLp.price).toFixed(2);
-  const borrowAmountInUsd = borrowAmount
-    .multipliedBy(selectedLp.price)
-    .toFixed(2);
+  // const borrowAmountInUsd = borrowAmount
+  //   .multipliedBy(selectedLp.price)
+  //   .toFixed(2);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -281,53 +272,44 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
           <span className="data">≈ ${formatNum(balanceInUsd)}</span>
         </div>
         <div className="dropdown_container ">
-          <Select
-            value={selectedLp?.lpAddress}
-            onChange={() => {}}
-            input={<BootstrapInput />}
-          >
-            {auction.supportedLps.map((item, index) => {
+          <BidFormDropDown
+            selectedOption={selectedLp}
+            options={auction.supportedLps}
+            renderRow={(item, index) => {
               return (
-                <MenuItem
-                  className="w-100"
+                <div
                   key={item.lpAddress}
-                  value={item.lpAddress}
+                  onClick={() => selectNewLp(index)}
+                  className="option w-100 d-flex align-items-center justify-content-between"
                 >
-                  {" "}
-                  <div
-                    key={item.lpAddress}
-                    onClick={() => selectNewLp(index)}
-                    className="option w-100 d-flex align-items-center justify-content-between"
-                  >
-                    <div className="left d-flex align-items-center">
+                  <div className="left d-flex align-items-center">
+                    <div
+                      className="icon"
+                      style={{
+                        backgroundImage: `url('${item.strategyImage}')`,
+                      }}
+                    ></div>
+                    <div className="title font-weight-bold">
+                      {item.strategyName}
+                    </div>
+                  </div>
+                  <div className="right">
+                    <div className="amount d-flex align-items-center">
                       <div
                         className="icon"
                         style={{
-                          backgroundImage: `url('${item.strategyImage}')`,
+                          backgroundImage: `url('${item.tokenImage}')`,
                         }}
                       ></div>
-                      <div className="title font-weight-bold">
-                        {item.strategyName}
-                      </div>
-                    </div>
-                    <div className="right">
-                      <div className="amount d-flex align-items-center">
-                        <div
-                          className="icon"
-                          style={{
-                            backgroundImage: `url('${item.tokenImage}')`,
-                          }}
-                        ></div>
-                        <div className="amount">
-                          {item.withdrawAmount} {item.symbol}
-                        </div>
+                      <div className="amount">
+                        {item.withdrawAmount} {item.symbol}
                       </div>
                     </div>
                   </div>
-                </MenuItem>
+                </div>
               );
-            })}
-          </Select>
+            }}
+          ></BidFormDropDown>
         </div>
       </div>
       <div className="collateral">
@@ -487,7 +469,7 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
 const usePilotSuggestionApi = () => {
   const createSuggestion = async (args: {
     name: string;
-    email: string;
+    telegram: string;
     remarks: string;
   }) => {
     const resp = await strapi.post("/pilot-suggestions", args);
@@ -498,11 +480,11 @@ const usePilotSuggestionApi = () => {
 
 const validate = ({
   name,
-  email,
+  telegram,
   remarks,
 }: {
   name: string;
-  email: string;
+  telegram: string;
   remarks: string;
 }) => {
   if (!name) {
@@ -511,12 +493,10 @@ const validate = ({
   if (name.length < 3) {
     return { valid: false, message: "Please Enter a valid name" };
   }
-  if (!email) {
-    return { valid: false, message: "Please enter an email" };
+  if (!telegram) {
+    return { valid: false, message: "Please enter Telegram Id" };
   }
-  if (!validateEmail(email)) {
-    return { valid: false, message: "Please enter a valid email" };
-  }
+
   if (!remarks) {
     return { valid: false, message: "Please enter a remark" };
   }
@@ -531,7 +511,11 @@ const validate = ({
 };
 
 const AuctionSuggestionForm = () => {
-  const [formState, setState] = useState({ name: "", email: "", remarks: "" });
+  const [formState, setState] = useState({
+    name: "",
+    telegram: "",
+    remarks: "",
+  });
   const [isCreating, setisCreating] = useState(false);
   const { showSuccess, showFailure } = useTransactionNotification();
 
@@ -547,7 +531,7 @@ const AuctionSuggestionForm = () => {
       }
       await createSuggestion(formState);
       showSuccess("Thank you for your Suggestion.");
-      setState({ name: "", email: "", remarks: "" });
+      setState({ name: "", telegram: "", remarks: "" });
     } catch (e) {
       showFailure("Try Again Later");
     } finally {
@@ -573,11 +557,11 @@ const AuctionSuggestionForm = () => {
         />
       </Label>
       <Label>
-        Email
+        Telegram
         <Input
-          value={formState.email}
-          onChange={handleChange("email")}
-          placeholder="Your Email"
+          value={formState.telegram}
+          onChange={handleChange("telegram")}
+          placeholder="Telegram"
         />
       </Label>
       <Label>
@@ -609,6 +593,7 @@ export const MakeABidForm = () => {
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
+  const prevAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   const isReady = isOneOf(auctions.status, [
     "FETCH_SUCCESS",
     "FETCH_BALANCE_SUCCESS",
@@ -617,8 +602,8 @@ export const MakeABidForm = () => {
 
   const renderForm = () => {
     if (isReady) {
-      if (currentAuction) {
-        return <AuctionForm auction={currentAuction} />;
+      if (prevAuction) {
+        return <AuctionForm auction={prevAuction} />;
       }
       if (!currentAuction && nextAuction) {
         return <AuctionForm auction={nextAuction} />;
@@ -644,8 +629,10 @@ export const MakeABidForm = () => {
   return (
     <div
       className={clsx("make_a_bid ", {
-        "bg-white pb-5": isPilotOver,
-        blurred: (!currentAuction && nextAuction) || !connected,
+        // "bg-white pb-5": isPilotOver,
+        "mb-5": !isReady,
+        blurred:
+          ((!currentAuction && nextAuction) || !connected) && !isPilotOver,
       })}
     >
       {renderForm()}

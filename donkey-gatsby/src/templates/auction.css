@@ -151,9 +151,17 @@
     width: 14px;
     transition: transform 0.5s ease-in-out;
 }
-
+.make_a_bid .bidformdropdown {
+    position: relative;
+    cursor: pointer;
+}
 .make_a_bid .dropdown.active::after {
     transform: rotateX(181deg);
+}
+
+ .bidformlist {
+    width: 100%;
+    background-color: #000;
 }
 
 .make_a_bid .field .option {
@@ -595,11 +603,11 @@ td.status.rejected {
 }
 
 .auction_page .field.dropdown {
-    height: auto;
+    /* height: auto; */
     background: black;
-    transition: max-height 0.3s ease-in-out;
-    overflow: hidden;
-    max-height: 50px;
+ 
+    /* overflow: hidden; */
+
     cursor:pointer;
     z-index: 10;
 }
@@ -634,7 +642,13 @@ td.status.rejected {
     opacity: 1;
     pointer-events: all;
 }
-
+.bidformdropdown__elm {
+    width: 100%;
+    z-index: 12;
+    background: #202020;
+border: 1px solid #464646;
+border-radius: 10px;
+}
 .auction_page .tooltip_content:before {
     content: "";
     position: absolute;

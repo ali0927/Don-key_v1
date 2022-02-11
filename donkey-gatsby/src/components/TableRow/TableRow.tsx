@@ -1,6 +1,6 @@
 import {useState} from 'react'
 
-export const TableRow = (props) => {
+export const TableRow = (props: any) => {
   const [open,setOpen] = useState(false)
 
     return  <tr className={open ? "folding open" : "folding"}>

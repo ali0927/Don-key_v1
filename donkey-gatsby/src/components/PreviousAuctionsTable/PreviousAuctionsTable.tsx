@@ -15,14 +15,11 @@ export const PreviousAuctionsTable = () => {
     prevAuctions.status !== "FETCH_SUCCESS" ||
     prevAuctions.data.length === 0
   ) {
-    return <div className="py-5"></div>;
+    return <div ></div>;
   }
 
   return (
-    <div
-      className="strip table_strip previous_auctions"
-
-    >
+    <div className="strip table_strip previous_auctions">
       <div className="boxed" style={{ paddingTop: 130 }}>
         <h3>Previous Auctions</h3>
         <table className="previous_auctions_head">
@@ -49,7 +46,10 @@ export const PreviousAuctionsTable = () => {
                     <td data-title="wallet">
                       {shortenAddress(winner.userAddress)}
                     </td>
-                    <FindStrategy auctionAddress={winner.auctionAddress}  lpAddress={winner.lpToken}>
+                    <FindStrategy
+                      auctionAddress={winner.auctionAddress}
+                      lpAddress={winner.lpToken}
+                    >
                       {({ lptoken }) => {
                         return (
                           <>

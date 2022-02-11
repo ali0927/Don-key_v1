@@ -80,10 +80,12 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
     );
   };
 
+  const hasEnded = currentAuction?.address.toLowerCase() !== auctionAddress.toLowerCase();
   return (
     <td>
       <button
-        disabled={isLoading || currentAuction?.address !== auctionAddress}
+       className={clsx({white: hasEnded })}
+        disabled={isLoading  || hasEnded}
         onClick={() => revokeBid(auctionAddress)}
       >
         {isLoading ? <Spinner size="sm" animation="border" /> : "Revoke"}

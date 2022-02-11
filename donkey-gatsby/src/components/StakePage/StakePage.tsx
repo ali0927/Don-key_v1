@@ -8,7 +8,6 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import styled from "styled-components";
 import { useState } from "react";
 import { getDonPriceWeb3 } from "helpers";
-import { getWeb3 } from "don-components";
 import { DonStaking } from "./DonStaking";
 import { LPStaking } from "./LPStaking";
 import { StakePageBanner } from "./StakePageBanner";
@@ -349,12 +348,11 @@ export const ImageWrapper = styled.div`
 
 const StakePage = () => {
   const [donPrice, setDonPrice] = useState<string | null>(null);
-  const web3 = getWeb3(56);
 
   const isDesktop = useMediaQuery(theme.mediaQueries.lg.up);
 
   React.useEffect(() => {
-    getDonPriceWeb3(web3).then(setDonPrice);
+    getDonPriceWeb3().then(setDonPrice);
   }, []);
 
   return (
