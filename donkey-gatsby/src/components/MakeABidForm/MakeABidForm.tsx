@@ -628,7 +628,7 @@ export const MakeABidForm = () => {
   return (
     <div
       className={clsx("make_a_bid ", {
-        // "bg-white pb-5": isPilotOver,
+        "bg-white pb-5": isPilotOver,
         "mb-5": !isReady,
         blurred:
           ((!currentAuction && nextAuction) || !connected) && !isPilotOver,
