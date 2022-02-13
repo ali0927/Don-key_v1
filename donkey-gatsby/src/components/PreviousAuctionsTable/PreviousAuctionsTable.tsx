@@ -3,7 +3,9 @@ import { TableGroup } from "components/TableGroup";
 import { shortenAddress } from "don-utils";
 import { formatNum } from "helpers";
 import { IStoreState } from "interfaces";
+import { orderBy, sortBy } from "lodash";
 import moment from "moment";
+import { useMemo } from "react";
 import { useSelector } from "react-redux";
 
 export const PreviousAuctionsTable = () => {
@@ -18,6 +20,10 @@ export const PreviousAuctionsTable = () => {
     return <div ></div>;
   }
 
+  console.log(prevAuctions, "A")
+  const sortedAuctions = useMemo(() => {
+    return orderBy(prevAuctions.data, (item) => moment(item.announcementDate).unix(), ["desc"]);
+  }, [prevAuctions.data])
   return (
     <div className="strip table_strip previous_auctions">
       <div className="boxed" style={{ paddingTop: 130 }}>
@@ -34,10 +40,10 @@ export const PreviousAuctionsTable = () => {
             </tr>
           </thead>
         </table>
-        {prevAuctions.data.map((item) => {
+        {sortedAuctions.map((item) => {
           return (
             <TableGroup
-              date={moment(item.announcementDate).format("d/MM/YYYY")}
+              date={moment(item.announcementDate).format("DD/MM/YYYY")}
             >
               {item.winners.map((winner, index) => {
                 return (
