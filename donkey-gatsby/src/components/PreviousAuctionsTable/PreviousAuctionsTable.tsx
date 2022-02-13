@@ -3,7 +3,7 @@ import { TableGroup } from "components/TableGroup";
 import { shortenAddress } from "don-utils";
 import { formatNum } from "helpers";
 import { IStoreState } from "interfaces";
-import { orderBy, sortBy } from "lodash";
+import { orderBy } from "lodash";
 import moment from "moment";
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
@@ -13,17 +13,24 @@ export const PreviousAuctionsTable = () => {
     (state: IStoreState) => state.auctions.prevAuctions
   );
 
-  if (
-    prevAuctions.status !== "FETCH_SUCCESS" ||
-    prevAuctions.data.length === 0
-  ) {
-    return <div ></div>;
+  const hasPrevAuctions = !(
+    prevAuctions.status !== "FETCH_SUCCESS" || prevAuctions.data.length === 0
+  );
+  const sortedAuctions = useMemo(() => {
+    if(!hasPrevAuctions){
+      return [];
+    }
+    return orderBy(
+      prevAuctions.data,
+      (item) => moment(item.announcementDate).unix(),
+      ["desc"]
+    );
+  }, [prevAuctions.data, hasPrevAuctions]);
+
+  if (!hasPrevAuctions) {
+    return <div></div>;
   }
 
-  console.log(prevAuctions, "A")
-  const sortedAuctions = useMemo(() => {
-    return orderBy(prevAuctions.data, (item) => moment(item.announcementDate).unix(), ["desc"]);
-  }, [prevAuctions.data])
   return (
     <div className="strip table_strip previous_auctions">
       <div className="boxed" style={{ paddingTop: 130 }}>
