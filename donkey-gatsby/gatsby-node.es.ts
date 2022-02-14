@@ -3,6 +3,7 @@ import webpack from "webpack";
 import _ from "lodash";
 import { calcSumOfAllPoolValues } from "./src/helpers/contractHelpers";
 import { DummySuggestions, DummyEarningIDs } from "./src/JsonData/DummyData";
+import { gql, useQuery, useLazyQuery } from "@apollo/client";
 
 /**
  * Here is the place where Gatsby creates the URLs for all the
@@ -312,40 +313,58 @@ export const createPages = async ({ graphql, actions }: any) => {
     }
   });
 
-  const suggestionsResp = await graphql(`
+  const ALL_SUGGESTION_QUERY =gql`
     query fetchSuggestions {
-      allStrapiSuggestions {
-        nodes {
-          address
-          apy
-          description
+      suggestions {
+        apy
+        description
+        id
+        status
+        title
+        created_at
+        network {
+          chainId
+          name
+        }
+        risk {
+          Title
+          image {
+            url
+          }
           id
-          strapiId
-          status
-          title
-          created_at(formatString: "DD/MM/Y")
-          network {
-            chainId
-            name
+        }
+        nickName
+        customer {
+          id
+          address
+        }
+        comments {
+          id
+          content
+          customer {
+            address
           }
-          risk {
-            Title
-            image {
-              url
+          likes {
+            address
+          }
+          replies {
+            content
+            customer {
+              address
             }
-            id
           }
-          nickName
+        }
+        votes {
+          address
         }
       }
     }
-  `);
+  `;
 
-  const suggestions = suggestionsResp.data.allStrapiSuggestions.nodes;
-
-  DummySuggestions.forEach((suggestion: any) => {
+  const { data: suggestions } = useQuery(ALL_SUGGESTION_QUERY);
+  suggestions.forEach((suggestion: any) => {
     createPage({
-      path: `/community/suggestion/${suggestion.idx}`,
+      path: `/community/suggestion/${suggestion.strapiId}`,
       component: path.resolve(`./src/templates/suggestionTemplate.tsx`),
       context: {
         suggestionInfo: suggestion

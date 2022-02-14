@@ -6,7 +6,7 @@ import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
 import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
-import { useSignin } from "hooks";
+import { useSignin, useSuggestionApi } from "hooks";
 
 const SuggestCardSection = styled.div`
 padding: 50px 25px;
@@ -147,7 +147,7 @@ type SuggestStatusType = keyof typeof STATUS_MAP;
 
 export const SuggestCard: React.FC<{ 
   suggest: { 
-    idx: number;
+    id: number;
     title: string;
     apy: number;
     votes: any;
@@ -159,13 +159,14 @@ export const SuggestCard: React.FC<{
   }
 }> = (props)  => {
   const { risks } = useRiskAndNetworkList();
+  const { vote, comment } = useSuggestionApi();
   const [showVoteModal, setShowVoteModal] = useState(false);
-  const [comment, setComment] = useState('');
+  const [commentContent, setCommentContent] = useState('');
   const { checkAvailability } = useSignin();
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [error, setError] = useState<any | null>(null);
-  const handleCommentChange = (e: any) => {
-    setComment(e.target.value);
+  const handleCommentContentChange = (e: any) => {
+    setCommentContent(e.target.value);
   }
 
   const handleCommentClick = async (e: any) => {
@@ -174,7 +175,7 @@ export const SuggestCard: React.FC<{
   }
 
   const handleSubmitComment = async (e: any) => {
-    e.stopPropagation();
+    if (commentContent === "") return;
     setShowVoteModal(false);
     const res = await checkAvailability();
     if (!res.status) {
@@ -182,10 +183,22 @@ export const SuggestCard: React.FC<{
       setError(res);
       return;
     }
+    const res_comment = await comment(props.suggest.id, commentContent);
+    setShowVoteModal(false);
+  }
+
+  const handleSubmitVote = async (e: any) => {
+    const res = await checkAvailability();
+    if (!res.status) {
+      setShowErrorModal(true);
+      setError(res);
+      return;
+    }
+    const res_vote = await vote(props.suggest.id);
   }
 
   const handleCardClick = () => {
-    navigate(`/community/suggestion/${props.suggest.idx}`);
+    navigate(`/community/suggestion/${props.suggest.id}`);
   }
 
   const risk = useMemo(() => {
@@ -233,7 +246,7 @@ export const SuggestCard: React.FC<{
             <SuggestRiskImage src={risk.image.url} />
           </div>
         </div>
-        <CommentButton onClick={(e) => handleCommentClick(e)}>
+        <CommentButton onClick={handleCommentClick}>
           Comment &amp; Vote
         </CommentButton>
       </SuggestCardSection>
@@ -247,17 +260,17 @@ export const SuggestCard: React.FC<{
       >
         <VoteModalSubtitle>Vote</VoteModalSubtitle>
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <VoteButton onClick={() => setShowVoteModal(true)}>
+          <VoteButton onClick={handleSubmitVote}>
             <BsFillCaretUpFill style={{marginRight: '20px'}}/>
             Vote
           </VoteButton>
-          <h3 style={{fontWeight:600, margin:0}}>{props.suggest.votes}</h3>
+          <h3 style={{fontWeight:600, margin:0}}>{props.suggest.votes.length}</h3>
         </div>
         <VoteModalSubtitle>Leave a comment</VoteModalSubtitle>
         <TextArea
           rows={4}
-          value={comment}
-          onChange={handleCommentChange}
+          value={commentContent}
+          onChange={handleCommentContentChange}
           placeholder="Start write comment here..."
         ></TextArea>
         <CommentButton onClick={handleSubmitComment}>

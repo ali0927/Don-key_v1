@@ -217,3 +217,21 @@ export type IStrapiToken = {
   image: IStrapiImage;
   RiskStrategy: { strategy: IStrapiStrategy }[];
 };
+
+export type IStrapiSuggestion = {
+  id: number;
+  title: string;
+  description: string;
+  nickName: string;
+  telegram: string;
+  address: string;
+  apy: number;
+  riskword: string;
+  votes: any;
+  risk: any;
+  network: any;
+  status: string;
+  created_at: string;
+  customer: any;
+  comments: any;
+}

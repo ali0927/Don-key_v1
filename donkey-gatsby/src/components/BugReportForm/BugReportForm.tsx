@@ -129,7 +129,6 @@ const validateEmail = (email) => {
   return re.test(String(email).toLowerCase());
 }
 
-
 const validate = (state: typeof INITIAL_STATE) => {
 
   if (!state.type) {
@@ -187,9 +186,6 @@ const SmallSpan = styled.span`
   color: #767b86;
   font-weight: normal;
 `;
-
-
-
 
 export const BugReportForm = () => {
   const { createBug } = useBugReportApi();

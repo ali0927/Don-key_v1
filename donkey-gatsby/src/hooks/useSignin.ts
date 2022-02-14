@@ -16,7 +16,15 @@ export const useSignin = () => {
 
   const signin = async () => {
     const accounts = await web3.eth.getAccounts();
-    const nonce = await strapi.get(`/customers/nonce/${accounts[0]}`);
+    let res: any = await strapi.get(`/customers/nonce/${accounts[0]}`);
+    let nonce = "";
+    if (res.data.status === "error") {
+      const new_customer: any = await strapi.post(`/customers`, {
+        address: accounts[0]
+      })
+      nonce = new_customer.data.nonce;
+    }
+    nonce = res.data;
     var hash  = web3.utils.sha3(nonce.toString());
     var signature = await web3.eth.sign(hash || '', accounts[0]);
 
@@ -49,21 +57,3 @@ export const useSignin = () => {
   };
 
 }
-
-// export const useSignin = () => {
-//   const { getConnectedWeb3 } = useWeb3Context();
-//   const auth = useSelector((state: IStoreState) => state.auth);
-//   const { tier } = useStakingContract();
-//   const dispatch = useDispatch();
-//   const web3 = getConnectedWeb3();
-//   return () => signin(web3, auth.token || "", tier, dispatch)
-// }
-
-// export const _checkAvailability = async () => {
-//   const { getConnectedWeb3 } = useWeb3Context();
-//   const auth = useSelector((state: IStoreState) => state.auth);
-//   const { tier } = useStakingContract();
-//   const dispatch = useDispatch();
-//   const web3 = getConnectedWeb3();
-//   return () => checkAvailability(web3, auth.token || "", tier)
-// }

@@ -3,7 +3,7 @@ import { SuggestCard } from "./SuggestCard";
 
 export const SuggestList: React.FC<{
   suggestList: {
-    idx: number
+    id: number
     title: string;
     apy: number;
     votes: number;

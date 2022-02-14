@@ -2,17 +2,14 @@ import React, { useEffect, useMemo, useState, useCallback } from "react";
 import styled from "styled-components";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
-import { AiOutlineInfoCircle, AiFillCaretDown } from "react-icons/ai";
+import { AiFillCaretDown } from "react-icons/ai";
 import { SuggestList } from "./SuggestList";
 import { SuggestRequestForm } from "./SuggestRequestForm";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
-import { useSuggestionApi } from "hooks";
-import { DummySuggestions } from "JsonData/DummyData";
 import { useStaticQuery, graphql } from "gatsby";
-import { INetwork } from "LandingPage/CardsSection/interfaces";
 import { DonCommonmodal } from "components/DonModal";
-import { useSignin } from "hooks";
+import { useSuggestionApi, useSignin } from "hooks";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -208,9 +205,15 @@ export const ErrorModal: React.FC<{
   const [openModal, setOpenModal] = useState(true);
   const { signin } = useSignin();
   const handleSignin = async () => {
-    const _res = await signin()
+    const _res = await signin();
     setOpenModal(false);
+    props.closeModal();
+    console.log('log--------token-----', _res.token);
   }
+
+  useEffect(() => {
+    setOpenModal(true);
+  }, [props])
 
   return (
     <DonCommonmodal

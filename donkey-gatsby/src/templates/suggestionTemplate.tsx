@@ -4,15 +4,15 @@ import { UserIcon } from "components/Icons";
 import { BsCircleFill, BsFillChatRightDotsFill, BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs"
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
-import { useRiskAndNetworkList } from "components/Suggest";
 import { Comment } from "components/Suggest/Comment";
 import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
-import { DummySuggestions } from "JsonData/DummyData";
 import styled from "styled-components";
 import { navigate } from "gatsby";
 import { DonGatsbyLink, IDonGatsbyLinkProps } from "components/DonGatsbyLink";
+import { useSuggestionApi } from "hooks";
+import { IStrapiSuggestion } from "interfaces";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -138,33 +138,6 @@ const SuggestionLink = styled(DonGatsbyLink)`
   color: #000;
 `
 
-const generateRandomText = (length: number) => {
-  const characters = ' abcdefghijklm nopqrstuvwxyz ';
-  let result = ' ';
-  const charactersLength = characters.length;
-  for(let i = 0; i < length; i++) {
-      result += 
-      characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result
-}
-
-const generateRandomAddress = () => {
-  const characters = 'abcdefghijklm0123456789';
-  let result = '0x';
-  const charactersLength = characters.length;
-  for(let i = 0; i < 5; i++) {
-      result += 
-      characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  result += "..."
-  for(let i = 0; i < 5; i++) {
-    result += 
-    characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result
-}
-
 export default function SuggestionView ({ 
   pageContext: { suggestionInfo }
   }: {
@@ -172,33 +145,26 @@ export default function SuggestionView ({
       suggestionInfo: any;
   };
 }) {
-  const [showRiskDetail, setShowRiskDetail] = useState(false)
-  const { risks } = useRiskAndNetworkList()
-  const suggestion = useMemo(() => {
-    return suggestionInfo
+  const [showRiskDetail, setShowRiskDetail] = useState(false);
+  const { getCount } = useSuggestionApi();
+  const [suggestion, setSuggestion] = useState<IStrapiSuggestion | null>(null);
+  const [suggestionCount, setSuggestionCount] = useState(0);
+
+  const getSuggestionCount = async () => {
+    const count = await getCount();
+    setSuggestionCount(count);
+  }
+
+  useEffect(() => {
+    setSuggestion(suggestionInfo);
+    getSuggestionCount();
   }, [suggestionInfo]);
 
-  const risk = useMemo(() => {
-    return risks.find((item: any) => item.strapiId === suggestion.risk);
-  }, [risks, suggestion]);
-
-  const comments = useMemo(() => {
-    const _comments = new Array(suggestion.comments).fill({}).map(item => {
-      return {
-        user: generateRandomAddress(),
-        date: '1/15 Mon',
-        content: generateRandomText(200),
-        likes: Math.floor(Math.random() * 10)
-      }
-    })
-    return _comments
-  }, [suggestion.comments])
-
   const nextSuggestion = (e: any) => {
-    navigate(`/community/suggestion/${suggestion.idx + 1}`)
+    navigate(`/community/suggestion/${suggestion?.id + 1}`)
   }
   const prevSuggestion = (e: any) => {
-    navigate(`/community/suggestion/${suggestion.idx - 1}`)
+    navigate(`/community/suggestion/${suggestion?.id - 1}`)
   }
 
   return (
@@ -211,59 +177,59 @@ export default function SuggestionView ({
       <div className="container">
         <SuggestionPath>
           <SuggestionLink to="/community">{`Community page / User suggestions / `}</SuggestionLink>
-          <span style={{fontWeight: 600}}>{suggestion.title}</span>
+          <span style={{fontWeight: 600}}>{suggestion?.title}</span>
         </SuggestionPath>
 
         <SuggestionBox>
           <div style={{display:'flex', marginBottom: '20px'}}>
-            <SuggetionPrevButton visible={suggestion.idx > 0} onClick={prevSuggestion} />
-            <SuggetionNextButton visible={DummySuggestions.length - 1 > suggestion.idx} onClick={nextSuggestion}/>
+            <SuggetionPrevButton visible={suggestion?.id > 1} onClick={prevSuggestion} />
+            <SuggetionNextButton visible={suggestionCount - 1 > suggestion?.id} onClick={nextSuggestion}/>
           </div>
 
           <div className="row">
             <div className="col-9 col-md-10" style={{display:'flex', flexDirection:'column'}}>
-              <SuggestionTitle>{suggestion.title}</SuggestionTitle>
-              <label style={{color: 'lightgrey'}}>{suggestion.date}</label>
+              <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
+              <label style={{color: 'lightgrey'}}>{suggestion?.created_at}</label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
                 <span style={{fontSize:'0.8rem'}}>Votes</span>
-                <span>{suggestion.votes}</span>
+                <span>{suggestion?.votes.length}</span>
               </SuggestVotes>
             </div>
           </div>
 
           <div className="row">
             <div className="col-sm-12 col-md-10" style={{display:'flex', flexDirection:'column'}}>
-              <SuggestionCategory>{suggestion.category}</SuggestionCategory>
-              <ShowMoreContent content={suggestion.description} length={270} />
+              {/* <SuggestionCategory>{suggestion.category}</SuggestionCategory> */}
+              <ShowMoreContent content={suggestion?.description || ''} length={270} />
             </div>
             <div className="col-sm-12 col-md-2">
               <SuggestionInfo>
                 <div style={{display:'flex', alignItems:'center'}}>
                   <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-                  <SuggestionUser>{suggestion.name}</SuggestionUser>
+                  <SuggestionUser>{suggestion?.nickName}</SuggestionUser>
                 </div>
                 <div className="row">
                   <div className="col-6 col-md-12">
                     <div style={{display:'flex', alignItems:'center'}}>
                       <BsCircleFill style={{width:25, height:6}} /> 
-                      <SuggestionUser>{suggestion.status}</SuggestionUser>
+                      <SuggestionUser>{suggestion?.status}</SuggestionUser>
                     </div>
                     <div style={{display:'flex', alignItems:'center'}}>
                       <BsCircleFill style={{width:25, height:6}} /> 
-                      <SuggestionUser>{`${suggestion.comments} comments`}</SuggestionUser>
+                      <SuggestionUser>{`${suggestion?.comments.length} comments`}</SuggestionUser>
                     </div>
                     <div style={{display:'flex', alignItems:'center'}}>
                       <BsCircleFill style={{width:25, height:6}} /> 
                       <SuggestionUser>
-                        {`${suggestion.apy}%`}
+                        {`${suggestion?.apy}%`}
                         <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
                       </SuggestionUser>
                     </div>
                   </div>
                   <div className="col-6 col-md-12" style={{display:'flex', flexDirection:'column'}}>
-                    <SuggestionRiskImage src={risk.image.url} />
+                    <SuggestionRiskImage src={suggestion?.risk.image.url} />
                     <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
                       Risk Description
                     </RiskDescriptionButton>
@@ -276,11 +242,11 @@ export default function SuggestionView ({
 
         <SuggetionCommentRow>
           <BsFillChatRightDotsFill />
-          <span style={{marginLeft:'15px'}}>{`Comments (${suggestion.comments})`}</span>
+          <span style={{marginLeft:'15px'}}>{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
         
         <CommentEdit />
-        {comments.map(comment =>
+        {suggestion?.comments.map((comment: any) =>
           <Comment comment={comment}/>
         )}
 
@@ -297,7 +263,7 @@ export default function SuggestionView ({
       >
         <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
           <div className="col-sm-12 col-md-4" style={{display:'flex'}}>
-            <SuggestionRiskImage src={risk.image.url} style={{padding: 0}} />
+            <SuggestionRiskImage src={suggestion?.risk.image.url} style={{padding: 0}} />
           </div>
           <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
             This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.

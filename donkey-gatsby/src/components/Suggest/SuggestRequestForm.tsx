@@ -350,6 +350,24 @@ const ExampleSuggestions = (): Array<any> => {
   return _example
 }
 
+const validate = (state: typeof INITIAL_STATE) => {
+  if (!state.nickName) {
+    return { isValid: false, message: "Please input Nick Name" };
+  }
+  if (!state.title) {
+    return { isValid: false, message: "Please input Title" };
+  }
+  if (!state.description) {
+    return { isValid: false, message: "Please input Suggestion Flow" };
+  }
+  if (!state.telegram) {
+    return { isValid: false, message: "Please input telegram account" };
+  }
+  if (!state.riskword) {
+    return { isValid: false, message: "Please input riskword" };
+  }
+  return { isValid: true, message: null };
+};
 
 export const SuggestRequestForm = () => {
   const { createSuggestion } = useSuggestionApi();
@@ -367,8 +385,8 @@ export const SuggestRequestForm = () => {
   const [error, setError] = useState<any | null>(null);
   const { checkAvailability } = useSignin();
   const exmapleSuggestions = ExampleSuggestions();
-
   const [formState, setFormState] = useState(INITIAL_STATE);
+
   const handleChange =
     <K extends keyof typeof INITIAL_STATE>(key: K) =>
     (e: { target: { value: string | File } }) => {
@@ -380,7 +398,11 @@ export const SuggestRequestForm = () => {
   };
 
   const handleCreate = async () => {
-    const checked = true;
+    const validationResp = validate(formState);
+    if (!validationResp.isValid) {
+      showFailure(validationResp.message);
+      return;
+    }
 
     const res = await checkAvailability();
     if (!res.status) {
@@ -389,21 +411,16 @@ export const SuggestRequestForm = () => {
       return;
     }
 
-    if (checked) {
-      let _suggestion = { ...formState };
-      _suggestion.network = NetworkTypes[_suggestion.network].strapiId;
-      _suggestion.risk = _suggestion.risk;
-      const web3 =  getConnectedWeb3();
-      const accounts = await web3.eth.getAccounts();
-      _suggestion.address = accounts[0];
-      try {
-        const resp = await createSuggestion(_suggestion);
-        setFormState(INITIAL_STATE);
-      } catch (e) {
-        console.log(e);
-        showFailure("Please Try Again Later");
-      } finally {
-      }
+    let _suggestion = { ...formState };
+    setIsCreating(true);
+    try {
+      const resp = await createSuggestion(_suggestion);
+      setFormState(INITIAL_STATE);
+    } catch (e) {
+      console.log(e);
+      showFailure("Please Try Again Later");
+    } finally {
+      setIsCreating(false);
     }
   };
 
@@ -437,7 +454,7 @@ export const SuggestRequestForm = () => {
                   )}
                   onClick={() => changeNetwork(item.strapiId)}
                 >
-                  <div>{item.Name}</div>
+                  <div>{item.name}</div>
                 </DropDownItem>
               )}
             </div>
@@ -479,7 +496,7 @@ export const SuggestRequestForm = () => {
         Network
         <div className="d-flex position-relative">
           <DropdownBtn active={showNetworkSelect} onClick={() => setShowNetworkSelect(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
-            {networks.find((item: any) => formState.network === item.strapiId).Name}
+            {networks.find((item: any) => formState.network === item.strapiId).name}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {showNetworkSelect && <DropDownMenu />}
