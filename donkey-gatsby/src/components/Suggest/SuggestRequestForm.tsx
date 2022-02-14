@@ -1,23 +1,20 @@
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState } from "react";
 import { Spinner, OverlayTrigger, Tooltip } from "react-bootstrap";
 import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
-import { useRiskAndNetworkList } from "components/Suggest";
+import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
 import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
-import { checkBalanceForStrategy } from "helpers";
-import { useStakingContract } from "hooks";
-import { useWeb3Context } from "don-components";
 import { theme } from "theme";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
-import { useSuggestionApi } from "hooks";
+import { useSuggestionApi, useSignin } from "hooks";
 import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
-import ExampleUser from "../../images/ex-user.png";
+import { useWeb3Context } from "don-components";
 
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
@@ -110,7 +107,7 @@ const INITIAL_STATE = {
   nickName: "",
   telegram: "",
   address: "",
-  network: 0,
+  network: 1,
   apy: 10,
   riskword: "",
   risk: 0
@@ -329,10 +326,7 @@ const renderTooltipFees = (props: any) => (
 const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
   const risk = risks.find((item: any) => item.strapiId === riskLevel);
   const color = riskLevel === 1 ? '#FF4500': riskLevel === 5 ? '#32CD32': riskLevel === 6 ? 'orange': riskLevel === 2 ? '#FFD700': '#00BFFF';
-  console.log('risks----', risk)
-
   if (!risk) return;
-
   return (
     <div style={{display:'flex', flexDirection:'column', marginTop: '16px', alignItems:'center'}}>
       <RiskLevelSelectorIcon color={color} />
@@ -359,9 +353,7 @@ const ExampleSuggestions = (): Array<any> => {
 
 export const SuggestRequestForm = () => {
   const { createSuggestion } = useSuggestionApi();
-  const { risks } = useRiskAndNetworkList();
-  // const networkList = useNetworkList();
-  // console.log('networkList---------', networkList)
+  const { risks, networks } = useRiskAndNetworkList();
   const [riskLevel, setRiskLevel] = useState(2);
   const [isCreating, setIsCreating] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -371,16 +363,10 @@ export const SuggestRequestForm = () => {
   const [selectedExmaple, setSelectedExample] = useState(0);
   const [showNetworkSelect, setShowNetworkSelect] = useState(false);
   const { getConnectedWeb3 } = useWeb3Context();
-
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [error, setError] = useState<any | null>(null);
+  const { checkAvailability } = useSignin();
   const exmapleSuggestions = ExampleSuggestions();
-
-  const { tier } = useStakingContract();  
-  const checkBalance = async () => {
-    const web3 = getConnectedWeb3();
-    const _res = await checkBalanceForStrategy(web3);
-    if ( _res || tier.tier > 0 ) return true;
-    else return false;
-  };
 
   const [formState, setFormState] = useState(INITIAL_STATE);
   const handleChange =
@@ -392,9 +378,17 @@ export const SuggestRequestForm = () => {
   const onClose = () => {
     setIsSent(null);
   };
+
   const handleCreate = async () => {
-    const checked = await checkBalance();
-    // const checked = true;
+    const checked = true;
+
+    const res = await checkAvailability();
+    if (!res.status) {
+      setShowErrorModal(true);
+      setError(res);
+      return;
+    }
+
     if (checked) {
       let _suggestion = { ...formState };
       _suggestion.network = NetworkTypes[_suggestion.network].strapiId;
@@ -413,8 +407,8 @@ export const SuggestRequestForm = () => {
     }
   };
 
-  const changeNetwork = (network: any) => {
-    setFormState((old) => ({ ...old, network: network }));
+  const changeNetwork = (network: number) => {
+    setFormState((old) => ({ ...old, network }));
   }
 
   const prevExample = () => {
@@ -423,7 +417,7 @@ export const SuggestRequestForm = () => {
   const nextExample = () => {
     if (selectedExmaple < exmapleSuggestions.length - 1) setSelectedExample(selectedExmaple + 1)
   }
-
+ 
   const DropDownMenu = () => {
     return (
       <ClickAwayListener onClickAway={() => setShowNetworkSelect(false)}>
@@ -434,16 +428,16 @@ export const SuggestRequestForm = () => {
         >
           <DropDown>
             <div id="collapseExample" className="collapse">
-              {NetworkTypes.map((item, idx) => 
+              {networks.map((item: any) => 
                 <DropDownItem
-                  key={item.value}
+                  key={item.chainId}
                   className={clsx(
                     "d-flex justify-content-between align-items-center",
-                    { selected: item.value === formState.network }
+                    { selected: item.strapiId === formState.network }
                   )}
-                  onClick={() => changeNetwork(idx)}
+                  onClick={() => changeNetwork(item.strapiId)}
                 >
-                  <div>{item.name}</div>
+                  <div>{item.Name}</div>
                 </DropDownItem>
               )}
             </div>
@@ -485,7 +479,7 @@ export const SuggestRequestForm = () => {
         Network
         <div className="d-flex position-relative">
           <DropdownBtn active={showNetworkSelect} onClick={() => setShowNetworkSelect(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
-            {NetworkTypes[formState.network].name}
+            {networks.find((item: any) => formState.network === item.strapiId).Name}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {showNetworkSelect && <DropDownMenu />}
@@ -607,6 +601,8 @@ export const SuggestRequestForm = () => {
           <BsArrowRight style={{margin: '10px', cursor:'pointer'}} onClick={() => nextExample()}/>
         </div>
       </DonCommonmodal>
+
+      {showErrorModal && error && <ErrorModal error={error} closeModal={() => setShowErrorModal(false)} />}
 
     </Form>
   );

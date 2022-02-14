@@ -1,11 +1,13 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { navigate } from "gatsby-link";
 import { UserIcon } from "components/Icons";
 import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
-import { useRiskAndNetworkList } from "./Suggest";
+import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
+import { useSignin } from "hooks";
+
 const SuggestCardSection = styled.div`
 padding: 50px 25px;
 background: #ffffff;
@@ -143,36 +145,51 @@ const STATUS_MAP = {
 
 type SuggestStatusType = keyof typeof STATUS_MAP;
 
-
-
 export const SuggestCard: React.FC<{ 
   suggest: { 
     idx: number;
     title: string;
     apy: number;
-    votes: number;
+    votes: any;
     address: string;
     description: string;
-    risk: number;
-    comments: number;
+    risk: any;
+    comments: any;
     status: String;
   }
 }> = (props)  => {
-  const { risks } = useRiskAndNetworkList()
-  const [showVoteModal, setShowVoteModal] = useState(false)
-  const [comment, setComment] = useState('')
+  const { risks } = useRiskAndNetworkList();
+  const [showVoteModal, setShowVoteModal] = useState(false);
+  const [comment, setComment] = useState('');
+  const { checkAvailability } = useSignin();
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [error, setError] = useState<any | null>(null);
   const handleCommentChange = (e: any) => {
-    setComment(e.target.value)
+    setComment(e.target.value);
   }
-  const handleCommentClick = (e: any) => {
+
+  const handleCommentClick = async (e: any) => {
     e.stopPropagation();
-    setShowVoteModal(true)
+    setShowVoteModal(true);
   }
+
+  const handleSubmitComment = async (e: any) => {
+    e.stopPropagation();
+    setShowVoteModal(false);
+    const res = await checkAvailability();
+    if (!res.status) {
+      setShowErrorModal(true);
+      setError(res);
+      return;
+    }
+  }
+
   const handleCardClick = () => {
     navigate(`/community/suggestion/${props.suggest.idx}`);
   }
+
   const risk = useMemo(() => {
-    return risks.find((item: any) => item.strapiId === props.suggest.risk);
+    return risks?.find((item: any) => item.strapiId === props.suggest.risk.id);
   }, [risks, props.suggest.risk]);
 
   return (
@@ -194,7 +211,7 @@ export const SuggestCard: React.FC<{
           <SuggestVotesBox className="col-3">
             <SuggestVotes>
               <span style={{fontSize:'0.6rem'}}>Votes</span>
-              <span>{props.suggest.votes}</span>
+              <span>{props.suggest.votes.length}</span>
             </SuggestVotes>
           </SuggestVotesBox>
         </div>
@@ -209,7 +226,7 @@ export const SuggestCard: React.FC<{
             </div>
             <div style={{display:'flex', alignItems:'center'}}>
               <AiOutlineMessage size="25px"/> 
-              <SuggestAddress>{`${props.suggest.comments} Comments`}</SuggestAddress>
+              <SuggestAddress>{`${props.suggest.comments.length} Comments`}</SuggestAddress>
             </div>
           </div>
           <div className="col-6">
@@ -243,10 +260,12 @@ export const SuggestCard: React.FC<{
           onChange={handleCommentChange}
           placeholder="Start write comment here..."
         ></TextArea>
-        <CommentButton onClick={() => setShowVoteModal(false)}>
+        <CommentButton onClick={handleSubmitComment}>
           Submit Comment
         </CommentButton>
       </DonCommonmodal>
+      
+      {showErrorModal && error && <ErrorModal error={error} closeModal={() => setShowErrorModal(false)} />}
   </div>
 
   )

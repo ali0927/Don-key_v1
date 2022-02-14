@@ -1,5 +1,11 @@
 import { strapi } from "strapi";
 import { ISuggestFormState } from "components/Suggest/SuggestRequestForm";
+
+export const fetchSuggestionList = async () => {
+  const resp = await strapi.get("/suggestions");
+  return resp.data;
+};
+
 export const useSuggestionApi = () => {
   const fetchList = async () => {
     const resp = await strapi.get("/suggestions");

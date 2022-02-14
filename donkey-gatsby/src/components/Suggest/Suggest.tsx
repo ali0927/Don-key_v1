@@ -11,6 +11,8 @@ import { useSuggestionApi } from "hooks";
 import { DummySuggestions } from "JsonData/DummyData";
 import { useStaticQuery, graphql } from "gatsby";
 import { INetwork } from "LandingPage/CardsSection/interfaces";
+import { DonCommonmodal } from "components/DonModal";
+import { useSignin } from "hooks";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -182,10 +184,58 @@ const SuggestStatus = {
   approved: 'approved'
 }
 
+const ConfirmButton = styled.button`
+  padding: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  border-radius: 10px;
+  background: linear-gradient(146.14deg, #353a4b 0%, #0b0e12 100%);
+  border: 0;
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+export const ErrorModal: React.FC<{
+  error: {
+    status: boolean
+    type: string
+    msg: string
+  };
+  closeModal: any
+}> = (props) => {
+  const [openModal, setOpenModal] = useState(true);
+  const { signin } = useSignin();
+  const handleSignin = async () => {
+    const _res = await signin()
+    setOpenModal(false);
+  }
+
+  return (
+    <DonCommonmodal
+      isOpen={openModal}
+      onClose={props.closeModal}
+      title="Error"
+      variant="common"
+      size="sm"
+    >
+      <p>
+        {props.error.msg}
+      </p>
+      {props.error.type === "token" &&
+        <ConfirmButton onClick={() => handleSignin()}>
+          Sign in
+        </ConfirmButton>
+      }
+    </DonCommonmodal>
+  )
+}
+
 export const Suggest = () => {
-  const [show, setShow] = useState(false);
   const { fetchList } = useSuggestionApi();
-  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
+  const [show, setShow] = useState(false);
+  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.new);
   const [viewMore, setViewMore] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
 
@@ -196,7 +246,7 @@ export const Suggest = () => {
 
   useEffect(() => {
     onLoad();
-  }, []);
+  })
 
   const onLoad = async () => {
     const suggestionList = await fetchList();
@@ -209,7 +259,6 @@ export const Suggest = () => {
       _list = suggestions.filter((item: any) => item.status === strategyFilter);
       _list = viewMore ? _list: _list.slice(0, 3);
     }
-    console.log('filter----------------', _list);
     return _list;
   }, [suggestions, viewMore]);
 
@@ -269,13 +318,13 @@ export const Suggest = () => {
   return (
     <div className="container">
       <div className="row mb-2">
-        {/* <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
+        <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
           <DropdownBtn active={show} onClick={() => setShow(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
             {strategyFilter}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {show && <DropDownMenu />}
-        </div> */}
+        </div>
       </div>
 
       {filterList.length > 0 &&
@@ -285,7 +334,7 @@ export const Suggest = () => {
           </div>
         </>
       }
-      {filterList.length > 0 &&
+      {filterList.length > 0 && suggestions.length > filterList.length &&
         <div className="row justify-content-center mb-4">
           <div className="col-sm-12 col-md-4">
             <MoreButton onClick={() => setViewMore(true)}>
