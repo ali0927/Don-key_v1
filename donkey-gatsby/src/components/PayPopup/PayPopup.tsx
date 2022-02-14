@@ -1,14 +1,15 @@
+import BigNumber from "bignumber.js";
 import { DonCommonmodal } from "components/DonModal";
-import { useWeb3Context } from "don-components";
-import { formatNum } from "helpers";
-import { useTimer } from "hooks";
+import { BSC_TESTNET_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
+import { formatNum, getERCContract, toEther } from "helpers";
+import { useEffectOnTabFocus, useTimer } from "hooks";
 import { ILoan, IStoreState } from "interfaces";
 import memoizeOne from "memoize-one";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { payLoanThunk } from "store/actions";
-import { findLendedLp } from "store/selectors";
+import { findLendedLp, selectAuction } from "store/selectors";
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.button`
@@ -130,11 +131,32 @@ export const PayPopup = ({
 }) => {
   const { hrs, days, mins } = useTimer(loan.settlementTime);
   const lpToken = useSelector(lpSelector(loan.lpAddress, loan.auctionAddress));
-
+  const auction = useSelector((state: IStoreState) =>
+    selectAuction(state.auctions.auctionInfo, loan.auctionAddress)
+  );
   const [isLoading, setIsLoading] = useState(false);
-
+  const [balance, setBalance] = useState("");
   const dispatch = useDispatch();
   const { address, getConnectedWeb3 } = useWeb3Context();
+
+  const fetchBalance = async () => {
+    if (address && auction) {
+      setIsLoading(true);
+      setBalance("");
+      const token = await getERCContract(
+        getWeb3(BSC_TESTNET_CHAIN_ID),
+        auction.loanTokenAddress
+      );
+      const balance = await token.methods.balanceOf(address).call();
+      const decimals = await token.methods.decimals().call();
+      setBalance(toEther(balance, decimals));
+      setIsLoading(false);
+    }
+  };
+
+  useEffectOnTabFocus(() => {
+    fetchBalance();
+  }, [address]);
 
   const claimLoan = async () => {
     setIsLoading(true);
@@ -152,7 +174,9 @@ export const PayPopup = ({
       })
     );
   };
-
+  const hasSufficientBalance = balance
+    ? new BigNumber(balance).gt(loan.totalAmountTobePaid)
+    : false;
   return (
     <DonCommonmodal
       className="auctionPop"
@@ -202,7 +226,7 @@ export const PayPopup = ({
       <div style={{ fontSize: 13 }}>
         <div className="d-flex mb-2 align-items-center justify-content-between">
           <span style={{ fontWeight: 300 }}>LP Value </span>
-          <span style={{ fontWeight: 500 }}>
+          <span style={{ fontWeight: 500, color: "#6e6e6e" }}>
             {formatNum(loan.lendedAmount)} {lpToken?.symbol}
           </span>
         </div>
@@ -224,12 +248,28 @@ export const PayPopup = ({
         style={{ fontSize: 13 }}
         className="d-flex mb-2 align-items-center justify-content-end"
       >
-        <span className="mr-4" style={{ fontWeight: 300 }}>
-          Total:{" "}
-        </span>
-        <span style={{ fontWeight: 600 }}>
-          {formatNum(loan.totalAmountTobePaid)} {lpToken?.symbol}
-        </span>
+        <div className="d-flex flex-column">
+          <span className="mr-4" style={{ fontWeight: 300 }}>
+            Total:{" "}
+          </span>
+          <span className="mr-4" style={{ fontWeight: 300 }}>
+            Balance:{" "}
+          </span>
+        </div>
+        <div className="d-flex flex-column">
+          <span style={{ fontWeight: 600 }}>
+            {formatNum(loan.totalAmountTobePaid)} {lpToken?.symbol}
+          </span>
+          <span style={{ fontWeight: 600 }}>
+            {balance ? (
+              <>
+                {formatNum(balance)} {lpToken?.symbol}
+              </>
+            ) : (
+              "-"
+            )}
+          </span>
+        </div>
       </div>
       <div
         className="d-flex my-4"
@@ -239,8 +279,10 @@ export const PayPopup = ({
           <StyledButton disabled={isLoading} onClick={claimLoan}>
             {isLoading ? (
               <Spinner animation="border" size="sm" />
-            ) : (
+            ) : hasSufficientBalance ? (
               <>Re-Pay &amp; Unstake</>
+            ) : (
+              "Insufficient Balance"
             )}
           </StyledButton>
         </div>

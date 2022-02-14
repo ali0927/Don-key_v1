@@ -178,6 +178,7 @@ export type IAuction = {
   endTime: number;
   initialized: boolean;
   tenure: number;
+  loanTokenAddress: string;
   maxDebtMap: {
     [TierNumber: number]: string;
   };

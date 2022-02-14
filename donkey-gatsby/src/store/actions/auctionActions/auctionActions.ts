@@ -95,6 +95,7 @@ export const fetchAuctionsThunk =
     const promises = AuctionContracts.map(async (contract) => {
       const auctionState: IAuction = {
         address: contract.address,
+        loanTokenAddress: "",
         endTime: 0,
         initialized: false,
         maxDebtMap: {},
@@ -114,11 +115,12 @@ export const fetchAuctionsThunk =
 
         await contract.initialize();
         auctionState.initialized = true;
-        [auctionState.endTime, auctionState.startTime, auctionState.tenure] =
+        [auctionState.endTime, auctionState.startTime, auctionState.tenure, auctionState.loanTokenAddress] =
           await Promise.all([
             contract.getauctionEndTime(),
             contract.getauctionStartTime(),
             contract.getLoanTenure(),
+            contract.getLoanTokenAddress()
           ]);
 
         auctionState.maxDebtMap = contract.getMaxDebtMap();
