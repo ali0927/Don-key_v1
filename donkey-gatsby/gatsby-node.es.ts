@@ -3,7 +3,6 @@ import webpack from "webpack";
 import _ from "lodash";
 import { calcSumOfAllPoolValues } from "./src/helpers/contractHelpers";
 import { DummySuggestions, DummyEarningIDs } from "./src/JsonData/DummyData";
-import { gql, useQuery, useLazyQuery } from "@apollo/client";
 
 /**
  * Here is the place where Gatsby creates the URLs for all the
@@ -312,66 +311,7 @@ export const createPages = async ({ graphql, actions }: any) => {
       });
     }
   });
-
-  const ALL_SUGGESTION_QUERY =gql`
-    query fetchSuggestions {
-      suggestions {
-        apy
-        description
-        id
-        status
-        title
-        created_at
-        network {
-          chainId
-          name
-        }
-        risk {
-          Title
-          image {
-            url
-          }
-          id
-        }
-        nickName
-        customer {
-          id
-          address
-        }
-        comments {
-          id
-          content
-          customer {
-            address
-          }
-          likes {
-            address
-          }
-          replies {
-            content
-            customer {
-              address
-            }
-          }
-        }
-        votes {
-          address
-        }
-      }
-    }
-  `;
-
-  const { data: suggestions } = useQuery(ALL_SUGGESTION_QUERY);
-  suggestions.forEach((suggestion: any) => {
-    createPage({
-      path: `/community/suggestion/${suggestion.strapiId}`,
-      component: path.resolve(`./src/templates/suggestionTemplate.tsx`),
-      context: {
-        suggestionInfo: suggestion
-      },
-    });
-  });
-
+ 
   DummyEarningIDs.forEach((id: any) => {
     createPage({
       path: `/earning/${id}`,
