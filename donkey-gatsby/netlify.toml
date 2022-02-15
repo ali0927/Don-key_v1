@@ -27,7 +27,7 @@
   GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
 [context."feature/auction-page".environment]
   GATSBY_STRAPI_URL = "https://dev-cms.don-key.finance"
-  GATSBY_STAKING_CONTRACT = "0x9E2403892eD4a6Dd663A4DF5ED6b55800Bed2F31"
+  GATSBY_STAKING_CONTRACT = "0x99937edFdcDbfbB9ACeDb8e165494B81E38EBeCF"
   GATSBY_API_URL = "https://dev-api.don-key.finance"
   GATSBY_APP_ENV = "development"
   GATSBY_SHOW_ADMIN = "false"
