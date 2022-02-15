@@ -16,7 +16,6 @@ export const POLYGON_CHAIN_ID = 137;
 export const FANTOM_CHAIN_ID = 250;
 export const BSC_TESTNET_CHAIN_ID = 97;
 
-
 export const NetworkConfigs = [{
     chainId: ETHEREUM_CHAIN_ID,
     rpcs: ETHEREUM_RPC,
