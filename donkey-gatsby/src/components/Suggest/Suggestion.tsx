@@ -13,7 +13,6 @@ import { navigate } from "gatsby";
 import { DonGatsbyLink, IDonGatsbyLinkProps } from "components/DonGatsbyLink";
 import { useSuggestionApi } from "hooks";
 import { IStrapiSuggestion } from "interfaces";
-import { gql, useQuery } from "@apollo/client";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -138,55 +137,6 @@ const SuggestionLink = styled(DonGatsbyLink)`
   text-decoration: none !important;
   color: #000;
 `
-// const { data: suggestions } = useQuery(ALL_SUGGESTION_QUERY);
-const ALL_SUGGESTION_QUERY =gql`
-  query fetchSuggestions {
-    suggestions {
-      apy
-      description
-      id
-      status
-      title
-      created_at
-      network {
-        chainId
-        name
-      }
-      risk {
-        Title
-        image {
-          url
-        }
-        id
-      }
-      nickName
-      customer {
-        id
-        address
-      }
-      comments {
-        id
-        content
-        customer {
-          address
-        }
-        likes {
-          address
-        }
-        replies {
-          content
-          customer {
-            address
-          }
-        }
-      }
-      votes {
-        address
-      }
-    }
-  }
-`;
-
 export const SuggestionView = (props: { id: number }) => {
   const [showRiskDetail, setShowRiskDetail] = useState(false);
   const { getCount, getSuggestion } = useSuggestionApi();

@@ -7,6 +7,7 @@ import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
 import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
 import { useSignin, useSuggestionApi } from "hooks";
+import { IStrapiSuggestion } from "interfaces";
 
 const SuggestCardSection = styled.div`
 padding: 50px 25px;
@@ -146,19 +147,8 @@ const STATUS_MAP = {
 type SuggestStatusType = keyof typeof STATUS_MAP;
 
 export const SuggestCard: React.FC<{ 
-  suggest: { 
-    id: number;
-    title: string;
-    apy: number;
-    votes: any;
-    address: string;
-    description: string;
-    risk: any;
-    comments: any;
-    status: String;
-  }
+  suggestion: IStrapiSuggestion
 }> = (props)  => {
-  const { risks } = useRiskAndNetworkList();
   const { vote, comment } = useSuggestionApi();
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [commentContent, setCommentContent] = useState('');
@@ -183,7 +173,7 @@ export const SuggestCard: React.FC<{
       setError(res);
       return;
     }
-    const res_comment = await comment(props.suggest.id, commentContent);
+    const res_comment = await comment(props.suggestion.id, commentContent);
     setShowVoteModal(false);
     return res_comment;
   }
@@ -195,30 +185,26 @@ export const SuggestCard: React.FC<{
       setError(res);
       return;
     }
-    const res_vote = await vote(props.suggest.id);
+    const res_vote = await vote(props.suggestion.id);
     return res_vote;
   }
 
   const handleCardClick = () => {
-    navigate(`/community/suggestion/${props.suggest.id}`);
+    navigate(`/community/suggestion/${props.suggestion.id}`);
   }
-
-  const risk = useMemo(() => {
-    return risks?.find((item: any) => item.strapiId === props.suggest.risk.id);
-  }, [risks, props.suggest.risk]);
 
   return (
     <div>
       <SuggestCardSection onClick={() => handleCardClick()}>
         <div className="row">
           <div className="col-9">
-            <SuggestTitle>{props.suggest.title}</SuggestTitle>
+            <SuggestTitle>{props.suggestion.title}</SuggestTitle>
             <div style={{display: 'flex', alignItems: 'center'}}>
-              <SuggestStatus status={props.suggest.status as SuggestStatusType}>
-                <SuggestStatusTitle>{STATUS_MAP[props.suggest.status as SuggestStatusType].text}</SuggestStatusTitle>
+              <SuggestStatus status={props.suggestion.status as SuggestStatusType}>
+                <SuggestStatusTitle>{STATUS_MAP[props.suggestion.status as SuggestStatusType].text}</SuggestStatusTitle>
               </SuggestStatus>
               <SuggestStatusTitle>
-                {`${props.suggest.apy}%`}
+                {`${props.suggestion.apy}%`}
                 <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
               </SuggestStatusTitle>
             </div>
@@ -226,26 +212,26 @@ export const SuggestCard: React.FC<{
           <SuggestVotesBox className="col-3">
             <SuggestVotes>
               <span style={{fontSize:'0.6rem'}}>Votes</span>
-              <span>{props.suggest.votes.length}</span>
+              <span>{props.suggestion.votes.length}</span>
             </SuggestVotes>
           </SuggestVotesBox>
         </div>
         <SuggestDescription>
-          {props.suggest.description}
+          {props.suggestion.description}
         </SuggestDescription>
         <div className="row">
           <div className="col-6" style={{display:'flex', flexDirection:'column', justifyContent:'space-around'}}>
             <div style={{display:'flex', alignItems:'center'}}>
               <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-              <SuggestAddress>{props.suggest.address}</SuggestAddress>
+              <SuggestAddress>{props.suggestion.customer.address}</SuggestAddress>
             </div>
             <div style={{display:'flex', alignItems:'center'}}>
               <AiOutlineMessage size="25px"/> 
-              <SuggestAddress>{`${props.suggest.comments.length} Comments`}</SuggestAddress>
+              <SuggestAddress>{`${props.suggestion.comments.length} Comments`}</SuggestAddress>
             </div>
           </div>
           <div className="col-6">
-            <SuggestRiskImage src={risk.image.url} />
+            <SuggestRiskImage src={props.suggestion.risk.image.url} />
           </div>
         </div>
         <CommentButton onClick={handleCommentClick}>
@@ -266,7 +252,7 @@ export const SuggestCard: React.FC<{
             <BsFillCaretUpFill style={{marginRight: '20px'}}/>
             Vote
           </VoteButton>
-          <h3 style={{fontWeight:600, margin:0}}>{props.suggest.votes.length}</h3>
+          <h3 style={{fontWeight:600, margin:0}}>{props.suggestion.votes.length}</h3>
         </div>
         <VoteModalSubtitle>Leave a comment</VoteModalSubtitle>
         <TextArea

@@ -412,6 +412,7 @@ export const SuggestRequestForm = () => {
     }
 
     let _suggestion = { ...formState };
+    _suggestion.risk = riskLevel;
     setIsCreating(true);
     try {
       const resp = await createSuggestion(_suggestion);

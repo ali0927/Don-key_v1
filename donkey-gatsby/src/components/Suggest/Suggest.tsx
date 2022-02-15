@@ -10,6 +10,7 @@ import { StaticImage } from "gatsby-plugin-image";
 import { useStaticQuery, graphql } from "gatsby";
 import { DonCommonmodal } from "components/DonModal";
 import { useSuggestionApi, useSignin } from "hooks";
+import { gql, useQuery } from "@apollo/client";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -234,35 +235,86 @@ export const ErrorModal: React.FC<{
   )
 }
 
+const ALL_SUGGESTION_QUERY = gql`
+  query allSuggestionsQuery {
+    suggestions {
+      apy
+      description
+      id
+      status
+      title
+      created_at
+      network {
+        name
+      }
+      risk {
+        Title
+        image {
+          url
+        }
+        id
+      }
+      nickName
+      customer {
+        address
+      }
+      comments {
+        content
+        customer {
+          address
+        }
+        likes {
+          address
+        }
+        replies {
+          content
+          customer {
+            address
+          }
+        }
+      }
+      votes {
+        address
+      }
+    }
+  }
+`;
+
 export const Suggest = () => {
   const { fetchList } = useSuggestionApi();
   const [show, setShow] = useState(false);
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.new);
   const [viewMore, setViewMore] = useState(false);
-  const [suggestions, setSuggestions] = useState([]);
+  const { data: suggestionsData } = useQuery(ALL_SUGGESTION_QUERY);
+
+  // const [suggestions, setSuggestions] = useState([]);
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
     setShow(false);
   };
 
-  useEffect(() => {
-    onLoad();
-  })
+  // useEffect(() => {
+  //   onLoad();
+  // })
 
-  const onLoad = async () => {
-    const suggestionList = await fetchList();
-    setSuggestions(suggestionList);
-  }
+  // const onLoad = async () => {
+  //   const suggestionList = await fetchList();
+  //   setSuggestions(suggestionList);
+  // }
 
   const filterList = useMemo(() => {
-    let _list = suggestions;
-    if (strategyFilter !== SuggestStatus.all) {
-      _list = suggestions.filter((item: any) => item.status === strategyFilter);
-      _list = viewMore ? _list: _list.slice(0, 3);
+    console.log('log------suggestions----', suggestionsData);
+    if (suggestionsData) {
+      let _list = suggestionsData.suggestions;
+      if (strategyFilter !== SuggestStatus.all) {
+        _list = suggestionsData.suggestions.filter((item: any) => item.status === strategyFilter);
+        _list = viewMore ? _list: _list.slice(0, 3);
+      }
+      return _list;
     }
-    return _list;
-  }, [suggestions, viewMore]);
+    return [];
+  }, [suggestionsData, viewMore]);
 
   const DropDownMenu = () => {
     return (
@@ -336,7 +388,7 @@ export const Suggest = () => {
           </div>
         </>
       }
-      {filterList.length > 0 && suggestions.length > filterList.length &&
+      {filterList.length > 0 && suggestionsData.suggestions.length > filterList.length &&
         <div className="row justify-content-center mb-4">
           <div className="col-sm-12 col-md-4">
             <MoreButton onClick={() => setViewMore(true)}>
