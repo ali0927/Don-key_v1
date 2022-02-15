@@ -92,7 +92,11 @@ class AuctionContract {
   };
 
   isWhiteListed = async (poolAddress: string) => {
-    return ((await this.viewContract.methods.lpToken(poolAddress).call()) !==
+    const lpTokenAddress = await this.viewContract.methods
+      .lpToken(poolAddress)
+      .call();
+    console.log(lpTokenAddress, "pool", poolAddress);
+    return (lpTokenAddress !==
       "0x0000000000000000000000000000000000000000") as boolean;
   };
 

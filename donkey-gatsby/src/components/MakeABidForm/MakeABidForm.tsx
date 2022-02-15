@@ -129,7 +129,7 @@ const BidFormDropDown = ({
     <ClickAwayListener onClickAway={() => setIsOpen(false)}>
       <div
         ref={setReferenceElement}
-        onClick={() => setIsOpen(val => !val)}
+        onClick={() => setIsOpen((val) => !val)}
         className="field bidformdropdown dropdown"
       >
         {DefaultRow}
@@ -232,7 +232,7 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
 
       await Auction.bid({
         lendedAmount: toWei(
-          new BigNumber(selectedLp.balance!)
+          new BigNumber(selectedLp.withdrawAmount!)
             .multipliedBy(state.percentLp)
             .dividedBy(100)
             .toString()
@@ -588,6 +588,9 @@ export const MakeABidForm = () => {
   const auctions = useSelector(
     (state: IStoreState) => state.auctions.auctionInfo
   );
+  const prevAuctions = useSelector(
+    (state: IStoreState) => state.auctions.prevAuctions
+  );
   const { connected } = useWeb3Context();
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
@@ -630,6 +633,7 @@ export const MakeABidForm = () => {
       className={clsx("make_a_bid ", {
         "bg-white pb-5": isPilotOver,
         "mb-5": !isReady,
+        "no-auction": prevAuctions.data.length === 0,
         blurred:
           ((!currentAuction && nextAuction) || !connected) && !isPilotOver,
       })}

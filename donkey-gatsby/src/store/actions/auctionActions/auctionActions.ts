@@ -5,6 +5,7 @@ import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, getWeb3 } from "don-components";
 import {
   captureException,
+  getAmount,
   getPoolContract,
   getTokenPrice,
   getTokenSymbol,
@@ -114,14 +115,18 @@ export const fetchAuctionsThunk =
         }
 
         await contract.initialize();
-        auctionState.initialized = true;
-        [auctionState.endTime, auctionState.startTime, auctionState.tenure, auctionState.loanTokenAddress] =
-          await Promise.all([
-            contract.getauctionEndTime(),
-            contract.getauctionStartTime(),
-            contract.getLoanTenure(),
-            contract.getLoanTokenAddress()
-          ]);
+
+        [
+          auctionState.endTime,
+          auctionState.startTime,
+          auctionState.tenure,
+          auctionState.loanTokenAddress,
+        ] = await Promise.all([
+          contract.getauctionEndTime(),
+          contract.getauctionStartTime(),
+          contract.getLoanTenure(),
+          contract.getLoanTokenAddress(),
+        ]);
 
         auctionState.maxDebtMap = contract.getMaxDebtMap();
 
@@ -166,6 +171,7 @@ export const fetchAuctionsThunk =
             })
           );
         }
+        auctionState.initialized = true;
       } catch (e) {
         console.log(e, "Feth Auctions");
         return auctionState;
@@ -194,26 +200,26 @@ export const fetchBalancesThunk =
       fetchedAuctions.forEach((item, index) => {
         const list = item.supportedLps.map(async (lp, lindex) => {
           const pool = await getPoolContract(web3, lp.lpAddress, 4);
-          const withdrawAmount = await pool.methods
-            .getUserInvestedAmount(userAddress)
-            .call();
-          const userBalance = await pool.methods.balanceOf(userAddress).call();
-          const lockedLp = await pool.methods
-            .lockedLPAmount(userAddress)
-            .call();
+          const withdrawAmount = await getAmount(
+            web3,
+            lp.lpAddress,
+            userAddress,
+            4,
+            100
+          );
+
+          const lockedBusd = toEther(
+            await pool.methods.lockedAmount(userAddress).call()
+          );
           fetchedAuctions = produce(fetchedAuctions, (draft) => {
-            draft[index].supportedLps[lindex].balance = toEther(userBalance);
             draft[index].supportedLps[lindex].withdrawAmount = new BigNumber(
-              userBalance
+              withdrawAmount
             ).isEqualTo(0)
               ? "0"
-              : toEther(
-                  new BigNumber(1)
-                    .minus(new BigNumber(lockedLp).dividedBy(userBalance))
-                    .multipliedBy(withdrawAmount)
-                    .toFixed(0)
-                );
-            draft[index].supportedLps[lindex].lockedLp = toEther(lockedLp);
+              : new BigNumber(withdrawAmount).lte(lockedBusd)
+              ? "0"
+              : new BigNumber(withdrawAmount).minus(lockedBusd).toString();
+            draft[index].supportedLps[lindex].lockedAmount = lockedBusd;
           });
         });
         promises.push(...list);

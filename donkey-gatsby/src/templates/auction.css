@@ -108,7 +108,7 @@
 
 @media (max-width: 850px) {
     .strip.autcion_head {
-        background-color: whitesmoke;
+        /* background-color: whitesmoke; */
         box-shadow: inset 0 650px 0 0 #fff037;
     }
 }
@@ -121,6 +121,9 @@
     box-shadow: 0 0 44px -2px #00000059;
     margin-bottom: -102px;
     min-height: 713px;
+}
+.make_a_bid.no-auction {
+    margin-bottom: 50px;
 }
 
 

@@ -163,13 +163,13 @@ export type ISupportedLP = {
   lpAddress: string;
   symbol: string;
   withdrawAmount?: string;
-  balance?: string;
+  lockedAmount?: string;
   price: string;
   strategyName: string;
   strategyImage: string;
   tokenImage: string;
   minCommission: number;
-  lockedLp?: string;
+
 };
 
 export type IAuction = {
