@@ -208,7 +208,6 @@ export const ErrorModal: React.FC<{
     const _res = await signin();
     setOpenModal(false);
     props.closeModal();
-    console.log('log--------token-----', _res.token);
   }
 
   useEffect(() => {

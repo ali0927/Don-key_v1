@@ -25,12 +25,11 @@ export const useSignin = () => {
       nonce = new_customer.data.nonce;
     }
     nonce = res.data;
-    var hash  = web3.utils.sha3(nonce.toString());
-    var signature = await web3.eth.sign(hash || '', accounts[0]);
+    var sig = await web3.eth.personal.sign(web3.utils.fromUtf8(`I am signing my one-time nonce: ${nonce}`), accounts[0], "pass");
 
     const resp = await strapi.post("/customers/sign", {
       address: accounts[0],
-      signature: signature
+      signature: sig
     });
 
     dispatch(setAuthToken(resp.data.token));
