@@ -185,6 +185,7 @@ export const SuggestCard: React.FC<{
     }
     const res_comment = await comment(props.suggest.id, commentContent);
     setShowVoteModal(false);
+    return res_comment;
   }
 
   const handleSubmitVote = async (e: any) => {
@@ -195,6 +196,7 @@ export const SuggestCard: React.FC<{
       return;
     }
     const res_vote = await vote(props.suggest.id);
+    return res_vote;
   }
 
   const handleCardClick = () => {
