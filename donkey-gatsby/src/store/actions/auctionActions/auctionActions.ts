@@ -276,10 +276,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
   const auctions = state.auctions.auctionInfo;
   const bids: IBid[] = [];
   const loans: ILoan[] = [];
-  if (
-    auctions.status === "FETCH_BALANCE_SUCCESS" ||
-    auctions.status === "FETCH_SUCCESS"
-  ) {
+  if (auctions.status === "FETCH_BALANCE_SUCCESS") {
     const auctionData = auctions.auctionState;
 
     const promises = auctionData.map(async (item) => {
@@ -339,6 +336,8 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
           settlementTime: info.settlementTime,
         };
         loans.push(loan);
+
+        // TO DO Update Locked LP Amount
       }
     });
 

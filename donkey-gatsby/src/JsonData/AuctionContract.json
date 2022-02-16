@@ -928,6 +928,19 @@
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "tokenPriceFeed",
+		"outputs": [
+			{
+				"internalType": "contract IPriceFeed",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -943,6 +956,19 @@
 	{
 		"inputs": [],
 		"name": "unpause",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_loanTenure",
+				"type": "uint256"
+			}
+		],
+		"name": "updateLoanTenure",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -1018,11 +1044,6 @@
 				"internalType": "address",
 				"name": "lpToken",
 				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "lpAmount",
-				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",

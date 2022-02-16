@@ -95,7 +95,7 @@ class AuctionContract {
     const lpTokenAddress = await this.viewContract.methods
       .lpToken(poolAddress)
       .call();
-    console.log(lpTokenAddress, "pool", poolAddress);
+
     return (lpTokenAddress !==
       "0x0000000000000000000000000000000000000000") as boolean;
   };
@@ -190,27 +190,29 @@ class AuctionContract {
 
   getUserInfo = async ({ userAddress }: { userAddress: string }) => {
     // fetch userInfo from contract;
-    //
 
-    const userInfo = await this.viewContract.methods
-      .userInfo(userAddress)
-      .call();
-    return {
-      lptoken: userInfo.lpToken,
-      lpamount: userInfo.lpAmount,
-      lendedAmount: userInfo.lendedAmount,
-      borrowedAmount: userInfo.borrowedAmount,
-      estimatedBorrowedAmount: userInfo.estimatedBorrowAmount,
-      borrowedAmountInUSD: userInfo.borrowedAmountInUSD,
-      borrowedTime: userInfo.borrowedTime,
-      settlementTime: userInfo.settlementTime,
-      commissionAmount: userInfo.commissionAmount,
-      commissionInPer: userInfo.commissionInPer,
-      participationTime: userInfo.participationTime,
-      loanSettlementTime: userInfo.loanSettlementTime,
-      tier: userInfo.tier,
-      loanSettled: userInfo.loanSettled,
-    };
+    try {
+      const userInfo = await this.viewContract.methods
+        .userInfo(userAddress)
+        .call();
+      return {
+        lptoken: userInfo.lpToken,
+        lendedAmount: userInfo.lendedAmount,
+        borrowedAmount: userInfo.borrowedAmount,
+        estimatedBorrowedAmount: userInfo.estimatedBorrowAmount,
+        borrowedAmountInUSD: userInfo.borrowedAmountInUSD,
+        borrowedTime: userInfo.borrowedTime,
+        settlementTime: userInfo.settlementTime,
+        commissionAmount: userInfo.commissionAmount,
+        commissionInPer: userInfo.commissionInPer,
+        participationTime: userInfo.participationTime,
+        loanSettlementTime: userInfo.loanSettlementTime,
+        tier: userInfo.tier,
+        loanSettled: userInfo.loanSettled,
+      };
+    } catch (e) {
+      throw Error("Error in Get UserInfo");
+    }
   };
 
   getMaxDebtMap = () => {
