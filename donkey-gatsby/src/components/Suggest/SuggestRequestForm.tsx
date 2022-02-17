@@ -63,13 +63,7 @@ export const Label = styled.label`
   font-weight: 600;
   display: block;
 `;
-const CheckBeforeSend = styled.div`
-  background-color: #fff037;
-  border: 2px dashed #222222;
-  border-radius: 15px;
-  padding: 22px 27px;
-  margin-bottom: 70px;
-`;
+
 export const Select = styled.select`
   ${InputFieldCSS}
   outline: none;
