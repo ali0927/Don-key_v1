@@ -181,12 +181,13 @@ export const SuggestionView = (props: { id: number }) => {
 
       <div className="container">
         <SuggestionPath>
-          <SuggestionLink to="/community">{`Community page / User suggestions / `}</SuggestionLink>
+          <SuggestionLink to="/community">Community page</SuggestionLink> /{" "}
+          <SuggestionLink to="/community">User suggestions</SuggestionLink> /
           <span style={{ fontWeight: 600 }}>{suggestion?.title}</span>
         </SuggestionPath>
 
         <SuggestionBox>
-          <div style={{ display: "flex", marginBottom: "20px" }}>
+          {/* <div style={{ display: "flex", marginBottom: "20px" }}>
             <SuggetionPrevButton
               visible={suggestion?.id! > 1}
               onClick={prevSuggestion}
@@ -195,7 +196,7 @@ export const SuggestionView = (props: { id: number }) => {
               visible={suggestionCount - 1 > suggestion?.id!}
               onClick={nextSuggestion}
             />
-          </div>
+          </div> */}
 
           <div className="row">
             <div
