@@ -1,24 +1,36 @@
-import React, { useState, useMemo, useCallback } from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { navigate } from "gatsby-link";
 import { UserIcon } from "components/Icons";
 import { AiOutlineMessage } from "react-icons/ai";
 import { DonCommonmodal } from "components/DonModal";
 import { BsFillCaretUpFill } from "react-icons/bs";
-import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
-import { useSignin, useSuggestionApi } from "hooks";
+import {
+  useEffectOnTabFocus,
+  useSignin,
+  useStakingContract,
+  useSuggestionApi,
+} from "hooks";
 import { IStrapiSuggestion } from "interfaces";
+import { useWeb3Context } from "don-components";
+import { IStoreState } from "store/reducers/rootReducer";
+import { useSelector } from "react-redux";
+import WalletPopup from "components/WalletPopup/WalletPopup";
+import { Spinner } from "react-bootstrap";
+import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
+import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
+import { captureException } from "helpers";
 
 const SuggestCardSection = styled.div`
-padding: 50px 25px;
-background: #ffffff;
-box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.05);
-border-radius: 20px;
-transition: transform 0.3s linear;
-cursor: pointer;
-&:hover {
+  padding: 50px 25px;
+  background: #ffffff;
+  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+  transition: transform 0.3s linear;
+  cursor: pointer;
+  &:hover {
     transform: translateY(-5px);
-}
+  }
 `;
 const SuggestTitle = styled.h4`
   font-weight: 600;
@@ -40,13 +52,12 @@ const SuggestStatus = styled.div`
       color: ${STATUS_MAP[props.status as "new"].color};
     `;
   }}
-
 `;
 const SuggestVotesBox = styled.div`
   @media (max-width: 600px) {
     margin-top: 10px;
   }
-`
+`;
 const SuggestStatusTitle = styled.div`
   font-weight: 600;
   font-size: 14px;
@@ -69,7 +80,7 @@ const SuggestDescription = styled.p`
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 3; /* number of lines to show */
-          line-clamp: 3; 
+  line-clamp: 3;
   -webkit-box-orient: vertical;
 `;
 const SuggestAddress = styled.p`
@@ -93,12 +104,15 @@ const CommentButton = styled.button`
   display: block;
   width: 100%;
   margin-top: 20px;
+  &:disabled {
+    opacity: 0.9;
+  }
 `;
 const VoteModalSubtitle = styled.div`
   font-weight: 600;
   font-size: 14px;
   margin: 20px 0 10px 0;
-`
+`;
 const VoteButton = styled.button`
   padding: 30px;
   font-weight: 500;
@@ -113,7 +127,7 @@ const VoteButton = styled.button`
   @media (max-width: 600px) {
     padding: 10px 30px;
   }
-`
+`;
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
   border: 1px solid rgba(245, 245, 245, 0.5);
@@ -133,7 +147,7 @@ const InputFieldCSS = css`
 const SuggestRiskImage = styled.img`
   padding-left: 20px;
   width: 100%;
-`
+`;
 export const TextArea = styled.textarea`
   ${InputFieldCSS}
 `;
@@ -146,53 +160,100 @@ const STATUS_MAP = {
 
 type SuggestStatusType = keyof typeof STATUS_MAP;
 
-export const SuggestCard: React.FC<{ 
-  suggestion: IStrapiSuggestion
-}> = (props)  => {
+export const SuggestCard: React.FC<{
+  suggestion: IStrapiSuggestion;
+}> = (props) => {
   const { vote, comment } = useSuggestionApi();
   const [showVoteModal, setShowVoteModal] = useState(false);
-  const [commentContent, setCommentContent] = useState('');
-  const { checkAvailability } = useSignin();
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<any | null>(null);
-  const handleCommentContentChange = (e: any) => {
-    setCommentContent(e.target.value);
-  }
+  const [commentContent, setCommentContent] = useState("");
+  const [isCreating, setIsCreating] = useState(false);
+  const { holdingDons, refetch } = useStakingContract();
+  const { showFailure, showSuccess, showProgress } =
+    useTransactionNotification();
+  const [hasCheckedDons, setHasChecked] = useState(false);
+  const { connected, address } = useWeb3Context();
+  const { signin } = useSignin();
+  const auth = useSelector((state: IStoreState) => state.auth);
+  useEffectOnTabFocus(() => {
+    (async () => {
+      setHasChecked(false);
+      try {
+        await refetch();
+      } catch (e) {
+        captureException(e, "UseEffect Accelerated APY Modal");
+      } finally {
+        setHasChecked(true);
+      }
+    })();
+  }, [address]);
 
-  const handleCommentClick = async (e: any) => {
-    e.stopPropagation();
-    setShowVoteModal(true);
-  }
+  const isLoggedIn = connected && auth.token;
+  const [showConnectWalletPopup, setShowConnectWalletPopup] = useState(false);
+  const [showSignInPopup, setShowSignInPopup] = useState(false);
 
-  const handleSubmitComment = async (e: any) => {
-    if (commentContent === "") return;
-    setShowVoteModal(false);
-    const res = await checkAvailability();
-    if (!res.status) {
-      setShowErrorModal(true);
-      setError(res);
-      return;
+  const handleSignIn = async () => {
+    try {
+      setIsCreating(true);
+      if (!connected) {
+        setShowConnectWalletPopup(true);
+        return;
+      }
+      await signin();
+      setShowSignInPopup(false);
+    } catch (e) {
+    } finally {
+      setIsCreating(false);
     }
-    const res_comment = await comment(props.suggestion.id, commentContent);
-    setShowVoteModal(false);
-    return res_comment;
-  }
+  };
+  const handleCommentContentChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setCommentContent(e.target.value);
+  };
 
-  const handleSubmitVote = async (e: any) => {
-    const res = await checkAvailability();
-    if (!res.status) {
-      setShowErrorModal(true);
-      setError(res);
-      return;
+  const handleCommentClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isLoggedIn) {
+      return setShowConnectWalletPopup(true);
+    }
+    setShowVoteModal(true);
+  };
+
+  const handleSubmitComment = async () => {
+    if (commentContent === "") return;
+    // setShowVoteModal(false);
+    try {
+      showProgress("Posting Comment");
+      const res_comment = await comment(props.suggestion.id, commentContent);
+      showSuccess("Comment Posted");
+      return res_comment;
+    } catch (e) {
+      showFailure("Failed to Comment");
+    } finally {
+      setShowVoteModal(false);
+    }
+  };
+
+  const handleSubmitVote = async () => {
+    try {
+      showProgress("Adding Vote");
+      const res_vote = await vote(props.suggestion.id);
+      showSuccess("Your Vote was Added");
+      return res_vote;
+    } catch (e) {
+      showFailure("Failed to vote");
+    } finally {
+      setShowVoteModal(false);
     }
     const res_vote = await vote(props.suggestion.id);
     setShowVoteModal(false);
     return res_vote;
-  }
+  };
 
   const handleCardClick = () => {
     navigate(`/community/suggestion/${props.suggestion.id}`);
-  }
+  };
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   return (
     <div>
@@ -200,34 +261,50 @@ export const SuggestCard: React.FC<{
         <div className="row">
           <div className="col-9">
             <SuggestTitle>{props.suggestion.title}</SuggestTitle>
-            <div style={{display: 'flex', alignItems: 'center'}}>
-              <SuggestStatus status={props.suggestion.status as SuggestStatusType}>
-                <SuggestStatusTitle>{STATUS_MAP[props.suggestion.status as SuggestStatusType].text}</SuggestStatusTitle>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <SuggestStatus
+                status={props.suggestion.status as SuggestStatusType}
+              >
+                <SuggestStatusTitle>
+                  {
+                    STATUS_MAP[props.suggestion.status as SuggestStatusType]
+                      .text
+                  }
+                </SuggestStatusTitle>
               </SuggestStatus>
               <SuggestStatusTitle>
                 {`${props.suggestion.apy}%`}
-                <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
+                <span style={{ color: "lightgrey", marginLeft: "4px" }}>
+                  APY
+                </span>
               </SuggestStatusTitle>
             </div>
           </div>
           <SuggestVotesBox className="col-3">
             <SuggestVotes>
-              <span style={{fontSize:'0.6rem'}}>Votes</span>
+              <span style={{ fontSize: "0.6rem" }}>Votes</span>
               <span>{props.suggestion.votes.length}</span>
             </SuggestVotes>
           </SuggestVotesBox>
         </div>
-        <SuggestDescription>
-          {props.suggestion.description}
-        </SuggestDescription>
+        <SuggestDescription>{props.suggestion.description}</SuggestDescription>
         <div className="row">
-          <div className="col-6" style={{display:'flex', flexDirection:'column', justifyContent:'space-around'}}>
-            <div style={{display:'flex', alignItems:'center'}}>
-              <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-              <SuggestAddress>{props.suggestion.nickName}</SuggestAddress>
+          <div
+            className="col-6"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <UserIcon color="#000" fill="yellow" width="25" height="25" />
+              <SuggestAddress>
+                {props.suggestion.customer.address}
+              </SuggestAddress>
             </div>
-            <div style={{display:'flex', alignItems:'center'}}>
-              <AiOutlineMessage size="25px"/> 
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <AiOutlineMessage size="25px" />
               <SuggestAddress>{`${props.suggestion.comments.length} Comments`}</SuggestAddress>
             </div>
           </div>
@@ -240,35 +317,83 @@ export const SuggestCard: React.FC<{
         </CommentButton>
       </SuggestCardSection>
 
-      <DonCommonmodal
-        isOpen={showVoteModal}
-        title="Comment and Vote"
-        variant="common"
-        onClose={() => setShowVoteModal(false)}
-        size="sm"
-      >
-        <VoteModalSubtitle>Vote</VoteModalSubtitle>
-        <div style={{display: 'flex', alignItems: 'center'}}>
-          <VoteButton onClick={handleSubmitVote}>
-            <BsFillCaretUpFill style={{marginRight: '20px'}}/>
-            Vote
-          </VoteButton>
-          <h3 style={{fontWeight:600, margin:0}}>{props.suggestion.votes.length}</h3>
-        </div>
-        <VoteModalSubtitle>Leave a comment</VoteModalSubtitle>
-        <TextArea
-          rows={4}
-          value={commentContent}
-          onChange={handleCommentContentChange}
-          placeholder="Start write comment here..."
-        ></TextArea>
-        <CommentButton onClick={handleSubmitComment}>
-          Submit Comment
-        </CommentButton>
-      </DonCommonmodal>
-      
-      {showErrorModal && error && <ErrorModal error={error} closeModal={() => setShowErrorModal(false)} />}
-  </div>
+      {showVoteModal && (
+        <DonCommonmodal
+          isOpen={showVoteModal}
+          title={hasDons && "Comment and Vote"}
+          variant="common"
+          onClose={() => setShowVoteModal(false)}
+          size="sm"
+        >
+          {!hasCheckedDons ? (
+            <div
+              style={{ minHeight: 200 }}
+              className="d-flex justify-content-center align-items-center"
+            >
+              <Spinner animation="border" />{" "}
+            </div>
+          ) : hasDons ? (
+            <>
+              <VoteModalSubtitle>Vote</VoteModalSubtitle>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <VoteButton onClick={handleSubmitVote}>
+                  <BsFillCaretUpFill style={{ marginRight: "20px" }} />
+                  Vote
+                </VoteButton>
+                <h3 style={{ fontWeight: 600, margin: 0 }}>
+                  {props.suggestion.votes.length}
+                </h3>
+              </div>
+              <VoteModalSubtitle>Leave a comment</VoteModalSubtitle>
+              <TextArea
+                rows={4}
+                value={commentContent}
+                onChange={handleCommentContentChange}
+                placeholder="Start write comment here..."
+              ></TextArea>
+              <CommentButton
+                disabled={!!!commentContent}
+                onClick={handleSubmitComment}
+              >
+                {isCreating ? (
+                  <Spinner animation="border" size="sm" />
+                ) : (
+                  <>Comment &amp; Vote</>
+                )}
+              </CommentButton>
+            </>
+          ) : (
+            <BuyDonContent />
+          )}
+        </DonCommonmodal>
+      )}
+      {showConnectWalletPopup && (
+        <WalletPopup
+          onDone={() => setShowSignInPopup(true)}
+          onClose={() => setShowConnectWalletPopup(false)}
+        />
+      )}
 
-  )
-}
+      {showSignInPopup && (
+        <DonCommonmodal
+          isOpen={showSignInPopup}
+          title="Sign In"
+          variant="common"
+          onClose={() => setShowSignInPopup(false)}
+          size="sm"
+        >
+          <h4 className="text-center">
+            You need to Sign In . In order to Comment
+          </h4>
+          <CommentButton onClick={handleSignIn}>
+            {isCreating ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <>Sign In</>
+            )}
+          </CommentButton>
+        </DonCommonmodal>
+      )}
+    </div>
+  );
+};

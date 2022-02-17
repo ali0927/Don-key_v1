@@ -1,7 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { UserIcon } from "components/Icons";
-import { BsCircleFill, BsFillChatRightDotsFill, BsArrowLeftSquare, BsArrowRightSquare } from "react-icons/bs"
+import {
+  BsCircleFill,
+  BsFillChatRightDotsFill,
+  BsArrowLeftSquare,
+  BsArrowRightSquare,
+} from "react-icons/bs";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import { Comment } from "components/Suggest/Comment";
@@ -10,7 +15,7 @@ import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
 import styled from "styled-components";
 import { navigate } from "gatsby";
-import { DonGatsbyLink, IDonGatsbyLinkProps } from "components/DonGatsbyLink";
+import { DonGatsbyLink } from "components/DonGatsbyLink";
 import { useSuggestionApi } from "hooks";
 import { IStrapiSuggestion } from "interfaces";
 
@@ -31,15 +36,15 @@ const SuggestionTitle = styled.label`
   @media (max-width: 600px) {
     font-size: 1.2rem;
   }
-`
+`;
 const SuggestionCategory = styled.label`
-  background: #F5F5F5;
+  background: #f5f5f5;
   padding: 10px;
   border-radius: 5px;
   width: fit-content;
   font-size: 0.8rem;
   margin-bottom: 20px;
-`
+`;
 const BackImage = styled.div`
   position: relative;
   width: 100%;
@@ -83,14 +88,14 @@ const SuggestionRiskImage = styled.img`
   margin: 10px auto 0 auto;
   padding: 0px 20px;
   max-width: 160px;
-`
+`;
 const SuggetionCommentRow = styled.div`
   display: flex;
   align-items: center;
   margin: 10px 0;
   font-size: 1.2rem;
   font-weight: 600;
-`
+`;
 const SuggestionPath = styled.div`
   margin: 20px 0;
   position: relative;
@@ -98,45 +103,47 @@ const SuggestionPath = styled.div`
   @media (max-width: 600px) {
     display: none;
   }
-`
+`;
 const SuggetionNextButton = styled(BsArrowRightSquare)`
   cursor: pointer;
   margin: 10px;
   width: 25px;
   height: 25px;
-  visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
+  visibility: ${(props: { visible: boolean }) =>
+    props.visible ? "visible" : "hidden"};
   @media (max-width: 600px) {
     display: none;
   }
-`
+`;
 const SuggetionPrevButton = styled(BsArrowLeftSquare)`
   cursor: pointer;
   margin: 10px;
   width: 25px;
   height: 25px;
-  visibility: ${(props: { visible: boolean }) => props.visible ? 'visible': 'hidden'};
+  visibility: ${(props: { visible: boolean }) =>
+    props.visible ? "visible" : "hidden"};
   @media (max-width: 600px) {
     display: none;
   }
-`
+`;
 const RiskDescriptionButton = styled.button`
   background: none;
   border: none;
   text-decoration: underline;
   font-size: 0.8rem;
   margin: 0 auto;
-`
+`;
 const SuggestionInfo = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 600px) {
     margin-top: 10px;
   }
-`
+`;
 const SuggestionLink = styled(DonGatsbyLink)`
   text-decoration: none !important;
   color: #000;
-`
+`;
 export const SuggestionView = (props: { id: number }) => {
   const [showRiskDetail, setShowRiskDetail] = useState(false);
   const { getCount, getSuggestion } = useSuggestionApi();
@@ -148,21 +155,25 @@ export const SuggestionView = (props: { id: number }) => {
     setSuggestion(_suggestion);
     const count = await getCount();
     setSuggestionCount(count);
-  }
+  };
 
   useEffect(() => {
     getSuggestionById(props.id);
   }, [props.id]);
 
-  const nextSuggestion = (e: any) => {
-    navigate(`/community/suggestion/${suggestion?.id + 1}`)
-  }
-  const prevSuggestion = (e: any) => {
-    navigate(`/community/suggestion/${suggestion?.id - 1}`)
-  }
+  const nextSuggestion = () => {
+    if (suggestion) {
+      navigate(`/community/suggestion/${suggestion.id + 1}`);
+    }
+  };
+  const prevSuggestion = () => {
+    if (suggestion) {
+      navigate(`/community/suggestion/${suggestion.id - 1}`);
+    }
+  };
 
   return (
-    <div style={{background:"#F5F5F5"}}>
+    <div style={{ background: "#F5F5F5" }}>
       <NavBar />
       <BackImage>
         <img src={YellowBack} alt="yellow_back" />
@@ -170,61 +181,83 @@ export const SuggestionView = (props: { id: number }) => {
 
       <div className="container">
         <SuggestionPath>
-          <SuggestionLink to="/community">{`Community page / User suggestions / `}</SuggestionLink>
-          <span style={{fontWeight: 600}}>{suggestion?.title}</span>
+          <SuggestionLink to="/community">Community page</SuggestionLink> /{" "}
+          <SuggestionLink to="/community">User suggestions</SuggestionLink> /
+          <span style={{ fontWeight: 600 }}>{suggestion?.title}</span>
         </SuggestionPath>
 
         <SuggestionBox>
-          <div style={{display:'flex', marginBottom: '20px'}}>
-            <SuggetionPrevButton visible={suggestion?.id > 1} onClick={prevSuggestion} />
-            <SuggetionNextButton visible={suggestionCount - 1 > suggestion?.id} onClick={nextSuggestion}/>
-          </div>
+          {/* <div style={{ display: "flex", marginBottom: "20px" }}>
+            <SuggetionPrevButton
+              visible={suggestion?.id! > 1}
+              onClick={prevSuggestion}
+            />
+            <SuggetionNextButton
+              visible={suggestionCount - 1 > suggestion?.id!}
+              onClick={nextSuggestion}
+            />
+          </div> */}
 
           <div className="row">
-            <div className="col-9 col-md-10" style={{display:'flex', flexDirection:'column'}}>
+            <div
+              className="col-9 col-md-10"
+              style={{ display: "flex", flexDirection: "column" }}
+            >
               <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
               <label style={{color: 'lightgrey'}}>{suggestion?.created_at.slice(0, 10)}</label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
-                <span style={{fontSize:'0.8rem'}}>Votes</span>
+                <span style={{ fontSize: "0.8rem" }}>Votes</span>
                 <span>{suggestion?.votes.length}</span>
               </SuggestVotes>
             </div>
           </div>
 
           <div className="row">
-            <div className="col-sm-12 col-md-10" style={{display:'flex', flexDirection:'column'}}>
-              {/* <SuggestionCategory>{suggestion.category}</SuggestionCategory> */}
-              <ShowMoreContent content={suggestion?.description || ''} length={270} />
+            <div
+              className="col-sm-12 col-md-10"
+              style={{ display: "flex", flexDirection: "column" }}
+            >
+              <ShowMoreContent
+                content={suggestion?.description || ""}
+                length={270}
+              />
             </div>
             <div className="col-sm-12 col-md-2">
               <SuggestionInfo>
-                <div style={{display:'flex', alignItems:'center'}}>
-                  <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <UserIcon color="#000" fill="yellow" width="25" height="25" />
                   <SuggestionUser>{suggestion?.nickName}</SuggestionUser>
                 </div>
                 <div className="row">
                   <div className="col-6 col-md-12">
-                    <div style={{display:'flex', alignItems:'center'}}>
-                      <BsCircleFill style={{width:25, height:6}} /> 
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <BsCircleFill style={{ width: 25, height: 6 }} />
                       <SuggestionUser>{suggestion?.status}</SuggestionUser>
                     </div>
-                    <div style={{display:'flex', alignItems:'center'}}>
-                      <BsCircleFill style={{width:25, height:6}} /> 
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <BsCircleFill style={{ width: 25, height: 6 }} />
                       <SuggestionUser>{`${suggestion?.comments.length} comments`}</SuggestionUser>
                     </div>
-                    <div style={{display:'flex', alignItems:'center'}}>
-                      <BsCircleFill style={{width:25, height:6}} /> 
+                    <div style={{ display: "flex", alignItems: "center" }}>
+                      <BsCircleFill style={{ width: 25, height: 6 }} />
                       <SuggestionUser>
                         {`${suggestion?.apy}%`}
-                        <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
+                        <span style={{ color: "lightgrey", marginLeft: "4px" }}>
+                          APY
+                        </span>
                       </SuggestionUser>
                     </div>
                   </div>
-                  <div className="col-6 col-md-12" style={{display:'flex', flexDirection:'column'}}>
+                  <div
+                    className="col-6 col-md-12"
+                    style={{ display: "flex", flexDirection: "column" }}
+                  >
                     <SuggestionRiskImage src={suggestion?.risk.image.url} />
-                    <RiskDescriptionButton onClick={() => setShowRiskDetail(true)}>
+                    <RiskDescriptionButton
+                      onClick={() => setShowRiskDetail(true)}
+                    >
                       Risk Description
                     </RiskDescriptionButton>
                   </div>
@@ -236,15 +269,17 @@ export const SuggestionView = (props: { id: number }) => {
 
         <SuggetionCommentRow>
           <BsFillChatRightDotsFill />
-          <span style={{marginLeft:'15px'}}>{`Comments (${suggestion?.comments.length})`}</span>
+          <span
+            style={{ marginLeft: "15px" }}
+          >{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
         
         <CommentEdit />
         {suggestion?.comments.map((comment: any) =>
           <Comment commentId={comment.id}/>
         )}
-
-      </div>      
+        
+      </div>
 
       <Footer />
 
@@ -255,16 +290,21 @@ export const SuggestionView = (props: { id: number }) => {
         onClose={() => setShowRiskDetail(false)}
         size="sm"
       >
-        <div className="row" style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
-          <div className="col-sm-12 col-md-4" style={{display:'flex'}}>
-            <SuggestionRiskImage src={suggestion?.risk.image.url} style={{padding: 0}} />
+        <div
+          className="row"
+          style={{ display: "flex", alignItems: "center", margin: "10px 0" }}
+        >
+          <div className="col-sm-12 col-md-4" style={{ display: "flex" }}>
+            <SuggestionRiskImage
+              src={suggestion?.risk.image.url}
+              style={{ padding: 0 }}
+            />
           </div>
           <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
             {suggestion?.riskword || 'No risk description'}
           </div>
         </div>
       </DonCommonmodal>
-
     </div>
-  )
-}
+  );
+};

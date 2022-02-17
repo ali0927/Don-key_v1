@@ -5,16 +5,30 @@ import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
 import { useRiskAndNetworkList, ErrorModal } from "./Suggest";
-import { BsTriangleFill, BsArrowRight, BsArrowLeft, BsQuestionCircle } from "react-icons/bs";
+import {
+  BsTriangleFill,
+  BsArrowRight,
+  BsArrowLeft,
+  BsQuestionCircle,
+} from "react-icons/bs";
 import { DonCommonmodal } from "components/DonModal";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { theme } from "theme";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
-import { useSuggestionApi, useSignin } from "hooks";
+import {
+  useSuggestionApi,
+  useSignin,
+  useStakingContract,
+  useEffectOnTabFocus,
+} from "hooks";
 import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import { useWeb3Context } from "don-components";
+import { useSelector } from "react-redux";
+import { IStoreState } from "store/reducers/rootReducer";
+import WalletPopup from "components/WalletPopup/WalletPopup";
+import { captureException } from "helpers";
 
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
@@ -49,13 +63,7 @@ export const Label = styled.label`
   font-weight: 600;
   display: block;
 `;
-const CheckBeforeSend = styled.div`
-background-color: #fff037;
-border: 2px dashed #222222;
-border-radius: 15px;
-padding: 22px 27px;
-margin-bottom: 70px;
-`;
+
 export const Select = styled.select`
   ${InputFieldCSS}
   outline: none;
@@ -92,14 +100,10 @@ export const SuggestRequestButton = styled.button`
   border: 0;
   display: block;
   width: 100%;
+  &:disabled {
+    opacity: 0.8;
+  }
 `;
-const DefaultOption = { name: "Select an option", value: "" } as const;
-
-const NetworkTypes = [
-  { name: "Binance Smart Chain", value: 56, strapiId: 1 },
-  { name: "Matic Network", value: 137, strapiId: 3 },
-  { name: "Avalanche", value: 43114, strapiId: 6 }
-] as const;
 
 const INITIAL_STATE = {
   title: "",
@@ -110,15 +114,16 @@ const INITIAL_STATE = {
   network: 1,
   apy: 10,
   riskword: "",
-  risk: 0
+  risk: 0,
 };
 export type ISuggestFormState = typeof INITIAL_STATE;
 
 //@ts-ignore
 const validateEmail = (email) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
-}
+};
 
 const SmallSpan = styled.span`
   font-size: 12px;
@@ -129,7 +134,7 @@ const APYPercent = styled.label`
   position: absolute;
   right: 10px;
   top: 28px;
-`
+`;
 const RiskLevel = styled.div`
   background: ${(props: { color: string }) => props.color};
   width: 20%;
@@ -137,36 +142,41 @@ const RiskLevel = styled.div`
   margin: 2px;
   margin-bottom: 60px;
   cursor: pointer;
-`
+`;
 const RiskLevelSelector = styled.div`
   display: flex;
   flex-direction: column;
   margin: 5px 0;
-  align-items: ${(props: { level: number }) => props.level === 0 ? 'flex-end': props.level === 1 ? 'center': 'flex-start'};
-`
+  align-items: ${(props: { level: number }) =>
+    props.level === 0
+      ? "flex-end"
+      : props.level === 1
+      ? "center"
+      : "flex-start"};
+`;
 const RiskLevelSelectorIcon = styled(BsTriangleFill)`
   color: ${(props: { color: string }) => props.color};
-`
+`;
 const ShowExampleSuggestionBtn = styled.button`
   background: none;
   border: none;
   text-decoration: underline;
   font-size: 0.8rem;
   margin: 10px auto;
-`
+`;
 const ExampleSuggetionBox = styled.div`
   display: flex;
   flex-direction: column;
   margin: 10px;
   padding: 20px;
-  background: #FBFBFB;
-`
+  background: #fbfbfb;
+`;
 const RiskImage = styled.img`
   width: 100px;
   @media (max-width: 568px) {
     display: none;
   }
-`
+`;
 const SuggetionImage = styled.img`
   width: 60px;
   height: 60px;
@@ -174,25 +184,26 @@ const SuggetionImage = styled.img`
   border-radius: 10px;
   margin: 10px 6px;
   cursor: pointer;
-  border: ${(props: { selected: boolean }) => props.selected ? '1px solid orange': 'none'}
-`
+  border: ${(props: { selected: boolean }) =>
+    props.selected ? "1px solid orange" : "none"};
+`;
 const UserImage = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 50%;
   margin-right: 10px;
-`
+`;
 const ExampleSuggestionTitle = styled.div`
   font-weight: 600;
   font-size: 1.2rem;
-`
+`;
 const ExampleSuggetionContent = styled.div`
   font-size: 1rem;
   overflow-wrap: anywhere;
   @media (max-width: 600px) {
     font-size: 0.8rem;
   }
-`
+`;
 const ExampleList = styled.div`
   display: flex;
   overflow-x: auto;
@@ -200,7 +211,7 @@ const ExampleList = styled.div`
   @media (max-width: 600px) {
     justify-content: normal;
   }
-`
+`;
 const DropdownBtn = styled.div`
   border: 1px solid #222222;
   padding: 15px;
@@ -302,53 +313,69 @@ const ExampleSuggetionAPY = styled.div`
   @media (max-width: 568px) {
     display: none;
   }
-`
+`;
 
 const generateRandomText = (length: number) => {
-  const characters = ' abcdefghijklm nopqrstuvwxyz ';
-  let result = ' ';
+  const characters = " abcdefghijklm nopqrstuvwxyz ";
+  let result = " ";
   const charactersLength = characters.length;
-  for(let i = 0; i < length; i++) {
-      result += 
-      characters.charAt(Math.floor(Math.random() * charactersLength));
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
   }
-  return result
-}
+  return result;
+};
 
 const renderTooltipFees = (props: any) => (
   <Tooltip id="button-tooltip" {...props} className="mytooltip">
     <strong>
-      Please address the risks in terms of: Impermanent loss, platform risk, audits and TVL in the pools
+      Please address the risks in terms of: Impermanent loss, platform risk,
+      audits and TVL in the pools
     </strong>
   </Tooltip>
 );
 
 const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
   const risk = risks.find((item: any) => item.strapiId === riskLevel);
-  const color = riskLevel === 1 ? '#FF4500': riskLevel === 5 ? '#32CD32': riskLevel === 6 ? 'orange': riskLevel === 2 ? '#FFD700': '#00BFFF';
+  const color =
+    riskLevel === 1
+      ? "#FF4500"
+      : riskLevel === 5
+      ? "#32CD32"
+      : riskLevel === 6
+      ? "orange"
+      : riskLevel === 2
+      ? "#FFD700"
+      : "#00BFFF";
   if (!risk) return;
   return (
-    <div style={{display:'flex', flexDirection:'column', marginTop: '16px', alignItems:'center'}}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginTop: "16px",
+        alignItems: "center",
+      }}
+    >
       <RiskLevelSelectorIcon color={color} />
       <label style={{textAlign: 'center', fontSize: '0.75rem'}}>{risk.Title}</label> 
     </div>
-  )
-}
+  );
+};
 
 const ExampleSuggestions = (): Array<any> => {
-  let _example = new Array(5).fill(0).map(item => {
+  let _example = new Array(5).fill(0).map((item) => {
     return {
       title: generateRandomText(15),
       apy: 12.123,
       name: generateRandomText(10),
       description: generateRandomText(300),
       risk: 2,
-      date: '15 Jan 2022 15:30',
-      category: 'Payments'
-    }
-  })  
-  return _example
-}
+      date: "15 Jan 2022 15:30",
+      category: "Payments",
+    };
+  });
+  return _example;
+};
 
 const validate = (state: typeof INITIAL_STATE) => {
   if (!state.nickName) {
@@ -374,17 +401,17 @@ export const SuggestRequestForm = () => {
   const { risks, networks } = useRiskAndNetworkList();
   const [riskLevel, setRiskLevel] = useState(2);
   const [isCreating, setIsCreating] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { showFailure } = useTransactionNotification();
+
+  const { showFailure, showSuccess } = useTransactionNotification();
   const [sent, setIsSent] = useState<{ ticketid: number } | null>(null);
   const [showExampleSuggestion, setShowExampleSuggestion] = useState(false);
   const [selectedExmaple, setSelectedExample] = useState(0);
   const [showNetworkSelect, setShowNetworkSelect] = useState(false);
-  const { getConnectedWeb3 } = useWeb3Context();
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<any | null>(null);
-  const { checkAvailability } = useSignin();
+  const { connected, address } = useWeb3Context();
+
+  const auth = useSelector((state: IStoreState) => state.auth);
   const exmapleSuggestions = ExampleSuggestions();
+  const { signin } = useSignin();
   const [formState, setFormState] = useState(INITIAL_STATE);
 
   const handleChange =
@@ -404,19 +431,13 @@ export const SuggestRequestForm = () => {
       return;
     }
 
-    const res = await checkAvailability();
-    if (!res.status) {
-      setShowErrorModal(true);
-      setError(res);
-      return;
-    }
-
     let _suggestion = { ...formState };
     _suggestion.risk = riskLevel;
     setIsCreating(true);
     try {
-      const resp = await createSuggestion(_suggestion);
+      await createSuggestion(_suggestion);
       setFormState(INITIAL_STATE);
+      showSuccess("Suggestion Saved For Review");
     } catch (e) {
       console.log(e);
       showFailure("Please Try Again Later");
@@ -427,15 +448,16 @@ export const SuggestRequestForm = () => {
 
   const changeNetwork = (network: number) => {
     setFormState((old) => ({ ...old, network }));
-  }
+  };
 
   const prevExample = () => {
-    if (selectedExmaple > 0) setSelectedExample(selectedExmaple - 1)
-  }
+    if (selectedExmaple > 0) setSelectedExample(selectedExmaple - 1);
+  };
   const nextExample = () => {
-    if (selectedExmaple < exmapleSuggestions.length - 1) setSelectedExample(selectedExmaple + 1)
-  }
- 
+    if (selectedExmaple < exmapleSuggestions.length - 1)
+      setSelectedExample(selectedExmaple + 1);
+  };
+
   const DropDownMenu = () => {
     return (
       <ClickAwayListener onClickAway={() => setShowNetworkSelect(false)}>
@@ -446,7 +468,7 @@ export const SuggestRequestForm = () => {
         >
           <DropDown>
             <div id="collapseExample" className="collapse">
-              {networks.map((item: any) => 
+              {networks.map((item: any) => (
                 <DropDownItem
                   key={item.chainId}
                   className={clsx(
@@ -457,18 +479,84 @@ export const SuggestRequestForm = () => {
                 >
                   <div>{item.name}</div>
                 </DropDownItem>
-              )}
+              ))}
             </div>
           </DropDown>
         </Overlay>
       </ClickAwayListener>
     );
   };
+  const { holdingDons, refetch } = useStakingContract();
+  const [hasCheckedDons, setHasChecked] = useState(false);
+  const [showSignInPopup, setShowSignInPopup] = useState(false);
+  useEffectOnTabFocus(() => {
+    (async () => {
+      setHasChecked(false);
+      try {
+        await refetch();
+      } catch (e) {
+        captureException(e, "UseEffect Accelerated APY Modal");
+      } finally {
+        setHasChecked(true);
+      }
+    })();
+  }, [address]);
+  const handleSignInAndSubmit = async () => {
+    try {
+      setIsCreating(true);
+      if (!connected) {
+        setShowSignInPopup(true);
+      }
+      await signin();
+    } catch (e) {
+    } finally {
+      setIsCreating(false);
+    }
+  };
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
+
+  const renderSubmitButton = () => {
+    if (!hasCheckedDons) {
+      return (
+        <SuggestRequestButton disabled>
+          Submit Suggestion
+        </SuggestRequestButton>
+      );
+    }
+    if(!hasDons){
+      return <SuggestRequestButton disabled>
+        You need at Least 100 DON in Order Submit Suggestion
+      </SuggestRequestButton>
+    }
+
+    if (!connected || !auth.token) {
+      return (
+        <SuggestRequestButton onClick={handleSignInAndSubmit}>
+          {isCreating ? (
+            <Spinner animation="border" size="sm" />
+          ) : (
+            <> Sign In &amp; Submit</>
+          )}
+        </SuggestRequestButton>
+      );
+    }
+
+    return (
+      <SuggestRequestButton onClick={handleCreate}>
+        {isCreating ? (
+          <Spinner animation="border" size="sm" />
+        ) : (
+          "Submit Suggestion"
+        )}
+      </SuggestRequestButton>
+    );
+  };
 
   return (
     <Form>
-       <Label>
-        Nick Name<br />
+      <Label>
+        Nick Name
+        <br />
         <Input
           value={formState.nickName}
           onChange={handleChange("nickName")}
@@ -476,8 +564,11 @@ export const SuggestRequestForm = () => {
         />
       </Label>
       <Label>
-        Telegram Name<br />
-        <SmallSpan>So we can contact you once the suggestion is applied</SmallSpan>
+        Telegram Name
+        <br />
+        <SmallSpan>
+          So we can contact you once the suggestion is applied
+        </SmallSpan>
         <Input
           value={formState.telegram}
           onChange={handleChange("telegram")}
@@ -492,12 +583,24 @@ export const SuggestRequestForm = () => {
           placeholder="Start write here"
         />
       </Label>
-      {sent && <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />}
+      {sent && (
+        <SuccessOverlay ticketid={sent.ticketid} isOpen onClose={onClose} />
+      )}
       <Label>
         Network
         <div className="d-flex position-relative">
-          <DropdownBtn active={showNetworkSelect} onClick={() => setShowNetworkSelect(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
-            {networks.find((item: any) => formState.network === item.strapiId).name}
+          <DropdownBtn
+            active={showNetworkSelect}
+            onClick={() => setShowNetworkSelect(true)}
+            aria-controls="collapseExample"
+            data-toggle="collapse"
+            data-target="#collapseExample"
+            aria-expanded="false"
+          >
+            {
+              networks.find((item: any) => formState.network === item.strapiId)
+                .name
+            }
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
           {showNetworkSelect && <DropDownMenu />}
@@ -505,7 +608,7 @@ export const SuggestRequestForm = () => {
       </Label>
       <Label>
         Estimated APY
-        <div style={{position: 'relative'}}>
+        <div style={{ position: "relative" }}>
           <Input
             value={formState.apy}
             onChange={handleChange("apy")}
@@ -517,33 +620,41 @@ export const SuggestRequestForm = () => {
 
       <Label>Risk Level</Label>
       <div>
-        <div style={{display:'flex'}}>
-          <RiskLevel color="#00BFFF" style={{borderRadius:'10px  0 0 10px'}} onClick={() => setRiskLevel(3)}>
-            { riskLevel === 3 && renderRiskLevelSelector(risks, 3) }
+        <div style={{ display: "flex" }}>
+          <RiskLevel
+            color="#00BFFF"
+            style={{ borderRadius: "10px  0 0 10px" }}
+            onClick={() => setRiskLevel(3)}
+          >
+            {riskLevel === 3 && renderRiskLevelSelector(risks, 3)}
           </RiskLevel>
           <RiskLevel color="#32CD32" onClick={() => setRiskLevel(5)}>
-            { riskLevel === 5 && renderRiskLevelSelector(risks, 5) }
+            {riskLevel === 5 && renderRiskLevelSelector(risks, 5)}
           </RiskLevel>
           <RiskLevel color="#FFD700" onClick={() => setRiskLevel(2)}>
-            { riskLevel === 2 && renderRiskLevelSelector(risks, 2) }
+            {riskLevel === 2 && renderRiskLevelSelector(risks, 2)}
           </RiskLevel>
-          <RiskLevel color="orange"  onClick={() => setRiskLevel(6)}>
-          { riskLevel === 6 && renderRiskLevelSelector(risks, 6) }  
+          <RiskLevel color="orange" onClick={() => setRiskLevel(6)}>
+            {riskLevel === 6 && renderRiskLevelSelector(risks, 6)}
           </RiskLevel>
-          <RiskLevel color="#FF4500" style={{borderRadius:'0 10px 10px 0'}} onClick={() => setRiskLevel(1)}>
-            { riskLevel === 1 && renderRiskLevelSelector(risks, 1) }
+          <RiskLevel
+            color="#FF4500"
+            style={{ borderRadius: "0 10px 10px 0" }}
+            onClick={() => setRiskLevel(1)}
+          >
+            {riskLevel === 1 && renderRiskLevelSelector(risks, 1)}
           </RiskLevel>
         </div>
       </div>
-   
+
       <Label>
         Describe the risk in your words
         <OverlayTrigger
           placement="top"
-          delay={{show: 250, hide: 400}}
+          delay={{ show: 250, hide: 400 }}
           overlay={renderTooltipFees}
         >
-          <BsQuestionCircle style={{marginLeft: '5px'}}/>
+          <BsQuestionCircle style={{ marginLeft: "5px" }} />
         </OverlayTrigger>
         <TextArea
           rows={2}
@@ -554,7 +665,8 @@ export const SuggestRequestForm = () => {
       </Label>
 
       <Label>
-        Suggestion Flow<br />
+        Suggestion Flow
+        <br />
         <TextArea
           rows={5}
           value={formState.description}
@@ -563,16 +675,16 @@ export const SuggestRequestForm = () => {
         ></TextArea>
       </Label>
 
-      <SuggestRequestButton onClick={handleCreate}>
-        {isCreating ? <Spinner animation="border" size="sm" /> : "Submit Suggestion"}
-      </SuggestRequestButton>
+      {renderSubmitButton()}
 
-      <div style={{display: 'flex'}}>
-        <ShowExampleSuggestionBtn onClick={() => setShowExampleSuggestion(true)}>
+      <div style={{ display: "flex" }}>
+        <ShowExampleSuggestionBtn
+          onClick={() => setShowExampleSuggestion(true)}
+        >
           Click here to see examples how to write a suggestion
         </ShowExampleSuggestionBtn>
       </div>
-     
+
       <DonCommonmodal
         isOpen={showExampleSuggestion}
         title="Suggestion Examples"
@@ -581,47 +693,71 @@ export const SuggestRequestForm = () => {
         size="mdSmall"
       >
         <ExampleSuggetionBox>
-          <div style={{display:'flex', width:'100%'}}>
-            <div style={{width:'100%'}}>
-              <label style={{fontSize:'0.8rem'}}>Suggestion Name</label>
-              <ExampleSuggestionTitle>{exmapleSuggestions[selectedExmaple].title}</ExampleSuggestionTitle>
+          <div style={{ display: "flex", width: "100%" }}>
+            <div style={{ width: "100%" }}>
+              <label style={{ fontSize: "0.8rem" }}>Suggestion Name</label>
+              <ExampleSuggestionTitle>
+                {exmapleSuggestions[selectedExmaple].title}
+              </ExampleSuggestionTitle>
             </div>
-            <RiskImage src={risks[exmapleSuggestions[selectedExmaple].risk].image.url} />
+            <RiskImage
+              src={risks[exmapleSuggestions[selectedExmaple].risk].image.url}
+            />
           </div>
 
-          <div style={{display:'flex', width:'100%', margin:'0'}}>
-            <div style={{width:'100%'}}>
-            {/* 
+          <div style={{ display: "flex", width: "100%", margin: "0" }}>
+            <div style={{ width: "100%" }}>
+              {/* 
               <UserImage src={ExampleUser} alt="user" />
               <label style={{fontSize:'0.8rem', fontWeight: 500}}>{exmapleSuggestions[selectedExmaple].name}</label>
             */}
             </div>
             <ExampleSuggetionAPY>
               <span>{exmapleSuggestions[selectedExmaple].apy}%</span>
-              <span style={{color: 'lightgrey', marginLeft:'4px'}}>APY</span>
+              <span style={{ color: "lightgrey", marginLeft: "4px" }}>APY</span>
             </ExampleSuggetionAPY>
           </div>
 
           <ExampleSuggetionContent>
-            <ShowMoreContent content={exmapleSuggestions[selectedExmaple].description} length={180} />
+            <ShowMoreContent
+              content={exmapleSuggestions[selectedExmaple].description}
+              length={180}
+            />
           </ExampleSuggetionContent>
         </ExampleSuggetionBox>
 
         <ExampleList>
-          {exmapleSuggestions.map((example, idx) => 
-            <SuggetionImage src={ExampleSuggetionImg} onClick={() => setSelectedExample(idx)} selected={selectedExmaple === idx}/>
-          )}
+          {exmapleSuggestions.map((example, idx) => (
+            <SuggetionImage
+              src={ExampleSuggetionImg}
+              onClick={() => setSelectedExample(idx)}
+              selected={selectedExmaple === idx}
+            />
+          ))}
         </ExampleList>
-        
-        <div style={{display:'flex', justifyContent:'center', alignItems:'center', fontWeight:600}}>
-          <BsArrowLeft style={{margin: '10px', cursor:'pointer'}} onClick={() => prevExample()}/>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontWeight: 600,
+          }}
+        >
+          <BsArrowLeft
+            style={{ margin: "10px", cursor: "pointer" }}
+            onClick={() => prevExample()}
+          />
           <span>Select Suggestion</span>
-          <BsArrowRight style={{margin: '10px', cursor:'pointer'}} onClick={() => nextExample()}/>
+          <BsArrowRight
+            style={{ margin: "10px", cursor: "pointer" }}
+            onClick={() => nextExample()}
+          />
         </div>
       </DonCommonmodal>
-
-      {showErrorModal && error && <ErrorModal error={error} closeModal={() => setShowErrorModal(false)} />}
-
+      {showSignInPopup && (
+        <WalletPopup onClose={() => setShowSignInPopup(false)} />
+      )}
     </Form>
   );
 };

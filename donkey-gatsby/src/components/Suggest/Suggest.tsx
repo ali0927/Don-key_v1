@@ -35,8 +35,11 @@ export const useRiskAndNetworkList = () => {
       }
     `
   );
-  return { risks: riskAndNetworks.allStrapiRisks.nodes, networks: riskAndNetworks.allStrapiNetworks.nodes }
-}
+  return {
+    risks: riskAndNetworks.allStrapiRisks.nodes,
+    networks: riskAndNetworks.allStrapiNetworks.nodes,
+  };
+};
 
 const DropdownBtn = styled.div`
   border: 2px solid #222222;
@@ -175,12 +178,12 @@ const MoreButton = styled.button`
   }
 `;
 
-const SuggestStatus = { 
-  all: 'all', 
-  new: 'new', 
-  old: 'old', 
-  approved: 'approved'
-}
+const SuggestStatus = {
+  all: "all",
+  new: "new",
+  old: "old",
+  approved: "approved",
+};
 
 const ConfirmButton = styled.button`
   padding: 10px;
@@ -197,11 +200,11 @@ const ConfirmButton = styled.button`
 
 export const ErrorModal: React.FC<{
   error: {
-    status: boolean
-    type: string
-    msg: string
+    status: boolean;
+    type: string;
+    msg: string;
   };
-  closeModal: any
+  closeModal: any;
 }> = (props) => {
   const [openModal, setOpenModal] = useState(true);
   const { signin } = useSignin();
@@ -209,11 +212,11 @@ export const ErrorModal: React.FC<{
     const _res = await signin();
     setOpenModal(false);
     props.closeModal();
-  }
+  };
 
   useEffect(() => {
     setOpenModal(true);
-  }, [props])
+  }, [props]);
 
   return (
     <DonCommonmodal
@@ -223,17 +226,13 @@ export const ErrorModal: React.FC<{
       variant="common"
       size="sm"
     >
-      <p>
-        {props.error.msg}
-      </p>
-      {props.error.type === "token" &&
-        <ConfirmButton onClick={() => handleSignin()}>
-          Sign in
-        </ConfirmButton>
-      }
+      <p>{props.error.msg}</p>
+      {props.error.type === "token" && (
+        <ConfirmButton onClick={() => handleSignin()}>Sign in</ConfirmButton>
+      )}
     </DonCommonmodal>
-  )
-}
+  );
+};
 
 const ALL_SUGGESTION_QUERY = gql`
   query allSuggestionsQuery {
@@ -307,13 +306,15 @@ export const Suggest = () => {
     if (suggestionsData) {
       let _list = suggestionsData.suggestions;
       if (strategyFilter !== SuggestStatus.all) {
-        _list = suggestionsData.suggestions.filter((item: any) => item.status === strategyFilter);
-        _list = viewMore ? _list: _list.slice(0, 3);
+        _list = suggestionsData.suggestions.filter(
+          (item: any) => item.status === strategyFilter
+        );
+        _list = viewMore ? _list : _list.slice(0, 3);
       }
       return _list;
     }
     return [];
-  }, [suggestionsData, viewMore]);
+  }, [suggestionsData, viewMore, strategyFilter]);
 
   const DropDownMenu = () => {
     return (
@@ -324,13 +325,13 @@ export const Suggest = () => {
           }}
         >
           <DropDown>
-            <div id="collapseExample" className="collapse" >
+            <div id="collapseExample" className="collapse">
               <DropDownItem
                 className={clsx(
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.all }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.all) }
+                onClick={() => handleNameChange(SuggestStatus.all)}
               >
                 <div>All</div>
               </DropDownItem>
@@ -339,7 +340,7 @@ export const Suggest = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.new }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.new) }
+                onClick={() => handleNameChange(SuggestStatus.new)}
               >
                 <div>New</div>
               </DropDownItem>
@@ -348,7 +349,7 @@ export const Suggest = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.old }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.old) }
+                onClick={() => handleNameChange(SuggestStatus.old)}
               >
                 <div>Old</div>
               </DropDownItem>
@@ -357,7 +358,7 @@ export const Suggest = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.approved }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.approved) }
+                onClick={() => handleNameChange(SuggestStatus.approved)}
               >
                 <div>Approved</div>
               </DropDownItem>
@@ -372,7 +373,14 @@ export const Suggest = () => {
     <div className="container">
       <div className="row mb-2">
         <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
-          <DropdownBtn active={show} onClick={() => setShow(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
+          <DropdownBtn
+            active={show}
+            onClick={() => setShow(true)}
+            aria-controls="collapseExample"
+            data-toggle="collapse"
+            data-target="#collapseExample"
+            aria-expanded="false"
+          >
             {strategyFilter}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
@@ -380,28 +388,33 @@ export const Suggest = () => {
         </div>
       </div>
 
-      {filterList.length > 0 &&
+      {filterList.length > 0 && (
         <>
           <div className="row py-4">
             <SuggestList suggestList={filterList} />
           </div>
         </>
-      }
-      {filterList.length > 0 && suggestionsData.suggestions.length > filterList.length &&
-        <div className="row justify-content-center mb-4">
-          <div className="col-sm-12 col-md-4">
-            <MoreButton onClick={() => setViewMore(true)}>
-              View More
-            </MoreButton>
+      )}
+      {filterList.length > 0 &&
+        suggestionsData.suggestions.length > filterList.length && (
+          <div className="row justify-content-center mb-4">
+            <div className="col-sm-12 col-md-4">
+              <MoreButton onClick={() => setViewMore(true)}>
+                View More
+              </MoreButton>
+            </div>
           </div>
-        </div>
-      }
+        )}
 
       <div className="row mb-5 pt-5">
         <div className="col-lg-6 d-flex flex-column mt-5 pt-md-5">
           <h2>Add your Strategy</h2>
           <SubHeading>
-            So you think you are a novel farmer? suggest your newest and best strategy, and put it up to vote with the Don-key community. We will be watching and deploying based on voting and comments. Before deploying the pool Don-key will contact you VIA telegram to help set-up your Don-key profile and finalize details.
+            So you think you are a novel farmer? suggest your newest and best
+            strategy, and put it up to vote with the Don-key community. We will
+            be watching and deploying based on voting and comments. Before
+            deploying the pool Don-key will contact you VIA telegram to help
+            set-up your Don-key profile and finalize details.
           </SubHeading>
           <DonkeyScope />
         </div>
@@ -409,7 +422,6 @@ export const Suggest = () => {
           <SuggestRequestForm />
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};

@@ -3,11 +3,10 @@ import { Suggest } from "components/Suggest";
 import { Footer } from "components/Footer";
 import { NavBar } from "components/Navbar";
 import { Pill, PillContainer } from "components/Pills";
-import { useBugReportApi } from "hooks";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { theme } from "theme";
-import { NextArrowButton } from "components/NextArrowButton"
+import { NextArrowButton } from "components/NextArrowButton";
 
 const Header = styled.div`
   background-color: ${theme.palette.background.yellow};
@@ -50,14 +49,18 @@ const SubHeading = styled.p`
   }
 `;
 
-const enum CommunityTabs { strategy, bugReport }
+const enum CommunityTabs {
+  strategy,
+  bugReport,
+}
 
 export const CommunityPage = () => {
-  const [selectedTab, setSelectedTab] = useState(CommunityTabs.strategy)
+  const [selectedTab, setSelectedTab] = useState(CommunityTabs.strategy);
 
   const handleNextClick = () => {
-    if (selectedTab === CommunityTabs.strategy) setSelectedTab(CommunityTabs.bugReport)
-  }
+    if (selectedTab === CommunityTabs.strategy)
+      setSelectedTab(CommunityTabs.bugReport);
+  };
 
   return (
     <>
@@ -68,16 +71,24 @@ export const CommunityPage = () => {
             <div className="col-lg-6 py-5">
               <Heading>Community page</Heading>
               <SubHeading>
-                Welcome to our community page where users can vote and suggest new strategies, report bugs and more features coming soon.
+                Welcome to our community page where users can vote and suggest
+                new strategies, report bugs and more features coming soon.
               </SubHeading>
             </div>
             <div className="col-12 pb-4">
-              <NextArrowButton to='#' onClick={handleNextClick}/>
+              <NextArrowButton to="#" onClick={handleNextClick} />
               <PillContainer>
-                <Pill active={selectedTab === CommunityTabs.strategy} onClick={() => setSelectedTab(CommunityTabs.strategy)}>
+                <Pill
+                  active={selectedTab === CommunityTabs.strategy}
+                  onClick={() => setSelectedTab(CommunityTabs.strategy)}
+                >
                   Suggest Strategy
                 </Pill>
-                <Pill active={selectedTab === CommunityTabs.bugReport} onClick={() => setSelectedTab(CommunityTabs.bugReport)} style={{margin: '0 auto'}}>
+                <Pill
+                  active={selectedTab === CommunityTabs.bugReport}
+                  onClick={() => setSelectedTab(CommunityTabs.bugReport)}
+                  style={{ margin: "0 auto" }}
+                >
                   Bug Report
                 </Pill>
               </PillContainer>
@@ -92,4 +103,4 @@ export const CommunityPage = () => {
       <Footer />
     </>
   );
-}
+};

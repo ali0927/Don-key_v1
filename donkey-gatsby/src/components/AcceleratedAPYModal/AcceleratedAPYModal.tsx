@@ -167,7 +167,7 @@ export const AcceleratedAPYModal = ({
     refetch,
   } = useStakingContract();
   const [predictedApy, setPredictedApy] = useState("");
-  const { getConnectedWeb3, chainId, switchNetwork } = useWeb3Context();
+  const { getConnectedWeb3, chainId, switchNetwork, address } = useWeb3Context();
 
   const [btnLoading, setBtnLoading] = useState(false);
   const tiersList = getTierList();
@@ -188,7 +188,7 @@ export const AcceleratedAPYModal = ({
   const tierImages = ["", tier1, tier2, tier3, tier4, tier5];
   useEffectOnTabFocus(() => {
     fetchAvailableDon();
-  }, []);
+  }, [address]);
 
   const donAmount = useMemo(() => {
     let currentTier = getTierList()[selectedTier];
@@ -269,7 +269,7 @@ export const AcceleratedAPYModal = ({
         setHasChecked(true);
       }
     })();
-  }, []);
+  }, [address]);
   const { getTierCommission } = useReferralContext();
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 

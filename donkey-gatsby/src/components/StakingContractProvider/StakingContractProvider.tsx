@@ -176,11 +176,9 @@ const useStaking = () => {
         .plus(userInfo.donEquivalent)
         .toFixed(0)
     );
-      await fetchTiers(viewstakingContract);
-      const crTier = staketierInfo.data[userInfo.tier_type];
-      const coolOffDons = toEther(userInfo.coolOffAmount);
-
- 
+    await fetchTiers(viewstakingContract);
+    const crTier = staketierInfo.data[userInfo.tier_type];
+    const coolOffDons = toEther(userInfo.coolOffAmount);
 
     setIsStaked(userInfo.isStaked);
     setStakedDon(donAmount);
