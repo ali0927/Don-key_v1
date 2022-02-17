@@ -300,7 +300,7 @@ export const SuggestCard: React.FC<{
             <div style={{ display: "flex", alignItems: "center" }}>
               <UserIcon color="#000" fill="yellow" width="25" height="25" />
               <SuggestAddress>
-                {props.suggestion.customer.address}
+                {props.suggestion.nickName}
               </SuggestAddress>
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
