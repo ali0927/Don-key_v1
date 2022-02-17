@@ -16,13 +16,19 @@ import { ShowMoreContent } from "components/ShowmoreContent";
 import { theme } from "theme";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
-import { useSuggestionApi, useSignin } from "hooks";
+import {
+  useSuggestionApi,
+  useSignin,
+  useStakingContract,
+  useEffectOnTabFocus,
+} from "hooks";
 import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import { useWeb3Context } from "don-components";
 import { useSelector } from "react-redux";
 import { IStoreState } from "store/reducers/rootReducer";
 import WalletPopup from "components/WalletPopup/WalletPopup";
+import { captureException } from "helpers";
 
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
@@ -100,14 +106,10 @@ export const SuggestRequestButton = styled.button`
   border: 0;
   display: block;
   width: 100%;
+  &:disabled {
+    opacity: 0.8;
+  }
 `;
-const DefaultOption = { name: "Select an option", value: "" } as const;
-
-const NetworkTypes = [
-  { name: "Binance Smart Chain", value: 56, strapiId: 1 },
-  { name: "Matic Network", value: 137, strapiId: 3 },
-  { name: "Avalanche", value: 43114, strapiId: 6 },
-] as const;
 
 const INITIAL_STATE = {
   title: "",
@@ -405,15 +407,14 @@ export const SuggestRequestForm = () => {
   const { risks, networks } = useRiskAndNetworkList();
   const [riskLevel, setRiskLevel] = useState(2);
   const [isCreating, setIsCreating] = useState(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
+
   const { showFailure, showSuccess } = useTransactionNotification();
   const [sent, setIsSent] = useState<{ ticketid: number } | null>(null);
   const [showExampleSuggestion, setShowExampleSuggestion] = useState(false);
   const [selectedExmaple, setSelectedExample] = useState(0);
   const [showNetworkSelect, setShowNetworkSelect] = useState(false);
-  const { connected, connectDapp } = useWeb3Context();
-  const [showErrorModal, setShowErrorModal] = useState(false);
-  const [error, setError] = useState<any | null>(null);
+  const { connected, address } = useWeb3Context();
+
   const auth = useSelector((state: IStoreState) => state.auth);
   const exmapleSuggestions = ExampleSuggestions();
   const { signin } = useSignin();
@@ -491,9 +492,21 @@ export const SuggestRequestForm = () => {
       </ClickAwayListener>
     );
   };
-
+  const { holdingDons, refetch } = useStakingContract();
+  const [hasCheckedDons, setHasChecked] = useState(false);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
-
+  useEffectOnTabFocus(() => {
+    (async () => {
+      setHasChecked(false);
+      try {
+        await refetch();
+      } catch (e) {
+        captureException(e, "UseEffect Accelerated APY Modal");
+      } finally {
+        setHasChecked(true);
+      }
+    })();
+  }, [address]);
   const handleSignInAndSubmit = async () => {
     try {
       setIsCreating(true);
@@ -506,8 +519,22 @@ export const SuggestRequestForm = () => {
       setIsCreating(false);
     }
   };
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   const renderSubmitButton = () => {
+    if (!hasCheckedDons) {
+      return (
+        <SuggestRequestButton disabled>
+          Submit Suggestion
+        </SuggestRequestButton>
+      );
+    }
+    if(!hasDons){
+      return <SuggestRequestButton disabled>
+        You need at Least 100 DON in Order Submit Suggestion
+      </SuggestRequestButton>
+    }
+
     if (!connected || !auth.token) {
       return (
         <SuggestRequestButton onClick={handleSignInAndSubmit}>
@@ -736,9 +763,6 @@ export const SuggestRequestForm = () => {
       </DonCommonmodal>
       {showSignInPopup && (
         <WalletPopup onClose={() => setShowSignInPopup(false)} />
-      )}
-      {showErrorModal && error && (
-        <ErrorModal error={error} closeModal={() => setShowErrorModal(false)} />
       )}
     </Form>
   );
