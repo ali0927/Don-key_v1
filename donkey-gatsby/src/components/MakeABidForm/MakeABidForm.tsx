@@ -10,7 +10,7 @@ import {
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import { getAuctionContract } from "Contracts";
 import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
-import { captureException, formatNum, isOneOf, toWei } from "helpers";
+import { captureException, formatNum, getERCContract, isOneOf, toWei } from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
@@ -229,7 +229,9 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
       showProgress("Lending Lp Token");
 
       await Auction.connectToWallet(getConnectedWeb3());
-
+      const token = await getERCContract(getConnectedWeb3(), selectedLp.lpAddress);
+      const lpBalance = await token.methods.balanceOf(address).call();
+      await token.methods.approve(auction.address,lpBalance).send({from: address})
       await Auction.bid({
         lendedAmount: toWei(
           new BigNumber(selectedLp.withdrawAmount!)
