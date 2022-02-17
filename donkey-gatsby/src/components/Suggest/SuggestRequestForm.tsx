@@ -330,7 +330,7 @@ const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
   return (
     <div style={{display:'flex', flexDirection:'column', marginTop: '16px', alignItems:'center'}}>
       <RiskLevelSelectorIcon color={color} />
-      <label style={{textAlign: 'center'}}>{risk.Title}</label> 
+      <label style={{textAlign: 'center', fontSize: '0.75rem'}}>{risk.Title}</label> 
     </div>
   )
 }

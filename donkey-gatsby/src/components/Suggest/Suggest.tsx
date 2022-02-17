@@ -304,7 +304,6 @@ export const Suggest = () => {
   // }
 
   const filterList = useMemo(() => {
-    console.log('log------suggestions----', suggestionsData);
     if (suggestionsData) {
       let _list = suggestionsData.suggestions;
       if (strategyFilter !== SuggestStatus.all) {

@@ -186,6 +186,7 @@ export const SuggestCard: React.FC<{
       return;
     }
     const res_vote = await vote(props.suggestion.id);
+    setShowVoteModal(false);
     return res_vote;
   }
 
@@ -223,7 +224,7 @@ export const SuggestCard: React.FC<{
           <div className="col-6" style={{display:'flex', flexDirection:'column', justifyContent:'space-around'}}>
             <div style={{display:'flex', alignItems:'center'}}>
               <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-              <SuggestAddress>{props.suggestion.customer.address}</SuggestAddress>
+              <SuggestAddress>{props.suggestion.nickName}</SuggestAddress>
             </div>
             <div style={{display:'flex', alignItems:'center'}}>
               <AiOutlineMessage size="25px"/> 

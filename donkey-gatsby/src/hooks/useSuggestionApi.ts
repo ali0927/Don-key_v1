@@ -70,12 +70,18 @@ export const useSuggestionApi = () => {
     return resp.data;
   }
 
+  const getComment = async (id: number) => {
+    const resp = await strapi.get(`/comments/${id}`);
+    return resp.data;
+  }
+
   return {
     fetchList,
     getSuggestion,
     getCount,
     createSuggestion,
     vote,
-    comment
+    comment,
+    getComment
   };
 };

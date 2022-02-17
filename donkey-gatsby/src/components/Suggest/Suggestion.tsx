@@ -183,7 +183,7 @@ export const SuggestionView = (props: { id: number }) => {
           <div className="row">
             <div className="col-9 col-md-10" style={{display:'flex', flexDirection:'column'}}>
               <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
-              <label style={{color: 'lightgrey'}}>{suggestion?.created_at}</label>
+              <label style={{color: 'lightgrey'}}>{suggestion?.created_at.slice(0, 10)}</label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
@@ -241,7 +241,7 @@ export const SuggestionView = (props: { id: number }) => {
         
         <CommentEdit />
         {suggestion?.comments.map((comment: any) =>
-          <Comment comment={comment}/>
+          <Comment commentId={comment.id}/>
         )}
 
       </div>      
@@ -260,7 +260,7 @@ export const SuggestionView = (props: { id: number }) => {
             <SuggestionRiskImage src={suggestion?.risk.image.url} style={{padding: 0}} />
           </div>
           <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
-            This is Risk level description. There are three levels for risk - Low, Medium, High. You can choose the level when create the suggestion.
+            {suggestion?.riskword || 'No risk description'}
           </div>
         </div>
       </DonCommonmodal>
