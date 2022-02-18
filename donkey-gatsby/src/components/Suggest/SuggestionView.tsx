@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { UserIcon } from "components/Icons";
 import {
@@ -18,6 +18,7 @@ import { navigate } from "gatsby";
 import { DonGatsbyLink } from "components/DonGatsbyLink";
 import { useSuggestionApi } from "hooks";
 import { IStrapiSuggestion } from "interfaces";
+import { gql, useQuery } from "@apollo/client";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -144,22 +145,72 @@ const SuggestionLink = styled(DonGatsbyLink)`
   text-decoration: none !important;
   color: #000;
 `;
-export const SuggestionView = (props: { id: number }) => {
+
+const SUGGESTION_QUERY = gql`
+  query getSuggestionsQuery($id: String!) {
+    suggestions(
+      where: {
+        id: $id
+      }
+    ) {
+      apy
+      description
+      id
+      status
+      title
+      created_at
+      network {
+        name
+      }
+      risk {
+        Title
+        image {
+          url
+        }
+        id
+      }
+      riskword
+      nickName
+      customer {
+        address
+      }
+      comments {
+        content
+        created_at
+        customer {
+          address
+        }
+        likes {
+          address
+        }
+        replies {
+          content
+          customer {
+            address
+          }
+        }
+      }
+      votes {
+        address
+      }
+    }
+  }
+`;
+
+export const SuggestionView = ({ id }: { id: number }) => {
   const [showRiskDetail, setShowRiskDetail] = useState(false);
-  const { getCount, getSuggestion } = useSuggestionApi();
-  const [suggestion, setSuggestion] = useState<IStrapiSuggestion | null>(null);
-  const [suggestionCount, setSuggestionCount] = useState(0);
+  const { data: suggestionsData } = useQuery(SUGGESTION_QUERY, {
+    variables: {
+      id
+    }
+  });
 
-  const getSuggestionById = async (id: number) => {
-    const _suggestion = await getSuggestion(id);
-    setSuggestion(_suggestion);
-    const count = await getCount();
-    setSuggestionCount(count);
-  };
-
-  useEffect(() => {
-    getSuggestionById(props.id);
-  }, [props.id]);
+  const suggestion = useMemo(() => {
+    if (suggestionsData) {
+      return suggestionsData.suggestions[0];
+    }
+    return null;
+  }, [suggestionsData, id])
 
   const nextSuggestion = () => {
     if (suggestion) {
@@ -276,7 +327,7 @@ export const SuggestionView = (props: { id: number }) => {
         
         <CommentEdit />
         {suggestion?.comments.map((comment: any) =>
-          <Comment commentId={comment.id}/>
+          <Comment comment={comment}/>
         )}
         
       </div>

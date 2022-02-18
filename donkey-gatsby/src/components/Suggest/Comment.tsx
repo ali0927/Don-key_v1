@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useSuggestionApi } from "hooks";
 import { UserIcon } from "components/Icons";
 import { BsFillCaretUpFill } from "react-icons/bs";
 import { shortLargeAddress } from "helpers";
+import { gql, useQuery } from "@apollo/client";
 import styled from "styled-components";
 
 const CommentBox = styled.div`
@@ -31,29 +32,40 @@ const ReplyButton = styled.button`
 const Like = styled.div`
   cursor: pointer;
 `
+const COMMENT_QUERY = gql`
+  query getCommentQuery($id: String!) {
+    comments (
+      where: {
+        id: $id
+      }
+    ) {
+      content
+      likes {
+        address
+      }
+      created_at
+      customer {
+        address
+      }
+      replies {
+        content
+        customer {
+          address
+        }
+      }     
+    }
+  }
+`;
 
 export const Comment: React.FC<{
-  commentId: number
-}> = ({ commentId }) => {
-  const { getComment } = useSuggestionApi();
-  const [comment, setComment] = useState<{
-    id: number
+  comment: {
     content: string
     likes: []
-    suggestion: any
     created_at: string
     customer: any
     replies: []
-  } | null>(null);
-
-  const getCommentById = async (id: number) => {
-    const _comment = await getComment(id);
-    setComment(_comment);
-  }
-
-  useEffect(() => {
-    getCommentById(commentId);
-  }, [commentId])
+  } 
+}> = ({ comment }) => {
   
   return (
     <CommentBox>

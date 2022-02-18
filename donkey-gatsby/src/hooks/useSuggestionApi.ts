@@ -1,7 +1,7 @@
 import { strapi } from "strapi";
 import { ISuggestFormState } from "components/Suggest/SuggestRequestForm";
 import { IStoreState } from "store/reducers/rootReducer";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export const useSuggestionApi = () => {
   const auth = useSelector((state: IStoreState) => state.auth);
