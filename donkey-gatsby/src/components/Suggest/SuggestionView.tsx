@@ -93,7 +93,7 @@ const SuggestionRiskImage = styled.img`
 const SuggetionCommentRow = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0;
+  margin: 30px 0 10px 0;
   font-size: 1.2rem;
   font-weight: 600;
 `;
@@ -175,6 +175,7 @@ const SUGGESTION_QUERY = gql`
         address
       }
       comments {
+        id
         content
         created_at
         customer {
@@ -188,6 +189,7 @@ const SUGGESTION_QUERY = gql`
           customer {
             address
           }
+          created_at
         }
       }
       votes {

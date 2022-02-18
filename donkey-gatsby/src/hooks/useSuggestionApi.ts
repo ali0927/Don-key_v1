@@ -74,6 +74,17 @@ export const useSuggestionApi = () => {
     return resp.data;
   }
 
+  const reply = async (comment: string, content: string) => {
+    const resp = await strapi.post('/replies', {
+      comment,
+      content
+    },
+    {
+      headers: { 'access-token': `${auth.token}` }
+    })
+    return resp.data;
+  }
+
   return {
     fetchList,
     getSuggestion,
@@ -81,6 +92,7 @@ export const useSuggestionApi = () => {
     createSuggestion,
     vote,
     comment,
-    getComment
+    getComment,
+    reply
   };
 };

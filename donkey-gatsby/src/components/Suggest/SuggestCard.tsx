@@ -168,8 +168,7 @@ export const SuggestCard: React.FC<{
   const [commentContent, setCommentContent] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const { holdingDons, refetch } = useStakingContract();
-  const { showFailure, showSuccess, showProgress } =
-    useTransactionNotification();
+  const { showFailure, showSuccess, showProgress } = useTransactionNotification();
   const [hasCheckedDons, setHasChecked] = useState(false);
   const { connected, address } = useWeb3Context();
   const { signin } = useSignin();
