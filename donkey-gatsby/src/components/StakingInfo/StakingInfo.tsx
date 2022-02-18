@@ -336,7 +336,13 @@ export const StakingInfo = () => {
   const [donPrice, setDonPrice] = useState<string | null>(null);
   const web3 = getWeb3(56);
   useEffect(() => {
-    getDonPriceWeb3(web3).then(setDonPrice);
+    getDonPriceWeb3(web3).then((price) => {
+      if(new BigNumber(price).gt("0.3")){
+        setDonPrice(price)
+      }else {
+        setDonPrice("0.3");
+      }
+    });
   }, []);
 
   const harvestDon = async () => {

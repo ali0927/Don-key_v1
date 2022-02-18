@@ -22,11 +22,11 @@ import styled from "styled-components";
 import { breakPoints } from "breakponts";
 
 const RewardsHeading = styled.h1`
-    font-weight: 800;
-    font-size: 16px;
-    line-height: 26px;
-    color: #fac200;
-    max-width: 218px;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 26px;
+  color: #fac200;
+  max-width: 218px;
   @media only screen and (min-width: ${breakPoints.lg}) {
     font-size: 30px;
     line-height: 70px;
@@ -68,6 +68,13 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
   const [unstake, openUnstake, closeUnstake] = useToggle();
   const { chainId, connected, switchNetwork } = useWeb3Context();
   const [isOpen, setIsOpen] = useState(false);
+
+  donPrice = donPrice
+    ? new BigNumber(donPrice).gt("0.3")
+      ? donPrice
+      : "0.3"
+    : "0";
+
   const {
     pendingReward,
     tier,
@@ -225,16 +232,15 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
                 className={clsx("w-100 text-center ", {
                   "text-lg-left": !isInCoolOffPeriod,
                 })}
-
               >
                 {isInCoolOffPeriod
                   ? `${formatNum(coolOffAmount, 3)} $DON`
                   : donPrice &&
-                  `$${formatNum(
-                    new BigNumber(donPrice)
-                      .multipliedBy(pendingReward)
-                      .toFixed()
-                  )}`}
+                    `$${formatNum(
+                      new BigNumber(donPrice)
+                        .multipliedBy(pendingReward)
+                        .toFixed()
+                    )}`}
               </RewardsHeading>
               {!isInCoolOffPeriod && (
                 <DownArrow
@@ -276,7 +282,9 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
           )}
           <div className="col-5 m-1 m-lg-0 col-lg-2 pt-3 pr-0">
             <p>DON STAKED</p>
-            <h2 className="mt-1 mb-3 m-lg-0">{new BigNumber(stakedDon).toFixed(0)}</h2>
+            <h2 className="mt-1 mb-3 m-lg-0">
+              {new BigNumber(stakedDon).toFixed(0)}
+            </h2>
           </div>
           <div className="col-5 m-1 m-lg-0 col-lg-3 pt-3">
             <p>TVL</p>
@@ -285,11 +293,7 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
                 <DonStakingTVL donPrice={donPrice} />
               </h1>
               <DownArrow
-                className={
-                  openStackMob
-                    ? "d-lg-none"
-                    : "d-lg-none rotate"
-                }
+                className={openStackMob ? "d-lg-none" : "d-lg-none rotate"}
                 onClick={() => setOpenStackMob(!openStackMob)}
               />
               <StakingArrow
@@ -321,8 +325,8 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
           )}
         </Card>
       </Paper>
-      <Collapse in={isOpenStaking} >
-        <div id="collapse-content" >
+      <Collapse in={isOpenStaking}>
+        <div id="collapse-content">
           <Paper
             bgColor="#FDFAFA"
             maxWidth="1124px"
@@ -358,7 +362,6 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
           </Paper>
         </div>
       </Collapse>
-
     </>
   );
 };
