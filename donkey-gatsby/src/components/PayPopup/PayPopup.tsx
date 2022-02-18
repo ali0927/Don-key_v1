@@ -225,8 +225,8 @@ export const PayPopup = ({
       </p>
       <div style={{ fontSize: 13 }}>
         <div className="d-flex mb-2 align-items-center justify-content-between">
-          <span style={{ fontWeight: 300 }}>LP Value </span>
-          <span style={{ fontWeight: 500, color: "#6e6e6e" }}>
+          <span style={{ fontWeight: 300, color: "#bbbbbb" }}>LP Value </span>
+          <span style={{ fontWeight: 500, color: "#bbbbbb" }}>
             {formatNum(loan.lendedAmount)} {lpToken?.symbol}
           </span>
         </div>
@@ -252,22 +252,10 @@ export const PayPopup = ({
           <span className="mr-4" style={{ fontWeight: 300 }}>
             Total:{" "}
           </span>
-          <span className="mr-4" style={{ fontWeight: 300 }}>
-            Balance:{" "}
-          </span>
         </div>
         <div className="d-flex flex-column">
           <span style={{ fontWeight: 600 }}>
             {formatNum(loan.totalAmountTobePaid)} {lpToken?.symbol}
-          </span>
-          <span style={{ fontWeight: 600 }}>
-            {balance ? (
-              <>
-                {formatNum(balance)} {lpToken?.symbol}
-              </>
-            ) : (
-              "-"
-            )}
           </span>
         </div>
       </div>
