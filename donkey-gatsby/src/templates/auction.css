@@ -121,7 +121,23 @@
     box-shadow: 0 0 44px -2px #00000059;
     margin-bottom: -102px;
     min-height: 713px;
+    position: relative;
 }
+
+.make_a_bid .connect_btn {
+    position: absolute;
+    top: 50%;
+    
+    width: 400px;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+
+.connect_btn:hover {
+    border: 0;
+    outline: 0;
+}
+
 .make_a_bid.no-auction {
     margin-bottom: 50px;
 }
@@ -361,13 +377,16 @@
     padding-bottom: 5px;
 }
 
-.make_a_bid.blurred {
+.make_a_bid .blurred {
     position: relative;
     pointer-events: none;
     filter: blur(8px);
     -webkit-filter: blur(3px);
 }
 
+.connect_btn {
+
+}
 
 .make_a_bid .head .data {
     color: #A3A3A3;

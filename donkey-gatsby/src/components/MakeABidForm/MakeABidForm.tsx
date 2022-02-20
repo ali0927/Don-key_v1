@@ -8,9 +8,20 @@ import {
   Input,
 } from "components/BugReportForm";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
+import WalletPopup from "components/WalletPopup/WalletPopup";
 import { getAuctionContract } from "Contracts";
-import { BSC_TESTNET_CHAIN_ID, useWeb3Context } from "don-components";
-import { captureException, formatNum, getERCContract, isOneOf, toWei } from "helpers";
+import {
+  BINANCE_CHAIN_ID,
+  BSC_TESTNET_CHAIN_ID,
+  useWeb3Context,
+} from "don-components";
+import {
+  captureException,
+  formatNum,
+  getERCContract,
+  isOneOf,
+  toWei,
+} from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
 import { IAuction, IAuctionSuccessState, IStoreState } from "interfaces";
 import moment from "moment";
@@ -229,9 +240,21 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
       showProgress("Lending Lp Token");
 
       await Auction.connectToWallet(getConnectedWeb3());
-      const token = await getERCContract(getConnectedWeb3(), selectedLp.lpAddress);
+      const token = await getERCContract(
+        getConnectedWeb3(),
+        selectedLp.lpAddress
+      );
       const lpBalance = await token.methods.balanceOf(address).call();
-      await token.methods.approve(auction.address,lpBalance).send({from: address})
+
+      const allowance = await token.methods
+        .allowance(address, auction.address)
+        .call();
+      if (new BigNumber(allowance).lt(lpBalance)) {
+        await token.methods
+          .approve(auction.address, lpBalance)
+          .send({ from: address });
+      }
+
       await Auction.bid({
         lendedAmount: toWei(
           new BigNumber(selectedLp.withdrawAmount!)
@@ -593,10 +616,13 @@ export const MakeABidForm = () => {
   const prevAuctions = useSelector(
     (state: IStoreState) => state.auctions.prevAuctions
   );
-  const { connected } = useWeb3Context();
+
+  const { switchNetwork, chainId, connected } = useWeb3Context();
+  const [isWalletPopupOpen, setIsWalletPopupOpen] = useState(false);
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
+  const lastAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   // const prevAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   const isReady = isOneOf(auctions.status, [
     "FETCH_SUCCESS",
@@ -636,11 +662,40 @@ export const MakeABidForm = () => {
         "bg-white pb-5": isPilotOver,
         "mb-5": !isReady,
         "no-auction": prevAuctions.data.length === 0,
-        blurred:
-          ((!currentAuction && nextAuction) || !connected) && !isPilotOver,
       })}
     >
-      {renderForm()}
+      <div
+        className={clsx({
+          blurred:
+            ((!currentAuction && !nextAuction) ||
+              !connected ||
+              (chainId !== BSC_TESTNET_CHAIN_ID && connected)) &&
+            !isPilotOver,
+        })}
+      >
+        {renderForm()}
+      </div>
+      {chainId !== BSC_TESTNET_CHAIN_ID && connected && (
+        <button
+          className="connect_btn"
+          onClick={() => switchNetwork(BSC_TESTNET_CHAIN_ID)}
+          style={{ marginTop: "41px" }}
+        >
+          Switch Network
+        </button>
+      )}
+      {!connected && (
+        <button
+          className="connect_btn"
+          onClick={() => setIsWalletPopupOpen(true)}
+          style={{ marginTop: "41px" }}
+        >
+          Connect Wallet
+        </button>
+      )}
+      {isWalletPopupOpen && (
+        <WalletPopup onClose={() => setIsWalletPopupOpen(false)} />
+      )}
     </div>
   );
 };

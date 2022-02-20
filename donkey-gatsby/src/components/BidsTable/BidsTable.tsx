@@ -80,12 +80,13 @@ const RevokeButton = ({ auctionAddress }: { auctionAddress: string }) => {
     );
   };
 
-  const hasEnded = currentAuction?.address.toLowerCase() !== auctionAddress.toLowerCase();
+  const hasEnded =
+    currentAuction?.address.toLowerCase() !== auctionAddress.toLowerCase();
   return (
     <td>
       <button
-       className={clsx({white: hasEnded })}
-        disabled={isLoading  || hasEnded}
+        className={clsx({ white: hasEnded })}
+        disabled={isLoading || hasEnded}
         onClick={() => revokeBid(auctionAddress)}
       >
         {isLoading ? <Spinner size="sm" animation="border" /> : "Revoke"}
@@ -127,102 +128,117 @@ export const BidsTable = () => {
 
   const bids = useSelector((state: IStoreState) => state.auctions.userBids);
   const { address } = useWeb3Context();
-  if (bids.status === "FETCH_SUCCESS" && bids.data.length > 0) {
-    return (
-      <div
-        className="strip table_strip your_bids"
-        style={{ paddingTop: "165px" }}
-      >
-        <div className="boxed">
-          <h3>Your Bids</h3>
-          <table>
-            {openDetails && (
-              <DetailsPopup
-                open={openDetails}
-                onClose={() => setOpenDetails(false)}
-              />
+
+  return (
+    <div
+      className="strip table_strip your_bids"
+      style={{ paddingTop: "165px" }}
+    >
+      <div className="boxed">
+        <h3>Your Bids</h3>
+        <table>
+          {openDetails && (
+            <DetailsPopup
+              open={openDetails}
+              onClose={() => setOpenDetails(false)}
+            />
+          )}
+
+          <thead>
+            <TableRow>
+              <th>#</th>
+              <th>status</th>
+              <th>wallet</th>
+              <th>collateral</th>
+              <th>value</th>
+              <th>borrow</th>
+              <th>commission</th>
+              <th>action</th>
+            </TableRow>
+          </thead>
+          <tbody>
+            {bids.data.length === 0 && (
+              <tr>
+                <td
+                  colSpan={8}
+                  style={{
+                    color: "#6C6C6C",
+                    padding: 38,
+                    textAlign: "center",
+                    // width: "100%",
+                  }}
+                >
+                  {bids.status !== "FETCH_SUCCESS" ? (
+                    <Spinner animation="border" />
+                  ) : (
+                    " You don't have any Bids"
+                  )}
+                </td>
+              </tr>
             )}
+            {bids.data.map((bid, index) => {
+              return (
+                <TableRow key={bid.lpAddress}>
+                  <td>{index + 1}</td>
+                  <td
+                    data-title="status"
+                    className={clsx("status", {
+                      success: isOneOf(bid.status, ["claimed", "won"]),
+                      pending: bid.status === "pending",
+                      rejected: bid.status === "rejected",
+                    })}
+                  >
+                    {isOneOf(bid.status, ["claimed", "won"]) && "Successful"}
+                    {bid.status === "rejected" && "Rejected"}
+                    {bid.status === "pending" && "Pending"}
+                  </td>
+                  <td data-title="wallet">{shortenAddress(address)}</td>
 
-            <thead>
-              <TableRow>
-                <th>#</th>
-                <th>status</th>
-                <th>wallet</th>
-                <th>collateral</th>
-                <th>value</th>
-                <th>borrow</th>
-                <th>commission</th>
-                <th>action</th>
-              </TableRow>
-            </thead>
-            <tbody>
-              {bids.data.map((bid, index) => {
-                return (
-                  <TableRow key={bid.lpAddress}>
-                    <td>{index + 1}</td>
-                    <td
-                      data-title="status"
-                      className={clsx("status", {
-                        success: isOneOf(bid.status, ["claimed", "won"]),
-                        pending: bid.status === "pending",
-                        rejected: bid.status === "rejected",
-                      })}
-                    >
-                      {isOneOf(bid.status, ["claimed", "won"]) && "Successful"}
-                      {bid.status === "rejected" && "Rejected"}
-                      {bid.status === "pending" && "Pending"}
-                    </td>
-                    <td data-title="wallet">{shortenAddress(address)}</td>
-
-                    <FindStrategy
-                      auctionAddress={bid.auctionAddress}
-                      lpAddress={bid.lpAddress}
-                    >
-                      {({ lptoken }) => {
-                        return (
-                          <>
-                            <td data-title="strategy lp">
-                              {lptoken.strategyName}{" "}
+                  <FindStrategy
+                    auctionAddress={bid.auctionAddress}
+                    lpAddress={bid.lpAddress}
+                  >
+                    {({ lptoken }) => {
+                      return (
+                        <>
+                          <td data-title="strategy lp">
+                            {lptoken.strategyName}{" "}
+                          </td>
+                          <td data-title="value">
+                            {formatNum(bid.lendedAmount)} {lptoken.symbol}
+                          </td>
+                          <td data-title="borrow">
+                            {formatNum(bid.borrowedAmount)} {lptoken.symbol}
+                          </td>
+                          <td data-title="commission">
+                            {formatNum(bid.commission)} {lptoken.symbol}
+                          </td>
+                          {isOneOf(bid.status, ["pending", "rejected"]) && (
+                            <RevokeButton auctionAddress={bid.auctionAddress} />
+                          )}
+                          {bid.status === "won" && (
+                            <ClaimButton
+                              auctionAddress={bid.auctionAddress}
+                              lpAddress={bid.lpAddress}
+                            />
+                          )}
+                          {bid.status === "claimed" && (
+                            <td>
+                              <button disabled className="white">
+                                Claimed{" "}
+                              </button>
                             </td>
-                            <td data-title="value">
-                              {formatNum(bid.lendedAmount)} {lptoken.symbol}
-                            </td>
-                            <td data-title="borrow">
-                              {formatNum(bid.borrowedAmount)} {lptoken.symbol}
-                            </td>
-                            <td data-title="commission">
-                              {formatNum(bid.commission)} {lptoken.symbol}
-                            </td>
-                            {isOneOf(bid.status, ["pending", "rejected"]) && (
-                              <RevokeButton
-                                auctionAddress={bid.auctionAddress}
-                              />
-                            )}
-                            {bid.status === "won" && (
-                              <ClaimButton
-                                auctionAddress={bid.auctionAddress}
-                                lpAddress={bid.lpAddress}
-                              />
-                            )}
-                            {bid.status === "claimed" && (
-                              <td>
-                                <button disabled className="white">
-                                  Claimed{" "}
-                                </button>
-                              </td>
-                            )}
-                          </>
-                        );
-                      }}
-                    </FindStrategy>
-                  </TableRow>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                          )}
+                        </>
+                      );
+                    }}
+                  </FindStrategy>
+                </TableRow>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
-    );
-  }
-  return <div className=""></div>;
+    </div>
+  );
 };
