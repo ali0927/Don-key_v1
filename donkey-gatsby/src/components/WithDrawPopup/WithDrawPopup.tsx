@@ -194,6 +194,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
 
   const [greyAmount, setGreyAmount] = React.useState("0");
   const [investedAmount, setInvestedAmount] = React.useState("0");
+  const [lockedAmount, setLockedAmount] = React.useState("0");
   const [selectedgreyShare, setGreyShare] = React.useState("0");
   const [currency, setCurrency] = React.useState("-");
   const [tokenPrice, setTokenPrice] = React.useState("-");
@@ -220,12 +221,13 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
           accounts[0],
           poolVersion
         );
-
+        const lockedAmount = await pool.methods.lockedAmount(accounts[0]).call();
+        const lockedAmountEth = toEther(lockedAmount, decimals);
         const investedAmount = new BigNumber(finalAmount)
-          .minus(greyAmount)
-          .toFixed(8);
+          .minus(greyAmount).toFixed(8);
         setGreyAmount(greyAmount);
         setInvestedAmount(investedAmount);
+        setLockedAmount(lockedAmountEth);
         setTokenPrice(tokenPrice);
         setCurrency(currency.toUpperCase());
         setIsReady(true);
@@ -320,6 +322,7 @@ export const WithDrawPopup: React.FC<IWithDrawPopupProps> = (props) => {
       available={investedAmount}
       price={tokenPrice}
       currency={currency}
+      lockedAmount={lockedAmount}
       title={
         hasGreyAmount && hasInvestedAmount
           ? "Active in Strategy"

@@ -148,7 +148,7 @@ export const BidsTable = () => {
                 <th>#</th>
                 <th>status</th>
                 <th>wallet</th>
-                <th>Strategy Name</th>
+                <th>collateral</th>
                 <th>value</th>
                 <th>borrow</th>
                 <th>commission</th>

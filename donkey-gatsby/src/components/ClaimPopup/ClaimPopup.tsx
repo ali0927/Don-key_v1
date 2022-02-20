@@ -120,7 +120,7 @@ export const ClaimPopup = ({
         has been won.
       </p>{" "}
       <p style={{ fontWeight: 100, marginBottom: "48px" }}>
-        You can now claim your loan. Click here to see the loan details
+        You can now claim your loan.
       </p>
       <div className="d-flex my-4">
         <div className="pr-2 w-50">
@@ -129,7 +129,7 @@ export const ClaimPopup = ({
           </StyledButton>
         </div>
         <div className="pl-2 w-50">
-          <StyledButton variant="white">Later</StyledButton>
+          <StyledButton onClick={onClose} variant="white">Later</StyledButton>
         </div>
       </div>
     </DonCommonmodal>
