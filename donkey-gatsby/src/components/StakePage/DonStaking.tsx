@@ -69,11 +69,6 @@ export const DonStaking = ({ donPrice }: { donPrice: string | null }) => {
   const { chainId, connected, switchNetwork } = useWeb3Context();
   const [isOpen, setIsOpen] = useState(false);
 
-  donPrice = donPrice
-    ? new BigNumber(donPrice).gt("0.3")
-      ? donPrice
-      : "0.3"
-    : "0";
 
   const {
     pendingReward,
