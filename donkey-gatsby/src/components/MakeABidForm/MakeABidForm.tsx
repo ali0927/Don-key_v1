@@ -7,6 +7,7 @@ import {
   TextArea,
   Input,
 } from "components/BugReportForm";
+import { DonCommonmodal } from "components/DonModal";
 import { useTransactionNotification } from "components/LotteryForm/useTransactionNotification";
 import WalletPopup from "components/WalletPopup/WalletPopup";
 import { getAuctionContract } from "Contracts";
@@ -19,7 +20,9 @@ import {
   captureException,
   formatNum,
   getERCContract,
+  getPoolContract,
   isOneOf,
+  toEther,
   toWei,
 } from "helpers";
 import { useStakingContract, useSwitchNetwork } from "hooks";
@@ -171,6 +174,7 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
   const selectNewLp = (index: number) => {
     setState((old) => ({ ...old, selectedLp: index }));
   };
+  const [showWaitForCyclePopup, setShowWaitForCyclePopup] = useState(false);
   const maxDebtRatio = auction.maxDebtMap[tier.tier as 0] || "0";
 
   const balance = selectedLp.withdrawAmount || "10";
@@ -217,9 +221,6 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
     .toFixed(2);
   const borrowAmount = debtAmount.multipliedBy(maxDebtRatio).dividedBy(100);
   const debtAmountInUsd = debtAmount.multipliedBy(selectedLp.price).toFixed(2);
-  // const borrowAmountInUsd = borrowAmount
-  //   .multipliedBy(selectedLp.price)
-  //   .toFixed(2);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -245,6 +246,24 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
         selectedLp.lpAddress
       );
       const lpBalance = await token.methods.balanceOf(address).call();
+      const pool = await getPoolContract(
+        getConnectedWeb3(),
+        selectedLp.lpAddress,
+        4
+      );
+      const availableWithdraw = new BigNumber(selectedLp.withdrawAmount!);
+      const lendedAmount = availableWithdraw
+        .multipliedBy(state.percentLp)
+        .dividedBy(100)
+        .toString();
+      const greyAmount = await pool.methods
+        .getUserGreyInvestedAmount(address)
+        .call();
+
+      const investedAmount = availableWithdraw.minus(toEther(greyAmount));
+      if (investedAmount.lt(lendedAmount)) {
+        return setShowWaitForCyclePopup(true);
+      }
 
       const allowance = await token.methods
         .allowance(address, auction.address)
@@ -256,12 +275,7 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
       }
 
       await Auction.bid({
-        lendedAmount: toWei(
-          new BigNumber(selectedLp.withdrawAmount!)
-            .multipliedBy(state.percentLp)
-            .dividedBy(100)
-            .toString()
-        ),
+        lendedAmount: toWei(lendedAmount),
         comission: commissionPer.multipliedBy(100).toFixed(0),
         lpToken: selectedLp.lpAddress,
         userAddress: address,
@@ -271,7 +285,6 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
 
       showSuccess("LP Token Lent Successfully");
     } catch (e) {
-      console.trace();
       captureException(e, "Handle Lp Lending");
       showFailure("Try again Later");
     } finally {
@@ -486,6 +499,20 @@ const AuctionForm = ({ auction }: { auction: IAuction }) => {
           </span>
         </div>
       </div>
+      {showWaitForCyclePopup && (
+        <DonCommonmodal
+          title="Wait for next cycle"
+          isOpen
+          variant="common"
+          size="sm"
+          onClose={() => {
+            setShowWaitForCyclePopup(false);
+          }}
+        >
+          you funds have not been assigned LP yet. You need to wait for next
+          farming cycle before you can bid in auction
+        </DonCommonmodal>
+      )}
     </>
   );
 };
@@ -622,7 +649,6 @@ export const MakeABidForm = () => {
   const currentAuction =
     (auctions as IAuctionSuccessState).currentAuction || null;
   const nextAuction = (auctions as IAuctionSuccessState).nextAuction || null;
-  const lastAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   // const prevAuction = (auctions as IAuctionSuccessState).lastAuction || null;
   const isReady = isOneOf(auctions.status, [
     "FETCH_SUCCESS",
