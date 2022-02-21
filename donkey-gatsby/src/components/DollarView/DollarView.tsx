@@ -33,6 +33,8 @@ export const DollarView = ({
         setPrice(await getTokenPrice(web3,poolAddress));
         setIsReady(true);
       }catch(e){
+        setPrice("1");
+        setIsReady(true);
         captureException(e, "Dollar View");
       } finally {
       }

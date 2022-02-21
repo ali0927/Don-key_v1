@@ -311,16 +311,31 @@ export const createPages = async ({ graphql, actions }: any) => {
       });
     }
   });
- 
-  DummyEarningIDs.forEach((id: any) => {
+
+  const auctionsResp = await graphql(`
+    query MyAuctions {
+      allStrapiAuctions {
+        nodes {
+          auctionAddress
+          slug
+          name
+        }
+      }
+    }
+  `);
+
+  const auctions = auctionsResp.data.allStrapiAuctions.nodes;
+
+  auctions.forEach((auction: any) => {
     createPage({
-      path: `/earning/${id}`,
-      component: path.resolve(`./src/templates/earningTemplate.tsx`),
+      path: `/auction/${auction.slug}`,
+      component: path.resolve(`./src/templates/auctionTemplate.tsx`),
       context: {
-        id: id
+        auction,
       },
     });
-  });
+  })
+
 
   // Rewrite For Share Links
   createRedirect({

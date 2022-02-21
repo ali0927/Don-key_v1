@@ -357,6 +357,8 @@ const DashboardMenu = () => {
       <MenuItem onClick={handleOpen}>Bridge</MenuItem>
       <MenuItem to="/faq">FAQ</MenuItem>
       <MenuItem to="/community">Community</MenuItem>
+      <MenuItem to="/auction/busd-auction">Auction</MenuItem>
+     
       {isOpen && <BridgePopup onClose={closeBridge} />}
     </>
   );
@@ -390,6 +392,7 @@ const DashboardDrawer = () => {
       <DrawerItem icon={<BridgeIcon />} onClick={handleOpen}>
         Bridge
       </DrawerItem>
+      <MenuItem to="/auction/busd-auction">Auction</MenuItem>
       {isOpen && <BridgePopup onClose={closeBridge} />}
       <DrawerItem icon={<StakeIcon />} to="/stake">
         Stake LP

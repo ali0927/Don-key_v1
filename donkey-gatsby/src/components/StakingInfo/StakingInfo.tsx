@@ -10,12 +10,12 @@ import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
 import { formatNum, getDonPriceWeb3 } from "helpers";
-import { getWeb3 } from "don-components";
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 import Questionmark from "components/Icons/Questionmark";
 import { useTimer } from "hooks/useTimer";
 import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
+import { captureException } from "logrocket";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -334,11 +334,11 @@ export const StakingInfo = () => {
   const [loading, enableLoading, disableLoading] = useToggle();
 
   const [donPrice, setDonPrice] = useState<string | null>(null);
-  const web3 = getWeb3(56);
+
   useEffect(() => {
-    getDonPriceWeb3(web3).then((price) => {
-      setDonPrice(price);
-    });
+    getDonPriceWeb3()
+      .then(setDonPrice)
+      .catch((e) => captureException(e, { extra: { msg: "StakingInfo" } }));
   }, []);
 
   const harvestDon = async () => {

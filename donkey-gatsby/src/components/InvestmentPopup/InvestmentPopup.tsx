@@ -38,7 +38,6 @@ import { BuyDonContent } from "components/BuyDonContent/BuyDonContent";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import Downarrow from "components/Icons/Downarrow";
 import { useInvestmentPopupStyles } from "./styles/useInvestmentPopupStyles";
-import { isInsurable } from "helpers/isInsurable";
 import { IInsuranceProps } from "interfaces";
 
 const ButtonWrapper = styled.div({
@@ -218,8 +217,6 @@ export const InvestmentPopup = ({
   gasLimit,
   onClose,
   onSuccess,
-
-  minAmountForInsurance
   
 }: {
   poolAddress: string;
@@ -292,6 +289,7 @@ export const InvestmentPopup = ({
     const price = await getTokenPrice(web3, poolAddress);
     setTokenPrice(price);
     const tokenAddress = await getTokenAddress(web3, poolAddress);
+    // Fetch Token Info
     fetch({ variables: { tokenAddress } });
   };
   const applyCode = async (code: string) => {

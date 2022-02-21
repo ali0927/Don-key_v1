@@ -14,7 +14,7 @@ import { store } from "store";
 import { BrightSdkProvider } from "contexts/BrightUnionContext";
 import { LogRocketProvider } from "LogRocketProvider";
 import { GlobalPopupProvider } from "components/GlobalPopupProvider";
-
+import { MoralisProvider } from "react-moralis";
 export const Providers: React.FC = ({ children }) => {
   return (
     <ReduxProvider store={store}>
@@ -115,17 +115,25 @@ export const Providers: React.FC = ({ children }) => {
           >
             <Web3Provider>
               <Provider store={store}>
-                <StakingContractProvider>
-                  <ReferralStateProvider>
-                    <BrightSdkProvider>
-                      <LogRocketProvider>
-                        <TooltipProvider>
-                          <GlobalPopupProvider>{children}</GlobalPopupProvider>
-                        </TooltipProvider>
-                      </LogRocketProvider>
-                    </BrightSdkProvider>
-                  </ReferralStateProvider>
-                </StakingContractProvider>
+                <MoralisProvider
+                  initializeOnMount
+                  appId="a6CWYm0VBZKltQy4lcSOyEIAo4NoTM8hv28KCnYz"
+                  serverUrl="https://pmvfcikhqlef.usemoralis.com:2053/server"
+                >
+                  <StakingContractProvider>
+                    <ReferralStateProvider>
+                      <BrightSdkProvider>
+                        <LogRocketProvider>
+                          <TooltipProvider>
+                            <GlobalPopupProvider>
+                              {children}
+                            </GlobalPopupProvider>
+                          </TooltipProvider>
+                        </LogRocketProvider>
+                      </BrightSdkProvider>
+                    </ReferralStateProvider>
+                  </StakingContractProvider>
+                </MoralisProvider>
               </Provider>
             </Web3Provider>
           </SnackbarProvider>

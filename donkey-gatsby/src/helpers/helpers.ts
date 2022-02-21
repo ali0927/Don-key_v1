@@ -19,10 +19,17 @@ export const getQueryParam = (name: string) => {
 
   return queryObj[name];
 };
-
+export const validateEmail = (email: string) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 export const tuplify = <T extends any[]>(...args: T) => {
   return args;
 };
+export const isOneOf = <T extends string>(val: T, arr: T[]) => {
+  return arr.includes(val);
+};
+
 
 export const getROI = async (web3: any, poolAddress: string) => {
   const investedAmountWithReward = new BigNumber(
