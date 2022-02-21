@@ -1,3 +1,4 @@
+import BigNumber from "bignumber.js";
 import { DonCommonmodal } from "components/DonModal";
 import { useWeb3Context } from "don-components";
 import { IStoreState } from "interfaces";
@@ -6,7 +7,7 @@ import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { claimLoanThunk } from "store/actions";
-import { bidSelector } from "store/selectors";
+import { bidSelector, findLendedLp } from "store/selectors";
 import styled, { css } from "styled-components";
 
 const StyledButton = styled.button`
@@ -35,11 +36,20 @@ const StyledButton = styled.button`
   }}
 `;
 
+const LoanInfoTitle = styled.div`
+  font-weight: 500;
+`;
+const LoanInfoRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 export const ClaimPopup = ({
   open,
   onClose,
   lpAddress,
-  auctionAddress
+  auctionAddress,
 }: {
   lpAddress: string;
   open: boolean;
@@ -53,12 +63,27 @@ export const ClaimPopup = ({
     bidSelector(state.auctions.userBids, lpAddress, auctionAddress)
   );
 
+  const loanToken = useSelector((state: IStoreState) =>
+    findLendedLp(state.auctions.auctionInfo, lpAddress, auctionAddress)
+  );
+  const estimatedBorrowAmount = bid?.estimatedBorrowAmount || "0";
+  const borrowAmount = bid?.borrowedAmount || "0";
+
+  const hasExcessLended = new BigNumber(borrowAmount).lt(
+    estimatedBorrowAmount
+  );
+  const newLended = new BigNumber(bid!.lendedAmount)
+    .multipliedBy(borrowAmount)
+    .dividedBy(estimatedBorrowAmount);
+  const excessLended = newLended.minus(bid!.lendedAmount).absoluteValue();
+  // console.log(borrowAmount, estimatedBorrowAmount, "info");
   const claimLoan = async () => {
     setIsLoading(true);
     dispatch(
       claimLoanThunk({
         auctionAddress: bid?.auctionAddress as string,
         web3: getConnectedWeb3(),
+        hasExcessLended,
         userAddress: address,
         onDone: () => {
           setIsLoading(false);
@@ -110,7 +135,7 @@ export const ClaimPopup = ({
         className="mb-3"
         style={{ fontWeight: 600, fontSize: "25px", paddingBottom: "7px" }}
       >
-        It's a win!
+        It's a win! {hasExcessLended && <small>Not for the full amount</small>}
       </h3>
       <p style={{ marginBottom: "23px" }}>
         Congratulations. Your bid from{" "}
@@ -119,9 +144,40 @@ export const ClaimPopup = ({
           : ""}{" "}
         has been won.
       </p>{" "}
-      <p style={{ fontWeight: 100, marginBottom: "48px" }}>
+      <p
+        style={{
+          fontWeight: 100,
+          ...(!hasExcessLended ? { marginBottom: "48px" } : {}),
+        }}
+      >
         You can now claim your loan.
       </p>
+      {hasExcessLended && (
+        <div>
+          <LoanInfoRow>
+            <LoanInfoTitle> LP Staked </LoanInfoTitle>
+            <div>{bid?.lendedAmount} LP</div>
+          </LoanInfoRow>
+          <LoanInfoRow>
+            <LoanInfoTitle> Borrow Amount won</LoanInfoTitle>
+            <div>
+              {bid?.borrowedAmount} {loanToken?.symbol}
+            </div>
+          </LoanInfoRow>
+          <LoanInfoRow>
+            <LoanInfoTitle> Commission</LoanInfoTitle>
+            <div>
+              {bid?.commission} {loanToken?.symbol}
+            </div>
+          </LoanInfoRow>
+
+          <LoanInfoRow className="mb-3">
+            <LoanInfoTitle> Excess Amount</LoanInfoTitle>
+            <div>{excessLended.toFixed(3)} LP</div>
+          </LoanInfoRow>
+          <div>When Claiming you will be release excess amount from lock</div>
+        </div>
+      )}
       <div className="d-flex my-4">
         <div className="pr-2 w-50">
           <StyledButton disabled={isLoading} onClick={claimLoan}>
@@ -129,7 +185,9 @@ export const ClaimPopup = ({
           </StyledButton>
         </div>
         <div className="pl-2 w-50">
-          <StyledButton onClick={onClose} variant="white">Later</StyledButton>
+          <StyledButton onClick={onClose} variant="white">
+            Later
+          </StyledButton>
         </div>
       </div>
     </DonCommonmodal>

@@ -210,6 +210,7 @@ export type IBid = {
   auctionAddress: string;
   lpAddress: string;
   lendedAmount: string;
+  estimatedBorrowAmount: string;
   borrowedAmount: string;
   // debtRatio: string;
   commission: string;

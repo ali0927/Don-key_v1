@@ -81,7 +81,9 @@ class AuctionContract {
     this.contract = null;
     this.connectedToWallet = false;
   }
-
+  releaseExcessLended = async ({userAddress}: {userAddress:string}) => {
+    await this.contract.methods.releaseExcessLended().send({from: userAddress});
+  }
   getauctionEndTime = async () => {
     return (await this.viewContract.methods.auctionEndTime().call()) as number;
   };

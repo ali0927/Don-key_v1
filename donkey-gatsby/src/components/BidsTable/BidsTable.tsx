@@ -13,26 +13,6 @@ import { revokeBidThunk } from "store/actions";
 import { selectAuction, selectCurrentAuction } from "store/selectors";
 import { createFindLendedLp } from "store/selectors/findLendedLp";
 
-// const FindAuction = ({
-//   address,
-//   children,
-// }: {
-//   address: string;
-//   children: (arg: { auction: IAuction }) => React.ReactElement;
-// }) => {
-//   const selectAuction = useMemo(() => {
-//     return createSelectAuction();
-//   }, []);
-
-//   const auction = useSelector((state: IStoreState) =>
-//     selectAuction(state, address)
-//   );
-
-//   if (auction) {
-//     return children({ auction });
-//   }
-//   return null;
-// };
 
 const ClaimButton = ({
   lpAddress,

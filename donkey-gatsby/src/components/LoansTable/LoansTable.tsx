@@ -67,7 +67,7 @@ export const LoansTable = () => {
             )}
             {loans.data.map((item, index) => {
               return (
-                <TableRow>
+                <TableRow key={item.lpAddress}>
                   <td>{index + 1}</td>
                   <td data-title="last day to pay" className="timer">
                     <CountDown date={item.settlementTime} />

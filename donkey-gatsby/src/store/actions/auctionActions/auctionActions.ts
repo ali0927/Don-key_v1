@@ -286,6 +286,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
         borrowedAmount: "0",
         commission: "0",
         commissionPercent: "0",
+        estimatedBorrowAmount: "0",
         lendedAmount: "0",
         lpAddress: "",
         participationTime: "0",
@@ -303,6 +304,7 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
       bid.borrowedAmount = isOneOf(bid.status, ["claimed", "won"])
         ? toEther(info.borrowedAmount)
         : toEther(info.estimatedBorrowedAmount);
+      bid.estimatedBorrowAmount = toEther(info.estimatedBorrowedAmount);
       const commissionBn = new BigNumber(info.commissionInPer).dividedBy(100);
       bid.commission = commissionBn
         .dividedBy(100)
@@ -366,11 +368,13 @@ export const claimLoanThunk =
     web3,
     auctionAddress,
     userAddress,
+    hasExcessLended,
     onDone,
     onError,
   }: {
     web3: Web3;
     auctionAddress: string;
+    hasExcessLended: boolean;
     userAddress: string;
     onDone?: () => void;
     onError?: () => void;
@@ -383,6 +387,9 @@ export const claimLoanThunk =
       );
       if (!auctionContract.connectedToWallet) {
         await auctionContract.connectToWallet(web3);
+      }
+      if(hasExcessLended){
+        await auctionContract.releaseExcessLended({userAddress});
       }
       await auctionContract.borrow({ userAddress });
       const { bids, loans } = await fetchBidsAndLoans(getState(), userAddress);
