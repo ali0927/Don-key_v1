@@ -693,7 +693,7 @@ export const MakeABidForm = () => {
       <div
         className={clsx({
           blurred:
-            ((!currentAuction && !nextAuction) ||
+            ((!currentAuction && nextAuction) ||
               !connected ||
               (chainId !== BSC_TESTNET_CHAIN_ID && connected)) &&
             !isPilotOver,
