@@ -5,6 +5,7 @@ import { IStoreState } from "interfaces";
 import moment from "moment";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
+import { BsPinAngle } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
 import { claimLoanThunk } from "store/actions";
 import { bidSelector, findLendedLp } from "store/selectors";
@@ -175,7 +176,7 @@ export const ClaimPopup = ({
             <LoanInfoTitle> Excess Amount</LoanInfoTitle>
             <div>{excessLended.toFixed(3)} LP</div>
           </LoanInfoRow>
-          <div>When Claiming you will be release excess amount from lock</div>
+          <div><BsPinAngle/> When Claiming you will be release excess amount from lock</div>
         </div>
       )}
       <div className="d-flex my-4">

@@ -23,6 +23,7 @@ import {
   IStoreState,
   ISupportedLP,
 } from "interfaces";
+import moment from "moment";
 import Moralis from "moralis/types";
 import { selectAuction } from "store/selectors";
 import { strapi } from "strapi";
@@ -96,6 +97,7 @@ export const fetchAuctionsThunk =
     const promises = AuctionContracts.map(async (contract) => {
       const auctionState: IAuction = {
         address: contract.address,
+        overDuePenalty: "",
         loanTokenAddress: "",
         endTime: 0,
         initialized: false,
@@ -121,11 +123,13 @@ export const fetchAuctionsThunk =
           auctionState.startTime,
           auctionState.tenure,
           auctionState.loanTokenAddress,
+          auctionState.overDuePenalty,
         ] = await Promise.all([
           contract.getauctionEndTime(),
           contract.getauctionStartTime(),
           contract.getLoanTenure(),
           contract.getLoanTokenAddress(),
+          contract.getOverduePenalty(),
         ]);
 
         auctionState.maxDebtMap = contract.getMaxDebtMap();
@@ -325,12 +329,19 @@ const fetchBidsAndLoans = async (state: IStoreState, userAddress: string) => {
         const repaymentAmount = await auctionContract.estimatedRepaymentAmount({
           userAddress,
         });
+        const penalty = moment().isAfter(moment.unix(info.settlementTime))
+          ? new BigNumber(item.overDuePenalty)
+              .div(10000)
+              .multipliedBy(toEther(info.borrowedAmount))
+              .toFixed(3)
+          : undefined;
 
         const loan: ILoan = {
           borrowedAmount: toEther(info.borrowedAmount),
           commission: toEther(info.commissionAmount),
           commissionPercent: commissionBn.toFixed(2),
           lendedAmount: toEther(info.lendedAmount),
+          penalty,
           auctionAddress: bid.auctionAddress,
           lpAddress: info.lptoken,
           status: getLoanStatus(info.loanSettled, forceRecovery),
@@ -388,8 +399,8 @@ export const claimLoanThunk =
       if (!auctionContract.connectedToWallet) {
         await auctionContract.connectToWallet(web3);
       }
-      if(hasExcessLended){
-        await auctionContract.releaseExcessLended({userAddress});
+      if (hasExcessLended) {
+        await auctionContract.releaseExcessLended({ userAddress });
       }
       await auctionContract.borrow({ userAddress });
       const { bids, loans } = await fetchBidsAndLoans(getState(), userAddress);

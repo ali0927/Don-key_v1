@@ -141,9 +141,12 @@ class AuctionContract {
   };
 
   getLoanTokenAddress = async () => {
-    console.log(this.address);
+    // console.log(this.address);
     return (await this.viewContract.methods.loanToken().call()) as string;
   };
+  getOverduePenalty = async () => {
+    return (await this.viewContract.methods.overduePenalty().call()) as string;
+  }
 
   getLoanToken = async (web3: Web3) => {
     return await getERCContract(web3, await this.getLoanTokenAddress());

@@ -2,13 +2,13 @@ import BigNumber from "bignumber.js";
 import { DonCommonmodal } from "components/DonModal";
 import { BSC_TESTNET_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
 import { formatNum, getERCContract, toEther } from "helpers";
-import { useEffectOnTabFocus, useTimer } from "hooks";
+import { useEffectOnTabFocus, useIsomorphicEffect, useTimer } from "hooks";
 import { ILoan, IStoreState } from "interfaces";
 import memoizeOne from "memoize-one";
 import React, { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { payLoanThunk } from "store/actions";
+import { fetchBidsAndLoansThunk, payLoanThunk } from "store/actions";
 import { findLendedLp, selectAuction } from "store/selectors";
 import styled, { css } from "styled-components";
 
@@ -129,7 +129,7 @@ export const PayPopup = ({
   open: boolean;
   onClose: () => void;
 }) => {
-  const { hrs, days, mins } = useTimer(loan.settlementTime);
+  const { hrs, days, mins, hasEnded } = useTimer(loan.settlementTime);
   const lpToken = useSelector(lpSelector(loan.lpAddress, loan.auctionAddress));
   const auction = useSelector((state: IStoreState) =>
     selectAuction(state.auctions.auctionInfo, loan.auctionAddress)
@@ -157,6 +157,12 @@ export const PayPopup = ({
   useEffectOnTabFocus(() => {
     fetchBalance();
   }, [address]);
+
+  useIsomorphicEffect(() => {
+    if (hasEnded && address && !loan.penalty) {
+      dispatch(fetchBidsAndLoansThunk(address));
+    }
+  }, [hasEnded, address]);
 
   const claimLoan = async () => {
     setIsLoading(true);
@@ -242,6 +248,14 @@ export const PayPopup = ({
             {formatNum(loan.commission)} {lpToken?.symbol}
           </span>
         </div>
+        {loan.penalty && (
+          <div className="d-flex mb-2 align-items-center justify-content-between">
+            <span style={{ fontWeight: 300 }}>Penalty </span>
+            <span style={{ fontWeight: 500 }}>
+              {formatNum(loan.penalty)} {lpToken?.symbol}
+            </span>
+          </div>
+        )}
       </div>
       <hr />
       <div

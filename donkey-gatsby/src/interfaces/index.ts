@@ -179,6 +179,7 @@ export type IAuction = {
   initialized: boolean;
   tenure: number;
   loanTokenAddress: string;
+  overDuePenalty: string;
   maxDebtMap: {
     [TierNumber: number]: string;
   };
@@ -203,6 +204,7 @@ export type ILoan = {
   commission: string;
   commissionPercent: string;
   totalAmountTobePaid: string;
+  penalty?: string;
   settlementTime: number;
 };
 
