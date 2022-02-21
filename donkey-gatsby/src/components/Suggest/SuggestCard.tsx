@@ -244,9 +244,6 @@ export const SuggestCard: React.FC<{
     } finally {
       setShowVoteModal(false);
     }
-    const res_vote = await vote(props.suggestion.id);
-    setShowVoteModal(false);
-    return res_vote;
   };
 
   const handleCardClick = () => {

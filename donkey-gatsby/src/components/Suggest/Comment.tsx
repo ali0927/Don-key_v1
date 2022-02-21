@@ -89,8 +89,9 @@ export const Comment: React.FC<{
   const { holdingDons, refetch } = useStakingContract();
   const [replyContent, setReplyContent] = useState("");
   const { showFailure, showSuccess, showProgress } = useTransactionNotification();
-  const { reply } = useSuggestionApi();
+  const { reply, like } = useSuggestionApi();
   const [isCreating, setIsCreating] = useState(false);
+  const [liked, setLiked] = useState(false);
 
   useEffectOnTabFocus(() => {
     (async () => {
@@ -116,6 +117,22 @@ export const Comment: React.FC<{
     }
     setShowReplyModal(true);
   };
+
+  const handleLikeClick = async (e: React.MouseEvent) => {
+    if (!isLoggedIn) {
+      return setShowConnectWalletPopup(true);
+    }
+    if (liked) return;
+    try {
+      showProgress("Adding Like");
+      const res_like = await like(comment.id);
+      showSuccess("Your Like was Added");
+      setLiked(true);
+      return res_like;
+    } catch (e) {
+      showFailure("Failed to Like");
+    }
+  }
 
   const handleSignIn = async () => {
     try {
@@ -170,12 +187,14 @@ export const Comment: React.FC<{
         </div>
         <div style={{display:'flex', alignItems:'center', margin:'10px 0'}}>
           <Like>
-            <BsFillCaretUpFill style={{marginRight: '10px'}}/>
-            <span>{`${comment?.likes.length} Likes`}</span>
+            <BsFillCaretUpFill style={{marginRight: '5px'}}/>
+            <ReplyButton onClick={handleLikeClick} style={{marginLeft:'0px'}}>
+              {`${comment?.likes.length + (liked ? 1: 0)} Likes`}
+            </ReplyButton>
           </Like>
           <ReplyButton onClick={handleReplyClick}>Reply</ReplyButton>
         </div>
-        {comment.replies.map((reply: any) => 
+        {comment?.replies.map((reply: any) => 
           <CommentReply>
             <div style={{display:'flex', alignItems:'center'}}>
               <UserIcon color="#000" fill="yellow" width="15" height="15"/>

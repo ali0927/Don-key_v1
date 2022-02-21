@@ -219,7 +219,7 @@ export type IStrapiToken = {
 };
 
 export type IStrapiSuggestion = {
-  id: number;
+  id: string;
   title: string;
   description: string;
   nickName: string;

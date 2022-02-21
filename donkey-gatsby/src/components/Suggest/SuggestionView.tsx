@@ -327,9 +327,9 @@ export const SuggestionView = ({ id }: { id: number }) => {
           >{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
         
-        <CommentEdit />
+        <CommentEdit suggestionId={suggestion?.id} />
         {suggestion?.comments.map((comment: any) =>
-          <Comment comment={comment}/>
+          <Comment comment={comment} />
         )}
         
       </div>
