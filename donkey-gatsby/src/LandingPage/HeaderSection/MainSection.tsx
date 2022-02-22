@@ -254,7 +254,7 @@ export const MainSection: React.FC = () => {
               </Text> */}
                 <Heading>Lending layer pilot</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
-                Collateralize your yield bearing assets and leverage your power
+                Collateralize yield bearing assets and leverage your power
               </Text>
               <MainSectionTimer />
             
