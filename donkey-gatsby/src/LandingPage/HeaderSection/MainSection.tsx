@@ -252,11 +252,12 @@ export const MainSection: React.FC = () => {
               <Text fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>
                 Copy Professionally Designed Yield Farming Strategies
               </Text> */}
-              <MainSectionTimer />
-              <Heading>Lending layer pilot</Heading>
+                <Heading>Lending layer pilot</Heading>
               <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
                 Collateralize your yield bearing assets and leverage your power
               </Text>
+              <MainSectionTimer />
+            
 
               <div className="d-flex flex-wrap">
                 <LaunchButton className="mt-3 mr-3 " />
