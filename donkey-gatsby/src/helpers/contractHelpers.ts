@@ -699,11 +699,7 @@ export const getDonPriceWeb3 = async (web3: Web3) => {
   return toEther(priceofToken);
 };
 
-export const getDonPrice = async (isBSC = false) => {
-  if (isBSC) {
-    return getDonPriceWeb3(getWeb3(56));
-  }
-
+export const getDonPrice = async () => {
   const res = await axios.post(
     `https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2`,
     {
@@ -774,9 +770,7 @@ export const calculateAPY = async (web3: Web3, type: StakeType) => {
   let totalStakedTokens = new BigNumber(
     toEther(await stakingContract.methods.totalSupply().call())
   );
-  const donPrice = await getDonPrice(
-    type === "binance" || type === "binancenew"
-  );
+  const donPrice = await getDonPrice();
   const rewardRate = toEther(await stakingContract.methods.rewardRate().call());
   const totalLPSupply = toEther(await lpContract.methods.totalSupply().call());
   const totalLPAmount = await gettotalSWAPLPoolValue(web3, type);
