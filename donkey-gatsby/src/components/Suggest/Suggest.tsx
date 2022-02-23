@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useCallback } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
@@ -9,8 +9,11 @@ import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
 import { useStaticQuery, graphql } from "gatsby";
 import { DonCommonmodal } from "components/DonModal";
-import { useSuggestionApi, useSignin } from "hooks";
+import { useSignin } from "hooks";
 import { gql, useQuery } from "@apollo/client";
+import { useWeb3Context } from "don-components";
+import { useDispatch } from "react-redux";
+import { setAuthToken } from "store/actions";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -280,16 +283,35 @@ const ALL_SUGGESTION_QUERY = gql`
 `;
 
 export const Suggest = () => {
-  const { fetchList } = useSuggestionApi();
+  const { connected, address } = useWeb3Context();
+  const { checkToken } = useSignin();
   const [show, setShow] = useState(false);
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
   const [viewMore, setViewMore] = useState(false);
   const { data: suggestionsData } = useQuery(ALL_SUGGESTION_QUERY);
+  const dispatch = useDispatch();
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
     setShow(false);
   };
+
+  useEffect(() => {
+    checkLocalToken();
+  }, [connected, address])
+
+  const checkLocalToken = async () => {
+    const localToken = localStorage.getItem('token');
+    if (localToken && connected) {
+      const res = await checkToken(localToken, address);
+      if (res.address) {
+        dispatch(setAuthToken(localToken));
+      }
+      else {
+        localStorage.setItem('token', '');
+      }
+    }
+  }
 
   const filterList = useMemo(() => {
     if (suggestionsData) {

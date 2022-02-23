@@ -32,6 +32,7 @@ export const useSignin = () => {
       });
 
       dispatch(setAuthToken(resp.data.token));
+      localStorage.setItem('token', resp.data.token);
       showSuccess("Successfully Signed In");
       return resp.data;
     } catch (e) {
@@ -39,7 +40,18 @@ export const useSignin = () => {
     }
   };
 
+  const checkToken = async (token: string, address: string) => {
+    const resp = await strapi.post(`/customers/checkToken`, {
+      address
+    },
+    {
+      headers: { 'access-token': token }
+    })
+    return resp.data;
+  }
+
   return {
     signin,
+    checkToken
   };
 };
