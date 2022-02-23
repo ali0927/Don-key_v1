@@ -153,6 +153,7 @@ export const TextArea = styled.textarea`
 `;
 
 const STATUS_MAP = {
+  unverified: { color: "#33cc33", backColor: "#ccffcc", text: "Unverified" },
   new: { color: "#33cc33", backColor: "#ccffcc", text: "New" },
   old: { color: "#0066ff", backColor: "#ccffcc", text: "Old" },
   approved: { color: "#660033", backColor: "#ccffcc", text: "Approved" },

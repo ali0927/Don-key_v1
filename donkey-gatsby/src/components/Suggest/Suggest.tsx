@@ -182,7 +182,7 @@ const SuggestStatus = {
   all: "all",
   new: "new",
   old: "old",
-  approved: "approved",
+  approved: "approved"  
 };
 
 const ConfirmButton = styled.button`
@@ -282,35 +282,24 @@ const ALL_SUGGESTION_QUERY = gql`
 export const Suggest = () => {
   const { fetchList } = useSuggestionApi();
   const [show, setShow] = useState(false);
-  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.new);
+  const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
   const [viewMore, setViewMore] = useState(false);
   const { data: suggestionsData } = useQuery(ALL_SUGGESTION_QUERY);
-
-  // const [suggestions, setSuggestions] = useState([]);
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
     setShow(false);
   };
 
-  // useEffect(() => {
-  //   onLoad();
-  // })
-
-  // const onLoad = async () => {
-  //   const suggestionList = await fetchList();
-  //   setSuggestions(suggestionList);
-  // }
-
   const filterList = useMemo(() => {
     if (suggestionsData) {
       let _list = suggestionsData.suggestions;
-      if (strategyFilter !== SuggestStatus.all) {
+      if (strategyFilter != SuggestStatus.all) {
         _list = suggestionsData.suggestions.filter(
           (item: any) => item.status === strategyFilter
         );
-        _list = viewMore ? _list : _list.slice(0, 3);
       }
+      _list = viewMore ? _list : _list.slice(0, 3);
       return _list;
     }
     return [];
