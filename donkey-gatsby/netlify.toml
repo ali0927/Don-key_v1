@@ -25,6 +25,18 @@
   GATSBY_LP_STAKING_ETH_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpeth"
   GATSBY_LP_STAKING_BSC_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpbsc"
   GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
+[context."feature/auction-page".environment]
+  GATSBY_STRAPI_URL = "https://dev-cms.don-key.finance"
+  GATSBY_STAKING_CONTRACT = "0x99937edFdcDbfbB9ACeDb8e165494B81E38EBeCF"
+  GATSBY_API_URL = "https://dev-api.don-key.finance"
+  GATSBY_APP_ENV = "development"
+  GATSBY_SHOW_ADMIN = "false"
+  GATSBY_SHARE_URL = "https://don-key.finance/share"
+  GATSBY_REFERRAL_CONTRACT = "0x6482d0b6ec29eEf62289e829c7942Ad6E491d221"
+  GATSBY_REFERRAL_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/referral-system"
+  GATSBY_LP_STAKING_ETH_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpeth"
+  GATSBY_LP_STAKING_BSC_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donlpbsc"
+  GATSBY_DON_STAKING_SUBGRAPH = "https://api.thegraph.com/subgraphs/name/adeee11/donstaking"
 [context."feature/*".environment]
   GATSBY_STRAPI_URL = "https://cms.don-key.finance"
   GATSBY_STAKING_CONTRACT = "0x659F10DdD8d2d445ce51784d0695d36b965D4c04"
