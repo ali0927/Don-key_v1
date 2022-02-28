@@ -289,6 +289,7 @@ export const Suggest = () => {
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
   const [viewMore, setViewMore] = useState(false);
   const { data: suggestionsData } = useQuery(ALL_SUGGESTION_QUERY);
+  const [suggestions, setSuggestions] = useState(suggestionsData?.suggestions);
   const dispatch = useDispatch();
 
   const handleNameChange = (value: string) => {
@@ -300,7 +301,12 @@ export const Suggest = () => {
     if (connected && address) {
       checkLocalToken();
     }
+
   }, [connected, address]);
+
+  useEffect(() => {
+    setSuggestions(suggestionsData?.suggestions);
+  }, [suggestionsData]);
 
   const checkLocalToken = async () => {
     const localToken = localStorage.getItem("token");
@@ -319,10 +325,10 @@ export const Suggest = () => {
   };
 
   const filterList = useMemo(() => {
-    if (suggestionsData) {
-      let _list = suggestionsData.suggestions;
+    if (suggestions) {
+      let _list = suggestions;
       if (strategyFilter != SuggestStatus.all) {
-        _list = suggestionsData.suggestions.filter(
+        _list = suggestions.filter(
           (item: any) => item.status === strategyFilter
         );
       }
@@ -330,7 +336,11 @@ export const Suggest = () => {
       return _list;
     }
     return [];
-  }, [suggestionsData, viewMore, strategyFilter]);
+  }, [suggestions, viewMore, strategyFilter]);
+
+  const addSuggestion = (suggestion: any) => {
+    setSuggestions([...suggestions, suggestion]);
+  }
 
   const DropDownMenu = () => {
     return (
@@ -412,7 +422,7 @@ export const Suggest = () => {
         </>
       )}
       {filterList.length > 0 &&
-        suggestionsData.suggestions.length > filterList.length && (
+        suggestions.length > filterList.length && (
           <div className="row justify-content-center mb-4">
             <div className="col-sm-12 col-md-4">
               <MoreButton onClick={() => setViewMore(true)}>
@@ -435,7 +445,7 @@ export const Suggest = () => {
           <DonkeyScope />
         </div>
         <div className="col-lg-6">
-          <SuggestRequestForm />
+          <SuggestRequestForm addSuggestion={addSuggestion} />
         </div>
       </div>
     </div>

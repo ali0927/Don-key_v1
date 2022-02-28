@@ -67,11 +67,11 @@ const SigninButton = styled.button`
   }
 `;
 
-export const CommentEdit: React.FC<{
-  suggestionId: string;
-  refetchData: () => Promise<void>;
-}> = ({ suggestionId, refetchData }) => {
-  const [commentContent, setCommentContent] = useState("");
+export const CommentEdit: React.FC<{ 
+  suggestionId: string
+  addComment(comment: any): void
+}> = ({ suggestionId, addComment }) => {
+  const [commentContent, setCommentContent] = useState('')
   const handleCommentChange = (e: any) => {
     setCommentContent(e.target.value);
   };
@@ -102,6 +102,7 @@ export const CommentEdit: React.FC<{
   const isLoggedIn = connected && auth.token;
   const [showConnectWalletPopup, setShowConnectWalletPopup] = useState(false);
   const [showSignInPopup, setShowSignInPopup] = useState(false);
+  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   const handleSignIn = async () => {
     try {
@@ -130,18 +131,17 @@ export const CommentEdit: React.FC<{
     try {
       showProgress("Posting Comment");
       const res_comment = await comment(suggestionId, commentContent);
-      await refetchData();
+      // await refetchData();
       showSuccess("Comment Posted");
-
+      addComment(res_comment);
       return res_comment;
     } catch (e) {
       showFailure("Failed to Comment");
     } finally {
-      // window.location.reload();
+      setCommentContent('');
     }
   };
 
-  const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   return (
     <>

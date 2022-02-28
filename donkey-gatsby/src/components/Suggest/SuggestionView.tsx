@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { UserIcon } from "components/Icons";
 import {
@@ -14,10 +14,7 @@ import { CommentEdit } from "components/Suggest/CommentEdit";
 import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
 import styled from "styled-components";
-import { navigate } from "gatsby";
 import { DonGatsbyLink } from "components/DonGatsbyLink";
-import { useSuggestionApi } from "hooks";
-import { IStrapiSuggestion } from "interfaces";
 import { gql, useQuery } from "@apollo/client";
 
 const SuggestionBox = styled.div`
@@ -197,18 +194,23 @@ const SUGGESTION_QUERY = gql`
 
 export const SuggestionView = ({ id }: { id: number }) => {
   const [showRiskDetail, setShowRiskDetail] = useState(false);
-  const { data: suggestionsData, refetch } = useQuery(SUGGESTION_QUERY, {
+  const { data: suggestionsData } = useQuery(SUGGESTION_QUERY, {
     variables: {
       id,
     },
   });
+  const [suggestion, setSuggestion] = useState(suggestionsData?.suggestions[0]);
 
-  const suggestion = useMemo(() => {
-    if (suggestionsData) {
-      return suggestionsData.suggestions[0];
-    }
-    return null;
+  useEffect(() => {
+    setSuggestion(suggestionsData?.suggestions[0]);
   }, [suggestionsData, id]);
+
+  const addComment = (comment: any) => {
+    setSuggestion({
+      ...suggestion,
+      comments: [...suggestion.comments, comment],
+    });
+  };
 
   return (
     <div style={{ background: "#F5F5F5" }}>
@@ -314,12 +316,7 @@ export const SuggestionView = ({ id }: { id: number }) => {
           >{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
 
-        <CommentEdit
-          suggestionId={suggestion?.id}
-          refetchData={async () => {
-            await refetch({ id: suggestion!.id });
-          }}
-        />
+        <CommentEdit suggestionId={suggestion?.id} addComment={addComment} />
         {suggestion?.comments.map((comment: any) => (
           <Comment comment={comment} />
         ))}

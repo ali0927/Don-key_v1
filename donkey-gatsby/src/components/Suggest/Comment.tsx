@@ -75,13 +75,14 @@ export const Comment: React.FC<{
   comment: {
     id: string
     content: string
-    likes: []
+    likes: any[]
     created_at: string
     customer: any
-    replies: []
+    replies: any[]
   } 
-}> = ({ comment }) => {
+}> = ( props ) => {
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [comment, setComment] = useState(props.comment);
   const [hasCheckedDons, setHasChecked] = useState(false);
   const { connected, address } = useWeb3Context();
   const { signin } = useSignin();
@@ -91,7 +92,6 @@ export const Comment: React.FC<{
   const { showFailure, showSuccess, showProgress } = useTransactionNotification();
   const { reply, like } = useSuggestionApi();
   const [isCreating, setIsCreating] = useState(false);
-  const [liked, setLiked] = useState(false);
 
   useEffectOnTabFocus(() => {
     (async () => {
@@ -122,12 +122,16 @@ export const Comment: React.FC<{
     if (!isLoggedIn) {
       return setShowConnectWalletPopup(true);
     }
-    if (liked) return;
+    const idx = comment.likes.findIndex((item: any) => item.address === address);
+    if (address && idx !== -1) {
+      showFailure("Your Like was already Added");
+      return;
+    }
     try {
       showProgress("Adding Like");
       const res_like = await like(comment.id);
       showSuccess("Your Like was Added");
-      setLiked(true);
+      setComment(res_like);
       return res_like;
     } catch (e) {
       showFailure("Failed to Like");
@@ -160,14 +164,14 @@ export const Comment: React.FC<{
     // setShowVoteModal(false);
     try {
       showProgress("Posting Reply");
-      const res_comment = await reply(comment?.id, replyContent);
+      const res_reply = await reply(comment?.id, replyContent);
       showSuccess("Reply Posted");
-      return res_comment;
+      setComment({...comment, replies: [...comment.replies, res_reply]})
+      return res_reply;
     } catch (e) {
       showFailure("Failed to Reply");
     } finally {
       setShowReplyModal(false);
-      window.location.reload();
     }
   };
 
@@ -189,7 +193,7 @@ export const Comment: React.FC<{
           <Like>
             <BsFillCaretUpFill style={{marginRight: '5px'}}/>
             <ReplyButton onClick={handleLikeClick} style={{marginLeft:'0px'}}>
-              {`${comment?.likes.length + (liked ? 1: 0)} Likes`}
+              {`${comment?.likes.length} Likes`}
             </ReplyButton>
           </Like>
           <ReplyButton onClick={handleReplyClick}>Reply</ReplyButton>
