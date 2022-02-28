@@ -93,7 +93,7 @@ export const BrightSdkProvider: React.FC = (props) => {
     try {
       const covers: IBrightUnion["activeCovers"] =
         await getBrightClient().getAllCovers();
-      console.log("Refetched", covers);
+    
       setState((old) => ({ ...old, activeCovers: filterCovers(covers) }));
     } catch (e) {
       console.log(e, "Error In Fetching");

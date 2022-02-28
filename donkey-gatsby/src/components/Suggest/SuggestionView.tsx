@@ -4,8 +4,6 @@ import { UserIcon } from "components/Icons";
 import {
   BsCircleFill,
   BsFillChatRightDotsFill,
-  BsArrowLeftSquare,
-  BsArrowRightSquare,
 } from "react-icons/bs";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
@@ -15,7 +13,7 @@ import { DonCommonmodal } from "components/DonModal";
 import YellowBack from "images/yellow_background.png";
 import styled from "styled-components";
 import { DonGatsbyLink } from "components/DonGatsbyLink";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useLazyQuery } from "@apollo/client";
 
 const SuggestionBox = styled.div`
   background: #fff;
@@ -35,14 +33,7 @@ const SuggestionTitle = styled.label`
     font-size: 1.2rem;
   }
 `;
-const SuggestionCategory = styled.label`
-  background: #f5f5f5;
-  padding: 10px;
-  border-radius: 5px;
-  width: fit-content;
-  font-size: 0.8rem;
-  margin-bottom: 20px;
-`;
+
 const BackImage = styled.div`
   position: relative;
   width: 100%;
@@ -102,28 +93,28 @@ const SuggestionPath = styled.div`
     display: none;
   }
 `;
-const SuggetionNextButton = styled(BsArrowRightSquare)`
-  cursor: pointer;
-  margin: 10px;
-  width: 25px;
-  height: 25px;
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
-  @media (max-width: 600px) {
-    display: none;
-  }
-`;
-const SuggetionPrevButton = styled(BsArrowLeftSquare)`
-  cursor: pointer;
-  margin: 10px;
-  width: 25px;
-  height: 25px;
-  visibility: ${(props: { visible: boolean }) =>
-    props.visible ? "visible" : "hidden"};
-  @media (max-width: 600px) {
-    display: none;
-  }
-`;
+// const SuggetionNextButton = styled(BsArrowRightSquare)`
+//   cursor: pointer;
+//   margin: 10px;
+//   width: 25px;
+//   height: 25px;
+//   visibility: ${(props: { visible: boolean }) =>
+//     props.visible ? "visible" : "hidden"};
+//   @media (max-width: 600px) {
+//     display: none;
+//   }
+// `;
+// const SuggetionPrevButton = styled(BsArrowLeftSquare)`
+//   cursor: pointer;
+//   margin: 10px;
+//   width: 25px;
+//   height: 25px;
+//   visibility: ${(props: { visible: boolean }) =>
+//     props.visible ? "visible" : "hidden"};
+//   @media (max-width: 600px) {
+//     display: none;
+//   }
+// `;
 const RiskDescriptionButton = styled.button`
   background: none;
   border: none;
@@ -192,14 +183,22 @@ const SUGGESTION_QUERY = gql`
   }
 `;
 
-export const SuggestionView = ({ id }: { id: number }) => {
+
+export const SuggestionView = ({ id }: any) => {
+  // console.log(path, args);
   const [showRiskDetail, setShowRiskDetail] = useState(false);
-  const { data: suggestionsData } = useQuery(SUGGESTION_QUERY, {
-    variables: {
-      id,
-    },
-  });
+  const [fetchData, { data: suggestionsData }] = useLazyQuery(SUGGESTION_QUERY);
   const [suggestion, setSuggestion] = useState(suggestionsData?.suggestions[0]);
+
+  useEffect(() => {
+    if (id) {
+      fetchData({
+        variables: {
+          id,
+        },
+      });
+    }
+  }, [id]);
 
   useEffect(() => {
     setSuggestion(suggestionsData?.suggestions[0]);
@@ -245,13 +244,13 @@ export const SuggestionView = ({ id }: { id: number }) => {
             >
               <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
               <label style={{ color: "lightgrey" }}>
-                {suggestion?.created_at.slice(0, 10)}
+                {(suggestion?.created_at || '').slice(0, 10)}
               </label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
                 <span style={{ fontSize: "0.8rem" }}>Votes</span>
-                <span>{suggestion?.votes.length}</span>
+                <span>{suggestion?.votes.length || '-'}</span>
               </SuggestVotes>
             </div>
           </div>
@@ -270,22 +269,22 @@ export const SuggestionView = ({ id }: { id: number }) => {
               <SuggestionInfo>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <UserIcon color="#000" fill="yellow" width="25" height="25" />
-                  <SuggestionUser>{suggestion?.nickName}</SuggestionUser>
+                  <SuggestionUser>{suggestion?.nickName || '-'}</SuggestionUser>
                 </div>
                 <div className="row">
                   <div className="col-6 col-md-12">
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
-                      <SuggestionUser>{suggestion?.status}</SuggestionUser>
+                      <SuggestionUser>{suggestion?.status || '-'}</SuggestionUser>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
-                      <SuggestionUser>{`${suggestion?.comments.length} comments`}</SuggestionUser>
+                      <SuggestionUser>{`${suggestion?.comments.length || '-'} comments`}</SuggestionUser>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
                       <SuggestionUser>
-                        {`${suggestion?.apy}%`}
+                        {`${suggestion?.apy || '-'}%`}
                         <span style={{ color: "lightgrey", marginLeft: "4px" }}>
                           APY
                         </span>
@@ -313,7 +312,7 @@ export const SuggestionView = ({ id }: { id: number }) => {
           <BsFillChatRightDotsFill />
           <span
             style={{ marginLeft: "15px" }}
-          >{`Comments (${suggestion?.comments.length})`}</span>
+          >{`Comments (${suggestion?.comments.length || ''})`}</span>
         </SuggetionCommentRow>
 
         <CommentEdit suggestionId={suggestion?.id} addComment={addComment} />
@@ -348,4 +347,9 @@ export const SuggestionView = ({ id }: { id: number }) => {
       </DonCommonmodal>
     </div>
   );
+};
+
+export const EmptySuggestion: React.FC<{path: string}> = ( ) => {
+
+  return <SuggestionView />
 };
