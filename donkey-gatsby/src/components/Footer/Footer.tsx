@@ -33,7 +33,7 @@ export const Footer = () => {
           <div className="col-8 d-flex justify-content-end align-items-end">
             <Paragraph className="text-white">
               {" "}
-              All Rights Reserved 2021
+              All Rights Reserved 2022
             </Paragraph>
           </div>
         </div>
@@ -111,7 +111,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="col-lg-2" style={{ textAlign: "center" }}>
-            <p className="text-white"> All Rights Reserved 2021</p>
+            <p className="text-white"> All Rights Reserved 2022</p>
           </div>
         </div>
         {mobileFooter()}
