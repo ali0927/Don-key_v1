@@ -170,7 +170,7 @@ const StakingQues = [
     ans: (
       <>
         Rewards are determined by 5 DON tiers, outlined below. The higher your
-        tier, the more additional APY in DON you can earn, up to an extra 100%
+        tier, the more additional APY in DON you can earn, up to an extra 40%
         APY!
         <div className="mt-3">
           <StaticImage
@@ -187,7 +187,7 @@ const StakingQues = [
   },
   {
     ques: "How are DON staking rewards calculated?",
-    ans: "Depending on your tier, the percent DON APY you accumulate is pegged to the dollar, so that within a year the quantity of rewards mirrors the percent promised by your tier. This means that while the dollar value of your DON always increases, the qunaitity of DON fluctuates according to price.",
+    ans: "Depending on your tier, the percent DON APY you accumulate is pegged to the dollar, so that within a year the quantity of rewards mirrors the percent promised by your tier. This means that while the dollar value of your DON always increases, the quantity of DON fluctuates according to price.",
 
     num: 3,
   },
