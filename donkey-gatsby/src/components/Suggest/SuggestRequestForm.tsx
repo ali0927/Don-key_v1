@@ -112,7 +112,7 @@ const INITIAL_STATE = {
   telegram: "",
   address: "",
   network: 1,
-  apy: 10,
+  apy: undefined as number | undefined,
   riskword: "",
   risk: 0,
 };
@@ -357,7 +357,9 @@ const renderRiskLevelSelector = (risks: any, riskLevel: number) => {
       }}
     >
       <RiskLevelSelectorIcon color={color} />
-      <label style={{textAlign: 'center', fontSize: '0.75rem'}}>{risk.Title}</label> 
+      <label style={{ textAlign: "center", fontSize: "0.75rem" }}>
+        {risk.Title}
+      </label>
     </div>
   );
 };
@@ -396,8 +398,8 @@ const validate = (state: typeof INITIAL_STATE) => {
   return { isValid: true, message: null };
 };
 
-export const SuggestRequestForm: React.FC<{ 
-  addSuggestion(suggestion: any): void
+export const SuggestRequestForm: React.FC<{
+  addSuggestion(suggestion: any): void;
 }> = ({ addSuggestion }) => {
   const { createSuggestion } = useSuggestionApi();
   const { risks, networks } = useRiskAndNetworkList();
@@ -438,8 +440,8 @@ export const SuggestRequestForm: React.FC<{
     setIsCreating(true);
     try {
       const res_suggestion = await createSuggestion(_suggestion);
-      addSuggestion(res_suggestion);
-      setFormState(INITIAL_STATE);
+      // addSuggestion(res_suggestion);
+      // setFormState(INITIAL_STATE);
       showSuccess("Suggestion was Published");
     } catch (e) {
       console.log(e);
@@ -519,17 +521,17 @@ export const SuggestRequestForm: React.FC<{
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
   const renderSubmitButton = () => {
-    if (!hasCheckedDons) {
+    // if (!hasCheckedDons) {
+    //   return (
+    //     <SuggestRequestButton disabled>Submit Suggestion</SuggestRequestButton>
+    //   );
+    // }
+    if (!hasDons) {
       return (
         <SuggestRequestButton disabled>
-          Submit Suggestion
+          You need at Least 100 DON in Order Submit Suggestion
         </SuggestRequestButton>
       );
-    }
-    if(!hasDons){
-      return <SuggestRequestButton disabled>
-        You need at Least 100 DON in Order Submit Suggestion
-      </SuggestRequestButton>
     }
 
     if (!connected || !auth.token) {

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ShowMoreContent } from "components/ShowmoreContent";
 import { UserIcon } from "components/Icons";
-import {
-  BsCircleFill,
-  BsFillChatRightDotsFill,
-} from "react-icons/bs";
+import { BsCircleFill, BsFillChatRightDotsFill } from "react-icons/bs";
 import { NavBar } from "components/Navbar";
 import { Footer } from "components/Footer";
 import { Comment } from "components/Suggest/Comment";
@@ -183,7 +180,6 @@ const SUGGESTION_QUERY = gql`
   }
 `;
 
-
 export const SuggestionView = ({ id }: any) => {
   // console.log(path, args);
   const [showRiskDetail, setShowRiskDetail] = useState(false);
@@ -201,6 +197,7 @@ export const SuggestionView = ({ id }: any) => {
   }, [id]);
 
   useEffect(() => {
+    console.log(suggestionsData, "unfo");
     setSuggestion(suggestionsData?.suggestions[0]);
   }, [suggestionsData, id]);
 
@@ -244,13 +241,13 @@ export const SuggestionView = ({ id }: any) => {
             >
               <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
               <label style={{ color: "lightgrey" }}>
-                {(suggestion?.created_at || '').slice(0, 10)}
+                {(suggestion?.created_at || "").slice(0, 10)}
               </label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
                 <span style={{ fontSize: "0.8rem" }}>Votes</span>
-                <span>{suggestion?.votes.length || '-'}</span>
+                <span>{suggestion?.votes.length || "-"}</span>
               </SuggestVotes>
             </div>
           </div>
@@ -269,22 +266,26 @@ export const SuggestionView = ({ id }: any) => {
               <SuggestionInfo>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <UserIcon color="#000" fill="yellow" width="25" height="25" />
-                  <SuggestionUser>{suggestion?.nickName || '-'}</SuggestionUser>
+                  <SuggestionUser>{suggestion?.nickName || "-"}</SuggestionUser>
                 </div>
                 <div className="row">
                   <div className="col-6 col-md-12">
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
-                      <SuggestionUser>{suggestion?.status || '-'}</SuggestionUser>
+                      <SuggestionUser>
+                        {suggestion?.status || "-"}
+                      </SuggestionUser>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
-                      <SuggestionUser>{`${suggestion?.comments.length || '-'} comments`}</SuggestionUser>
+                      <SuggestionUser>{`${
+                        suggestion?.comments.length || "-"
+                      } comments`}</SuggestionUser>
                     </div>
                     <div style={{ display: "flex", alignItems: "center" }}>
                       <BsCircleFill style={{ width: 25, height: 6 }} />
                       <SuggestionUser>
-                        {`${suggestion?.apy || '-'}%`}
+                        {`${suggestion?.apy || "-"}%`}
                         <span style={{ color: "lightgrey", marginLeft: "4px" }}>
                           APY
                         </span>
@@ -310,9 +311,11 @@ export const SuggestionView = ({ id }: any) => {
 
         <SuggetionCommentRow>
           <BsFillChatRightDotsFill />
-          <span
-            style={{ marginLeft: "15px" }}
-          >{`Comments (${suggestion?.comments.length || ''})`}</span>
+          <span style={{ marginLeft: "15px" }}>{`Comments ${
+            suggestion?.comments.length
+              ? `(${suggestion?.comments.length})`
+              : ""
+          }`}</span>
         </SuggetionCommentRow>
 
         <CommentEdit suggestionId={suggestion?.id} addComment={addComment} />
@@ -349,7 +352,6 @@ export const SuggestionView = ({ id }: any) => {
   );
 };
 
-export const EmptySuggestion: React.FC<{path: string}> = ( ) => {
-
-  return <SuggestionView />
+export const EmptySuggestion: React.FC<{ path: string }> = () => {
+  return <SuggestionView />;
 };
