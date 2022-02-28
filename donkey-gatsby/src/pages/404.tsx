@@ -88,17 +88,7 @@ const NotFoundPage: React.FC = () => {
   const handleGoToHome = () => {
     navigate("/");
   };
-  const [isMount, setMount] = useState(false);
 
-  useEffect(() => {
-    setMount(true);
-  }, []);
-
-  if(!isMount) {
-    return(
-       <div>loading</div>
-    )
-  }
 
   return (
     <>
