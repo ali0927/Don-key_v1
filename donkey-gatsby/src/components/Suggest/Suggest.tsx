@@ -13,7 +13,7 @@ import { useSignin } from "hooks";
 import { gql, useQuery } from "@apollo/client";
 import { useWeb3Context } from "don-components";
 import { useDispatch } from "react-redux";
-import { setAuthToken } from "store/actions";
+import { logoutUser, setAuthToken } from "store/actions";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -185,7 +185,7 @@ const SuggestStatus = {
   all: "all",
   new: "new",
   old: "old",
-  approved: "approved"  
+  approved: "approved",
 };
 
 const ConfirmButton = styled.button`
@@ -297,21 +297,26 @@ export const Suggest = () => {
   };
 
   useEffect(() => {
-    checkLocalToken();
-  }, [connected, address])
+    if (connected && address) {
+      checkLocalToken();
+    }
+  }, [connected, address]);
 
   const checkLocalToken = async () => {
-    const localToken = localStorage.getItem('token');
+    const localToken = localStorage.getItem("token");
+    if(!localToken){
+      dispatch(logoutUser());
+    }
     if (localToken && connected) {
       const res = await checkToken(localToken, address);
       if (res.address) {
         dispatch(setAuthToken(localToken));
-      }
-      else {
-        localStorage.setItem('token', '');
+      } else {
+        localStorage.setItem("token", "");
+        dispatch(logoutUser());
       }
     }
-  }
+  };
 
   const filterList = useMemo(() => {
     if (suggestionsData) {

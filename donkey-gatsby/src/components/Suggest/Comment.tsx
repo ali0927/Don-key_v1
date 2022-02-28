@@ -10,7 +10,7 @@ import {
   useStakingContract,
   useSuggestionApi,
 } from "hooks";
-import { IStoreState } from "store/reducers/rootReducer";
+import { IStoreState } from "interfaces";
 import { useSelector } from "react-redux";
 import { captureException } from "helpers";
 import { Spinner } from "react-bootstrap";

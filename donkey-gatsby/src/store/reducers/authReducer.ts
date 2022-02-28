@@ -14,6 +14,9 @@ export const authReducer: Reducer<IAuthState, IAuthActions> = (state = {}, actio
                 last_updated: Date.now()
             }
         }
+        case "LOGOUT_USER": {
+            return {}
+        }
     }
     return state;
 }

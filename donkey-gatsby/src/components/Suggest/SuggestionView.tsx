@@ -148,11 +148,7 @@ const SuggestionLink = styled(DonGatsbyLink)`
 
 const SUGGESTION_QUERY = gql`
   query getSuggestionsQuery($id: String!) {
-    suggestions(
-      where: {
-        id: $id
-      }
-    ) {
+    suggestions(where: { id: $id }) {
       apy
       description
       id
@@ -201,10 +197,10 @@ const SUGGESTION_QUERY = gql`
 
 export const SuggestionView = ({ id }: { id: number }) => {
   const [showRiskDetail, setShowRiskDetail] = useState(false);
-  const { data: suggestionsData } = useQuery(SUGGESTION_QUERY, {
+  const { data: suggestionsData, refetch } = useQuery(SUGGESTION_QUERY, {
     variables: {
-      id
-    }
+      id,
+    },
   });
 
   const suggestion = useMemo(() => {
@@ -212,18 +208,7 @@ export const SuggestionView = ({ id }: { id: number }) => {
       return suggestionsData.suggestions[0];
     }
     return null;
-  }, [suggestionsData, id])
-
-  const nextSuggestion = () => {
-    if (suggestion) {
-      navigate(`/community/suggestion/${suggestion.id + 1}`);
-    }
-  };
-  const prevSuggestion = () => {
-    if (suggestion) {
-      navigate(`/community/suggestion/${suggestion.id - 1}`);
-    }
-  };
+  }, [suggestionsData, id]);
 
   return (
     <div style={{ background: "#F5F5F5" }}>
@@ -257,7 +242,9 @@ export const SuggestionView = ({ id }: { id: number }) => {
               style={{ display: "flex", flexDirection: "column" }}
             >
               <SuggestionTitle>{suggestion?.title}</SuggestionTitle>
-              <label style={{color: 'lightgrey'}}>{suggestion?.created_at.slice(0, 10)}</label>
+              <label style={{ color: "lightgrey" }}>
+                {suggestion?.created_at.slice(0, 10)}
+              </label>
             </div>
             <div className="col-3 col-md-2">
               <SuggestVotes>
@@ -326,12 +313,16 @@ export const SuggestionView = ({ id }: { id: number }) => {
             style={{ marginLeft: "15px" }}
           >{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
-        
-        <CommentEdit suggestionId={suggestion?.id} />
-        {suggestion?.comments.map((comment: any) =>
+
+        <CommentEdit
+          suggestionId={suggestion?.id}
+          refetchData={async () => {
+            await refetch({ id: suggestion!.id });
+          }}
+        />
+        {suggestion?.comments.map((comment: any) => (
           <Comment comment={comment} />
-        )}
-        
+        ))}
       </div>
 
       <Footer />
@@ -353,8 +344,8 @@ export const SuggestionView = ({ id }: { id: number }) => {
               style={{ padding: 0 }}
             />
           </div>
-          <div className="col-sm-12 col-md-8" style={{fontSize:'0.8rem'}}>
-            {suggestion?.riskword || 'No risk description'}
+          <div className="col-sm-12 col-md-8" style={{ fontSize: "0.8rem" }}>
+            {suggestion?.riskword || "No risk description"}
           </div>
         </div>
       </DonCommonmodal>

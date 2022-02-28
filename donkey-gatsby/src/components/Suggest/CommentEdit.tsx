@@ -8,7 +8,7 @@ import {
   useStakingContract,
   useSuggestionApi,
 } from "hooks";
-import { IStoreState } from "store/reducers/rootReducer";
+import { IStoreState } from "interfaces";
 import { useSelector } from "react-redux";
 import { captureException } from "helpers";
 import { Spinner } from "react-bootstrap";
@@ -50,7 +50,7 @@ const CommentButton = styled.button`
   border-radius: 10px;
   border: 0;
   background-color: yellow;
-`
+`;
 const SigninButton = styled.button`
   padding: 10px;
   font-weight: 500;
@@ -67,13 +67,14 @@ const SigninButton = styled.button`
   }
 `;
 
-export const CommentEdit: React.FC<{ 
-  suggestionId: string 
-}> = ({ suggestionId }) => {
-  const [commentContent, setCommentContent] = useState('')
+export const CommentEdit: React.FC<{
+  suggestionId: string;
+  refetchData: () => Promise<void>;
+}> = ({ suggestionId, refetchData }) => {
+  const [commentContent, setCommentContent] = useState("");
   const handleCommentChange = (e: any) => {
-    setCommentContent(e.target.value)
-  }
+    setCommentContent(e.target.value);
+  };
   const [hasCheckedDons, setHasChecked] = useState(false);
   const [showBuyDonModal, setShowBuyDonModal] = useState(false);
   const { connected, address } = useWeb3Context();
@@ -81,7 +82,8 @@ export const CommentEdit: React.FC<{
   const { comment } = useSuggestionApi();
   const auth = useSelector((state: IStoreState) => state.auth);
   const { holdingDons, refetch } = useStakingContract();
-  const { showFailure, showSuccess, showProgress } = useTransactionNotification();
+  const { showFailure, showSuccess, showProgress } =
+    useTransactionNotification();
   const [isCreating, setIsCreating] = useState(false);
 
   useEffectOnTabFocus(() => {
@@ -128,12 +130,14 @@ export const CommentEdit: React.FC<{
     try {
       showProgress("Posting Comment");
       const res_comment = await comment(suggestionId, commentContent);
+      await refetchData();
       showSuccess("Comment Posted");
+
       return res_comment;
     } catch (e) {
       showFailure("Failed to Comment");
     } finally {
-      window.location.reload();
+      // window.location.reload();
     }
   };
 
@@ -141,60 +145,60 @@ export const CommentEdit: React.FC<{
 
   return (
     <>
-    <CommentEditBox>
-      <UserIcon color="#000" fill="yellow" width="25" height="25"/> 
-      <div style={{width: '100%', paddingRight:'10px'}}>
-        <TextArea
-          rows={4}
-          value={commentContent}
-          onChange={handleCommentChange}
-          placeholder="Start write comment here..."
-        ></TextArea>
-        <div style={{display:'flex', justifyContent:'flex-end'}}>
-          <CommentButton onClick={handleCommentClick}>Send</CommentButton>
+      <CommentEditBox>
+        <UserIcon color="#000" fill="yellow" width="25" height="25" />
+        <div style={{ width: "100%", paddingRight: "10px" }}>
+          <TextArea
+            rows={4}
+            value={commentContent}
+            onChange={handleCommentChange}
+            placeholder="Start write comment here..."
+          ></TextArea>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <CommentButton onClick={handleCommentClick}>Send</CommentButton>
+          </div>
         </div>
-      </div>
-    </CommentEditBox>
+      </CommentEditBox>
 
-    {showBuyDonModal && (
-      <DonCommonmodal
-        isOpen={showBuyDonModal}
-        title={hasDons}
-        variant="common"
-        onClose={() => setShowBuyDonModal(false)}
-        size="sm"
-      >
-        <BuyDonContent />
-      </DonCommonmodal>
-    )}
+      {showBuyDonModal && (
+        <DonCommonmodal
+          isOpen={showBuyDonModal}
+          title={hasDons}
+          variant="common"
+          onClose={() => setShowBuyDonModal(false)}
+          size="sm"
+        >
+          <BuyDonContent />
+        </DonCommonmodal>
+      )}
 
-    {showConnectWalletPopup && (
-      <WalletPopup
-        onDone={() => setShowSignInPopup(true)}
-        onClose={() => setShowConnectWalletPopup(false)}
-      />
-    )}
+      {showConnectWalletPopup && (
+        <WalletPopup
+          onDone={() => setShowSignInPopup(true)}
+          onClose={() => setShowConnectWalletPopup(false)}
+        />
+      )}
 
-    {showSignInPopup && (
-      <DonCommonmodal
-        isOpen={showSignInPopup}
-        title="Sign In"
-        variant="common"
-        onClose={() => setShowSignInPopup(false)}
-        size="sm"
-      >
-        <h4 className="text-center">
-          You need to Sign In . In order to Reply
-        </h4>
-        <SigninButton onClick={handleSignIn}>
-          {isCreating ? (
-            <Spinner animation="border" size="sm" />
-          ) : (
-            <>Sign In</>
-          )}
-        </SigninButton>
-      </DonCommonmodal>
-    )}
+      {showSignInPopup && (
+        <DonCommonmodal
+          isOpen={showSignInPopup}
+          title="Sign In"
+          variant="common"
+          onClose={() => setShowSignInPopup(false)}
+          size="sm"
+        >
+          <h4 className="text-center">
+            You need to Sign In . In order to Reply
+          </h4>
+          <SigninButton onClick={handleSignIn}>
+            {isCreating ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              <>Sign In</>
+            )}
+          </SigninButton>
+        </DonCommonmodal>
+      )}
     </>
-  )   
-}
+  );
+};

@@ -26,7 +26,7 @@ import { AiFillCaretDown } from "react-icons/ai";
 import ExampleSuggetionImg from "../../images/exmaple-suggestion.png";
 import { useWeb3Context } from "don-components";
 import { useSelector } from "react-redux";
-import { IStoreState } from "store/reducers/rootReducer";
+import { IStoreState } from "interfaces";
 import WalletPopup from "components/WalletPopup/WalletPopup";
 import { captureException } from "helpers";
 
