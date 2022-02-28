@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavBar } from "components/Navbar";
 import styled from "styled-components";
 import { breakPoints } from "breakponts";
@@ -88,6 +88,7 @@ const NotFoundPage: React.FC = () => {
   const handleGoToHome = () => {
     navigate("/");
   };
+
 
   return (
     <>

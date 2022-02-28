@@ -129,7 +129,7 @@ export const BecomeAFarmerSection: React.FC = () => {
                     <DarkLine className="d-lg-none" />
                     <Card.Title>Build your strategy</Card.Title>
                     <Card.Text className="mt-3 mt-lg-4">
-                      The most user friendly interface in the DeFi space. create
+                      The most user friendly interface in the DeFi space. Create
                       complicated strategies with 0 code.
                     </Card.Text>
                   </Card.Body>

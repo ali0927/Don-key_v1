@@ -2,15 +2,18 @@ import React, { useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { ClickAwayListener } from "@material-ui/core";
 import clsx from "clsx";
-import { AiOutlineInfoCircle, AiFillCaretDown } from "react-icons/ai";
+import { AiFillCaretDown } from "react-icons/ai";
 import { SuggestList } from "./SuggestList";
 import { SuggestRequestForm } from "./SuggestRequestForm";
 import { theme } from "theme";
 import { StaticImage } from "gatsby-plugin-image";
-import { useSuggestionApi } from "hooks";
-import { DummySuggestions } from "JsonData/DummyData";
 import { useStaticQuery, graphql } from "gatsby";
-import { INetwork } from "LandingPage/CardsSection/interfaces";
+import { DonCommonmodal } from "components/DonModal";
+import { useSignin } from "hooks";
+import { gql, useQuery } from "@apollo/client";
+import { useWeb3Context } from "don-components";
+import { useDispatch } from "react-redux";
+import { logoutUser, setAuthToken } from "store/actions";
 
 export const useRiskAndNetworkList = () => {
   const riskAndNetworks = useStaticQuery(
@@ -35,8 +38,11 @@ export const useRiskAndNetworkList = () => {
       }
     `
   );
-  return { risks: riskAndNetworks.allStrapiRisks.nodes, networks: riskAndNetworks.allStrapiNetworks.nodes }
-}
+  return {
+    risks: riskAndNetworks.allStrapiRisks.nodes,
+    networks: riskAndNetworks.allStrapiNetworks.nodes,
+  };
+};
 
 const DropdownBtn = styled.div`
   border: 2px solid #222222;
@@ -175,19 +181,116 @@ const MoreButton = styled.button`
   }
 `;
 
-const SuggestStatus = { 
-  all: 'all', 
-  new: 'new', 
-  old: 'old', 
-  approved: 'approved'
-}
+const SuggestStatus = {
+  all: "all",
+  new: "new",
+  old: "old",
+  approved: "approved",
+};
 
-export const Suggest: React.FC = () => {
+const ConfirmButton = styled.button`
+  padding: 10px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #fff;
+  border-radius: 10px;
+  background: linear-gradient(146.14deg, #353a4b 0%, #0b0e12 100%);
+  border: 0;
+  display: block;
+  width: 100%;
+  margin-top: 20px;
+`;
+
+export const ErrorModal: React.FC<{
+  error: {
+    status: boolean;
+    type: string;
+    msg: string;
+  };
+  closeModal: any;
+}> = (props) => {
+  const [openModal, setOpenModal] = useState(true);
+  const { signin } = useSignin();
+  const handleSignin = async () => {
+    const _res = await signin();
+    setOpenModal(false);
+    props.closeModal();
+  };
+
+  useEffect(() => {
+    setOpenModal(true);
+  }, [props]);
+
+  return (
+    <DonCommonmodal
+      isOpen={openModal}
+      onClose={props.closeModal}
+      title="Error"
+      variant="common"
+      size="sm"
+    >
+      <p>{props.error.msg}</p>
+      {props.error.type === "token" && (
+        <ConfirmButton onClick={() => handleSignin()}>Sign in</ConfirmButton>
+      )}
+    </DonCommonmodal>
+  );
+};
+
+const ALL_SUGGESTION_QUERY = gql`
+  query allSuggestionsQuery {
+    suggestions {
+      apy
+      description
+      id
+      status
+      title
+      created_at
+      network {
+        name
+      }
+      risk {
+        Title
+        image {
+          url
+        }
+        id
+      }
+      nickName
+      customer {
+        address
+      }
+      comments {
+        content
+        customer {
+          address
+        }
+        likes {
+          address
+        }
+        replies {
+          content
+          customer {
+            address
+          }
+        }
+      }
+      votes {
+        address
+      }
+    }
+  }
+`;
+
+export const Suggest = () => {
+  const { connected, address } = useWeb3Context();
+  const { checkToken } = useSignin();
   const [show, setShow] = useState(false);
-  const { fetchList } = useSuggestionApi();
-  const [suggestionList, setSuggestionList] = useState([]); 
   const [strategyFilter, setSuggestFilter] = useState(SuggestStatus.all);
   const [viewMore, setViewMore] = useState(false);
+  const { data: suggestionsData } = useQuery(ALL_SUGGESTION_QUERY);
+  const [suggestions, setSuggestions] = useState(suggestionsData?.suggestions);
+  const dispatch = useDispatch();
 
   const handleNameChange = (value: string) => {
     setSuggestFilter(value);
@@ -195,24 +298,49 @@ export const Suggest: React.FC = () => {
   };
 
   useEffect(() => {
-    onLoad();
-  }, []);
+    if (connected && address) {
+      checkLocalToken();
+    }
 
-  const onLoad = async () => {
-    const _suggestionList = await fetchList();
-    setSuggestionList(_suggestionList);
+  }, [connected, address]);
+
+  useEffect(() => {
+    setSuggestions(suggestionsData?.suggestions);
+  }, [suggestionsData]);
+
+  const checkLocalToken = async () => {
+    const localToken = localStorage.getItem("token");
+    if(!localToken){
+      dispatch(logoutUser());
+    }
+    if (localToken && connected) {
+      const res = await checkToken(localToken, address);
+      if (res.address) {
+        dispatch(setAuthToken(localToken));
+      } else {
+        localStorage.setItem("token", "");
+        dispatch(logoutUser());
+      }
+    }
   };
 
-  const filterList = suggestionList
-  // const filterList = useMemo(() => {
-  //   const _suggestionList = [...suggestionList];
-  //   console.log('suggestionList------------', suggestionList)
-  //   if (strategyFilter === SuggestStatus.all) return suggestionList;
-  //   const _list = suggestionList.filter((item: any) => item.status === strategyFilter);
-  //   return viewMore ? _list: _list.slice(0, 3);
-  // }, [strategyFilter]);
+  const filterList = useMemo(() => {
+    if (suggestions) {
+      let _list = suggestions;
+      if (strategyFilter != SuggestStatus.all) {
+        _list = suggestions.filter(
+          (item: any) => item.status === strategyFilter
+        );
+      }
+      _list = viewMore ? _list : _list.slice(0, 3);
+      return _list;
+    }
+    return [];
+  }, [suggestions, viewMore, strategyFilter]);
 
-  console.log('filterList------------', filterList)
+  const addSuggestion = (suggestion: any) => {
+    setSuggestions([...suggestions, suggestion]);
+  }
 
   const DropDownMenu = () => {
     return (
@@ -223,13 +351,13 @@ export const Suggest: React.FC = () => {
           }}
         >
           <DropDown>
-            <div id="collapseExample" className="collapse" >
+            <div id="collapseExample" className="collapse">
               <DropDownItem
                 className={clsx(
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.all }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.all) }
+                onClick={() => handleNameChange(SuggestStatus.all)}
               >
                 <div>All</div>
               </DropDownItem>
@@ -238,7 +366,7 @@ export const Suggest: React.FC = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.new }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.new) }
+                onClick={() => handleNameChange(SuggestStatus.new)}
               >
                 <div>New</div>
               </DropDownItem>
@@ -247,7 +375,7 @@ export const Suggest: React.FC = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.old }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.old) }
+                onClick={() => handleNameChange(SuggestStatus.old)}
               >
                 <div>Old</div>
               </DropDownItem>
@@ -256,7 +384,7 @@ export const Suggest: React.FC = () => {
                   "d-flex justify-content-between align-items-center",
                   { selected: strategyFilter === SuggestStatus.approved }
                 )}
-                onClick={() => handleNameChange(SuggestStatus.approved) }
+                onClick={() => handleNameChange(SuggestStatus.approved)}
               >
                 <div>Approved</div>
               </DropDownItem>
@@ -271,7 +399,14 @@ export const Suggest: React.FC = () => {
     <div className="container">
       <div className="row mb-2">
         <div className="col-12 col-md-4 col-lg-3 d-flex justify-content-start mt-2 mt-lg-0 positioin-static position-sm-relative">
-          <DropdownBtn active={show} onClick={() => setShow(true)} aria-controls="collapseExample" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false">
+          <DropdownBtn
+            active={show}
+            onClick={() => setShow(true)}
+            aria-controls="collapseExample"
+            data-toggle="collapse"
+            data-target="#collapseExample"
+            aria-expanded="false"
+          >
             {strategyFilter}
             <AiFillCaretDown className="icon" />
           </DropdownBtn>
@@ -279,36 +414,40 @@ export const Suggest: React.FC = () => {
         </div>
       </div>
 
-      {filterList.length > 0 &&
+      {filterList.length > 0 && (
         <>
           <div className="row py-4">
             <SuggestList suggestList={filterList} />
           </div>
         </>
-      }
+      )}
       {filterList.length > 0 &&
-        <div className="row justify-content-center mb-4">
-          <div className="col-sm-12 col-md-4">
-            <MoreButton onClick={() => setViewMore(true)}>
-              View More
-            </MoreButton>
+        suggestions.length > filterList.length && (
+          <div className="row justify-content-center mb-4">
+            <div className="col-sm-12 col-md-4">
+              <MoreButton onClick={() => setViewMore(true)}>
+                View More
+              </MoreButton>
+            </div>
           </div>
-        </div>
-      }
+        )}
 
       <div className="row mb-5 pt-5">
         <div className="col-lg-6 d-flex flex-column mt-5 pt-md-5">
           <h2>Add your Strategy</h2>
           <SubHeading>
-            So you think you are a novel farmer? suggest your newest and best strategy, and put it up to vote with the Don-key community. We will be watching and deploying based on voting and comments. Before deploying the pool Don-key will contact you VIA telegram to help set-up your Don-key profile and finalize details.
+            So you think you are a novel farmer? suggest your newest and best
+            strategy, and put it up to vote with the Don-key community. We will
+            be watching and deploying based on voting and comments. Before
+            deploying the pool Don-key will contact you VIA telegram to help
+            set-up your Don-key profile and finalize details.
           </SubHeading>
           <DonkeyScope />
         </div>
         <div className="col-lg-6">
-          <SuggestRequestForm />
+          <SuggestRequestForm addSuggestion={addSuggestion} />
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};

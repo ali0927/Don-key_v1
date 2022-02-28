@@ -2,7 +2,7 @@ import { InsurancePopup } from "components/InvestmentPopup/InsurancePopup";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { closePopup, IPopups } from "store/actions";
-import { IStoreState } from "store/reducers/rootReducer";
+import { IStoreState } from "interfaces";
 
 const renderPopup = <T extends IPopups["type"]>(
   obj: IStoreState["popups"] | undefined,

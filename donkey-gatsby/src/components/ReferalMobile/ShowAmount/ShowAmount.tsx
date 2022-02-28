@@ -1,5 +1,5 @@
 import { useUSDViewBool } from "contexts/USDViewContext";
-import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
+import { getWeb3, useWeb3Context } from "don-components";
 import {
   captureException,
   formatNum,
@@ -29,7 +29,7 @@ export const ShowAmount: React.FC<{
           const web3 = getWeb3(chainId);
           let tokenPrice = "";
           if (isDon) {
-            tokenPrice = await getDonPrice(chainId === BINANCE_CHAIN_ID);
+            tokenPrice = await getDonPrice();
           } else {
             tokenPrice = await getTokenPrice(web3, poolAddress);
           }

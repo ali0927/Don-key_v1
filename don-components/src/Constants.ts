@@ -4,7 +4,7 @@ export const BINANCE_RPC_CACHED = ["https://node-api.don-key.finance/bsc"];
 export const MATIC_RPC_CACHED = ["https://node-api.don-key.finance/polygon"];
 export const AVAX_RPC_CACHED = ["https://node-api.don-key.finance/avax"];
 export const FANTOM_RPC_CACHED = ["https://node-api.don-key.finance/ftm"];
-export const BSC_TESTNET_RPC = ["https://data-seed-prebsc-1-s1.binance.org:8545"];
+export const BSC_TESTNET_RPC = ["https://node-api.don-key.finance/bsc-testnet"];
 // export const AVAX_RPC_CACHED = ["https://node-api.don-key.finance/avax"];
 export const MATIC_RPC = ["https://polygon-rpc.com"];
 export const FANTOM_RPC = ["https://rpc.ftm.tools"];
@@ -15,7 +15,6 @@ export const BINANCE_CHAIN_ID = 56;
 export const POLYGON_CHAIN_ID = 137;
 export const FANTOM_CHAIN_ID = 250;
 export const BSC_TESTNET_CHAIN_ID = 97;
-
 
 export const NetworkConfigs = [{
     chainId: ETHEREUM_CHAIN_ID,

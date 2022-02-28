@@ -8,7 +8,7 @@ import { FarmerStrategies } from "components/FarmerStrategies";
 import { FarmerBio } from "components/FarmerBio";
 import { IFarmerInter } from "interfaces";
 
-export default function Dashboard({
+export default function FarmerTemplate({
   pageContext: { data, tvl },
 }: {
   pageContext: {

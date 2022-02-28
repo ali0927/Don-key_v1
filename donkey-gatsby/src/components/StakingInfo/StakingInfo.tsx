@@ -10,12 +10,12 @@ import moment from "moment";
 import { SmallTimerDots } from "icons";
 import { breakPoints } from "breakponts";
 import { formatNum, getDonPriceWeb3 } from "helpers";
-import { getWeb3 } from "don-components";
 import { AcceleratedAPYModal } from "components/AcceleratedAPYModal";
 import Questionmark from "components/Icons/Questionmark";
 import { useTimer } from "hooks/useTimer";
 import { useMediaQuery } from "@material-ui/core";
 import { theme } from "theme";
+import { captureException } from "logrocket";
 
 const StakingCard = styled.div`
   background-color: #fff;
@@ -211,7 +211,7 @@ const TimerLabel = styled.div`
   font-size: 4.25px;
   font-weight: 400;
   color: #000000;
-  ${theme.mediaQueries.md.down}{
+  ${theme.mediaQueries.md.down} {
     font-size: 8px;
   }
 `;
@@ -279,7 +279,7 @@ export const StakingTimer = ({
         <TimmerRoot className=" d-flex justify-content-center">
           <TimeCard variant={variant}>
             <TimerTime>{days}</TimerTime>
-            <TimerLabel>{isMobile ? "D": "DAYS"}</TimerLabel>
+            <TimerLabel>{isMobile ? "D" : "DAYS"}</TimerLabel>
           </TimeCard>
 
           <DotsWrraper>
@@ -289,7 +289,7 @@ export const StakingTimer = ({
 
           <TimeCard variant={variant}>
             <TimerTime>{hrs}</TimerTime>
-            <TimerLabel>{isMobile ? "H": "HOURS"}</TimerLabel>
+            <TimerLabel>{isMobile ? "H" : "HOURS"}</TimerLabel>
           </TimeCard>
           <DotsWrraper>
             {" "}
@@ -297,7 +297,7 @@ export const StakingTimer = ({
           </DotsWrraper>
           <TimeCard variant={variant}>
             <TimerTime>{mins}</TimerTime>
-            <TimerLabel>{isMobile ? "M": "MINUTES"}</TimerLabel>
+            <TimerLabel>{isMobile ? "M" : "MINUTES"}</TimerLabel>
           </TimeCard>
           <DotsWrraper>
             {" "}
@@ -305,7 +305,7 @@ export const StakingTimer = ({
           </DotsWrraper>
           <TimeCard variant={variant}>
             <TimerTime>{secs}</TimerTime>
-            <TimerLabel>{isMobile ? "S": "SECONDS"}</TimerLabel>
+            <TimerLabel>{isMobile ? "S" : "SECONDS"}</TimerLabel>
           </TimeCard>
         </TimmerRoot>
       </Root>
@@ -334,9 +334,11 @@ export const StakingInfo = () => {
   const [loading, enableLoading, disableLoading] = useToggle();
 
   const [donPrice, setDonPrice] = useState<string | null>(null);
-  const web3 = getWeb3(56);
+
   useEffect(() => {
-    getDonPriceWeb3(web3).then(setDonPrice);
+    getDonPriceWeb3()
+      .then(setDonPrice)
+      .catch((e) => captureException(e, { extra: { msg: "StakingInfo" } }));
   }, []);
 
   const harvestDon = async () => {
@@ -488,7 +490,7 @@ export const StakingInfo = () => {
           <StakingCard className="d-flex h-100 flex-wrap justify-content-between">
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>DON Staked</StakingTitle>
-              <StakingSubtitle>{formatNum(stakedDon,2)}</StakingSubtitle>
+              <StakingSubtitle>{formatNum(stakedDon, 2)}</StakingSubtitle>
             </StakingCol>
             <StakingCol style={{ width: "21%" }}>
               <StakingTitle>Tier</StakingTitle>

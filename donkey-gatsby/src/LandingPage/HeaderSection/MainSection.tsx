@@ -23,7 +23,6 @@ import { StaticImage } from "gatsby-plugin-image";
 import { Text } from "components/Text";
 import { HeroImage } from "../HeroImage";
 
-
 const Root = styled.div`
   background-color: #fff037;
   min-height: 500px;
@@ -61,12 +60,12 @@ const Heading = styled.h1`
   width: 100%;
   @media only screen and (min-width: ${breakPoints.md}) {
     font-size: 49px;
-    width:80%;
+    width: 80%;
   }
 `;
 
 const SubHeading = styled.h1`
- font-family: "Poppins";
+  font-family: "Poppins";
   font-size: 40px;
   font-weight: 400;
   text-align: left;
@@ -104,8 +103,8 @@ export const Rocket = styled(RocketLaunchIcon)`
 `;
 
 export const HeaderImg = styled.img`
-    width: 691px;
-    height: 500px;
+  width: 691px;
+  height: 500px;
 `;
 
 export const useFarmersList = () => {
@@ -127,35 +126,44 @@ export const useFarmersList = () => {
     `
   );
   return {
-    list: Strategies.allStrapiFarmers.nodes as ({poolAddress: string; network: {chainId: number}; name: string; graphUrl: string}[]),
-    count:Strategies.allStrapiFarmers.totalCount as number
-  }
-}
+    list: Strategies.allStrapiFarmers.nodes as {
+      poolAddress: string;
+      network: { chainId: number };
+      name: string;
+      graphUrl: string;
+    }[],
+    count: Strategies.allStrapiFarmers.totalCount as number,
+  };
+};
 
 export const useDonInfo = () => {
   const { data: ethPriceInfo, loading } = useQuery(ETH_PRICE, {
     client: uniswapClient,
   });
-  
- 
-  
+
   const [{ data: coingecko }] = useAxios({
     method: "GET",
     url: "https://api.coingecko.com/api/v3/coins/don-key",
   });
 
-  const {hasLoaded, state: usersCount, updateState: setUsersCount} = useLocalStorageState("donkeyusercount",0, 24 * 60 * 60 * 1000);
-  const {hasLoaded: hasLoadedTvl, state: totalTvl, updateState: setTotalTvl} = useLocalStorageState("donkeytvl","", 24 * 60 * 60 * 1000);
+  const {
+    hasLoaded,
+    state: usersCount,
+    updateState: setUsersCount,
+  } = useLocalStorageState("donkeyusercount", 0, 24 * 60 * 60 * 1000);
+  const {
+    hasLoaded: hasLoadedTvl,
+    state: totalTvl,
+    updateState: setTotalTvl,
+  } = useLocalStorageState("donkeytvl", "", 24 * 60 * 60 * 1000);
   const [usersLoading, setUsersLoading] = React.useState(false);
   const [tvlLoading, setTVLLoading] = React.useState(false);
 
-  const {list, count} = useFarmersList();
+  const { list, count } = useFarmersList();
   const updateUsersCount = async () => {
     setUsersLoading(true);
 
-    const totalUserCount = await getUsersCount(
-      list
-    );
+    const totalUserCount = await getUsersCount(list);
     setUsersCount(totalUserCount);
     setUsersLoading(false);
   };
@@ -191,20 +199,18 @@ export const useDonInfo = () => {
     const totalTVL = await getTVL(list);
     setTotalTvl(totalTVL);
     setTVLLoading(false);
-    
   };
 
   React.useEffect(() => {
     (async () => {
-      if(hasLoadedTvl && !totalTvl){
+      if (hasLoadedTvl && !totalTvl) {
         updateTVL();
       }
-      if(hasLoaded && !usersCount){
-        updateUsersCount()
+      if (hasLoaded && !usersCount) {
+        updateUsersCount();
       }
-      
     })();
-  }, [hasLoadedTvl,hasLoaded]);
+  }, [hasLoadedTvl, hasLoaded]);
 
   return {
     donPrice: finalDerivedEth,
@@ -239,18 +245,20 @@ export const MainSection: React.FC = () => {
   return (
     <>
       <Root className="position-relative">
-       
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-7 mb-3 mb-lg-5">
-            <Heading className="mb-2">Farm. Profit. Repeat</Heading>
-            <Text  fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>Copy Professionally Designed Yield Farming Strategies</Text>
-              {/* <MainSectionTimer /> */}
-              {/* <Heading>Referral is live!</Heading>
-              <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
-                Follow real farmers and share with real friends
+              {/* <Heading className="mb-2">Farm. Profit. Repeat</Heading>
+              <Text fontSize={18} className="mb-5" style={{ maxWidth: 320 }}>
+                Copy Professionally Designed Yield Farming Strategies
               </Text> */}
-              
+                <Heading>Lending layer pilot</Heading>
+              <Text fontSize={18} className="mt-4" style={{ maxWidth: 320 }}>
+                Collateralize yield bearing assets and leverage your power
+              </Text>
+              <MainSectionTimer />
+            
+
               <div className="d-flex flex-wrap">
                 <LaunchButton className="mt-3 mr-3 " />
 
@@ -268,7 +276,6 @@ export const MainSection: React.FC = () => {
 
             <div className="col-lg-5 mb-5 d-flex justify-content-center justify-content-lg-center">
               <HeroImage />
-            
             </div>
           </div>
 
@@ -325,7 +332,6 @@ export const MainSection: React.FC = () => {
 
           <div></div>
         </div>
-      
       </Root>
     </>
   );

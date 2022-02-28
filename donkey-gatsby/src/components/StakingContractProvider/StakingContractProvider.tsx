@@ -3,7 +3,12 @@ import {
   StakingContractContext,
 } from "contexts/StakingContractContext";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { BINANCE_CHAIN_ID, getWeb3, useWeb3Context } from "don-components";
+import {
+  BINANCE_CHAIN_ID,
+  BSC_TESTNET_CHAIN_ID,
+  getWeb3,
+  useWeb3Context,
+} from "don-components";
 import DonStaking from "JsonData/DonStaking.json";
 import { captureException, getBSCDon, sendEvent, toEther } from "helpers";
 import BigNumber from "bignumber.js";
@@ -66,7 +71,11 @@ const useStaking = () => {
   const { chainId, getConnectedWeb3, connected, address } = useWeb3Context();
 
   const viewstakingContract = useMemo(() => {
-    const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
+    const newWeb3 = getWeb3(
+      process.env.GATSBY_APP_ENV === "development"
+        ? BSC_TESTNET_CHAIN_ID
+        : BINANCE_CHAIN_ID
+    );
     return new newWeb3.eth.Contract(DonStaking.abi as any, DonStakingAddress);
   }, []);
   const connectedStakingContract = useMemo(() => {
@@ -114,7 +123,11 @@ const useStaking = () => {
       const resp = await api.post("/api/v2/walletdetails", {
         walletAddress: address,
       });
-      const newWeb3 = getWeb3(BINANCE_CHAIN_ID);
+      const newWeb3 = getWeb3(
+        process.env.GATSBY_APP_ENV === "development"
+          ? BSC_TESTNET_CHAIN_ID
+          : BINANCE_CHAIN_ID
+      );
       let donEquivalent = "0";
       try {
         const contract = new newWeb3.eth.Contract(
@@ -157,8 +170,17 @@ const useStaking = () => {
 
   const fetchState = async () => {
     setLoading(true);
-
-    const userInfo = await viewstakingContract.methods.userInfo(address).call();
+    let userInfo;
+    try {
+     
+      userInfo = await viewstakingContract.methods.userInfo(address).call();
+     
+    } catch (e: any) {
+      console.log("Error UserInfo");
+      captureException(e, `Address: ${address} Staking: ${DonStakingAddress} `)
+      throw new Error(e);
+     
+    }
 
     try {
       const minDuration = await viewstakingContract.methods
@@ -176,11 +198,9 @@ const useStaking = () => {
         .plus(userInfo.donEquivalent)
         .toFixed(0)
     );
-      await fetchTiers(viewstakingContract);
-      const crTier = staketierInfo.data[userInfo.tier_type];
-      const coolOffDons = toEther(userInfo.coolOffAmount);
-
- 
+    await fetchTiers(viewstakingContract);
+    const crTier = staketierInfo.data[userInfo.tier_type];
+    const coolOffDons = toEther(userInfo.coolOffAmount);
 
     setIsStaked(userInfo.isStaked);
     setStakedDon(donAmount);

@@ -312,56 +312,30 @@ export const createPages = async ({ graphql, actions }: any) => {
     }
   });
 
-  const suggestionsResp = await graphql(`
-    query fetchSuggestions {
-      allStrapiSuggestions {
+  const auctionsResp = await graphql(`
+    query MyAuctions {
+      allStrapiAuctions {
         nodes {
-          address
-          apy
-          description
-          id
-          strapiId
-          status
-          title
-          created_at(formatString: "DD/MM/Y")
-          network {
-            chainId
-            name
-          }
-          risk {
-            Title
-            image {
-              url
-            }
-            id
-          }
-          nickName
+          auctionAddress
+          slug
+          name
         }
       }
     }
   `);
 
-  const suggestions = suggestionsResp.data.allStrapiSuggestions.nodes;
+  const auctions = auctionsResp.data.allStrapiAuctions.nodes;
 
-  DummySuggestions.forEach((suggestion: any) => {
+  auctions.forEach((auction: any) => {
     createPage({
-      path: `/community/suggestion/${suggestion.idx}`,
-      component: path.resolve(`./src/templates/suggestionTemplate.tsx`),
+      path: `/auction/${auction.slug}`,
+      component: path.resolve(`./src/templates/auctionTemplate.tsx`),
       context: {
-        suggestionInfo: suggestion
+        auction,
       },
     });
-  });
+  })
 
-  DummyEarningIDs.forEach((id: any) => {
-    createPage({
-      path: `/earning/${id}`,
-      component: path.resolve(`./src/templates/earningTemplate.tsx`),
-      context: {
-        id: id
-      },
-    });
-  });
 
   // Rewrite For Share Links
   createRedirect({

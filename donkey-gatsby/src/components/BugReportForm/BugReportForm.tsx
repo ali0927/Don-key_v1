@@ -6,6 +6,7 @@ import styled, { css } from "styled-components";
 import { SuccessOverlay } from "./SuccessOverlay";
 import coolicon from "./coolicon.svg";
 import { theme } from "theme";
+import { validateEmail } from "helpers";
 const InputFieldCSS = css`
   background: rgba(245, 245, 245, 0.5);
   border: 1px solid rgba(245, 245, 245, 0.5);
@@ -123,11 +124,6 @@ const INITIAL_STATE = {
 export type IBugFormState = typeof INITIAL_STATE;
 
 
-//@ts-ignore
-const validateEmail = (email) => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(email).toLowerCase());
-}
 
 
 const validate = (state: typeof INITIAL_STATE) => {
@@ -187,9 +183,6 @@ const SmallSpan = styled.span`
   color: #767b86;
   font-weight: normal;
 `;
-
-
-
 
 export const BugReportForm = () => {
   const { createBug } = useBugReportApi();

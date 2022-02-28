@@ -63,7 +63,9 @@ const Subtitle = styled.div`
 const WalletPopup = ({
   onClose,
   onDone,
+  msg
 }: {
+  msg?: string;
   onClose: () => void;
   onDone?: () => void;
 }) => {
@@ -82,7 +84,7 @@ const WalletPopup = ({
 
   return (
     <DonCommonmodal
-      title={"Select a Wallet"}
+      title={msg || "Select a Wallet"}
       variant="common"
       subtitle={" "}
       contentStyle={{ padding: 30 }}

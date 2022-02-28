@@ -15,7 +15,7 @@ The project is Defi app for creating yield Farming strategies.
 
  - Reuseable components live inside components folder 
  - Pages used in router go to Pages folder
- - All Component should have Pascal Case Naming
+ - All components should have Pascal Case Naming
  - Components Prop interface should be inside components file
  - All hooks go inside hooks folder
  - All helpers functions used will go to helpers folder
@@ -25,10 +25,22 @@ The project is Defi app for creating yield Farming strategies.
 # Git
 We follow git flow, by this we mean that our main branch is the dev branch.
 
-When working on new features we craete a branch from dev called feature/{what-the-feature-is} bug branches start with bugfix/{bug-fix-name}
+When working on new features we create a branch from dev called feature/{what-the-feature-is} bug branches start with bugfix/{bug-fix-name}
 
+# Getting started
 
+## Prerequisites
+1) Install npm
+2) Install yarn
 
+## Setup
+1) Clone the repository: `git clone https://github.com/donkey-finance/DonkeyFinance.git`
+2) Install dependencies: `yarn install`
+
+## Testing locally
+1) In the terminal, navigate to the `donkey-gatsby` folder
+2) Start development server: `yarn dev`
+3) Switch to Rinkeby testnet in Metamask
 
 ## Available Scripts
 
