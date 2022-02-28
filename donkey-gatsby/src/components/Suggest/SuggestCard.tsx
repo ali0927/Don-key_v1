@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import { navigate } from "gatsby-link";
 import { UserIcon } from "components/Icons";
@@ -163,7 +163,7 @@ type SuggestStatusType = keyof typeof STATUS_MAP;
 
 export const SuggestCard: React.FC<{
   suggestion: IStrapiSuggestion;
-}> = (props) => {
+}> = ( props ) => {
   const { vote, comment } = useSuggestionApi();
   const [showVoteModal, setShowVoteModal] = useState(false);
   const [commentContent, setCommentContent] = useState("");
@@ -174,6 +174,9 @@ export const SuggestCard: React.FC<{
   const { connected, address } = useWeb3Context();
   const { signin } = useSignin();
   const auth = useSelector((state: IStoreState) => state.auth);
+  const [suggestion, setSuggestion] = useState(props.suggestion);
+  
+
   useEffectOnTabFocus(() => {
     (async () => {
       setHasChecked(false);
@@ -224,8 +227,9 @@ export const SuggestCard: React.FC<{
     // setShowVoteModal(false);
     try {
       showProgress("Posting Comment");
-      const res_comment = await comment(props.suggestion.id, commentContent);
+      const res_comment = await comment(suggestion.id, commentContent);
       showSuccess("Comment Posted");
+      setSuggestion({ ...suggestion, comments: [...suggestion.comments, res_comment]});
       return res_comment;
     } catch (e) {
       showFailure("Failed to Comment");
@@ -235,20 +239,25 @@ export const SuggestCard: React.FC<{
   };
 
   const handleSubmitVote = async () => {
+    const idx = suggestion.votes.findIndex((item: any) => item.address === address);
+    if (address && idx !== -1) {
+      showFailure("Your Vote was Already Added");
+      return;
+    }
     try {
       showProgress("Adding Vote");
-      const res_vote = await vote(props.suggestion.id);
+      const res_vote = await vote(suggestion.id);
       showSuccess("Your Vote was Added");
+      setSuggestion(res_vote);
       return res_vote;
     } catch (e) {
       showFailure("Failed to vote");
     } finally {
-      setShowVoteModal(false);
     }
   };
 
   const handleCardClick = () => {
-    navigate(`/community/suggestion/${props.suggestion.id}`);
+    navigate(`/community/suggestion/${suggestion.id}`);
   };
   const hasDons = hasCheckedDons && holdingDons && holdingDons.gte(100);
 
@@ -257,20 +266,20 @@ export const SuggestCard: React.FC<{
       <SuggestCardSection onClick={() => handleCardClick()}>
         <div className="row">
           <div className="col-9">
-            <SuggestTitle>{props.suggestion.title}</SuggestTitle>
+            <SuggestTitle>{suggestion.title}</SuggestTitle>
             <div style={{ display: "flex", alignItems: "center" }}>
               <SuggestStatus
-                status={props.suggestion.status as SuggestStatusType}
+                status={suggestion.status as SuggestStatusType}
               >
                 <SuggestStatusTitle>
                   {
-                    STATUS_MAP[props.suggestion.status as SuggestStatusType]
+                    STATUS_MAP[suggestion.status as SuggestStatusType]
                       .text
                   }
                 </SuggestStatusTitle>
               </SuggestStatus>
               <SuggestStatusTitle>
-                {`${props.suggestion.apy}%`}
+                {`${suggestion.apy}%`}
                 <span style={{ color: "lightgrey", marginLeft: "4px" }}>
                   APY
                 </span>
@@ -280,11 +289,11 @@ export const SuggestCard: React.FC<{
           <SuggestVotesBox className="col-3">
             <SuggestVotes>
               <span style={{ fontSize: "0.6rem" }}>Votes</span>
-              <span>{props.suggestion.votes.length}</span>
+              <span>{suggestion.votes.length}</span>
             </SuggestVotes>
           </SuggestVotesBox>
         </div>
-        <SuggestDescription>{props.suggestion.description}</SuggestDescription>
+        <SuggestDescription>{suggestion.description}</SuggestDescription>
         <div className="row">
           <div
             className="col-6"
@@ -297,16 +306,16 @@ export const SuggestCard: React.FC<{
             <div style={{ display: "flex", alignItems: "center" }}>
               <UserIcon color="#000" fill="yellow" width="25" height="25" />
               <SuggestAddress>
-                {props.suggestion.nickName}
+                {suggestion.nickName}
               </SuggestAddress>
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <AiOutlineMessage size="25px" />
-              <SuggestAddress>{`${props.suggestion.comments.length} Comments`}</SuggestAddress>
+              <SuggestAddress>{`${suggestion.comments.length} Comments`}</SuggestAddress>
             </div>
           </div>
           <div className="col-6">
-            <SuggestRiskImage src={props.suggestion.risk.image.url} />
+            <SuggestRiskImage src={suggestion.risk.image.url} />
           </div>
         </div>
         <CommentButton onClick={handleCommentClick}>
@@ -338,7 +347,7 @@ export const SuggestCard: React.FC<{
                   Vote
                 </VoteButton>
                 <h3 style={{ fontWeight: 600, margin: 0 }}>
-                  {props.suggestion.votes.length}
+                  {suggestion.votes.length}
                 </h3>
               </div>
               <VoteModalSubtitle>Leave a comment</VoteModalSubtitle>

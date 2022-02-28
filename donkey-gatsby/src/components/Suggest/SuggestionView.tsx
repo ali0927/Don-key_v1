@@ -206,13 +206,15 @@ export const SuggestionView = ({ id }: { id: number }) => {
       id
     }
   });
+  const [suggestion, setSuggestion] = useState(suggestionsData?.suggestions[0]);
 
-  const suggestion = useMemo(() => {
-    if (suggestionsData) {
-      return suggestionsData.suggestions[0];
-    }
-    return null;
+  useEffect(() => {
+    setSuggestion(suggestionsData?.suggestions[0]);
   }, [suggestionsData, id])
+
+  const addComment = (comment: any) => {
+    setSuggestion({...suggestion, comments: [...suggestion.comments, comment]})
+  }
 
   const nextSuggestion = () => {
     if (suggestion) {
@@ -327,7 +329,7 @@ export const SuggestionView = ({ id }: { id: number }) => {
           >{`Comments (${suggestion?.comments.length})`}</span>
         </SuggetionCommentRow>
         
-        <CommentEdit suggestionId={suggestion?.id} />
+        <CommentEdit suggestionId={suggestion?.id} addComment={addComment} />
         {suggestion?.comments.map((comment: any) =>
           <Comment comment={comment} />
         )}

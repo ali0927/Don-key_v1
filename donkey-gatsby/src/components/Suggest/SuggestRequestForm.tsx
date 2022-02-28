@@ -396,7 +396,9 @@ const validate = (state: typeof INITIAL_STATE) => {
   return { isValid: true, message: null };
 };
 
-export const SuggestRequestForm = () => {
+export const SuggestRequestForm: React.FC<{ 
+  addSuggestion(suggestion: any): void
+}> = ({ addSuggestion }) => {
   const { createSuggestion } = useSuggestionApi();
   const { risks, networks } = useRiskAndNetworkList();
   const [riskLevel, setRiskLevel] = useState(2);
@@ -435,9 +437,10 @@ export const SuggestRequestForm = () => {
     _suggestion.risk = riskLevel;
     setIsCreating(true);
     try {
-      await createSuggestion(_suggestion);
+      const res_suggestion = await createSuggestion(_suggestion);
+      addSuggestion(res_suggestion);
       setFormState(INITIAL_STATE);
-      showSuccess("Suggestion Saved For Review");
+      showSuccess("Suggestion was Published");
     } catch (e) {
       console.log(e);
       showFailure("Please Try Again Later");
